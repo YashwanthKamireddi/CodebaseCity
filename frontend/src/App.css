@@ -1,0 +1,18 @@
+/* App-specific styles */
+
+.app-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #0a0a0f;
+}
+
+.canvas-container {
+    flex: 1;
+    position: relative;
+}
+
+.canvas-container canvas {
+    background: linear-gradient(to bottom, #0a0a12, #0f0f18);
+}
