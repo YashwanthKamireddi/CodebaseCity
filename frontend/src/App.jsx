@@ -9,6 +9,7 @@ import LegendPanel from './components/LegendPanel'
 import ControlsPanel from './components/ControlsPanel'
 import LoadingScreen from './components/LoadingScreen'
 import HealthDashboard from './components/HealthDashboard'
+import TimelineSlider from './components/TimelineSlider'
 import useStore from './store/useStore'
 
 function App() {
@@ -125,6 +126,8 @@ function App() {
                     )}
 
                     {cityData && sidebarOpen && <HealthDashboard />}
+
+                    <TimelineSlider />
 
                     <ControlsPanel
                         sidebarOpen={sidebarOpen}

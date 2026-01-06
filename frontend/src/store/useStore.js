@@ -35,6 +35,12 @@ const useStore = create((set, get) => ({
     messages: [],
     chatLoading: false,
 
+    // History State (Git Timeline)
+    commits: [],
+    currentCommitIndex: -1,  // -1 means latest (HEAD)
+    historyLoading: false,
+    currentRepoPath: null,
+
     // Actions
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error, loading: false }),
@@ -107,6 +113,54 @@ const useStore = create((set, get) => ({
                 const errorData = await response.json().catch(() => ({}))
                 const errorMessage = errorData.detail || `Analysis failed (${response.status})`
                 throw new Error(errorMessage)
+            }
+
+            const data = await response.json()
+            setCityData(data)
+            // Save repo path for history features
+            set({ currentRepoPath: path, commits: [], currentCommitIndex: -1 })
+        } catch (error) {
+            setError(error.message)
+            setLoading(false)
+        }
+    },
+
+    // History Actions
+    fetchHistory: async (path) => {
+        set({ historyLoading: true })
+        try {
+            const response = await fetch(`${API_BASE}/history?path=${encodeURIComponent(path)}&limit=30`)
+            if (!response.ok) throw new Error('Failed to fetch history')
+
+            const data = await response.json()
+            set({
+                commits: data.commits || [],
+                historyLoading: false,
+                currentCommitIndex: -1  // Start at latest
+            })
+        } catch (error) {
+            console.error('History fetch error:', error)
+            set({ historyLoading: false, commits: [] })
+        }
+    },
+
+    setCommitIndex: (index) => set({ currentCommitIndex: index }),
+
+    analyzeAtCommit: async (commitHash) => {
+        const { currentRepoPath, setLoading, setCityData, setError } = get()
+        if (!currentRepoPath) return
+
+        setLoading(true)
+        try {
+            const response = await fetch(`${API_BASE}/analyze-at-commit`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ path: currentRepoPath, commit_hash: commitHash })
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}))
+                throw new Error(errorData.detail || 'Failed to analyze at commit')
             }
 
             const data = await response.json()

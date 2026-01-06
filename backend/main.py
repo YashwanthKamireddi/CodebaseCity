@@ -27,7 +27,9 @@ app.add_middleware(
 
 # Import and include routers
 from api.routes import router as api_router
+from api.history import router as history_router
 app.include_router(api_router, prefix="/api")
+app.include_router(history_router, prefix="/api")
 
 
 @app.get("/")
