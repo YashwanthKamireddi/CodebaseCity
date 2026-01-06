@@ -224,15 +224,6 @@ cd frontend && npm run dev
 
 ---
 
-## Acknowledgments
-
-This project was inspired by:
-
-- **[CodeCity](https://wettel.github.io/codecity.html)** by Richard Wettel (University of Lugano) — The original research on visualizing software systems as 3D cities using polymetric views.
-- **[Galois, Inc.](https://galois.com/)** — Research on visualizing codebases as cities for improved spatial reasoning.
-
----
-
 ## License
 
 MIT License — Copyright (c) 2026 Yashwanth Kamireddi
