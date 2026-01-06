@@ -148,10 +148,20 @@ const useStore = create((set, get) => ({
 
     analyzeAtCommit: async (commitHash) => {
         const { currentRepoPath, setLoading, setCityData, setError } = get()
-        if (!currentRepoPath) return
+
+        console.log('analyzeAtCommit called:', { commitHash, currentRepoPath })
+
+        if (!currentRepoPath) {
+            console.error('No currentRepoPath set!')
+            setError('No repository path. Please analyze a local repo first.')
+            return
+        }
 
         setLoading(true)
+        setError(null)
+
         try {
+            console.log('Fetching analyze-at-commit...')
             const response = await fetch(`${API_BASE}/analyze-at-commit`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -164,9 +174,12 @@ const useStore = create((set, get) => ({
             }
 
             const data = await response.json()
+            console.log('Got city data at commit:', data?.name, data?.buildings?.length, 'buildings')
             setCityData(data)
         } catch (error) {
+            console.error('analyzeAtCommit error:', error)
             setError(error.message)
+        } finally {
             setLoading(false)
         }
     },
