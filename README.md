@@ -224,15 +224,26 @@ cd frontend && npm run dev
 
 ---
 
+## Acknowledgments
+
+This project was inspired by:
+
+- **[CodeCity](https://wettel.github.io/codecity.html)** by Richard Wettel (University of Lugano) — The original research on visualizing software systems as 3D cities using polymetric views.
+- **[Galois, Inc.](https://galois.com/)** — Research on visualizing codebases as cities for improved spatial reasoning.
+
+---
+
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License — Copyright (c) 2026 Yashwanth Kamireddi
+
+See [LICENSE](LICENSE) for details.
 
 ---
 
 <div align="center">
 
-**Built with passion for better code understanding**
+**Built with ❤️ by Yashwanth Kamireddi**
 
 [Report Bug](https://github.com/YashwanthKamireddi/CodebaseCity/issues) • [Request Feature](https://github.com/YashwanthKamireddi/CodebaseCity/issues) • [Star on GitHub](https://github.com/YashwanthKamireddi/CodebaseCity)
 

@@ -1,155 +1,203 @@
-import React, { useMemo, useRef, useState } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
+import React, { useMemo } from 'react'
 import * as THREE from 'three'
-import Building, { InstancedBuildings } from './Building'
-import District from './District'
-import Roads from './Roads'
+import Building from './Building'
 import useStore from '../store/useStore'
 
-// Threshold for switching to instanced rendering
-const INSTANCED_THRESHOLD = 200
+// District colors - muted, urban tones
+const DISTRICT_COLORS = {
+    api: '#4a90a4',
+    services: '#7c6b9e',
+    data: '#4a9e9e',
+    utils: '#6a9e6a',
+    auth: '#9e8a4a',
+    ui: '#9e6a8a',
+    tests: '#5a8e8e',
+    config: '#7a7a9e',
+    frontend: '#9e6a8a',
+    backend: '#4a90a4'
+}
 
 export default function CityScene({ data }) {
-    const groupRef = useRef()
-    const { camera } = useThree()
-    const [lodLevel, setLodLevel] = useState('high')
+    const { showRoads, selectedBuilding } = useStore()
 
-    // Dynamic LOD based on camera distance
-    useFrame(() => {
-        if (camera && data?.buildings?.length > 100) {
-            const distance = camera.position.length()
-            if (distance > 250) {
-                setLodLevel('low')
-            } else if (distance > 150) {
-                setLodLevel('medium')
-            } else {
-                setLodLevel('high')
-            }
+    const { centeredBuildings, centeredDistricts, buildingMap } = useMemo(() => {
+        if (!data?.buildings?.length) {
+            return { centeredBuildings: [], centeredDistricts: [], buildingMap: {} }
         }
-    })
 
-    if (!data) {
-        return <EmptyScene />
+        let minX = Infinity, maxX = -Infinity
+        let minZ = Infinity, maxZ = -Infinity
+
+        data.buildings.forEach(b => {
+            minX = Math.min(minX, b.position.x)
+            maxX = Math.max(maxX, b.position.x)
+            minZ = Math.min(minZ, b.position.z)
+            maxZ = Math.max(maxZ, b.position.z)
+        })
+
+        const centerX = (minX + maxX) / 2
+        const centerZ = (minZ + maxZ) / 2
+
+        const centeredBuildings = data.buildings.map(b => ({
+            ...b,
+            position: { x: b.position.x - centerX, z: b.position.z - centerZ }
+        }))
+
+        const buildingMap = {}
+        centeredBuildings.forEach(b => { buildingMap[b.id] = b })
+
+        const centeredDistricts = data.districts?.map(d => ({
+            ...d,
+            center: d.center ? { x: d.center.x - centerX, y: d.center.y - centerZ } : { x: 0, y: 0 }
+        })) || []
+
+        return { centeredBuildings, centeredDistricts, buildingMap }
+    }, [data])
+
+    // Connected buildings
+    const connectedIds = useMemo(() => {
+        if (!selectedBuilding || !data?.roads) return new Set()
+        const ids = new Set()
+        data.roads.forEach(road => {
+            const source = road.source || road.from
+            const target = road.target || road.to
+            if (source === selectedBuilding.id) ids.add(target)
+            if (target === selectedBuilding.id) ids.add(source)
+        })
+        return ids
+    }, [selectedBuilding, data?.roads])
+
+    // Roads to render
+    const roadsToRender = useMemo(() => {
+        if (!data?.roads) return []
+        if (selectedBuilding) {
+            return data.roads.filter(road => {
+                const source = road.source || road.from
+                const target = road.target || road.to
+                return source === selectedBuilding.id || target === selectedBuilding.id
+            })
+        } else if (showRoads) {
+            return data.roads.slice(0, 40)
+        }
+        return []
+    }, [data?.roads, selectedBuilding, showRoads])
+
+    if (!centeredBuildings.length) {
+        return (
+            <group>
+                <ambientLight intensity={0.6} />
+                <directionalLight position={[50, 80, 50]} intensity={1.2} />
+                <mesh rotation={[-Math.PI / 2, 0, 0]}>
+                    <planeGeometry args={[300, 300]} />
+                    <meshStandardMaterial color="#4a5568" />
+                </mesh>
+            </group>
+        )
     }
 
-    const useInstanced = data.buildings?.length > INSTANCED_THRESHOLD
+    const spread = Math.max(...centeredBuildings.map(b => Math.max(Math.abs(b.position.x), Math.abs(b.position.z))))
+    const gridSize = Math.max(200, spread * 2.5)
 
-    return (
-        <group ref={groupRef}>
-            {/* Bright ambient light */}
-            <ambientLight intensity={0.8} color="#ffffff" />
-
-            {/* Main Sun */}
-            <directionalLight
-                position={[60, 100, 40]}
-                intensity={1.5}
-                color="#fff5e6"
-                castShadow={lodLevel === 'high'}
-                shadow-mapSize-width={lodLevel === 'high' ? 2048 : 1024}
-                shadow-mapSize-height={lodLevel === 'high' ? 2048 : 1024}
-                shadow-camera-far={300}
-                shadow-camera-left={-120}
-                shadow-camera-right={120}
-                shadow-camera-top={120}
-                shadow-camera-bottom={-120}
-                shadow-bias={-0.0001}
-            />
-
-            {/* Fill Light */}
-            <directionalLight position={[-40, 50, -40]} intensity={0.6} color="#87ceeb" />
-
-            {/* Sky/Ground ambient */}
-            <hemisphereLight args={['#87ceeb', '#3d5c3d', 0.6]} />
-
-            {/* Ground */}
-            <Ground size={data.buildings?.length > 500 ? 800 : 500} />
-
-            {/* Districts - skip for very large datasets */}
-            {lodLevel !== 'low' && data.districts?.map(district => (
-                <District key={district.id} data={district} />
-            ))}
-
-            {/* Buildings - use instanced for large datasets */}
-            {useInstanced ? (
-                <InstancedBuildings buildings={data.buildings} />
-            ) : (
-                data.buildings?.map(building => (
-                    <Building key={building.id} data={building} />
-                ))
-            )}
-
-            {/* Roads - only show in high LOD */}
-            {lodLevel === 'high' && (
-                <Roads roads={data.roads} buildings={data.buildings} />
-            )}
-
-            {/* Fog for depth */}
-            <fog attach="fog" args={['#e8f4f8', 150, 500]} />
-        </group>
-    )
-}
-
-function Ground({ size = 500 }) {
-    const gridTexture = useMemo(() => {
-        const canvas = document.createElement('canvas')
-        canvas.width = 512
-        canvas.height = 512
-        const ctx = canvas.getContext('2d')
-
-        // Grass base
-        const gradient = ctx.createRadialGradient(256, 256, 0, 256, 256, 360)
-        gradient.addColorStop(0, '#4a7c4e')
-        gradient.addColorStop(1, '#3a5c3e')
-        ctx.fillStyle = gradient
-        ctx.fillRect(0, 0, 512, 512)
-
-        // Grass texture
-        ctx.fillStyle = '#5a8c5e'
-        for (let i = 0; i < 200; i++) {
-            ctx.beginPath()
-            ctx.arc(Math.random() * 512, Math.random() * 512, 2 + Math.random() * 3, 0, Math.PI * 2)
-            ctx.fill()
-        }
-
-        // Grid
-        ctx.strokeStyle = '#6b7b6c'
-        ctx.lineWidth = 2
-        for (let i = 0; i <= 512; i += 64) {
-            ctx.beginPath()
-            ctx.moveTo(i, 0)
-            ctx.lineTo(i, 512)
-            ctx.stroke()
-            ctx.beginPath()
-            ctx.moveTo(0, i)
-            ctx.lineTo(512, i)
-            ctx.stroke()
-        }
-
-        const texture = new THREE.CanvasTexture(canvas)
-        texture.wrapS = THREE.RepeatWrapping
-        texture.wrapT = THREE.RepeatWrapping
-        texture.repeat.set(size / 50, size / 50)
-        return texture
-    }, [size])
-
-    return (
-        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} receiveShadow>
-            <planeGeometry args={[size, size]} />
-            <meshStandardMaterial map={gridTexture} roughness={0.9} metalness={0} />
-        </mesh>
-    )
-}
-
-function EmptyScene() {
     return (
         <group>
-            <ambientLight intensity={0.6} />
-            <directionalLight position={[50, 100, 50]} intensity={1.2} color="#ffffff" />
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
-                <planeGeometry args={[200, 200]} />
-                <meshStandardMaterial color="#4a7c4e" />
+            {/* City Lighting - warm golden hour */}
+            <ambientLight intensity={0.5} color="#fff5eb" />
+            <directionalLight
+                position={[80, 100, 60]}
+                intensity={1.4}
+                color="#fef3c7"
+                castShadow
+                shadow-mapSize={[2048, 2048]}
+            />
+            <directionalLight position={[-40, 60, -40]} intensity={0.3} color="#bfdbfe" />
+            <hemisphereLight args={['#87ceeb', '#6b7280', 0.4]} />
+
+            {/* City Ground - concrete/asphalt */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+                <planeGeometry args={[gridSize, gridSize]} />
+                <meshStandardMaterial color="#4b5563" roughness={0.95} />
             </mesh>
-            <fog attach="fog" args={['#e8f4f8', 50, 200]} />
+
+            {/* City grid - street pattern */}
+            <gridHelper
+                args={[gridSize, Math.floor(gridSize / 20), '#6b7280', '#5a5a68']}
+                position={[0, 0.02, 0]}
+            />
+
+            {/* District zones - just colored borders, no overlapping */}
+            {centeredDistricts.map(district => {
+                const cx = district.center?.x || 0
+                const cy = district.center?.y || 0
+                const size = 30 + (district.building_count || 5) * 3
+                const color = DISTRICT_COLORS[district.id?.toLowerCase()] || district.color || '#6b7280'
+
+                return (
+                    <mesh key={district.id} rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.05, cy]}>
+                        <ringGeometry args={[size - 2, size, 64]} />
+                        <meshBasicMaterial color={color} transparent opacity={0.6} />
+                    </mesh>
+                )
+            })}
+
+            {/* Buildings */}
+            {centeredBuildings.map(building => (
+                <Building
+                    key={building.id}
+                    data={building}
+                    isConnected={connectedIds.has(building.id)}
+                />
+            ))}
+
+            {/* Roads - flat ribbon style */}
+            {roadsToRender.map((road, i) => {
+                const sourceId = road.source || road.from
+                const targetId = road.target || road.to
+                const fromBuilding = buildingMap[sourceId]
+                const toBuilding = buildingMap[targetId]
+                if (!fromBuilding || !toBuilding) return null
+
+                const isHighlighted = selectedBuilding &&
+                    (sourceId === selectedBuilding.id || targetId === selectedBuilding.id)
+
+                // Simple straight line with raised height
+                const start = new THREE.Vector3(fromBuilding.position.x, 0.2, fromBuilding.position.z)
+                const end = new THREE.Vector3(toBuilding.position.x, 0.2, toBuilding.position.z)
+                const curve = new THREE.LineCurve3(start, end)
+
+                return (
+                    <mesh key={i}>
+                        <tubeGeometry args={[curve, 2, isHighlighted ? 0.5 : 0.25, 6, false]} />
+                        <meshBasicMaterial
+                            color={isHighlighted ? "#3b82f6" : "#6b7280"}
+                            transparent
+                            opacity={isHighlighted ? 0.9 : 0.4}
+                        />
+                    </mesh>
+                )
+            })}
+
+            {/* Street lamps */}
+            {centeredBuildings.filter((_, i) => i % 4 === 0).slice(0, 20).map((b, i) => (
+                <group key={`lamp-${i}`} position={[b.position.x + 4, 0, b.position.z + 4]}>
+                    {/* Pole */}
+                    <mesh position={[0, 3, 0]} castShadow>
+                        <cylinderGeometry args={[0.1, 0.15, 6, 8]} />
+                        <meshStandardMaterial color="#374151" metalness={0.7} roughness={0.3} />
+                    </mesh>
+                    {/* Lamp arm */}
+                    <mesh position={[0.5, 5.5, 0]} rotation={[0, 0, Math.PI / 6]}>
+                        <cylinderGeometry args={[0.08, 0.08, 1.2, 6]} />
+                        <meshStandardMaterial color="#374151" metalness={0.7} />
+                    </mesh>
+                    {/* Light */}
+                    <mesh position={[1, 5.3, 0]}>
+                        <sphereGeometry args={[0.25, 16, 16]} />
+                        <meshBasicMaterial color="#fef3c7" />
+                    </mesh>
+                    {/* Point light for glow */}
+                    <pointLight position={[1, 5, 0]} intensity={0.5} distance={15} color="#fef3c7" />
+                </group>
+            ))}
         </group>
     )
 }

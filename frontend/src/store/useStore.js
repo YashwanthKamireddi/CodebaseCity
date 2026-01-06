@@ -2,6 +2,16 @@ import { create } from 'zustand'
 
 const API_BASE = '/api'
 
+// Get initial theme from localStorage or system preference
+const getInitialTheme = () => {
+    if (typeof window !== 'undefined') {
+        const stored = localStorage.getItem('codebase-city-theme')
+        if (stored) return stored
+        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+    }
+    return 'dark'
+}
+
 const useStore = create((set, get) => ({
     // City Data State
     cityData: null,
@@ -19,6 +29,7 @@ const useStore = create((set, get) => ({
     showRoads: true,
     showLabels: true,
     nightMode: false,
+    theme: getInitialTheme(), // 'light' | 'dark'
 
     // Chat State
     messages: [],
@@ -46,6 +57,19 @@ const useStore = create((set, get) => ({
     toggleLabels: () => set((state) => ({ showLabels: !state.showLabels })),
     toggleNightMode: () => set((state) => ({ nightMode: !state.nightMode })),
 
+    toggleTheme: () => set((state) => {
+        const newTheme = state.theme === 'dark' ? 'light' : 'dark'
+        localStorage.setItem('codebase-city-theme', newTheme)
+        document.documentElement.setAttribute('data-theme', newTheme)
+        return { theme: newTheme }
+    }),
+
+    setTheme: (theme) => {
+        localStorage.setItem('codebase-city-theme', theme)
+        document.documentElement.setAttribute('data-theme', theme)
+        set({ theme })
+    },
+
     // API Actions
     fetchDemo: async () => {
         const { setLoading, setCityData, setError } = get()
@@ -66,9 +90,10 @@ const useStore = create((set, get) => ({
         const { setLoading, setCityData, setError, setProgress } = get()
         setLoading(true)
         setProgress(0)
+        setError(null)
 
         try {
-            setProgress(20)
+            setProgress(10)
             const response = await fetch(`${API_BASE}/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -76,12 +101,19 @@ const useStore = create((set, get) => ({
             })
 
             setProgress(80)
-            if (!response.ok) throw new Error('Analysis failed')
+
+            if (!response.ok) {
+                // Parse error details from backend
+                const errorData = await response.json().catch(() => ({}))
+                const errorMessage = errorData.detail || `Analysis failed (${response.status})`
+                throw new Error(errorMessage)
+            }
 
             const data = await response.json()
             setCityData(data)
         } catch (error) {
             setError(error.message)
+            setLoading(false)
         }
     },
 

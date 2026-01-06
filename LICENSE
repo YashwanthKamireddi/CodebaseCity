@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2024 Codebase City
+Copyright (c) 2026 Yashwanth Kamireddi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,15 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+## Acknowledgments
+
+This project was inspired by:
+- **CodeCity** by Richard Wettel (University of Lugano) - The original research on 
+  visualizing software systems as 3D cities using polymetric views.
+  https://wettel.github.io/codecity.html
+
+- **Galois, Inc.** research on visualizing codebases as cities for improved 
+  spatial reasoning and team collaboration.

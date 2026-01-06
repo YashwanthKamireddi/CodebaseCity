@@ -1,107 +1,92 @@
 import React from 'react'
 
-// VSCode-like language colors
-const LANGUAGE_COLORS = {
+// Compact language colors
+const COLORS = {
     python: '#3572A5',
     javascript: '#F7DF1E',
     typescript: '#3178C6',
     java: '#B07219',
     go: '#00ADD8',
     rust: '#DEA584',
-    cpp: '#F34B7D',
-    c: '#555555',
-    ruby: '#CC342D',
-    php: '#777BB4',
-    swift: '#FA7343',
-    kotlin: '#A97BFF',
-    scala: '#C22D40',
-    csharp: '#178600',
     default: '#6B7280'
 }
 
-// Language display names
-const LANGUAGE_NAMES = {
-    python: 'Python',
-    javascript: 'JavaScript',
-    typescript: 'TypeScript',
-    java: 'Java',
-    go: 'Go',
-    rust: 'Rust',
-    cpp: 'C++',
-    c: 'C',
-    ruby: 'Ruby',
-    php: 'PHP',
-    swift: 'Swift',
-    kotlin: 'Kotlin',
-    scala: 'Scala',
-    csharp: 'C#',
-    html: 'HTML',
-    css: 'CSS'
-}
-
 export default function LegendPanel({ districts, buildings }) {
-    // Count files by language
-    const languageCounts = {}
+    // Count top 5 languages only
+    const langCounts = {}
     buildings?.forEach(b => {
         const lang = b.language?.toLowerCase() || 'default'
-        languageCounts[lang] = (languageCounts[lang] || 0) + 1
+        if (lang !== 'default' && lang !== 'unknown') {
+            langCounts[lang] = (langCounts[lang] || 0) + 1
+        }
     })
 
-    // Sort by count
-    const languages = Object.entries(languageCounts)
-        .filter(([lang]) => lang !== 'default' && lang !== 'unknown')
+    const topLangs = Object.entries(langCounts)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 8)
+        .slice(0, 4)
 
     return (
-        <div className="legend-panel panel">
-            <div className="panel-content" style={{ padding: 'var(--space-3)' }}>
-                {/* Languages Section */}
-                <div className="legend-section">
-                    <div className="legend-heading">Languages</div>
-                    {languages.map(([lang, count]) => (
-                        <div key={lang} className="legend-item">
-                            <div
-                                className="legend-color"
-                                style={{ backgroundColor: LANGUAGE_COLORS[lang] || LANGUAGE_COLORS.default }}
-                            />
-                            <span>{LANGUAGE_NAMES[lang] || lang}</span>
-                            <span className="legend-count">{count}</span>
+        <div style={{
+            position: 'fixed',
+            bottom: '80px',
+            right: '16px',
+            width: '160px',
+            background: 'rgba(20, 20, 30, 0.95)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '10px',
+            padding: '12px',
+            zIndex: 400,
+            fontSize: '12px',
+            color: '#b4b4c0'
+        }}>
+            {/* Languages */}
+            <div style={{ marginBottom: '12px' }}>
+                <div style={{ fontSize: '10px', color: '#7a7a8c', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    Languages
+                </div>
+                {topLangs.map(([lang, count]) => (
+                    <div key={lang} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                        <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: COLORS[lang] || COLORS.default }} />
+                        <span style={{ flex: 1, textTransform: 'capitalize' }}>{lang}</span>
+                        <span style={{ color: '#6b7280' }}>{count}</span>
+                    </div>
+                ))}
+            </div>
+
+            {/* Districts - compact */}
+            {districts?.length > 0 && (
+                <div style={{ marginBottom: '12px' }}>
+                    <div style={{ fontSize: '10px', color: '#7a7a8c', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        Districts
+                    </div>
+                    {districts.slice(0, 3).map(d => (
+                        <div key={d.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
+                            <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: d.color }} />
+                            <span style={{ flex: 1 }}>{d.name}</span>
+                            <span style={{ color: '#6b7280' }}>{d.building_count}</span>
                         </div>
                     ))}
                 </div>
+            )}
 
-                {/* Districts Section */}
-                {districts && districts.length > 0 && (
-                    <div className="legend-section">
-                        <div className="legend-heading">Districts</div>
-                        {districts.slice(0, 6).map(district => (
-                            <div key={district.id} className="legend-item">
-                                <div
-                                    className="legend-color"
-                                    style={{ backgroundColor: district.color }}
-                                />
-                                <span>{district.name}</span>
-                                <span className="legend-count">{district.building_count}</span>
-                            </div>
-                        ))}
+            {/* Health - very compact */}
+            <div>
+                <div style={{ fontSize: '10px', color: '#7a7a8c', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    Health
+                </div>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e' }} />
+                        <span>OK</span>
                     </div>
-                )}
-
-                {/* Health Indicators */}
-                <div className="legend-section">
-                    <div className="legend-heading">Health Status</div>
-                    <div className="legend-item">
-                        <div className="legend-color" style={{ backgroundColor: '#22c55e' }} />
-                        <span>Healthy</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#eab308' }} />
+                        <span>Warn</span>
                     </div>
-                    <div className="legend-item">
-                        <div className="legend-color" style={{ backgroundColor: '#eab308' }} />
-                        <span>Needs Review</span>
-                    </div>
-                    <div className="legend-item">
-                        <div className="legend-color" style={{ backgroundColor: '#ef4444' }} />
-                        <span>Critical</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444' }} />
+                        <span>Crit</span>
                     </div>
                 </div>
             </div>

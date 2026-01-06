@@ -11,12 +11,52 @@ import LoadingScreen from './components/LoadingScreen'
 import useStore from './store/useStore'
 
 function App() {
-    const { cityData, selectedBuilding, loading, error, fetchDemo } = useStore()
+    const { cityData, selectedBuilding, loading, error, fetchDemo, setSelectedBuilding, theme } = useStore()
     const [sidebarOpen, setSidebarOpen] = useState(true)
 
     useEffect(() => {
         fetchDemo()
     }, [fetchDemo])
+
+    // Apply theme on mount
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme)
+    }, [theme])
+
+    // Keyboard shortcuts
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            // Ignore if typing in an input
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                if (e.key === 'Escape') {
+                    e.target.blur()
+                }
+                return
+            }
+
+            switch (e.key) {
+                case 'Escape':
+                    // Deselect building
+                    if (selectedBuilding) {
+                        setSelectedBuilding(null)
+                    }
+                    break
+                case '/':
+                    // Focus search bar
+                    e.preventDefault()
+                    const searchInput = document.querySelector('.search-input input')
+                    if (searchInput) {
+                        searchInput.focus()
+                    }
+                    break
+                default:
+                    break
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [selectedBuilding, setSelectedBuilding])
 
     return (
         <div className="app-layout">
@@ -24,18 +64,19 @@ function App() {
                 <div className="canvas-wrapper">
                     <Canvas
                         shadows
-                        dpr={[1, 2]}
+                        dpr={[1, 1.5]}
                         gl={{
                             antialias: true,
                             alpha: false,
-                            powerPreference: 'high-performance'
+                            powerPreference: 'high-performance',
+                            preserveDrawingBuffer: true
                         }}
                     >
                         <PerspectiveCamera
                             makeDefault
-                            position={[120, 100, 120]}
-                            fov={45}
-                            near={1}
+                            position={[80, 60, 80]}
+                            fov={50}
+                            near={0.1}
                             far={1000}
                         />
 
@@ -43,12 +84,13 @@ function App() {
                             enablePan={true}
                             enableZoom={true}
                             enableRotate={true}
-                            minDistance={30}
-                            maxDistance={400}
-                            maxPolarAngle={Math.PI / 2.2}
-                            minPolarAngle={0.2}
+                            minDistance={20}
+                            maxDistance={300}
+                            maxPolarAngle={Math.PI / 2.1}
+                            minPolarAngle={0.1}
                             dampingFactor={0.05}
                             enableDamping={true}
+                            target={[0, 0, 0]}
                         />
 
                         <Suspense fallback={null}>

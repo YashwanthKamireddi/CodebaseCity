@@ -29,39 +29,25 @@ export default function District({ data }) {
     return (
         <group>
             {/* District ground - subtle colored area */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.15, cy]} receiveShadow>
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.05, cy]} receiveShadow>
                 <circleGeometry args={[size, 48]} />
                 <meshStandardMaterial
                     color={color}
                     transparent
-                    opacity={isFocused ? 0.35 : 0.15}
+                    opacity={isFocused ? 0.25 : 0.1}
                     roughness={0.8}
                     metalness={0}
-                    depthWrite={false}
                 />
             </mesh>
 
             {/* District border - glowing ring */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.2, cy]}>
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.06, cy]}>
                 <ringGeometry args={[size - 1, size, 48]} />
                 <meshBasicMaterial
                     color={color}
                     transparent
-                    opacity={isFocused ? 0.9 : 0.5}
+                    opacity={isFocused ? 0.7 : 0.4}
                     side={THREE.DoubleSide}
-                    depthWrite={false}
-                />
-            </mesh>
-
-            {/* Second inner ring for depth */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.18, cy]}>
-                <ringGeometry args={[size - 3, size - 2, 48]} />
-                <meshBasicMaterial
-                    color={color}
-                    transparent
-                    opacity={0.2}
-                    side={THREE.DoubleSide}
-                    depthWrite={false}
                 />
             </mesh>
         </group>
