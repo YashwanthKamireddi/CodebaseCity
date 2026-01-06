@@ -65,17 +65,17 @@ export default function Building({ data, isConnected }) {
 
       {/* Selected - green ring */}
       {isSelected && (
-        <mesh position={[0, 0.1, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <mesh position={[0, 0.2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[Math.max(width, depth) * 0.9, Math.max(width, depth) * 1.1, 32]} />
-          <meshBasicMaterial color="#22c55e" transparent opacity={0.9} side={THREE.DoubleSide} />
+          <meshBasicMaterial color="#22c55e" transparent opacity={0.9} depthWrite={false} />
         </mesh>
       )}
 
       {/* Connected - blue ring */}
       {isConnected && !isSelected && (
-        <mesh position={[0, 0.1, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <mesh position={[0, 0.2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[Math.max(width, depth) * 0.8, Math.max(width, depth) * 1, 32]} />
-          <meshBasicMaterial color="#3b82f6" transparent opacity={0.7} side={THREE.DoubleSide} />
+          <meshBasicMaterial color="#3b82f6" transparent opacity={0.7} depthWrite={false} />
         </mesh>
       )}
 

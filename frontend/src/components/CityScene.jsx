@@ -124,7 +124,7 @@ export default function CityScene({ data }) {
                 position={[0, 0.02, 0]}
             />
 
-            {/* District zones - flat glowing rings (no platforms) */}
+            {/* District zones - flat glowing rings only */}
             {centeredDistricts.map((district) => {
                 const cx = district.center?.x || 0
                 const cy = district.center?.y || 0
@@ -132,18 +132,15 @@ export default function CityScene({ data }) {
                 const color = DISTRICT_COLORS[district.id?.toLowerCase()] || district.color || '#6b7280'
 
                 return (
-                    <group key={district.id}>
-                        {/* Outer glow ring */}
-                        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.05, cy]}>
-                            <ringGeometry args={[size - 1, size, 64]} />
-                            <meshBasicMaterial color={color} transparent opacity={0.6} />
-                        </mesh>
-                        {/* Inner subtle fill */}
-                        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.03, cy]}>
-                            <circleGeometry args={[size - 1, 48]} />
-                            <meshBasicMaterial color={color} transparent opacity={0.05} />
-                        </mesh>
-                    </group>
+                    <mesh key={district.id} rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.15, cy]}>
+                        <ringGeometry args={[size - 2, size, 64]} />
+                        <meshBasicMaterial
+                            color={color}
+                            transparent
+                            opacity={0.5}
+                            depthWrite={false}
+                        />
+                    </mesh>
                 )
             })}
 
@@ -179,6 +176,7 @@ export default function CityScene({ data }) {
                             color={isHighlighted ? "#3b82f6" : "#6b7280"}
                             transparent
                             opacity={isHighlighted ? 0.9 : 0.4}
+                            depthWrite={false}
                         />
                     </mesh>
                 )
