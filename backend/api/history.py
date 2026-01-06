@@ -189,17 +189,25 @@ async def analyze_at_commit(request: AnalyzeAtCommitRequest):
         if result.returncode != 0:
             raise HTTPException(status_code=400, detail=f"Failed to checkout: {result.stderr}")
         
-        # Run analysis
+        # Run analysis (async function)
         analyzer = CodebaseAnalyzer()
-        city_data = analyzer.analyze(path)
+        city_data = await analyzer.analyze(path)
         
         # Add commit info to response
-        city_data["commit"] = {
+        # Handle both Pydantic model and dict return types
+        if hasattr(city_data, 'dict'):
+            result = city_data.dict()
+        elif hasattr(city_data, 'model_dump'):
+            result = city_data.model_dump()
+        else:
+            result = dict(city_data) if not isinstance(city_data, dict) else city_data
+        
+        result["commit"] = {
             "hash": commit_hash,
             "analyzed_at": datetime.now().isoformat()
         }
         
-        return city_data
+        return result
         
     except subprocess.TimeoutExpired:
         raise HTTPException(status_code=408, detail="Git command timed out")
