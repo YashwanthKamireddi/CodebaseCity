@@ -8,6 +8,7 @@ import BuildingPanel from './components/BuildingPanel'
 import LegendPanel from './components/LegendPanel'
 import ControlsPanel from './components/ControlsPanel'
 import LoadingScreen from './components/LoadingScreen'
+import HealthDashboard from './components/HealthDashboard'
 import useStore from './store/useStore'
 
 function App() {
@@ -23,6 +24,9 @@ function App() {
         document.documentElement.setAttribute('data-theme', theme)
     }, [theme])
 
+    // Get store actions for shortcuts
+    const { toggleRoads, toggleLabels, toggleNightMode, clearSelection } = useStore()
+
     // Keyboard shortcuts
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -34,20 +38,32 @@ function App() {
                 return
             }
 
-            switch (e.key) {
-                case 'Escape':
+            switch (e.key.toLowerCase()) {
+                case 'escape':
                     // Deselect building
-                    if (selectedBuilding) {
-                        setSelectedBuilding(null)
-                    }
+                    clearSelection()
                     break
                 case '/':
                     // Focus search bar
                     e.preventDefault()
-                    const searchInput = document.querySelector('.search-input input')
-                    if (searchInput) {
-                        searchInput.focus()
-                    }
+                    const searchInput = document.querySelector('input[placeholder*="Search"]')
+                    if (searchInput) searchInput.focus()
+                    break
+                case 'n':
+                    // Toggle night mode
+                    toggleNightMode()
+                    break
+                case 'l':
+                    // Toggle labels
+                    toggleLabels()
+                    break
+                case 'd':
+                    // Toggle dependencies
+                    toggleRoads()
+                    break
+                case 'r':
+                    // Reset view (reload)
+                    window.location.reload()
                     break
                 default:
                     break
@@ -56,7 +72,7 @@ function App() {
 
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [selectedBuilding, setSelectedBuilding])
+    }, [clearSelection, toggleNightMode, toggleLabels, toggleRoads])
 
     return (
         <div className="app-layout">
@@ -107,6 +123,8 @@ function App() {
                     {cityData && (
                         <LegendPanel districts={cityData.districts} buildings={cityData.buildings} />
                     )}
+
+                    {cityData && sidebarOpen && <HealthDashboard />}
 
                     <ControlsPanel
                         sidebarOpen={sidebarOpen}

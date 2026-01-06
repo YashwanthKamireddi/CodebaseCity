@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import * as THREE from 'three'
 import Building from './Building'
+import Trees from './Trees'
 import useStore from '../store/useStore'
 
 // District colors - muted, urban tones
@@ -124,18 +125,32 @@ export default function CityScene({ data }) {
                 position={[0, 0.02, 0]}
             />
 
-            {/* District zones - just colored borders, no overlapping */}
-            {centeredDistricts.map(district => {
+            {/* District zones - elevated platforms with glow */}
+            {centeredDistricts.map((district, idx) => {
                 const cx = district.center?.x || 0
                 const cy = district.center?.y || 0
                 const size = 30 + (district.building_count || 5) * 3
                 const color = DISTRICT_COLORS[district.id?.toLowerCase()] || district.color || '#6b7280'
+                const elevation = 0.3 + (idx % 3) * 0.15  // Vary elevation
 
                 return (
-                    <mesh key={district.id} rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.05, cy]}>
-                        <ringGeometry args={[size - 2, size, 64]} />
-                        <meshBasicMaterial color={color} transparent opacity={0.6} />
-                    </mesh>
+                    <group key={district.id}>
+                        {/* Platform base */}
+                        <mesh position={[cx, elevation / 2, cy]} castShadow>
+                            <cylinderGeometry args={[size, size + 1, elevation, 32]} />
+                            <meshStandardMaterial color="#3f3f46" roughness={0.9} />
+                        </mesh>
+                        {/* Glowing border ring */}
+                        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[cx, elevation + 0.02, cy]}>
+                            <ringGeometry args={[size - 1.5, size, 64]} />
+                            <meshBasicMaterial color={color} transparent opacity={0.7} />
+                        </mesh>
+                        {/* Inner glow */}
+                        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[cx, elevation + 0.01, cy]}>
+                            <circleGeometry args={[size - 1.5, 32]} />
+                            <meshStandardMaterial color={color} transparent opacity={0.08} />
+                        </mesh>
+                    </group>
                 )
             })}
 
@@ -147,6 +162,9 @@ export default function CityScene({ data }) {
                     isConnected={connectedIds.has(building.id)}
                 />
             ))}
+
+            {/* Trees in green spaces */}
+            <Trees buildings={centeredBuildings} />
 
             {/* Roads - flat ribbon style */}
             {roadsToRender.map((road, i) => {

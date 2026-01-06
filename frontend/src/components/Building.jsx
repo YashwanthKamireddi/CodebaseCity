@@ -2,6 +2,7 @@ import React, { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '../store/useStore'
+import BuildingLabel from './BuildingLabel'
 
 // Realistic city colors by language
 const LANGUAGE_COLORS = {
@@ -88,6 +89,13 @@ export default function Building({ data, isConnected }) {
         <boxGeometry args={[width * 1.5, height * 1.5, depth * 1.5]} />
         <meshBasicMaterial transparent opacity={0} />
       </mesh>
+
+      {/* Building Label with pattern detection */}
+      <BuildingLabel
+        building={data}
+        position={{ x: 0, z: 0 }}
+        height={height}
+      />
     </group>
   )
 }

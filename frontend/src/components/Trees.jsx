@@ -1,137 +1,59 @@
-import React, { useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
+import React from 'react'
 
-// Tree types based on file purpose
-const TREE_TYPES = {
-    test: { color: '#22c55e', trunkColor: '#854d0e', scale: 1.0 },      // Green - tests
-    utility: { color: '#3b82f6', trunkColor: '#78350f', scale: 0.8 },   // Blue - utils
-    docs: { color: '#ec4899', trunkColor: '#92400e', scale: 0.6 },      // Pink - docs
-    config: { color: '#f59e0b', trunkColor: '#78350f', scale: 0.7 },    // Orange - config
-}
+// Simple tree component for green spaces
+export default function Trees({ buildings }) {
+    if (!buildings || buildings.length < 5) return null
 
-// Determine tree type from file info
-function getTreeType(building) {
-    const name = building.name?.toLowerCase() || ''
-    const path = building.path?.toLowerCase() || ''
+    // Place trees in gaps between buildings
+    const treePositions = []
+    const gridSize = 15
 
-    if (name.includes('test') || name.includes('spec') || path.includes('test')) {
-        return 'test'
-    }
-    if (name.includes('util') || name.includes('helper') || path.includes('util')) {
-        return 'utility'
-    }
-    if (name.endsWith('.md') || name.endsWith('.txt') || name.includes('readme')) {
-        return 'docs'
-    }
-    if (name.includes('config') || name.endsWith('.json') || name.endsWith('.yaml')) {
-        return 'config'
-    }
-    return null
-}
+    // Create a grid of potential tree positions
+    for (let x = -80; x < 80; x += gridSize) {
+        for (let z = -80; z < 80; z += gridSize) {
+            // Check if any building is too close
+            const tooClose = buildings.some(b => {
+                const dx = b.position.x - x
+                const dz = b.position.z - z
+                return Math.sqrt(dx * dx + dz * dz) < 8
+            })
 
-// Single tree component with low-poly style
-function Tree({ position, type = 'test', seed = 0 }) {
-    const treeRef = useRef()
-    const treeConfig = TREE_TYPES[type] || TREE_TYPES.test
-
-    // Gentle sway animation
-    useFrame((state) => {
-        if (treeRef.current) {
-            const sway = Math.sin(state.clock.elapsedTime * 0.5 + seed) * 0.03
-            treeRef.current.rotation.z = sway
+            if (!tooClose && Math.random() > 0.7) {
+                treePositions.push({ x, z, scale: 0.5 + Math.random() * 0.5 })
+            }
         }
-    })
-
-    const scale = treeConfig.scale * (0.8 + Math.random() * 0.4)
+    }
 
     return (
-        <group ref={treeRef} position={position}>
-            {/* Trunk */}
-            <mesh position={[0, 1.5 * scale, 0]} castShadow>
-                <cylinderGeometry args={[0.2 * scale, 0.3 * scale, 3 * scale, 6]} />
-                <meshStandardMaterial color={treeConfig.trunkColor} roughness={0.9} />
-            </mesh>
-
-            {/* Foliage - stacked cones for low-poly look */}
-            <mesh position={[0, 3.5 * scale, 0]} castShadow>
-                <coneGeometry args={[1.8 * scale, 2.5 * scale, 6]} />
-                <meshStandardMaterial
-                    color={treeConfig.color}
-                    roughness={0.7}
-                    flatShading
-                />
-            </mesh>
-            <mesh position={[0, 4.8 * scale, 0]} castShadow>
-                <coneGeometry args={[1.4 * scale, 2 * scale, 6]} />
-                <meshStandardMaterial
-                    color={treeConfig.color}
-                    roughness={0.7}
-                    flatShading
-                />
-            </mesh>
-            <mesh position={[0, 5.8 * scale, 0]} castShadow>
-                <coneGeometry args={[0.9 * scale, 1.5 * scale, 6]} />
-                <meshStandardMaterial
-                    color={treeConfig.color}
-                    roughness={0.7}
-                    flatShading
-                />
-            </mesh>
+        <group>
+            {treePositions.slice(0, 30).map((pos, i) => (
+                <Tree key={i} position={[pos.x, 0, pos.z]} scale={pos.scale} />
+            ))}
         </group>
     )
 }
 
-// Generate tree positions around buildings
-export default function Trees({ buildings }) {
-    const treeData = useMemo(() => {
-        if (!buildings || buildings.length === 0) return []
-
-        const trees = []
-
-        buildings.forEach((building, index) => {
-            const treeType = getTreeType(building)
-            if (!treeType) return
-
-            const { x, z } = building.position
-            const { width, depth } = building.dimensions
-
-            // Place 1-3 trees around the building
-            const treeCount = 1 + Math.floor(Math.random() * 2)
-
-            for (let i = 0; i < treeCount; i++) {
-                const angle = (Math.PI * 2 * i) / treeCount + Math.random() * 0.5
-                const distance = Math.max(width, depth) * 0.8 + 2 + Math.random() * 3
-
-                trees.push({
-                    id: `tree-${index}-${i}`,
-                    position: [
-                        x + Math.cos(angle) * distance,
-                        0,
-                        z + Math.sin(angle) * distance
-                    ],
-                    type: treeType,
-                    seed: index * 100 + i
-                })
-            }
-        })
-
-        // Limit trees for performance
-        return trees.slice(0, 150)
-    }, [buildings])
-
-    if (treeData.length === 0) return null
-
+function Tree({ position, scale = 1 }) {
     return (
-        <group>
-            {treeData.map(tree => (
-                <Tree
-                    key={tree.id}
-                    position={tree.position}
-                    type={tree.type}
-                    seed={tree.seed}
-                />
-            ))}
+        <group position={position} scale={[scale, scale, scale]}>
+            {/* Trunk */}
+            <mesh position={[0, 1.5, 0]} castShadow>
+                <cylinderGeometry args={[0.3, 0.4, 3, 8]} />
+                <meshStandardMaterial color="#5d4037" roughness={0.9} />
+            </mesh>
+            {/* Foliage layers */}
+            <mesh position={[0, 3.5, 0]} castShadow>
+                <coneGeometry args={[2, 3, 8]} />
+                <meshStandardMaterial color="#2d5a27" roughness={0.8} />
+            </mesh>
+            <mesh position={[0, 5, 0]} castShadow>
+                <coneGeometry args={[1.5, 2.5, 8]} />
+                <meshStandardMaterial color="#3d7a37" roughness={0.8} />
+            </mesh>
+            <mesh position={[0, 6.2, 0]} castShadow>
+                <coneGeometry args={[1, 2, 8]} />
+                <meshStandardMaterial color="#4d8a47" roughness={0.8} />
+            </mesh>
         </group>
     )
 }

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import useStore from '../store/useStore'
 
 export default function ControlsPanel({ sidebarOpen, onToggleSidebar }) {
-    const { toggleRoads, showRoads, toggleNightMode, nightMode, cityData } = useStore()
+    const { toggleRoads, showRoads, toggleNightMode, nightMode, cityData, showLabels, toggleLabels } = useStore()
 
     const handleExportPNG = useCallback(() => {
         // Find the canvas element
@@ -83,6 +83,19 @@ export default function ControlsPanel({ sidebarOpen, onToggleSidebar }) {
             >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+            </button>
+
+            {/* Labels Toggle */}
+            <button
+                style={btnStyle(showLabels)}
+                onClick={toggleLabels}
+                title="Toggle Labels"
+            >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M4 7V4h16v3" />
+                    <path d="M9 20h6" />
+                    <path d="M12 4v16" />
                 </svg>
             </button>
 

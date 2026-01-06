@@ -1,5 +1,6 @@
 import React from 'react'
 import useStore from '../store/useStore'
+import { detectPattern } from './BuildingLabel'
 
 export default function BuildingPanel({ building }) {
     const { clearSelection } = useStore()
@@ -11,6 +12,7 @@ export default function BuildingPanel({ building }) {
     const healthColor = healthScore >= 70 ? '#22c55e' : healthScore >= 40 ? '#eab308' : '#ef4444'
     const langDisplay = language?.charAt(0).toUpperCase() + language?.slice(1) || 'Unknown'
     const suggestions = getSuggestions(metrics, is_hotspot, decay_level)
+    const pattern = detectPattern(building)
 
     return (
         <div style={{
@@ -56,6 +58,18 @@ export default function BuildingPanel({ building }) {
                 {decay_level > 0.6 && (
                     <span style={{ padding: '4px 8px', background: 'rgba(234,179,8,0.2)', borderRadius: '4px', fontSize: '11px', color: '#fbbf24' }}>
                         Legacy
+                    </span>
+                )}
+                {pattern && (
+                    <span style={{
+                        padding: '4px 8px',
+                        background: `${pattern.color}20`,
+                        borderRadius: '4px',
+                        fontSize: '11px',
+                        color: pattern.color,
+                        fontWeight: 600
+                    }}>
+                        ⚠ {pattern.label}
                     </span>
                 )}
             </div>
