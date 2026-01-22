@@ -1,24 +1,27 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import useStore from '../store/useStore'
+import {
+    GitGraph,
+    Type,
+    Moon,
+    Sun,
+    Download,
+    RotateCcw,
+    MessageSquare
+} from 'lucide-react'
+import '../styles/ProfessionalUI.css'
 
 export default function ControlsPanel({ sidebarOpen, onToggleSidebar }) {
     const { toggleRoads, showRoads, toggleNightMode, nightMode, cityData, showLabels, toggleLabels } = useStore()
+    const [hoveredBtn, setHoveredBtn] = useState(null)
 
     const handleExportPNG = useCallback(() => {
-        // Find the canvas element
         const canvas = document.querySelector('canvas')
         if (!canvas) {
             alert('No canvas found to export')
             return
         }
 
-        // Get the WebGL context and render
-        const gl = canvas.getContext('webgl2') || canvas.getContext('webgl')
-        if (gl) {
-            gl.finish()
-        }
-
-        // Convert to data URL and download
         try {
             const dataUrl = canvas.toDataURL('image/png', 1.0)
             const link = document.createElement('a')
@@ -27,113 +30,126 @@ export default function ControlsPanel({ sidebarOpen, onToggleSidebar }) {
             link.click()
         } catch (err) {
             console.error('Export failed:', err)
-            alert('Export failed - try refreshing the page')
         }
     }, [cityData])
 
-    const btnStyle = (active) => ({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '40px',
-        height: '40px',
-        background: active ? 'linear-gradient(135deg, #818cf8, #6366f1)' : 'rgba(255, 255, 255, 0.08)',
-        border: active ? 'none' : '1px solid rgba(255, 255, 255, 0.1)',
-        borderRadius: '8px',
-        color: active ? '#fff' : 'rgba(255, 255, 255, 0.7)',
-        cursor: 'pointer',
-        transition: 'all 0.15s ease',
-        boxShadow: active ? '0 4px 12px rgba(99, 102, 241, 0.4)' : 'none'
-    })
+    const ToolButton = ({ id, active, onClick, icon, label, shortcut }) => (
+        <div
+            style={{ position: 'relative' }}
+            onMouseEnter={() => setHoveredBtn(id)}
+            onMouseLeave={() => setHoveredBtn(null)}
+        >
+            <button
+                className={`p-icon-btn ${active ? 'active' : ''}`}
+                onClick={onClick}
+                style={{
+                    background: active ? 'var(--color-bg-hover)' : 'transparent',
+                    color: active ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+                    width: '36px',
+                    height: '36px'
+                }}
+            >
+                {icon}
+            </button>
+            {hoveredBtn === id && (
+                <div style={{
+                    position: 'absolute',
+                    bottom: '100%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    marginBottom: '8px',
+                    padding: '4px 8px',
+                    background: 'var(--color-bg-secondary)',
+                    border: '1px solid var(--border-default)',
+                    borderRadius: '4px',
+                    fontSize: '11px',
+                    whiteSpace: 'nowrap',
+                    boxShadow: 'var(--shadow-lg)',
+                    zIndex: 1000,
+                    pointerEvents: 'none',
+                    color: 'var(--color-text-primary)'
+                }}>
+                    {label}
+                    {shortcut && <span style={{ marginLeft: '6px', opacity: 0.5 }}>{shortcut}</span>}
+                </div>
+            )}
+        </div>
+    )
 
     return (
         <div style={{
             position: 'fixed',
-            bottom: '20px',
+            bottom: '24px',
             left: '50%',
             transform: 'translateX(-50%)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '10px 14px',
-            background: 'rgba(20, 20, 30, 0.95)',
-            backdropFilter: 'blur(12px)',
+            display: 'flex',
+            gap: '4px',
+            padding: '4px',
+            background: 'var(--color-bg-secondary)',
+            border: '1px solid var(--border-default)',
             borderRadius: '12px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            boxShadow: '0 4px 24px rgba(0, 0, 0, 0.4)',
+            boxShadow: 'var(--shadow-xl)',
             zIndex: 500
         }}>
-            {/* Toggle Dependencies */}
-            <button
-                style={btnStyle(showRoads)}
+            <ToolButton
+                id="roads"
+                active={showRoads}
                 onClick={toggleRoads}
-                title="Toggle Dependencies"
-            >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M3 3v18h18" />
-                    <path d="M7 16l4-8 4 8 4-12" />
-                </svg>
-            </button>
+                label="Dependencies"
+                shortcut="D"
+                icon={<GitGraph size={18} />}
+            />
 
-            {/* Night Mode */}
-            <button
-                style={btnStyle(nightMode)}
-                onClick={toggleNightMode}
-                title="Toggle Night Mode"
-            >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                </svg>
-            </button>
-
-            {/* Labels Toggle */}
-            <button
-                style={btnStyle(showLabels)}
+            <ToolButton
+                id="labels"
+                active={showLabels}
                 onClick={toggleLabels}
-                title="Toggle Labels"
-            >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M4 7V4h16v3" />
-                    <path d="M9 20h6" />
-                    <path d="M12 4v16" />
-                </svg>
-            </button>
+                label="Labels"
+                shortcut="L"
+                icon={<Type size={18} />}
+            />
 
-            {/* Export PNG */}
-            <button
-                style={btnStyle(false)}
+            <div style={{ width: '1px', background: 'var(--border-subtle)', margin: '4px 2px' }} />
+
+            <ToolButton
+                id="night"
+                active={nightMode}
+                onClick={toggleNightMode}
+                label={nightMode ? "Day Mode" : "Night Mode"}
+                shortcut="N"
+                icon={nightMode ? <Sun size={18} /> : <Moon size={18} />}
+            />
+
+            <div style={{ width: '1px', background: 'var(--border-subtle)', margin: '4px 2px' }} />
+
+            <ToolButton
+                id="export"
+                active={false}
                 onClick={handleExportPNG}
-                title="Export as PNG"
-            >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                    <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-            </button>
+                label="Export PNG"
+                shortcut="E"
+                icon={<Download size={18} />}
+            />
 
-            {/* Reset View */}
-            <button
-                style={btnStyle(false)}
+            <ToolButton
+                id="reset"
+                active={false}
                 onClick={() => window.location.reload()}
-                title="Reset View"
-            >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                    <path d="M3 3v5h5" />
-                </svg>
-            </button>
+                label="Reset View"
+                shortcut="R"
+                icon={<RotateCcw size={18} />}
+            />
 
-            {/* AI Chat Toggle */}
-            <button
-                style={btnStyle(sidebarOpen)}
+            <div style={{ width: '1px', background: 'var(--border-subtle)', margin: '4px 2px' }} />
+
+            <ToolButton
+                id="chat"
+                active={sidebarOpen}
                 onClick={onToggleSidebar}
-                title="Toggle AI Guide"
-            >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                </svg>
-            </button>
+                label="Assistant"
+                shortcut="G"
+                icon={<MessageSquare size={18} />}
+            />
         </div>
     )
 }

@@ -1,25 +1,36 @@
+/**
+ * CityScene.jsx
+ *
+ * Clean, practical 3D codebase visualization
+ * Focus: Fast, informative, not gimmicky
+ */
+
 import React, { useMemo } from 'react'
 import * as THREE from 'three'
-import Building from './Building'
+import DataBlock from './DataBlock'
+import PostProcessing from './PostProcessing'
+import { Environment, Grid } from '@react-three/drei'
 import useStore from '../store/useStore'
 
-// District colors - muted, urban tones
-const DISTRICT_COLORS = {
-    api: '#4a90a4',
-    services: '#7c6b9e',
-    data: '#4a9e9e',
-    utils: '#6a9e6a',
-    auth: '#9e8a4a',
-    ui: '#9e6a8a',
-    tests: '#5a8e8e',
-    config: '#7a7a9e',
-    frontend: '#9e6a8a',
-    backend: '#4a90a4'
+// Module colors by type - developer-friendly naming
+const MODULE_COLORS = {
+    api: '#3b82f6',      // Blue
+    services: '#8b5cf6', // Purple
+    data: '#06b6d4',     // Cyan
+    utils: '#22c55e',    // Green
+    auth: '#f59e0b',     // Amber
+    ui: '#ec4899',       // Pink
+    tests: '#6366f1',    // Indigo
+    config: '#64748b',   // Slate
+    frontend: '#f97316', // Orange
+    backend: '#0ea5e9',  // Sky
+    default: '#6b7280'   // Gray
 }
 
 export default function CityScene({ data }) {
     const { showRoads, selectedBuilding } = useStore()
 
+    // Process and center building data
     const { centeredBuildings, centeredDistricts, buildingMap } = useMemo(() => {
         if (!data?.buildings?.length) {
             return { centeredBuildings: [], centeredDistricts: [], buildingMap: {} }
@@ -54,7 +65,7 @@ export default function CityScene({ data }) {
         return { centeredBuildings, centeredDistricts, buildingMap }
     }, [data])
 
-    // Connected buildings
+    // Find connected files for selected file
     const connectedIds = useMemo(() => {
         if (!selectedBuilding || !data?.roads) return new Set()
         const ids = new Set()
@@ -67,8 +78,8 @@ export default function CityScene({ data }) {
         return ids
     }, [selectedBuilding, data?.roads])
 
-    // Roads to render
-    const roadsToRender = useMemo(() => {
+    // Dependencies to show
+    const dependenciesToShow = useMemo(() => {
         if (!data?.roads) return []
         if (selectedBuilding) {
             return data.roads.filter(road => {
@@ -77,19 +88,20 @@ export default function CityScene({ data }) {
                 return source === selectedBuilding.id || target === selectedBuilding.id
             })
         } else if (showRoads) {
-            return data.roads.slice(0, 40)
+            return data.roads.slice(0, 50)
         }
         return []
     }, [data?.roads, selectedBuilding, showRoads])
 
+    // Empty state
     if (!centeredBuildings.length) {
         return (
             <group>
                 <ambientLight intensity={0.6} />
-                <directionalLight position={[50, 80, 50]} intensity={1.2} />
+                <directionalLight position={[50, 80, 50]} intensity={1} />
                 <mesh rotation={[-Math.PI / 2, 0, 0]}>
-                    <planeGeometry args={[300, 300]} />
-                    <meshStandardMaterial color="#4a5568" />
+                    <planeGeometry args={[200, 200]} />
+                    <meshStandardMaterial color="#1e293b" />
                 </mesh>
             </group>
         )
@@ -100,61 +112,104 @@ export default function CityScene({ data }) {
 
     return (
         <group>
-            {/* City Lighting - warm golden hour */}
-            <ambientLight intensity={0.5} color="#fff5eb" />
+            {/* ═══════════════════════════════════════════════════════════════
+                PRACTICAL LIGHTING - Clean, readable
+                ═══════════════════════════════════════════════════════════════ */}
+
+            <PostProcessing enabled={true} />
+
+            {/* HDRI for realistic reflections (subtle but useful) */}
+            <Environment preset="city" background={false} />
+
+            {/* Simple ambient for base visibility */}
+            <ambientLight intensity={0.5} color="#ffffff" />
+
+            {/* Main directional light */}
             <directionalLight
-                position={[80, 100, 60]}
-                intensity={1.4}
-                color="#fef3c7"
+                position={[60, 80, 40]}
+                intensity={1.2}
+                color="#ffffff"
                 castShadow
-                shadow-mapSize={[2048, 2048]}
-            />
-            <directionalLight position={[-40, 60, -40]} intensity={0.3} color="#bfdbfe" />
-            <hemisphereLight args={['#87ceeb', '#6b7280', 0.4]} />
-
-            {/* City Ground - concrete/asphalt */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-                <planeGeometry args={[gridSize, gridSize]} />
-                <meshStandardMaterial color="#4b5563" roughness={0.95} />
-            </mesh>
-
-            {/* City grid - street pattern */}
-            <gridHelper
-                args={[gridSize, Math.floor(gridSize / 20), '#6b7280', '#5a5a68']}
-                position={[0, 0.02, 0]}
+                shadow-mapSize={[1024, 1024]}
+                shadow-camera-far={200}
+                shadow-camera-left={-80}
+                shadow-camera-right={80}
+                shadow-camera-top={80}
+                shadow-camera-bottom={-80}
             />
 
-            {/* District zones - flat glowing rings only */}
+            {/* Fill light for shadows */}
+            <directionalLight
+                position={[-40, 50, -40]}
+                intensity={0.3}
+                color="#94a3b8"
+            />
+
+            {/* ═══════════════════════════════════════════════════════════════
+                GROUND PLANE - High-end Grid
+                ═══════════════════════════════════════════════════════════════ */}
+
+            <Grid
+                position={[0, 0.01, 0]}
+                args={[gridSize, gridSize]}
+                cellSize={10}
+                cellThickness={1}
+                cellColor="#334155"
+                sectionSize={50}
+                sectionThickness={1.5}
+                sectionColor="#475569"
+                fadeDistance={150}
+                fadeStrength={1}
+                infiniteGrid
+            />
+
+
+
+
+            {/* ═══════════════════════════════════════════════════════════════
+                MODULE BOUNDARIES - Show file groupings
+                ═══════════════════════════════════════════════════════════════ */}
+
             {centeredDistricts.map((district) => {
                 const cx = district.center?.x || 0
                 const cy = district.center?.y || 0
-                const size = 30 + (district.building_count || 5) * 3
-                const color = DISTRICT_COLORS[district.id?.toLowerCase()] || district.color || '#6b7280'
+                const size = 25 + (district.building_count || 5) * 2.5
+                const color = MODULE_COLORS[district.id?.toLowerCase()] || MODULE_COLORS.default
 
                 return (
-                    <mesh key={district.id} rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.15, cy]}>
-                        <ringGeometry args={[size - 2, size, 64]} />
+                    <mesh
+                        key={district.id}
+                        rotation={[-Math.PI / 2, 0, 0]}
+                        position={[cx, 0.1, cy]}
+                    >
+                        <ringGeometry args={[size - 1.5, size, 48]} />
                         <meshBasicMaterial
                             color={color}
                             transparent
-                            opacity={0.5}
+                            opacity={0.4}
                             depthWrite={false}
                         />
                     </mesh>
                 )
             })}
 
-            {/* Buildings */}
+            {/* ═══════════════════════════════════════════════════════════════
+                FILES (Buildings)
+                ═══════════════════════════════════════════════════════════════ */}
+
             {centeredBuildings.map(building => (
-                <Building
+                <DataBlock
                     key={building.id}
                     data={building}
                     isConnected={connectedIds.has(building.id)}
                 />
             ))}
 
-            {/* Roads - flat ribbon style */}
-            {roadsToRender.map((road, i) => {
+            {/* ═══════════════════════════════════════════════════════════════
+                DEPENDENCIES (Lines between files)
+                ═══════════════════════════════════════════════════════════════ */}
+
+            {dependenciesToShow.map((road, i) => {
                 const sourceId = road.source || road.from
                 const targetId = road.target || road.to
                 const fromBuilding = buildingMap[sourceId]
@@ -164,46 +219,24 @@ export default function CityScene({ data }) {
                 const isHighlighted = selectedBuilding &&
                     (sourceId === selectedBuilding.id || targetId === selectedBuilding.id)
 
-                // Simple straight line with raised height
-                const start = new THREE.Vector3(fromBuilding.position.x, 0.2, fromBuilding.position.z)
-                const end = new THREE.Vector3(toBuilding.position.x, 0.2, toBuilding.position.z)
+                const start = new THREE.Vector3(fromBuilding.position.x, 0.3, fromBuilding.position.z)
+                const end = new THREE.Vector3(toBuilding.position.x, 0.3, toBuilding.position.z)
                 const curve = new THREE.LineCurve3(start, end)
 
                 return (
                     <mesh key={i}>
-                        <tubeGeometry args={[curve, 2, isHighlighted ? 0.5 : 0.25, 6, false]} />
+                        <tubeGeometry args={[curve, 2, isHighlighted ? 0.4 : 0.15, 6, false]} />
                         <meshBasicMaterial
-                            color={isHighlighted ? "#3b82f6" : "#6b7280"}
+                            color={isHighlighted ? "#3b82f6" : "#475569"}
                             transparent
-                            opacity={isHighlighted ? 0.9 : 0.4}
+                            opacity={isHighlighted ? 0.9 : 0.3}
                             depthWrite={false}
                         />
                     </mesh>
                 )
             })}
-
-            {/* Street lamps */}
-            {centeredBuildings.filter((_, i) => i % 4 === 0).slice(0, 20).map((b, i) => (
-                <group key={`lamp-${i}`} position={[b.position.x + 4, 0, b.position.z + 4]}>
-                    {/* Pole */}
-                    <mesh position={[0, 3, 0]} castShadow>
-                        <cylinderGeometry args={[0.1, 0.15, 6, 8]} />
-                        <meshStandardMaterial color="#374151" metalness={0.7} roughness={0.3} />
-                    </mesh>
-                    {/* Lamp arm */}
-                    <mesh position={[0.5, 5.5, 0]} rotation={[0, 0, Math.PI / 6]}>
-                        <cylinderGeometry args={[0.08, 0.08, 1.2, 6]} />
-                        <meshStandardMaterial color="#374151" metalness={0.7} />
-                    </mesh>
-                    {/* Light */}
-                    <mesh position={[1, 5.3, 0]}>
-                        <sphereGeometry args={[0.25, 16, 16]} />
-                        <meshBasicMaterial color="#fef3c7" />
-                    </mesh>
-                    {/* Point light for glow */}
-                    <pointLight position={[1, 5, 0]} intensity={0.5} distance={15} color="#fef3c7" />
-                </group>
-            ))}
         </group>
     )
 }
+
+export { MODULE_COLORS }

@@ -1,18 +1,31 @@
 /* App-specific styles */
 
-.app-container {
+.app-layout {
     display: flex;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background: #0a0a0f;
+    background: var(--color-bg-primary);
 }
 
-.canvas-container {
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.canvas-wrapper {
     flex: 1;
     position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
-.canvas-container canvas {
+.canvas-wrapper canvas {
     background: linear-gradient(to bottom, #0a0a12, #0f0f18);
+    display: block; /* Removes bottom spacing */
 }

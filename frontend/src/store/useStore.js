@@ -30,6 +30,8 @@ const useStore = create((set, get) => ({
     showLabels: true,
     nightMode: false,
     theme: getInitialTheme(), // 'light' | 'dark'
+    commandPaletteOpen: false,
+    analyzeModalOpen: false,
 
     // Chat State
     messages: [],
@@ -41,17 +43,26 @@ const useStore = create((set, get) => ({
     historyLoading: false,
     currentRepoPath: null,
 
+    // VS Code Integration State
+    vscodeConnected: false,
+
+    // Time Travel Animation State
+    isAnimating: false,
+    animationSpeed: 1000, // ms per commit
+    previousCityData: null, // For morphing animations
+
     // Actions
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error, loading: false }),
     setProgress: (progress) => set({ analysisProgress: progress }),
 
-    setCityData: (data) => set({
+    setCityData: (data) => set((state) => ({
+        previousCityData: state.cityData, // Store for morphing
         cityData: data,
         loading: false,
         error: null,
         analysisProgress: 100
-    }),
+    })),
 
     selectBuilding: (building) => set({ selectedBuilding: building }),
     clearSelection: () => set({ selectedBuilding: null }),
@@ -62,6 +73,54 @@ const useStore = create((set, get) => ({
     toggleRoads: () => set((state) => ({ showRoads: !state.showRoads })),
     toggleLabels: () => set((state) => ({ showLabels: !state.showLabels })),
     toggleNightMode: () => set((state) => ({ nightMode: !state.nightMode })),
+
+    setCommandPaletteOpen: (open) => set((state) => ({
+        commandPaletteOpen: open,
+        analyzeModalOpen: open ? false : state.analyzeModalOpen
+    })),
+
+    setAnalyzeModalOpen: (open) => set((state) => ({
+        analyzeModalOpen: open,
+        commandPaletteOpen: open ? false : state.commandPaletteOpen
+    })),
+
+    // VS Code integration
+    setVSCodeConnected: (connected) => set({ vscodeConnected: connected }),
+
+    // Time Travel Animation
+    setAnimating: (isAnimating) => set({ isAnimating }),
+    setAnimationSpeed: (speed) => set({ animationSpeed: speed }),
+
+    // Animated time travel through commits
+    startTimeTravel: async (startIndex, endIndex, direction = 'backward') => {
+        const { commits, analyzeAtCommit, setAnimating, animationSpeed } = get()
+
+        if (commits.length === 0) return
+
+        setAnimating(true)
+
+        const step = direction === 'backward' ? 1 : -1
+        let current = startIndex
+
+        while (
+            (direction === 'backward' && current <= endIndex) ||
+            (direction === 'forward' && current >= endIndex)
+        ) {
+            if (!get().isAnimating) break // Allow stopping
+
+            const commit = commits[current]
+            if (commit) {
+                set({ currentCommitIndex: current })
+                await analyzeAtCommit(commit.hash)
+                await new Promise(r => setTimeout(r, animationSpeed))
+            }
+            current += step
+        }
+
+        setAnimating(false)
+    },
+
+    stopTimeTravel: () => set({ isAnimating: false }),
 
     toggleTheme: () => set((state) => {
         const newTheme = state.theme === 'dark' ? 'light' : 'dark'

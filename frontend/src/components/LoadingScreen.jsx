@@ -63,7 +63,7 @@ export default function LoadingScreen() {
                 </div>
 
                 {/* Title */}
-                <h2 className="loading-title">Building Your City{dots}</h2>
+                <h2 className="loading-title">Analyzing Codebase{dots}</h2>
 
                 {/* Current Stage */}
                 <div className="loading-stage">

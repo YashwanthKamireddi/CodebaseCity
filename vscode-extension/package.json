@@ -1,0 +1,136 @@
+{
+  "name": "codebase-city",
+  "displayName": "Codebase City",
+  "description": "Visualize your codebase as an interactive 3D city",
+  "version": "1.0.0",
+  "publisher": "codebase-city",
+  "icon": "images/icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "visualization",
+    "3d",
+    "codebase",
+    "architecture",
+    "code-map"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codebaseCity.openCity",
+        "title": "Open Codebase City",
+        "icon": "$(home)"
+      },
+      {
+        "command": "codebaseCity.analyzeWorkspace",
+        "title": "Analyze Current Workspace in Codebase City",
+        "icon": "$(search)"
+      },
+      {
+        "command": "codebaseCity.findInCity",
+        "title": "Find Current File in City",
+        "icon": "$(pin)"
+      },
+      {
+        "command": "codebaseCity.startServer",
+        "title": "Start Codebase City Server"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "codebaseCity.findInCity",
+          "group": "navigation",
+          "when": "codebaseCity.connected"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "codebaseCity.analyzeWorkspace",
+          "group": "navigation",
+          "when": "explorerResourceIsFolder"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codebase-city",
+          "title": "Codebase City",
+          "icon": "$(home)"
+        }
+      ]
+    },
+    "views": {
+      "codebase-city": [
+        {
+          "type": "webview",
+          "id": "codebaseCity.cityView",
+          "name": "City View"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Codebase City",
+      "properties": {
+        "codebaseCity.serverUrl": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "URL of the Codebase City backend server"
+        },
+        "codebaseCity.frontendUrl": {
+          "type": "string",
+          "default": "http://localhost:5173",
+          "description": "URL of the Codebase City frontend"
+        },
+        "codebaseCity.autoSync": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically sync current file with city view"
+        },
+        "codebaseCity.maxFiles": {
+          "type": "number",
+          "default": 5000,
+          "description": "Maximum number of files to analyze"
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "codebaseCity.openCity",
+        "key": "ctrl+shift+c",
+        "mac": "cmd+shift+c"
+      },
+      {
+        "command": "codebaseCity.findInCity",
+        "key": "ctrl+shift+f",
+        "mac": "cmd+shift+f",
+        "when": "editorTextFocus && codebaseCity.connected"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@types/ws": "^8.5.10",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {
+    "ws": "^8.16.0"
+  }
+}

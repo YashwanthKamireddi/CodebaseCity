@@ -1,17 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Map, ChevronDown, ChevronRight, Activity } from 'lucide-react'
+import '../styles/ProfessionalUI.css'
 
-// Compact language colors
-const COLORS = {
-    python: '#3572A5',
-    javascript: '#F7DF1E',
-    typescript: '#3178C6',
-    java: '#B07219',
-    go: '#00ADD8',
-    rust: '#DEA584',
-    default: '#6B7280'
+// Language colors with icons
+const LANGUAGES = {
+    python: { color: '#3572A5', icon: '🐍' },
+    javascript: { color: '#F7DF1E', icon: '📜' },
+    typescript: { color: '#3178C6', icon: '🔷' },
+    java: { color: '#B07219', icon: '☕' },
+    go: { color: '#00ADD8', icon: '🔵' },
+    rust: { color: '#DEA584', icon: '🦀' },
+    default: { color: '#6B7280', icon: '📄' }
 }
 
 export default function LegendPanel({ districts, buildings }) {
+    const [collapsed, setCollapsed] = useState(false)
+
     // Count top 5 languages only
     const langCounts = {}
     buildings?.forEach(b => {
@@ -23,73 +27,133 @@ export default function LegendPanel({ districts, buildings }) {
 
     const topLangs = Object.entries(langCounts)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 4)
+        .slice(0, 5)
+
+    const totalFiles = buildings?.length || 0
 
     return (
         <div style={{
             position: 'fixed',
-            bottom: '80px',
+            bottom: '100px',
             right: '16px',
-            width: '160px',
-            background: 'rgba(20, 20, 30, 0.95)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '10px',
-            padding: '12px',
+            width: collapsed ? '48px' : '200px',
             zIndex: 400,
-            fontSize: '12px',
-            color: '#b4b4c0'
+            transition: 'width 0.2s cubic-bezier(0.2, 0, 0, 1)',
+            overflow: 'hidden',
+            background: 'rgba(20, 20, 23, 0.75)',
+            backdropFilter: 'blur(40px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(40px) saturate(180%)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06) inset',
+            borderRadius: '16px',
+            display: 'flex',
+            flexDirection: 'column'
         }}>
-            {/* Languages */}
-            <div style={{ marginBottom: '12px' }}>
-                <div style={{ fontSize: '10px', color: '#7a7a8c', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    Languages
+            {/* Header */}
+            <div
+                className="p-panel-header"
+                style={{
+                    padding: '12px',
+                    cursor: 'pointer',
+                    minHeight: '44px',
+                    borderBottom: collapsed ? 'none' : '1px solid rgba(255,255,255,0.06)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    background: 'transparent'
+                }}
+                onClick={() => setCollapsed(!collapsed)}
+            >
+                <div className="p-panel-title" style={{ fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Map size={16} color="var(--color-text-secondary)" />
+                    {!collapsed && <span style={{ fontWeight: 600 }}>Legend</span>}
                 </div>
-                {topLangs.map(([lang, count]) => (
-                    <div key={lang} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-                        <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: COLORS[lang] || COLORS.default }} />
-                        <span style={{ flex: 1, textTransform: 'capitalize' }}>{lang}</span>
-                        <span style={{ color: '#6b7280' }}>{count}</span>
-                    </div>
-                ))}
+                {!collapsed ? <ChevronDown size={14} color="var(--color-text-tertiary)" /> : <ChevronRight size={14} color="var(--color-text-tertiary)" />}
             </div>
 
-            {/* Districts - compact */}
-            {districts?.length > 0 && (
-                <div style={{ marginBottom: '12px' }}>
-                    <div style={{ fontSize: '10px', color: '#7a7a8c', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                        Districts
+            {!collapsed && (
+                <div style={{ padding: '16px' }}>
+                    {/* Languages */}
+                    <SectionTitle>Languages</SectionTitle>
+                    <div style={{ marginBottom: '20px' }}>
+                        {topLangs.map(([lang, count]) => {
+                            const langInfo = LANGUAGES[lang] || LANGUAGES.default
+                            const percentage = totalFiles > 0 ? Math.round((count / totalFiles) * 100) : 0
+                            return (
+                                <div key={lang} style={{ marginBottom: '8px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '4px', color: 'var(--color-text-secondary)' }}>
+                                        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <span>{langInfo.icon}</span>
+                                            <span style={{ textTransform: 'capitalize' }}>{lang}</span>
+                                        </span>
+                                        <span style={{ opacity: 0.7 }}>{count}</span>
+                                    </div>
+                                    <div style={{ height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden' }}>
+                                        <div style={{ height: '100%', width: `${percentage}%`, background: langInfo.color, borderRadius: '2px' }} />
+                                    </div>
+                                </div>
+                            )
+                        })}
                     </div>
-                    {districts.slice(0, 3).map(d => (
-                        <div key={d.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }}>
-                            <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: d.color }} />
-                            <span style={{ flex: 1 }}>{d.name}</span>
-                            <span style={{ color: '#6b7280' }}>{d.building_count}</span>
-                        </div>
-                    ))}
+
+                    {/* Districts */}
+                    {districts?.length > 0 && (
+                        <>
+                            <SectionTitle>Modules</SectionTitle>
+                            <div style={{ marginBottom: '20px', display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                                {districts.slice(0, 5).map(d => (
+                                    <div key={d.id} style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '6px',
+                                        padding: '4px 8px',
+                                        background: 'rgba(255,255,255,0.05)',
+                                        border: '1px solid rgba(255,255,255,0.05)',
+                                        borderRadius: '6px',
+                                        fontSize: '0.75rem',
+                                        color: 'var(--color-text-secondary)'
+                                    }}>
+                                        <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: d.color }} />
+                                        <span className="truncate" style={{ maxWidth: '80px' }}>{d.name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )}
+
+                    {/* Health Status */}
+                    <SectionTitle>Health</SectionTitle>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <HealthItem color="var(--color-health-excellent)" label="Healthy" />
+                        <HealthItem color="var(--color-health-moderate)" label="Warning" />
+                        <HealthItem color="var(--color-health-critical)" label="Critical" />
+                    </div>
                 </div>
             )}
+        </div>
+    )
+}
 
-            {/* Health - very compact */}
-            <div>
-                <div style={{ fontSize: '10px', color: '#7a7a8c', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    Health
-                </div>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e' }} />
-                        <span>OK</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#eab308' }} />
-                        <span>Warn</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ef4444' }} />
-                        <span>Crit</span>
-                    </div>
-                </div>
-            </div>
+function SectionTitle({ children }) {
+    return (
+        <div style={{
+            fontSize: '0.65rem',
+            fontWeight: 600,
+            textTransform: 'uppercase',
+            color: 'var(--color-text-tertiary)',
+            letterSpacing: '0.05em',
+            marginBottom: '8px'
+        }}>
+            {children}
+        </div>
+    )
+}
+
+function HealthItem({ color, label }) {
+    return (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: color }} />
+            <span>{label}</span>
         </div>
     )
 }

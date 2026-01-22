@@ -3,7 +3,7 @@ Codebase City - Backend API
 AI-powered 3D codebase visualization
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
@@ -28,8 +28,23 @@ app.add_middleware(
 # Import and include routers
 from api.routes import router as api_router
 from api.history import router as history_router
+from api.websocket import websocket_vscode, websocket_frontend
+
 app.include_router(api_router, prefix="/api")
 app.include_router(history_router, prefix="/api")
+
+
+# WebSocket endpoints for VS Code integration
+@app.websocket("/ws/vscode")
+async def ws_vscode_endpoint(websocket: WebSocket):
+    """WebSocket for VS Code extension bidirectional sync"""
+    await websocket_vscode(websocket)
+
+
+@app.websocket("/ws/frontend")
+async def ws_frontend_endpoint(websocket: WebSocket):
+    """WebSocket for frontend browser bidirectional sync"""
+    await websocket_frontend(websocket)
 
 
 @app.get("/")
@@ -37,7 +52,8 @@ async def root():
     return {
         "name": "Codebase City API",
         "version": "1.0.0",
-        "status": "running"
+        "status": "running",
+        "features": ["3d-visualization", "vscode-sync", "git-timeline"]
     }
 
 

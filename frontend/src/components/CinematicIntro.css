@@ -1,0 +1,245 @@
+/**
+ * CinematicIntro.css
+ *
+ * Premium intro animation styles
+ */
+
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Background */
+.intro-bg {
+  position: absolute;
+  inset: 0;
+}
+
+.intro-bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 40%,
+    #1e1e3a 0%,
+    #0f0f1a 50%,
+    #050508 100%
+  );
+}
+
+.intro-bg-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Floating particles */
+.intro-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.intro-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: linear-gradient(135deg, #6366f1 0%, #a78bfa 100%);
+  border-radius: 50%;
+  filter: blur(1px);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+}
+
+/* Content */
+.intro-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+/* Logo */
+.intro-logo {
+  position: relative;
+}
+
+.intro-logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 28px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 0 60px rgba(99, 102, 241, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: logoGlow 3s ease-in-out infinite;
+}
+
+@keyframes logoGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 40px rgba(99, 102, 241, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 80px rgba(99, 102, 241, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+}
+
+/* Title */
+.intro-title {
+  margin: 0;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Tagline */
+.intro-tagline {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.02em;
+}
+
+/* Progress */
+.intro-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  width: 280px;
+}
+
+.intro-progress-track {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.intro-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1 0%, #a78bfa 50%, #6366f1 100%);
+  background-size: 200% 100%;
+  border-radius: 2px;
+  animation: progressShimmer 2s linear infinite;
+}
+
+@keyframes progressShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.intro-progress-glow {
+  position: absolute;
+  top: -4px;
+  width: 40px;
+  height: 12px;
+  background: radial-gradient(ellipse, rgba(99, 102, 241, 0.8) 0%, transparent 70%);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.intro-progress-text {
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.05em;
+}
+
+/* Skip button */
+.intro-skip {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.intro-skip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.intro-skip kbd {
+  padding: 0.125rem 0.375rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+}
+
+/* Reveal curtain */
+.intro-curtain {
+  position: absolute;
+  inset: 0;
+  background: #050508;
+  z-index: 10;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .intro-title {
+    font-size: 2.5rem;
+  }
+
+  .intro-tagline {
+    font-size: 0.9375rem;
+    text-align: center;
+  }
+
+  .intro-logo-icon {
+    width: 100px;
+    height: 100px;
+  }
+
+  .intro-logo-icon svg {
+    width: 60px;
+    height: 60px;
+  }
+
+  .intro-skip {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}

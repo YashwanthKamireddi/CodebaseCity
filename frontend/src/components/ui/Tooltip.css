@@ -1,0 +1,51 @@
+/**
+ * Tooltip.css
+ *
+ * Premium tooltip styles
+ */
+
+.tooltip-content {
+  padding: 0.375rem 0.75rem;
+  background: var(--color-bg-elevated, #1c1c1f);
+  border: 1px solid var(--border-default, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-md, 6px);
+  box-shadow: var(--shadow-lg, 0 10px 25px rgba(0, 0, 0, 0.35));
+
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-primary, #fafafa);
+  white-space: nowrap;
+
+  z-index: var(--z-tooltip, 70);
+}
+
+/* Light mode */
+[data-theme="light"] .tooltip-content {
+  background: var(--color-bg-primary, #ffffff);
+  color: var(--color-text-primary, #09090b);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* Arrow */
+.tooltip-arrow {
+  fill: var(--color-bg-elevated, #1c1c1f);
+}
+
+[data-theme="light"] .tooltip-arrow {
+  fill: var(--color-bg-primary, #ffffff);
+}
+
+/* Keyboard shortcut in tooltip */
+.tooltip-content kbd {
+  margin-left: 0.5rem;
+  padding: 0.125rem 0.25rem;
+  background: var(--color-bg-tertiary, #18181b);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.04));
+  border-radius: var(--radius-sm, 4px);
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.625rem;
+  color: var(--color-text-tertiary, #71717a);
+}

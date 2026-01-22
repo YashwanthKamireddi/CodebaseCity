@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react'
 import useStore from '../store/useStore'
 import { detectPattern } from './BuildingLabel'
+import { Activity, AlertTriangle, CheckCircle, BarChart2 } from 'lucide-react'
+import '../styles/ProfessionalUI.css'
 
 export default function HealthDashboard() {
     const { cityData } = useStore()
@@ -61,104 +63,138 @@ export default function HealthDashboard() {
 
     if (!stats) return null
 
-    const healthColor = stats.healthScore >= 70 ? '#22c55e' : stats.healthScore >= 40 ? '#eab308' : '#ef4444'
+    const healthColor = stats.healthScore >= 70 ? 'var(--color-health-excellent)' :
+        stats.healthScore >= 40 ? 'var(--color-health-moderate)' :
+            'var(--color-health-critical)'
+
     const patternCount = Object.values(stats.patterns).reduce((a, b) => a + b, 0)
 
     return (
         <div style={{
             position: 'fixed',
-            top: '72px',
-            right: '360px',
-            width: '280px',
-            background: 'rgba(20, 20, 30, 0.95)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '12px',
-            padding: '16px',
-            zIndex: 400
+            top: '16px',
+            right: '336px',
+            width: '260px',
+            zIndex: 400,
+            maxHeight: 'calc(100vh - 120px)',
+            overflowY: 'auto',
+            background: 'rgba(20, 20, 23, 0.75)',
+            backdropFilter: 'blur(40px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(40px) saturate(180%)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06) inset',
+            borderRadius: '16px',
+            display: 'flex',
+            flexDirection: 'column'
         }}>
             {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                <span style={{ fontSize: '14px', fontWeight: 600, color: '#fff' }}>📊 Health Dashboard</span>
-            </div>
-
-            {/* Health Score */}
-            <div style={{
+            <div className="p-panel-header" style={{
+                height: '56px',
+                borderBottom: '1px solid rgba(255,255,255,0.06)',
+                padding: '0 16px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '12px',
-                marginBottom: '16px',
-                padding: '12px',
-                background: 'rgba(255,255,255,0.04)',
-                borderRadius: '8px'
+                justifyContent: 'space-between',
+                background: 'transparent'
             }}>
+                <div className="p-panel-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <BarChart2 size={16} color="var(--color-text-secondary)" />
+                    <span style={{ fontSize: '0.85rem', fontWeight: 600, letterSpacing: '0.01em' }}>Project Health</span>
+                </div>
+                <div className="p-tag" style={{
+                    color: healthColor,
+                    background: `color-mix(in srgb, ${healthColor}, transparent 90%)`,
+                    padding: '2px 8px',
+                    borderRadius: '6px',
+                    fontSize: '0.75rem',
+                    fontWeight: 600,
+                    border: `1px solid color-mix(in srgb, ${healthColor}, transparent 80%)`
+                }}>
+                    {stats.healthScore}/100
+                </div>
+            </div>
+
+            <div style={{ padding: '16px' }}>
+                {/* Health Score Ring */}
                 <div style={{
-                    width: '60px', height: '60px', borderRadius: '50%',
-                    background: `conic-gradient(${healthColor} ${stats.healthScore * 3.6}deg, #374151 0deg)`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '16px',
+                    marginBottom: '20px',
+                    padding: '16px',
+                    background: 'rgba(255,255,255,0.03)',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(255,255,255,0.05)'
                 }}>
                     <div style={{
-                        width: '48px', height: '48px', borderRadius: '50%',
-                        background: '#1a1a24',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '16px', fontWeight: 700, color: healthColor
+                        position: 'relative',
+                        width: '56px', height: '56px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center'
                     }}>
-                        {stats.healthScore}
+                        <svg width="56" height="56" viewBox="0 0 56 56" style={{ transform: 'rotate(-90deg)' }}>
+                            <circle cx="28" cy="28" r="24" stroke="rgba(255,255,255,0.05)" strokeWidth="6" fill="none" />
+                            <circle cx="28" cy="28" r="24" stroke={healthColor} strokeWidth="6" fill="none"
+                                strokeDasharray="150.8"
+                                strokeDashoffset={150.8 * (1 - stats.healthScore / 100)}
+                                strokeLinecap="round"
+                            />
+                        </svg>
+                        <div style={{ position: 'absolute', fontSize: '12px', fontWeight: 700 }}>
+                            {stats.healthScore}
+                        </div>
+                    </div>
+                    <div>
+                        <div style={{ fontSize: '0.7rem', color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Status</div>
+                        <div style={{ fontSize: '1rem', fontWeight: 600, color: healthColor }}>
+                            {stats.healthScore >= 70 ? 'Healthy' : stats.healthScore >= 40 ? 'Moderate' : 'Critical'}
+                        </div>
                     </div>
                 </div>
+
+                {/* Quick Stats Grid */}
+                <div className="p-grid-2" style={{ marginBottom: '24px', gap: '12px' }}>
+                    <StatBox label="Files" value={stats.total} />
+                    <StatBox label="Modules" value={stats.districts} />
+                    <StatBox label="LOC" value={formatNumber(stats.totalLoc)} />
+                    <StatBox label="Complexity" value={stats.avgComplexity} />
+                </div>
+
+                {/* Issues */}
+                <div style={{ marginBottom: '20px' }}>
+                    <div style={{ fontSize: '0.7rem', color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Issues Detected</div>
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        {stats.hotspots > 0 && (
+                            <Badge color="var(--color-accent-danger)" label={`${stats.hotspots} Hotspots`} icon={<AlertTriangle size={10} />} />
+                        )}
+                        {stats.patterns.god_class > 0 && (
+                            <Badge color="var(--color-accent-danger)" label={`${stats.patterns.god_class} God Class`} />
+                        )}
+                        {stats.patterns.blob > 0 && (
+                            <Badge color="var(--color-accent-danger)" label={`${stats.patterns.blob} Blob`} />
+                        )}
+                        {patternCount === 0 && stats.hotspots === 0 && (
+                            <Badge color="var(--color-accent-success)" label="All systems nominal" icon={<CheckCircle size={10} />} />
+                        )}
+                    </div>
+                </div>
+
+                {/* Languages */}
                 <div>
-                    <div style={{ fontSize: '12px', color: '#7a7a8c' }}>Project Health</div>
-                    <div style={{ fontSize: '14px', fontWeight: 600, color: healthColor }}>
-                        {stats.healthScore >= 70 ? 'Good' : stats.healthScore >= 40 ? 'Moderate' : 'Needs Attention'}
+                    <div style={{ fontSize: '0.7rem', color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>Tech Stack</div>
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        {stats.topLangs.map(([lang, count]) => (
+                            <span key={lang} style={{
+                                padding: '4px 8px',
+                                background: 'rgba(255,255,255,0.05)',
+                                borderRadius: '6px',
+                                fontSize: '0.75rem',
+                                color: 'var(--color-text-secondary)',
+                                border: '1px solid rgba(255,255,255,0.05)'
+                            }}>
+                                {lang} <span style={{ opacity: 0.5, marginLeft: '4px' }}>{count}</span>
+                            </span>
+                        ))}
                     </div>
-                </div>
-            </div>
-
-            {/* Quick Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '16px' }}>
-                <StatBox label="Files" value={stats.total} />
-                <StatBox label="Districts" value={stats.districts} />
-                <StatBox label="Total LOC" value={formatNumber(stats.totalLoc)} />
-                <StatBox label="Avg Complexity" value={stats.avgComplexity} />
-            </div>
-
-            {/* Issues */}
-            <div style={{ marginBottom: '16px' }}>
-                <div style={{ fontSize: '11px', color: '#7a7a8c', marginBottom: '8px', textTransform: 'uppercase' }}>Issues Found</div>
-                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                    {stats.hotspots > 0 && (
-                        <Badge color="#ef4444" label={`${stats.hotspots} Hotspots`} />
-                    )}
-                    {stats.patterns.god_class > 0 && (
-                        <Badge color="#ef4444" label={`${stats.patterns.god_class} God Class`} />
-                    )}
-                    {stats.patterns.blob > 0 && (
-                        <Badge color="#dc2626" label={`${stats.patterns.blob} Blob`} />
-                    )}
-                    {stats.patterns.brain_class > 0 && (
-                        <Badge color="#8b5cf6" label={`${stats.patterns.brain_class} Brain Class`} />
-                    )}
-                    {patternCount === 0 && stats.hotspots === 0 && (
-                        <Badge color="#22c55e" label="No issues!" />
-                    )}
-                </div>
-            </div>
-
-            {/* Languages */}
-            <div>
-                <div style={{ fontSize: '11px', color: '#7a7a8c', marginBottom: '8px', textTransform: 'uppercase' }}>Languages</div>
-                <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                    {stats.topLangs.map(([lang, count]) => (
-                        <span key={lang} style={{
-                            padding: '3px 8px',
-                            background: 'rgba(129,140,248,0.15)',
-                            borderRadius: '4px',
-                            fontSize: '11px',
-                            color: '#a5b4fc'
-                        }}>
-                            {lang} ({count})
-                        </span>
-                    ))}
                 </div>
             </div>
         </div>
@@ -168,27 +204,33 @@ export default function HealthDashboard() {
 function StatBox({ label, value }) {
     return (
         <div style={{
-            padding: '10px',
-            background: 'rgba(255,255,255,0.04)',
-            borderRadius: '6px',
+            padding: '12px',
+            background: 'rgba(255,255,255,0.03)',
+            borderRadius: '8px',
+            border: '1px solid rgba(255,255,255,0.05)',
             textAlign: 'center'
         }}>
-            <div style={{ fontSize: '16px', fontWeight: 600, color: '#fff' }}>{value}</div>
-            <div style={{ fontSize: '10px', color: '#7a7a8c' }}>{label}</div>
+            <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-text-primary)' }}>{value}</div>
+            <div style={{ fontSize: '0.65rem', color: 'var(--color-text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: '4px' }}>{label}</div>
         </div>
     )
 }
 
-function Badge({ color, label }) {
+function Badge({ color, label, icon }) {
     return (
         <span style={{
-            padding: '3px 8px',
-            background: `${color}20`,
-            borderRadius: '4px',
-            fontSize: '11px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            padding: '4px 10px',
+            background: `color-mix(in srgb, ${color}, transparent 88%)`,
+            border: `1px solid color-mix(in srgb, ${color}, transparent 80%)`,
+            borderRadius: '6px',
+            fontSize: '0.75rem',
             color: color,
             fontWeight: 500
         }}>
+            {icon}
             {label}
         </span>
     )
