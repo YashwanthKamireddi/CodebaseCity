@@ -31,33 +31,39 @@ function useAnimatedValue(target, speed = 0.1) {
 // Wrapper component that adds animation to buildings
 export function AnimatedBuilding({ data, previousData, children }) {
     const groupRef = useRef()
-    const { isAnimating } = useStore()
+    const { isAnimating, highlightedCategory } = useStore()
 
-    // Calculate animation targets
-    const targetHeight = data?.dimensions?.height || 5
-    const prevHeight = previousData?.dimensions?.height || targetHeight
-
-    // Determine if this is a new building, removed building, or changed building
-    const isNew = !previousData && data
-    const hasChanged = previousData && data && prevHeight !== targetHeight
-
-    // Animate scale for new buildings
-    const [scale, setScale] = useState(isNew ? 0 : 1)
-
-    useEffect(() => {
-        if (isNew) {
-            const timer = setTimeout(() => setScale(1), 50)
-            return () => clearTimeout(timer)
+    // Highlight logic
+    const isHighlighted = useMemo(() => {
+        if (!highlightedCategory) return false
+        if (highlightedCategory.type === 'language') {
+            return data.language?.toLowerCase() === highlightedCategory.value.toLowerCase()
         }
-    }, [isNew])
+        if (highlightedCategory.type === 'health') {
+            const health = data.health || 0
+            if (highlightedCategory.value === 'healthy') return health >= 70
+            if (highlightedCategory.value === 'warning') return health >= 40 && health < 70
+            if (highlightedCategory.value === 'critical') return health < 40
+        }
+        if (highlightedCategory.type === 'district') {
+            return data.district_id === highlightedCategory.value
+        }
+        return false
+    }, [highlightedCategory, data])
 
-    // Smooth scale animation
-    useFrame(() => {
+    // Smooth scale animation & Pulse
+    useFrame((state) => {
         if (groupRef.current) {
             const currentScale = groupRef.current.scale.x
-            const targetScale = 1
+            let targetScale = 1
+
+            // Pulse if highlighted
+            if (isHighlighted) {
+                targetScale = 1.1 + Math.sin(state.clock.elapsedTime * 8) * 0.05
+            }
+
             const diff = targetScale - currentScale
-            if (Math.abs(diff) > 0.01) {
+            if (Math.abs(diff) > 0.001) {
                 const newScale = currentScale + diff * 0.1
                 groupRef.current.scale.set(newScale, newScale, newScale)
             }
@@ -305,12 +311,12 @@ export function TimeTravelStats() {
                 )}
 
                 {changes.newBuildings.size === 0 &&
-                 changes.removedBuildings.size === 0 &&
-                 changes.changedBuildings.size === 0 && (
-                    <div style={{ fontSize: '12px', color: '#9ca3af' }}>
-                        No structural changes
-                    </div>
-                )}
+                    changes.removedBuildings.size === 0 &&
+                    changes.changedBuildings.size === 0 && (
+                        <div style={{ fontSize: '12px', color: '#9ca3af' }}>
+                            No structural changes
+                        </div>
+                    )}
             </div>
         </div>
     )

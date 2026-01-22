@@ -32,6 +32,7 @@ const useStore = create((set, get) => ({
     theme: getInitialTheme(), // 'light' | 'dark'
     commandPaletteOpen: false,
     analyzeModalOpen: false,
+    highlightedCategory: null, // { type: 'language' | 'health' | 'district', value: string }
 
     // Chat State
     messages: [],
@@ -83,6 +84,8 @@ const useStore = create((set, get) => ({
         analyzeModalOpen: open,
         commandPaletteOpen: open ? false : state.commandPaletteOpen
     })),
+
+    setHighlightedCategory: (category) => set({ highlightedCategory: category }),
 
     // VS Code integration
     setVSCodeConnected: (connected) => set({ vscodeConnected: connected }),
