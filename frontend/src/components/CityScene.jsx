@@ -8,6 +8,7 @@
 import React, { useMemo } from 'react'
 import * as THREE from 'three'
 import DataBlock from './DataBlock'
+import Roads from './Roads'
 import PostProcessing from './PostProcessing'
 import { Environment, Grid } from '@react-three/drei'
 import useStore from '../store/useStore'
@@ -192,41 +193,10 @@ export default function CityScene({ data }) {
             ))}
 
             {/* ═══════════════════════════════════════════════════════════════
-                DEPENDENCIES (Lines between files)
+                DEPENDENCIES (Premium Animated Flow)
                 ═══════════════════════════════════════════════════════════════ */}
 
-            {dependenciesToShow.map((road, i) => {
-                const sourceId = road.source || road.from
-                const targetId = road.target || road.to
-                const fromBuilding = buildingMap[sourceId]
-                const toBuilding = buildingMap[targetId]
-                if (!fromBuilding || !toBuilding) return null
-
-                const isHighlighted = selectedBuilding &&
-                    (sourceId === selectedBuilding.id || targetId === selectedBuilding.id)
-
-                const start = new THREE.Vector3(fromBuilding.position.x, 2, fromBuilding.position.z)
-                const end = new THREE.Vector3(toBuilding.position.x, 2, toBuilding.position.z)
-
-                // Create a nice arc
-                const distance = start.distanceTo(end)
-                const mid = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5)
-                mid.y += distance * 0.4 // Arc height relative to distance
-
-                const curve = new THREE.CatmullRomCurve3([start, mid, end])
-
-                return (
-                    <mesh key={i}>
-                        <tubeGeometry args={[curve, 20, isHighlighted ? 0.3 : 0.08, 6, false]} />
-                        <meshBasicMaterial
-                            color={isHighlighted ? "#60a5fa" : "#475569"}
-                            transparent
-                            opacity={isHighlighted ? 0.8 : 0.15}
-                            depthWrite={false}
-                        />
-                    </mesh>
-                )
-            })}
+            <Roads roads={data?.roads || []} buildings={centeredBuildings} />
         </group>
     )
 }
