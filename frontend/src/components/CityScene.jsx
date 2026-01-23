@@ -149,6 +149,7 @@ export default function CityScene({ data }) {
                 GROUND PLANE - High-end Grid
                 ═══════════════════════════════════════════════════════════════ */}
 
+            {/* Ground Grid - Subtle, "liked" by user */}
             <Grid
                 position={[0, 0.01, 0]}
                 args={[gridSize, gridSize]}
@@ -173,24 +174,9 @@ export default function CityScene({ data }) {
             {centeredDistricts.map((district) => {
                 const cx = district.center?.x || 0
                 const cy = district.center?.y || 0
-                const size = 25 + (district.building_count || 5) * 2.5
-                const color = MODULE_COLORS[district.id?.toLowerCase()] || MODULE_COLORS.default
-
-                return (
-                    <mesh
-                        key={district.id}
-                        rotation={[-Math.PI / 2, 0, 0]}
-                        position={[cx, 0.1, cy]}
-                    >
-                        <ringGeometry args={[size - 1.5, size, 48]} />
-                        <meshBasicMaterial
-                            color={color}
-                            transparent
-                            opacity={0.4}
-                            depthWrite={false}
-                        />
-                    </mesh>
-                )
+                // Use implicit grouping - no visual boundary, just proximity
+                // This creates the "European" feel where buildings cluster naturally
+                return null
             })}
 
             {/* ═══════════════════════════════════════════════════════════════
@@ -219,17 +205,23 @@ export default function CityScene({ data }) {
                 const isHighlighted = selectedBuilding &&
                     (sourceId === selectedBuilding.id || targetId === selectedBuilding.id)
 
-                const start = new THREE.Vector3(fromBuilding.position.x, 0.3, fromBuilding.position.z)
-                const end = new THREE.Vector3(toBuilding.position.x, 0.3, toBuilding.position.z)
-                const curve = new THREE.LineCurve3(start, end)
+                const start = new THREE.Vector3(fromBuilding.position.x, 2, fromBuilding.position.z)
+                const end = new THREE.Vector3(toBuilding.position.x, 2, toBuilding.position.z)
+
+                // Create a nice arc
+                const distance = start.distanceTo(end)
+                const mid = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5)
+                mid.y += distance * 0.4 // Arc height relative to distance
+
+                const curve = new THREE.CatmullRomCurve3([start, mid, end])
 
                 return (
                     <mesh key={i}>
-                        <tubeGeometry args={[curve, 2, isHighlighted ? 0.4 : 0.15, 6, false]} />
+                        <tubeGeometry args={[curve, 20, isHighlighted ? 0.3 : 0.08, 6, false]} />
                         <meshBasicMaterial
-                            color={isHighlighted ? "#3b82f6" : "#475569"}
+                            color={isHighlighted ? "#60a5fa" : "#475569"}
                             transparent
-                            opacity={isHighlighted ? 0.9 : 0.3}
+                            opacity={isHighlighted ? 0.8 : 0.15}
                             depthWrite={false}
                         />
                     </mesh>

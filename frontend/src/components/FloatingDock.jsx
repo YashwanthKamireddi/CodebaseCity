@@ -15,14 +15,15 @@ import {
     Box,
     Table2,
     Home,
-    FolderSearch
+    FolderSearch,
+    Signpost
 } from 'lucide-react'
 import useStore from '../store/useStore'
 import { CommandPaletteTrigger } from './ui/CommandPalette'
 
 export default function FloatingDock({ view, onViewChange, onAnalyze }) {
     const mouseX = useMotionValue(null)
-    const { analyzeRepo, loading, setCommandPaletteOpen } = useStore()
+    const { analyzeRepo, loading, setCommandPaletteOpen, toggleRoads, showRoads } = useStore()
 
     return (
         <div style={{
@@ -55,13 +56,6 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
                     alignItems: 'center'
                 }}
             >
-                {/* Home / Logo */}
-                <DockIcon mouseX={mouseX} onClick={() => window.location.reload()}>
-                    <LayoutGrid size={20} color="white" />
-                </DockIcon>
-
-                <div className="dock-divider" />
-
                 {/* View Toggles */}
                 <DockIcon
                     mouseX={mouseX}
@@ -99,6 +93,18 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
                     loading={loading}
                 >
                     <FolderSearch size={20} />
+                </DockIcon>
+
+                <div className="dock-divider" />
+
+                {/* Toggles */}
+                <DockIcon
+                    mouseX={mouseX}
+                    onClick={toggleRoads}
+                    active={showRoads}
+                    title="Toggle Connections"
+                >
+                    <Signpost size={20} />
                 </DockIcon>
 
                 <div className="dock-divider" />

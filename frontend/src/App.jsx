@@ -11,14 +11,13 @@ import { OrbitControls, PerspectiveCamera, Preload } from '@react-three/drei'
 import CityScene from './components/CityScene'
 import Sidebar from './components/Sidebar'
 import BuildingPanel from './components/BuildingPanel'
-import LegendPanel from './components/LegendPanel'
-import ControlsPanel from './components/ControlsPanel'
 import LoadingScreen from './components/LoadingScreen'
 import TimelineSlider from './components/TimelineSlider'
 import CommandPalette from './components/ui/CommandPalette'
 import FileTable from './components/FileTable'
 import FloatingDock from './components/FloatingDock'
 import AnalyzeModal from './components/AnalyzeModal'
+import WelcomeOverlay from './components/WelcomeOverlay'
 import './components/FloatingDock.css'
 import { TimeTravelStats } from './components/AnimatedBuilding'
 import { useVSCodeSync } from './hooks/useVSCodeSync'
@@ -143,10 +142,10 @@ function App() {
                                     enablePan={true}
                                     enableZoom={true}
                                     enableRotate={true}
-                                    minDistance={20}
-                                    maxDistance={250}
-                                    maxPolarAngle={Math.PI / 2.2}
-                                    minPolarAngle={0.2}
+                                    minDistance={5} // Allow close-ups (Street View)
+                                    maxDistance={300}
+                                    maxPolarAngle={Math.PI / 2} // Allow ground level view
+                                    minPolarAngle={0.1}
                                     dampingFactor={0.08}
                                     enableDamping={true}
                                     target={[0, 0, 0]}
@@ -159,17 +158,9 @@ function App() {
                             </Canvas>
 
                             {/* 3D-only Overlays */}
-                            {cityData && (
-                                <LegendPanel
-                                    districts={cityData.districts}
-                                    buildings={cityData.buildings}
-                                />
-                            )}
+                            {/* Compass/Legend removed as requested */}
 
-                            <ControlsPanel
-                                sidebarOpen={sidebarOpen}
-                                onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-                            />
+                            )}
                         </>
                     ) : (
                         /* Table View */
@@ -217,6 +208,9 @@ function App() {
 
             {/* Loading - simple, fast */}
             {loading && <LoadingScreen />}
+
+            {/* Onboarding */}
+            <WelcomeOverlay />
         </div>
     )
 }

@@ -96,16 +96,22 @@ export default function TimelineSlider() {
 
     return (
         <div
-            className="p-panel-floating"
+            // Solid, Bottom-Right positioning
             style={{
                 position: 'fixed',
-                bottom: '80px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                minWidth: '500px',
-                maxWidth: '600px',
+                bottom: '32px',
+                right: '32px',
+                width: '380px', // Compact width
                 zIndex: 500,
-                padding: 0
+                padding: '0',
+                // Solid Dark Theme (No Transparency)
+                background: '#111111',
+                border: '1px solid #333333',
+                borderRadius: '16px',
+                boxShadow: '0 24px 48px -12px rgba(0,0,0,0.8)',
+                transition: 'all 0.3s ease',
+                opacity: 1, // Always visible/solid
+                transformOrigin: 'bottom right'
             }}
             onMouseEnter={() => setShowControls(true)}
             onMouseLeave={() => setShowControls(false)}

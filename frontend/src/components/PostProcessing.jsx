@@ -7,26 +7,26 @@
  */
 
 import {
-  EffectComposer,
-  Bloom,
-  SMAA
+    EffectComposer,
+    Bloom,
+    SMAA
 } from '@react-three/postprocessing'
 
 export default function PostProcessing({ enabled = true }) {
-  if (!enabled) return null
+    if (!enabled) return null
 
-  return (
-    <EffectComposer multisampling={0}>
-      {/* SMAA for clean edges */}
-      <SMAA />
+    return (
+        <EffectComposer multisampling={0}>
+            {/* SMAA for clean edges */}
+            <SMAA />
 
-      {/* Subtle bloom - makes hotspots and selections stand out */}
-      <Bloom
-        intensity={0.3}
-        luminanceThreshold={0.7}
-        luminanceSmoothing={0.9}
-        radius={0.6}
-      />
-    </EffectComposer>
-  )
+            {/* Subtle bloom - makes hotspots and selections stand out */}
+            <Bloom
+                intensity={0.15} // Reduced from 0.3 for clarity
+                luminanceThreshold={0.7}
+                luminanceSmoothing={0.9}
+                radius={0.4} // Reduced spread
+            />
+        </EffectComposer>
+    )
 }

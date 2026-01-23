@@ -5,14 +5,13 @@ import * as THREE from 'three'
 import useStore from '../store/useStore'
 
 // Tech-focused color palette (Neon/Cyberpunk but clean)
-const TYPE_COLORS = {
-    api: '#3b82f6',      // Blue
-    services: '#8b5cf6', // Purple
-    data: '#06b6d4',     // Cyan
-    utils: '#22c55e',    // Green
-    auth: '#f59e0b',     // Amber
-    ui: '#ec4899',       // Pink
-    default: '#64748b'   // Slate
+// GitHub-standard language colors for instant recognition
+// Uniform Professional Palette (Sleek Dark City)
+const BUILDING_COLOR = '#475569' // Slate 600 - Main building body
+
+// Get file extension from path (kept helper but unused for main color)
+function getFileColor(filename) {
+    return BUILDING_COLOR
 }
 
 export default function DataBlock({ data, isConnected }) {
@@ -23,17 +22,17 @@ export default function DataBlock({ data, isConnected }) {
     const { width, height, depth } = data.dimensions
     const { x, z } = data.position
 
-    // Determine color based on file type/folder
+    // Use language-based color
+    // Color based on Size (Height/Complexity)
+    // Cyberpunk/Compact City Spectrum
     const baseColor = useMemo(() => {
-        // Simple heuristic for demo - usually you'd check extension or path
-        const path = data.name.toLowerCase()
-        if (path.includes('api')) return TYPE_COLORS.api
-        if (path.includes('service')) return TYPE_COLORS.services
-        if (path.includes('util')) return TYPE_COLORS.utils
-        if (path.includes('ui') || path.includes('component')) return TYPE_COLORS.ui
-        if (path.includes('auth')) return TYPE_COLORS.auth
-        return TYPE_COLORS.default
-    }, [data.name])
+        // Map height to Cool -> Hot spectrum (Blue -> Purple -> Pink -> Orange)
+        // Avoids Green/Yellow for a cleaner "sci-fi" look
+        // Range: Hue 260 (Deep Blue) down to 10 (Red-Orange)
+        // Multiplier helps distinguish small files
+        const h = Math.max(20, 260 - Math.min(240, height * 8))
+        return `hsl(${h}, 90%, 60%)`
+    }, [height])
 
     // Animation for hotspots/connected nodes
     useFrame((state) => {
@@ -66,15 +65,35 @@ export default function DataBlock({ data, isConnected }) {
         document.body.style.cursor = 'default'
     }
 
+    // Darker shade for roof and foundation
+    const roofColor = useMemo(() => {
+        const c = new THREE.Color(baseColor)
+        c.multiplyScalar(0.7)
+        return c
+    }, [baseColor])
+
+    const foundationColor = useMemo(() => {
+        const c = new THREE.Color(baseColor)
+        c.multiplyScalar(0.5)
+        return c
+    }, [baseColor])
+
     return (
-        <group position={[x, height / 2, z]}>
-            {/*
-         DATA BLOCK MESH
-         - Abstract representation of code volume
-         - Glassy/Metallic look
-      */}
+        <group position={[x, 0, z]}>
+            {/* Foundation - darker base */}
+            <mesh position={[0, 0.15, 0]} receiveShadow>
+                <boxGeometry args={[width * 1.1, 0.3, depth * 1.1]} />
+                <meshPhysicalMaterial
+                    color={foundationColor}
+                    roughness={0.8}
+                    metalness={0.2}
+                />
+            </mesh>
+
+            {/* Main Building Body */}
             <mesh
                 ref={meshRef}
+                position={[0, height / 2 + 0.3, 0]}
                 onClick={handleClick}
                 onPointerOver={handlePointerOver}
                 onPointerOut={handlePointerOut}
@@ -100,15 +119,31 @@ export default function DataBlock({ data, isConnected }) {
                 />
             </mesh>
 
-            {/* Selection Ring (Holographic) */}
+            {/* Roof - flat top cap */}
+            <mesh position={[0, height + 0.31, 0]} castShadow>
+                <boxGeometry args={[width * 0.9, 0.1, depth * 0.9]} />
+                <meshPhysicalMaterial
+                    color={roofColor}
+                    roughness={0.5}
+                    metalness={0.4}
+                />
+            </mesh>
+            {/* Selection Box (Rectangular to match building) */}
             {isSelected && (
-                <mesh position={[0, -height / 2 + 0.1, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-                    <ringGeometry args={[Math.max(width, depth) * 1.2, Math.max(width, depth) * 1.5, 32]} />
-                    <meshBasicMaterial color="#ffffff" transparent opacity={0.5} side={THREE.DoubleSide} />
-                </mesh>
+                <group position={[0, 0.2, 0]}>
+                    <mesh rotation={[-Math.PI / 2, 0, 0]}>
+                        <planeGeometry args={[width * 1.5, depth * 1.5]} />
+                        <meshBasicMaterial color="#60a5fa" transparent opacity={0.2} />
+                    </mesh>
+                    <mesh rotation={[-Math.PI / 2, 0, 0]}>
+                        <planeGeometry args={[width * 1.5, depth * 1.5]} />
+                        <Edges color="#eff6ff" scale={1.0} threshold={15} />
+                        <meshBasicMaterial visible={false} />
+                    </mesh>
+                </group>
             )}
 
 
-        </group>
+        </group >
     )
 }
