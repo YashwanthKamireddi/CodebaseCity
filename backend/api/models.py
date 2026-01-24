@@ -61,6 +61,7 @@ class Road(BaseModel):
 class CityData(BaseModel):
     """Complete city representation"""
     name: str
+    path: Optional[str] = None  # Local absolute path to the repo (critical for file reading)
     buildings: List[Building]
     districts: List[District]
     roads: List[Road]

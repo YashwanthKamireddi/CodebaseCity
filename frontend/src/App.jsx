@@ -26,13 +26,21 @@ import './components/FloatingDock.css'
 import { TimeTravelStats } from './components/AnimatedBuilding'
 import { useVSCodeSync } from './hooks/useVSCodeSync'
 import useStore from './store/useStore'
+import CodeViewer from './components/CodeViewer'
 
 // Design tokens
 import './styles/design-tokens.css'
 import './styles/ProfessionalUI.css'
 import './App.css'
 
+import CodePage from './components/CodePage'
+
 function App() {
+    // Simple Client-Side Routing for Standalone Code View
+    if (window.location.pathname === '/code') {
+        return <CodePage />
+    }
+
     const {
         cityData,
         selectedBuilding,
@@ -205,6 +213,15 @@ function App() {
                     {view === '3d' && <ViewControl />}
                     {view === '3d' && <CanvasUI />}
                     <ChatInterface />
+                    {/* ROOT LEVEL CODE VIEWER */}
+                    {useStore.getState().codeViewerOpen && selectedBuilding && (
+                        <div style={{ position: 'fixed', inset: 0, zIndex: 99999 }}>
+                            <CodeViewer
+                                building={selectedBuilding}
+                                onClose={() => useStore.getState().setCodeViewerOpen(false)}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
 

@@ -92,13 +92,6 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
 
                 {/* Toggles */}
                 <DeckItem
-                    onClick={toggleRoads}
-                    active={showRoads}
-                    icon={<Signpost size={18} />}
-                    label="Connections"
-                />
-
-                <DeckItem
                     onClick={() => useStore.setState(state => ({ showTimeline: !state.showTimeline }))}
                     active={useStore(state => state.showTimeline)}
                     icon={<Clock size={18} />}

@@ -108,10 +108,14 @@ async def analyze_codebase(request: AnalyzeRequest):
             print(f"[API] Analyzing {repo_name}...")
             city_data = await analyzer.analyze(temp_dir, request.max_files)
             city_data.name = repo_name
+            # CRITICAL: Return the local temp path so frontend can read files
+            city_data.path = temp_dir
         else:
             if not os.path.exists(path):
                 raise HTTPException(status_code=404, detail="Path not found")
             city_data = await analyzer.analyze(path, request.max_files)
+            # Ensure path is absolute for local analysis
+            city_data.path = os.path.abspath(path)
 
         # 4. Save to Cache (Memory + Disk)
         city_cache[cache_key] = city_data

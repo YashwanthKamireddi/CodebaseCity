@@ -30,7 +30,10 @@ const useStore = create((set, get) => ({
     viewMode: 'orbit', // orbit | street | overview
     layoutMode: 'city', // city | galaxy | tree
     colorMode: 'default', // default | layer | churn | language
-    showRoads: true,
+    layoutMode: 'city', // city | galaxy | tree
+    colorMode: 'default', // default | layer | churn | language
+    showRoads: false, // Default hidden (Selection only)
+    showLabels: true,
     showLabels: true,
     nightMode: false,
     theme: getInitialTheme(), // 'light' | 'dark'
@@ -38,6 +41,7 @@ const useStore = create((set, get) => ({
     analyzeModalOpen: true, // Open by default
     highlightedCategory: null, // { type: 'language' | 'health' | 'district', value: string }
     highlightedIssue: null, // { type: 'string', paths: string[] }
+    codeViewerOpen: false, // Global state for code viewer modal
 
     // Camera Control State
     cameraAction: null, // { type: 'ZOOM_IN' | 'ZOOM_OUT' | 'FIT' | 'RESET' | 'CENTER', timestamp: number }
@@ -69,6 +73,7 @@ const useStore = create((set, get) => ({
     setCityData: (data) => set((state) => ({
         previousCityData: state.cityData, // Store for morphing
         cityData: data,
+        currentRepoPath: data.path || state.currentRepoPath, // Sync path from data if available
         loading: false,
         error: null,
         analysisProgress: 100
@@ -133,6 +138,7 @@ const useStore = create((set, get) => ({
 
     // VS Code integration
     setVSCodeConnected: (connected) => set({ vscodeConnected: connected }),
+    setCodeViewerOpen: (open) => set({ codeViewerOpen: open }),
 
     // Time Travel Animation
     setAnimating: (isAnimating) => set({ isAnimating }),
@@ -243,39 +249,31 @@ const useStore = create((set, get) => ({
     fetchFileContent: async (path) => {
         set({ fileContent: { path, content: null, loading: true } })
 
-        const { currentRepoPath } = get()
+        const { currentRepoPath, cityData } = get()
         let fullPath = path
 
+        // Use either explicitly set repo path OR the path saved in city data (Backend Fix)
+        const repoRootPromise = currentRepoPath || cityData?.path
+
         // Handle Remote URLs (GitHub)
-        // Format: https://github.com/User/Repo/path/to/file
         if (path.startsWith('http')) {
             try {
-                // Strip protocol, domain, user, repo (approx 5 segments)
-                // We want the path appearing AFTER the repo name
-                // Example: https://github.com/user/repo/src/index.ts -> src/index.ts
                 const url = new URL(path)
                 const parts = url.pathname.split('/').filter(Boolean)
                 // parts: ['user', 'repo', 'src', 'index.ts']
-                // We assume parts[0] is user, parts[1] is repo. Path starts at 2.
-                // NOTE: GitHub "blob/main" might be present?
-                // The current codebase-city engine likely stores the raw file path URL or constructed path.
-                // Assuming standard structure from the user's log:
-                // .../server/storage/supabase-storage.ts
-                // It looks like index 2+.
                 const relativeParts = parts.slice(2)
 
                 // If blob/main or tree/main exists, strip it
+                // We use a regex to match common branch structures or simply shift if keyword matches
                 if (relativeParts[0] === 'blob' || relativeParts[0] === 'tree') {
-                    relativeParts.splice(0, 2) // remove blob/main
+                    relativeParts.splice(0, 2)
                 }
 
-                // If currentRepoPath is valid (Local path), use it
-                if (currentRepoPath && !currentRepoPath.startsWith('http')) {
-                   const cleanRepo = currentRepoPath.endsWith('/') ? currentRepoPath.slice(0, -1) : currentRepoPath
+                if (repoRootPromise && !repoRootPromise.startsWith('http')) {
+                   const cleanRepo = repoRootPromise.endsWith('/') ? repoRootPromise.slice(0, -1) : repoRootPromise
                    fullPath = `${cleanRepo}/${relativeParts.join('/')}`
                 } else {
-                   // Fallback: If we don't have local path, maybe the Backend knows how to handle relative?
-                   // We send just the relative path and hope backend resolves it against active city.
+                   // Only fallback relative if we really have no root
                    fullPath = relativeParts.join('/')
                 }
             } catch (e) {
@@ -283,8 +281,8 @@ const useStore = create((set, get) => ({
             }
         }
         // Handle Local Relative Paths
-        else if (currentRepoPath && !path.startsWith('/') && !path.includes(':')) {
-           const cleanRepo = currentRepoPath.endsWith('/') ? currentRepoPath.slice(0, -1) : currentRepoPath
+        else if (repoRootPromise && !path.startsWith('/') && !path.includes(':')) {
+           const cleanRepo = repoRootPromise.endsWith('/') ? repoRootPromise.slice(0, -1) : repoRootPromise
            const cleanPath = path.startsWith('/') ? path.slice(1) : path
            fullPath = `${cleanRepo}/${cleanPath}`
         }

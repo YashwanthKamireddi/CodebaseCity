@@ -3,18 +3,22 @@
  *
  * THE BIONIC CODE: Contextual Side Sheet.
  * Design: Glassmorphism, docked to the right edge.
+ * Verified Structure: Clean JSX.
  * Purpose: Professional detail view, not a game HUD.
  */
 import React from 'react'
 import useStore from '../store/useStore'
 import { detectPattern } from './BuildingLabel'
+import CodeViewer from './CodeViewer'
 import FileInsights from './FileInsights'
-import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Sparkles, AlertTriangle, Activity } from 'lucide-react'
+import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Sparkles, AlertTriangle, Activity, Maximize2, Minimize2, Eye } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 // Styles imported from index.css mostly, inline for layout
 
 export default function BuildingPanel({ building }) {
     const { clearSelection, fetchFileContent, fileContent } = useStore()
+    const [isMaximized, setIsMaximized] = React.useState(false)
+    const [showCode, setShowCode] = React.useState(false)
 
     if (!building) return null
 
@@ -32,24 +36,25 @@ export default function BuildingPanel({ building }) {
         <AnimatePresence>
             <motion.div
                 initial={{ x: '100%', opacity: 0.5 }}
-                animate={{ x: 0, opacity: 1 }}
+                animate={{
+                    x: 0,
+                    width: '450px',
+                    height: '100vh',
+                    top: 0,
+                    right: 0
+                }}
                 exit={{ x: '100%', opacity: 0.5 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                 style={{
                     position: 'fixed',
-                    top: 0,
-                    right: 0,
-                    width: '450px', // Wider for code
-                    height: '100vh',
                     zIndex: 1000,
-                    background: 'var(--glass-panel)',
-                    backdropFilter: `blur(var(--glass-blur))`,
-                    WebkitBackdropFilter: `blur(var(--glass-blur))`,
-                    borderLeft: '1px solid var(--glass-border)',
-                    boxShadow: '-8px 0 32px rgba(0,0,0,0.2)',
+                    // THE VOID THEME: Premium Solid Dark
+                    background: '#09090b',
+                    borderLeft: '1px solid #27272a',
+                    boxShadow: '-30px 0 100px rgba(0,0,0,0.8)',
                     display: 'flex',
                     flexDirection: 'column',
-                    color: 'var(--text-primary)'
+                    color: '#e4e4e7'
                 }}
             >
                 {/* HEADER: File Identity */}
@@ -90,13 +95,14 @@ export default function BuildingPanel({ building }) {
                             {path}
                         </div>
                     </div>
+
                     <button
                         onClick={clearSelection}
                         style={{
                             background: 'transparent',
                             border: 'none',
                             cursor: 'pointer',
-                            color: 'var(--text-secondary)'
+                            color: '#a1a1aa'
                         }}
                     >
                         <X size={24} />
@@ -127,54 +133,49 @@ export default function BuildingPanel({ building }) {
                         <SwissMetric label="Incoming Deps" value={metrics.dependencies_in} />
                     </div>
 
-                    {/* Code Viewer (Mini Editor) */}
-                    <div style={{ marginBottom: '32px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    {/* Code Viewer Action */}
+                    <div style={{ marginBottom: '32px' }}>
                         <SectionHeader title="Source Code" icon={<FileCode2 size={14} />} />
                         <div style={{
-                            background: '#1e1e1e', // Monaco Editor BG
-                            border: '1px solid #2d2d2d',
-                            borderRadius: '6px',
-                            overflow: 'hidden',
-                            position: 'relative',
-                            fontFamily: '"JetBrains Mono", Consolas, monospace',
-                            fontSize: '0.8rem',
-                            lineHeight: '1.5',
+                            background: '#18181b', // Surface
+                            borderRadius: '12px',
+                            padding: '32px 24px',
+                            border: '1px solid #27272a',
                             display: 'flex',
                             flexDirection: 'column',
-                            minHeight: '300px'
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '16px',
+                            textAlign: 'center'
                         }}>
-                            {/* Editor Header */}
                             <div style={{
-                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                padding: '8px 12px',
-                                background: '#252526',
-                                borderBottom: '1px solid #2d2d2d',
-                                color: '#cccccc',
-                                fontSize: '0.75rem'
+                                width: '64px', height: '64px',
+                                background: '#27272a', borderRadius: '16px',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                marginBottom: '8px'
                             }}>
-                                <span>{path.split('/').pop()}</span>
-                                <span style={{ opacity: 0.5 }}>{metrics.loc} lines</span>
+                                <FileCode2 size={32} color="#71717a" />
                             </div>
-
-                            {/* Scrollable Code Area */}
-                            <div style={{
-                                flex: 1,
-                                overflow: 'auto',
-                                padding: '16px',
-                                color: '#d4d4d4', // VS Code Default FG
-                                whiteSpace: 'pre',
-                                tabSize: 4
-                            }}>
-                                {fileContent?.loading ? (
-                                    <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>Loading source...</div>
-                                ) : (
-                                    fileContent?.error ? (
-                                        <div style={{ color: '#ef4444' }}>Unable to read file content.</div>
-                                    ) : (
-                                        fileContent?.content || '// No content available.'
-                                    )
-                                )}
-                            </div>
+                            <button
+                                onClick={() => useStore.getState().setCodeViewerOpen(true)}
+                                style={{
+                                    background: '#3b82f6',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '10px 24px',
+                                    borderRadius: '6px',
+                                    fontWeight: 600,
+                                    fontSize: '0.9rem',
+                                    cursor: 'pointer',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
+                                    marginBottom: '0' // Fix spacing
+                                }}
+                            >
+                                <Eye size={16} /> View Source
+                            </button>
                         </div>
                     </div>
 
@@ -185,9 +186,11 @@ export default function BuildingPanel({ building }) {
                             fontSize: '0.9rem',
                             color: 'var(--text-secondary)',
                             lineHeight: 1.6,
-                            background: 'rgba(0,0,0,0.03)',
-                            padding: '16px',
-                            borderRadius: '8px'
+                            background: 'rgba(0,0,0,0.2)', // Darker inner card
+                            border: '1px solid rgba(255,255,255,0.05)',
+                            padding: '20px',
+                            borderRadius: '12px',
+                            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)'
                         }}>
                             <FileInsights file={building} />
                         </div>
@@ -207,7 +210,6 @@ export default function BuildingPanel({ building }) {
                             onClick={() => navigator.clipboard.writeText(path)}
                         />
                     </div>
-
                 </div>
             </motion.div>
         </AnimatePresence>
