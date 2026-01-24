@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import useStore from '../store/useStore'
-import { Folder, File, Code, Hash, Link as LinkIcon, ChevronRight, ChevronDown, Activity, AlertTriangle, CheckCircle, BarChart2 } from 'lucide-react'
+import { Folder, File, Code, Hash, Link as LinkIcon, ChevronRight, ChevronDown, Activity, AlertTriangle, CheckCircle, BarChart2, Layers } from 'lucide-react'
 import { detectPattern } from './BuildingLabel'
 
 export default function Sidebar() {
