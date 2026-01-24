@@ -5,11 +5,12 @@ import { Folder, File, Code, Hash, Link as LinkIcon, ChevronRight, ChevronDown }
 export default function Sidebar() {
     const { cityData, selectBuilding, selectedBuilding, sidebarOpen, setSidebarOpen } = useStore()
 
+    if (!cityData) return null
+
     const onClose = () => setSidebarOpen(false)
 
-    // Derived state - safe to run even if cityData is null (returns defaults)
-    const stats = cityData?.stats
-    const metadata = cityData?.metadata
+    const { stats, metadata } = cityData
+    const health = metadata?.health || { grade: 'A', score: 100 }
 
     const metrics = [
         { label: 'Files', value: stats?.total_files || 0, icon: <File size={14} /> },
@@ -17,39 +18,6 @@ export default function Sidebar() {
         { label: 'Links', value: stats?.total_dependencies || 0, icon: <LinkIcon size={14} /> },
         { label: 'LOC', value: stats?.total_loc?.toLocaleString() || 0, icon: <Hash size={14} /> }
     ]
-
-    // Calculate Health Score
-    // Formula: Start at 100. Deduct for complexity, churn, and poor modulation.
-    const healthScore = React.useMemo(() => {
-        if (!stats) return { grade: '-', score: 0, color: '#71717a' }
-
-        // Base deductions
-        let score = 100
-
-        // Complexity Penalty (Avg complexity > 10 is bad)
-        // Assuming avg complexity around 5 is normal
-        // If we don't have avg_complexity, guess based on LOC/File
-        const avgLoc = (stats.total_loc / (stats.total_files || 1)) || 0
-        if (avgLoc > 200) score -= 10
-        if (avgLoc > 500) score -= 20
-
-        // Explicit deductions if present
-        if (metadata?.cyclomatic_complexity > 20) score -= 15
-
-        score = Math.max(0, Math.min(100, score))
-
-        let grade = 'A'
-        let color = '#22c55e' // Green
-
-        if (score < 90) { grade = 'B'; color = '#84cc16' } // Lime
-        if (score < 80) { grade = 'C'; color = '#eab308' } // Yellow
-        if (score < 70) { grade = 'D'; color = '#f97316' } // Orange
-        if (score < 60) { grade = 'F'; color = '#ef4444' } // Red
-
-        return { grade, score, color }
-    }, [stats, metadata])
-
-    if (!cityData) return null
 
     return (
         <div
@@ -88,37 +56,6 @@ export default function Sidebar() {
             </div>
 
             <div className="sidebar-content" style={{ flex: 1, overflowY: 'auto' }}>
-                {/* Health Scorecard - World Class UI */}
-                <div style={{ padding: '24px 24px 0 24px' }}>
-                    <div style={{
-                        background: '#18181b',
-                        border: '1px solid #27272a',
-                        borderRadius: '16px',
-                        padding: '20px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        boxShadow: '0 4px 20px -2px rgba(0,0,0,0.5)'
-                    }}>
-                        <div>
-                            <div style={{ color: '#a1a1aa', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
-                                Project Health
-                            </div>
-                            <div style={{ fontSize: '2.5rem', fontWeight: 800, color: healthScore.color, lineHeight: 1 }}>
-                                {healthScore.grade}
-                            </div>
-                        </div>
-                        <div style={{ textAlign: 'right' }}>
-                            <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#e4e4e7' }}>
-                                {healthScore.score}<span style={{ fontSize: '0.9rem', color: '#71717a' }}>/100</span>
-                            </div>
-                            <div style={{ fontSize: '0.8rem', color: healthScore.color }}>
-                                {healthScore.score > 80 ? 'Excellent' : healthScore.score > 60 ? 'Needs Work' : 'Critical'}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <GlobalIntelligence cityData={cityData} onSelect={selectBuilding} />
             </div>
         </div>
@@ -141,7 +78,7 @@ function GlobalIntelligence({ cityData, onSelect }) {
             {
                 id: 'circular',
                 title: 'Circular Dependencies',
-                files: cityData.stats?.circular_dependencies || [], // Use backend stats if avail
+                files: cityData.stats?.circular_dependencies || [],
                 color: '#f97316'
             },
             {
@@ -153,7 +90,7 @@ function GlobalIntelligence({ cityData, onSelect }) {
             {
                 id: 'dupes',
                 title: 'Duplicate Files',
-                files: files.filter(f => f.metrics?.churn > 20), // Mock: High churn often implies copy-paste wars
+                files: files.filter(f => f.metrics?.churn > 20),
                 color: '#8b5cf6'
             },
             {
