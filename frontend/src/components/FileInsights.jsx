@@ -106,79 +106,84 @@ function generateInsights(file) {
     return { insights, suggestions }
 }
 
-return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        {/* Issues */}
-        <div>
-            <h4 style={{
-                fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em',
-                color: '#71717a', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px'
-            }}>
-                <AlertTriangle size={12} /> Analysis
-            </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {insights.map((insight, i) => (
-                    <div key={i} style={{
-                        background: '#18181b',
-                        border: '1px solid #27272a',
-                        borderLeft: `3px solid ${getColorForType(insight.type)}`,
-                        borderRadius: '4px', // Technical corner
-                        padding: '16px',
-                        display: 'flex',
-                        gap: '12px'
-                    }}>
-                        <div style={{ marginTop: '2px', color: getColorForType(insight.type) }}>
-                            <insight.icon size={16} />
-                        </div>
-                        <div>
-                            <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#e4e4e7', marginBottom: '4px' }}>
-                                {insight.title}
-                            </div>
-                            <div style={{ fontSize: '0.8rem', color: '#a1a1aa', lineHeight: '1.5' }}>
-                                {insight.description}
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </div>
+export default function FileInsights({ file }) {
+    if (!file) return null
 
-        {/* Suggestions */}
-        {suggestions.length > 0 && (
+    const { insights, suggestions } = generateInsights(file)
+
+    return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            {/* Issues */}
             <div>
                 <h4 style={{
                     fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em',
                     color: '#71717a', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px'
                 }}>
-                    <Lightbulb size={12} /> Recommended Actions
+                    <AlertTriangle size={12} /> Analysis
                 </h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {suggestions.map((suggestion, i) => (
+                    {insights.map((insight, i) => (
                         <div key={i} style={{
-                            background: 'rgba(59, 130, 246, 0.05)', // Very subtle blue tint
-                            border: '1px dashed #3f3f46',
-                            borderRadius: '4px',
-                            padding: '16px'
+                            background: '#18181b',
+                            border: '1px solid #27272a',
+                            borderLeft: `3px solid ${getColorForType(insight.type)}`,
+                            borderRadius: '4px', // Technical corner
+                            padding: '16px',
+                            display: 'flex',
+                            gap: '12px'
                         }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                                <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#60a5fa' }}>
-                                    {suggestion.action}
-                                </span>
-                                <div style={{ display: 'flex', gap: '6px' }}>
-                                    <Badge label={suggestion.impact} color="#10b981" />
-                                    <Badge label={suggestion.effort} color="#f59e0b" />
+                            <div style={{ marginTop: '2px', color: getColorForType(insight.type) }}>
+                                <insight.icon size={16} />
+                            </div>
+                            <div>
+                                <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#e4e4e7', marginBottom: '4px' }}>
+                                    {insight.title}
+                                </div>
+                                <div style={{ fontSize: '0.8rem', color: '#a1a1aa', lineHeight: '1.5' }}>
+                                    {insight.description}
                                 </div>
                             </div>
-                            <p style={{ fontSize: '0.8rem', color: '#a1a1aa', margin: 0, lineHeight: '1.5' }}>
-                                {suggestion.description}
-                            </p>
                         </div>
                     ))}
                 </div>
             </div>
-        )}
-    </div>
-)
+
+            {/* Suggestions */}
+            {suggestions.length > 0 && (
+                <div>
+                    <h4 style={{
+                        fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em',
+                        color: '#71717a', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px'
+                    }}>
+                        <Lightbulb size={12} /> Recommended Actions
+                    </h4>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                        {suggestions.map((suggestion, i) => (
+                            <div key={i} style={{
+                                background: 'rgba(59, 130, 246, 0.05)', // Very subtle blue tint
+                                border: '1px dashed #3f3f46',
+                                borderRadius: '4px',
+                                padding: '16px'
+                            }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#60a5fa' }}>
+                                        {suggestion.action}
+                                    </span>
+                                    <div style={{ display: 'flex', gap: '6px' }}>
+                                        <Badge label={suggestion.impact} color="#10b981" />
+                                        <Badge label={suggestion.effort} color="#f59e0b" />
+                                    </div>
+                                </div>
+                                <p style={{ fontSize: '0.8rem', color: '#a1a1aa', margin: 0, lineHeight: '1.5' }}>
+                                    {suggestion.description}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    )
 }
 
 // Helpers

@@ -31,8 +31,30 @@ export default function DataBlock({ data, isConnected }) {
         (!highlightedIssue && selectedBuilding && !isSelected && !isDependency && !isDependent)
 
     const { width, height, depth } = data.dimensions
-    const { x, z } = data.position
-    const { colorMode } = useStore() // Get global color mode
+    const { layoutMode } = useStore() // Get global layout mode
+
+    // Compute Position based on Layout Mode
+    const position = useMemo(() => {
+        const { x, z } = data.position
+
+        if (layoutMode === 'galaxy') {
+            // Galaxy Warp: Spiral Transformation
+            const r = Math.sqrt(x * x + z * z)
+            const theta = Math.atan2(z, x) + r * 0.1 // Twist factor
+
+            // 3D Sphere/Bowl Effect
+            const spiralX = r * Math.cos(theta)
+            const spiralZ = r * Math.sin(theta)
+            const spiralY = Math.sin(r * 0.05) * 10 // Elevation waves
+
+            return [spiralX, spiralY, spiralZ]
+        }
+
+        // Default City Grid
+        return [x, 0, z]
+    }, [data.position, layoutMode])
+
+    const [x, y, z] = position
 
     // Dynamic coloring based on relationship
     const baseColor = useMemo(() => {
@@ -183,7 +205,7 @@ export default function DataBlock({ data, isConnected }) {
     }, [baseColor])
 
     return (
-        <group position={[x, 0, z]}>
+        <group position={[x, y, z]}>
             {/* Foundation - darker base */}
             <mesh position={[0, 0.15, 0]} receiveShadow>
                 <boxGeometry args={[width * 1.1, 0.3, depth * 1.1]} />
