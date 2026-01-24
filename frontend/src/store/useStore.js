@@ -26,13 +26,16 @@ const useStore = create((set, get) => ({
 
     // UI State
     viewMode: 'orbit', // orbit | street | overview
+    layoutMode: 'city', // city | galaxy | tree
+    colorMode: 'default', // default | layer | churn | language
     showRoads: true,
     showLabels: true,
     nightMode: false,
     theme: getInitialTheme(), // 'light' | 'dark'
     commandPaletteOpen: false,
-    analyzeModalOpen: false,
+    analyzeModalOpen: true, // Open by default
     highlightedCategory: null, // { type: 'language' | 'health' | 'district', value: string }
+    highlightedIssue: null, // { type: 'string', paths: string[] }
 
     // Chat State
     messages: [],
@@ -65,12 +68,43 @@ const useStore = create((set, get) => ({
         analysisProgress: 100
     })),
 
-    selectBuilding: (building) => set({ selectedBuilding: building }),
-    clearSelection: () => set({ selectedBuilding: null }),
+    graphNeighbors: { dependencies: [], dependents: [] },
+
+    selectBuilding: (building) => {
+        set({ selectedBuilding: building })
+        get().calculateNeighbors(building?.id)
+    },
+    clearSelection: () => set({ selectedBuilding: null, graphNeighbors: { dependencies: [], dependents: [] } }),
     setHoveredBuilding: (building) => set({ hoveredBuilding: building }),
     focusDistrict: (district) => set({ focusedDistrict: district }),
 
+    calculateNeighbors: (buildingId) => {
+        if (!buildingId) {
+            set({ graphNeighbors: { dependencies: [], dependents: [] } })
+            return
+        }
+
+        const { cityData } = get()
+        if (!cityData) return
+
+        const dependencies = []
+        const dependents = []
+
+        cityData.roads.forEach(road => {
+            if (road.source === buildingId) {
+                dependencies.push(road.target)
+            }
+            if (road.target === buildingId) {
+                dependents.push(road.source)
+            }
+        })
+
+        set({ graphNeighbors: { dependencies, dependents } })
+    },
+
     setViewMode: (mode) => set({ viewMode: mode }),
+    setLayoutMode: (mode) => set({ layoutMode: mode }),
+    setColorMode: (mode) => set({ colorMode: mode }),
     toggleRoads: () => set((state) => ({ showRoads: !state.showRoads })),
     toggleLabels: () => set((state) => ({ showLabels: !state.showLabels })),
     toggleNightMode: () => set((state) => ({ nightMode: !state.nightMode })),
@@ -86,6 +120,7 @@ const useStore = create((set, get) => ({
     })),
 
     setHighlightedCategory: (category) => set({ highlightedCategory: category }),
+    setHighlightedIssue: (issue) => set({ highlightedIssue: issue }),
 
     // VS Code integration
     setVSCodeConnected: (connected) => set({ vscodeConnected: connected }),
@@ -140,8 +175,8 @@ const useStore = create((set, get) => ({
 
     // API Actions
     fetchDemo: async () => {
-        const { setLoading, setCityData, setError } = get()
-        setLoading(true)
+        const { setCityData, setError } = get()
+        // Silent load for demo (no full screen overlay)
 
         try {
             const response = await fetch(`${API_BASE}/demo`)
@@ -160,13 +195,19 @@ const useStore = create((set, get) => ({
         setProgress(0)
         setError(null)
 
+        // Minimum time to ensure UI feedback (1.5s)
+        const minTime = new Promise(resolve => setTimeout(resolve, 1500))
+
         try {
             setProgress(10)
-            const response = await fetch(`${API_BASE}/analyze`, {
+            const responsePromise = fetch(`${API_BASE}/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ path, max_files: 5000 })
             })
+
+            // Wait for both fetch and minTime
+            const [response] = await Promise.all([responsePromise, minTime])
 
             setProgress(80)
 
@@ -182,7 +223,9 @@ const useStore = create((set, get) => ({
             // Save repo path for history features
             set({ currentRepoPath: path, commits: [], currentCommitIndex: -1 })
         } catch (error) {
+            console.error("Analysis Error:", error)
             setError(error.message)
+        } finally {
             setLoading(false)
         }
     },
@@ -350,6 +393,20 @@ function createDemoCity() {
             total_dependencies: roads.length,
             hotspots: buildings.filter(b => b.is_hotspot).length,
             avg_complexity: Math.round(buildings.reduce((sum, b) => sum + b.metrics.complexity, 0) / buildings.length)
+        },
+        metadata: {
+            health: { score: 72, grade: 'C' },
+            num_files: buildings.length,
+            layer_violations: [
+                { source: 'utils/logger.ts', target: 'auth/login.ts', sourceLayer: 'util', targetLayer: 'ui' }
+            ],
+            duplicates: [],
+            issues: {
+                circular_dependencies: [],
+                highly_coupled: [{ path: 'services/LegacyBilling.ts', count: 15 }],
+                large_files: [{ path: 'services/LegacyBilling.ts', lines: 520 }],
+                god_objects: [{ path: 'services/LegacyBilling.ts' }]
+            }
         }
     }
 }

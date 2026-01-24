@@ -167,14 +167,14 @@ function FlowConnection({ curve, isHighlighted, isOutgoing, isCrossDistrict }) {
 
     // Color scheme
     const baseColor = isHighlighted
-        ? (isOutgoing ? '#60a5fa' : '#a78bfa') // Blue out, Purple in
+        ? (isOutgoing ? '#4ade80' : '#f87171') // Green out (Dependency), Red in (Impact check)
         : (isCrossDistrict ? '#475569' : '#334155')
 
     const particleColor = isHighlighted
-        ? (isOutgoing ? '#93c5fd' : '#c4b5fd')
+        ? (isOutgoing ? '#86efac' : '#fca5a5')
         : '#64748b'
 
-    const glowColor = isOutgoing ? '#3b82f6' : '#8b5cf6'
+    const glowColor = isOutgoing ? '#22c55e' : '#ef4444'
 
     // Get start and end points
     const startPoint = curve.getPointAt(0)

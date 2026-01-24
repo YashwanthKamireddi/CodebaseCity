@@ -67,17 +67,7 @@ function Ground({ size = 400 }) {
                 />
             </mesh>
 
-            {/* Glow ring around city center */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.01, 0]}>
-                <ringGeometry args={[80, 85, 64]} />
-                <meshBasicMaterial color="#00d4ff" transparent opacity={0.1} side={THREE.DoubleSide} />
-            </mesh>
-
-            {/* Outer boundary indicator */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.02, 0]}>
-                <ringGeometry args={[size / 2 - 5, size / 2, 64]} />
-                <meshBasicMaterial color="#1a1a24" transparent opacity={0.5} side={THREE.DoubleSide} />
-            </mesh>
+            {/* Rings removed as requested */}
         </group>
     )
 }

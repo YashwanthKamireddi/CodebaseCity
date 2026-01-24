@@ -17,6 +17,9 @@ import CommandPalette from './components/ui/CommandPalette'
 import FileTable from './components/FileTable'
 import FloatingDock from './components/FloatingDock'
 import AnalyzeModal from './components/AnalyzeModal'
+import DiagnosticsHUD from './components/DiagnosticsHUD'
+import ViewControl from './components/ViewControl'
+import CanvasUI from './components/CanvasUI'
 import WelcomeOverlay from './components/WelcomeOverlay'
 import './components/FloatingDock.css'
 import { TimeTravelStats } from './components/AnimatedBuilding'
@@ -47,10 +50,10 @@ function App() {
     // VS Code integration
     const { notifyBuildingSelected } = useVSCodeSync()
 
-    // Load data on mount
-    useEffect(() => {
-        fetchDemo()
-    }, [fetchDemo])
+    // Load data on mount - DISABLED (User wants to analyze directly)
+    // useEffect(() => {
+    //     fetchDemo()
+    // }, [fetchDemo])
 
     // Apply theme
     useEffect(() => {
@@ -160,7 +163,7 @@ function App() {
                             {/* 3D-only Overlays */}
                             {/* Compass/Legend removed as requested */}
 
-                            )}
+
                         </>
                     ) : (
                         /* Table View */
@@ -195,6 +198,10 @@ function App() {
                     )}
 
                     {view === '3d' && <TimelineSlider />}
+
+                    {view === '3d' && <DiagnosticsHUD />}
+                    {view === '3d' && <ViewControl />}
+                    {view === '3d' && <CanvasUI />}
                 </div>
             </div>
 
@@ -208,6 +215,43 @@ function App() {
 
             {/* Loading - simple, fast */}
             {loading && <LoadingScreen />}
+
+            {/* Error Toast - Moved to Top Center to avoid overlap */}
+            {useStore.getState().error && (
+                <div style={{
+                    position: 'fixed',
+                    top: '24px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: '#ef4444',
+                    color: 'white',
+                    padding: '12px 24px',
+                    borderRadius: '30px',
+                    boxShadow: '0 10px 30px -10px rgba(239, 68, 68, 0.5)',
+                    zIndex: 10001,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    animation: 'slideDown 0.3s ease-out',
+                    maxWidth: '80vw',
+                    fontSize: '0.9rem',
+                    fontWeight: 500
+                }}>
+                    <span>⚠️ {useStore.getState().error}</span>
+                    <button
+                        onClick={() => useStore.getState().setError(null)}
+                        style={{
+                            background: 'rgba(255,255,255,0.2)',
+                            border: 'none',
+                            borderRadius: '50%',
+                            width: '24px',
+                            height: '24px',
+                            cursor: 'pointer',
+                            color: 'white'
+                        }}
+                    >✕</button>
+                </div>
+            )}
 
             {/* Onboarding */}
             <WelcomeOverlay />

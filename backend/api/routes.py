@@ -30,7 +30,7 @@ async def analyze_codebase(request: AnalyzeRequest):
     import subprocess
     import tempfile
     import shutil
-    
+
     # Blocklist of repos too large to analyze (GB+ in size)
     BLOCKED_REPOS = {
         "linux": "Linux kernel (5GB+, 30M+ LOC) - try a smaller project like expressjs/express",
@@ -42,73 +42,86 @@ async def analyze_codebase(request: AnalyzeRequest):
         "rust": "Rust compiler (2GB+) - try nicegram/nicegram-ios instead",
         "webkit": "WebKit (5GB+) - try expressjs/express instead",
     }
-    
+
     try:
         path = request.path.strip()
-        
-        # Check if it's a GitHub URL
-        if path.startswith("https://github.com/") or path.startswith("github.com/"):
+
+        # Check if it's a GitHub URL or shorthand
+        is_github = "github.com" in path or (len(path.split("/")) == 2 and not os.path.exists(path))
+
+        if is_github:
+            # Handle shorthand user/repo
+            if not "github.com" in path:
+                path = f"github.com/{path}"
+
             if not path.startswith("https://"):
-                path = "https://" + path
-            
+                path = "https://" + path.replace("http://", "")
+
             # Extract repo name for cache key
             repo_name = path.rstrip("/").split("/")[-1].replace(".git", "")
             cache_key = f"github_{repo_name}"
-            
+        else:
+            # Local path
+            cache_key = path.replace("/", "_").replace(":", "").replace("\\", "_")
+            if cache_key.startswith("_"): cache_key = cache_key[1:]
+
+        # 1. Check Memory Cache
+        if cache_key in city_cache:
+            print(f"[API] Cache Hit (Memory): {cache_key}")
+            return city_cache[cache_key]
+
+        # 2. Check Disk Cache
+        data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "cities")
+        os.makedirs(data_dir, exist_ok=True)
+        cache_file = os.path.join(data_dir, f"{cache_key}.json")
+
+        if os.path.exists(cache_file):
+            print(f"[API] Cache Hit (Disk): {cache_file}")
+            try:
+                import json
+                with open(cache_file, "r") as f:
+                    data_dict = json.load(f)
+                    city = CityData(**data_dict)
+                    city_cache[cache_key] = city
+                    return city
+            except Exception as e:
+                print(f"[API] Failed to load disk cache: {e}")
+
+        # 3. Analyze
+        if is_github:
             # Check blocklist
             if repo_name.lower() in BLOCKED_REPOS:
-                raise HTTPException(
-                    status_code=413, 
-                    detail=f"Repository too large: {BLOCKED_REPOS[repo_name.lower()]}"
-                )
-            
-            if cache_key in city_cache:
-                return city_cache[cache_key]
-            
-            # Clone to temp directory
+                raise HTTPException(status_code=413, detail=f"Repository too large: {BLOCKED_REPOS[repo_name.lower()]}")
+
             temp_dir = os.path.join(tempfile.gettempdir(), "codebase_city", repo_name)
-            
-            # Clean up if exists
-            if os.path.exists(temp_dir):
-                shutil.rmtree(temp_dir)
-            
+            if os.path.exists(temp_dir): shutil.rmtree(temp_dir)
             os.makedirs(os.path.dirname(temp_dir), exist_ok=True)
-            
-            # Clone the repo (shallow clone for speed) - 5 min timeout for large repos
+
             print(f"[API] Cloning {path}...")
             clone_result = subprocess.run(
-                ["git", "clone", "--depth", "1", "--single-branch", path, temp_dir],
-                capture_output=True,
-                text=True,
-                timeout=300  # 5 minutes for large repos
+                ["git", "clone", "--single-branch", path, temp_dir],
+                capture_output=True, text=True, timeout=600
             )
-            
             if clone_result.returncode != 0:
                 raise HTTPException(status_code=400, detail=f"Failed to clone: {clone_result.stderr}")
-            
-            print(f"[API] Clone complete, analyzing...")
-            
-            # Analyze the cloned repo
+
+            print(f"[API] Analyzing {repo_name}...")
             city_data = await analyzer.analyze(temp_dir, request.max_files)
             city_data.name = repo_name
-            
-            # Cache it
-            city_cache[cache_key] = city_data
-            
-            return city_data
+        else:
+            if not os.path.exists(path):
+                raise HTTPException(status_code=404, detail="Path not found")
+            city_data = await analyzer.analyze(path, request.max_files)
 
-        
-        # Local path
-        cache_key = path
-        if cache_key in city_cache:
-            return city_cache[cache_key]
-        
-        # Analyze the codebase
-        city_data = await analyzer.analyze(path, request.max_files)
-        
-        # Cache the result
+        # 4. Save to Cache (Memory + Disk)
         city_cache[cache_key] = city_data
-        
+        try:
+            with open(cache_file, "w") as f:
+                f.write(city_data.model_dump_json())
+            print(f"[API] Saved to disk: {cache_file}")
+        except Exception as e:
+            print(f"[API] Failed to save to disk: {e}")
+
         return city_data
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Path not found")
@@ -156,7 +169,7 @@ async def get_building_detail(request: BuildingDetailRequest):
                 # Get AI-generated details
                 detail = await guide.get_building_detail(building, city)
                 return detail
-    
+
     raise HTTPException(status_code=404, detail="Building not found")
 
 

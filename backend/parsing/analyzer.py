@@ -15,6 +15,7 @@ import multiprocessing
 from api.models import CityData, Building, District, Road, BuildingMetrics
 from .code_parser import CodeParser
 from .metrics import MetricsCalculator
+from parsing.intelligence import IntelligenceEngine
 from graph.graph_builder import GraphBuilder
 from graph.clustering import ClusteringEngine
 from graph.layout import LayoutEngine
@@ -26,14 +27,14 @@ MAX_WORKERS = min(8, multiprocessing.cpu_count())
 
 class CodebaseAnalyzer:
     """High-performance codebase analyzer for massive repositories"""
-    
+
     def __init__(self):
         self.parser = CodeParser()
         self.metrics = MetricsCalculator()
         self.graph_builder = GraphBuilder()
         self.clustering = ClusteringEngine()
         self.layout = LayoutEngine()
-        
+
         # Supported file extensions with language mapping
         self.supported_extensions = {
             '.py': 'python',
@@ -56,7 +57,7 @@ class CodebaseAnalyzer:
             '.scala': 'scala',
             '.cs': 'csharp',
         }
-        
+
         # Directories to always skip (performance critical)
         self.skip_dirs = frozenset({
             'node_modules', '.git', '__pycache__', 'venv', 'env',
@@ -69,13 +70,13 @@ class CodebaseAnalyzer:
             'test', 'tests', 'testing', '__tests__', 'spec', 'specs',
             'benchmark', 'benchmarks', 'fixtures'
         })
-        
+
         # Files to skip
         self.skip_files = frozenset({
             'package-lock.json', 'yarn.lock', 'Cargo.lock',
             'poetry.lock', 'Gemfile.lock', 'composer.lock'
         })
-    
+
     async def analyze(self, path: str, max_files: int = 5000) -> CityData:
         """
         Analyze a codebase with high performance.
@@ -84,39 +85,88 @@ class CodebaseAnalyzer:
         root_path = Path(path)
         if not root_path.exists():
             raise FileNotFoundError(f"Path not found: {path}")
-        
+
         print(f"[Analyzer] Starting analysis of {root_path.name}")
-        
+
         # Step 1: Fast file discovery using os.scandir (faster than rglob)
         print("[Analyzer] Discovering files...")
         files = self._fast_discover_files(root_path, max_files)
         print(f"[Analyzer] Found {len(files)} code files")
-        
+
         if len(files) == 0:
             return self._empty_city(root_path.name)
-        
+
         # Step 2: Parallel file parsing with ThreadPool
         print("[Analyzer] Parsing files in parallel...")
         parsed_files = await self._parallel_parse(files, root_path)
         print(f"[Analyzer] Parsed {len(parsed_files)} files successfully")
-        
+
         if len(parsed_files) == 0:
             return self._empty_city(root_path.name)
-        
+
         # Step 3: Build dependency graph (optimized)
         print("[Analyzer] Building dependency graph...")
         graph = self.graph_builder.build(parsed_files)
         print(f"[Analyzer] Graph: {graph.number_of_nodes()} nodes, {graph.number_of_edges()} edges")
-        
+
         # Step 4: Fast clustering (Leiden algorithm)
         print("[Analyzer] Clustering into districts...")
         clusters = await self.clustering.cluster(graph, parsed_files)
         print(f"[Analyzer] Created {len(clusters)} districts")
-        
+
         # Step 5: Generate spatial layout
         print("[Analyzer] Generating city layout...")
         layout_data = self.layout.generate(parsed_files, clusters, graph)
-        
+
+        # ---------------------------------------------------------
+        # Intelligence Upgrade
+        # ---------------------------------------------------------
+        print("[Analyzer] Running Intelligence Engine...")
+
+        # 1. Complexity & Security
+        for pf in parsed_files:
+            # Complexity
+            comp = IntelligenceEngine.calculate_complexity(pf.get('content', ''))
+            pf['complexity_score'] = comp['score'] # update dict
+            pf['complexityLevel'] = comp['level']
+
+            # Security
+            issues = IntelligenceEngine.scan_security(pf.get('content', ''), pf['name'])
+            pf['security_issues'] = issues
+
+            # Layer
+            pf['layer'] = IntelligenceEngine.detect_layer(pf['path'])
+
+        # 2. Graph Issues
+        # Convert parsed_files dicts to list
+        files_for_intel = parsed_files
+
+        # Graph Issues (Cycles, Coupling, God Objects)
+        # Convert NetworkX graph to edge list if needed? detect_graph_issues takes G directly.
+        graph_issues = IntelligenceEngine.detect_graph_issues(graph, files_for_intel)
+
+        # 3. Layer Violations
+        # Need edge list with paths
+        graph_edges = [{'source': u, 'target': v} for u, v in graph.edges()]
+        layer_violations = IntelligenceEngine.detect_layer_violations(files_for_intel, {'edges': graph_edges})
+
+        # 4. Duplicates
+        duplicates = IntelligenceEngine.detect_duplicates(files_for_intel)
+
+        # 5. Metadata Assembly
+        metadata = {
+            "num_files": len(parsed_files),
+            "num_directories": len(clusters), # Approximation
+            "languages": {}, # Simplified for now
+            "layer_violations": layer_violations,
+            "duplicates": duplicates,
+            "issues": graph_issues
+        }
+
+        # 6. Health Score
+        health = IntelligenceEngine.calculate_health_score(metadata)
+        metadata['health'] = health
+
         # Step 6: Assemble city data
         print("[Analyzer] Building city structure...")
         city = self._build_city(
@@ -126,10 +176,18 @@ class CodebaseAnalyzer:
             layout=layout_data,
             graph=graph
         )
-        
+
+        # Inject metadata into city
+        city.metadata = metadata # CityData allows extra fields via Pydantic extra='allow' or we define it?
+        # api/models.py CityData definition check needed.
+        # Assuming we return dict or object.
+        # Wait, `self._build_city` returns CityData object.
+        # Python objects are mutable.
+        city.metadata = metadata
+
         print(f"[Analyzer] Complete! City has {len(city.buildings)} buildings")
         return city
-    
+
     def _fast_discover_files(self, root: Path, max_files: int) -> List[Path]:
         """
         Ultra-fast file discovery using os.scandir.
@@ -137,32 +195,32 @@ class CodebaseAnalyzer:
         """
         files = []
         stack = [root]
-        
+
         while stack and len(files) < max_files:
             try:
                 current = stack.pop()
-                
+
                 with os.scandir(current) as entries:
                     for entry in entries:
                         if len(files) >= max_files:
                             break
-                        
+
                         name = entry.name
-                        
+
                         # Skip hidden files/dirs
                         if name.startswith('.'):
                             continue
-                        
+
                         if entry.is_dir(follow_symlinks=False):
                             # Skip unwanted directories
                             if name.lower() not in self.skip_dirs:
                                 stack.append(Path(entry.path))
-                        
+
                         elif entry.is_file(follow_symlinks=False):
                             # Skip unwanted files
                             if name in self.skip_files:
                                 continue
-                            
+
                             # Check extension
                             path = Path(entry.path)
                             if path.suffix in self.supported_extensions:
@@ -172,14 +230,14 @@ class CodebaseAnalyzer:
                                         files.append(path)
                                 except OSError:
                                     pass
-            
+
             except PermissionError:
                 continue
             except OSError:
                 continue
-        
+
         return files
-    
+
     async def _parallel_parse(self, files: List[Path], root: Path) -> List[dict]:
         """
         Parse files in parallel using ThreadPoolExecutor.
@@ -187,56 +245,56 @@ class CodebaseAnalyzer:
         """
         parsed = []
         batch_size = 50  # Process in batches for memory efficiency
-        
+
         with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             for i in range(0, len(files), batch_size):
                 batch = files[i:i + batch_size]
-                
+
                 # Parse batch in parallel
                 loop = asyncio.get_event_loop()
                 futures = [
                     loop.run_in_executor(executor, self._parse_file_sync, f, root)
                     for f in batch
                 ]
-                
+
                 results = await asyncio.gather(*futures, return_exceptions=True)
-                
+
                 for result in results:
                     if isinstance(result, dict):
                         parsed.append(result)
-        
+
         return parsed
-    
+
     def _parse_file_sync(self, file_path: Path, root: Path) -> Optional[dict]:
         """Synchronous file parsing for use in thread pool"""
         try:
             # Read file
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                 content = f.read()
-            
+
             language = self.supported_extensions.get(file_path.suffix, 'unknown')
             relative_path = str(file_path.relative_to(root)).replace('\\', '/')
-            
+
             # Fast metrics calculation
             lines = content.split('\n')
             loc = len(lines)
-            
+
             # Simplified complexity (count conditionals)
             complexity = self.metrics.cyclomatic_complexity(content, language)
-            
+
             # Get git metrics (with timeout protection)
             age_days = self.metrics.get_file_age(file_path)
             churn = self.metrics.get_file_churn(file_path)
-            
+
             # Extract imports
             imports = self.parser.extract_imports(content, language)
-            
+
             # Hotspot detection
             is_hotspot = complexity > 15 and (churn > 8 or loc > 500)
-            
+
             # Decay level
             decay = min(1.0, age_days / 730)
-            
+
             return {
                 'id': relative_path,
                 'name': file_path.name,
@@ -251,10 +309,13 @@ class CodebaseAnalyzer:
                 'is_hotspot': is_hotspot,
                 'decay_level': decay
             }
-        
+
         except Exception as e:
+            print(f"[Error] Failed to parse {file_path.name}: {e}")
+            import traceback
+            traceback.print_exc()
             return None
-    
+
     def _empty_city(self, name: str) -> CityData:
         """Return an empty city structure"""
         return CityData(
@@ -270,7 +331,7 @@ class CodebaseAnalyzer:
                 'hotspots': 0
             }
         )
-    
+
     def _build_city(
         self,
         name: str,
@@ -280,22 +341,22 @@ class CodebaseAnalyzer:
         graph
     ) -> CityData:
         """Assemble the final city data structure"""
-        
+
         # Build buildings
         buildings = []
         for pf in parsed_files:
             pos = layout['positions'].get(pf['id'], {'x': 0, 'y': 0, 'z': 0})
-            
+
             # Scale dimensions with caps for visual consistency
             loc = pf['loc']
             complexity = pf['complexity']
-            
+
             width = max(2, min(10, loc / 100))
             height = max(1, min(25, complexity * 0.8))
             depth = max(2, min(10, loc / 100))
-            
+
             cluster_id = layout['file_clusters'].get(pf['id'], 'default')
-            
+
             buildings.append(Building(
                 id=pf['id'],
                 name=pf['name'],
@@ -315,7 +376,7 @@ class CodebaseAnalyzer:
                 decay_level=pf['decay_level'],
                 is_hotspot=pf['is_hotspot']
             ))
-        
+
         # Build districts
         districts = []
         for cluster in clusters:
@@ -328,19 +389,19 @@ class CodebaseAnalyzer:
                 building_count=cluster['size'],
                 description=cluster.get('description')
             ))
-        
+
         # Build roads - limit for performance
         roads = []
         edge_count = 0
         max_edges = 500  # Cap edges for rendering performance
-        
+
         for source, target, data in graph.edges(data=True):
             if edge_count >= max_edges:
                 break
-            
+
             src_cluster = layout['file_clusters'].get(source)
             tgt_cluster = layout['file_clusters'].get(target)
-            
+
             roads.append(Road(
                 source=source,
                 target=target,
@@ -349,7 +410,7 @@ class CodebaseAnalyzer:
                 is_cross_district=src_cluster != tgt_cluster
             ))
             edge_count += 1
-        
+
         return CityData(
             name=name,
             buildings=buildings,

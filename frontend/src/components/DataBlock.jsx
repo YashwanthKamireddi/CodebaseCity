@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useRef, useMemo, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Edges } from '@react-three/drei'
 import * as THREE from 'three'
@@ -16,35 +16,139 @@ function getFileColor(filename) {
 
 export default function DataBlock({ data, isConnected }) {
     const meshRef = useRef()
-    const { selectBuilding, selectedBuilding, setHoveredBuilding } = useStore()
+    const { selectBuilding, selectedBuilding, setHoveredBuilding, graphNeighbors, highlightedIssue } = useStore()
 
     const isSelected = selectedBuilding?.id === data.id
+    const isDependency = selectedBuilding && graphNeighbors.dependencies.includes(data.id)
+    const isDependent = selectedBuilding && graphNeighbors.dependents.includes(data.id)
+
+    // Issue Highlighting Logic
+    const isIssueHighlighted = highlightedIssue && highlightedIssue.paths.includes(data.path)
+
+    // Unrelated if Issue Mode covers everything NOT IN issue
+    // If HighlightMode is ACTIVE, everything else is UNRELATED
+    const isUnrelated = (highlightedIssue && !isIssueHighlighted) ||
+        (!highlightedIssue && selectedBuilding && !isSelected && !isDependency && !isDependent)
+
     const { width, height, depth } = data.dimensions
     const { x, z } = data.position
+    const { colorMode } = useStore() // Get global color mode
 
-    // Use language-based color
-    // Color based on Size (Height/Complexity)
-    // Cyberpunk/Compact City Spectrum
+    // Dynamic coloring based on relationship
     const baseColor = useMemo(() => {
-        // Map height to Cool -> Hot spectrum (Blue -> Purple -> Pink -> Orange)
-        // Avoids Green/Yellow for a cleaner "sci-fi" look
-        // Range: Hue 260 (Deep Blue) down to 10 (Red-Orange)
-        // Multiplier helps distinguish small files
+        if (highlightedIssue) {
+            if (isIssueHighlighted) return '#ef4444' // Red For Issues
+            return '#1e293b' // Dimmed
+        }
+
+        if (isSelected) return '#facc15' // Gold (Selected)
+        if (isDependency) return '#4ade80' // Green (Dependency - Upstream)
+        if (isDependent) return '#f87171' // Red (Dependent - Downstream Impact)
+
+        // --- Color Modes ---
+        if (colorMode === 'layer') {
+            const l = data.layer || 'other'
+            if (l === 'ui') return '#3b82f6' // Blue
+            if (l === 'service') return '#8b5cf6' // Violet
+            if (l === 'data') return '#06b6d4' // Cyan
+            if (l === 'util') return '#22c55e' // Green
+            return '#64748b' // Slate
+        }
+
+        if (colorMode === 'churn') {
+            // Hotspots are red, stable is blue
+            if (data.is_hotspot) return '#ef4444'
+            const churn = data.metrics?.churn || 0
+            if (churn > 5) return '#f97316' // Orange
+            if (churn > 2) return '#fbbf24' // Yellow
+            return '#3b82f6' // Blue
+        }
+
+        if (colorMode === 'language') {
+            const ext = data.path.split('.').pop()
+            if (['ts', 'tsx'].includes(ext)) return '#3178c6'
+            if (['js', 'jsx'].includes(ext)) return '#f7df1e'
+            if (ext === 'py') return '#3572a5'
+            if (ext === 'css') return '#563d7c'
+            if (ext === 'html') return '#e34c26'
+            return '#64748b'
+        }
+
+        if (isUnrelated) return '#1e293b' // Dark Slate (Unrelated - Dimmed)
+
+        // Default: Height-based spectrum
         const h = Math.max(20, 260 - Math.min(240, height * 8))
         return `hsl(${h}, 90%, 60%)`
-    }, [height])
+    }, [height, isSelected, isDependency, isDependent, isUnrelated, highlightedIssue, isIssueHighlighted, colorMode, data.layer, data.metrics, data.path, data.is_hotspot])
 
-    // Animation for hotspots/connected nodes
+    // Opacity logic
+    const opacity = isUnrelated ? 0.1 : 0.9
+    const emissiveIntensity = (highlightedIssue && isIssueHighlighted) ? 1.0 : (isSelected ? 0.8 : (isDependency || isDependent) ? 0.5 : 0.1)
+
+    // Animation state
+    const revealTime = useMemo(() => {
+        // Stagger based on distance from origin (x, z)
+        const dist = Math.sqrt(x * x + z * z)
+        return dist * 0.02 // 20ms per unit of distance
+    }, [x, z])
+
+    const [grown, setGrown] = useState(false)
+    const mountTimeRef = useRef(null)
+
+    // Reset animation if data changes (e.g. re-analysis)
+    React.useEffect(() => {
+        setGrown(false)
+        mountTimeRef.current = null
+    }, [data])
+
+    // Animation for growth + hotspots
     useFrame((state) => {
         if (meshRef.current) {
-            // Subtle floating
-            // meshRef.current.position.y = (height / 2) + Math.sin(state.clock.elapsedTime + x) * 0.5
+            // Capture mount time on first frame
+            if (mountTimeRef.current === null) {
+                mountTimeRef.current = state.clock.elapsedTime
+            }
 
-            // Pulse if hotspot or connected
-            if (data.is_hotspot || isConnected) {
-                const time = state.clock.elapsedTime
-                const pulse = (Math.sin(time * 3) + 1) * 0.5 // 0 to 1
-                meshRef.current.material.emissiveIntensity = data.is_hotspot ? 0.5 + pulse * 0.5 : pulse * 0.3
+            // Calculate time elapsed SINCE this building was created
+            const time = state.clock.elapsedTime - mountTimeRef.current
+
+            // 1. Growth Animation (Intro)
+            if (!grown) {
+                if (time > revealTime) {
+                    const currentScale = meshRef.current.scale.y
+
+                    if (currentScale < 1) {
+                        // Smooth Lerp
+                        meshRef.current.scale.y += (1 - currentScale) * 0.08
+
+                        // Grow from bottom constraints
+                        meshRef.current.position.y = (height * meshRef.current.scale.y) / 2 + 0.3
+
+                        // Snap to finish when close
+                        if (Math.abs(1 - currentScale) < 0.01) {
+                            setGrown(true)
+                            meshRef.current.scale.y = 1
+                            meshRef.current.position.y = height / 2 + 0.3
+                        }
+                    } else {
+                        setGrown(true)
+                    }
+                } else {
+                    // Waiting for wave - hidden or tiny
+                    meshRef.current.scale.y = 0.01
+                    meshRef.current.position.y = 0.3
+                    meshRef.current.visible = true
+                }
+            }
+
+            // 2. Pulse Animation (Continuous)
+            if (grown && (data.is_hotspot || isDependency || isDependent)) {
+                // Use global time for sync pulsing
+                const globalTime = state.clock.elapsedTime
+                const pulse = (Math.sin(globalTime * 3) + 1) * 0.5
+                meshRef.current.material.emissiveIntensity = (data.is_hotspot || isSelected)
+                    ? 0.5 + pulse * 0.5
+                    : 0.2 + pulse * 0.4
             }
         }
     })
@@ -87,6 +191,8 @@ export default function DataBlock({ data, isConnected }) {
                     color={foundationColor}
                     roughness={0.8}
                     metalness={0.2}
+                    transparent
+                    opacity={opacity}
                 />
             </mesh>
 
@@ -106,9 +212,9 @@ export default function DataBlock({ data, isConnected }) {
                     clearcoat={1}
                     clearcoatRoughness={0.1}
                     emissive={baseColor}
-                    emissiveIntensity={isSelected ? 0.4 : 0.1}
+                    emissiveIntensity={emissiveIntensity}
                     transparent
-                    opacity={0.9}
+                    opacity={opacity}
                 />
 
                 {/* Wireframe Edges - Tron look */}

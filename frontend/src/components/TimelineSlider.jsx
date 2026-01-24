@@ -99,8 +99,8 @@ export default function TimelineSlider() {
             // Solid, Bottom-Right positioning
             style={{
                 position: 'fixed',
-                bottom: '32px',
-                right: '32px',
+                top: '24px',
+                right: '24px',
                 width: '380px', // Compact width
                 zIndex: 500,
                 padding: '0',

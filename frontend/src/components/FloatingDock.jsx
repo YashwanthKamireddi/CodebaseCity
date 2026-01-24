@@ -1,29 +1,25 @@
 /**
  * FloatingDock.jsx
  *
- * A world-class, macOS-inspired floating dock navigation.
- * Uses Framer Motion for magnetic hover effects.
+ * A refined "Control Deck" for professional navigation.
+ * Static, precise, and high-contrast.
  */
-import React, { useRef } from 'react'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
     LayoutGrid,
     Search,
     BarChart2,
     Github,
-    Settings,
     Box,
-    Table2,
-    Home,
-    FolderSearch,
-    Signpost
+    Sparkles,
+    Signpost,
+    FolderSearch
 } from 'lucide-react'
 import useStore from '../store/useStore'
-import { CommandPaletteTrigger } from './ui/CommandPalette'
 
 export default function FloatingDock({ view, onViewChange, onAnalyze }) {
-    const mouseX = useMotionValue(null)
-    const { analyzeRepo, loading, setCommandPaletteOpen, toggleRoads, showRoads } = useStore()
+    const { setCommandPaletteOpen, toggleRoads, showRoads, loading } = useStore()
 
     return (
         <div style={{
@@ -33,148 +29,198 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
             transform: 'translateX(-50%)',
             zIndex: 1000,
             display: 'flex',
-            gap: '12px',
-            alignItems: 'end',
             marginBottom: 'safe-area-inset-bottom'
         }}>
-            {/* Main Dock */}
-            <motion.div
-                className="glass-dock"
-                onMouseMove={(e) => mouseX.set(e.pageX)}
-                onMouseLeave={() => mouseX.set(Infinity)}
-                style={{
-                    display: 'flex',
-                    gap: '12px',
-                    padding: '12px 16px',
-                    borderRadius: '24px',
-                    background: 'rgba(20, 20, 23, 0.75)',
-                    backdropFilter: 'blur(40px) saturate(180%)',
-                    WebkitBackdropFilter: 'blur(40px) saturate(180%)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.06) inset',
-                    height: '64px',
-                    alignItems: 'center'
-                }}
-            >
+            <nav className="control-deck" style={{
+                display: 'flex',
+                gap: '8px',
+                padding: '8px',
+                borderRadius: '16px',
+                background: '#09090b', // Solid dark base
+                border: '1px solid #27272a', // Zinc-800
+                boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05) inset',
+                alignItems: 'center'
+            }}>
                 {/* View Toggles */}
-                <DockIcon
-                    mouseX={mouseX}
+                <DeckItem
                     onClick={() => onViewChange('3d')}
                     active={view === '3d'}
-                    title="3D City View"
-                >
-                    <Box size={20} />
-                </DockIcon>
+                    icon={<Box size={18} />}
+                    label="City View"
+                />
 
-                <DockIcon
-                    mouseX={mouseX}
+                <DeckItem
                     onClick={() => onViewChange('table')}
                     active={view === 'table'}
-                    title="Metrics Dashboard"
-                >
-                    <BarChart2 size={20} />
-                </DockIcon>
+                    icon={<BarChart2 size={18} />}
+                    label="Metrics"
+                />
 
-                <div className="dock-divider" />
+                <Divider />
 
                 {/* Actions */}
-                <DockIcon
-                    mouseX={mouseX}
+                <DeckItem
                     onClick={() => setCommandPaletteOpen(true)}
-                    title="Search (Cmd+K)"
-                >
-                    <Search size={20} />
-                </DockIcon>
+                    icon={<Search size={18} />}
+                    label="Search"
+                    shortcut="⌘K"
+                />
 
-                <DockIcon
-                    mouseX={mouseX}
+                <DeckItem
                     onClick={onAnalyze}
-                    title="Analyze Repo"
+                    icon={<FolderSearch size={18} />}
+                    label="Analyze"
                     loading={loading}
-                >
-                    <FolderSearch size={20} />
-                </DockIcon>
+                    accent
+                />
 
-                <div className="dock-divider" />
+                <DeckItem
+                    onClick={() => useStore.setState({ chatOpen: !useStore.getState().chatOpen })}
+                    icon={<Sparkles size={18} />}
+                    label="AI Architect"
+                />
+
+                <Divider />
 
                 {/* Toggles */}
-                <DockIcon
-                    mouseX={mouseX}
+                <DeckItem
                     onClick={toggleRoads}
                     active={showRoads}
-                    title="Toggle Connections"
-                >
-                    <Signpost size={20} />
-                </DockIcon>
+                    icon={<Signpost size={18} />}
+                    label="Connections"
+                />
 
-                <div className="dock-divider" />
+                <Divider />
 
-                <DockIcon
-                    mouseX={mouseX}
+                <DeckItem
                     onClick={() => window.open('https://github.com/YashwanthKamireddi/CodebaseCity', '_blank')}
-                    title="GitHub"
-                >
-                    <Github size={20} />
-                </DockIcon>
-
-            </motion.div>
+                    icon={<Github size={18} />}
+                    label="GitHub"
+                />
+            </nav>
         </div>
     )
 }
 
-function DockIcon({ mouseX, children, onClick, active, title, loading }) {
-    const ref = useRef()
-
-    const distance = useTransform(mouseX, (val) => {
-        const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 }
-        return val - bounds.x - bounds.width / 2
-    })
-
-    const widthSync = useTransform(distance, [-150, 0, 150], [40, 60, 40])
-    const width = useSpring(widthSync, { mass: 0.1, stiffness: 150, damping: 12 })
+function DeckItem({ icon, label, onClick, active, loading, accent, shortcut }) {
+    const [hovered, setHovered] = useState(false)
 
     return (
-        <motion.button
-            ref={ref}
-            onClick={onClick}
-            title={title}
-            style={{
-                width,
-                height: width,
-                borderRadius: '12px',
-                background: active ? 'var(--color-accent)' : 'rgba(255,255,255,0.05)',
-                color: active ? 'white' : 'var(--color-text-secondary)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                position: 'relative'
-            }}
-            whileTap={{ scale: 0.9 }}
-        >
-            {loading ? (
-                <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-                >
-                    {children}
-                </motion.div>
-            ) : children}
+        <div style={{ position: 'relative' }}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}>
+            <button
+                onClick={onClick}
+                className="deck-btn"
+                style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '10px',
+                    background: active ? (accent ? '#818cf8' : '#27272a') : 'transparent',
+                    color: active ? (accent ? 'white' : 'white') : '#a1a1aa',
+                    border: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    position: 'relative',
+                    overflow: 'hidden'
+                }}
+            >
+                {loading ? (
+                    <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                    >
+                        {icon}
+                    </motion.div>
+                ) : icon}
 
-            {active && (
-                <motion.div
-                    layoutId="active-dot"
-                    style={{
+                {active && !accent && (
+                    <div style={{
                         position: 'absolute',
-                        bottom: '-8px',
+                        bottom: '-6px',
                         width: '4px',
                         height: '4px',
                         borderRadius: '50%',
-                        background: 'white'
-                    }}
-                />
-            )}
-        </motion.button>
+                        background: 'white',
+                        opacity: 0.5
+                    }} />
+                )}
+            </button>
+
+            {/* Precision Tooltip */}
+            <AnimatePresence>
+                {hovered && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 5, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        style={{
+                            position: 'absolute',
+                            bottom: '100%',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            marginBottom: '12px',
+                            background: '#18181b', // Zinc-900
+                            border: '1px solid #27272a',
+                            borderRadius: '8px',
+                            padding: '6px 10px',
+                            whiteSpace: 'nowrap',
+                            display: 'flex',
+                            gap: '8px',
+                            alignItems: 'center',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                            zIndex: 100
+                        }}
+                    >
+                        <span style={{ fontSize: '12px', fontWeight: 500, color: '#f4f4f5' }}>{label}</span>
+                        {shortcut && (
+                            <span style={{
+                                fontSize: '10px',
+                                color: '#71717a',
+                                background: '#27272a',
+                                padding: '1px 4px',
+                                borderRadius: '4px'
+                            }}>{shortcut}</span>
+                        )}
+                        {/* Triangle */}
+                        <div style={{
+                            position: 'absolute',
+                            bottom: '-4px',
+                            left: '50%',
+                            marginLeft: '-4px',
+                            width: '8px',
+                            height: '8px',
+                            background: '#18181b',
+                            borderRight: '1px solid #27272a',
+                            borderBottom: '1px solid #27272a',
+                            transform: 'rotate(45deg)'
+                        }} />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Hover State Styles (Inline for simplicity) */}
+            <style>{`
+                .deck-btn:hover {
+                    background: ${active ? '' : 'rgba(255,255,255,0.05)'} !important;
+                    color: white !important;
+                }
+            `}</style>
+        </div>
+    )
+}
+
+function Divider() {
+    return (
+        <div style={{
+            width: '1px',
+            height: '24px',
+            background: '#27272a',
+            margin: '0 4px'
+        }} />
     )
 }
