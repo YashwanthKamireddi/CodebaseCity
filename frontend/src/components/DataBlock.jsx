@@ -31,7 +31,7 @@ export default function DataBlock({ data, isConnected }) {
         (!highlightedIssue && selectedBuilding && !isSelected && !isDependency && !isDependent)
 
     const { width, height, depth } = data.dimensions
-    const { layoutMode } = useStore() // Get global layout mode
+    const { layoutMode, colorMode } = useStore() // Get global modes
 
     // Compute Position based on Layout Mode
     const position = useMemo(() => {
