@@ -56,14 +56,14 @@ function Ground({ size = 400 }) {
     return (
         <group>
             {/* Main ground plane */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-                <planeGeometry args={[size, size]} />
+            {/* Main ground plane - Lowered to prevent Z-fighting */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]} receiveShadow>
+                <planeGeometry args={[size * 2, size * 2]} />
                 <meshStandardMaterial
                     map={gridTexture}
                     roughness={0.9}
                     metalness={0.1}
-                    transparent
-                    opacity={0.9}
+                // Opaque to hide background
                 />
             </mesh>
 

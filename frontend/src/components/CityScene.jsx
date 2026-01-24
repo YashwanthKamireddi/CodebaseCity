@@ -36,7 +36,16 @@ export default function CityScene() {
             </group>
 
             {/* SHADOWS */}
-            <ContactShadows resolution={512} scale={200} blur={2} opacity={0.5} far={10} color="#000000" />
+            {/* SHADOWS - Lifted slightly above ground, Expanded */}
+            <ContactShadows
+                position={[0, 0.01, 0]}
+                resolution={1024}
+                scale={500}
+                blur={2}
+                opacity={0.5}
+                far={10}
+                color="#000000"
+            />
 
             {/* FOG (Attach to parent scene) */}
             <fog attach="fog" args={['#09090b', 20, 500]} />
