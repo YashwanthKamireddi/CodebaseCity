@@ -38,14 +38,14 @@ export default function DataBlock({ data, isConnected }) {
         const { x, z } = data.position
 
         if (layoutMode === 'galaxy') {
-            // Galaxy Warp: Spiral Transformation
+            // Galaxy Warp: EXTREME Transformation
             const r = Math.sqrt(x * x + z * z)
-            const theta = Math.atan2(z, x) + r * 0.1 // Twist factor
+            const theta = Math.atan2(z, x) + (r * 0.4) // Strong Twist
+            const spread = 2.0 // Widen the galaxy
 
-            // 3D Sphere/Bowl Effect
-            const spiralX = r * Math.cos(theta)
-            const spiralZ = r * Math.sin(theta)
-            const spiralY = Math.sin(r * 0.05) * 10 // Elevation waves
+            const spiralX = (r * spread) * Math.cos(theta)
+            const spiralZ = (r * spread) * Math.sin(theta)
+            const spiralY = (r * 0.4) - 20 // Deep Gravity Well
 
             return [spiralX, spiralY, spiralZ]
         }
@@ -69,16 +69,25 @@ export default function DataBlock({ data, isConnected }) {
 
         // --- Color Modes ---
         if (colorMode === 'layer') {
-            const l = data.layer || 'other'
-            if (l === 'ui') return '#3b82f6' // Blue
-            if (l === 'service') return '#8b5cf6' // Violet
-            if (l === 'data') return '#06b6d4' // Cyan
-            if (l === 'util') return '#22c55e' // Green
-            return '#64748b' // Slate
+            // INFERRED LAYER LOGIC (If backend data is missing)
+            const p = data.path.toLowerCase()
+            let layer = data.layer || 'other'
+
+            if (p.includes('component') || p.includes('page') || p.includes('ui') || p.match(/\.(jsx|tsx|vue|svelte)$/)) layer = 'ui'
+            else if (p.includes('service') || p.includes('api') || p.includes('controll')) layer = 'service'
+            else if (p.includes('util') || p.includes('lib') || p.includes('help')) layer = 'util'
+            else if (p.includes('store') || p.includes('context') || p.includes('redux') || p.includes('hook')) layer = 'data'
+            else if (p.includes('db') || p.includes('model') || p.includes('schema')) layer = 'db'
+
+            if (layer === 'ui') return '#3b82f6' // Blue
+            if (layer === 'service') return '#8b5cf6' // Violet
+            if (layer === 'data') return '#06b6d4' // Cyan
+            if (layer === 'util') return '#10b981' // Emerald
+            if (layer === 'db') return '#f59e0b' // Amber
+            return '#475569' // Slate (Unknown)
         }
 
         if (colorMode === 'churn') {
-            // Hotspots are red, stable is blue
             if (data.is_hotspot) return '#ef4444'
             const churn = data.metrics?.churn || 0
             if (churn > 5) return '#f97316' // Orange
@@ -98,9 +107,15 @@ export default function DataBlock({ data, isConnected }) {
 
         if (isUnrelated) return '#1e293b' // Dark Slate (Unrelated - Dimmed)
 
-        // Default: Height-based spectrum
-        const h = Math.max(20, 260 - Math.min(240, height * 8))
-        return `hsl(${h}, 90%, 60%)`
+        // Structure Mode: Discrete Tiered Spectrum ("More Colors")
+        // Height represents LOC/Complexity
+        if (height < 2) return '#22d3ee' // Cyan (Tiny)
+        if (height < 5) return '#34d399' // Emerald (Small)
+        if (height < 10) return '#a3e635' // Lime (Medium)
+        if (height < 20) return '#facc15' // Yellow (Large)
+        if (height < 40) return '#fb923c' // Orange (Very Large)
+        if (height < 60) return '#f87171' // Red (Huge)
+        return '#d946ef' // Fuchsia (God Class)
     }, [height, isSelected, isDependency, isDependent, isUnrelated, highlightedIssue, isIssueHighlighted, colorMode, data.layer, data.metrics, data.path, data.is_hotspot])
 
     // Opacity logic
