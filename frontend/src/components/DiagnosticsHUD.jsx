@@ -3,7 +3,7 @@ import useStore from '../store/useStore'
 import { AlertTriangle, Shield, Layers, Copy, GitMerge, Activity, X } from 'lucide-react'
 
 export default function DiagnosticsHUD() {
-    const { cityData, setHighlightedIssue, highlightedIssue } = useStore()
+    const { cityData, setHighlightedIssue, highlightedIssue, selectedBuilding } = useStore()
     const [activeTab, setActiveTab] = useState('issues') // issues, patterns, security
     const [expanded, setExpanded] = useState(true)
 
@@ -54,26 +54,32 @@ export default function DiagnosticsHUD() {
 
     const gradeColor = getGradeColor(health?.grade || 'C')
 
+    const baseStyle = {
+        position: 'fixed',
+        top: '24px',
+        left: '340px', // Fixed Left
+        // right: 'auto',
+        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+        zIndex: 900,
+    }
+
+    // Minified View
     if (!expanded) {
         return (
             <div
                 onClick={() => setExpanded(true)}
                 style={{
-                    position: 'fixed',
-                    top: '24px',
-                    right: '24px',
+                    ...baseStyle,
                     background: 'rgba(9, 9, 11, 0.6)',
                     backdropFilter: 'blur(12px)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '12px',
                     padding: '12px',
                     cursor: 'pointer',
-                    zIndex: 2000,
                     display: 'flex',
                     alignItems: 'center',
                     gap: '12px',
                     boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-                    transition: 'all 0.2s ease'
                 }}
             >
                 <div style={{
@@ -90,15 +96,12 @@ export default function DiagnosticsHUD() {
 
     return (
         <div style={{
-            position: 'fixed',
-            top: '24px',
-            right: '24px',
+            ...baseStyle,
             width: '320px',
             background: 'rgba(9, 9, 11, 0.85)',
             backdropFilter: 'blur(16px)',
             border: '1px solid rgba(255, 255, 255, 0.1)',
             borderRadius: '16px',
-            zIndex: 2000,
             display: 'flex',
             flexDirection: 'column',
             boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
@@ -219,10 +222,10 @@ export default function DiagnosticsHUD() {
                         <br />
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             <div style={{ padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span>🏭</span> <span style={{ color: 'white' }}>Factories detected</span>
+                                <Layers size={14} color="#94a3b8" /> <span style={{ color: 'white' }}>Factories detected</span>
                             </div>
                             <div style={{ padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span>🎣</span> <span style={{ color: 'white' }}>React Hooks extracted</span>
+                                <Activity size={14} color="#94a3b8" /> <span style={{ color: 'white' }}>React Hooks extracted</span>
                             </div>
                         </div>
                     </div>

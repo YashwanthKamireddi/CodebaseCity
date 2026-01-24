@@ -23,6 +23,8 @@ const useStore = create((set, get) => ({
     selectedBuilding: null,
     hoveredBuilding: null,
     focusedDistrict: null,
+    fileContent: null, // { path: string, content: string, loading: boolean }
+    sidebarOpen: true,
 
     // UI State
     viewMode: 'orbit', // orbit | street | overview
@@ -112,6 +114,7 @@ const useStore = create((set, get) => ({
     toggleRoads: () => set((state) => ({ showRoads: !state.showRoads })),
     toggleLabels: () => set((state) => ({ showLabels: !state.showLabels })),
     toggleNightMode: () => set((state) => ({ nightMode: !state.nightMode })),
+    setSidebarOpen: (open) => set({ sidebarOpen: open }),
 
     setCommandPaletteOpen: (open) => set((state) => ({
         commandPaletteOpen: open,
@@ -226,13 +229,73 @@ const useStore = create((set, get) => ({
 
             const data = await response.json()
             setCityData(data)
-            // Save repo path for history features
-            set({ currentRepoPath: path, commits: [], currentCommitIndex: -1 })
+            // Save repo path (use backed returned path if available, else input)
+            // This ensures we have the local path for file reading even if input was a URL
+            set({ currentRepoPath: data.path || path, commits: [], currentCommitIndex: -1 })
         } catch (error) {
             console.error("Analysis Error:", error)
             setError(error.message)
         } finally {
             setLoading(false)
+        }
+    },
+
+    fetchFileContent: async (path) => {
+        set({ fileContent: { path, content: null, loading: true } })
+
+        const { currentRepoPath } = get()
+        let fullPath = path
+
+        // Handle Remote URLs (GitHub)
+        // Format: https://github.com/User/Repo/path/to/file
+        if (path.startsWith('http')) {
+            try {
+                // Strip protocol, domain, user, repo (approx 5 segments)
+                // We want the path appearing AFTER the repo name
+                // Example: https://github.com/user/repo/src/index.ts -> src/index.ts
+                const url = new URL(path)
+                const parts = url.pathname.split('/').filter(Boolean)
+                // parts: ['user', 'repo', 'src', 'index.ts']
+                // We assume parts[0] is user, parts[1] is repo. Path starts at 2.
+                // NOTE: GitHub "blob/main" might be present?
+                // The current codebase-city engine likely stores the raw file path URL or constructed path.
+                // Assuming standard structure from the user's log:
+                // .../server/storage/supabase-storage.ts
+                // It looks like index 2+.
+                const relativeParts = parts.slice(2)
+
+                // If blob/main or tree/main exists, strip it
+                if (relativeParts[0] === 'blob' || relativeParts[0] === 'tree') {
+                    relativeParts.splice(0, 2) // remove blob/main
+                }
+
+                // If currentRepoPath is valid (Local path), use it
+                if (currentRepoPath && !currentRepoPath.startsWith('http')) {
+                   const cleanRepo = currentRepoPath.endsWith('/') ? currentRepoPath.slice(0, -1) : currentRepoPath
+                   fullPath = `${cleanRepo}/${relativeParts.join('/')}`
+                } else {
+                   // Fallback: If we don't have local path, maybe the Backend knows how to handle relative?
+                   // We send just the relative path and hope backend resolves it against active city.
+                   fullPath = relativeParts.join('/')
+                }
+            } catch (e) {
+                console.warn('Failed to parse URL path', e)
+            }
+        }
+        // Handle Local Relative Paths
+        else if (currentRepoPath && !path.startsWith('/') && !path.includes(':')) {
+           const cleanRepo = currentRepoPath.endsWith('/') ? currentRepoPath.slice(0, -1) : currentRepoPath
+           const cleanPath = path.startsWith('/') ? path.slice(1) : path
+           fullPath = `${cleanRepo}/${cleanPath}`
+        }
+
+        try {
+            const response = await fetch(`${API_BASE}/files/content?path=${encodeURIComponent(fullPath)}`)
+            if (!response.ok) throw new Error('Failed to load content')
+            const data = await response.json()
+            set({ fileContent: { path, content: data.content, loading: false } })
+        } catch (error) {
+            set({ fileContent: { path, content: `Error: ${error.message}`, loading: false, error: true } })
         }
     },
 

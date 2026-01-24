@@ -14,12 +14,19 @@ import { motion, AnimatePresence } from 'framer-motion'
 // Styles imported from index.css mostly, inline for layout
 
 export default function BuildingPanel({ building }) {
-    const { clearSelection } = useStore()
+    const { clearSelection, fetchFileContent, fileContent } = useStore()
 
     if (!building) return null
 
     const { metrics, name, path, is_hotspot, decay_level, language } = building
     const pattern = detectPattern(building)
+
+    // Fetch content when building changes
+    React.useEffect(() => {
+        if (path) fetchFileContent(path)
+    }, [path, fetchFileContent])
+
+    const isContentReady = fileContent?.path === path && !fileContent?.loading
 
     return (
         <AnimatePresence>
@@ -32,7 +39,7 @@ export default function BuildingPanel({ building }) {
                     position: 'fixed',
                     top: 0,
                     right: 0,
-                    width: '400px',
+                    width: '450px', // Wider for code
                     height: '100vh',
                     zIndex: 1000,
                     background: 'var(--glass-panel)',
@@ -118,6 +125,57 @@ export default function BuildingPanel({ building }) {
                         <SwissMetric label="Complexity" value={metrics.complexity} highlight={metrics.complexity > 20} />
                         <SwissMetric label="Commits (Churn)" value={metrics.churn} />
                         <SwissMetric label="Incoming Deps" value={metrics.dependencies_in} />
+                    </div>
+
+                    {/* Code Viewer (Mini Editor) */}
+                    <div style={{ marginBottom: '32px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        <SectionHeader title="Source Code" icon={<FileCode2 size={14} />} />
+                        <div style={{
+                            background: '#1e1e1e', // Monaco Editor BG
+                            border: '1px solid #2d2d2d',
+                            borderRadius: '6px',
+                            overflow: 'hidden',
+                            position: 'relative',
+                            fontFamily: '"JetBrains Mono", Consolas, monospace',
+                            fontSize: '0.8rem',
+                            lineHeight: '1.5',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            minHeight: '300px'
+                        }}>
+                            {/* Editor Header */}
+                            <div style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                padding: '8px 12px',
+                                background: '#252526',
+                                borderBottom: '1px solid #2d2d2d',
+                                color: '#cccccc',
+                                fontSize: '0.75rem'
+                            }}>
+                                <span>{path.split('/').pop()}</span>
+                                <span style={{ opacity: 0.5 }}>{metrics.loc} lines</span>
+                            </div>
+
+                            {/* Scrollable Code Area */}
+                            <div style={{
+                                flex: 1,
+                                overflow: 'auto',
+                                padding: '16px',
+                                color: '#d4d4d4', // VS Code Default FG
+                                whiteSpace: 'pre',
+                                tabSize: 4
+                            }}>
+                                {fileContent?.loading ? (
+                                    <div style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>Loading source...</div>
+                                ) : (
+                                    fileContent?.error ? (
+                                        <div style={{ color: '#ef4444' }}>Unable to read file content.</div>
+                                    ) : (
+                                        fileContent?.content || '// No content available.'
+                                    )
+                                )}
+                            </div>
+                        </div>
                     </div>
 
                     {/* Analysis Stream */}

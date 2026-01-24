@@ -57,6 +57,13 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
                     label="Metrics"
                 />
 
+                <DeckItem
+                    onClick={() => useStore.setState(state => ({ sidebarOpen: !state.sidebarOpen }))}
+                    active={useStore(state => state.sidebarOpen)}
+                    icon={<FolderSearch size={18} />}
+                    label="Explorer"
+                />
+
                 <Divider />
 
                 {/* Actions */}

@@ -20,6 +20,7 @@ import AnalyzeModal from './components/AnalyzeModal'
 import DiagnosticsHUD from './components/DiagnosticsHUD'
 import ViewControl from './components/ViewControl'
 import CanvasUI from './components/CanvasUI'
+import ChatInterface from './components/ChatInterface'
 import WelcomeOverlay from './components/WelcomeOverlay'
 import './components/FloatingDock.css'
 import { TimeTravelStats } from './components/AnimatedBuilding'
@@ -203,10 +204,11 @@ function App() {
                     {view === '3d' && <DiagnosticsHUD />}
                     {view === '3d' && <ViewControl />}
                     {view === '3d' && <CanvasUI />}
+                    <ChatInterface />
                 </div>
             </div>
 
-            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+            <Sidebar />
 
             {/* Command Palette - ⌘K */}
             <CommandPalette />

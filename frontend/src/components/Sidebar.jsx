@@ -2,10 +2,12 @@ import React from 'react'
 import useStore from '../store/useStore'
 import { Folder, File, Code, Hash, Link as LinkIcon, ChevronRight, ChevronDown } from 'lucide-react'
 
-export default function Sidebar({ isOpen, onClose }) {
-    const { cityData, selectBuilding, selectedBuilding } = useStore()
+export default function Sidebar() {
+    const { cityData, selectBuilding, selectedBuilding, sidebarOpen, setSidebarOpen } = useStore()
 
     if (!cityData) return null
+
+    const onClose = () => setSidebarOpen(false)
 
     const { stats, metadata } = cityData
     const health = metadata?.health || { grade: 'A', score: 100 }
@@ -18,72 +20,28 @@ export default function Sidebar({ isOpen, onClose }) {
     ]
 
     return (
-        <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+        <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
             <div className="sidebar-header">
                 <h2>{cityData.name}</h2>
                 <button className="close-btn" onClick={onClose}>×</button>
             </div>
 
-            {/* Health Badge */}
-            <div style={{ padding: '0 20px 10px 20px' }}>
-                <div style={{
-                    background: 'rgba(34, 197, 94, 0.1)',
-                    color: '#4ade80',
-                    border: '1px solid rgba(34, 197, 94, 0.2)',
-                    padding: '6px 12px',
-                    borderRadius: '6px',
-                    fontSize: '0.8rem',
-                    fontWeight: 600,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                }}>
-                    <span>Project Health</span>
-                    <span>{health.grade} - {health.score}/100</span>
-                </div>
-            </div>
-
-            {/* Metrics Grid */}
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '8px',
-                padding: '0 20px 20px 20px',
-                borderBottom: '1px solid rgba(255,255,255,0.05)'
-            }}>
-                {metrics.map((m, i) => (
-                    <div key={i} style={{ background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#94a3b8', fontSize: '0.75rem', marginBottom: '4px' }}>
-                            {m.icon} {m.label}
-                        </div>
-                        <div style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white' }}>{m.value}</div>
-                    </div>
-                ))}
-            </div>
-
-            {/* Language Bar */}
-            <div style={{ padding: '0 20px 20px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', marginBottom: '8px' }}>LANGUAGES</div>
-                <div style={{ display: 'flex', height: '8px', borderRadius: '4px', overflow: 'hidden', marginBottom: '8px' }}>
-                    {/* Mock data for now, would come from stats.languages */}
-                    <div style={{ width: '45%', background: '#3178c6' }} title="TypeScript 45%" />
-                    <div style={{ width: '30%', background: '#f7df1e' }} title="JavaScript 30%" />
-                    <div style={{ width: '15%', background: '#563d7c' }} title="CSS 15%" />
-                    <div style={{ width: '10%', background: '#e34c26' }} title="HTML 10%" />
-                </div>
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.7rem', color: '#cbd5e1' }}>
-                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#3178c6' }} /> TS 45%
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.7rem', color: '#cbd5e1' }}>
-                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f7df1e' }} /> JS 30%
-                    </div>
-                </div>
-            </div>
+            {/* Spacer */}
+            <div style={{ height: '16px' }} />
 
             <div className="sidebar-content">
                 <div className="file-tree-container" style={{ padding: '10px' }}>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748b', marginBottom: '8px', paddingLeft: '8px' }}>EXPLORER</div>
+                    <div style={{
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        color: '#94a3b8',
+                        marginBottom: '12px',
+                        paddingLeft: '8px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
+                    }}>
+                        Explorer
+                    </div>
                     <FileTree
                         files={cityData.buildings}
                         onSelect={selectBuilding}

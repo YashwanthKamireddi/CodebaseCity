@@ -47,10 +47,23 @@ export default function CameraController() {
 
         window.addEventListener('flyToBuilding', handleFlyTo)
         return () => window.removeEventListener('flyToBuilding', handleFlyTo)
+        window.addEventListener('flyToBuilding', handleFlyTo)
+        return () => window.removeEventListener('flyToBuilding', handleFlyTo)
     }, [camera, controls])
 
-    // Handle Global Camera Actions (UI Buttons)
-    const { cameraAction } = useStore() // Get from store, not event listener
+    // Auto-fly to selected building
+    const { selectedBuilding, cameraAction } = useStore()
+
+    useEffect(() => {
+        if (!selectedBuilding) return
+        // Dispatch synthetic event to reuse logic, or just call logic directly
+        // Better: Reuse logic logic?
+        // Let's just create a synthetic event for the existing handler if possible,
+        // BUT the handler is inside the other effect.
+        // Let's just emit the event vertically.
+        const event = new CustomEvent('flyToBuilding', { detail: { building: selectedBuilding } })
+        window.dispatchEvent(event)
+    }, [selectedBuilding]) // Only when selection changes
 
     useEffect(() => {
         if (!cameraAction) return

@@ -191,3 +191,22 @@ async def clear_cache(city_id: str):
         del city_cache[city_id]
         return {"status": "cleared"}
     raise HTTPException(status_code=404, detail="City not found in cache")
+
+
+@router.get("/files/content")
+async def get_file_content(path: str):
+    """
+    Get raw content of a file
+    """
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="File not found")
+
+    try:
+        # Limit size to 1MB
+        if os.path.getsize(path) > 1024 * 1024:
+             raise HTTPException(status_code=413, detail="File too large")
+
+        with open(path, 'r', encoding='utf-8', errors='ignore') as f:
+            return {"content": f.read()}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

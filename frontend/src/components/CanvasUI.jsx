@@ -14,13 +14,14 @@ import useStore from '../store/useStore'
 // OR, simpler: Just absolute position this over the canvas.
 
 export default function CanvasUI() {
-    const { setCameraAction } = useStore()
+    const { setCameraAction, selectedBuilding } = useStore()
 
     return (
         <div style={{
             position: 'absolute',
             bottom: '32px', // Back to corner
-            right: '24px',
+            right: selectedBuilding ? '474px' : '24px', // Slide left of 450px panel + padding
+            transition: 'right 0.4s cubic-bezier(0.16, 1, 0.3, 1)', // Smooth Spring
             display: 'flex',
             flexDirection: 'column',
             gap: '8px',
