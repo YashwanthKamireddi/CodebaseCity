@@ -14,29 +14,45 @@ import useStore from '../store/useStore'
 // OR, simpler: Just absolute position this over the canvas.
 
 export default function CanvasUI() {
-    const { setFocusCamera } = useStore()
-
-    const handleZoomIn = () => {
-        // Dispatch zoom event or update store
-        // Implementation detail: usually handled by Scene component listening to store
-    }
+    const { setCameraAction } = useStore()
 
     return (
         <div style={{
             position: 'absolute',
-            bottom: '32px',
-            right: '32px',
+            bottom: '32px', // Back to corner
+            right: '24px',
             display: 'flex',
             flexDirection: 'column',
             gap: '8px',
-            zIndex: 100
+            zIndex: 2000
         }}>
-            <ControlButton icon={<Plus size={18} />} onClick={() => { }} title="Zoom In" />
-            <ControlButton icon={<Minus size={18} />} onClick={() => { }} title="Zoom Out" />
-            <div style={{ height: '8px' }} />
-            <ControlButton icon={<Maximize size={18} />} onClick={() => setFocusCamera(true)} title="Fit to Screen" />
-            <ControlButton icon={<Crosshair size={18} />} onClick={() => { }} title="Center Selection" />
-            <ControlButton icon={<RefreshCw size={18} />} onClick={() => { }} title="Reset View" />
+            {/* Zoom Group */}
+            <div style={{
+                display: 'flex', flexDirection: 'column',
+                background: 'rgba(9, 9, 11, 0.9)',
+                backdropFilter: 'blur(12px)',
+                borderRadius: '12px',
+                border: '1px solid rgba(255,255,255,0.1)',
+                padding: '4px',
+                gap: '2px'
+            }}>
+                <ControlButton icon={<Plus size={20} />} onClick={() => setCameraAction('ZOOM_IN')} title="Zoom In" />
+                <ControlButton icon={<Minus size={20} />} onClick={() => setCameraAction('ZOOM_OUT')} title="Zoom Out" />
+            </div>
+
+            {/* View Group */}
+            <div style={{
+                display: 'flex', flexDirection: 'column',
+                background: 'rgba(9, 9, 11, 0.9)',
+                backdropFilter: 'blur(12px)',
+                borderRadius: '12px',
+                border: '1px solid rgba(255,255,255,0.1)',
+                padding: '4px',
+                gap: '2px'
+            }}>
+                <ControlButton icon={<Maximize size={20} />} onClick={() => setCameraAction('FIT')} title="Reset View" />
+                <ControlButton icon={<Crosshair size={20} />} onClick={() => setCameraAction('CENTER')} title="Center Origin" />
+            </div>
         </div>
     )
 }
@@ -50,10 +66,9 @@ function ControlButton({ icon, onClick, title }) {
                 width: '40px',
                 height: '40px',
                 borderRadius: '8px',
-                background: 'rgba(9, 9, 11, 0.8)',
-                backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#cbd5e1',
+                background: 'transparent', // Transparent by default
+                border: 'none',
+                color: '#e2e8f0',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

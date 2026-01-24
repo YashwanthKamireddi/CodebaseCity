@@ -65,6 +65,7 @@ class CityData(BaseModel):
     districts: List[District]
     roads: List[Road]
     stats: Dict[str, Any] = Field(default_factory=dict)
+    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional analysis metadata")
 
 
 class ChatMessage(BaseModel):

@@ -37,6 +37,9 @@ const useStore = create((set, get) => ({
     highlightedCategory: null, // { type: 'language' | 'health' | 'district', value: string }
     highlightedIssue: null, // { type: 'string', paths: string[] }
 
+    // Camera Control State
+    cameraAction: null, // { type: 'ZOOM_IN' | 'ZOOM_OUT' | 'FIT' | 'RESET' | 'CENTER', timestamp: number }
+
     // Chat State
     messages: [],
     chatLoading: false,
@@ -46,6 +49,7 @@ const useStore = create((set, get) => ({
     currentCommitIndex: -1,  // -1 means latest (HEAD)
     historyLoading: false,
     currentRepoPath: null,
+    showTimeline: false, // Default hidden to reduce clutter
 
     // VS Code Integration State
     vscodeConnected: false,
@@ -121,6 +125,8 @@ const useStore = create((set, get) => ({
 
     setHighlightedCategory: (category) => set({ highlightedCategory: category }),
     setHighlightedIssue: (issue) => set({ highlightedIssue: issue }),
+
+    setCameraAction: (type) => set({ cameraAction: { type, timestamp: Date.now() } }),
 
     // VS Code integration
     setVSCodeConnected: (connected) => set({ vscodeConnected: connected }),
@@ -248,6 +254,8 @@ const useStore = create((set, get) => ({
             set({ historyLoading: false, commits: [] })
         }
     },
+
+    setShowTimeline: (show) => set({ showTimeline: show }),
 
     setCommitIndex: (index) => set({ currentCommitIndex: index }),
 

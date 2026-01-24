@@ -142,6 +142,7 @@ function App() {
                                 />
 
                                 <OrbitControls
+                                    makeDefault
                                     enablePan={true}
                                     enableZoom={true}
                                     enableRotate={true}

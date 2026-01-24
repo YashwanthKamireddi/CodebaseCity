@@ -14,7 +14,8 @@ import {
     Box,
     Sparkles,
     Signpost,
-    FolderSearch
+    FolderSearch,
+    Clock
 } from 'lucide-react'
 import useStore from '../store/useStore'
 
@@ -88,6 +89,13 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
                     active={showRoads}
                     icon={<Signpost size={18} />}
                     label="Connections"
+                />
+
+                <DeckItem
+                    onClick={() => useStore.setState(state => ({ showTimeline: !state.showTimeline }))}
+                    active={useStore(state => state.showTimeline)}
+                    icon={<Clock size={18} />}
+                    label="Time Travel"
                 />
 
                 <Divider />

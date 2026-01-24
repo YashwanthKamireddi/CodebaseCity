@@ -138,6 +138,44 @@ class IntelligenceEngine:
         return issues
 
     @staticmethod
+    def detect_graph_issues(graph, files: List[Dict]) -> Dict:
+        """
+        Detect graph-level issues like cycles and god objects.
+        """
+        try:
+            import networkx as nx
+        except ImportError:
+            return {}
+
+        issues = {
+            "circular_dependencies": [],
+            "god_objects": [],
+            "highly_coupled": [],
+            "large_files": []
+        }
+
+        # 1. Cycles
+        try:
+            cycles = list(nx.simple_cycles(graph))
+            # Limit to small cycles for performance/relevance
+            cycles = [c for c in cycles if len(c) < 5][:10]
+            issues["circular_dependencies"] = cycles
+        except Exception:
+            pass # Graph might not be directed or error in cycle finding
+
+        # 2. God Objects (High Degree)
+        for node, degree in graph.degree():
+            if degree > 20:
+                issues["god_objects"].append(node)
+
+        # 3. Large Files
+        for f in files:
+            if f.get('loc', 0) > 1000:
+                issues["large_files"].append(f['path'])
+
+        return issues
+
+    @staticmethod
     def calculate_health_score(metadata: Dict[str, Any]) -> Dict[str, Any]:
         """
         Calculate an overall health score (0-100) and grade (A-F).

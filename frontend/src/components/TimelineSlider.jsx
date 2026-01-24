@@ -88,30 +88,30 @@ export default function TimelineSlider() {
         analyzeAtCommit(commits[lastIndex].hash)
     }, [commits, setCommitIndex, analyzeAtCommit])
 
-    // Don't show if no history
-    if (!currentRepoPath || commits.length === 0) return null
+    const { showTimeline } = useStore()
+
+    // Don't show if no history or toggled off
+    if (!currentRepoPath || commits.length === 0 || !showTimeline) return null
 
     const currentCommit = currentCommitIndex >= 0 ? commits[currentCommitIndex] : null
     const progress = commits.length > 1 ? ((currentCommitIndex >= 0 ? currentCommitIndex : 0) / (commits.length - 1)) * 100 : 0
 
     return (
         <div
-            // Solid, Bottom-Right positioning
+            // Centered above the Floating Dock
             style={{
                 position: 'fixed',
-                top: '24px',
-                right: '24px',
-                width: '380px', // Compact width
+                bottom: '100px', // Clear the dock
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '420px', // Slightly wider
                 zIndex: 500,
                 padding: '0',
-                // Solid Dark Theme (No Transparency)
                 background: '#111111',
                 border: '1px solid #333333',
                 borderRadius: '16px',
                 boxShadow: '0 24px 48px -12px rgba(0,0,0,0.8)',
                 transition: 'all 0.3s ease',
-                opacity: 1, // Always visible/solid
-                transformOrigin: 'bottom right'
             }}
             onMouseEnter={() => setShowControls(true)}
             onMouseLeave={() => setShowControls(false)}
