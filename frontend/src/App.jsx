@@ -140,6 +140,7 @@ function App() {
                                     alpha: false,
                                     powerPreference: 'high-performance',
                                     stencil: false,
+                                    preserveDrawingBuffer: true // ENABLE SNAPSHOTS
                                 }}
                             >
                                 <PerspectiveCamera
@@ -147,7 +148,7 @@ function App() {
                                     position={[80, 50, 80]}
                                     fov={45}
                                     near={1}
-                                    far={500}
+                                    far={2000} // Match new render distance
                                 />
 
                                 <OrbitControls
@@ -156,7 +157,7 @@ function App() {
                                     enableZoom={true}
                                     enableRotate={true}
                                     minDistance={5} // Allow close-ups (Street View)
-                                    maxDistance={300}
+                                    maxDistance={1500} // Allow full "God View"
                                     maxPolarAngle={Math.PI / 2} // Allow ground level view
                                     minPolarAngle={0.1}
                                     dampingFactor={0.08}

@@ -1,17 +1,17 @@
 import React, { useMemo } from 'react'
 import * as THREE from 'three'
 
-function Ground({ size = 400 }) {
+function Ground({ size = 4000 }) { // 10x Size
     // Create grid texture
     const gridTexture = useMemo(() => {
         const canvas = document.createElement('canvas')
-        canvas.width = 512
-        canvas.height = 512
+        canvas.width = 1024 // Higher res
+        canvas.height = 1024
         const ctx = canvas.getContext('2d')
 
-        // Dark background
-        ctx.fillStyle = '#0a0a0f'
-        ctx.fillRect(0, 0, 512, 512)
+        // Pure Black background to match scene
+        ctx.fillStyle = '#000000'
+        ctx.fillRect(0, 0, 1024, 1024)
 
         // Grid lines
         ctx.strokeStyle = '#1a1a24'
