@@ -38,6 +38,7 @@ export default function BuildingPanel({ building }) {
                 initial={{ x: '100%', opacity: 0.5 }}
                 animate={{
                     x: 0,
+                    opacity: 1, // FIX: Ensure full opacity
                     width: '450px',
                     height: '100vh',
                     top: 0,
