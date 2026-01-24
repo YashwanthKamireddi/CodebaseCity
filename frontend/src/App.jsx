@@ -210,7 +210,6 @@ function App() {
 
                     {view === '3d' && <TimelineSlider />}
 
-                    {view === '3d' && <DiagnosticsHUD />}
                     {view === '3d' && <ViewControl />}
                     {view === '3d' && <CanvasUI />}
                     <ChatInterface />
