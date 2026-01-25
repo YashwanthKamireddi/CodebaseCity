@@ -38,8 +38,34 @@ export default function CommandPalette() {
         showRoads,
         showLabels,
         commandPaletteOpen,
-        setCommandPaletteOpen
+        setCommandPaletteOpen,
+        traceDependency
     } = useStore()
+
+    // Trace Params State
+    const [traceParams, setTraceParams] = useState(null)
+
+    // Detect Trace Command
+    useEffect(() => {
+        if (!search) {
+            setTraceParams(null)
+            return
+        }
+
+        // Patterns: "trace X to Y", "path X -> Y", "trace auth"
+        const traceRegex = /^(?:trace|path)\s+(.+?)(?:\s+(?:to|->)\s+(.+))?$/i
+        const match = search.match(traceRegex)
+
+        if (match) {
+            const source = match[1].trim()
+            const target = match[2]?.trim()
+            if (source) {
+                setTraceParams({ source, target })
+            }
+        } else {
+            setTraceParams(null)
+        }
+    }, [search])
 
     // Open with ⌘K or Ctrl+K
     useEffect(() => {
@@ -172,8 +198,33 @@ export default function CommandPalette() {
 
                             <Command.List className="command-list">
                                 <Command.Empty className="command-empty">
-                                    No results found.
+                                    {traceParams ? 'Press Enter to Trace...' : 'No results found.'}
                                 </Command.Empty>
+
+                                {/* Visual Query Match */}
+                                {traceParams && (
+                                    <Command.Group heading="Visual Queries" className="command-group">
+                                        <Command.Item
+                                            value="trace-action"
+                                            className="command-item"
+                                            onSelect={() => {
+                                                traceDependency(traceParams.source, traceParams.target || 'database')
+                                                setCommandPaletteOpen(false)
+                                            }}
+                                        >
+                                            <div className="command-item-icon">
+                                                <Zap size={16} color="#f59e0b" />
+                                            </div>
+                                            <div className="command-item-content">
+                                                <span className="command-item-title">
+                                                    Trace Dependency: <span style={{ color: '#fbbf24' }}>{traceParams.source}</span> → <span style={{ color: '#fbbf24' }}>{traceParams.target || '(Auto-Detect)'}</span>
+                                                </span>
+                                                <span className="command-item-subtitle">Visualize data flow path in 3D</span>
+                                            </div>
+                                            <kbd className="command-item-shortcut">↵</kbd>
+                                        </Command.Item>
+                                    </Command.Group>
+                                )}
 
                                 {/* Files */}
                                 {fileResults.length > 0 && (

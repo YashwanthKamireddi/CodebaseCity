@@ -80,6 +80,46 @@ const useStore = create((set, get) => ({
     })),
 
     graphNeighbors: { dependencies: [], dependents: [] },
+    activeTrace: null, // { source, target, path: [] }
+
+    traceDependency: async (sourceQuery, targetQuery) => {
+        const { cityData, setLoading, setError } = get()
+        if (!cityData) return
+
+        // Simple fuzzy find for IDs (Frontend side for now, or move to backend resolver)
+        const findId = (q) => cityData.buildings.find(b => b.name.toLowerCase().includes(q.toLowerCase()))?.id
+
+        const sourceId = findId(sourceQuery)
+        const targetId = findId(targetQuery)
+
+        if (!sourceId || !targetId) {
+             console.warn("Could not resolve trace IDs", { sourceQuery, targetQuery })
+             return
+        }
+
+        try {
+            const res = await fetch(`${API_BASE}/v2/graph/trace`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ city_id: cityData.name || 'default', source: sourceId, target: targetId })
+            })
+
+            if (!res.ok) throw new Error("Trace failed")
+            const data = await res.json()
+
+            if (data.found) {
+                set({ activeTrace: { source: sourceId, target: targetId, path: data.path, edges: data.edges } })
+                // Also highlight them
+                set({ highlightedIssue: { type: 'trace', paths: data.path } })
+            } else {
+                console.warn("No path found")
+                set({ activeTrace: null, highlightedIssue: null })
+            }
+        } catch (e) {
+            console.error("Trace error", e)
+            set({ activeTrace: null })
+        }
+    },
 
     selectBuilding: (building) => {
         set({

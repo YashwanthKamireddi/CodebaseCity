@@ -5,6 +5,8 @@ import useStore from '../store/useStore'
 import Ground from './Ground'
 import Roads from './Roads'
 import InstancedCity from './InstancedCity'
+import InstancedTrace from './InstancedTrace'
+import HolographicXRay from './HolographicXRay'
 import DataBlock from './DataBlock'
 import CameraController from './CameraController'
 
@@ -25,8 +27,9 @@ export default function CityScene() {
 
             {/* CONTENT */}
             <group position={[0, 0, 0]}>
-                {/* INSTANCED RENDERING ENGINE (V4) */}
                 <InstancedCity />
+                <InstancedTrace />
+                <HolographicXRay />
 
                 {/* Legacy Fallback for X-Ray interactions (Only render selected/hovered as real meshes if needed) */}
                 {/* For now, InstancedCity handles everything visually */}

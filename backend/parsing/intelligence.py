@@ -278,4 +278,74 @@ class IntelligenceEngine:
             else:
                 hashes[h] = f['path']
 
-        return duplicates
+    @staticmethod
+    def generate_flowchart(content: str, filename: str) -> str:
+        """
+        Generates a Mermaid Flowchart representing the logic inside the file.
+        Uses AST for Python, Fallback for others.
+        """
+        if not content: return ""
+
+        # Python AST Parser
+        if filename.endswith('.py'):
+            try:
+                import ast
+                tree = ast.parse(content)
+
+                chart = ["graph TD"]
+                function_map = {} # func_name -> node_id
+                calls = [] # (caller_id, callee_name)
+
+                # 1. Identify Functions (Nodes)
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.FunctionDef):
+                        node_id = f"F_{node.name}"
+                        function_map[node.name] = node_id
+                        chart.append(f"    {node_id}[def {node.name}]")
+
+                        # Inspect body for calls
+                        for subnode in ast.walk(node):
+                            if isinstance(subnode, ast.Call):
+                                if isinstance(subnode.func, ast.Name):
+                                    calls.append((node_id, subnode.func.id))
+                                elif isinstance(subnode.func, ast.Attribute):
+                                    calls.append((node_id, subnode.func.attr))
+
+                # 2. Map Calls (Edges)
+                for caller_id, callee_name in calls:
+                    # Internal calls
+                    if callee_name in function_map:
+                        chart.append(f"    {caller_id} -->|calls| {function_map[callee_name]}")
+                    # External API calls (simplified)
+                    elif callee_name in ['print', 'save', 'get', 'post', 'fetch']:
+                        ext_id = f"EXT_{callee_name}"
+                        chart.append(f"    {ext_id}(({callee_name}))")
+                        chart.append(f"    {caller_id} -.-> {ext_id}")
+
+                if len(chart) == 1:
+                    return "graph TD\n    Root[Module Body]:::root"
+
+                return "\n".join(chart)
+            except Exception:
+                return "graph TD\n    Error[Parse Error]:::error"
+
+        # JS/TS Structure Parser (Regex)
+        is_js = filename.endswith(('.js', '.jsx', '.ts', '.tsx'))
+        if is_js:
+            chart = ["graph TD"]
+            # Find functions
+            funcs = re.findall(r'(?:function|const|let|var)\s+([a-zA-Z0-9_]+)\s*=?\s*(?:async\s*)?\(', content)
+
+            for f in funcs[:10]: # Limit to avoid clutter
+                 chart.append(f"    {f}[{f}]")
+
+            # Simple waterfall for now as JS AST is hard in Python
+            for i in range(len(funcs) - 1):
+                chart.append(f"    {funcs[i]} -.-> {funcs[i+1]}")
+
+            if len(chart) == 1:
+                 return "graph TD\n    Code[Code Content]:::code"
+
+            return "\n".join(chart)
+
+        return ""
