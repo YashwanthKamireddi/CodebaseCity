@@ -82,7 +82,10 @@ const useStore = create((set, get) => ({
     graphNeighbors: { dependencies: [], dependents: [] },
 
     selectBuilding: (building) => {
-        set({ selectedBuilding: building })
+        set({
+            selectedBuilding: building,
+            codeViewerOpen: false // Reset view to sidebar when changing selection
+        })
         get().calculateNeighbors(building?.id)
     },
     clearSelection: () => set({ selectedBuilding: null, graphNeighbors: { dependencies: [], dependents: [] } }),

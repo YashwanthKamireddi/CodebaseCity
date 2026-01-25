@@ -35,7 +35,8 @@ export default function DataBlock({ data, isConnected }) {
 
     // Compute Position based on Layout Mode
     const position = useMemo(() => {
-        const { x, z } = data.position
+        // Defensive destructuring
+        const { x = 0, z = 0 } = data.position || {}
 
         if (layoutMode === 'galaxy') {
             // Galaxy Warp: EXTREME Transformation
@@ -54,7 +55,7 @@ export default function DataBlock({ data, isConnected }) {
         return [x, 0, z]
     }, [data.position, layoutMode])
 
-    const [x, y, z] = position
+    const [x = 0, y = 0, z = 0] = position || [0, 0, 0]
 
     // Dynamic coloring based on relationship
     const baseColor = useMemo(() => {

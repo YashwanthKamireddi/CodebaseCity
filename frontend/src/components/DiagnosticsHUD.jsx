@@ -1,271 +1,226 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import useStore from '../store/useStore'
-import { AlertTriangle, Shield, Layers, Copy, GitMerge, Activity, X } from 'lucide-react'
+import { AlertTriangle, Shield, Layers, Copy, GitMerge, Activity, X, Zap, ChevronRight } from 'lucide-react'
 
 export default function DiagnosticsHUD() {
-    const { cityData, setHighlightedIssue, highlightedIssue, selectedBuilding } = useStore()
-    const [activeTab, setActiveTab] = useState('issues') // issues, patterns, security
-    const [expanded, setExpanded] = useState(true)
+    const { cityData, setHighlightedIssue, highlightedIssue } = useStore()
+    const [expanded, setExpanded] = useState(false) // Default collapsed to avoid clutter
 
+    // MOVED: Conditional return MUST be after hooks
+    // if (!cityData) return null <--- This was the bug
+
+    const stats = useMemo(() => {
+        // Handle null cityData gracefully inside the hook
+        if (!cityData) return {
+            health: { score: 0, grade: '-' },
+            violations: { count: 0, items: [] },
+            circular: { count: 0, items: [] },
+            godObjects: { count: 0, items: [] },
+            heavyFiles: { count: 0, items: [] },
+            duplicates: { count: 0, items: [] }
+        }
+
+        const metadata = cityData.metadata || {}
+        const issues = metadata.issues || {}
+
+        // Safe access to backend data
+        const violations = metadata.layer_violations || []
+        const circular = issues.circular_dependencies || []
+        const godObjects = issues.god_objects || []
+        const heavyFiles = issues.large_files || []
+        const duplicates = metadata.duplicates || []
+
+        const health = metadata.health || { score: 85, grade: 'B' }
+
+        return {
+            health,
+            violations: { count: violations.length, items: violations },
+            circular: { count: circular.length, items: circular },
+            godObjects: { count: godObjects.length, items: godObjects },
+            heavyFiles: { count: heavyFiles.length, items: heavyFiles },
+            duplicates: { count: duplicates.length, items: duplicates }
+        }
+    }, [cityData])
+
+    // NOW it is safe to return null if we want to stop rendering
     if (!cityData) return null
 
-    // Safety check for metadata (it might be missing in demo data or old scans)
-    const metadata = cityData.metadata || {}
-    const health = metadata.health || cityData.stats?.health || { grade: 'B', score: 85 } // Fallback
-    const issues = metadata.issues || {}
-    const layer_violations = metadata.layer_violations || []
-    const duplicates = metadata.duplicates || []
+    const healthColor = stats.health.score >= 90 ? '#4ade80' : stats.health.score >= 70 ? '#facc15' : '#ef4444'
 
-    const stats = {
-        files: metadata.num_files || cityData.stats?.total_files || 0,
-        violations: layer_violations.length,
-        duplicates: duplicates.length,
-        circles: issues.circular_dependencies?.length || 0,
-        coupled: issues.highly_coupled?.length || 0,
-        large: issues.large_files?.length || 0
-    }
-
-    const getGradeColor = (grade) => {
-        if (grade === 'A') return '#4ade80' // Green
-        if (grade === 'B') return '#a3e635' // Lime
-        if (grade === 'C') return '#facc15' // Yellow
-        if (grade === 'D') return '#fb923c' // Orange
-        return '#ef4444' // Red
-    }
-
-    const toggleIssue = (type, items) => {
+    const handleIssueClick = (type, items) => {
         if (highlightedIssue?.type === type) {
-            setHighlightedIssue(null) // Toggle off
+            setHighlightedIssue(null)
         } else {
-            // Extract paths from items for highlighting
+            // Extract paths similar to Sidebar logic
             let paths = []
-            if (type === 'circles') {
-                paths = items.flatMap(i => i.paths)
-            } else if (type === 'duplicates') {
-                paths = items.flatMap(i => [i.original, i.duplicate])
-            } else if (type === 'violations') {
-                paths = items.flatMap(i => [i.source, i.target])
-            } else {
-                paths = items.map(i => i.path)
-            }
+            if (type === 'violations') paths = items.flatMap(i => [i.source, i.target])
+            else if (type === 'duplicates') paths = items.flatMap(i => [i.original, i.duplicate])
+            else if (type === 'circular') paths = items.flatMap(i => i)
+            else paths = items
+
+            paths = paths.map(p => typeof p === 'string' ? p : p.path || p)
             setHighlightedIssue({ type, paths })
         }
     }
 
-    const gradeColor = getGradeColor(health?.grade || 'C')
-
-    const baseStyle = {
-        position: 'fixed',
-        top: '24px',
-        left: '340px', // Fixed Left
-        // right: 'auto',
-        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-        zIndex: 900,
-    }
-
-    // Minified View
+    // Minified Widget
     if (!expanded) {
         return (
             <div
                 onClick={() => setExpanded(true)}
                 style={{
-                    ...baseStyle,
-                    background: 'rgba(9, 9, 11, 0.6)',
+                    position: 'fixed',
+                    top: '24px',
+                    right: '24px', // Right side now, to avoid sidebar overlap
+                    zIndex: 800,
+                    background: 'rgba(9, 9, 11, 0.8)',
                     backdropFilter: 'blur(12px)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '12px',
-                    padding: '12px',
+                    padding: '8px 16px',
                     cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
+                    display: 'flex', alignItems: 'center', gap: '12px',
                     boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+                    transition: 'all 0.2s ease'
                 }}
             >
                 <div style={{
                     width: '32px', height: '32px', borderRadius: '50%',
-                    border: `3px solid ${gradeColor}`, color: gradeColor,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold'
+                    border: `3px solid ${healthColor}`, color: healthColor,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontWeight: 800, fontSize: '0.9rem'
                 }}>
-                    {health?.grade || '?'}
+                    {stats.health.grade}
                 </div>
-                <span style={{ color: 'white', fontWeight: 600, fontSize: '0.9rem' }}>Diagnostics</span>
+                <div>
+                    <div style={{ fontSize: '0.7rem', color: '#a1a1aa', textTransform: 'uppercase' }}>System Health</div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'white' }}>{stats.health.score}%</div>
+                </div>
             </div>
         )
     }
 
+    // Expanded Dashboard
     return (
         <div style={{
-            ...baseStyle,
-            width: '320px',
-            background: 'rgba(9, 9, 11, 0.85)',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            position: 'fixed',
+            top: '24px',
+            right: '24px',
+            width: '300px',
+            zIndex: 800,
+            background: '#09090b',
+            border: '1px solid #27272a',
             borderRadius: '16px',
-            display: 'flex',
-            flexDirection: 'column',
             boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
-            maxHeight: 'calc(100vh - 120px)',
-            overflow: 'hidden',
-            fontFamily: '"JetBrains Mono", monospace'
+            display: 'flex', flexDirection: 'column',
+            animation: 'fadeIn 0.2s ease-out'
         }}>
             {/* Header */}
             <div style={{
-                padding: '20px',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                background: 'linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 100%)'
+                padding: '16px',
+                borderBottom: '1px solid #27272a',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                background: '#0c0c0e',
+                borderRadius: '16px 16px 0 0'
             }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{
-                        width: '48px', height: '48px', borderRadius: '50%',
-                        background: 'rgba(0,0,0,0.3)',
-                        border: `4px solid ${gradeColor}`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: '1.5rem', fontWeight: 800, color: gradeColor,
-                        boxShadow: `0 0 20px ${gradeColor}40`
-                    }}>
-                        {health?.grade || 'C'}
-                    </div>
-                    <div>
-                        <div style={{ fontSize: '0.75rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>Health Score</div>
-                        <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white' }}>{health?.score || 50}/100</div>
-                    </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <Activity size={16} color={healthColor} />
+                    <span style={{ fontWeight: 700, color: 'white' }}>System Diagnostics</span>
                 </div>
-                <button
-                    onClick={() => setExpanded(false)}
-                    style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}
-                >
+                <button onClick={() => setExpanded(false)} style={{ background: 'transparent', border: 'none', color: '#52525b', cursor: 'pointer' }}>
                     <X size={18} />
                 </button>
             </div>
 
-            {/* Tabs */}
-            <div style={{ display: 'flex', padding: '8px', gap: '4px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                {['issues', 'patterns'].map(tab => (
-                    <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        style={{
-                            flex: 1,
-                            padding: '8px',
-                            background: activeTab === tab ? 'rgba(255,255,255,0.1)' : 'transparent',
-                            border: 'none',
-                            borderRadius: '6px',
-                            color: activeTab === tab ? 'white' : '#64748b',
-                            fontSize: '0.8rem',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            textTransform: 'capitalize'
-                        }}
-                    >
-                        {tab}
-                    </button>
-                ))}
+            {/* Health Big Stat */}
+            <div style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '16px', borderBottom: '1px solid #27272a' }}>
+                <div style={{ position: 'relative', width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="60" height="60" viewBox="0 0 56 56" style={{ transform: 'rotate(-90deg)' }}>
+                        <circle cx="28" cy="28" r="24" stroke="#27272a" strokeWidth="4" fill="none" />
+                        <circle cx="28" cy="28" r="24" stroke={healthColor} strokeWidth="4" fill="none"
+                            strokeDasharray="150.8"
+                            strokeDashoffset={150.8 * (1 - stats.health.score / 100)}
+                            strokeLinecap="round"
+                        />
+                    </svg>
+                    <div style={{ position: 'absolute', fontSize: '1.2rem', fontWeight: 800, color: 'white' }}>{stats.health.grade}</div>
+                </div>
+                <div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white' }}>{stats.health.score}</div>
+                    <div style={{ fontSize: '0.75rem', color: healthColor }}>
+                        {stats.health.score >= 80 ? 'System Stable' : 'Attention Needed'}
+                    </div>
+                </div>
             </div>
 
-            {/* Content List */}
-            <div style={{ flex: 1, overflowY: 'auto', padding: '12px' }}>
-
-                {/* Architecture Issues */}
-                {activeTab === 'issues' && (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-
-                        <IssueCard
-                            icon={<Layers size={16} color="#ef4444" />}
-                            label="Architecture Violations"
-                            count={stats.violations}
-                            active={highlightedIssue?.type === 'violations'}
-                            onClick={() => toggleIssue('violations', layer_violations)}
-                        />
-
-                        <IssueCard
-                            icon={<Activity size={16} color="#f97316" />}
-                            label="Circular Dependencies"
-                            count={stats.circles}
-                            active={highlightedIssue?.type === 'circles'}
-                            onClick={() => toggleIssue('circles', issues.circular_dependencies)}
-                        />
-
-                        <IssueCard
-                            icon={<GitMerge size={16} color="#eab308" />}
-                            label="Highly Coupled Files"
-                            count={stats.coupled}
-                            active={highlightedIssue?.type === 'coupled'}
-                            onClick={() => toggleIssue('coupled', issues.highly_coupled)}
-                        />
-
-                        <IssueCard
-                            icon={<Copy size={16} color="#a855f7" />}
-                            label="Duplicate Files"
-                            count={stats.duplicates}
-                            active={highlightedIssue?.type === 'duplicates'}
-                            onClick={() => toggleIssue('duplicates', duplicates)}
-                        />
-
-                        <IssueCard
-                            icon={<AlertTriangle size={16} color="#3b82f6" />}
-                            label="Large Files (>300 lines)"
-                            count={stats.large}
-                            active={highlightedIssue?.type === 'large'}
-                            onClick={() => toggleIssue('large', issues.large_files)}
-                        />
-                    </div>
-                )}
-
-                {/* Patterns (Mock for now, data flows later) */}
-                {activeTab === 'patterns' && (
-                    <div style={{ padding: '20px', textAlign: 'center', color: '#64748b', fontSize: '0.9rem' }}>
-                        <p>Design Pattern detection is running in background.</p>
-                        <br />
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                            <div style={{ padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Layers size={14} color="#94a3b8" /> <span style={{ color: 'white' }}>Factories detected</span>
-                            </div>
-                            <div style={{ padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <Activity size={14} color="#94a3b8" /> <span style={{ color: 'white' }}>React Hooks extracted</span>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
+            {/* Issue List */}
+            <div style={{ padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <DiagnosticRow
+                    label="Architecture"
+                    count={stats.violations.count}
+                    color="#ef4444"
+                    icon={<Layers size={14} />}
+                    active={highlightedIssue?.type === 'violations'}
+                    onClick={() => handleIssueClick('violations', stats.violations.items)}
+                />
+                <DiagnosticRow
+                    label="Circular Deps"
+                    count={stats.circular.count}
+                    color="#f97316"
+                    icon={<Activity size={14} />}
+                    active={highlightedIssue?.type === 'circular'}
+                    onClick={() => handleIssueClick('circular', stats.circular.items)}
+                />
+                <DiagnosticRow
+                    label="God Objects"
+                    count={stats.godObjects.count}
+                    color="#eab308"
+                    icon={<AlertTriangle size={14} />}
+                    active={highlightedIssue?.type === 'godObjects'}
+                    onClick={() => handleIssueClick('godObjects', stats.godObjects.items)}
+                />
+                <DiagnosticRow
+                    label="Large Files"
+                    count={stats.heavyFiles.count}
+                    color="#3b82f6"
+                    icon={<Copy size={14} />}
+                    active={highlightedIssue?.type === 'heavyFiles'}
+                    onClick={() => handleIssueClick('heavyFiles', stats.heavyFiles.items)}
+                />
             </div>
         </div>
     )
 }
 
-function IssueCard({ icon, label, count, active, onClick }) {
+function DiagnosticRow({ label, count, color, icon, active, onClick }) {
     return (
         <div
-            onClick={onClick}
+            onClick={count > 0 ? onClick : undefined}
             style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '12px',
-                background: active ? 'rgba(59, 130, 246, 0.15)' : 'rgba(255, 255, 255, 0.03)',
-                border: active ? '1px solid #3b82f6' : '1px solid rgba(255, 255, 255, 0.05)',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '10px 12px',
                 borderRadius: '8px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
+                background: active ? `${color}15` : 'transparent',
+                border: active ? `1px solid ${color}40` : '1px solid transparent',
+                cursor: count > 0 ? 'pointer' : 'default',
+                opacity: count > 0 ? 1 : 0.5,
+                transition: 'all 0.1s'
             }}
+            onMouseEnter={(e) => count > 0 && !active && (e.currentTarget.style.background = '#18181b')}
+            onMouseLeave={(e) => count > 0 && !active && (e.currentTarget.style.background = 'transparent')}
         >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                {icon}
-                <span style={{ fontSize: '0.85rem', color: active ? 'white' : '#cbd5e1' }}>{label}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: active ? 'white' : '#a1a1aa' }}>
+                <span style={{ color: active ? color : '#71717a' }}>{icon}</span>
+                <span style={{ fontSize: '0.85rem', fontWeight: 500 }}>{label}</span>
             </div>
-            <span style={{
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                color: count > 0 ? (active ? 'white' : '#94a3b8') : '#475569',
-                background: count > 0 ? 'rgba(0,0,0,0.3)' : 'transparent',
-                padding: '2px 8px',
-                borderRadius: '10px'
-            }}>
-                {count}
-            </span>
+            {count > 0 && (
+                <span style={{
+                    fontSize: '0.75rem', fontWeight: 700,
+                    color: active ? 'white' : color,
+                    background: active ? color : `${color}15`,
+                    padding: '2px 8px', borderRadius: '6px'
+                }}>{count}</span>
+            )}
         </div>
     )
 }
