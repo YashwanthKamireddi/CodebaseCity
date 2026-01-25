@@ -28,10 +28,12 @@ app.add_middleware(
 # Import and include routers
 from api.routes import router as api_router
 from api.history import router as history_router
+from api.v2.router import router as v2_router
 from api.websocket import websocket_vscode, websocket_frontend
 
 app.include_router(api_router, prefix="/api")
 app.include_router(history_router, prefix="/api")
+app.include_router(v2_router, prefix="/api/v2")
 
 
 # WebSocket endpoints for VS Code integration

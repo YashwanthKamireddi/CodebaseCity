@@ -200,8 +200,26 @@ async def clear_cache(city_id: str):
 @router.get("/files/content")
 async def get_file_content(path: str):
     """
-    Get raw content of a file
+    Get raw content of a file.
+    Handles both local paths and GitHub URLs.
     """
+    # Handle GitHub URLs
+    if path.startswith("http") and "github.com" in path:
+        import httpx
+        try:
+            # Convert github.com/user/repo/blob/branch/file to raw.githubusercontent.com...
+            # This is a heuristic; might need refinement for complex URLs
+            raw_url = path.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/")
+
+            async with httpx.AsyncClient() as client:
+                response = await client.get(raw_url)
+                if response.status_code == 200:
+                   return {"content": response.text}
+                else:
+                   raise HTTPException(status_code=404, detail="Failed to fetch from GitHub")
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"GitHub fetch failed: {str(e)}")
+
     if not os.path.exists(path):
         raise HTTPException(status_code=404, detail="File not found")
 

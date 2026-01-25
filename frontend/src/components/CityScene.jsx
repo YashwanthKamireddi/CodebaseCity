@@ -4,6 +4,7 @@ import { ContactShadows } from '@react-three/drei'
 import useStore from '../store/useStore'
 import Ground from './Ground'
 import Roads from './Roads'
+import InstancedCity from './InstancedCity'
 import DataBlock from './DataBlock'
 import CameraController from './CameraController'
 
@@ -24,13 +25,11 @@ export default function CityScene() {
 
             {/* CONTENT */}
             <group position={[0, 0, 0]}>
-                {buildings && buildings.map((building) => (
-                    <DataBlock
-                        key={building.id}
-                        data={building}
-                        isConnected={false}
-                    />
-                ))}
+                {/* INSTANCED RENDERING ENGINE (V4) */}
+                <InstancedCity />
+
+                {/* Legacy Fallback for X-Ray interactions (Only render selected/hovered as real meshes if needed) */}
+                {/* For now, InstancedCity handles everything visually */}
                 <Roads />
                 <Ground />
             </group>
