@@ -323,18 +323,29 @@ const SectionHeader = ({ title, icon }) => (
 const SwissButton = ({ label, icon, onClick, primary }) => (
     <button
         onClick={onClick}
+        title={label}
         style={{
             flex: 1,
+            minWidth: 0, // Allow flexbox shrinking
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
             padding: '12px',
-            borderRadius: '0px', // Strict Swiss corners? Or minor radius? Let's go 4px
+            borderRadius: '4px',
             border: primary ? 'none' : '1px solid var(--glass-border)',
             background: primary ? 'var(--text-primary)' : 'transparent',
             color: primary ? 'var(--bg-studio)' : 'var(--text-primary)',
             fontSize: '0.8rem', fontWeight: 600,
-            cursor: 'pointer'
+            cursor: 'pointer',
+            overflow: 'hidden'
         }}
     >
-        {icon} {label}
+        <span style={{ flexShrink: 0 }}>{icon}</span>
+        <span style={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            height: '1.2em' // Consistency
+        }}>
+            {label}
+        </span>
     </button>
 )

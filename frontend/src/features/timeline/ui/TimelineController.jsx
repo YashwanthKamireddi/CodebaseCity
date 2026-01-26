@@ -286,6 +286,8 @@ export default function TimelineController() {
                             {/* Background Track */}
                             <div style={{
                                 position: 'absolute',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
                                 width: '100%',
                                 height: '4px',
                                 background: 'rgba(255, 255, 255, 0.1)',
@@ -295,6 +297,8 @@ export default function TimelineController() {
                             {/* Progress Fill */}
                             <div style={{
                                 position: 'absolute',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
                                 width: `${progress}%`,
                                 height: '4px',
                                 background: isLoading
