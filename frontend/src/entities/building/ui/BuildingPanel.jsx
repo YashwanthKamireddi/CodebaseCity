@@ -67,25 +67,29 @@ export default function BuildingPanel({ building }) {
                     borderBottom: '1px solid var(--glass-border)',
                     display: 'flex',
                     alignItems: 'flex-start',
-                    justifyContent: 'space-between'
+                    justifyContent: 'space-between',
+                    gap: '16px' // Force gap
                 }}>
-                    <div>
+                    <div style={{ flex: 1, minWidth: 0 }}> {/* Critical for flex truncation */}
                         <div style={{
                             fontSize: '0.75rem',
                             textTransform: 'uppercase',
                             letterSpacing: '0.1em',
                             fontWeight: 600,
                             color: 'var(--text-secondary)',
-                            marginBottom: '4px'
+                            marginBottom: '6px',
+                            display: 'flex', alignItems: 'center', gap: '6px'
                         }}>
-                            File Inspector
+                            <FileCode2 size={12} /> File Inspector
                         </div>
                         <h2 style={{
                             margin: 0,
-                            fontSize: '1.5rem',
+                            fontSize: '1.4rem',
                             fontFamily: 'var(--font-display)',
                             fontWeight: 600,
-                            lineHeight: 1.2
+                            lineHeight: 1.2,
+                            overflowWrap: 'break-word', // Wrap long names
+                            color: '#e4e4e7'
                         }}>
                             {name}
                         </h2>
@@ -93,48 +97,47 @@ export default function BuildingPanel({ building }) {
                         {/* Author Badge */}
                         {author && author !== 'Unknown' && (
                             <div style={{
-                                display: 'flex',
+                                display: 'inline-flex',
                                 alignItems: 'center',
                                 gap: '8px',
-                                marginTop: '8px',
-                                padding: '6px 10px',
-                                background: 'rgba(59, 130, 246, 0.1)',
-                                borderRadius: '6px',
-                                border: '1px solid rgba(59, 130, 246, 0.2)'
+                                marginTop: '12px',
+                                padding: '4px 10px 4px 4px',
+                                background: 'rgba(255, 255, 255, 0.03)',
+                                borderRadius: '20px',
+                                border: '1px solid rgba(255, 255, 255, 0.08)'
                             }}>
                                 <div style={{
-                                    width: '24px',
-                                    height: '24px',
+                                    width: '20px',
+                                    height: '20px',
                                     borderRadius: '50%',
                                     background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    fontSize: '0.7rem',
+                                    fontSize: '0.65rem',
                                     fontWeight: 700,
                                     color: 'white'
                                 }}>
                                     {author.charAt(0).toUpperCase()}
                                 </div>
-                                <div>
-                                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e4e4e7' }}>
-                                        {author}
-                                    </div>
-                                    {email && (
-                                        <div style={{ fontSize: '0.65rem', color: '#71717a', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                            <Mail size={10} /> {email}
-                                        </div>
-                                    )}
+                                <div style={{ fontSize: '0.8rem', fontWeight: 500, color: '#d4d4d8' }}>
+                                    {author}
                                 </div>
                             </div>
                         )}
 
                         <div style={{
-                            fontSize: '0.8rem',
+                            fontSize: '0.75rem',
                             color: 'var(--text-mono)',
                             fontFamily: 'var(--font-mono)',
-                            marginTop: '4px',
-                            opacity: 0.8
+                            marginTop: '12px',
+                            padding: '8px 10px',
+                            background: '#121215',
+                            border: '1px solid #27272a',
+                            borderRadius: '6px',
+                            wordBreak: 'break-all', // Force break for paths
+                            lineHeight: 1.4,
+                            userSelect: 'text'
                         }}>
                             {path}
                         </div>
@@ -142,14 +145,18 @@ export default function BuildingPanel({ building }) {
 
                     <button
                         onClick={clearSelection}
+                        className="touch-target"
                         style={{
                             background: 'transparent',
                             border: 'none',
                             cursor: 'pointer',
-                            color: '#a1a1aa'
+                            color: '#a1a1aa',
+                            padding: '4px',
+                            borderRadius: '4px',
+                            flexShrink: 0
                         }}
                     >
-                        <X size={24} />
+                        <X size={20} />
                     </button>
                 </div>
 
