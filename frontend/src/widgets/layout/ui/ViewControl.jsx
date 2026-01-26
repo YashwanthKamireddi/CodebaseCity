@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import useStore from '../../../store/useStore'
 import { Network, Layers, Activity, FileCode, Sliders, Camera, Flame } from 'lucide-react'
 
@@ -136,26 +137,93 @@ function LegendItem({ color, label }) {
     )
 }
 
+import { motion, AnimatePresence } from 'framer-motion'
+
+// ... (imports remain)
+
+export default function ViewControl() {
+    // ... (rest of component remains same until Option usage)
+    // Actually, I just need to update the file import and the Option component at the bottom.
+    // I can leave the ViewControl body logic as is, it just uses <Option />.
+}
+
+// ... existing ViewControl code ...
+
+// ... existing LegendItem code ...
+
 function Option({ active, onClick, icon, label }) {
+    const [isHovered, setIsHovered] = React.useState(false)
+
     return (
-        <button
-            onClick={onClick}
-            title={label}
-            style={{
-                background: active ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                border: 'none',
-                borderRadius: '8px',
-                width: '32px',
-                height: '32px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: active ? 'white' : '#94a3b8',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-            }}
+        <div
+            style={{ position: 'relative' }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
-            {icon}
-        </button>
+            <button
+                onClick={onClick}
+                // Removed native title to prevent double tooltip
+                style={{
+                    background: active ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                    border: 'none',
+                    borderRadius: '8px',
+                    width: '32px',
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: active ? 'white' : '#94a3b8',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                }}
+            >
+                {icon}
+            </button>
+
+            <AnimatePresence>
+                {isHovered && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 4, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 12, scale: 1 }}
+                        exit={{ opacity: 0, y: 4, scale: 0.95 }}
+                        transition={{ duration: 0.15, ease: "easeOut" }}
+                        style={{
+                            position: 'absolute',
+                            top: '100%',
+                            left: '50%',
+                            transform: 'translateX(-50%)', // Note: motion handles x/y separate from transform string often, but sticking to style is safe if x not used prop
+                            backgroundColor: 'rgba(9, 9, 11, 0.9)',
+                            backdropFilter: 'blur(8px)',
+                            color: 'white',
+                            padding: '6px 10px',
+                            borderRadius: '6px',
+                            fontSize: '0.75rem',
+                            fontWeight: 500,
+                            whiteSpace: 'nowrap',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            pointerEvents: 'none',
+                            zIndex: 100,
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+                            // Fix Framer Motion centering override
+                            x: "-50%"
+                        }}
+                    >
+                        {label}
+                        {/* Little Arrow */}
+                        <div style={{
+                            position: 'absolute',
+                            top: '-4px',
+                            left: '50%',
+                            transform: 'translateX(-50%) rotate(45deg)',
+                            width: '8px',
+                            height: '8px',
+                            background: 'rgba(9, 9, 11, 0.9)',
+                            borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
+                            borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                        }} />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
     )
 }
