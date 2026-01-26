@@ -198,7 +198,7 @@ export default function TimelineController() {
                     left: '20%', // Default, overridden by animate
                     transform: 'translateX(-50%)',
                     zIndex: 200,
-                    width: '100%',
+                    width: '1000%',
                     maxWidth: '560px',
                     padding: '0 24px',
                     pointerEvents: 'auto',
