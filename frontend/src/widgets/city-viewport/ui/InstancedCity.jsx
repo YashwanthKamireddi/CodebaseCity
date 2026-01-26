@@ -15,7 +15,8 @@ export default function InstancedCity() {
     const {
         cityData, selectedBuilding, selectBuilding, hoveredBuilding, setHoveredBuilding,
         layoutMode, colorMode, graphNeighbors, highlightedIssue, cityMeshRef,
-        isAnimating // Sync with timeline playback
+        isAnimating, // Sync with timeline playback
+        currentCommitIndex // Sync with timeline scrubbing (Robust Fix)
     } = useStore()
     const meshRef = useRef()
     const materialRef = useRef()
@@ -62,7 +63,8 @@ export default function InstancedCity() {
         const animateGrowth = (now) => {
             const elapsed = now - startTime
             // Skip animation if we are time-travelling (Gource Mode)
-            const isQuick = isAnimating
+            // Fix: Check BOTH isAnimating AND currentCommitIndex to handle scrubbing/stepping
+            const isQuick = isAnimating || currentCommitIndex !== -1
             const progress = isQuick ? 1 : Math.min(elapsed / duration, 1)
 
             // "Digital Rise": Smooth exponential ease-out

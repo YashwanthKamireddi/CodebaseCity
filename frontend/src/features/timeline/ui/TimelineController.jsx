@@ -11,7 +11,7 @@ import useStore from '../../../store/useStore'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function TimelineController() {
-    const { cityData, showTimeline, setCityData, setAnimating } = useStore()
+    const { cityData, showTimeline, setCityData, setAnimating, setCommitIndex } = useStore()
     const [history, setHistory] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
     const [isPlaying, setIsPlaying] = useState(false)
@@ -24,6 +24,12 @@ export default function TimelineController() {
         setAnimating(isPlaying || isScrubbing)
         return () => setAnimating(false)
     }, [isPlaying, isScrubbing, setAnimating])
+
+    // Sync global Commit Index (Critical for disabling growth animation during time travel)
+    useEffect(() => {
+        setCommitIndex(currentIndex)
+        return () => setCommitIndex(-1) // Reset on unmount
+    }, [currentIndex, setCommitIndex])
 
     // Fetch History
     useEffect(() => {
@@ -209,8 +215,9 @@ export default function TimelineController() {
                     {/* Play/Pause Button */}
                     <button
                         onClick={() => {
+                            // Auto-Rewind Logic
                             if (!isPlaying && currentIndex >= history.length - 1) {
-                                setCurrentIndex(0) // Auto-rewind
+                                setCurrentIndex(0)
                                 performAnalysis(history[0])
                             }
                             setIsPlaying(p => !p)

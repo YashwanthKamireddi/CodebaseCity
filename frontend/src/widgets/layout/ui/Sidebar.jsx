@@ -170,10 +170,13 @@ function CollapsibleFolder({ name, depth, children }) {
                     marginBottom: '2px',
                     minWidth: 0,
                     maxWidth: '100%',
+                    width: '100%', // FORCE WIDTH
+                    boxSizing: 'border-box', // HANDLE PADDING
                     overflow: 'hidden'
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.background = '#18181b'}
                 onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                title={name}
             >
                 <div style={{ display: 'flex', flexShrink: 0 }}>
                     {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
