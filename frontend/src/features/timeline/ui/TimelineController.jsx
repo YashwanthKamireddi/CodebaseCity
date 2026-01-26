@@ -12,9 +12,172 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 export default function TimelineController() {
     const { cityData, showTimeline, setCityData, setAnimating, setCommitIndex, sidebarOpen } = useStore()
-    // ... (rest of state)
+    const [history, setHistory] = useState([])
+    const [currentIndex, setCurrentIndex] = useState(0)
+    const [isPlaying, setIsPlaying] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [isScrubbing, setIsScrubbing] = useState(false)
+    const debounceRef = useRef(null)
 
-    // ...
+    // Sync global animation state (for InstancedCity optimization)
+    useEffect(() => {
+        setAnimating(isPlaying || isScrubbing)
+        return () => setAnimating(false)
+    }, [isPlaying, isScrubbing, setAnimating])
+
+    // Sync global Commit Index (Critical for disabling growth animation during time travel)
+    useEffect(() => {
+        setCommitIndex(currentIndex)
+        return () => setCommitIndex(-1) // Reset on unmount
+    }, [currentIndex, setCommitIndex])
+
+    // Fetch History
+    useEffect(() => {
+        if (!cityData?.path || !showTimeline) return
+
+        const fetchHistory = async () => {
+            try {
+                const url = `/api/history?path=${encodeURIComponent(cityData.path)}&limit=100`
+                const res = await fetch(url)
+                const data = await res.json()
+
+                if (!data.commits || data.commits.length === 0) {
+                    setHistory([{
+                        date: new Date().toLocaleDateString(),
+                        short_hash: 'HEAD',
+                        message: 'Current State',
+                        author: 'You',
+                        timestamp: Date.now() / 1000
+                    }])
+                    setCurrentIndex(0)
+                } else {
+                    const chronological = [...data.commits].reverse()
+                    setHistory(chronological)
+                    setCurrentIndex(chronological.length - 1)
+                }
+            } catch (e) {
+                setHistory([{
+                    date: "Now",
+                    short_hash: "LOCAL",
+                    message: "Current View",
+                    author: "Local",
+                    timestamp: Date.now() / 1000
+                }])
+            }
+        }
+
+        fetchHistory()
+    }, [cityData?.path, showTimeline])
+
+    // Raw API Call (Memoized)
+    const performAnalysis = useCallback(async (commit) => {
+        setIsLoading(true)
+        try {
+            const res = await fetch('/api/analyze-at-commit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    path: cityData.path,
+                    commit_hash: commit.hash
+                })
+            })
+
+            if (res.ok) {
+                const newCityData = await res.json()
+                setCityData(newCityData)
+            }
+        } catch (e) {
+            console.error("Time Travel Failed:", e)
+        } finally {
+            setIsLoading(false)
+            setIsScrubbing(false)
+        }
+    }, [cityData?.path, setCityData])
+
+    // Debounced Wrapper for SCRUBBING
+    const debouncedTravel = useCallback((commit) => {
+        if (!commit || commit.short_hash === 'HEAD' || commit.short_hash === 'LOCAL') return
+        if (debounceRef.current) clearTimeout(debounceRef.current)
+
+        setIsScrubbing(true)
+        debounceRef.current = setTimeout(() => {
+            performAnalysis(commit)
+        }, 400)
+    }, [performAnalysis])
+
+    // Handle slider change
+    const handleSliderChange = (e) => {
+        const newIndex = parseInt(e.target.value)
+        setCurrentIndex(newIndex)
+        setIsPlaying(false)
+        debouncedTravel(history[newIndex])
+    }
+
+    // Step navigation
+    const handleStep = (direction) => {
+        const newIndex = currentIndex + direction
+        if (newIndex >= 0 && newIndex < history.length) {
+            setCurrentIndex(newIndex)
+            setIsPlaying(false)
+            performAnalysis(history[newIndex])
+        }
+    }
+
+    // Async Recursive Playback Engine
+    useEffect(() => {
+        let isCancelled = false
+
+        const playNext = () => {
+            if (isCancelled || !isPlaying || isLoading) return
+
+            setCurrentIndex(prev => {
+                const nextIndex = prev + 1
+                if (nextIndex >= history.length) {
+                    setIsPlaying(false)
+                    return prev
+                }
+                performAnalysis(history[nextIndex])
+                return nextIndex
+            })
+        }
+
+        playNext()
+
+        return () => { isCancelled = true }
+    }, [isPlaying, isLoading, history, performAnalysis])
+
+    // Keyboard shortcuts
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (!showTimeline) return
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return
+
+            switch (e.key) {
+                case 'ArrowLeft':
+                    e.preventDefault()
+                    handleStep(-1)
+                    break
+                case 'ArrowRight':
+                    e.preventDefault()
+                    handleStep(1)
+                    break
+                case ' ':
+                    e.preventDefault()
+                    setIsPlaying(p => !p)
+                    break
+                default:
+                    break
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [showTimeline, currentIndex, history])
+
+    if (!cityData || !showTimeline) return null
+
+    const currentCommit = history[currentIndex] || {}
+    const progress = history.length > 1 ? (currentIndex / (history.length - 1)) * 100 : 100
 
     return (
         <AnimatePresence>
