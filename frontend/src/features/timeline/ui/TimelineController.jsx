@@ -283,22 +283,23 @@ export default function TimelineController() {
 
                         {/* Slider Track */}
                         <div style={{ position: 'relative', height: '16px', display: 'flex', alignItems: 'center' }}>
-                            {/* Background Track */}
+                            {/* Background Track - Absolute Centering */}
                             <div style={{
                                 position: 'absolute',
-                                top: '50%',
-                                transform: 'translateY(-50%)',
+                                left: 0,
                                 width: '100%',
                                 height: '4px',
                                 background: 'rgba(255, 255, 255, 0.1)',
-                                borderRadius: '2px'
+                                borderRadius: '2px',
+                                top: 0,
+                                bottom: 0,
+                                margin: 'auto'
                             }} />
 
-                            {/* Progress Fill */}
+                            {/* Progress Fill - Absolute Centering */}
                             <div style={{
                                 position: 'absolute',
-                                top: '50%',
-                                transform: 'translateY(-50%)',
+                                left: 0,
                                 width: `${progress}%`,
                                 height: '4px',
                                 background: isLoading
@@ -306,7 +307,10 @@ export default function TimelineController() {
                                     : '#6366f1',
                                 borderRadius: '2px',
                                 transition: isScrubbing ? 'none' : 'width 0.3s ease',
-                                boxShadow: '0 0 8px rgba(99, 102, 241, 0.5)'
+                                boxShadow: '0 0 8px rgba(99, 102, 241, 0.5)',
+                                top: 0,
+                                bottom: 0,
+                                margin: 'auto'
                             }} />
 
                             {/* Native Slider (Invisible but interactive) */}
@@ -320,8 +324,10 @@ export default function TimelineController() {
                                     position: 'absolute',
                                     width: '100%',
                                     height: '32px', // Larger hit area
-                                    top: '-8px', // Center hit area
+                                    top: '50%',
+                                    transform: 'translateY(-50%)', // Center hit area
                                     margin: 0,
+                                    left: 0,
                                     opacity: 0,
                                     cursor: 'grab',
                                     zIndex: 10, // Topmost
@@ -329,21 +335,22 @@ export default function TimelineController() {
                                 }}
                             />
 
-                            {/* Visual Handle - Pure CSS Alignment */}
+                            {/* Visual Handle - Absolute Centering */}
                             <motion.div
                                 style={{
                                     position: 'absolute',
                                     left: `${progress}%`,
-                                    top: '50%',
-                                    // HARD FIX: Translate -50% -50% is standard.
-                                    // If user says "not in position", they likely mean the progress bar
-                                    // ends before the dot reaches the end.
-                                    transform: 'translate(-50%, -50%)',
-                                    width: isLoading ? '18px' : '12px', // Smaller, more precise
-                                    height: isLoading ? '18px' : '12px',
+                                    // Remove transform centering for TOP, keep for LEFT
+                                    transform: 'translateX(-50%)',
+                                    top: 0,
+                                    bottom: 0,
+                                    margin: 'auto',
+                                    width: isLoading ? '18px' : '12px',
+                                    height: isLoading ? '18px' : '12px', // Must match width for circle
+                                    // Explicit fix: Ensure height is fixed so margin:auto works
                                     background: 'white',
                                     borderRadius: '50%',
-                                    boxShadow: '0 0 0 4px rgba(99, 102, 241, 0.3)', // Halo effect
+                                    boxShadow: '0 0 0 4px rgba(99, 102, 241, 0.3)',
                                     pointerEvents: 'none',
                                     zIndex: 5
                                 }}
