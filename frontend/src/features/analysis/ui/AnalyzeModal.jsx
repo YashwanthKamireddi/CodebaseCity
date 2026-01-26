@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Folder, Globe, ArrowRight } from 'lucide-react'
 import useStore from '../../../store/useStore'
-import { Modal, ModalContent } from '../../../shared/ui/Modal'
+import { Modal, ModalContent, ModalTitle, ModalDescription } from '../../../shared/ui/Modal'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function AnalyzeModal({ open, onOpenChange }) {
@@ -65,7 +65,7 @@ export default function AnalyzeModal({ open, onOpenChange }) {
                             <Globe size={32} color="#a5b4fc" strokeWidth={1.5} />
                         </motion.div>
 
-                        <h2 style={{
+                        <ModalTitle style={{
                             margin: 0,
                             fontFamily: 'var(--font-display)',
                             fontSize: '2rem', // Larger
@@ -74,18 +74,20 @@ export default function AnalyzeModal({ open, onOpenChange }) {
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
                             marginBottom: '8px',
-                            letterSpacing: '-0.02em'
+                            letterSpacing: '-0.02em',
+                            textAlign: 'center'
                         }}>
                             Initialize Workspace
-                        </h2>
-                        <p style={{
+                        </ModalTitle>
+                        <ModalDescription style={{
                             margin: 0,
                             fontSize: '1rem',
                             color: 'rgba(255,255,255,0.6)',
                             fontWeight: 400,
+                            textAlign: 'center'
                         }}>
                             Connect a repository to visualize structure.
-                        </p>
+                        </ModalDescription>
                     </div>
 
                     {/* INPUT FORM */}

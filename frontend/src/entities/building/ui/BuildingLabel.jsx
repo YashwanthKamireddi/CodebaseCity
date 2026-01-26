@@ -1,42 +1,7 @@
 import React from 'react'
-import { Text, Billboard } from '@react-three/drei'
+import { Text, Billboard, Html } from '@react-three/drei'
 import useStore from '../../../store/useStore'
-
-// Pattern detection based on CodeCity paper metrics
-export function detectPattern(building) {
-    const metrics = building.metrics || {}
-    const loc = metrics.loc || 0
-    const complexity = metrics.complexity || 0
-    const methods = metrics.methods || metrics.complexity || 0  // Use complexity as proxy for methods
-    const attributes = metrics.dependencies_in || 0  // Use dependencies as proxy for attributes
-
-    // God Class: Too many methods and attributes
-    if ((loc > 400 && complexity > 20) || building.is_hotspot) {
-        return { type: 'god_class', label: 'God Class', color: '#ef4444', severity: 'critical' }
-    }
-
-    // Data Class: Many attributes, few methods
-    if (attributes > 10 && methods < 3) {
-        return { type: 'data_class', label: 'Data Class', color: '#f59e0b', severity: 'warning' }
-    }
-
-    // Lazy Class: Almost no functionality
-    if (loc < 50 && methods < 3 && !building.is_hotspot) {
-        return { type: 'lazy_class', label: 'Lazy Class', color: '#6b7280', severity: 'info' }
-    }
-
-    // Brain Class: High complexity
-    if (complexity > 25) {
-        return { type: 'brain_class', label: 'Brain Class', color: '#8b5cf6', severity: 'warning' }
-    }
-
-    // Blob: Very large file
-    if (loc > 800) {
-        return { type: 'blob', label: 'Blob', color: '#dc2626', severity: 'critical' }
-    }
-
-    return null
-}
+import { detectPattern } from '../utils'
 
 // Building label component
 export default function BuildingLabel({ building, position, height }) {
@@ -47,6 +12,7 @@ export default function BuildingLabel({ building, position, height }) {
     const isSelected = selectedBuilding?.id === building.id
     const pattern = detectPattern(building)
     const name = building.name || 'Unknown'
+    const author = building.author // { author, email_hash } from backend
 
     // Show label if selected, has pattern, or is hotspot
     const shouldShow = isSelected || pattern || building.is_hotspot
@@ -54,33 +20,106 @@ export default function BuildingLabel({ building, position, height }) {
     if (!shouldShow && !isSelected) return null
 
     return (
-        <Billboard position={[position.x, height + 2, position.z]} follow={true}>
-            {/* File name */}
-            <Text
-                fontSize={isSelected ? 1.2 : 0.8}
-                color={isSelected ? '#22c55e' : '#ffffff'}
-                anchorX="center"
-                anchorY="bottom"
-                outlineWidth={0.08}
-                outlineColor="#000000"
-            >
-                {name.length > 20 ? name.slice(0, 17) + '...' : name}
-            </Text>
-
-            {/* Pattern badge */}
-            {pattern && (
+        <group position={[position.x, height + 2, position.z]}>
+            {/* 1. Standard Text Label */}
+            <Billboard follow={true}>
                 <Text
-                    position={[0, -0.8, 0]}
-                    fontSize={0.6}
-                    color={pattern.color}
+                    fontSize={isSelected ? 1.0 : 0.8}
+                    color={isSelected ? '#22c55e' : '#ffffff'}
                     anchorX="center"
-                    anchorY="top"
-                    outlineWidth={0.06}
+                    anchorY="bottom"
+                    outlineWidth={0.08}
                     outlineColor="#000000"
                 >
-                    ⚠ {pattern.label}
+                    {name.length > 20 ? name.slice(0, 17) + '...' : name}
                 </Text>
+
+                {/* Pattern badge */}
+                {pattern && (
+                    <Text
+                        position={[0, -0.6, 0]}
+                        fontSize={0.5}
+                        color={pattern.color}
+                        anchorX="center"
+                        anchorY="top"
+                        outlineWidth={0.06}
+                        outlineColor="#000000"
+                    >
+                        ⚠ {pattern.label}
+                    </Text>
+                )}
+            </Billboard>
+
+            {/* 2. Holographic Author Identity (Only on Selection) */}
+            {isSelected && author && author.author !== 'Unknown' && (
+                <AuthorHologram author={author} />
             )}
-        </Billboard>
+        </group>
+    )
+}
+
+function AuthorHologram({ author }) {
+    return (
+        <Html position={[0, 2.5, 0]} center transform sprite>
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                padding: '8px 16px',
+                background: 'rgba(0, 0, 0, 0.6)', // Deep semi-transparent
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '50px',
+                boxShadow: '0 0 20px rgba(59, 130, 246, 0.4)', // Blue Glow
+                color: 'white',
+                whiteSpace: 'nowrap',
+                pointerEvents: 'none',
+                minWidth: '200px'
+            }}>
+                {/* Avatar Hologram */}
+                <div style={{
+                    width: '32px', height: '32px',
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    border: '2px solid #3b82f6',
+                    position: 'relative'
+                }}>
+                    <img
+                        src={`https://www.gravatar.com/avatar/${author.email_hash}?d=retro`}
+                        alt="Author"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 0 6px #3b82f6' }} />
+                </div>
+
+                {/* Text Info */}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span style={{
+                        fontSize: '10px',
+                        textTransform: 'uppercase',
+                        letterSpacing: '1px',
+                        color: '#94a3b8'
+                    }}>
+                        Main Architect
+                    </span>
+                    <span style={{
+                        fontWeight: 700,
+                        fontSize: '14px',
+                        textShadow: '0 0 10px rgba(255,255,255,0.5)'
+                    }}>
+                        {author.author}
+                    </span>
+                </div>
+
+                {/* Deco Elements */}
+                <div style={{
+                    marginLeft: 'auto',
+                    width: '6px', height: '6px',
+                    borderRadius: '50%',
+                    background: '#22c55e',
+                    boxShadow: '0 0 8px #22c55e'
+                }} />
+            </div>
+        </Html>
     )
 }

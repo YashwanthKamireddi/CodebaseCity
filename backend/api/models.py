@@ -14,8 +14,7 @@ class AnalyzeRequest(BaseModel):
     """Request to analyze a codebase"""
     path: str = Field(
         ...,
-        description="Local path or GitHub URL to analyze",
-        pattern=r"^(https?:\/\/)?(www\.)?github\.com\/[\w-]+\/[\w.-]+(\.git)?$|^(\/|~\/|(\w:))?([\w-]+\/)*[\w-]+$"
+        description="Local path or GitHub URL to analyze"
     )
     max_files: int = Field(default=1000, description="Maximum files to process")
 
@@ -43,6 +42,8 @@ class Building(BaseModel):
     summary: Optional[str] = Field(default=None, description="AI-generated summary")
     decay_level: float = Field(default=0.0, description="0-1, visual decay amount")
     is_hotspot: bool = Field(default=False, description="High churn + high complexity")
+    author: Optional[str] = Field(default="Unknown", description="Primary author")
+    email: Optional[str] = Field(default=None, description="Author email")
 
 
 class District(BaseModel):

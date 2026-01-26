@@ -8,10 +8,12 @@
  */
 import React from 'react'
 import useStore from '../../../store/useStore'
-import { detectPattern } from './BuildingLabel'
+import { detectPattern } from '../utils'
+import { BuildingModel } from '../model'
 import CodeViewer from './CodeViewer'
 import FileInsights from './FileInsights'
-import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Sparkles, AlertTriangle, Activity, Maximize2, Minimize2, Eye } from 'lucide-react'
+import ImpactPanel from '../../../features/explorer/ui/ImpactPanel'
+import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Sparkles, AlertTriangle, Activity, Maximize2, Minimize2, Eye, User, Mail } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 // Styles imported from index.css mostly, inline for layout
 
@@ -22,7 +24,7 @@ export default function BuildingPanel({ building }) {
 
     if (!building) return null
 
-    const { metrics, name, path, is_hotspot, decay_level, language } = building
+    const { metrics, name, path, is_hotspot, decay_level, language, author, email } = building
     const pattern = detectPattern(building)
 
     // Fetch content when building changes
@@ -38,8 +40,8 @@ export default function BuildingPanel({ building }) {
                 initial={{ x: '100%', opacity: 0.5 }}
                 animate={{
                     x: 0,
-                    opacity: 1, // FIX: Ensure full opacity
-                    width: '450px',
+                    opacity: 1,
+                    width: '380px',
                     height: '100vh',
                     top: 0,
                     right: 0
@@ -86,6 +88,46 @@ export default function BuildingPanel({ building }) {
                         }}>
                             {name}
                         </h2>
+
+                        {/* Author Badge */}
+                        {author && author !== 'Unknown' && (
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                marginTop: '8px',
+                                padding: '6px 10px',
+                                background: 'rgba(59, 130, 246, 0.1)',
+                                borderRadius: '6px',
+                                border: '1px solid rgba(59, 130, 246, 0.2)'
+                            }}>
+                                <div style={{
+                                    width: '24px',
+                                    height: '24px',
+                                    borderRadius: '50%',
+                                    background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    fontSize: '0.7rem',
+                                    fontWeight: 700,
+                                    color: 'white'
+                                }}>
+                                    {author.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e4e4e7' }}>
+                                        {author}
+                                    </div>
+                                    {email && (
+                                        <div style={{ fontSize: '0.65rem', color: '#71717a', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                            <Mail size={10} /> {email}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
                         <div style={{
                             fontSize: '0.8rem',
                             color: 'var(--text-mono)',
@@ -128,10 +170,28 @@ export default function BuildingPanel({ building }) {
                         gap: '16px',
                         marginBottom: '32px'
                     }}>
-                        <SwissMetric label="Lines of Code" value={metrics.loc} />
-                        <SwissMetric label="Complexity" value={metrics.complexity} highlight={metrics.complexity > 20} />
-                        <SwissMetric label="Commits (Churn)" value={metrics.churn} />
-                        <SwissMetric label="Incoming Deps" value={metrics.dependencies_in} />
+                        <SwissMetric
+                            label="Health Grade"
+                            value={BuildingModel.getGrade(BuildingModel.calculateHealth(metrics, decay_level))}
+                            highlight={false}
+                        />
+                        <SwissMetric
+                            label="Lines of Code"
+                            value={BuildingModel.formatMetric(metrics.loc, 'loc')}
+                        />
+                        <SwissMetric
+                            label="Complexity"
+                            value={metrics.complexity}
+                            highlight={metrics.complexity > 20}
+                        />
+                        <SwissMetric
+                            label="Commits (Churn)"
+                            value={metrics.churn}
+                        />
+                        <SwissMetric
+                            label="Incoming Deps"
+                            value={metrics.dependencies_in}
+                        />
                     </div>
 
                     {/* Code Viewer Action */}
@@ -177,23 +237,6 @@ export default function BuildingPanel({ building }) {
                             >
                                 <Eye size={16} /> View Source
                             </button>
-                        </div>
-                    </div>
-
-                    {/* Analysis Stream */}
-                    <div style={{ marginBottom: '32px' }}>
-                        <SectionHeader title="Deep Analysis" icon={<Activity size={14} />} />
-                        <div style={{
-                            fontSize: '0.9rem',
-                            color: 'var(--text-secondary)',
-                            lineHeight: 1.6,
-                            background: 'rgba(0,0,0,0.2)', // Darker inner card
-                            border: '1px solid rgba(255,255,255,0.05)',
-                            padding: '20px',
-                            borderRadius: '12px',
-                            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)'
-                        }}>
-                            <FileInsights file={building} />
                         </div>
                     </div>
 

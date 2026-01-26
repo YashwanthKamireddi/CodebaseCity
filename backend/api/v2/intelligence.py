@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from typing import Optional, List, Dict, Any
 from pydantic import BaseModel
-from api.routes import city_cache # Reuse cache
+from utils.cache import city_cache # Reuse cache directly from source
 from parsing.intelligence import IntelligenceEngine
 from ai.analyst import RepositoryAnalyst
 from ai.advisor import ArchitectureAdvisor
@@ -26,11 +26,56 @@ async def get_flowchart(req: FlowchartRequest):
     Generates a Mermaid Flowchart for the specific file.
     """
     if req.city_id not in city_cache:
-         raise HTTPException(status_code=404, detail="City not loaded")
+        # Try to revive from disk
+        # from api.routes import city_cache, get_city
+        import asyncio
+        try:
+             # Hack: get_city is async and might not be importable easily if circular.
+             # But city_cache is shared.
+             # Let's manual load.
+             import os
+             import json
+             from api.models import CityData
+
+             data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "cities")
+             cache_file = os.path.join(data_dir, f"{req.city_id}.json")
+             if not os.path.exists(cache_file):
+                 # Try with github_ prefix
+                 cache_file = os.path.join(data_dir, f"github_{req.city_id}.json")
+
+             if os.path.exists(cache_file):
+                 print(f"[Intelligence] Reviving city {req.city_id} from disk...")
+                 with open(cache_file, "r") as f:
+                     data = json.load(f)
+                     city_cache[req.city_id] = CityData(**data)
+             else:
+                 raise HTTPException(status_code=404, detail="City not loaded or found")
+        except Exception as e:
+            print(f"Failed to revive: {e}")
+            raise HTTPException(status_code=404, detail="City not loaded")
 
     # [Same logic as before...]
     import os
-    full_path = req.file_path
+    # Resolve absolute path using city.path
+    if req.city_id in city_cache and city_cache[req.city_id].path:
+        base_path = city_cache[req.city_id].path
+    else:
+        # Fallback 1: Try standard GitHub temp location
+        import tempfile
+        possible_path = os.path.join(tempfile.gettempdir(), "codebase_city", req.city_id.replace("github_", ""))
+        if os.path.exists(possible_path):
+            base_path = possible_path
+        else:
+            # Fallback 2: Assume CWD or relative (Legacy)
+            base_path = ""
+
+    # Construct full path
+    if base_path:
+        rel_path = req.file_path.lstrip('/')
+        full_path = os.path.join(base_path, rel_path)
+    else:
+        full_path = req.file_path
+
     if ".." in full_path:
          raise HTTPException(status_code=400, detail="Invalid path")
 

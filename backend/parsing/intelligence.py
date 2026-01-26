@@ -258,10 +258,44 @@ class IntelligenceEngine:
                     })
         return issues
 
+        return issues
+
+    @staticmethod
+    def calculate_impact(graph, node: str) -> Dict[str, int]:
+        """
+        Calculates the Blast Radius (Impact) of a file.
+        Returns:
+            - direct_dependents: Count of files directly importing this.
+            - transitive_dependents: Count of all files affected recursively.
+        """
+        try:
+            import networkx as nx
+            if node not in graph: return {'direct': 0, 'transitive': 0}
+
+            # Direct Predecessors (Who imports me?)
+            # In DiGraph: u -> v means u imports v.
+            # So predecessors of v are files that import v.
+            direct = list(graph.predecessors(node))
+
+            # Transitive (Ancestors)
+            # ancestors(G, source) returns all nodes having a path to source?
+            # No, ancestors are nodes that have a path TO node.
+            # Descendants are nodes reachable FROM node.
+            # We want "Who depends on me", so "Who imports me".
+            # That is the Reverse Graph's descendants, or current graph's ancestors.
+            transitive = nx.ancestors(graph, node)
+
+            return {
+                'direct': len(direct),
+                'transitive': len(transitive)
+            }
+        except Exception:
+            return {'direct': 0, 'transitive': 0}
+
     @staticmethod
     def detect_graph_issues(graph, files: List[Dict]) -> Dict:
         """
-        Detect graph-level issues like cycles and god objects.
+        Detect graph-level issues like cycles, god objects, and orphans.
         """
         try:
             import networkx as nx
@@ -271,6 +305,7 @@ class IntelligenceEngine:
         issues = {
             "circular_dependencies": [],
             "god_objects": [],
+            "orphans": [],
             "highly_coupled": [],
             "large_files": []
         }
@@ -282,12 +317,20 @@ class IntelligenceEngine:
             cycles = [c for c in cycles if len(c) < 5][:10]
             issues["circular_dependencies"] = cycles
         except Exception:
-            pass # Graph might not be directed or error in cycle finding
+            pass
 
-        # 2. God Objects (High Degree)
-        for node, degree in graph.degree():
-            if degree > 20:
+        # 2. God Objects (High Degree) & Orphans (Zero Degree)
+        for node in graph.nodes():
+            degree = graph.degree(node)
+
+            # God Object: High connections
+            if degree > 20: # Threshold
                 issues["god_objects"].append(node)
+
+            # Orphan: Zero connections (and not just a standalone config file?)
+            # 0 degree means 0 in-degree AND 0 out-degree. Isolated.
+            if degree == 0:
+                issues["orphans"].append(node)
 
         # 3. Large Files
         for f in files:

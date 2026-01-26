@@ -25,11 +25,14 @@ export function getBuildingColor(data, mode, context = {}) {
     }
 
     // 2. Selection / Graph State
-    if (isSelected) return '#facc15' // Gold
+    if (isSelected) return '#fbbf24' // Gold (Brighter)
     if (isHovered) return '#60a5fa' // Blue Highlight
     if (isDependency) return '#4ade80' // Green (Dependency)
     if (isDependent) return '#f87171' // Red (Dependent)
-    if (isUnrelated) return '#1e293b' // Dimmed
+
+    // FOCUS MODE: If something is selected but this node is unrelated -> GHOST IT
+    // Use an extremely dark color to make it fade into the background
+    if (isUnrelated) return '#0f172a' // Slate-900 (almost black background)
 
     // 3. Color Modes
     if (mode === 'layer') {
@@ -57,6 +60,16 @@ export function getBuildingColor(data, mode, context = {}) {
         if (churn > 5) return '#f97316' // Orange
         if (churn > 2) return '#fbbf24' // Yellow
         return '#3b82f6' // Blue
+    }
+
+    // COMPLEXITY HEATMAP MODE
+    if (mode === 'complexity') {
+        const c = data.metrics?.complexity || 0
+        if (c > 30) return '#db2777' // Pink 600 (Extreme)
+        if (c > 20) return '#9333ea' // Purple 600 (High)
+        if (c > 10) return '#f59e0b' // Amber 500 (Medium)
+        if (c > 5) return '#facc15'  // Yellow 400 (Low-Medium)
+        return '#10b981'             // Emerald 500 (Safe)
     }
 
     if (mode === 'language') {
@@ -92,6 +105,16 @@ export function getBuildingColor(data, mode, context = {}) {
         }
     }
 
+    // SOCIAL MODE (Author)
+    if (mode === 'author') {
+        if (data.author) {
+            // Handle both legacy object structure and new direct string structure
+            const name = typeof data.author === 'object' ? data.author.author : data.author
+            return stringToColor(name || 'Unknown')
+        }
+        return '#475569' // fallback
+    }
+
     // 4. Default Structure Mode (Height/Complexity based)
     const height = data.dimensions?.height || 5
     if (height < 2) return '#22d3ee'
@@ -101,4 +124,15 @@ export function getBuildingColor(data, mode, context = {}) {
     if (height < 40) return '#fb923c'
     if (height < 60) return '#f87171'
     return '#d946ef'
+}
+
+// Deterministic Hash to Color
+function stringToColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    // Convert to HSL for better aesthetics (Saturation 70%, Lightness 60%)
+    const h = Math.abs(hash % 360);
+    return `hsl(${h}, 70%, 60%)`;
 }

@@ -114,13 +114,24 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
 function DeckItem({ icon, label, onClick, active, loading, accent, shortcut }) {
     const [hovered, setHovered] = useState(false)
 
+    // Handle Keyboard Enter/Space
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            onClick?.()
+        }
+    }
+
     return (
         <div style={{ position: 'relative' }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}>
             <button
                 onClick={onClick}
+                onKeyDown={handleKeyDown}
                 className="deck-btn"
+                aria-label={label}
+                title={!hovered ? label : undefined} // Fallback title
                 style={{
                     width: '40px',
                     height: '40px',
@@ -134,7 +145,8 @@ function DeckItem({ icon, label, onClick, active, loading, accent, shortcut }) {
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
                     position: 'relative',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    outline: 'none' // We handle focus-visible manually or let browser do standard if mapped
                 }}
             >
                 {loading ? (
@@ -212,11 +224,15 @@ function DeckItem({ icon, label, onClick, active, loading, accent, shortcut }) {
                 )}
             </AnimatePresence>
 
-            {/* Hover State Styles (Inline for simplicity) */}
+            {/* Hover & Focus Styles */}
             <style>{`
                 .deck-btn:hover {
                     background: ${active ? '' : 'rgba(255,255,255,0.05)'} !important;
                     color: white !important;
+                }
+                .deck-btn:focus-visible {
+                    box-shadow: 0 0 0 2px var(--color-accent);
+                    background: rgba(255,255,255,0.1) !important;
                 }
             `}</style>
         </div>

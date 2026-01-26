@@ -14,18 +14,17 @@ import useStore from '../../../store/useStore'
 // OR, simpler: Just absolute position this over the canvas.
 
 export default function CanvasUI() {
-    const { setCameraAction, selectedBuilding, sidebarOpen } = useStore() // Added sidebarOpen
+    const { setCameraAction } = useStore()
 
     return (
         <div style={{
             position: 'fixed',
             bottom: '32px',
-            left: sidebarOpen ? '344px' : '24px', // Dodge Left Sidebar
-            transition: 'left 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+            right: '24px', // Right aligned
             display: 'flex',
             flexDirection: 'column',
             gap: '8px',
-            zIndex: 2000
+            zIndex: 900 // Below BuildingPanel (1000)
         }}>
             {/* Zoom Group */}
             < div style={{

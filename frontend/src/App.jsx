@@ -9,12 +9,12 @@ import React, { useState, useEffect, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, Preload } from '@react-three/drei'
 import CityScene from './widgets/city-viewport/ui/CityScene'
-import CityErrorBoundary from './widgets/city-viewport/ui/CityErrorBoundary'
+import { CanvasErrorBoundary } from './widgets/layout/ui/CanvasErrorBoundary'
 import Sidebar from './widgets/layout/ui/Sidebar'
 import BuildingPanel from './entities/building/ui/BuildingPanel'
 import LoadingScreen from './shared/ui/LoadingScreen'
 import CinematicIntro from './features/onboarding/ui/CinematicIntro'
-import TimelineSlider from './features/time-travel/ui/TimelineSlider'
+import TimelineController from './features/timeline/ui/TimelineController'
 import CommandPalette from './features/search/ui/CommandPalette'
 import FileTable from './features/explorer/ui/FileTable'
 import FloatingDock from './widgets/layout/ui/FloatingDock'
@@ -25,7 +25,6 @@ import CanvasUI from './widgets/layout/ui/CanvasUI'
 import ChatInterface from './features/ai-architect/ui/ChatInterface'
 import WelcomeOverlay from './widgets/layout/ui/WelcomeOverlay'
 import './features/FloatingDock.css'
-import { TimeTravelStats } from './features/time-travel/ui/AnimatedBuilding'
 import { useVSCodeSync } from './hooks/useVSCodeSync'
 import useStore from './store/useStore'
 import CodeViewer from './entities/building/ui/CodeViewer'
@@ -135,7 +134,7 @@ function App() {
                     {view === '3d' ? (
                         <>
                             {/* 3D View */}
-                            <CityErrorBoundary>
+                            <CanvasErrorBoundary>
                                 <Canvas
                                     shadows
                                     dpr={[1, 1.5]}
@@ -175,7 +174,7 @@ function App() {
                                         <Preload all />
                                     </Suspense>
                                 </Canvas>
-                            </CityErrorBoundary>
+                            </CanvasErrorBoundary>
 
                             {/* 3D-only Overlays */}
                             {/* Compass/Legend removed as requested */}
@@ -214,7 +213,7 @@ function App() {
                         <BuildingPanel building={selectedBuilding} />
                     )}
 
-                    {view === '3d' && <TimelineSlider />}
+                    {view === '3d' && <TimelineController />}
 
                     {view === '3d' && <DiagnosticsHUD />}
                     {view === '3d' && <ViewControl />}

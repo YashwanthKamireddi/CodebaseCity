@@ -150,7 +150,21 @@ async def get_history(path: str, limit: int = 50) -> HistoryResponse:
     except subprocess.TimeoutExpired:
         raise HTTPException(status_code=408, detail="Git command timed out")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # Fallback: If not a git repo or other error, return a single "snapshot" of current state
+        # this prevents the UI from breaking for non-git folders
+        return HistoryResponse(
+            commits=[Commit(
+                hash="local",
+                short_hash="LOCAL",
+                date=datetime.now().strftime("%Y-%m-%d"),
+                timestamp=int(datetime.now().timestamp()),
+                message="Current Workspace State (Non-Git)",
+                author="You",
+                files_changed=0, insertions=0, deletions=0
+            )],
+            total=1,
+            repo_name=os.path.basename(path)
+        )
 
 
 @router.post("/analyze-at-commit")

@@ -15,9 +15,16 @@ from .models import (
 )
 # ... imports ...
 
+# Global instances (should be singletons or dependency injected)
+from parsing.analyzer import CodebaseAnalyzer
+from parsing.search import CodeSearchEngine
+from ai.city_guide import CityGuide
+
 router = APIRouter()
 
-# ... globals ...
+analyzer = CodebaseAnalyzer()
+search_engine = CodeSearchEngine()
+guide = CityGuide()
 
 @router.post("/analyze", response_model=CityData)
 @limiter.limit("5/minute")
@@ -31,41 +38,15 @@ async def analyze_codebase(request: Request, body: AnalyzeRequest):
     Analyze a codebase and return city data.
     Accepts local paths or GitHub URLs (https://github.com/user/repo)
     """
-    import subprocess
-    import tempfile
-    import shutil
-
-    # Blocklist of repos too large to analyze (GB+ in size)
-    BLOCKED_REPOS = {
-        "linux": "Linux kernel (5GB+, 30M+ LOC) - try a smaller project like expressjs/express",
-        "chromium": "Chromium (30GB+) - try nicegram/nicegram-ios instead",
-        "gecko-dev": "Firefox (2GB+) - try nicegram/nicegram-ios instead",
-        "kubernetes": "Kubernetes (2GB+) - try expressjs/express instead",
-        "tensorflow": "TensorFlow (2GB+) - try pytorch/vision instead",
-        "llvm-project": "LLVM (4GB+) - try nicegram/nicegram-ios instead",
-        "rust": "Rust compiler (2GB+) - try nicegram/nicegram-ios instead",
-        "webkit": "WebKit (5GB+) - try expressjs/express instead",
-    }
+    from services.git_service import GitService
 
     try:
-        path = body.path.strip()
+        path, is_github, repo_name = GitService.parse_url(body.path)
 
-        # Check if it's a GitHub URL or shorthand
-        is_github = "github.com" in path or (len(path.split("/")) == 2 and not os.path.exists(path))
-
+        # Determine cache key
         if is_github:
-            # Handle shorthand user/repo
-            if not "github.com" in path:
-                path = f"github.com/{path}"
-
-            if not path.startswith("https://"):
-                path = "https://" + path.replace("http://", "")
-
-            # Extract repo name for cache key
-            repo_name = path.rstrip("/").split("/")[-1].replace(".git", "")
             cache_key = f"github_{repo_name}"
         else:
-            # Local path
             cache_key = path.replace("/", "_").replace(":", "").replace("\\", "_")
             if cache_key.startswith("_"): cache_key = cache_key[1:]
 
@@ -86,88 +67,53 @@ async def analyze_codebase(request: Request, body: AnalyzeRequest):
                 with open(cache_file, "r") as f:
                     data_dict = json.load(f)
                     city = CityData(**data_dict)
-
-                    # Validate that the repo path still exists (crucial for git history/content)
-                    if city.path and not os.path.exists(city.path):
-                        print(f"[API] Cache Invalid: Path {city.path} missing. Invalidating.")
+                    if not city.path or not os.path.exists(city.path):
+                         # If path is missing or invalid, treating as cache miss
+                         # For GitHub repos, we might check if we can re-hydrate,
+                         # but easiest is to let it fall through to re-analysis.
+                         print(f"[API] Cache Invalid: Data exists but files missing at {city.path}")
+                         # Continue to fall through (don't return city)
                     else:
                         city_cache[cache_key] = city
                         return city
-            except Exception as e:
-                print(f"[API] Failed to load disk cache: {e}")
+            except Exception:
+                pass # Fall through to analyze
 
         # 3. Analyze
         if is_github:
-            # Check blocklist
-            if repo_name.lower() in BLOCKED_REPOS:
-                raise HTTPException(status_code=413, detail=f"Repository too large: {BLOCKED_REPOS[repo_name.lower()]}")
-
-            temp_dir = os.path.join(tempfile.gettempdir(), "codebase_city", repo_name)
-            if os.path.exists(temp_dir): shutil.rmtree(temp_dir)
-            os.makedirs(os.path.dirname(temp_dir), exist_ok=True)
-
-            print(f"[API] Cloning {path}...")
-            clone_result = subprocess.run(
-                ["git", "clone", "--single-branch", path, temp_dir],
-                capture_output=True, text=True, timeout=600
-            )
-            if clone_result.returncode != 0:
-                raise HTTPException(status_code=400, detail=f"Failed to clone: {clone_result.stderr}")
+            # Clone via Service
+            path = GitService.clone_repo(path, repo_name)
 
             print(f"[API] Analyzing {repo_name}...")
-            city_data = await analyzer.analyze(temp_dir, request.max_files)
+            city_data = await analyzer.analyze(path, body.max_files)
             city_data.name = repo_name
-            # CRITICAL: Return the local temp path so frontend can read files
-            city_data.path = temp_dir
-
-            # Index for Search
-            if hasattr(analyzer, 'last_parsed_files'):
-                search_engine.index_files(analyzer.last_parsed_files)
-
-
-            # Index for Search
-            files_list = [f for f in analyzer.last_parsed_files] if hasattr(analyzer, 'last_parsed_files') else []
-            # Wait, analyzer.analyze() returns city_data, but doesn't expose parsed_files directly unless we modify Analyzer.
-            # But the SearchEngine needs raw content.
-            # I should modify Analyzer to return parsed_files or index inside Analyzer?
-            # Better: Analyzer stores it or returns it.
-            # Let's modify Analyzer.py to expose parsed_files or pass SearchEngine to Analyzer?
-            # Simplest: Analyzer.analyze returns list of dicts? No, returns CityData.
-            # I will modify Analyzer to set last_parsed_files on itself for now (hacky but fast) or pass search_engine.
-
-            # Actually, let's just make Analyzer return tuple? No breaks API.
-            # Let's index inside Routes for now, but I need access to file content.
-            # CityData doesn't store content (too big).
-
-            # PLAN B: Modify Analyzer.analyze to take an optional `search_engine` callback.
-            # Or just update Analyzer to expose `self.parsed_files`.
+            city_data.path = path # Temp path for file reading
 
         else:
             if not os.path.exists(path):
                 raise HTTPException(status_code=404, detail="Path not found")
-            city_data = await analyzer.analyze(path, request.max_files)
-            # Ensure path is absolute for local analysis
+
+            print(f"[API] Analyzing Local {path}...")
+            city_data = await analyzer.analyze(path, body.max_files)
             city_data.path = os.path.abspath(path)
 
-            # Index for Search
-            if hasattr(analyzer, 'last_parsed_files'):
-                search_engine.index_files(analyzer.last_parsed_files)
+        # Index Strategy
+        if hasattr(analyzer, 'last_parsed_files'):
+             search_engine.index_files(analyzer.last_parsed_files)
 
-
-        # 4. Save to Cache (Memory + Disk)
+        # 4. Save to Cache
         city_cache[cache_key] = city_data
         try:
             with open(cache_file, "w") as f:
                 f.write(city_data.model_dump_json())
             print(f"[API] Saved to disk: {cache_file}")
         except Exception as e:
-            print(f"[API] Failed to save to disk: {e}")
+            print(f"[API] Failed to save disk cache: {e}")
 
         return city_data
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Path not found")
-    except subprocess.TimeoutExpired:
-        raise HTTPException(status_code=408, detail="Clone timed out - repository too large")
+
+    except HTTPException:
+        raise
     except Exception as e:
         import traceback
         traceback.print_exc()
@@ -258,15 +204,36 @@ async def get_file_content(path: str):
         import httpx
         try:
             # Convert github.com/user/repo/blob/branch/file to raw.githubusercontent.com...
-            # This is a heuristic; might need refinement for complex URLs
-            raw_url = path.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/")
+            # Handling:
+            # 1. Standard: github.com/.../blob/main/file -> raw.githubusercontent.com/.../main/file
+            # 2. Implicit: github.com/.../file -> raw.githubusercontent.com/.../HEAD/file (try main/master)
+
+            base_raw = path.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/")
 
             async with httpx.AsyncClient() as client:
-                response = await client.get(raw_url)
+                # Try direct replacement first
+                response = await client.get(base_raw)
                 if response.status_code == 200:
-                   return FileContentResponse(content=response.text)
-                else:
-                   raise HTTPException(status_code=404, detail="Failed to fetch from GitHub")
+                    return FileContentResponse(content=response.text)
+
+                # If failed, and URL looks like it's missing branch (no /blob/ originally implies no branch deep link)
+                if "/blob/" not in path:
+                     # Inject branch suggestions
+                     # base_raw might be raw.githubusercontent.com/user/repo/file
+                     # We need raw.githubusercontent.com/user/repo/BRANCH/file
+                     parts = base_raw.split("/")
+                     # parts: [https:, , raw..., user, repo, ...files...]
+                     if len(parts) > 5:
+                         base_root = "/".join(parts[:5]) # .../user/repo
+                         file_path = "/".join(parts[5:])
+
+                         for branch in ["main", "master", "HEAD"]:
+                             candidate = f"{base_root}/{branch}/{file_path}"
+                             resp = await client.get(candidate)
+                             if resp.status_code == 200:
+                                 return FileContentResponse(content=resp.text)
+
+                raise HTTPException(status_code=404, detail="Failed to fetch from GitHub (404)")
         except Exception as e:
             import traceback
             traceback.print_exc() # Log full stack trace

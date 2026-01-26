@@ -1,6 +1,6 @@
 import React from 'react'
 import useStore from '../../../store/useStore'
-import { Network, Layers, Activity, FileCode, Sliders, Camera } from 'lucide-react'
+import { Network, Layers, Activity, FileCode, Sliders, Camera, Flame } from 'lucide-react'
 
 export default function ViewControl() {
     const { layoutMode, setLayoutMode, colorMode, setColorMode } = useStore()
@@ -9,7 +9,9 @@ export default function ViewControl() {
         { id: 'default', icon: <FileCode size={16} />, label: 'Structure' },
         { id: 'layer', icon: <Layers size={16} />, label: 'Layer' },
         { id: 'churn', icon: <Activity size={16} />, label: 'Churn' },
-        { id: 'language', icon: <Sliders size={16} />, label: 'Language' }
+        { id: 'complexity', icon: <Flame size={16} />, label: 'Complexity' },
+        { id: 'language', icon: <Sliders size={16} />, label: 'Language' },
+        { id: 'author', icon: <Activity size={16} style={{ transform: 'rotate(90deg)' }} />, label: 'Social' }
     ]
 
     const handleSnapshot = () => {
@@ -90,6 +92,34 @@ export default function ViewControl() {
                         <LegendItem color="#563d7c" label="CSS" />
                         <LegendItem color="#41b883" label="Vue" />
                         <LegendItem color="#64748b" label="Other" />
+                    </div>
+                )
+            }
+
+            {/* Dynamic Legend for Complexity Mode */}
+            {
+                colorMode === 'complexity' && (
+                    <div style={{
+                        position: 'fixed',
+                        top: '80px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        display: 'flex',
+                        gap: '16px',
+                        padding: '8px 16px',
+                        background: 'rgba(9, 9, 11, 0.6)',
+                        backdropFilter: 'blur(12px)',
+                        borderRadius: '50px',
+                        border: '1px solid rgba(255,255,255,0.05)',
+                        zIndex: 1900,
+                        pointerEvents: 'none',
+                        animation: 'fadeIn 0.3s ease'
+                    }}>
+                        <LegendItem color="#10b981" label="Safe" />
+                        <LegendItem color="#facc15" label="Low" />
+                        <LegendItem color="#f59e0b" label="Medium" />
+                        <LegendItem color="#9333ea" label="High" />
+                        <LegendItem color="#db2777" label="Extreme" />
                     </div>
                 )
             }

@@ -185,6 +185,20 @@ export function useVSCodeSync() {
         }
     }, [cityData, send])
 
+    // Heartbeat to keep connection alive
+    useEffect(() => {
+        if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) return
+
+        const interval = setInterval(() => {
+            if (wsRef.current?.readyState === WebSocket.OPEN) {
+                send('ping', { timestamp: Date.now() })
+            }
+        }, 30000)
+
+        return () => clearInterval(interval)
+    }, [send, cityData]) // Re-run if city data changes (connection refresh) or just on mount/connection state?
+    // Actually best to tie to connection status, but we don't track it deeply here yet.
+
     return {
         notifyBuildingSelected,
         notifyBuildingHovered,

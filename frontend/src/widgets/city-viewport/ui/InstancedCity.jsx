@@ -1,9 +1,12 @@
 import React, { useRef, useLayoutEffect, useMemo, useState } from 'react'
 import * as THREE from 'three'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, extend } from '@react-three/fiber'
 import useStore from '../../../store/useStore'
-import { buildingVertexShader, buildingFragmentShader } from '../../../shaders/BuildingShader'
+import { PulseMaterial } from '../shaders/PulseMaterial' // Import the new material
 import { getBuildingColor } from '../../../utils/colorUtils'
+
+// Register material (already done in file, but safe)
+// extend({ PulseMaterial })
 
 const tempObject = new THREE.Object3D()
 const tempColor = new THREE.Color()
@@ -11,7 +14,8 @@ const tempColor = new THREE.Color()
 export default function InstancedCity() {
     const {
         cityData, selectedBuilding, selectBuilding, hoveredBuilding, setHoveredBuilding,
-        layoutMode, colorMode, graphNeighbors, highlightedIssue, cityMeshRef
+        layoutMode, colorMode, graphNeighbors, highlightedIssue, cityMeshRef,
+        isAnimating // Sync with timeline playback
     } = useStore()
     const meshRef = useRef()
     const materialRef = useRef()
@@ -57,11 +61,12 @@ export default function InstancedCity() {
 
         const animateGrowth = (now) => {
             const elapsed = now - startTime
-            const progress = Math.min(elapsed / duration, 1)
+            // Skip animation if we are time-travelling (Gource Mode)
+            const isQuick = isAnimating
+            const progress = isQuick ? 1 : Math.min(elapsed / duration, 1)
 
             // "Digital Rise": Smooth exponential ease-out
-            // Starts fast, lands soft. No bounce.
-            const ease = 1 - Math.pow(1 - progress, 4)
+            const ease = isQuick ? 1 : 1 - Math.pow(1 - progress, 4)
 
             let maxRadiusSq = 0
 
@@ -76,7 +81,6 @@ export default function InstancedCity() {
                 const currentHeight = targetHeight * ease
 
                 // Y-Rise: Bottom is fixed at 0.3 (Ground), grows UP.
-                // This creates the effect of rising from the layout plane.
                 const y = (currentHeight / 2) + 0.3
 
                 tempObject.position.set(x, y, z)
@@ -92,23 +96,21 @@ export default function InstancedCity() {
             meshRef.current.instanceMatrix.needsUpdate = true
 
             // CRITICAL: Override Bounding Sphere for Raycasting
-            // If we don't do this, Raycaster checks the default 1x1x1 sphere and fails everything.
             if (meshRef.current.geometry) {
                 if (!meshRef.current.geometry.boundingSphere) {
                     meshRef.current.geometry.boundingSphere = new THREE.Sphere()
                 }
-                // Set radius to cover the furthest building + padding
                 meshRef.current.geometry.boundingSphere.radius = Math.sqrt(maxRadiusSq) + 50
                 meshRef.current.geometry.boundingSphere.center.set(0, 0, 0)
             }
 
-            if (progress < 1) {
+            if (progress < 1 && !isQuick) {
                 requestAnimationFrame(animateGrowth)
             }
         }
         requestAnimationFrame(animateGrowth)
 
-    }, [buildings, count]) // Run only when data changes
+    }, [buildings, count]) // We don't need 'isAnimating' in deps, it's used as a flag inside effect
 
     // Update Colors (Selection/Highlight)
     useLayoutEffect(() => {
@@ -121,16 +123,30 @@ export default function InstancedCity() {
             // Graph States
             const isDependency = selectedBuilding && graphNeighbors.dependencies.includes(b.id)
             const isDependent = selectedBuilding && graphNeighbors.dependents.includes(b.id)
+
+            // INTELLIGENCE LAYERS:
+            // 1. Highlight Issues (Cycles/God Objects) from Metadata
+            const issues = cityData?.metadata?.issues || {}
+            const isCircular = issues.circular_dependencies?.flat().includes(b.id)
+            const isGodObject = issues.god_objects?.includes(b.id)
+
+            // If we are in "Default" mode, we show these critical warnings
+            const showWarnings = colorMode === 'default' || colorMode === 'churn'
+
+            // Priority: Explicit Issue > Selected > Dependency > ...
+            // But we pass flags to getBuildingColor to handle priority
+
             const isIssueHighlighted = highlightedIssue && highlightedIssue.paths.includes(b.path)
 
-            // Unrelated Logic
+            // Unrelated Logic (Focus Mode)
             const isUnrelated = (highlightedIssue && !isIssueHighlighted) ||
                 (!highlightedIssue && selectedBuilding && !isSelected && !isDependency && !isDependent)
 
             // Get Color from Utility
             const colorHex = getBuildingColor(b, colorMode, {
                 isSelected, isHovered, isDependency, isDependent,
-                isUnrelated, highlightedIssue, isIssueHighlighted
+                isUnrelated, highlightedIssue, isIssueHighlighted,
+                isCircular, isGodObject, showWarnings
             })
 
             tempColor.set(colorHex)
@@ -166,34 +182,49 @@ export default function InstancedCity() {
         }
     }
 
+
+    // Data Attribute Logic: Create buffers
+    const churnAttribute = useMemo(() => {
+        if (count === 0) return null
+        const array = new Float32Array(count)
+        buildings.forEach((b, i) => {
+            array[i] = b.metrics?.churn || 0
+        })
+        return new THREE.InstancedBufferAttribute(array, 1) // 1 float per instance
+    }, [buildings, count])
+
+
     if (count === 0) return null
 
     return (
         <instancedMesh
             ref={meshRef}
             args={[null, null, count]}
-            frustumCulled={false} // CRITICAL: Fixes raycasting by bypassing bounding sphere check
+            frustumCulled={false}
             onPointerMove={handlePointerMove}
             onPointerOut={handlePointerOut}
             onClick={(e) => {
                 e.stopPropagation()
-                console.log('Click on instance:', e.instanceId)
                 if (e.instanceId !== undefined) {
                     selectBuilding(buildings[e.instanceId])
                 }
             }}
         >
-            <boxGeometry args={[1, 1, 1]} />
-            <shaderMaterial
+            <boxGeometry args={[1, 1, 1]}>
+                {churnAttribute && (
+                    <instancedBufferAttribute
+                        attach="attributes-aChurn" // Attach to geometry.attributes.aChurn
+                        args={[churnAttribute.array, 1]}
+                    />
+                )}
+            </boxGeometry>
+
+            {/* The Living Material */}
+            <pulseMaterial
                 ref={materialRef}
-                vertexShader={buildingVertexShader}
-                fragmentShader={buildingFragmentShader}
-                uniforms={{
-                    uTime: { value: 0 }
-                }}
-                transparent={false} // CRITICAL: Fixes Z-fighting/Flickering on overlapping buildings
+                transparent={false}
                 depthWrite={true}
-                vertexColors={true}
+                vertexColors={true} // Vital for instanceColor support
             />
         </instancedMesh>
     )
