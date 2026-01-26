@@ -7,8 +7,7 @@ export default function Sidebar() {
     const { cityData, selectBuilding, selectedBuilding, sidebarOpen, setSidebarOpen } = useStore()
     const onClose = () => setSidebarOpen(false)
 
-    if (!cityData) return null
-
+    // HOOKS MUST RUN UNCONDITIONALLY
     const [width, setWidth] = React.useState(280)
     const [isResizing, setIsResizing] = React.useState(false)
 
@@ -38,6 +37,9 @@ export default function Sidebar() {
             window.removeEventListener('mouseup', stopResizing)
         }
     }, [resize, stopResizing])
+
+    // EARLY RETURN ONLY AFTER HOOKS
+    if (!cityData) return null
 
     return (
         <div
