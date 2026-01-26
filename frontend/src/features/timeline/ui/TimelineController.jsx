@@ -305,7 +305,7 @@ export default function TimelineController() {
                                 boxShadow: '0 0 8px rgba(99, 102, 241, 0.5)'
                             }} />
 
-                            {/* Native Slider (Invisible) */}
+                            {/* Native Slider (Invisible but interactive) */}
                             <input
                                 type="range"
                                 min={0}
@@ -315,19 +315,23 @@ export default function TimelineController() {
                                 style={{
                                     position: 'absolute',
                                     width: '100%',
-                                    height: '100%',
+                                    height: '32px', // Larger hit area
+                                    top: '-8px', // Center hit area
+                                    margin: 0,
                                     opacity: 0,
                                     cursor: 'grab',
-                                    zIndex: 2
+                                    zIndex: 10, // Topmost
+                                    appearance: 'none', // Reset native styles
                                 }}
                             />
 
-                            {/* Visual Handle */}
+                            {/* Visual Handle - Centered on Progress */}
                             <motion.div
                                 style={{
                                     position: 'absolute',
                                     left: `${progress}%`,
                                     top: '50%',
+                                    // Translate -50% centers the DOT on the specific percentage point
                                     transform: 'translate(-50%, -50%)',
                                     width: isLoading ? '18px' : '14px',
                                     height: isLoading ? '18px' : '14px',

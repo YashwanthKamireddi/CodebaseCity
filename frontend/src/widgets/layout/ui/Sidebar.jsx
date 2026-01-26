@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import useStore from '../../../store/useStore'
 import { Folder, File, Code, Hash, Link as LinkIcon, ChevronRight, ChevronDown } from 'lucide-react'
+import './Sidebar.css'
 
 export default function Sidebar() {
     const { cityData, selectBuilding, selectedBuilding, sidebarOpen, setSidebarOpen } = useStore()
@@ -102,37 +103,16 @@ function FileTree({ files, onSelect, selectedId }) {
                     <div
                         key={item.id}
                         onClick={() => onSelect(item)}
+                        className="file-row"
                         style={{
-                            padding: '4px 8px',
                             paddingLeft: `${(depth + 1) * 12 + 8}px`,
-                            cursor: 'pointer',
-                            fontSize: '0.8rem',
                             color: isSelected ? '#60a5fa' : '#a1a1aa',
                             background: isSelected ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                            borderRadius: '6px',
-                            marginBottom: '2px',
-                            transition: 'all 0.1s ease',
                             fontWeight: isSelected ? 500 : 400,
-                            minWidth: 0,
-                            maxWidth: '100%',
-                            overflow: 'hidden'
-                        }}
-                        onMouseEnter={(e) => {
-                            if (isSelected) return;
-                            e.currentTarget.style.background = '#18181b'
-                            e.currentTarget.style.color = '#e4e4e7'
-                        }}
-                        onMouseLeave={(e) => {
-                            if (isSelected) return;
-                            e.currentTarget.style.background = 'transparent'
-                            e.currentTarget.style.color = '#a1a1aa'
                         }}
                     >
                         <File size={14} strokeWidth={1.5} className={item.language} color={isSelected ? '#60a5fa' : '#52525b'} style={{ flexShrink: 0 }} />
-                        <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</span>
+                        <span className="row-label">{name}</span>
                     </div>
                 )
             } else {
@@ -145,7 +125,7 @@ function FileTree({ files, onSelect, selectedId }) {
         })
     }
 
-    return <div>{renderNode(tree)}</div>
+    return <div className="file-tree-container">{renderNode(tree)}</div>
 }
 
 function CollapsibleFolder({ name, depth, children }) {
@@ -155,27 +135,10 @@ function CollapsibleFolder({ name, depth, children }) {
         <div>
             <div
                 onClick={() => setIsOpen(!isOpen)}
+                className="folder-row"
                 style={{
-                    padding: '6px 8px',
                     paddingLeft: `${depth * 12 + 8}px`,
-                    cursor: 'pointer',
-                    fontSize: '0.85rem',
-                    color: '#a1a1aa',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    fontWeight: 600,
-                    userSelect: 'none',
-                    borderRadius: '6px',
-                    marginBottom: '2px',
-                    minWidth: 0,
-                    maxWidth: '100%',
-                    width: '100%', // FORCE WIDTH
-                    boxSizing: 'border-box', // HANDLE PADDING
-                    overflow: 'hidden'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.background = '#18181b'}
-                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                 title={name}
             >
                 <div style={{ display: 'flex', flexShrink: 0 }}>
@@ -184,13 +147,7 @@ function CollapsibleFolder({ name, depth, children }) {
                 <div style={{ display: 'flex', flexShrink: 0 }}>
                     <Folder size={14} fill={isOpen ? "#52525b" : "none"} strokeWidth={1.5} color="#71717a" />
                 </div>
-                <span style={{
-                    flex: 1,
-                    minWidth: 0,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap'
-                }}>
+                <span className="row-label">
                     {name}
                 </span>
             </div>

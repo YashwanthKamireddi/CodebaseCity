@@ -1,0 +1,64 @@
+/* Sidebar.css */
+
+.sidebar-container {
+    box-sizing: border-box;
+}
+
+/* Ensure the file tree container captures the width */
+.file-tree-container {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/* File Row Styling - Guaranteed Truncation */
+.file-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-width: 0; /* CRITICAL for flex child truncation */
+    max-width: 100%;
+    padding: 4px 8px; /* Vertical adjustments handled in JSX potentially, but safe here */
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.1s ease;
+    user-select: none;
+}
+
+.file-row:hover {
+    background: rgba(255, 255, 255, 0.05); /* Fallback */
+}
+
+/* Folder Row Styling */
+.folder-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-width: 0; /* CRITICAL */
+    max-width: 100%;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 6px;
+    margin-bottom: 2px;
+    user-select: none;
+    color: #a1a1aa;
+    font-weight: 600;
+}
+
+.folder-row:hover {
+    background: #18181b;
+}
+
+/* The Text Label - Truncate it! */
+.row-label {
+    flex: 1;
+    min-width: 0; /* CRITICAL */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
