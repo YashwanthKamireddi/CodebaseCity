@@ -137,15 +137,7 @@ function LegendItem({ color, label }) {
     )
 }
 
-import { motion, AnimatePresence } from 'framer-motion'
 
-// ... (imports remain)
-
-export default function ViewControl() {
-    // ... (rest of component remains same until Option usage)
-    // Actually, I just need to update the file import and the Option component at the bottom.
-    // I can leave the ViewControl body logic as is, it just uses <Option />.
-}
 
 // ... existing ViewControl code ...
 
