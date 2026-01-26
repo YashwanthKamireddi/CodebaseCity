@@ -9,25 +9,56 @@ export default function Sidebar() {
 
     if (!cityData) return null
 
+    const [width, setWidth] = React.useState(280)
+    const [isResizing, setIsResizing] = React.useState(false)
+
+    const startResizing = React.useCallback((e) => {
+        setIsResizing(true)
+        e.preventDefault() // Prevent selection
+    }, [])
+
+    const stopResizing = React.useCallback(() => {
+        setIsResizing(false)
+    }, [])
+
+    const resize = React.useCallback((e) => {
+        if (isResizing) {
+            const newWidth = e.clientX
+            if (newWidth > 150 && newWidth < 800) {
+                setWidth(newWidth)
+            }
+        }
+    }, [isResizing])
+
+    React.useEffect(() => {
+        window.addEventListener('mousemove', resize)
+        window.addEventListener('mouseup', stopResizing)
+        return () => {
+            window.removeEventListener('mousemove', resize)
+            window.removeEventListener('mouseup', stopResizing)
+        }
+    }, [resize, stopResizing])
+
     return (
         <div
             style={{
                 position: 'fixed',
                 top: 0,
                 left: 0,
-                width: '280px',
-                maxWidth: '280px',
+                width: `${width}px`,
+                maxWidth: '80vw', // Safety cap
                 height: '100vh',
-                zIndex: 'var(--z-modal-backdrop)', // Sidebar is high priority
+                zIndex: 'var(--z-modal-backdrop)',
                 background: 'var(--bg-studio-dark)',
                 borderRight: '1px solid var(--glass-border)',
-                boxShadow: '20px 0 40px rgba(0,0,0,0.5)',
+                boxShadow: isResizing ? 'none' : '20px 0 40px rgba(0,0,0,0.5)',
                 display: 'flex',
                 flexDirection: 'column',
                 transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-                // Instant / Snappy transition
-                transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                color: 'var(--text-primary)'
+                // Disable transition during resize for performance
+                transition: isResizing ? 'none' : 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                color: 'var(--text-primary)',
+                userSelect: isResizing ? 'none' : 'auto'
             }}
         >
             {/* Header */}
@@ -40,13 +71,15 @@ export default function Sidebar() {
                 <h2 style={{ fontSize: 'var(--font-lg)', margin: 0, fontWeight: 700, letterSpacing: '-0.02em', color: 'white' }}>
                     {cityData.name}
                 </h2>
-                <button
-                    onClick={onClose}
-                    className="touch-target"
-                    style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', fontSize: '1.5rem', cursor: 'pointer' }}
-                >
-                    ×
-                </button>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                        onClick={onClose}
+                        className="touch-target"
+                        style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', fontSize: '1.5rem', cursor: 'pointer' }}
+                    >
+                        ×
+                    </button>
+                </div>
             </div>
 
             {/* Scrollable Content - PURE FILE EXPLORER */}
@@ -70,6 +103,31 @@ export default function Sidebar() {
                     />
                 </div>
             </div>
+
+            {/* Drag Handle */}
+            <div
+                onMouseDown={startResizing}
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: -4, // Slop area
+                    width: '8px',
+                    height: '100%',
+                    cursor: 'col-resize',
+                    zIndex: 10
+                }}
+            />
+            {/* Visual Border Highlight when resizing */}
+            {isResizing && (
+                <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    width: '2px',
+                    height: '100%',
+                    background: '#3b82f6'
+                }} />
+            )}
         </div>
     )
 }

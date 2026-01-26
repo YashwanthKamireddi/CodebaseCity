@@ -12,53 +12,59 @@
     flex-direction: column;
 }
 
-/* File Row Styling - Guaranteed Truncation */
+/* Base Row Styles with Indentation Guide Support */
+.file-row, .folder-row {
+    position: relative; /* For Pseudo-elements if needed */
+    display: flex;
+    align-items: center;
+    gap: 6px; /* Tighter gap like VS Code */
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    border-radius: 4px; /* Sharper corners */
+    transition: background 0.1s ease;
+    user-select: none;
+    border: 1px solid transparent; /* Prevent layout shift on focus */
+}
+
 .file-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    min-width: 0; /* CRITICAL for flex child truncation */
-    max-width: 100%;
-    padding: 4px 8px; /* Vertical adjustments handled in JSX potentially, but safe here */
-    box-sizing: border-box;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: all 0.1s ease;
-    user-select: none;
-}
-
-.file-row:hover {
-    background: rgba(255, 255, 255, 0.05); /* Fallback */
-}
-
-/* Folder Row Styling */
-.folder-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    width: 100%;
-    min-width: 0; /* CRITICAL */
-    max-width: 100%;
-    padding: 6px 8px;
-    box-sizing: border-box;
-    cursor: pointer;
-    border-radius: 6px;
-    margin-bottom: 2px;
-    user-select: none;
+    padding: 3px 8px; /* Tighter padding */
     color: #a1a1aa;
+}
+
+.folder-row {
+    padding: 4px 8px;
+    margin-bottom: 0px; /* Compact */
+    color: #e4e4e7;
     font-weight: 600;
 }
 
-.folder-row:hover {
-    background: #18181b;
+/* Hover States */
+.file-row:hover, .folder-row:hover {
+    background: #2a2a2e; /* VS Code dark hover */
 }
 
-/* The Text Label - Truncate it! */
+/* Active/Selected State - Handled in inline style for dynamism but can be reinforced */
+.file-row.selected {
+    background: #37373d !important;
+    color: #ffffff !important;
+}
+
+/* Text Label */
 .row-label {
     flex: 1;
-    min-width: 0; /* CRITICAL */
+    min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-family: 'Inter', sans-serif; /* Clean sans */
+    font-size: 0.85rem;
+    line-height: 1.4;
 }
+
+/* Indentation Guide Line (Experimental) */
+/* We can add a subtle left border to children container if we structure it that way,
+   but currently it's flat. For now, we rely on depth padding.
+   Future: Render vertical lines using absolute positioning based on depth. */

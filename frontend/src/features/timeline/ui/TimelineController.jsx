@@ -325,21 +325,23 @@ export default function TimelineController() {
                                 }}
                             />
 
-                            {/* Visual Handle - Centered on Progress */}
+                            {/* Visual Handle - Pure CSS Alignment */}
                             <motion.div
                                 style={{
                                     position: 'absolute',
                                     left: `${progress}%`,
                                     top: '50%',
-                                    // Translate -50% centers the DOT on the specific percentage point
+                                    // HARD FIX: Translate -50% -50% is standard.
+                                    // If user says "not in position", they likely mean the progress bar
+                                    // ends before the dot reaches the end.
                                     transform: 'translate(-50%, -50%)',
-                                    width: isLoading ? '18px' : '14px',
-                                    height: isLoading ? '18px' : '14px',
+                                    width: isLoading ? '18px' : '12px', // Smaller, more precise
+                                    height: isLoading ? '18px' : '12px',
                                     background: 'white',
                                     borderRadius: '50%',
-                                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+                                    boxShadow: '0 0 0 4px rgba(99, 102, 241, 0.3)', // Halo effect
                                     pointerEvents: 'none',
-                                    transition: 'width 0.15s, height 0.15s'
+                                    zIndex: 5
                                 }}
                                 animate={isLoading ? { scale: [1, 1.2, 1] } : {}}
                                 transition={{ repeat: Infinity, duration: 0.8 }}

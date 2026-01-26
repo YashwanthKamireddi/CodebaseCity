@@ -57,7 +57,8 @@ export default function BuildingPanel({ building }) {
                     boxShadow: '-30px 0 100px rgba(0,0,0,0.8)',
                     display: 'flex',
                     flexDirection: 'column',
-                    color: '#e4e4e7'
+                    color: '#e4e4e7',
+                    overflow: 'hidden' // FIX: CONTAIN EVERYTHING
                 }}
             >
                 {/* HEADER: File Identity */}
