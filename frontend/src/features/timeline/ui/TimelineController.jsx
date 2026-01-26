@@ -11,7 +11,7 @@ import useStore from '../../../store/useStore'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function TimelineController() {
-    const { cityData, showTimeline, setCityData, setAnimating, setCommitIndex, sidebarOpen } = useStore()
+    const { cityData, showTimeline, setCityData, setAnimating, setCommitIndex, sidebarOpen, sidebarWidth } = useStore()
     const [history, setHistory] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
     const [isPlaying, setIsPlaying] = useState(false)
@@ -187,15 +187,15 @@ export default function TimelineController() {
                 animate={{
                     y: 0,
                     opacity: 1,
-                    // Dynamic centering based on sidebar state
-                    left: sidebarOpen ? 'calc(50% + 140px)' : '50%'
+                    // Precise centering: 50vw + half sidebar width
+                    left: sidebarOpen ? `calc(50% + ${sidebarWidth / 2}px)` : '50%'
                 }}
                 exit={{ y: 80, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 style={{
                     position: 'fixed',
                     bottom: '120px', // Closer to dock (was 140px)
-                    left: '60%', // Default, overridden by animate
+                    left: '20%', // Default, overridden by animate
                     transform: 'translateX(-50%)',
                     zIndex: 200,
                     width: '100%',

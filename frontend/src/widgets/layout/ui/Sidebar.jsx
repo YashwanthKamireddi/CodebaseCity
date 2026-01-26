@@ -21,11 +21,9 @@ export default function Sidebar() {
 
     const resize = React.useCallback((e) => {
         if (isResizing) {
-            if (isResizing) {
-                const newWidth = e.clientX
-                if (newWidth > 150 && newWidth < 800) {
-                    setSidebarWidth(newWidth)
-                }
+            const newWidth = e.clientX
+            if (newWidth > 150 && newWidth < 800) {
+                setSidebarWidth(newWidth)
             }
         }
     }, [isResizing])
