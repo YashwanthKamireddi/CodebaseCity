@@ -179,12 +179,8 @@ export default function TimelineController() {
     const currentCommit = history[currentIndex] || {}
     const progress = history.length > 1 ? (currentIndex / (history.length - 1)) * 100 : 100
 
-    // Calculate centering offset
-    // 50% + (LeftSidebar - RightPanel) / 2
-    // If panels are open, we shift the center point to balance the visual space.
-    const leftPanelWidth = sidebarOpen ? sidebarWidth : 0
-    const rightPanelWidth = selectedBuilding ? 380 : 0 // Fixed width from BuildingPanel
-    const centerOffset = (leftPanelWidth - rightPanelWidth) / 2
+    // Calculate centering offset - REVERTED to standard 50% to align with FloatingDock
+    // The user prefers the timeline to be centered on the screen/dock, not the "remaining viewport".
 
     return (
         <AnimatePresence>
@@ -200,7 +196,7 @@ export default function TimelineController() {
                 style={{
                     position: 'fixed',
                     bottom: '120px',
-                    left: `calc(50% + ${centerOffset}px)`, // Dynamic centering
+                    left: '50%', // Standard Center (Matches Dock)
                     transform: 'translateX(-50%)',
                     zIndex: 200,
                     width: '100%',
