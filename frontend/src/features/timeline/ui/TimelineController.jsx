@@ -210,7 +210,7 @@ export default function TimelineController() {
                     boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.6)',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '16px'
+                    gap: '24px' // Increased gap for breathing room
                 }}>
 
                     {/* Play/Pause Button */}
@@ -249,7 +249,7 @@ export default function TimelineController() {
                     </button>
 
                     {/* Timeline Track */}
-                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px', marginRight: '8px' }}>
 
                         {/* Meta Info */}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
