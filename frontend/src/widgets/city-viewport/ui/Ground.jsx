@@ -56,14 +56,16 @@ function Ground({ size = 4000 }) { // 10x Size
     return (
         <group>
             {/* Main ground plane */}
-            {/* Main ground plane - Lowered to prevent Z-fighting */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]} receiveShadow raycast={() => null}>
+            {/* Main ground plane - Lowered significantly to prevent Z-fighting with Shadows */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.2, 0]} receiveShadow raycast={() => null}>
                 <planeGeometry args={[size * 2, size * 2]} />
                 <meshStandardMaterial
                     map={gridTexture}
                     roughness={0.9}
                     metalness={0.1}
-                // Opaque to hide background
+                    polygonOffset
+                    polygonOffsetFactor={1}
+                    polygonOffsetUnits={1}
                 />
             </mesh>
 
