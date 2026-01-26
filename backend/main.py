@@ -16,6 +16,25 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Import and include routers
+from api.routes import router as api_router
+from api.history import router as history_router
+from api.v2.router import router as v2_router
+from api.websocket import websocket_vscode, websocket_frontend
+from utils.error_handler import global_exception_handler
+from utils.logger import root_logger
+
+# Register Global Exception Handler
+app.add_exception_handler(Exception, global_exception_handler)
+
+# Rate Limiting (SlowAPI)
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from utils.limiter import limiter
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 # CORS for frontend
 app.add_middleware(
     CORSMiddleware,

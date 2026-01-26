@@ -1,0 +1,37 @@
+flowchart TB
+    %% Context & Containers
+    User((User))
+
+    subgraph Browser["Browser (Frontend)"]
+        direction TB
+        UI[React UI]
+        3D[Three.js Canvas]
+        State[Zustand Store]
+
+        UI --> State
+        3D --> State
+    end
+
+    subgraph Backend["Backend (Python/FastAPI)"]
+        direction TB
+        API[FastAPI Router]
+        Analyzer[Code Analyzer]
+        Git[Git Service]
+        Cache[File Cache]
+        Limiter[Rate Limiter]
+
+        API --> Limiter
+        API --> Analyzer
+        Analyzer --> Git
+        Analyzer --> Cache
+    end
+
+    User -->|"Interacts with"| Browser
+    Browser -->|"HTTP/JSON (/analyze)"| Backend
+
+    %% Styling
+    classDef box fill:#111,stroke:#fff,stroke-width:2px,color:#fff
+    classDef actor fill:#000,stroke:#fff,stroke-width:2px,color:#fff
+
+    class Browser,Backend box
+    class User actor

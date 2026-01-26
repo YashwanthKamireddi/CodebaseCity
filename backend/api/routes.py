@@ -2,27 +2,31 @@
 API Routes for Codebase City
 """
 
-from fastapi import APIRouter, HTTPException, BackgroundTasks
+from fastapi import APIRouter, HTTPException, BackgroundTasks, Request
 from typing import Optional
 import os
+from utils.limiter import limiter
+from utils.cache import city_cache
 
 from .models import (
     AnalyzeRequest, CityData, ChatRequest, ChatResponse,
-    BuildingDetailRequest, BuildingDetail
+    BuildingDetailRequest, BuildingDetail, SearchRequest, SearchResponse, SearchResult, FileContentResponse
+
 )
-from parsing.analyzer import CodebaseAnalyzer
-from ai.city_guide import CityGuide
+# ... imports ...
 
 router = APIRouter()
 
-# Store analyzed cities in memory (in production, use Redis/DB)
-city_cache: dict[str, CityData] = {}
-analyzer = CodebaseAnalyzer()
-guide = CityGuide()
-
+# ... globals ...
 
 @router.post("/analyze", response_model=CityData)
-async def analyze_codebase(request: AnalyzeRequest):
+@limiter.limit("5/minute")
+async def analyze_codebase(request: Request, body: AnalyzeRequest):
+    """
+    Analyze a codebase and return city data.
+    Accepts local paths or GitHub URLs (https://github.com/user/repo)
+    """
+    # ... implementation ...
     """
     Analyze a codebase and return city data.
     Accepts local paths or GitHub URLs (https://github.com/user/repo)
@@ -44,7 +48,7 @@ async def analyze_codebase(request: AnalyzeRequest):
     }
 
     try:
-        path = request.path.strip()
+        path = body.path.strip()
 
         # Check if it's a GitHub URL or shorthand
         is_github = "github.com" in path or (len(path.split("/")) == 2 and not os.path.exists(path))
@@ -82,8 +86,13 @@ async def analyze_codebase(request: AnalyzeRequest):
                 with open(cache_file, "r") as f:
                     data_dict = json.load(f)
                     city = CityData(**data_dict)
-                    city_cache[cache_key] = city
-                    return city
+
+                    # Validate that the repo path still exists (crucial for git history/content)
+                    if city.path and not os.path.exists(city.path):
+                        print(f"[API] Cache Invalid: Path {city.path} missing. Invalidating.")
+                    else:
+                        city_cache[cache_key] = city
+                        return city
             except Exception as e:
                 print(f"[API] Failed to load disk cache: {e}")
 
@@ -110,12 +119,40 @@ async def analyze_codebase(request: AnalyzeRequest):
             city_data.name = repo_name
             # CRITICAL: Return the local temp path so frontend can read files
             city_data.path = temp_dir
+
+            # Index for Search
+            if hasattr(analyzer, 'last_parsed_files'):
+                search_engine.index_files(analyzer.last_parsed_files)
+
+
+            # Index for Search
+            files_list = [f for f in analyzer.last_parsed_files] if hasattr(analyzer, 'last_parsed_files') else []
+            # Wait, analyzer.analyze() returns city_data, but doesn't expose parsed_files directly unless we modify Analyzer.
+            # But the SearchEngine needs raw content.
+            # I should modify Analyzer to return parsed_files or index inside Analyzer?
+            # Better: Analyzer stores it or returns it.
+            # Let's modify Analyzer.py to expose parsed_files or pass SearchEngine to Analyzer?
+            # Simplest: Analyzer.analyze returns list of dicts? No, returns CityData.
+            # I will modify Analyzer to set last_parsed_files on itself for now (hacky but fast) or pass search_engine.
+
+            # Actually, let's just make Analyzer return tuple? No breaks API.
+            # Let's index inside Routes for now, but I need access to file content.
+            # CityData doesn't store content (too big).
+
+            # PLAN B: Modify Analyzer.analyze to take an optional `search_engine` callback.
+            # Or just update Analyzer to expose `self.parsed_files`.
+
         else:
             if not os.path.exists(path):
                 raise HTTPException(status_code=404, detail="Path not found")
             city_data = await analyzer.analyze(path, request.max_files)
             # Ensure path is absolute for local analysis
             city_data.path = os.path.abspath(path)
+
+            # Index for Search
+            if hasattr(analyzer, 'last_parsed_files'):
+                search_engine.index_files(analyzer.last_parsed_files)
+
 
         # 4. Save to Cache (Memory + Disk)
         city_cache[cache_key] = city_data
@@ -132,7 +169,20 @@ async def analyze_codebase(request: AnalyzeRequest):
     except subprocess.TimeoutExpired:
         raise HTTPException(status_code=408, detail="Clone timed out - repository too large")
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/search", response_model=SearchResponse)
+async def search_code(request: SearchRequest):
+    """
+    Semantic Code Search
+    """
+    results_raw = search_engine.search(request.query)
+    # Convert raw dicts to Pydantic models
+    results = [SearchResult(**r) for r in results_raw]
+    return SearchResponse(results=results)
 
 
 @router.get("/city/{city_id}", response_model=CityData)
@@ -197,7 +247,7 @@ async def clear_cache(city_id: str):
     raise HTTPException(status_code=404, detail="City not found in cache")
 
 
-@router.get("/files/content")
+@router.get("/files/content", response_model=FileContentResponse)
 async def get_file_content(path: str):
     """
     Get raw content of a file.
@@ -214,10 +264,13 @@ async def get_file_content(path: str):
             async with httpx.AsyncClient() as client:
                 response = await client.get(raw_url)
                 if response.status_code == 200:
-                   return {"content": response.text}
+                   return FileContentResponse(content=response.text)
                 else:
                    raise HTTPException(status_code=404, detail="Failed to fetch from GitHub")
         except Exception as e:
+            import traceback
+            traceback.print_exc() # Log full stack trace
+            print(f"[API ERROR] GitHub fetch failed for {path}: {e}")
             raise HTTPException(status_code=500, detail=f"GitHub fetch failed: {str(e)}")
 
     if not os.path.exists(path):
@@ -229,6 +282,6 @@ async def get_file_content(path: str):
              raise HTTPException(status_code=413, detail="File too large")
 
         with open(path, 'r', encoding='utf-8', errors='ignore') as f:
-            return {"content": f.read()}
+            return FileContentResponse(content=f.read())
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -1,0 +1,96 @@
+/* Modal.css - Premium Design System */
+
+@keyframes overlayShow {
+  from { opacity: 0; backdrop-filter: blur(0px); }
+  to { opacity: 1; backdrop-filter: blur(4px); }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%) scale(0.96);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0px);
+  }
+}
+
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  inset: 0;
+  animation: overlayShow 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 9999;
+}
+
+.modal-content {
+  background: linear-gradient(180deg, rgba(24, 24, 27, 0.8) 0%, rgba(9, 9, 11, 0.95) 100%);
+  border-radius: 24px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 40px 80px -20px rgba(0, 0, 0, 0.8),
+    0 0 80px -40px rgba(120, 119, 198, 0.2); /* Subtle purple glow */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 580px;
+  max-height: 85vh;
+  animation: contentShow 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10000;
+  color: #f4f4f5;
+  outline: none;
+  backdrop-filter: blur(20px) saturate(180%);
+  overflow: hidden;
+}
+
+/* Internal Structure */
+.modal-header {
+  padding: 32px 32px 16px 32px;
+  text-align: center;
+}
+
+.modal-body {
+  padding: 0 32px 32px 32px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.4);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Input Styles Shared */
+.premium-input-wrapper {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2) inset;
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.premium-input-wrapper:focus-within {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05), 0 2px 10px rgba(0,0,0,0.2) inset;
+  background: rgba(255,255,255,0.05);
+}

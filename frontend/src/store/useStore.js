@@ -26,14 +26,14 @@ const useStore = create((set, get) => ({
     fileContent: null, // { path: string, content: string, loading: boolean }
     sidebarOpen: true,
 
+    // Direct Ref for Performance (avoiding React re-renders)
+    cityMeshRef: { current: null }, // Accessed by CameraController
+
     // UI State
     viewMode: 'orbit', // orbit | street | overview
-    layoutMode: 'city', // city | galaxy | tree
-    colorMode: 'default', // default | layer | churn | language
-    layoutMode: 'city', // city | galaxy | tree
+    // layoutMode removed
     colorMode: 'default', // default | layer | churn | language
     showRoads: false, // Default hidden (Selection only)
-    showLabels: true,
     showLabels: true,
     nightMode: false,
     theme: getInitialTheme(), // 'light' | 'dark'
@@ -49,6 +49,7 @@ const useStore = create((set, get) => ({
     // Chat State
     messages: [],
     chatLoading: false,
+    agentStatus: 'idle', // 'idle' | 'thinking' | 'analyzing' | 'writing'
 
     // History State (Git Timeline)
     commits: [],
@@ -247,11 +248,34 @@ const useStore = create((set, get) => ({
         }
     },
 
+    searchCode: async (query) => {
+        try {
+            const response = await fetch(`${API_BASE}/search`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query })
+            })
+            if (!response.ok) return []
+            const data = await response.json()
+            return data.results || []
+        } catch (error) {
+            console.error("Search failed:", error)
+            return []
+        }
+    },
+
     analyzeRepo: async (path) => {
-        const { setLoading, setCityData, setError, setProgress } = get()
+        const {
+            setLoading, setCityData, setError, setProgress,
+            clearSelection, setHighlightedIssue, setHighlightedCategory
+        } = get()
         setLoading(true)
         setProgress(0)
         setError(null)
+        clearSelection()
+        setHighlightedIssue(null)
+        setHighlightedCategory(null)
+
 
         // Minimum time to ensure UI feedback (1.5s)
         const minTime = new Promise(resolve => setTimeout(resolve, 1500))
@@ -407,10 +431,16 @@ const useStore = create((set, get) => ({
         const userMessage = { role: 'user', content }
         set({
             messages: [...messages, userMessage],
-            chatLoading: true
+            chatLoading: true,
+            agentStatus: 'thinking'
         })
 
         try {
+            // Simulated "Thinking" delay for realism if response is too fast
+            const start = Date.now()
+
+            set({ agentStatus: 'analyzing' })
+            await new Promise(r => setTimeout(r, 600))
             const response = await fetch(`${API_BASE}/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -429,7 +459,8 @@ const useStore = create((set, get) => ({
             const data = await response.json()
             set((state) => ({
                 messages: [...state.messages, { role: 'assistant', content: data.message }],
-                chatLoading: false
+                chatLoading: false,
+                agentStatus: 'idle'
             }))
         } catch (error) {
             set((state) => ({
@@ -437,7 +468,8 @@ const useStore = create((set, get) => ({
                     role: 'assistant',
                     content: 'Unable to connect to the AI assistant. Please ensure the backend server is running.'
                 }],
-                chatLoading: false
+                chatLoading: false,
+                agentStatus: 'idle'
             }))
         }
     }

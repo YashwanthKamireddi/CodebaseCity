@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from typing import List, Optional, Dict, Any
 from pydantic import BaseModel
 from graph.engine.graph_service import GraphService
-from api.routes import city_cache # Reuse existing cache for Phase 1 compatibility
+from utils.cache import city_cache # Reuse existing cache for Phase 1 compatibility
 
 router = APIRouter()
 graph_service = GraphService()

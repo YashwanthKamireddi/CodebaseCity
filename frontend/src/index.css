@@ -8,6 +8,7 @@
  * - Zero "Gamey" effects.
  */
 
+@import './styles/design-system.css';
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {

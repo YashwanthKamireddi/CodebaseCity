@@ -7,9 +7,16 @@ from typing import Optional, List, Dict, Any
 from enum import Enum
 
 
+class SearchRequest(BaseModel):
+    query: str
+
 class AnalyzeRequest(BaseModel):
     """Request to analyze a codebase"""
-    path: str = Field(..., description="Local path or GitHub URL to analyze")
+    path: str = Field(
+        ...,
+        description="Local path or GitHub URL to analyze",
+        pattern=r"^(https?:\/\/)?(www\.)?github\.com\/[\w-]+\/[\w.-]+(\.git)?$|^(\/|~\/|(\w:))?([\w-]+\/)*[\w-]+$"
+    )
     max_files: int = Field(default=1000, description="Maximum files to process")
 
 
@@ -104,4 +111,24 @@ class BuildingDetail(BaseModel):
     imports: List[str]
     imported_by: List[str]
     recent_changes: List[str] = Field(default_factory=list)
+    imported_by: List[str]
+    recent_changes: List[str] = Field(default_factory=list)
     suggestions: List[str] = Field(default_factory=list)
+
+
+class FileContentResponse(BaseModel):
+    """Response for file content"""
+    content: str
+
+
+class SearchResult(BaseModel):
+    """Single search result item"""
+    file: str
+    line: int
+    content: str
+    relevance: float
+
+
+class SearchResponse(BaseModel):
+    """Response for code search"""
+    results: List[SearchResult]

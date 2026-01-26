@@ -99,6 +99,7 @@ class CodebaseAnalyzer:
         # Step 2: Parallel file parsing with ThreadPool
         print("[Analyzer] Parsing files in parallel...")
         parsed_files = await self._parallel_parse(files, root_path)
+        self.last_parsed_files = parsed_files # Store for Search Indexing
         print(f"[Analyzer] Parsed {len(parsed_files)} files successfully")
 
         if len(parsed_files) == 0:

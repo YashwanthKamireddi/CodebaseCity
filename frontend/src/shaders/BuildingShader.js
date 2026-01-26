@@ -67,6 +67,6 @@ export const buildingFragmentShader = `
         float fogFactor = smoothstep(100.0, 400.0, fogDist);
         finalColor = mix(finalColor, vec3(0.05, 0.05, 0.07), fogFactor); // Fade to dark
 
-        gl_FragColor = vec4(finalColor, 0.9); // Slightly transparent
+        gl_FragColor = vec4(finalColor, 1.0); // Opaque for stability
     }
 `

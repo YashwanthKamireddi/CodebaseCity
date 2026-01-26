@@ -1,0 +1,289 @@
+/**
+ * BuildingPanel.jsx
+ *
+ * THE BIONIC CODE: Contextual Side Sheet.
+ * Design: Glassmorphism, docked to the right edge.
+ * Verified Structure: Clean JSX.
+ * Purpose: Professional detail view, not a game HUD.
+ */
+import React from 'react'
+import useStore from '../../../store/useStore'
+import { detectPattern } from './BuildingLabel'
+import CodeViewer from './CodeViewer'
+import FileInsights from './FileInsights'
+import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Sparkles, AlertTriangle, Activity, Maximize2, Minimize2, Eye } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+// Styles imported from index.css mostly, inline for layout
+
+export default function BuildingPanel({ building }) {
+    const { clearSelection, fetchFileContent, fileContent } = useStore()
+    const [isMaximized, setIsMaximized] = React.useState(false)
+    const [showCode, setShowCode] = React.useState(false)
+
+    if (!building) return null
+
+    const { metrics, name, path, is_hotspot, decay_level, language } = building
+    const pattern = detectPattern(building)
+
+    // Fetch content when building changes
+    React.useEffect(() => {
+        if (path) fetchFileContent(path)
+    }, [path, fetchFileContent])
+
+    const isContentReady = fileContent?.path === path && !fileContent?.loading
+
+    return (
+        <AnimatePresence>
+            <motion.div
+                initial={{ x: '100%', opacity: 0.5 }}
+                animate={{
+                    x: 0,
+                    opacity: 1, // FIX: Ensure full opacity
+                    width: '450px',
+                    height: '100vh',
+                    top: 0,
+                    right: 0
+                }}
+                exit={{ x: '100%', opacity: 0.5 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} // "Swift Out" Curve
+                style={{
+                    position: 'fixed',
+                    zIndex: 1000,
+                    // THE VOID THEME: Premium Solid Dark
+                    background: '#09090b',
+                    borderLeft: '1px solid #27272a',
+                    boxShadow: '-30px 0 100px rgba(0,0,0,0.8)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    color: '#e4e4e7'
+                }}
+            >
+                {/* HEADER: File Identity */}
+                <div style={{
+                    padding: '24px',
+                    borderBottom: '1px solid var(--glass-border)',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between'
+                }}>
+                    <div>
+                        <div style={{
+                            fontSize: '0.75rem',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.1em',
+                            fontWeight: 600,
+                            color: 'var(--text-secondary)',
+                            marginBottom: '4px'
+                        }}>
+                            File Inspector
+                        </div>
+                        <h2 style={{
+                            margin: 0,
+                            fontSize: '1.5rem',
+                            fontFamily: 'var(--font-display)',
+                            fontWeight: 600,
+                            lineHeight: 1.2
+                        }}>
+                            {name}
+                        </h2>
+                        <div style={{
+                            fontSize: '0.8rem',
+                            color: 'var(--text-mono)',
+                            fontFamily: 'var(--font-mono)',
+                            marginTop: '4px',
+                            opacity: 0.8
+                        }}>
+                            {path}
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={clearSelection}
+                        style={{
+                            background: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer',
+                            color: '#a1a1aa'
+                        }}
+                    >
+                        <X size={24} />
+                    </button>
+                </div>
+
+                {/* SCROLL CONTENT */}
+                <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
+
+                    {/* Status Tags */}
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '32px' }}>
+                        <StatusBadge label={language} />
+                        {is_hotspot && <StatusBadge label="Hotspot" variant="danger" icon={<AlertTriangle size={12} />} />}
+                        {decay_level > 0.6 && <StatusBadge label="Legacy" variant="warning" />}
+                        {pattern && <StatusBadge label={pattern.label} variant="active" icon={<Sparkles size={12} />} />}
+                    </div>
+
+                    {/* Key Metrics - Swiss Grid Layout */}
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '16px',
+                        marginBottom: '32px'
+                    }}>
+                        <SwissMetric label="Lines of Code" value={metrics.loc} />
+                        <SwissMetric label="Complexity" value={metrics.complexity} highlight={metrics.complexity > 20} />
+                        <SwissMetric label="Commits (Churn)" value={metrics.churn} />
+                        <SwissMetric label="Incoming Deps" value={metrics.dependencies_in} />
+                    </div>
+
+                    {/* Code Viewer Action */}
+                    <div style={{ marginBottom: '32px' }}>
+                        <SectionHeader title="Source Code" icon={<FileCode2 size={14} />} />
+                        <div style={{
+                            background: '#18181b', // Surface
+                            borderRadius: '12px',
+                            padding: '32px 24px',
+                            border: '1px solid #27272a',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '16px',
+                            textAlign: 'center'
+                        }}>
+                            <div style={{
+                                width: '64px', height: '64px',
+                                background: '#27272a', borderRadius: '16px',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                marginBottom: '8px'
+                            }}>
+                                <FileCode2 size={32} color="#71717a" />
+                            </div>
+                            <button
+                                onClick={() => useStore.getState().setCodeViewerOpen(true)}
+                                style={{
+                                    background: '#3b82f6',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '10px 24px',
+                                    borderRadius: '6px',
+                                    fontWeight: 600,
+                                    fontSize: '0.9rem',
+                                    cursor: 'pointer',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
+                                    marginBottom: '0' // Fix spacing
+                                }}
+                            >
+                                <Eye size={16} /> View Source
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Analysis Stream */}
+                    <div style={{ marginBottom: '32px' }}>
+                        <SectionHeader title="Deep Analysis" icon={<Activity size={14} />} />
+                        <div style={{
+                            fontSize: '0.9rem',
+                            color: 'var(--text-secondary)',
+                            lineHeight: 1.6,
+                            background: 'rgba(0,0,0,0.2)', // Darker inner card
+                            border: '1px solid rgba(255,255,255,0.05)',
+                            padding: '20px',
+                            borderRadius: '12px',
+                            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2)'
+                        }}>
+                            <FileInsights file={building} />
+                        </div>
+                    </div>
+
+                    {/* Action Bar */}
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                        <SwissButton
+                            label="Open in Editor"
+                            icon={<ExternalLink size={14} />}
+                            onClick={() => window.open(`vscode://file/${path}`, '_blank')}
+                            primary
+                        />
+                        <SwissButton
+                            label="Copy Path"
+                            icon={<Copy size={14} />}
+                            onClick={() => navigator.clipboard.writeText(path)}
+                        />
+                    </div>
+                </div>
+            </motion.div>
+        </AnimatePresence>
+    )
+}
+
+// --- SUBCOMPONENTS (Bionic) ---
+
+const StatusBadge = ({ label, variant = 'default', icon }) => {
+    const colors = {
+        default: { bg: 'rgba(120,120,120,0.1)', txt: 'var(--text-secondary)' },
+        danger: { bg: 'rgba(239, 68, 68, 0.15)', txt: 'var(--signal-danger)' },
+        warning: { bg: 'rgba(245, 158, 11, 0.15)', txt: 'var(--signal-warning)' },
+        active: { bg: 'rgba(37, 99, 235, 0.15)', txt: 'var(--signal-active)' }
+    }
+    const c = colors[variant] || colors.default
+    return (
+        <span style={{
+            display: 'inline-flex', alignItems: 'center', gap: '4px',
+            padding: '4px 8px', borderRadius: '4px',
+            fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em',
+            background: c.bg, color: c.txt
+        }}>
+            {icon} {label}
+        </span>
+    )
+}
+
+const SwissMetric = ({ label, value, highlight }) => (
+    <div style={{ borderTop: '2px solid var(--glass-border)', paddingTop: '8px' }}>
+        <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginBottom: '4px' }}>{label}</div>
+        <div style={{
+            fontSize: '1.8rem',
+            fontWeight: 300,
+            fontFamily: 'var(--font-display)',
+            color: highlight ? 'var(--signal-danger)' : 'var(--text-primary)'
+        }}>
+            {value}
+        </div>
+    </div>
+)
+
+const SectionHeader = ({ title, icon }) => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+        <span style={{ color: 'var(--text-secondary)' }}>{icon}</span>
+        <h3 style={{
+            fontSize: '0.9rem',
+            fontWeight: 600,
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            margin: 0,
+            color: 'var(--text-primary)'
+        }}>
+            {title}
+        </h3>
+    </div>
+)
+
+const SwissButton = ({ label, icon, onClick, primary }) => (
+    <button
+        onClick={onClick}
+        style={{
+            flex: 1,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+            padding: '12px',
+            borderRadius: '0px', // Strict Swiss corners? Or minor radius? Let's go 4px
+            border: primary ? 'none' : '1px solid var(--glass-border)',
+            background: primary ? 'var(--text-primary)' : 'transparent',
+            color: primary ? 'var(--bg-studio)' : 'var(--text-primary)',
+            fontSize: '0.8rem', fontWeight: 600,
+            cursor: 'pointer'
+        }}
+    >
+        {icon} {label}
+    </button>
+)

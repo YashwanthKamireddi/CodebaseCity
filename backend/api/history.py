@@ -181,6 +181,7 @@ async def analyze_at_commit(request: AnalyzeAtCommitRequest):
         raise HTTPException(status_code=400, detail="Not a git repository")
 
     original_branch = None
+    stashed = False
 
     try:
         # Get current branch/commit
@@ -203,6 +204,18 @@ async def analyze_at_commit(request: AnalyzeAtCommitRequest):
             )
             original_branch = result.stdout.strip()
 
+        # Check for modifications
+        status = subprocess.run(
+            ["git", "status", "--porcelain"],
+            cwd=path,
+            capture_output=True,
+            text=True
+        )
+        if status.stdout.strip():
+            # Stash changes to allow travel
+            subprocess.run(["git", "stash", "push", "-m", "CodeCity Auto-Stash"], cwd=path, capture_output=True)
+            stashed = True
+
         # Checkout target commit
         result = subprocess.run(
             ["git", "checkout", commit_hash, "--quiet"],
@@ -220,7 +233,6 @@ async def analyze_at_commit(request: AnalyzeAtCommitRequest):
         city_data = await analyzer.analyze(path)
 
         # Add commit info to response
-        # Handle both Pydantic model and dict return types
         if hasattr(city_data, 'dict'):
             result = city_data.dict()
         elif hasattr(city_data, 'model_dump'):
@@ -251,4 +263,11 @@ async def analyze_at_commit(request: AnalyzeAtCommitRequest):
                     timeout=30
                 )
             except:
-                pass  # Best effort restoration
+                pass
+
+        # Pop stash if we created it
+        if stashed:
+            try:
+                subprocess.run(["git", "stash", "pop"], cwd=path, capture_output=True)
+            except:
+                pass

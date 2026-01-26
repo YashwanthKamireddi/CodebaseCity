@@ -8,32 +8,34 @@
 import React, { useState, useEffect, Suspense } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, Preload } from '@react-three/drei'
-import CityScene from './components/CityScene'
-import Sidebar from './components/Sidebar'
-import BuildingPanel from './components/BuildingPanel'
-import LoadingScreen from './components/LoadingScreen'
-import TimelineSlider from './components/TimelineSlider'
-import CommandPalette from './components/ui/CommandPalette'
-import FileTable from './components/FileTable'
-import FloatingDock from './components/FloatingDock'
-import AnalyzeModal from './components/AnalyzeModal'
-import DiagnosticsHUD from './components/DiagnosticsHUD'
-import ViewControl from './components/ViewControl'
-import CanvasUI from './components/CanvasUI'
-import ChatInterface from './components/ChatInterface'
-import WelcomeOverlay from './components/WelcomeOverlay'
-import './components/FloatingDock.css'
-import { TimeTravelStats } from './components/AnimatedBuilding'
+import CityScene from './widgets/city-viewport/ui/CityScene'
+import CityErrorBoundary from './widgets/city-viewport/ui/CityErrorBoundary'
+import Sidebar from './widgets/layout/ui/Sidebar'
+import BuildingPanel from './entities/building/ui/BuildingPanel'
+import LoadingScreen from './shared/ui/LoadingScreen'
+import CinematicIntro from './features/onboarding/ui/CinematicIntro'
+import TimelineSlider from './features/time-travel/ui/TimelineSlider'
+import CommandPalette from './features/search/ui/CommandPalette'
+import FileTable from './features/explorer/ui/FileTable'
+import FloatingDock from './widgets/layout/ui/FloatingDock'
+import AnalyzeModal from './features/analysis/ui/AnalyzeModal'
+import DiagnosticsHUD from './widgets/debug/ui/DiagnosticsHUD'
+import ViewControl from './widgets/layout/ui/ViewControl'
+import CanvasUI from './widgets/layout/ui/CanvasUI'
+import ChatInterface from './features/ai-architect/ui/ChatInterface'
+import WelcomeOverlay from './widgets/layout/ui/WelcomeOverlay'
+import './features/FloatingDock.css'
+import { TimeTravelStats } from './features/time-travel/ui/AnimatedBuilding'
 import { useVSCodeSync } from './hooks/useVSCodeSync'
 import useStore from './store/useStore'
-import CodeViewer from './components/CodeViewer'
+import CodeViewer from './entities/building/ui/CodeViewer'
 
 // Design tokens
 import './styles/design-tokens.css'
 import './styles/ProfessionalUI.css'
 import './App.css'
 
-import CodePage from './components/CodePage'
+import CodePage from './features/explorer/ui/CodePage'
 
 function App() {
     // Simple Client-Side Routing for Standalone Code View
@@ -47,6 +49,7 @@ function App() {
         loading,
         theme,
         isAnimating,
+        layoutMode,
         vscodeConnected,
         fetchDemo,
         selectBuilding
@@ -132,44 +135,47 @@ function App() {
                     {view === '3d' ? (
                         <>
                             {/* 3D View */}
-                            <Canvas
-                                shadows
-                                dpr={[1, 1.5]}
-                                gl={{
-                                    antialias: true,
-                                    alpha: false,
-                                    powerPreference: 'high-performance',
-                                    stencil: false,
-                                    preserveDrawingBuffer: true // ENABLE SNAPSHOTS
-                                }}
-                            >
-                                <PerspectiveCamera
-                                    makeDefault
-                                    position={[80, 50, 80]}
-                                    fov={45}
-                                    near={1}
-                                    far={2000} // Match new render distance
-                                />
+                            <CityErrorBoundary>
+                                <Canvas
+                                    shadows
+                                    dpr={[1, 1.5]}
+                                    gl={{
+                                        antialias: true,
+                                        alpha: false,
+                                        powerPreference: 'high-performance',
+                                        stencil: false,
+                                        preserveDrawingBuffer: true // ENABLE SNAPSHOTS
+                                    }}
+                                >
+                                    <PerspectiveCamera
+                                        makeDefault
+                                        position={[80, 50, 80]}
+                                        fov={45}
+                                        near={0.1} // FIX: Prevent clipping when close
+                                        far={3000} // Expanded render distance
+                                    />
 
-                                <OrbitControls
-                                    makeDefault
-                                    enablePan={true}
-                                    enableZoom={true}
-                                    enableRotate={true}
-                                    minDistance={5} // Allow close-ups (Street View)
-                                    maxDistance={1500} // Allow full "God View"
-                                    maxPolarAngle={Math.PI / 2} // Allow ground level view
-                                    minPolarAngle={0.1}
-                                    dampingFactor={0.08}
-                                    enableDamping={true}
-                                    target={[0, 0, 0]}
-                                />
+                                    <OrbitControls
+                                        makeDefault
+                                        enablePan={true}
+                                        enableZoom={true}
+                                        enableRotate={true}
+                                        minDistance={1} // Allow extreme close-ups
+                                        maxDistance={2500}
+                                        // Constrain to hemisphere (0 to PI/2)
+                                        maxPolarAngle={Math.PI / 2}
+                                        minPolarAngle={0}
+                                        dampingFactor={0.08}
+                                        enableDamping={true}
+                                        target={[0, 0, 0]}
+                                    />
 
-                                <Suspense fallback={null}>
-                                    <CityScene data={cityData} />
-                                    <Preload all />
-                                </Suspense>
-                            </Canvas>
+                                    <Suspense fallback={null}>
+                                        <CityScene data={cityData} />
+                                        <Preload all />
+                                    </Suspense>
+                                </Canvas>
+                            </CityErrorBoundary>
 
                             {/* 3D-only Overlays */}
                             {/* Compass/Legend removed as requested */}
@@ -234,8 +240,28 @@ function App() {
             {/* Analyze Repo Modal */}
             <AnalyzeModal open={analyzeModalOpen} onOpenChange={setAnalyzeModalOpen} />
 
-            {/* Loading - simple, fast */}
-            {loading && <LoadingScreen />}
+            {/* Loading - Cinematic */}
+            {loading && <CinematicIntro onComplete={() => {/* Handled by store or fake timer? Actually 'loading' is controlled by store.
+            If I wait for onComplete, I might be blocking the real load.
+            Logic:
+            Real API loading sets 'loading=true'.
+            When API finishes, 'loading=false'.
+            BUT, user wants to see the "Intro" BEFORE the city appears.
+            So:
+            1. API finishes -> sets loading=false.
+            2. BUT we keep overlay visible until CinematicIntro finishes?
+
+            Actually, the user said "when a project is begin analyzing".
+            The 'loading' state in store maps to analysis.
+            Since analysis is fast (~1s for small repos), I will make CinematicIntro just RENDER when loading=true.
+            If loading finishes EARLY, CinematicIntro should probably speed up or just fade out.
+            However, for this prototype, I will just replace <LoadingScreen /> with <CinematicIntro /> and let it run.
+            If loading finishes, it unmounts.
+            Wait, if it unmounts midway, it looks glitchy.
+
+            Better: Edit LoadingScreen.jsx to wrap CinematicIntro.
+            Run ViewFile on LoadingScreen.jsx first.
+            */}} />}
 
             {/* Error Toast - Moved to Top Center to avoid overlap */}
             {useStore.getState().error && (

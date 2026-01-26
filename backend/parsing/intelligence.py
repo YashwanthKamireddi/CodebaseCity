@@ -3,6 +3,127 @@ import re
 import hashlib
 from typing import List, Dict, Any, Set
 from difflib import SequenceMatcher
+import math
+from collections import Counter
+
+class SearchEngine:
+    """
+    Advanced Semantic Search Engine using BM25.
+    Features:
+    - BM25 Ranking (k1=1.5, b=0.75)
+    - CamelCase Separation
+    - Stopword Removal
+    """
+    def __init__(self):
+        self.index = {}  # token -> { filepath: freq }
+        self.documents = {}  # filepath -> { length: int }
+        self.avgdl = 0
+        self.k1 = 1.5
+        self.b = 0.75
+
+        self.stopwords = {
+            'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with',
+            'by', 'from', 'up', 'down', 'is', 'are', 'was', 'were', 'be', 'been', 'has', 'have',
+            'had', 'do', 'does', 'did', 'can', 'could', 'shoud', 'would', 'will', 'may', 'might',
+            'must', 'import', 'export', 'from', 'return', 'const', 'let', 'var', 'function',
+            'class', 'def', 'async', 'await', 'if', 'else', 'for', 'while', 'try', 'catch'
+        }
+
+    def tokenize(self, text: str) -> List[str]:
+        # 1. Split by non-alphanumeric
+        tokens = re.findall(r'\b[a-zA-Z0-9]+\b', text)
+
+        processed = []
+        for t in tokens:
+            if len(t) < 3: continue
+
+            # 2. Split CamelCase (e.g. UserProfile -> User, Profile)
+            camel_parts = re.findall(r'[A-Z]?[a-z]+|[A-Z]+(?=[A-Z]|$)', t)
+            if not camel_parts:
+                processed.append(t.lower())
+                continue
+
+            for part in camel_parts:
+                if len(part) >= 3:
+                    processed.append(part.lower())
+
+            # Add original too if different
+            if len(camel_parts) > 1:
+                processed.append(t.lower())
+
+        return [p for p in processed if p not in self.stopwords]
+
+    def index_files(self, files: List[Dict]):
+        self.index = {}
+        self.documents = {}
+        total_length = 0
+
+        print(f"[SearchEngine] Indexing {len(files)} files with BM25...")
+
+        for f in files:
+            path = f['path']
+            content = f.get('content', '') or ''
+
+            # Use name + content (give name more weight by repeating it)
+            full_text = f"{f['name']} {f['name']} {f['name']} {content}"
+
+            tokens = self.tokenize(full_text)
+            length = len(tokens)
+            total_length += length
+
+            self.documents[path] = {'length': length}
+
+            term_freqs = Counter(tokens)
+
+            for token, freq in term_freqs.items():
+                if token not in self.index:
+                    self.index[token] = {}
+                self.index[token][path] = freq
+
+        self.avgdl = total_length / len(files) if files else 0
+
+    def search(self, query: str, limit: int = 20) -> List[Dict]:
+        query_tokens = self.tokenize(query)
+        if not query_tokens: return []
+
+        scores = {}  # path -> score
+
+        for token in query_tokens:
+            if token not in self.index: continue
+
+            # Calculate IDF
+            doc_freq = len(self.index[token])
+            total_docs = len(self.documents)
+            # BM25 IDF
+            idf = math.log(((total_docs - doc_freq + 0.5) / (doc_freq + 0.5)) + 1)
+
+            for path, freq in self.index[token].items():
+                doc_len = self.documents[path]['length']
+
+                # BM25 Term Frequency Saturation
+                 # raw freq
+                tf = freq
+
+                numerator = tf * (self.k1 + 1)
+                denominator = tf + self.k1 * (1 - self.b + self.b * (doc_len / (self.avgdl + 1))) # +1 to avoid div0
+
+                score = idf * (numerator / denominator)
+
+                scores[path] = scores.get(path, 0) + score
+
+        # Sort by score
+        ranked = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+        results = []
+
+        for path, score in ranked[:limit]:
+            results.append({
+                'path': path,
+                'score': round(score, 4),
+                'name': path.split('/')[-1]
+            })
+
+        return results
+
 
 class IntelligenceEngine:
     """
@@ -205,7 +326,8 @@ class IntelligenceEngine:
         # For now assume metadata has 'complexity_count' or calculated elsewhere.
         # Let's say we check files directly if passed, but metadata structure is fixed.
         # Simplification: Deduct for 'Coupling'
-        coupled = len(metadata.get('issues', {}).get('highly_coupled', []))
+        coupled_list = metadata.get('issues', {}).get('highly_coupled', [])
+        coupled = len(coupled_list) if isinstance(coupled_list, list) else 0
         score -= min(15, coupled * 2)
 
         score = max(0, round(score))
@@ -277,6 +399,8 @@ class IntelligenceEngine:
                 })
             else:
                 hashes[h] = f['path']
+
+        return duplicates
 
     @staticmethod
     def generate_flowchart(content: str, filename: str) -> str:

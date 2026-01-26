@@ -1,5 +1,12 @@
 export const BUILDING_COLOR = '#475569'
 
+/**
+ * Determines the color of a building based on analysis mode and interaction state.
+ * @param {Object} data - The building data object (from cityData).
+ * @param {string} mode - Current Color Mode ('layer', 'churn', 'language', 'default').
+ * @param {Object} context - Interaction context ({ isSelected, isHovered, ... }).
+ * @returns {string} Hex color string.
+ */
 export function getBuildingColor(data, mode, context = {}) {
     const {
         isSelected,
@@ -53,13 +60,36 @@ export function getBuildingColor(data, mode, context = {}) {
     }
 
     if (mode === 'language') {
-        const ext = data.path.split('.').pop()
-        if (['ts', 'tsx'].includes(ext)) return '#3178c6'
-        if (['js', 'jsx'].includes(ext)) return '#f7df1e'
-        if (ext === 'py') return '#3572a5'
-        if (ext === 'css') return '#563d7c'
-        if (ext === 'html') return '#e34c26'
-        return '#64748b'
+        const ext = data.path.split('.').pop().toLowerCase()
+
+        // Comprehensive Language Map
+        switch (ext) {
+            case 'ts': case 'tsx': return '#3178c6' // TypeScript Blue
+            case 'js': case 'jsx': case 'cjs': case 'mjs': return '#f7df1e' // JavaScript Yellow
+            case 'py': return '#3572a5' // Python Blue
+            case 'go': return '#00add8' // Go Cyan
+            case 'rs': return '#dea584' // Rust Brown
+            case 'java': return '#b07219' // Java Orange
+            case 'c': return '#555555' // C Grey
+            case 'cpp': case 'h': case 'hpp': return '#f34b7d' // C++ Pink
+            case 'cs': return '#178600' // C# Green
+            case 'html': return '#e34c26' // HTML Orange
+            case 'css': case 'scss': case 'sass': case 'less': return '#563d7c' // CSS Purple
+            case 'vue': return '#41b883' // Vue Green
+            case 'svelte': return '#ff3e00' // Svelte Orange
+            case 'json': case 'yaml': case 'yml': return '#cb171e' // Data Red (YAML/JSON)
+            case 'md': case 'markdown': return '#083fa1' // Markdown Blue
+            case 'sh': case 'bash': case 'zsh': return '#89e051' // Shell Green
+            case 'dockerfile': return '#384d54' // Docker Grey
+            case 'sql': return '#e38c00' // SQL Orange
+            case 'php': return '#4F5D95' // PHP Purple
+            case 'rb': return '#701516' // Ruby Red
+            case 'swift': return '#F05138' // Swift Orange
+            case 'kt': case 'kts': return '#A97BFF' // Kotlin Purple
+            case 'lua': return '#000080' // Lua Blue
+            case 'r': return '#276dc3' // R Blue
+            default: return '#64748b' // Slate (Unknown)
+        }
     }
 
     // 4. Default Structure Mode (Height/Complexity based)

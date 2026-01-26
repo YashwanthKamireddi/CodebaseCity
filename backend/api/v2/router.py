@@ -1,3 +1,4 @@
+from fastapi import APIRouter
 from .graph import router as graph_router
 from .intelligence import router as intelligence_router
 
