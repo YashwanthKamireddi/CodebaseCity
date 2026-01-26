@@ -45,6 +45,10 @@ export const createUISlice = (set, get) => ({
 
     setSidebarOpen: (open) => set({ sidebarOpen: open }),
 
+    // Sidebar Resizing
+    sidebarWidth: 280,
+    setSidebarWidth: (width) => set({ sidebarWidth: width }),
+
     // Mutually Exclusive Modals
     setCommandPaletteOpen: (open) => set((state) => ({
         commandPaletteOpen: open,

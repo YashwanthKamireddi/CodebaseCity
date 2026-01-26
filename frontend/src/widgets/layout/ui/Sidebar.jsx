@@ -4,11 +4,10 @@ import { Folder, File, Code, Hash, Link as LinkIcon, ChevronRight, ChevronDown }
 import './Sidebar.css'
 
 export default function Sidebar() {
-    const { cityData, selectBuilding, selectedBuilding, sidebarOpen, setSidebarOpen } = useStore()
+    const { cityData, selectBuilding, selectedBuilding, sidebarOpen, setSidebarOpen, sidebarWidth, setSidebarWidth } = useStore()
     const onClose = () => setSidebarOpen(false)
 
-    // HOOKS MUST RUN UNCONDITIONALLY
-    const [width, setWidth] = React.useState(280)
+    // Global State for layout coordination
     const [isResizing, setIsResizing] = React.useState(false)
 
     const startResizing = React.useCallback((e) => {
@@ -22,9 +21,11 @@ export default function Sidebar() {
 
     const resize = React.useCallback((e) => {
         if (isResizing) {
-            const newWidth = e.clientX
-            if (newWidth > 150 && newWidth < 800) {
-                setWidth(newWidth)
+            if (isResizing) {
+                const newWidth = e.clientX
+                if (newWidth > 150 && newWidth < 800) {
+                    setSidebarWidth(newWidth)
+                }
             }
         }
     }, [isResizing])
@@ -47,7 +48,7 @@ export default function Sidebar() {
                 position: 'fixed',
                 top: 0,
                 left: 0,
-                width: `${width}px`,
+                width: `${sidebarWidth}px`,
                 maxWidth: '80vw', // Safety cap
                 height: '100vh',
                 zIndex: 'var(--z-modal-backdrop)',
