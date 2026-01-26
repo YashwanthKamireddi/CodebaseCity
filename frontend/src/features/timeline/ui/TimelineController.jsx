@@ -196,7 +196,8 @@ export default function TimelineController() {
                     width: '100%',
                     maxWidth: '560px',
                     padding: '0 24px',
-                    pointerEvents: 'auto'
+                    pointerEvents: 'auto',
+                    boxSizing: 'border-box' // Fix centering if padding adds to width
                 }}
             >
                 <div style={{
@@ -248,7 +249,7 @@ export default function TimelineController() {
                     </button>
 
                     {/* Timeline Track */}
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
 
                         {/* Meta Info */}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
