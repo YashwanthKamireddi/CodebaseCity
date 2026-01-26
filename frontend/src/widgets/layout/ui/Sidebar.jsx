@@ -165,7 +165,7 @@ function FileTree({ files, onSelect, selectedId }) {
                         onClick={() => onSelect(item)}
                         className="file-row"
                         style={{
-                            paddingLeft: `${(depth + 1) * 12 + 8}px`,
+                            paddingLeft: `${(depth + 1) * 10 + 10}px`, // Tighter indentation
                             color: isSelected ? '#60a5fa' : '#a1a1aa',
                             background: isSelected ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
                             fontWeight: isSelected ? 500 : 400,
@@ -197,7 +197,7 @@ function CollapsibleFolder({ name, depth, children }) {
                 onClick={() => setIsOpen(!isOpen)}
                 className="folder-row"
                 style={{
-                    paddingLeft: `${depth * 12 + 8}px`,
+                    paddingLeft: `${depth * 10 + 10}px`, // Tighter indentation
                 }}
                 title={name}
             >

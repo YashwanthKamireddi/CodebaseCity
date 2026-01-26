@@ -194,7 +194,7 @@ export default function TimelineController() {
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 style={{
                     position: 'fixed',
-                    bottom: '140px',
+                    bottom: '90px', // Closer to dock (was 140px)
                     left: '50%', // Default, overridden by animate
                     transform: 'translateX(-50%)',
                     zIndex: 200,
