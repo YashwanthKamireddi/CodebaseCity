@@ -186,9 +186,7 @@ export default function TimelineController() {
                 initial={{ y: 80, opacity: 0 }}
                 animate={{
                     y: 0,
-                    opacity: 1,
-                    // Precise centering: 50vw + half sidebar width
-                    left: sidebarOpen ? `calc(50% + ${sidebarWidth / 2}px)` : '50%'
+                    opacity: 1
                 }}
                 exit={{ y: 80, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -198,7 +196,7 @@ export default function TimelineController() {
                     left: '20%', // Default, overridden by animate
                     transform: 'translateX(-50%)',
                     zIndex: 200,
-                    width: '1000%',
+                    width: '100%',
                     maxWidth: '560px',
                     padding: '0 24px',
                     pointerEvents: 'auto',
