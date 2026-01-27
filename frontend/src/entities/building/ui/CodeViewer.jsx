@@ -1,4 +1,5 @@
 import React from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Copy, Download, FileCode2, Check } from 'lucide-react'
 import useStore from '../../../store/useStore'
@@ -10,6 +11,7 @@ export default function CodeViewer({ building, onClose }) {
     if (!building) return null
 
     const handleCopy = () => {
+        console.log('[CodeViewer] Copying:', fileContent?.content?.length)
         if (fileContent?.content) {
             navigator.clipboard.writeText(fileContent.content)
             setCopied(true)
@@ -17,7 +19,7 @@ export default function CodeViewer({ building, onClose }) {
         }
     }
 
-    return (
+    return createPortal(
         <AnimatePresence>
             <motion.div
                 initial={{ opacity: 0 }}
@@ -26,9 +28,9 @@ export default function CodeViewer({ building, onClose }) {
                 style={{
                     position: 'fixed',
                     top: 0, left: 0, right: 0, bottom: 0,
-                    background: 'rgba(0,0,0,0.8)',
-                    backdropFilter: 'blur(8px)',
-                    zIndex: 2000, // Higher than panel
+                    background: 'rgba(0,0,0,0.85)', // Slightly darker
+                    backdropFilter: 'blur(12px)', // heavier blur
+                    zIndex: 2147483647, // CSS MAX INT
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -44,11 +46,10 @@ export default function CodeViewer({ building, onClose }) {
                         width: '100%',
                         maxWidth: '1200px',
                         height: '90vh',
-                        // THE VOID THEME
                         background: '#09090b',
-                        color: '#f4f4f5', // Explicit White Text
+                        color: '#f4f4f5',
                         borderRadius: '16px',
-                        boxShadow: '0 50px 100px -20px rgba(0, 0, 0, 0.8)',
+                        boxShadow: '0 50px 100px -20px rgba(0, 0, 0, 0.9)',
                         border: '1px solid #27272a',
                         display: 'flex',
                         flexDirection: 'column',
@@ -67,11 +68,19 @@ export default function CodeViewer({ building, onClose }) {
                         padding: '0 16px',
                         userSelect: 'none'
                     }}>
-                        {/* Traffic Lights */}
+                        {/* Traffic Lights (Red Only) */}
                         <div style={{ display: 'flex', gap: '8px' }}>
-                            <div onClick={onClose} style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ff5f56', cursor: 'pointer', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.1)' }} />
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ffbd2e', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.1)' }} />
-                            <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#27c93f', boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.1)' }} />
+                            <div
+                                onClick={onClose}
+                                title="Close (Esc)"
+                                style={{
+                                    width: '12px', height: '12px', borderRadius: '50%',
+                                    background: '#ff5f56', cursor: 'pointer',
+                                    boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.1)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                }}
+                            />
+                            {/* Min/Max removed as requested */}
                         </div>
 
                         {/* Title */}
@@ -86,23 +95,26 @@ export default function CodeViewer({ building, onClose }) {
 
                         {/* Actions */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                            <button
+                            <motion.button
                                 onClick={handleCopy}
+                                whileTap={{ scale: 0.95 }}
                                 style={{
-                                    display: 'flex', alignItems: 'center', gap: '6px',
-                                    background: copied ? 'rgba(34, 197, 94, 0.1)' : 'transparent',
-                                    color: copied ? '#4ade80' : '#71717a',
-                                    border: 'none',
-                                    padding: '4px 8px',
-                                    borderRadius: '4px',
-                                    fontSize: '0.75rem',
+                                    display: 'flex', alignItems: 'center', gap: '8px',
+                                    background: copied ? 'rgba(34, 197, 94, 0.2)' : 'rgba(255,255,255,0.05)',
+                                    color: copied ? '#4ade80' : '#a1a1aa',
+                                    border: copied ? '1px solid rgba(34, 197, 94, 0.3)' : '1px solid rgba(255,255,255,0.1)',
+                                    padding: '6px 12px',
+                                    borderRadius: '6px',
+                                    fontSize: '0.8rem',
+                                    fontWeight: 500,
                                     cursor: 'pointer',
-                                    transition: 'all 0.2s'
+                                    transition: 'all 0.2s',
+                                    outline: 'none'
                                 }}
                             >
                                 {copied ? <Check size={14} /> : <Copy size={14} />}
-                                {copied ? 'Copied' : 'Copy'}
-                            </button>
+                                {copied ? 'Copied' : 'Copy Source'}
+                            </motion.button>
                         </div>
                     </div>
 
@@ -148,11 +160,12 @@ export default function CodeViewer({ building, onClose }) {
                         fontSize: '0.75rem',
                         color: 'white'
                     }}>
-                        <span>TypeScript</span>
-                        <span>{building.metrics.loc} lines • UTF-8</span>
+                        <span>{building.language || 'Text'}</span>
+                        <span>{building.metrics?.loc || building.metrics?.lines || '?'} lines • UTF-8</span>
                     </div>
                 </motion.div>
             </motion.div>
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     )
 }

@@ -48,9 +48,14 @@ export default function CameraController() {
                 y = building.dimensions.height // Aim at top
             }
 
-            // Calculate target position (offset from building) - increased distance to see hologram
-            const targetPos = new THREE.Vector3(x + 45, y + 50, z + 45)
-            const lookAtPos = new THREE.Vector3(x, y * 0.6, z)
+            // Calculate target position (offset from building)
+            // Adjusted to frame both Building and Hologram (as requested)
+            // Closer zoom (40-60 range) and aiming higher (at y, not y*0.6)
+            const zoomDist = Math.max(40, y * 1.5)
+            const targetPos = new THREE.Vector3(x + zoomDist, y + zoomDist, z + zoomDist)
+
+            // Look at the TOP of the building (where hologram is)
+            const lookAtPos = new THREE.Vector3(x, y, z)
 
             // Animate Camera Position
             gsap.to(camera.position, {

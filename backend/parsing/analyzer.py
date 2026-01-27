@@ -92,6 +92,7 @@ class CodebaseAnalyzer:
                 # Social / Git Metadata
                 author=pf.get('author', 'Unknown'),
                 email=pf.get('email', ''),
+                email_hash=pf.get('metrics', {}).get('email_hash') or pf.get('email_hash'),
                 last_modified=pf.get('last_modified', 0)
             ))
 

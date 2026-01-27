@@ -6,6 +6,7 @@
  * Refactored for smooth async playback loop to prevent API overload.
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { Play, Pause, ChevronLeft, ChevronRight, Clock, User } from 'lucide-react'
 import useStore from '../../../store/useStore'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -69,8 +70,19 @@ export default function TimelineController() {
         fetchHistory()
     }, [cityData?.path, showTimeline])
 
+    const abortControllerRef = useRef(null)
+
     // Raw API Call (Memoized)
     const performAnalysis = useCallback(async (commit) => {
+        // Cancel previous request
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort()
+        }
+
+        // Create new controller
+        const controller = new AbortController()
+        abortControllerRef.current = controller
+
         setIsLoading(true)
         try {
             const res = await fetch('/api/analyze-at-commit', {
@@ -79,7 +91,8 @@ export default function TimelineController() {
                 body: JSON.stringify({
                     path: cityData.path,
                     commit_hash: commit.hash
-                })
+                }),
+                signal: controller.signal // Bind signal
             })
 
             if (res.ok) {
@@ -87,12 +100,29 @@ export default function TimelineController() {
                 setCityData(newCityData)
             }
         } catch (e) {
+            if (e.name === 'AbortError') {
+                console.log('Analysis aborted')
+                return
+            }
             console.error("Time Travel Failed:", e)
         } finally {
-            setIsLoading(false)
-            setIsScrubbing(false)
+            // Only clear loading if THIS request finished (wasn't aborted)
+            if (abortControllerRef.current === controller) {
+                setIsLoading(false)
+                setIsScrubbing(false)
+                abortControllerRef.current = null
+            }
         }
     }, [cityData?.path, setCityData])
+
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort()
+            }
+        }
+    }, [])
 
     // Debounced Wrapper for SCRUBBING
     const debouncedTravel = useCallback((commit) => {
@@ -108,52 +138,61 @@ export default function TimelineController() {
     // Handle slider change
     const handleSliderChange = (e) => {
         const newIndex = parseInt(e.target.value)
-        setIsPlaying(false) // STOP IMMEDIATELY
+        setIsPlaying(false) // Kill Loop
+        setIsScrubbing(true) // Visual Feedback
         setCurrentIndex(newIndex)
+        // Debounce actual API call to prevent flooding during drag
         debouncedTravel(history[newIndex])
     }
 
     // Step navigation
     const handleStep = (direction) => {
+        setIsPlaying(false)
         const newIndex = currentIndex + direction
         if (newIndex >= 0 && newIndex < history.length) {
             setCurrentIndex(newIndex)
-            setIsPlaying(false)
             performAnalysis(history[newIndex])
         }
     }
 
-    // Async Recursive Playback Engine with Ref for reliability
-    const playingRef = useRef(isPlaying)
-    useEffect(() => { playingRef.current = isPlaying }, [isPlaying])
-
+    // Async Recursive Playback Engine (Robust)
     useEffect(() => {
-        let timer = null
+        let isCancelled = false
 
-        const playNext = async () => {
-            if (!playingRef.current || isLoading) return
+        const loop = async () => {
+            if (!isPlaying || isCancelled) return
 
-            // Perform step
-            setCurrentIndex(prev => {
-                const nextIndex = prev + 1
-                if (nextIndex >= history.length) {
-                    setIsPlaying(false)
-                    return prev
-                }
-                performAnalysis(history[nextIndex])
-                return nextIndex
-            })
+            // 1. Calculate Next
+            let nextIndex = currentIndex + 1
+            if (nextIndex >= history.length) {
+                setIsPlaying(false)
+                return
+            }
 
-            // Loop with delay
-            timer = setTimeout(playNext, 800) // Consistent speed
+            // 2. Optimistic UI Update
+            setCurrentIndex(nextIndex)
+
+            // 3. Perform Analysis (BLOCKING)
+            // We await this so we don't pile up requests
+            await performAnalysis(history[nextIndex])
+
+            // 4. Check if we should continue
+            // (User might have paused DURING the await)
+            if (!isPlaying || isCancelled) return
+
+            // 5. Schedule next frame (Delay for readability)
+            setTimeout(loop, 800)
         }
 
         if (isPlaying) {
-            playNext()
+            // Kickstart loop
+            loop()
         }
 
-        return () => clearTimeout(timer)
-    }, [isPlaying, isLoading, history, performAnalysis])
+        return () => {
+            isCancelled = true // Kill any pending loops on unmount/dep change
+        }
+    }, [isPlaying, history]) // Removed dependencies that cause re-eval loops
 
     // Keyboard shortcuts
     useEffect(() => {
@@ -188,10 +227,7 @@ export default function TimelineController() {
     const currentCommit = history[currentIndex] || {}
     const progress = history.length > 1 ? (currentIndex / (history.length - 1)) * 100 : 100
 
-    // Calculate centering offset - REVERTED to standard 50% to align with FloatingDock
-    // The user prefers the timeline to be centered on the screen/dock, not the "remaining viewport".
-
-    return (
+    return createPortal(
         <AnimatePresence>
             <motion.div
                 key="timeline-bar"
@@ -204,34 +240,39 @@ export default function TimelineController() {
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 style={{
                     position: 'fixed',
-                    bottom: '120px',
-                    left: '50%', // Standard Center (Matches Dock)
-                    transform: 'translateX(-50%)',
-                    zIndex: 200,
-                    width: '100%',
-                    maxWidth: '560px',
+                    bottom: '130px',
+                    left: 0,
+                    right: 0,
+                    marginInline: 'auto', // CSS Native Centering (Robust)
+                    width: 'fit-content', // Hugs content
+                    maxWidth: '90vw',
+                    zIndex: 9000,
                     padding: '0 24px',
-                    pointerEvents: 'auto',
-                    boxSizing: 'border-box'
+                    pointerEvents: 'none', // Allow clicking through side gaps
+                    boxSizing: 'border-box',
+                    display: 'flex',
+                    justifyContent: 'center'
                 }}
             >
                 <div style={{
-                    background: 'rgba(9, 9, 11, 0.85)',
-                    backdropFilter: 'blur(20px)',
-                    WebkitBackdropFilter: 'blur(20px)',
-                    borderRadius: '16px',
-                    padding: '12px 20px',
+                    background: 'rgba(5, 5, 10, 0.65)',
+                    backdropFilter: 'blur(24px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+                    borderRadius: '24px',
+                    padding: '16px 24px',
                     border: '1px solid rgba(255, 255, 255, 0.08)',
-                    boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.6)',
+                    boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.8)',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '24px' // Increased gap for breathing room
+                    gap: '32px',
+                    pointerEvents: 'auto', // Re-enable clicks
+                    minWidth: '600px'
                 }}>
 
                     {/* Play/Pause Button */}
+                    {/* Play/Pause Button - Prominent Primary Action */}
                     <button
                         onClick={() => {
-                            // Auto-Rewind Logic
                             if (!isPlaying && currentIndex >= history.length - 1) {
                                 setCurrentIndex(0)
                                 performAnalysis(history[0])
@@ -239,12 +280,12 @@ export default function TimelineController() {
                             setIsPlaying(p => !p)
                         }}
                         style={{
-                            width: '40px',
-                            height: '40px',
+                            width: '48px', // Larger hit target
+                            height: '48px',
                             borderRadius: '50%',
                             background: isPlaying
                                 ? 'white'
-                                : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                                : 'linear-gradient(135deg, #3b82f6, #8b5cf6)', // Blue-Purple Gradient
                             border: 'none',
                             display: 'flex',
                             alignItems: 'center',
@@ -252,14 +293,14 @@ export default function TimelineController() {
                             cursor: 'pointer',
                             flexShrink: 0,
                             boxShadow: isPlaying
-                                ? '0 0 20px rgba(255,255,255,0.3)'
-                                : '0 4px 12px rgba(99, 102, 241, 0.4)',
-                            transition: 'all 0.2s ease'
+                                ? '0 0 24px rgba(255,255,255,0.4)' // Brighter glow active
+                                : '0 4px 16px rgba(59, 130, 246, 0.4)', // Color glow inactive
+                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                         }}
                     >
                         {isPlaying
-                            ? <Pause size={18} fill="#09090b" stroke="#09090b" />
-                            : <Play size={18} fill="white" stroke="white" style={{ marginLeft: '2px' }} />
+                            ? <Pause size={20} fill="#09090b" stroke="#09090b" />
+                            : <Play size={20} fill="white" stroke="white" style={{ marginLeft: '3px' }} />
                         }
                     </button>
 
@@ -267,69 +308,93 @@ export default function TimelineController() {
                     <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px', marginRight: '8px' }}>
 
                         {/* Meta Info */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <span style={{
-                                    fontSize: '0.75rem',
-                                    fontWeight: 600,
-                                    color: 'white',
-                                    fontFamily: 'var(--font-mono, monospace)'
-                                }}>
-                                    {currentCommit.short_hash}
-                                </span>
-                                <span style={{ color: '#52525b' }}>•</span>
-                                <span style={{ fontSize: '0.75rem', color: '#71717a' }}>
-                                    {currentCommit.date}
-                                </span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingBottom: '2px' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <span style={{
+                                        fontSize: '0.85rem',
+                                        fontWeight: 700,
+                                        color: '#f4f4f5',
+                                        fontFamily: 'var(--font-mono, monospace)',
+                                        letterSpacing: '-0.02em'
+                                    }}>
+                                        {currentCommit.short_hash}
+                                    </span>
+                                    <span style={{ fontSize: '0.75rem', color: '#a1a1aa' }}>
+                                        {currentCommit.date}
+                                    </span>
+                                </div>
                             </div>
 
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '6px',
-                                fontSize: '0.7rem',
-                                color: '#a1a1aa'
+                                gap: '8px',
+                                fontSize: '0.75rem',
+                                color: '#d4d4d8',
+                                background: 'rgba(255,255,255,0.05)',
+                                padding: '4px 8px 4px 4px', // Adjusted padding for avatar
+                                borderRadius: '20px',
+                                border: '1px solid rgba(255,255,255,0.05)'
                             }}>
-                                <User size={12} />
-                                <span style={{ maxWidth: '100px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {/* Avatar Implementation */}
+                                <div style={{
+                                    width: '20px',
+                                    height: '20px',
+                                    borderRadius: '50%',
+                                    overflow: 'hidden',
+                                    background: '#3f3f46',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}>
+                                    {/* Unavatar for GitHub/Gravatar resolution */}
+                                    <img
+                                        src={`https://unavatar.io/${currentCommit.email || currentCommit.author}?fallback=false`}
+                                        alt={currentCommit.author}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex' }}
+                                    />
+                                    <div style={{ display: 'none', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, color: 'white' }}>
+                                        {currentCommit.author ? currentCommit.author.charAt(0).toUpperCase() : '?'}
+                                    </div>
+                                </div>
+
+                                <span style={{ fontWeight: 500, maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                     {currentCommit.author}
                                 </span>
                             </div>
                         </div>
 
                         {/* Slider Track */}
-                        <div style={{ position: 'relative', height: '16px', display: 'flex', alignItems: 'center' }}>
-                            {/* Background Track - Absolute Centering */}
+                        <div style={{ position: 'relative', height: '24px', display: 'flex', alignItems: 'center' }}>
+                            {/* Background Track */}
                             <div style={{
                                 position: 'absolute',
                                 left: 0,
                                 width: '100%',
-                                height: '4px',
+                                height: '6px', // Thicker track
                                 background: 'rgba(255, 255, 255, 0.1)',
-                                borderRadius: '2px',
-                                top: 0,
-                                bottom: 0,
-                                margin: 'auto'
+                                borderRadius: '4px',
+                                top: 0, bottom: 0, margin: 'auto'
                             }} />
 
-                            {/* Progress Fill - Absolute Centering */}
+                            {/* Progress Fill */}
                             <div style={{
                                 position: 'absolute',
                                 left: 0,
                                 width: `${progress}%`,
-                                height: '4px',
-                                background: isLoading
-                                    ? 'linear-gradient(90deg, #6366f1, #8b5cf6)'
-                                    : '#6366f1',
-                                borderRadius: '2px',
-                                transition: isScrubbing ? 'none' : 'width 0.3s ease',
-                                boxShadow: '0 0 8px rgba(99, 102, 241, 0.5)',
-                                top: 0,
-                                bottom: 0,
-                                margin: 'auto'
+                                height: '6px',
+                                background: isPlaying || isLoading
+                                    ? 'linear-gradient(90deg, #3b82f6, #a855f7)'
+                                    : '#3b82f6',
+                                borderRadius: '4px',
+                                transition: isScrubbing ? 'none' : 'width 0.2s linear', // Smoother logic
+                                boxShadow: '0 0 12px rgba(59, 130, 246, 0.5)', // Neon glow
+                                top: 0, bottom: 0, margin: 'auto'
                             }} />
 
-                            {/* Native Slider (Invisible but interactive) */}
+                            {/* Native Slider */}
                             <input
                                 type="range"
                                 min={0}
@@ -339,39 +404,32 @@ export default function TimelineController() {
                                 style={{
                                     position: 'absolute',
                                     width: '100%',
-                                    height: '32px', // Larger hit area
-                                    top: '50%',
-                                    transform: 'translateY(-50%)', // Center hit area
+                                    height: '100%',
+                                    top: 0, left: 0,
                                     margin: 0,
-                                    left: 0,
                                     opacity: 0,
                                     cursor: 'grab',
-                                    zIndex: 10, // Topmost
-                                    appearance: 'none', // Reset native styles
+                                    zIndex: 10
                                 }}
                             />
 
-                            {/* Visual Handle - Absolute Centering */}
+                            {/* Visual Handle */}
                             <motion.div
                                 style={{
                                     position: 'absolute',
                                     left: `${progress}%`,
-                                    // Remove transform centering for TOP, keep for LEFT
+                                    top: 0, bottom: 0, margin: 'auto',
                                     transform: 'translateX(-50%)',
-                                    top: 0,
-                                    bottom: 0,
-                                    margin: 'auto',
-                                    width: isLoading ? '18px' : '12px',
-                                    height: isLoading ? '18px' : '12px', // Must match width for circle
-                                    // Explicit fix: Ensure height is fixed so margin:auto works
-                                    background: 'white',
+                                    width: '16px',
+                                    height: '16px',
+                                    background: '#ffffff',
                                     borderRadius: '50%',
-                                    boxShadow: '0 0 0 4px rgba(99, 102, 241, 0.3)',
+                                    boxShadow: '0 0 0 4px rgba(59, 130, 246, 0.3), 0 2px 8px rgba(0,0,0,0.4)',
                                     pointerEvents: 'none',
                                     zIndex: 5
                                 }}
-                                animate={isLoading ? { scale: [1, 1.2, 1] } : {}}
-                                transition={{ repeat: Infinity, duration: 0.8 }}
+                                whileHover={{ scale: 1.2 }}
+                                animate={isLoading ? { scale: [1, 1.1, 1], boxShadow: '0 0 0 8px rgba(59, 130, 246, 0.2)' } : {}}
                             />
                         </div>
 
@@ -414,7 +472,8 @@ export default function TimelineController() {
                     </div>
                 </div>
             </motion.div>
-        </AnimatePresence>
+        </AnimatePresence>,
+        document.body
     )
 }
 

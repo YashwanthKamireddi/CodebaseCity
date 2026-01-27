@@ -6,8 +6,9 @@ import { detectPattern } from '../utils'
 // Building label component
 export default function BuildingLabel({ building, position, height }) {
     const { showLabels, selectedBuilding } = useStore()
+    const codeViewerOpen = useStore(state => state.codeViewerOpen)
 
-    if (!showLabels) return null
+    if (!showLabels || codeViewerOpen) return null
 
     const isSelected = selectedBuilding?.id === building.id
     const pattern = detectPattern(building)
@@ -60,7 +61,7 @@ export default function BuildingLabel({ building, position, height }) {
 
 function AuthorHologram({ author }) {
     return (
-        <Html position={[0, 2.5, 0]} center transform sprite>
+        <Html position={[0, 2.5, 0]} center transform sprite zIndexRange={[0, 50]}>
             <div style={{
                 display: 'flex',
                 alignItems: 'center',

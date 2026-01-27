@@ -44,6 +44,7 @@ class Building(BaseModel):
     is_hotspot: bool = Field(default=False, description="High churn + high complexity")
     author: Optional[str] = Field(default="Unknown", description="Primary author")
     email: Optional[str] = Field(default=None, description="Author email")
+    email_hash: Optional[str] = Field(default=None, description="MD5 hash of email for Gravatar")
 
 
 class District(BaseModel):

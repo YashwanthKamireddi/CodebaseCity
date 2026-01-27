@@ -12,7 +12,9 @@ import CityScene from './widgets/city-viewport/ui/CityScene'
 import { CanvasErrorBoundary } from './widgets/layout/ui/CanvasErrorBoundary'
 import Sidebar from './widgets/layout/ui/Sidebar'
 import BuildingPanel from './entities/building/ui/BuildingPanel'
+import { motion, AnimatePresence } from 'framer-motion'
 import LoadingScreen from './shared/ui/LoadingScreen'
+import { ErrorBoundary } from './shared/ui/ErrorBoundary'
 import CityBuilderLoader from './features/onboarding/ui/CityBuilderLoader'
 
 
@@ -59,6 +61,9 @@ function App() {
     const [sidebarOpen, setSidebarOpen] = useState(true)
     const [view, setView] = useState('3d') // '3d' or 'table'
     const { analyzeModalOpen, setAnalyzeModalOpen } = useStore()
+
+    // DEBUG: Trace loading state
+    console.log('[App] Render. Loading:', loading, 'CityData:', !!cityData)
 
     // VS Code integration
     const { notifyBuildingSelected } = useVSCodeSync()
@@ -223,12 +228,10 @@ function App() {
                     <ChatInterface />
                     {/* ROOT LEVEL CODE VIEWER */}
                     {useStore.getState().codeViewerOpen && selectedBuilding && (
-                        <div style={{ position: 'fixed', inset: 0, zIndex: 99999 }}>
-                            <CodeViewer
-                                building={selectedBuilding}
-                                onClose={() => useStore.getState().setCodeViewerOpen(false)}
-                            />
-                        </div>
+                        <CodeViewer
+                            building={selectedBuilding}
+                            onClose={() => useStore.getState().setCodeViewerOpen(false)}
+                        />
                     )}
                 </div>
             </div>
@@ -242,7 +245,21 @@ function App() {
             <AnalyzeModal open={analyzeModalOpen} onOpenChange={setAnalyzeModalOpen} />
 
             {/* Loading - 3D City Builder */}
-            {loading && <CityBuilderLoader />}
+            <AnimatePresence>
+                {loading && (
+                    <motion.div
+                        key="loader"
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.8, ease: "easeInOut" }}
+                        style={{ position: 'fixed', inset: 0, zIndex: 99999 }}
+                    >
+                        <ErrorBoundary>
+                            <CityBuilderLoader />
+                        </ErrorBoundary>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Error Toast - Moved to Top Center to avoid overlap */}
             {useStore.getState().error && (

@@ -183,6 +183,61 @@ export default function BuildingPanel({ building }) {
 
 
 
+                    {/* ANALYTICAL HUD */}
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr',
+                        gap: '24px',
+                        marginBottom: '32px'
+                    }}>
+                        <SwissMetric
+                            label="Lines of Code"
+                            value={metrics?.loc || metrics?.lines || 'N/A'}
+                            highlight={false}
+                        />
+                        <SwissMetric
+                            label="Complexity"
+                            value={metrics?.complexity || '1'}
+                            highlight={(metrics?.complexity || 1) > 10}
+                        />
+                        <SwissMetric
+                            label="File Size"
+                            value={metrics?.size ? `${Math.round(metrics.size / 1024)} KB` : '< 1 KB'}
+                            highlight={false}
+                        />
+                        <SwissMetric
+                            label="Commits"
+                            value={metrics?.commits || '1'}
+                            highlight={false}
+                        />
+                    </div>
+
+                    {/* DEPENDENCIES */}
+                    {(metrics?.imports || []).length > 0 && (
+                        <div style={{ marginBottom: '32px' }}>
+                            <SectionHeader title="Dependencies" icon={<Layers size={14} />} />
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                {metrics.imports.slice(0, 6).map((imp, i) => (
+                                    <span key={i} style={{
+                                        fontSize: '0.75rem',
+                                        padding: '4px 8px',
+                                        background: 'rgba(255,255,255,0.05)',
+                                        borderRadius: '4px',
+                                        color: '#d4d4d8',
+                                        fontFamily: 'var(--font-mono)'
+                                    }}>
+                                        {imp}
+                                    </span>
+                                ))}
+                                {metrics.imports.length > 6 && (
+                                    <span style={{ fontSize: '0.75rem', padding: '4px 8px', color: '#71717a' }}>
+                                        +{metrics.imports.length - 6} more
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
                     {/* Code Viewer Action */}
                     <div style={{ marginBottom: '32px' }}>
                         <SectionHeader title="Source Code" icon={<FileCode2 size={14} />} />

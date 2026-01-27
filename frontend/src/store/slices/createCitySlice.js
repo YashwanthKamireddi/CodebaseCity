@@ -57,6 +57,8 @@ export const createCitySlice = (set, get) => ({
         // Minimum time to ensure UI feedback (1.5s)
         const minTime = new Promise(resolve => setTimeout(resolve, 1500))
 
+        setLoading(true)
+
         try {
             setProgress(10)
             const responsePromise = fetch(`${API_BASE}/analyze`, {

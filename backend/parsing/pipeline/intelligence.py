@@ -26,16 +26,25 @@ class IntelligenceStep(PipelineStep):
         # 1. Complexity & Security
         for pf in parsed_files:
             # Only update author if not already set by GitMetaStep (or is 'Unknown')
-            current_author = pf.get('author', 'Unknown')
-            if current_author == 'Unknown' or current_author is None:
-                if pf['path'] in author_map:
-                    author_data = author_map[pf['path']]
-                    # author_map returns dict: { 'author': str, 'email': str, 'commits': int }
-                    if isinstance(author_data, dict):
+            # Always enrich with Social Data (Email Hash for Gravatar)
+            if pf['path'] in author_map:
+                author_data = author_map[pf['path']]
+                if isinstance(author_data, dict):
+                    # Ensure metrics dict exists
+                    if 'metrics' not in pf:
+                        pf['metrics'] = {}
+
+                    # Inject Hash unconditionally
+                    pf['metrics']['email_hash'] = author_data.get('email_hash')
+
+                    # Populate basic author info if missing
+                    current_author = pf.get('author', 'Unknown')
+                    if current_author == 'Unknown' or current_author is None:
                         pf['author'] = author_data.get('author', 'Unknown')
                         pf['email'] = author_data.get('email', '')
-                    else:
-                        pf['author'] = str(author_data) if author_data else 'Unknown'
+                    elif not pf.get('email'):
+                        # If author name exists but email is missing, add email
+                        pf['email'] = author_data.get('email', '')
 
             comp = IntelligenceEngine.calculate_complexity(pf.get('content', ''))
             pf['complexity_score'] = comp['score']

@@ -54,12 +54,22 @@ function FloatingBlock({ position, delay }) {
         const time = state.clock.elapsedTime
         if (time < delay) return
 
-        // Bobbing motion
-        ref.current.position.y = Math.sin(time * speed + offset) * 2 + 1
+        // Construction rise effect (0 to 1) - SLOWER (0.5 -> 0.2)
+        const progress = Math.min((time - delay) * 0.2, 1)
+        if (progress < 0) {
+            ref.current.scale.set(0, 0, 0)
+            return
+        }
 
-        // Rotation
-        ref.current.rotation.x = time * 0.2
-        ref.current.rotation.y = time * 0.1
+        // Smoother Easing (Sine InOut) - Less "Pop"
+        const ease = -(Math.cos(Math.PI * progress) - 1) / 2
+
+        // Bobbing motion (Very Subtle)
+        const bob = Math.sin(time * speed + offset) * 0.05 // Reduced form 0.2
+
+        ref.current.position.y = (ease * 2.5) + bob // Slightly taller rise
+        ref.current.scale.set(1, ease, 1) // Grow vertically
+        ref.current.rotation.set(0, 0, 0) // No rotation
     })
 
     return (
@@ -73,7 +83,7 @@ function BuilderScene() {
         for (let i = 0; i < BLOCK_COUNT; i++) {
             const x = (Math.random() - 0.5) * GRID_SIZE
             const z = (Math.random() - 0.5) * GRID_SIZE - 20 // Placing vaguely in front
-            temp.push({ position: [x, 0, z], delay: Math.random() * 2 })
+            temp.push({ position: [x, 0, z], delay: Math.random() * 4 }) // Spread over 4s (was 2s)
         }
         return temp
     }, [])
@@ -102,6 +112,7 @@ function BuilderScene() {
                 ))}
             </Instances>
 
+            {/* <EffectComposer disableNormalPass> */}
             <EffectComposer disableNormalPass>
                 <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} intensity={1.5} />
             </EffectComposer>
@@ -160,11 +171,12 @@ function LoadingText() {
 }
 
 export default function CityBuilderLoader() {
+    React.useEffect(() => console.log('[CityBuilderLoader] Mounted'), [])
     return (
         <div style={{
-            position: 'absolute',
+            position: 'fixed',
             inset: 0,
-            zIndex: 9999,
+            zIndex: 99999, // Max Z-Index
             background: '#050505'
         }}>
             <Canvas camera={{ position: [0, 8, 15], fov: 60 }}>

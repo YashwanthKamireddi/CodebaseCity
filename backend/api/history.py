@@ -19,6 +19,8 @@ class Commit(BaseModel):
     timestamp: int
     message: str
     author: str
+    email: str = ""        # Added email
+    email_hash: str = ""   # Added hash
     files_changed: int = 0
     insertions: int = 0
     deletions: int = 0
@@ -42,6 +44,7 @@ async def get_history(path: str, limit: int = 50) -> HistoryResponse:
     Returns list of commits with metadata.
     """
     import tempfile
+    import hashlib # Added hashlib
 
     # Handle GitHub URLs
     if path.startswith("http") or "github.com" in path:
@@ -71,7 +74,7 @@ async def get_history(path: str, limit: int = 50) -> HistoryResponse:
             [
                 "git", "log",
                 f"--max-count={limit}",
-                "--format=%H|%h|%at|%an|%s",
+                "--format=%H|%h|%at|%an|%ae|%s", # Added %ae (email)
                 "--shortstat"
             ],
             cwd=path,
@@ -98,17 +101,22 @@ async def get_history(path: str, limit: int = 50) -> HistoryResponse:
                 i += 1
                 continue
 
-            # Parse commit line: hash|short_hash|timestamp|author|message
-            parts = line.split("|", 4)
-            if len(parts) >= 5:
+            # Parse commit line: hash|short_hash|timestamp|author|email|message
+            parts = line.split("|", 5) # Split into 6 parts
+            if len(parts) >= 6:
                 timestamp = int(parts[2])
+                auth_email = parts[4]
+                email_hash = hashlib.md5(auth_email.lower().strip().encode('utf-8')).hexdigest()
+
                 commit = Commit(
                     hash=parts[0],
                     short_hash=parts[1],
                     timestamp=timestamp,
                     date=datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d"),
                     author=parts[3],
-                    message=parts[4][:100],  # Truncate long messages
+                    email=auth_email,
+                    email_hash=email_hash,
+                    message=parts[5][:100],  # Truncate long messages
                     files_changed=0,
                     insertions=0,
                     deletions=0

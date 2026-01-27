@@ -3,7 +3,7 @@ import { Html } from '@react-three/drei'
 import mermaid from 'mermaid'
 import { motion, AnimatePresence } from 'framer-motion'
 import useStore from '../../../store/useStore'
-import { User, GitCommit, Calendar, Mail } from 'lucide-react'
+import { User, GitCommit, Calendar, Mail, FileCode2 } from 'lucide-react'
 
 // Initialize Mermaid
 mermaid.initialize({
@@ -50,45 +50,18 @@ export default function HolographicXRay() {
             return
         }
 
+        // User wants the "Filename Hologram" (Card) but NOT the Flowchart
         setVisible(true)
 
-        // Only fetch flowchart if NOT in social mode
-        if (!isSocialMode) {
-            const fetchFlowchart = async () => {
-                setLoading(true)
-                try {
-                    const res = await fetch('/api/v2/intelligence/flowchart', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            city_id: cityData.name || 'default',
-                            file_path: selectedBuilding.path
-                        })
-                    })
-
-                    if (!res.ok) throw new Error("Failed to fetch")
-                    const data = await res.json()
-                    const code = data.chart || "graph TD\n Error[No Data]"
-
-                    const id = `mermaid-${selectedBuilding.id.replace(/[^a-zA-Z0-9]/g, '')}`
-                    const { svg } = await mermaid.render(id, code)
-                    setChartSvg(svg)
-                } catch (e) {
-                    console.warn("X-Ray Info:", e)
-                    setChartSvg(null)
-                } finally {
-                    setLoading(false)
-                }
-            }
-            fetchFlowchart()
-        }
+        // Flowchart fetch removed to declutter
     }, [selectedBuilding, cityData, isSocialMode])
 
     if (!selectedBuilding || !visible) return null
+
     if (!selectedBuilding.position) return null
 
     // In flowchart mode, hide entirely if no chart data loaded
-    if (!isSocialMode && !loading && !chartSvg) return null
+    // if (!isSocialMode && !loading && !chartSvg) return null
 
     const { x, z } = selectedBuilding.position
     const y = (selectedBuilding.dimensions.height || 10) + 20
@@ -175,9 +148,21 @@ export default function HolographicXRay() {
                                                 background: `linear-gradient(135deg, ${authorColor}, ${authorColor}80)`,
                                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                 fontSize: '1.2rem', fontWeight: 700, color: 'white',
-                                                boxShadow: `0 0 20px ${authorColor}40`
+                                                boxShadow: `0 0 20px ${authorColor}40`,
+                                                overflow: 'hidden',
+                                                border: '2px solid rgba(255,255,255,0.2)'
                                             }}>
-                                                {author.charAt(0).toUpperCase()}
+                                                {(selectedBuilding.email || selectedBuilding.author) ? (
+                                                    <img
+                                                        src={`https://unavatar.io/${selectedBuilding.email || selectedBuilding.author}?fallback=false`}
+                                                        alt={author}
+                                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                                        onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex' }}
+                                                    />
+                                                ) : null}
+                                                <div style={{ display: (selectedBuilding.email || selectedBuilding.author) ? 'none' : 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                                                    {typeof author === 'string' ? author.charAt(0).toUpperCase() : '?'}
+                                                </div>
                                             </div>
                                             <div>
                                                 <div style={{ fontSize: '1rem', fontWeight: 600, color: 'white' }}>
@@ -212,29 +197,13 @@ export default function HolographicXRay() {
                                         </div>
                                     </div>
                                 ) : (
-                                    <>
-                                        {loading && (
-                                            <div style={{ height: '120px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-                                                <div style={{
-                                                    width: '40px', height: '2px', background: '#38bdf8', borderRadius: '2px',
-                                                    animation: 'pulse 1.5s ease-in-out infinite'
-                                                }} />
-                                                <span style={{ fontSize: '0.75rem', color: '#52525b' }}>Analyzing...</span>
-                                            </div>
-                                        )}
-
-                                        {!loading && chartSvg && (
-                                            <div
-                                                dangerouslySetInnerHTML={{ __html: chartSvg }}
-                                                style={{
-                                                    opacity: 0.9,
-                                                    filter: 'contrast(1.1)',
-                                                    maxHeight: '300px',
-                                                    overflow: 'auto'
-                                                }}
-                                            />
-                                        )}
-                                    </>
+                                    <div style={{ padding: '8px 0', fontSize: '0.8rem', color: '#a1a1aa' }}>
+                                        {/* Minimal Content - Just Structure Tag */}
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <FileCode2 size={14} />
+                                            <span>{selectedBuilding.language || 'File'}</span>
+                                        </div>
+                                    </div>
                                 )}
                             </div>
 
