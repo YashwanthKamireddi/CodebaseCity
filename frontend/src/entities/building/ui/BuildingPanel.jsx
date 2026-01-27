@@ -11,9 +11,8 @@ import useStore from '../../../store/useStore'
 import { detectPattern } from '../utils'
 import { BuildingModel } from '../model'
 import CodeViewer from './CodeViewer'
-import FileInsights from './FileInsights'
-import ImpactPanel from '../../../features/explorer/ui/ImpactPanel'
-import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Sparkles, AlertTriangle, Activity, Maximize2, Minimize2, Eye, User, Mail } from 'lucide-react'
+
+import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Activity, Maximize2, Minimize2, Eye, User, Mail } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 // Styles imported from index.css mostly, inline for layout
 
@@ -163,44 +162,7 @@ export default function BuildingPanel({ building }) {
                 {/* SCROLL CONTENT */}
                 <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
 
-                    {/* Status Tags */}
-                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '32px' }}>
-                        <StatusBadge label={language} />
-                        {is_hotspot && <StatusBadge label="Hotspot" variant="danger" icon={<AlertTriangle size={12} />} />}
-                        {decay_level > 0.6 && <StatusBadge label="Legacy" variant="warning" />}
-                        {pattern && <StatusBadge label={pattern.label} variant="active" icon={<Sparkles size={12} />} />}
-                    </div>
 
-                    {/* Key Metrics - Swiss Grid Layout */}
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr',
-                        gap: '16px',
-                        marginBottom: '32px'
-                    }}>
-                        <SwissMetric
-                            label="Health Grade"
-                            value={BuildingModel.getGrade(BuildingModel.calculateHealth(metrics, decay_level))}
-                            highlight={false}
-                        />
-                        <SwissMetric
-                            label="Lines of Code"
-                            value={BuildingModel.formatMetric(metrics.loc, 'loc')}
-                        />
-                        <SwissMetric
-                            label="Complexity"
-                            value={metrics.complexity}
-                            highlight={metrics.complexity > 20}
-                        />
-                        <SwissMetric
-                            label="Commits (Churn)"
-                            value={metrics.churn}
-                        />
-                        <SwissMetric
-                            label="Incoming Deps"
-                            value={metrics.dependencies_in}
-                        />
-                    </div>
 
                     {/* Code Viewer Action */}
                     <div style={{ marginBottom: '32px' }}>
