@@ -21,7 +21,10 @@ export default function BuildingPanel({ building }) {
     const [isMaximized, setIsMaximized] = React.useState(false)
     const [showCode, setShowCode] = React.useState(false)
 
-    if (!building) return null
+    // FIX: Hide panel when Code Viewer is open to prevent visual overlap ("Hologram coming out")
+    const codeViewerOpen = useStore(state => state.codeViewerOpen)
+
+    if (!building || codeViewerOpen) return null
 
     const { metrics, name, path, is_hotspot, decay_level, language, author, email } = building
     const pattern = detectPattern(building)
@@ -105,19 +108,32 @@ export default function BuildingPanel({ building }) {
                                 borderRadius: '20px',
                                 border: '1px solid rgba(255, 255, 255, 0.08)'
                             }}>
+                                {/* Gravatar Image */}
                                 <div style={{
                                     width: '20px',
                                     height: '20px',
                                     borderRadius: '50%',
-                                    background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '0.65rem',
-                                    fontWeight: 700,
-                                    color: 'white'
+                                    overflow: 'hidden',
+                                    background: '#27272a',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center'
                                 }}>
-                                    {author.charAt(0).toUpperCase()}
+                                    {building.metrics?.email_hash ? (
+                                        <img
+                                            src={`https://www.gravatar.com/avatar/${building.metrics.email_hash}?d=retro&s=40`}
+                                            alt={author}
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            onError={(e) => { e.target.style.display = 'none' }}
+                                        />
+                                    ) : (
+                                        <div style={{
+                                            width: '100%', height: '100%',
+                                            background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            fontSize: '0.65rem', fontWeight: 700, color: 'white'
+                                        }}>
+                                            {author.charAt(0).toUpperCase()}
+                                        </div>
+                                    )}
                                 </div>
                                 <div style={{ fontSize: '0.8rem', fontWeight: 500, color: '#d4d4d8' }}>
                                     {author}
