@@ -111,79 +111,50 @@ function BuilderScene() {
 
 // --- UI OVERLAY ---
 
-function LoadingText({ onComplete }) {
-    const [index, setIndex] = useState(0)
+function LoadingText() {
+    const [text, setText] = useState(TEXT_SEQUENCE[0])
 
     React.useEffect(() => {
-        if (index >= TEXT_SEQUENCE.length - 1) return
-
-        const timeout = setTimeout(() => {
-            setIndex(prev => prev + 1)
-        }, 800) // Speed of text updates
-
-        return () => clearTimeout(timeout)
-    }, [index])
+        let i = 0
+        const interval = setInterval(() => {
+            i = (i + 1) % TEXT_SEQUENCE.length
+            setText(TEXT_SEQUENCE[i])
+        }, 1200)
+        return () => clearInterval(interval)
+    }, [])
 
     return (
         <div style={{
             position: 'absolute',
-            bottom: '15%',
+            bottom: '20%',
             left: '50%',
             transform: 'translateX(-50%)',
             textAlign: 'center',
-            width: '100%',
-            maxWidth: '600px',
-            fontFamily: '"Fira Code", monospace',
-            zIndex: 10
+            zIndex: 100000, // Force top
+            pointerEvents: 'none'
         }}>
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    style={{
-                        background: 'rgba(9, 9, 11, 0.8)',
-                        backdropFilter: 'blur(12px)',
-                        padding: '16px 32px',
-                        borderRadius: '12px',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        boxShadow: '0 0 40px rgba(0, 242, 255, 0.2)',
-                        display: 'inline-block'
-                    }}
-                >
-                    <div style={{
-                        color: '#00f2ff',
-                        fontSize: '1rem',
-                        fontWeight: 600,
-                        letterSpacing: '0.1em',
-                        marginBottom: '8px'
-                    }}>
-                        {TEXT_SEQUENCE[index]}
-                    </div>
-
-                    {/* Progress Bar */}
-                    <div style={{
-                        width: '100%',
-                        height: '2px',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        position: 'relative',
-                        overflow: 'hidden'
-                    }}>
-                        <motion.div
-                            initial={{ width: '0%' }}
-                            animate={{ width: '100%' }}
-                            transition={{ duration: 0.8, ease: "linear" }}
-                            style={{
-                                height: '100%',
-                                background: '#00f2ff',
-                                boxShadow: '0 0 10px #00f2ff'
-                            }}
-                        />
-                    </div>
-                </motion.div>
-            </AnimatePresence>
+            <div style={{
+                color: '#fff',
+                fontSize: '2rem',
+                fontWeight: 800,
+                fontFamily: '"Fira Code", monospace',
+                textShadow: '0 0 20px rgba(0, 242, 255, 0.8)',
+                marginBottom: '16px',
+                letterSpacing: '0.1em'
+            }}>
+                INITIALIZING...
+            </div>
+            <div style={{
+                color: '#00f2ff',
+                fontSize: '1rem',
+                fontFamily: '"Fira Code", monospace',
+                letterSpacing: '0.05em',
+                background: 'rgba(0,0,0,0.6)',
+                padding: '8px 16px',
+                borderRadius: '8px'
+            }}>
+                {'>'} {text}
+            </div>
         </div>
     )
 }
@@ -193,24 +164,18 @@ export default function CityBuilderLoader() {
         <div style={{
             position: 'absolute',
             inset: 0,
-            zIndex: 9999, // Topmost
+            zIndex: 9999,
             background: '#050505'
         }}>
-            <Canvas camera={{ position: [0, 5, 10], fov: 60 }}>
+            <Canvas camera={{ position: [0, 8, 15], fov: 60 }}>
                 <color attach="background" args={['#050505']} />
-                <fog attach="fog" args={['#050505', 10, 40]} />
+                <fog attach="fog" args={['#050505', 10, 50]} />
+                <ambientLight intensity={2} /> {/* Brighter */}
+                <pointLight position={[10, 10, 10]} intensity={3} color="#6366f1" />
                 <BuilderScene />
             </Canvas>
 
             <LoadingText />
-
-            {/* Vignette Overlay */}
-            <div style={{
-                position: 'absolute',
-                inset: 0,
-                background: 'radial-gradient(circle, transparent 40%, #000000 100%)',
-                pointerEvents: 'none'
-            }} />
         </div>
     )
 }
