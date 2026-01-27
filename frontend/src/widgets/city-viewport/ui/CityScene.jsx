@@ -2,12 +2,13 @@ import React, { useMemo, useLayoutEffect, useRef } from 'react'
 import { ContactShadows } from '@react-three/drei'
 import gsap from 'gsap'
 import useStore from '../../../store/useStore'
-import Ground from './Ground'
+import AvatarSprites from '../../../features/timeline/ui/AvatarSprites'
 import Roads from './Roads'
 import InstancedCity from './InstancedCity'
 import InstancedTrace from './InstancedTrace'
 import HolographicXRay from './HolographicXRay'
 import CameraController from './CameraController'
+import Ground from './Ground'
 
 export default function CityScene() {
     const { cityData } = useStore()
@@ -30,6 +31,9 @@ export default function CityScene() {
                 <InstancedCity />
                 <InstancedTrace />
                 <HolographicXRay />
+
+                {/* Gource Mode: Social Avatars */}
+                <AvatarSprites />
 
                 <Roads />
                 <Ground />

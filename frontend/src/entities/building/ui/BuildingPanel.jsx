@@ -24,15 +24,18 @@ export default function BuildingPanel({ building }) {
     // FIX: Hide panel when Code Viewer is open to prevent visual overlap ("Hologram coming out")
     const codeViewerOpen = useStore(state => state.codeViewerOpen)
 
+    // Calculate path for effect (safe access)
+    const buildingPath = building?.path
+
+    // Fetch content when building changes (Must be called before any return)
+    React.useEffect(() => {
+        if (buildingPath) fetchFileContent(buildingPath)
+    }, [buildingPath, fetchFileContent])
+
+    // NOW we can return early
     if (!building || codeViewerOpen) return null
 
     const { metrics, name, path, is_hotspot, decay_level, language, author, email } = building
-    const pattern = detectPattern(building)
-
-    // Fetch content when building changes
-    React.useEffect(() => {
-        if (path) fetchFileContent(path)
-    }, [path, fetchFileContent])
 
     const isContentReady = fileContent?.path === path && !fileContent?.loading
 

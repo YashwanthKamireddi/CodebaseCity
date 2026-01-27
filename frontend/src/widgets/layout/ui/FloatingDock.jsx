@@ -62,7 +62,7 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
                     onClick={() => useStore.setState(state => ({ sidebarOpen: !state.sidebarOpen }))}
                     active={useStore(state => state.sidebarOpen)}
                     icon={<FolderSearch size={18} />}
-                    label="Explorer"
+                    label="File Inspector"
                 />
 
                 <Divider />

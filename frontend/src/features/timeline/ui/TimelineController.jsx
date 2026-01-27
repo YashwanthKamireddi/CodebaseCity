@@ -108,8 +108,8 @@ export default function TimelineController() {
     // Handle slider change
     const handleSliderChange = (e) => {
         const newIndex = parseInt(e.target.value)
+        setIsPlaying(false) // STOP IMMEDIATELY
         setCurrentIndex(newIndex)
-        setIsPlaying(false)
         debouncedTravel(history[newIndex])
     }
 
@@ -123,13 +123,17 @@ export default function TimelineController() {
         }
     }
 
-    // Async Recursive Playback Engine
+    // Async Recursive Playback Engine with Ref for reliability
+    const playingRef = useRef(isPlaying)
+    useEffect(() => { playingRef.current = isPlaying }, [isPlaying])
+
     useEffect(() => {
-        let isCancelled = false
+        let timer = null
 
-        const playNext = () => {
-            if (isCancelled || !isPlaying || isLoading) return
+        const playNext = async () => {
+            if (!playingRef.current || isLoading) return
 
+            // Perform step
             setCurrentIndex(prev => {
                 const nextIndex = prev + 1
                 if (nextIndex >= history.length) {
@@ -139,11 +143,16 @@ export default function TimelineController() {
                 performAnalysis(history[nextIndex])
                 return nextIndex
             })
+
+            // Loop with delay
+            timer = setTimeout(playNext, 800) // Consistent speed
         }
 
-        playNext()
+        if (isPlaying) {
+            playNext()
+        }
 
-        return () => { isCancelled = true }
+        return () => clearTimeout(timer)
     }, [isPlaying, isLoading, history, performAnalysis])
 
     // Keyboard shortcuts

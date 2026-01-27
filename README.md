@@ -2,240 +2,133 @@
 
 # 🏙️ Codebase City
 
-**Transform any codebase into an interactive 3D city**
+**The Bionic Code Explorer.**
+*Transform abstract syntax into living, breathing digital infrastructure.*
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776ab.svg)](https://python.org)
-[![React](https://img.shields.io/badge/React-18+-61dafb.svg)](https://react.dev)
-[![Three.js](https://img.shields.io/badge/Three.js-r150+-000000.svg)](https://threejs.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Copyright](https://img.shields.io/badge/Copyright-Yashwanth%20Kamireddi-purple.svg)](#license)
+[![Status](https://img.shields.io/badge/Status-Active-success.svg)](#)
 
-[Demo](#demo) • [Features](#features) • [Quick Start](#quick-start) • [How It Works](#how-it-works) • [Contributing](#contributing)
+[Live Demo](#demo) • [Features](#features) • [Installation](#installation) • [Philosophy](#philosophy)
 
 </div>
 
 ---
 
-## What is Codebase City?
+## ⚡ What is Codebase City?
 
-Codebase City is a **3D visualization tool** that transforms your codebase into an interactive city where:
+**Codebase City** is not just a visualization—it's a **spatial understanding engine**. It turns the thousands of invisible lines of code in your project into a navigable, 3D metropolis.
 
-- **Files become buildings** — Height represents complexity, size represents lines of code
-- **Folders become districts** — Automatically clustered by relationships
-- **Dependencies become roads** — Connecting related files visually
-- **Problem areas glow** — Hotspots and technical debt are immediately visible
+- **Files become Buildings**: Height represents complexity, footprint represents scale.
+- **Directories become Districts**: Logic clusters naturally into neighborhoods.
+- **History becomes a Movie**: Watch your city evolve with "Gource-style" time travel.
+- **You are the Architect**: Walk through your digital creation.
 
-Navigate your code like exploring a city. Understand architecture at a glance. Find what needs attention.
-
----
-
-## Demo
-
-![Codebase City Screenshot](docs/screenshot.png)
-
-*A Python backend visualized as an interactive city with districts, buildings, and dependency roads*
+> *"Code is no longer flat text. It's a world you can explore."*
 
 ---
 
-## Features
+## ✨ Key Features
 
-### For Developers
-| Feature | Description |
-|---------|-------------|
-| **Visual Navigation** | Explore codebases spatially instead of through file trees |
-| **Instant Search** | Find files by name, path, or language with live results |
-| **Health Scores** | Every file gets a 0-100 health rating |
-| **VSCode Integration** | One-click to open any file in your editor |
+### 🏗️ The Holographic City
+Explore your codebase as a fully immersive 3D environment.
+- **Infinite Grid**: A retro-futurist foundation (TRON / Synthwave aesthetic).
+- **Metric Mapping**: See "God Objects" and "Hotspots" instantly as towering skyscrapers.
+- **X-Ray Mode**: Toggle layers to see dependencies and hidden logic.
 
-### For Tech Leads
-| Feature | Description |
-|---------|-------------|
-| **Hotspot Detection** | Identify complex, frequently-changed code |
-| **Technical Debt Visualization** | See legacy and abandoned code grow moss |
-| **Dependency Mapping** | Understand coupling between components |
-| **Recommendations** | AI-generated suggestions for improvement |
+### 👥 Cinematic Timeline
+Travel through time and see who built what.
+- **Social Avatars**: See your teammates' profile pictures floating over the files they edit in real-time.
+- **Live Replay**: Scrub through years of Git history in seconds.
+- **Blame Visualization**: Instantly identify who owns which part of the city.
 
-### For Teams
-| Feature | Description |
-|---------|-------------|
-| **GitHub URL Support** | Paste any public repo URL to visualize |
-| **Local Folder Analysis** | Analyze your private codebases |
-| **Scales to Large Projects** | Handles thousands of files efficiently |
-| **Language Agnostic** | Supports Python, JavaScript, TypeScript, Go, Rust, Java, and more |
+### 🔍 Bionic Inspector
+A professional-grade HUD for deep analysis.
+- **File Inspector**: Click any building to see its source code, health score, and author stats.
+- **Diagnostics**: Real-time alerts for circular dependencies and legacy code rot.
+- **Command Palette (⌘K)**: Instant jump navigation to any file or class.
 
 ---
 
-## Quick Start
+## � Gallery
+
+<p align="center">
+  <img src="docs/images/1" width="45%" />
+  <img src="docs/images/2" width="45%" />
+  <img src="docs/images/3" width="45%" />
+  <img src="docs/images/4" width="45%" />
+  <img src="docs/images/5" width="45%" />
+  <img src="docs/images/6" width="45%" />
+</p>
+
+---
+
+## �🚀 Installation
 
 ### Prerequisites
-- Python 3.11+
-- Node.js 18+
-- Git
+- **Node.js** v18+
+- **Python** 3.11+
+- **Git**
 
-### Installation
+### Quick Start
 
 ```bash
-# Clone the repository
+# 1. Clone the repository
 git clone https://github.com/YashwanthKamireddi/CodebaseCity.git
 cd CodebaseCity
 
-# Start the backend
+# 2. Start the Backend (FastAPI)
 cd backend
 pip install -r requirements.txt
 python -m uvicorn main:app --reload --port 8000
 
-# In a new terminal, start the frontend
+# 3. Start the Frontend (React + R3F)
+# ( Open a new terminal )
 cd frontend
 npm install
 npm run dev
 ```
 
-Open **http://localhost:5173** and explore the demo city!
-
-### Analyze Your Own Project
-
-1. Click **"Analyze Project"** in the header
-2. Enter a GitHub URL (e.g., `https://github.com/expressjs/express`)
-3. Or enter a local folder path (e.g., `C:\Users\you\your-project`)
-4. Wait for analysis to complete
-5. Explore your codebase as a city!
+Open **http://localhost:5173** and let the city rise.
 
 ---
 
-## How It Works
+## 🎨 Design Philosophy
 
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   Your Code     │────▶│   Analysis      │────▶│   3D City       │
-│   (GitHub/Local)│     │   Engine        │     │   Visualization │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-                               │
-                               ▼
-                    ┌─────────────────────┐
-                    │  • AST Parsing      │
-                    │  • Dependency Graph │
-                    │  • Clustering       │
-                    │  • Metrics          │
-                    └─────────────────────┘
-```
-
-**Analysis Pipeline:**
-1. **Parse** — Extract AST from source files
-2. **Graph** — Build dependency relationships
-3. **Cluster** — Group related files into districts using Leiden algorithm
-4. **Layout** — Position buildings spatially
-5. **Render** — Generate interactive 3D visualization
+**Codebase City** is built on the **Bionic Design System**:
+- **High Contrast**: Designed for long coding sessions (Dark Mode First).
+- **Zero Gimmicks**: Every pixel serves a purpose. No distracting fluff.
+- **Swiss Grid**: Typography and layout follow strict International Style principles.
 
 ---
 
-## Tech Stack
+## 🤝 Contributing
 
-| Layer | Technology |
-|-------|------------|
-| **Frontend** | React 18 + Vite |
-| **3D Engine** | Three.js + React Three Fiber |
-| **Styling** | Custom CSS Design System |
-| **Backend** | Python FastAPI |
-| **Analysis** | NetworkX + AST parsing |
-| **Fonts** | Outfit, Inter, JetBrains Mono |
+We welcome contributions to Codebase City! However, please respect the original vision and architecture.
 
----
+1. **Fork the Project**
+2. **Create your Feature Branch** (`git checkout -b feature/AmazingFeature`)
+3. **Commit your Changes** (`git commit -m 'Add some AmazingFeature'`)
+4. **Push to the Branch** (`git push origin feature/AmazingFeature`)
+5. **Open a Pull Request**
 
-## Project Structure
-
-```
-codebase-city/
-├── frontend/          # React + Three.js application
-│   ├── src/
-│   │   ├── components/  # UI and 3D components
-│   │   ├── store/       # Zustand state management
-│   │   └── index.css    # Design system
-│   └── package.json
-│
-├── backend/           # Python FastAPI server
-│   ├── api/           # REST endpoints
-│   ├── parsing/       # Code analysis
-│   ├── graph/         # Dependency graph + clustering
-│   └── ai/            # AI chat (optional)
-│
-└── docs/              # Documentation + screenshots
-```
+### Note on Intellectual Property
+By contributing to this repository, you agree that your contributions will be licensed under its MIT License. The original concept and core architecture remain the intellectual property of **Yashwanth Kamireddi**. We encourage innovation but ask that you do not simply clone the project to create a direct competitor without significant transformative value.
 
 ---
 
-## Configuration
+## 📜 License & Copyright
 
-### Environment Variables
+**Copyright © 2026 Yashwanth Kamireddi.** All Rights Reserved.
 
-```bash
-# backend/.env
-GEMINI_API_KEY=your_key_here  # Optional: for AI chat features
-```
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-**Note:** The app works fully without an API key. AI chat will provide helpful static responses.
-
----
-
-## Supported Languages
-
-| Language | Extension |
-|----------|-----------|
-| Python | `.py` |
-| JavaScript | `.js`, `.jsx` |
-| TypeScript | `.ts`, `.tsx` |
-| Java | `.java` |
-| Go | `.go` |
-| Rust | `.rs` |
-| C/C++ | `.c`, `.cpp`, `.h` |
-| Ruby | `.rb` |
-| PHP | `.php` |
-| Swift | `.swift` |
-| Kotlin | `.kt` |
-| C# | `.cs` |
-
----
-
-## Contributing
-
-Contributions are welcome! Here's how you can help:
-
-1. **Report bugs** — Open an issue with reproduction steps
-2. **Suggest features** — Describe your use case
-3. **Submit PRs** — Fork, create a branch, and submit
-
-### Development Setup
-
-```bash
-# Backend with auto-reload
-cd backend && python -m uvicorn main:app --reload --port 8000
-
-# Frontend with HMR
-cd frontend && npm run dev
-```
-
----
-
-## Roadmap
-
-- [ ] Export city as image/video
-- [ ] Team collaboration features
-- [ ] Git history timeline visualization
-- [ ] Code coverage heatmap
-- [ ] Custom themes (day/night/cyberpunk)
-
----
-
-## License
-
-MIT License — Copyright (c) 2026 Yashwanth Kamireddi
-
-See [LICENSE](LICENSE) for details.
+You are free to use, modify, and distribute this software, provided you include the original copyright notice and license in all copies.
 
 ---
 
 <div align="center">
 
-**Built with ❤️ by Yashwanth Kamireddi**
-
-[Report Bug](https://github.com/YashwanthKamireddi/CodebaseCity/issues) • [Request Feature](https://github.com/YashwanthKamireddi/CodebaseCity/issues) • [Star on GitHub](https://github.com/YashwanthKamireddi/CodebaseCity)
+**Crafted with 💜 by Yashwanth Kamireddi**
 
 </div>
