@@ -13,7 +13,13 @@ import { CanvasErrorBoundary } from './widgets/layout/ui/CanvasErrorBoundary'
 import Sidebar from './widgets/layout/ui/Sidebar'
 import BuildingPanel from './entities/building/ui/BuildingPanel'
 import LoadingScreen from './shared/ui/LoadingScreen'
-import CinematicIntro from './features/onboarding/ui/CinematicIntro'
+import CityBuilderLoader from './features/onboarding/ui/CityBuilderLoader'
+
+// ... existing imports ...
+
+// Inside App component return:
+{/* Loading - 3D City Builder */ }
+{ loading && <CityBuilderLoader /> }
 import TimelineController from './features/timeline/ui/TimelineController'
 import CommandPalette from './features/search/ui/CommandPalette'
 import FileTable from './features/explorer/ui/FileTable'
@@ -239,28 +245,8 @@ function App() {
             {/* Analyze Repo Modal */}
             <AnalyzeModal open={analyzeModalOpen} onOpenChange={setAnalyzeModalOpen} />
 
-            {/* Loading - Cinematic */}
-            {loading && <CinematicIntro onComplete={() => {/* Handled by store or fake timer? Actually 'loading' is controlled by store.
-            If I wait for onComplete, I might be blocking the real load.
-            Logic:
-            Real API loading sets 'loading=true'.
-            When API finishes, 'loading=false'.
-            BUT, user wants to see the "Intro" BEFORE the city appears.
-            So:
-            1. API finishes -> sets loading=false.
-            2. BUT we keep overlay visible until CinematicIntro finishes?
-
-            Actually, the user said "when a project is begin analyzing".
-            The 'loading' state in store maps to analysis.
-            Since analysis is fast (~1s for small repos), I will make CinematicIntro just RENDER when loading=true.
-            If loading finishes EARLY, CinematicIntro should probably speed up or just fade out.
-            However, for this prototype, I will just replace <LoadingScreen /> with <CinematicIntro /> and let it run.
-            If loading finishes, it unmounts.
-            Wait, if it unmounts midway, it looks glitchy.
-
-            Better: Edit LoadingScreen.jsx to wrap CinematicIntro.
-            Run ViewFile on LoadingScreen.jsx first.
-            */}} />}
+            {/* Loading - 3D City Builder */}
+            {loading && <CityBuilderLoader />}
 
             {/* Error Toast - Moved to Top Center to avoid overlap */}
             {useStore.getState().error && (
