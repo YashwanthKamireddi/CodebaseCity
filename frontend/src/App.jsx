@@ -15,11 +15,7 @@ import BuildingPanel from './entities/building/ui/BuildingPanel'
 import LoadingScreen from './shared/ui/LoadingScreen'
 import CityBuilderLoader from './features/onboarding/ui/CityBuilderLoader'
 
-// ... existing imports ...
 
-// Inside App component return:
-{/* Loading - 3D City Builder */ }
-{ loading && <CityBuilderLoader /> }
 import TimelineController from './features/timeline/ui/TimelineController'
 import CommandPalette from './features/search/ui/CommandPalette'
 import FileTable from './features/explorer/ui/FileTable'
