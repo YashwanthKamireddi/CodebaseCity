@@ -1,134 +1,124 @@
 <div align="center">
 
-# 🏙️ Codebase City
+# Codebase City
 
-**The Bionic Code Explorer.**
-*Transform abstract syntax into living, breathing digital infrastructure.*
+**Advanced 3D Visualization & Analytics Platform for Software Engineering.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Production-success.svg)](#)
 [![Copyright](https://img.shields.io/badge/Copyright-Yashwanth%20Kamireddi-purple.svg)](#license)
-[![Status](https://img.shields.io/badge/Status-Active-success.svg)](#)
 
-[Live Demo](#demo) • [Features](#features) • [Installation](#installation) • [Philosophy](#philosophy)
+[Demo](#gallery) • [Features](#capabilities) • [Installation](#getting-started) • [Usage](#usage)
 
 </div>
 
 ---
 
-## ⚡ What is Codebase City?
+## Overview
 
-**Codebase City** is not just a visualization—it's a **spatial understanding engine**. It turns the thousands of invisible lines of code in your project into a navigable, 3D metropolis.
+**Codebase City** is a static analysis tool that renders software architecture as an interactive 3D environment. It parses abstract syntax trees (AST) and Git history to generate a spatial representation of code complexity, dependencies, and developer activity.
 
-- **Files become Buildings**: Height represents complexity, footprint represents scale.
-- **Directories become Districts**: Logic clusters naturally into neighborhoods.
-- **History becomes a Movie**: Watch your city evolve with "Gource-style" time travel.
-- **You are the Architect**: Walk through your digital creation.
-
-> *"Code is no longer flat text. It's a world you can explore."*
+Primary use cases:
+*   **Technical Debt Identification**: Visualizing complex files ("God Objects") as towering structures.
+*   **Onboarding**: Allowing new engineers to spatially explore project layout and logic flow.
+*   **Activity Tracking**: Replaying commit history to identify churn and ownership.
 
 ---
 
-## ✨ Key Features
+## Capabilities
 
-### 🏗️ The Holographic City
-Explore your codebase as a fully immersive 3D environment.
-- **Infinite Grid**: A retro-futurist foundation (TRON / Synthwave aesthetic).
-- **Metric Mapping**: See "God Objects" and "Hotspots" instantly as towering skyscrapers.
-- **X-Ray Mode**: Toggle layers to see dependencies and hidden logic.
+### 1. Spatial Code Analysis
+*   **Complexity Mapping**: File height correlates to LOC (Lines of Code) and cyclomatic complexity.
+*   **Dependency Tracing**: Visual links show import/export relationships between modules.
+*   **Hotspot Detection**: Color-coded indicators for files with high churn or error rates.
 
-### 👥 Cinematic Timeline
-Travel through time and see who built what.
-- **Social Avatars**: See your teammates' profile pictures floating over the files they edit in real-time.
-- **Live Replay**: Scrub through years of Git history in seconds.
-- **Blame Visualization**: Instantly identify who owns which part of the city.
+### 2. Temporal Visualization ("Cinematic Timeline")
+*   **Git Replay**: Scrub through project history to watch architecture evolve.
+*   **Author Attribution**: identifying active contributors via 3D avatars overlaid on modified files.
+*   **Blame View**: Instant visibility of file ownership and last-modified dates.
 
-### 🔍 Bionic Inspector
-A professional-grade HUD for deep analysis.
-- **File Inspector**: Click any building to see its source code, health score, and author stats.
-- **Diagnostics**: Real-time alerts for circular dependencies and legacy code rot.
-- **Command Palette (⌘K)**: Instant jump navigation to any file or class.
+### 3. Inspection & Diagnostics
+*   **Deep Dive Inspection**: Click any node to view source code, syntax highlighting, and metrics.
+*   **System Diagnostics**: Automated alerts for circular dependencies, large files, and potential refactoring targets.
+*   **Universal Search**: Jump to any file, class, or function instantly.
 
 ---
 
-## � Gallery
+## Gallery
 
 <p align="center">
-  <img src="docs/images/1" width="45%" />
-  <img src="docs/images/2" width="45%" />
-  <img src="docs/images/3" width="45%" />
-  <img src="docs/images/4" width="45%" />
-  <img src="docs/images/5" width="45%" />
-  <img src="docs/images/6" width="45%" />
+  <img src="docs/images/1.png" width="45%" />
+  <img src="docs/images/2.png" width="45%" />
+  <img src="docs/images/3.png" width="45%" />
+  <img src="docs/images/4.png" width="45%" />
+  <img src="docs/images/5.png" width="45%" />
+  <img src="docs/images/6.png" width="45%" />
 </p>
 
 ---
 
-## �🚀 Installation
+## Getting Started
 
 ### Prerequisites
-- **Node.js** v18+
-- **Python** 3.11+
-- **Git**
+*   **Node.js** v18 or higher
+*   **Python** 3.11 or higher
+*   **Git**
 
-### Quick Start
+### Installation
+
+Clone the repository and install dependencies for both services.
 
 ```bash
-# 1. Clone the repository
+# 1. Clone Repository
 git clone https://github.com/YashwanthKamireddi/CodebaseCity.git
 cd CodebaseCity
 
-# 2. Start the Backend (FastAPI)
+# 2. Setup Backend (Analysis Engine)
 cd backend
 pip install -r requirements.txt
-python -m uvicorn main:app --reload --port 8000
+# Run the API server
+python -m uvicorn main:app --reload --port 8000 &
 
-# 3. Start the Frontend (React + R3F)
-# ( Open a new terminal )
-cd frontend
+# 3. Setup Frontend (Visualization Client)
+cd ../frontend
 npm install
+# Run the client
 npm run dev
 ```
 
-Open **http://localhost:5173** and let the city rise.
+The application will be available at `http://localhost:5173`.
 
 ---
 
-## 🎨 Design Philosophy
+## Usage
 
-**Codebase City** is built on the **Bionic Design System**:
-- **High Contrast**: Designed for long coding sessions (Dark Mode First).
-- **Zero Gimmicks**: Every pixel serves a purpose. No distracting fluff.
-- **Swiss Grid**: Typography and layout follow strict International Style principles.
+### Analyzing a Project
+1.  **Launch the Dashboard**: Open the web interface.
+2.  **Input Source**:
+    *   **Local**: Enter the absolute path to a directory on your machine.
+    *   **Remote**: Paste a valid GitHub repository URL.
+3.  **Visual Exploration**: Use `WASD` or mouse controls to navigate the 3D city.
+4.  **Inspect**: Click on any building to open the **File Inspector**.
 
----
-
-## 🤝 Contributing
-
-We welcome contributions to Codebase City! However, please respect the original vision and architecture.
-
-1. **Fork the Project**
-2. **Create your Feature Branch** (`git checkout -b feature/AmazingFeature`)
-3. **Commit your Changes** (`git commit -m 'Add some AmazingFeature'`)
-4. **Push to the Branch** (`git push origin feature/AmazingFeature`)
-5. **Open a Pull Request**
-
-### Note on Intellectual Property
-By contributing to this repository, you agree that your contributions will be licensed under its MIT License. The original concept and core architecture remain the intellectual property of **Yashwanth Kamireddi**. We encourage innovation but ask that you do not simply clone the project to create a direct competitor without significant transformative value.
+### Keyboard Controls
+*   `W`/`A`/`S`/`D`: Move Camera
+*   `Q`/`E`: Rotate
+*   `Scroll`: Zoom
+*   `Cmd+K` / `Ctrl+K`: Open Command Palette / Search
 
 ---
 
-## 📜 License & Copyright
+## Contributing
+
+Contributions are welcome. Please ensure all pull requests adhere to the project's coding standards and architecture patterns.
+
+**Intellectual Property Notice**:
+This project and its core architecture are the intellectual property of **Yashwanth Kamireddi**. Contributors agree that their submissions become part of the project under the standard MIT License terms.
+
+---
+
+## License
 
 **Copyright © 2026 Yashwanth Kamireddi.** All Rights Reserved.
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
-You are free to use, modify, and distribute this software, provided you include the original copyright notice and license in all copies.
-
----
-
-<div align="center">
-
-**Crafted with 💜 by Yashwanth Kamireddi**
-
-</div>
+Licensed under the MIT License. See [LICENSE](LICENSE) for full text.
