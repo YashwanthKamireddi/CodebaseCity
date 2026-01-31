@@ -3,6 +3,7 @@ import { createCitySlice } from './slices/createCitySlice'
 import { createUISlice } from './slices/createUISlice'
 import { createInteractionSlice } from './slices/createInteractionSlice'
 import { createTimeSlice } from './slices/createTimeSlice'
+import { createIntelligenceSlice } from './slices/createIntelligenceSlice'
 
 const API_BASE = '/api'
 
@@ -11,6 +12,7 @@ const useStore = create((set, get) => ({
     ...createUISlice(set, get),
     ...createInteractionSlice(set, get),
     ...createTimeSlice(set, get),
+    ...createIntelligenceSlice(set, get),
 
     // Direct Ref for Performance (avoiding React re-renders)
     cityMeshRef: { current: null }, // Accessed by CameraController

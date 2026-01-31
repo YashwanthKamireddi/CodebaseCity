@@ -7,6 +7,7 @@ const API_BASE = '/api'
 export const createCitySlice = (set, get) => ({
     // State
     cityData: null,
+    cityId: null, // Cache key for API calls
     previousCityData: null, // For morphing
     currentRepoPath: null,
     loading: false,
@@ -19,14 +20,21 @@ export const createCitySlice = (set, get) => ({
     setError: (error) => set({ error, loading: false }),
     setProgress: (progress) => set({ analysisProgress: progress }),
 
-    setCityData: (data) => set((state) => ({
-        previousCityData: state.cityData,
-        cityData: data,
-        currentRepoPath: data.path || state.currentRepoPath,
-        loading: false,
-        error: null,
-        analysisProgress: 100
-    })),
+    setCityData: (data) => {
+        // Generate cityId from path
+        const path = data.path || ''
+        const cityId = path.replace(/\//g, '_').replace(/:/g, '').replace(/\\/g, '_').replace(/^_/, '')
+        
+        set((state) => ({
+            previousCityData: state.cityData,
+            cityData: data,
+            cityId: cityId,
+            currentRepoPath: data.path || state.currentRepoPath,
+            loading: false,
+            error: null,
+            analysisProgress: 100
+        }))
+    },
 
     // Async Actions
     fetchDemo: async () => {

@@ -30,6 +30,8 @@ import ChatInterface from './features/ai-architect/ui/ChatInterface'
 import WelcomeOverlay from './widgets/layout/ui/WelcomeOverlay'
 import DependencyGraph from './features/architect/ui/DependencyGraph'
 import ExportReport from './features/analysis/ui/ExportReport'
+import IntelligenceDashboard from './components/IntelligenceDashboard'
+import ImpactVisualization from './components/ImpactVisualization'
 import './features/FloatingDock.css'
 import { useVSCodeSync } from './hooks/useVSCodeSync'
 import useStore from './store/useStore'
@@ -242,6 +244,14 @@ function App() {
             </div>
 
             <Sidebar />
+
+            {/* Intelligence Dashboard */}
+            {useStore.getState().activeIntelligencePanel && (
+                <IntelligenceDashboard />
+            )}
+
+            {/* Impact Visualization */}
+            <ImpactVisualization />
 
             {/* Command Palette - ⌘K */}
             <CommandPalette />

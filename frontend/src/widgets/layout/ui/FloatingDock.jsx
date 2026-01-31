@@ -17,12 +17,13 @@ import {
     History,         // Time Travel - history/timeline
     Github,          // GitHub link
     Network,         // 2D Dependency Graph
-    Download         // Export Report
+    Download,        // Export Report
+    Brain            // Intelligence Dashboard
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
 
 export default function FloatingDock({ view, onViewChange, onAnalyze, onShowGraph, onShowExport }) {
-    const { setCommandPaletteOpen, toggleRoads, showRoads, loading, cityData } = useStore()
+    const { setCommandPaletteOpen, toggleRoads, showRoads, loading, cityData, setActiveIntelligencePanel, activeIntelligencePanel } = useStore()
 
     return (
         <div style={{
@@ -76,6 +77,17 @@ export default function FloatingDock({ view, onViewChange, onAnalyze, onShowGrap
                     label="Dependency Graph"
                     description="Interactive 2D graph view"
                     disabled={!cityData}
+                />
+
+                {/* Intelligence Dashboard - Developer Tools */}
+                <DeckItem
+                    onClick={() => setActiveIntelligencePanel(activeIntelligencePanel ? null : 'health')}
+                    active={!!activeIntelligencePanel}
+                    icon={<Brain size={18} />}
+                    label="Intelligence"
+                    description="Code health, quality & impact analysis"
+                    disabled={!cityData}
+                    accent
                 />
 
                 <Divider />
