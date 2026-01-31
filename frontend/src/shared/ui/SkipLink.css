@@ -1,0 +1,24 @@
+/**
+ * SkipLink Styles
+ */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100000;
+  padding: var(--space-3) var(--space-6);
+  background: var(--color-accent);
+  color: white;
+  font-weight: var(--font-semibold);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: var(--space-4);
+  outline: 2px solid white;
+  outline-offset: 2px;
+}

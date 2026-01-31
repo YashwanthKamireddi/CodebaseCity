@@ -1,16 +1,40 @@
-google-genai>=0.1.0
+# Codebase City Backend Dependencies
+# Professional-grade Python package requirements
+
+# Core Framework
 fastapi>=0.109.0
 uvicorn[standard]>=0.27.0
+pydantic>=2.6.0
 python-dotenv>=1.0.0
+
+# AI/ML Integration
+google-genai>=0.1.0
+
+# Graph Analysis
 networkx>=3.2.1
 leidenalg>=0.10.2
 igraph>=0.11.3
 scipy>=1.12.0
 numpy>=1.26.4
-pydantic>=2.6.0
+
+# HTTP Client
 httpx>=0.26.0
+
+# Code Parsing (Tree-sitter AST)
 tree-sitter>=0.21.0
 tree-sitter-python>=0.21.0
 tree-sitter-javascript>=0.21.0
+
+# Git Integration
 gitpython>=3.1.41
+
+# Async File Operations
 aiofiles>=23.2.1
+
+# Rate Limiting
+slowapi>=0.1.9
+
+# Production Extras (Optional but recommended)
+# orjson>=3.9.0        # Fast JSON serialization
+# redis>=5.0.0         # For distributed caching
+# prometheus-client    # Metrics export

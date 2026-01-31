@@ -48,31 +48,28 @@ export default function AnalyzeModal({ open, onOpenChange }) {
                     {/* CUSTOM LOGO IDENTITY */}
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '32px' }}>
                         <motion.div
-                            initial={{ scale: 0.9, y: 10, opacity: 0 }}
-                            animate={{ scale: 1, y: 0, opacity: 1 }}
-                            transition={{ type: 'spring', damping: 20 }}
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.15 }}
                             style={{
-                                width: '64px', height: '64px', // Larger
-                                borderRadius: '20px', // Softer
-                                background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2))', // Cosmic Gradient
-                                border: '1px solid rgba(255,255,255,0.1)',
+                                width: '64px', height: '64px',
+                                borderRadius: '16px',
+                                background: 'rgba(59, 130, 246, 0.12)',
+                                border: '1px solid rgba(59, 130, 246, 0.2)',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                marginBottom: '20px',
-                                boxShadow: '0 0 40px -10px rgba(99, 102, 241, 0.5)' // Glow
+                                marginBottom: '20px'
                             }}
                         >
                             {/* Universe Icon */}
-                            <Globe size={32} color="#a5b4fc" strokeWidth={1.5} />
+                            <Globe size={32} color="#60a5fa" strokeWidth={1.5} />
                         </motion.div>
 
                         <ModalTitle style={{
                             margin: 0,
                             fontFamily: 'var(--font-display)',
-                            fontSize: '2rem', // Larger
-                            fontWeight: 600, // Bolder
-                            background: 'linear-gradient(180deg, #fff 0%, #c4b5fd 100%)', // Cosmic text
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
+                            fontSize: '1.75rem',
+                            fontWeight: 600,
+                            color: '#f4f4f5',
                             marginBottom: '8px',
                             letterSpacing: '-0.02em',
                             textAlign: 'center'
@@ -101,7 +98,7 @@ export default function AnalyzeModal({ open, onOpenChange }) {
                                 borderRadius: '16px',
                                 border: '1px solid rgba(255,255,255,0.08)',
                                 transition: 'all 0.2s ease',
-                                boxShadow: isFocused ? '0 0 0 2px rgba(99, 102, 241, 0.5)' : 'none',
+                                boxShadow: isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.5)' : 'none',
                                 marginBottom: '24px' // Space between input and button
                             }}
                         >
@@ -150,13 +147,13 @@ export default function AnalyzeModal({ open, onOpenChange }) {
                                             padding: '0 32px',
                                             borderRadius: '12px',
                                             border: 'none',
-                                            background: '#6366f1', // Primary Brand Color
+                                            background: '#3b82f6',
                                             color: '#fff',
                                             fontSize: '1rem',
                                             fontWeight: 600,
                                             cursor: 'pointer',
                                             display: 'flex', alignItems: 'center', gap: '8px',
-                                            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)',
+                                            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.4)',
                                             width: '100%', // Full width on mobile/small modals
                                             justifyContent: 'center'
                                         }}

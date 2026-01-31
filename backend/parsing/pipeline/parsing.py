@@ -48,6 +48,9 @@ class ParsingStep(PipelineStep):
 
     def _parse_file_sync(self, file_path: Path, root: Path) -> Optional[Dict]:
         try:
+            # Get file size first
+            file_size = file_path.stat().st_size
+
             with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                 content = f.read()
 
@@ -78,7 +81,8 @@ class ParsingStep(PipelineStep):
                 'churn': churn,
                 'imports': imports,
                 'is_hotspot': is_hotspot,
-                'decay_level': decay
+                'decay_level': decay,
+                'size_bytes': file_size
             }
         except Exception as e:
             # print(f"Parse error {file_path}: {e}")

@@ -61,11 +61,11 @@ export default function ChatInterface() {
                         <div style={{
                             width: '32px', height: '32px',
                             borderRadius: '8px',
-                            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.05))',
-                            border: '1px solid rgba(99, 102, 241, 0.2)',
+                            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05))',
+                            border: '1px solid rgba(59, 130, 246, 0.2)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center'
                         }}>
-                            <Sparkles size={16} color="#818cf8" />
+                            <Sparkles size={16} color="#60a5fa" />
                         </div>
                         <div>
                             <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.95rem', display: 'block' }}>Architect</span>

@@ -13,7 +13,7 @@ mermaid.initialize({
         darkMode: true,
         background: '#09090b',
         primaryColor: '#3b82f6',
-        secondaryColor: '#6366f1',
+        secondaryColor: '#2563eb',
         tertiaryColor: '#09090b',
         primaryBorderColor: '#3b82f6',
         lineColor: '#52525b',

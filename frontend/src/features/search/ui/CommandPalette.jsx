@@ -162,16 +162,16 @@ export default function CommandPalette() {
                     {/* Command dialog */}
                     <motion.div
                         className="command-dialog"
-                        initial={{ opacity: 0, scale: 0.98, y: -20, x: '-50%' }}
+                        initial={{ opacity: 0, scale: 0.98, y: -10, x: '-50%' }}
                         animate={{ opacity: 1, scale: 1, y: 0, x: '-50%' }}
-                        exit={{ opacity: 0, scale: 0.98, y: -20, x: '-50%' }}
-                        transition={{ type: 'spring', damping: 25, stiffness: 350 }}
+                        exit={{ opacity: 0, scale: 0.98, y: -10, x: '-50%' }}
+                        transition={{ duration: 0.15, ease: [0.32, 0.72, 0, 1] }}
                         style={{
-                            background: 'rgba(5, 5, 10, 0.65)',
-                            backdropFilter: 'blur(30px) saturate(180%)',
+                            background: 'rgba(12, 12, 15, 0.85)',
+                            backdropFilter: 'blur(24px) saturate(150%)',
                             border: '1px solid rgba(255,255,255,0.08)',
-                            boxShadow: '0 24px 64px -12px rgba(0,0,0,0.6)',
-                            borderRadius: '24px',
+                            boxShadow: '0 24px 48px -12px rgba(0,0,0,0.5)',
+                            borderRadius: '14px',
                             overflow: 'hidden'
                         }}
                     >

@@ -16,6 +16,15 @@ import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Activity, Ma
 import { motion, AnimatePresence } from 'framer-motion'
 // Styles imported from index.css mostly, inline for layout
 
+// Helper to format file size
+function formatFileSize(bytes) {
+    if (!bytes || bytes === 0) return '0 B'
+    const units = ['B', 'KB', 'MB', 'GB']
+    const i = Math.floor(Math.log(bytes) / Math.log(1024))
+    const size = (bytes / Math.pow(1024, i)).toFixed(i > 0 ? 1 : 0)
+    return `${size} ${units[i]}`
+}
+
 export default function BuildingPanel({ building }) {
     const { clearSelection, fetchFileContent, fileContent } = useStore()
     const [isMaximized, setIsMaximized] = React.useState(false)
@@ -42,7 +51,7 @@ export default function BuildingPanel({ building }) {
     return (
         <AnimatePresence>
             <motion.div
-                initial={{ x: '100%', opacity: 0.5 }}
+                initial={{ x: '100%', opacity: 0.8 }}
                 animate={{
                     x: 0,
                     opacity: 1,
@@ -51,8 +60,8 @@ export default function BuildingPanel({ building }) {
                     top: 0,
                     right: 0
                 }}
-                exit={{ x: '100%', opacity: 0.5 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} // "Swift Out" Curve
+                exit={{ x: '100%', opacity: 0.8 }}
+                transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
                 style={{
                     position: 'fixed',
                     zIndex: 1000,
@@ -120,9 +129,9 @@ export default function BuildingPanel({ building }) {
                                     background: '#27272a',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center'
                                 }}>
-                                    {building.metrics?.email_hash ? (
+                                    {(building.email_hash || building.metrics?.email_hash) ? (
                                         <img
-                                            src={`https://www.gravatar.com/avatar/${building.metrics.email_hash}?d=retro&s=40`}
+                                            src={`https://www.gravatar.com/avatar/${building.email_hash || building.metrics?.email_hash}?d=retro&s=40`}
                                             alt={author}
                                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                             onError={(e) => { e.target.style.display = 'none' }}
@@ -130,7 +139,7 @@ export default function BuildingPanel({ building }) {
                                     ) : (
                                         <div style={{
                                             width: '100%', height: '100%',
-                                            background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
+                                            background: 'linear-gradient(135deg, #3b82f6, #2563eb)',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                                             fontSize: '0.65rem', fontWeight: 700, color: 'white'
                                         }}>
@@ -202,7 +211,7 @@ export default function BuildingPanel({ building }) {
                         />
                         <SwissMetric
                             label="File Size"
-                            value={metrics?.size ? `${Math.round(metrics.size / 1024)} KB` : '< 1 KB'}
+                            value={formatFileSize(metrics?.size_bytes || metrics?.size || 0)}
                             highlight={false}
                         />
                         <SwissMetric

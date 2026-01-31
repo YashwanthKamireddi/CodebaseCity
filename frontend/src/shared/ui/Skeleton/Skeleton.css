@@ -1,0 +1,155 @@
+/* Base skeleton styles */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.03) 0%,
+        rgba(255, 255, 255, 0.06) 50%,
+        rgba(255, 255, 255, 0.03) 100%
+    );
+    background-size: 200% 100%;
+}
+
+/* Shimmer animation */
+.skeleton--shimmer {
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Pulse animation */
+.skeleton--pulse {
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+}
+
+/* Wave animation */
+.skeleton--wave {
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton--wave::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.08),
+        transparent
+    );
+    animation: skeleton-wave 1.6s linear infinite;
+}
+
+@keyframes skeleton-wave {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Group layout */
+.skeleton-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Card skeleton */
+.skeleton-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.skeleton-card__content {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.skeleton-card__footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* List item skeleton */
+.skeleton-list-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+}
+
+.skeleton-list-item__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Table skeleton */
+.skeleton-table {
+    width: 100%;
+}
+
+.skeleton-table__header,
+.skeleton-table__row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 16px;
+    padding: 12px 16px;
+}
+
+.skeleton-table__header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.skeleton-table__row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Building skeleton */
+.skeleton-building {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.skeleton-building__info {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.skeleton-building__stats {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .skeleton--shimmer,
+    .skeleton--pulse {
+        animation: none;
+    }
+
+    .skeleton--wave::after {
+        animation: none;
+    }
+
+    .skeleton {
+        background: rgba(255, 255, 255, 0.06);
+    }
+}

@@ -7,21 +7,22 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-    LayoutGrid,
-    Search,
-    BarChart2,
-    Github,
-    Box,
-    Sparkles,
-    Signpost,
-    FolderSearch,
-    Clock,
-    Globe // Added Globe
+    // Semantic icons that represent actual functionality
+    Building2,       // 3D City View - buildings/architecture
+    Table2,          // Table/Metrics view - data tables
+    FolderTree,      // File Inspector - folder hierarchy
+    Search,          // Search command palette
+    ScanLine,        // Analyze - scanning codebase
+    Sparkles,        // AI - sparkles/magic
+    History,         // Time Travel - history/timeline
+    Github,          // GitHub link
+    Network,         // 2D Dependency Graph
+    Download         // Export Report
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
 
-export default function FloatingDock({ view, onViewChange, onAnalyze }) {
-    const { setCommandPaletteOpen, toggleRoads, showRoads, loading } = useStore() // layoutMode removed
+export default function FloatingDock({ view, onViewChange, onAnalyze, onShowGraph, onShowExport }) {
+    const { setCommandPaletteOpen, toggleRoads, showRoads, loading, cityData } = useStore()
 
     return (
         <div style={{
@@ -47,22 +48,34 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
                 <DeckItem
                     onClick={() => onViewChange('3d')}
                     active={view === '3d'}
-                    icon={<Box size={18} />}
+                    icon={<Building2 size={18} />}
                     label="City View"
+                    description="3D code visualization"
                 />
 
                 <DeckItem
                     onClick={() => onViewChange('table')}
                     active={view === 'table'}
-                    icon={<BarChart2 size={18} />}
-                    label="Metrics"
+                    icon={<Table2 size={18} />}
+                    label="Metrics Table"
+                    description="File statistics & metrics"
                 />
 
                 <DeckItem
                     onClick={() => useStore.setState(state => ({ sidebarOpen: !state.sidebarOpen }))}
                     active={useStore(state => state.sidebarOpen)}
-                    icon={<FolderSearch size={18} />}
+                    icon={<FolderTree size={18} />}
                     label="File Inspector"
+                    description="Browse project structure"
+                />
+
+                {/* 2D Dependency Graph - NEW */}
+                <DeckItem
+                    onClick={onShowGraph}
+                    icon={<Network size={18} />}
+                    label="Dependency Graph"
+                    description="Interactive 2D graph view"
+                    disabled={!cityData}
                 />
 
                 <Divider />
@@ -72,13 +85,15 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
                     onClick={() => setCommandPaletteOpen(true)}
                     icon={<Search size={18} />}
                     label="Search"
+                    description="Find files, commands, symbols"
                     shortcut="⌘K"
                 />
 
                 <DeckItem
                     onClick={onAnalyze}
-                    icon={<Globe size={18} />}
+                    icon={<ScanLine size={18} />}
                     label="Analyze"
+                    description="Scan repository for metrics"
                     loading={loading}
                     accent
                 />
@@ -87,6 +102,7 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
                     onClick={() => useStore.setState({ chatOpen: !useStore.getState().chatOpen })}
                     icon={<Sparkles size={18} />}
                     label="AI Architect"
+                    description="Get AI-powered insights"
                 />
 
                 <Divider />
@@ -95,8 +111,18 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
                 <DeckItem
                     onClick={() => useStore.setState(state => ({ showTimeline: !state.showTimeline }))}
                     active={useStore(state => state.showTimeline)}
-                    icon={<Clock size={18} />}
+                    icon={<History size={18} />}
                     label="Time Travel"
+                    description="View codebase evolution over time"
+                />
+
+                {/* Export Report - NEW */}
+                <DeckItem
+                    onClick={onShowExport}
+                    icon={<Download size={18} />}
+                    label="Export Report"
+                    description="Download analysis as PDF/HTML"
+                    disabled={!cityData}
                 />
 
                 <Divider />
@@ -105,20 +131,21 @@ export default function FloatingDock({ view, onViewChange, onAnalyze }) {
                     onClick={() => window.open('https://github.com/YashwanthKamireddi/CodebaseCity', '_blank')}
                     icon={<Github size={18} />}
                     label="GitHub"
+                    description="Star us on GitHub!"
                 />
             </nav >
         </div >
     )
 }
 
-function DeckItem({ icon, label, onClick, active, loading, accent, shortcut }) {
+function DeckItem({ icon, label, description, onClick, active, loading, accent, shortcut, disabled }) {
     const [hovered, setHovered] = useState(false)
 
     // Handle Keyboard Enter/Space
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()
-            onClick?.()
+            if (!disabled) onClick?.()
         }
     }
 
@@ -127,26 +154,31 @@ function DeckItem({ icon, label, onClick, active, loading, accent, shortcut }) {
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}>
             <button
-                onClick={onClick}
+                onClick={() => !disabled && onClick?.()}
                 onKeyDown={handleKeyDown}
                 className="deck-btn"
                 aria-label={label}
+                disabled={disabled}
                 title={!hovered ? label : undefined} // Fallback title
                 style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '10px',
-                    background: active ? (accent ? '#818cf8' : '#27272a') : 'transparent',
-                    color: active ? (accent ? 'white' : 'white') : '#a1a1aa',
-                    border: 'none',
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '12px',
+                    background: active
+                        ? (accent ? 'linear-gradient(135deg, #3b82f6, #2563eb)' : 'rgba(255, 255, 255, 0.12)')
+                        : 'transparent',
+                    color: disabled ? '#52525b' : active ? 'white' : '#a1a1aa',
+                    border: active ? '1px solid rgba(255,255,255,0.15)' : '1px solid transparent',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    cursor: 'pointer',
+                    cursor: disabled ? 'not-allowed' : 'pointer',
                     transition: 'all 0.2s ease',
                     position: 'relative',
                     overflow: 'hidden',
-                    outline: 'none' // We handle focus-visible manually or let browser do standard if mapped
+                    outline: 'none',
+                    opacity: disabled ? 0.5 : 1,
+                    boxShadow: active && accent ? '0 4px 12px rgba(59, 130, 246, 0.4)' : 'none'
                 }}
             >
                 {loading ? (
@@ -185,39 +217,55 @@ function DeckItem({ icon, label, onClick, active, loading, accent, shortcut }) {
                             left: '50%',
                             transform: 'translateX(-50%)',
                             marginBottom: '12px',
-                            background: '#18181b', // Zinc-900
-                            border: '1px solid #27272a',
-                            borderRadius: '8px',
-                            padding: '6px 10px',
+                            background: 'rgba(15, 15, 20, 0.95)',
+                            backdropFilter: 'blur(12px)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            borderRadius: '10px',
+                            padding: '8px 12px',
                             whiteSpace: 'nowrap',
+                            boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+                            zIndex: 100,
+                            textAlign: 'center'
+                        }}
+                    >
+                        <div style={{
                             display: 'flex',
                             gap: '8px',
                             alignItems: 'center',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
-                            zIndex: 100
-                        }}
-                    >
-                        <span style={{ fontSize: '12px', fontWeight: 500, color: '#f4f4f5' }}>{label}</span>
-                        {shortcut && (
-                            <span style={{
+                            marginBottom: description ? '4px' : 0
+                        }}>
+                            <span style={{ fontSize: '12px', fontWeight: 600, color: '#f4f4f5' }}>{label}</span>
+                            {shortcut && (
+                                <span style={{
+                                    fontSize: '10px',
+                                    color: '#71717a',
+                                    background: '#27272a',
+                                    padding: '2px 6px',
+                                    borderRadius: '4px',
+                                    fontFamily: 'var(--font-mono)'
+                                }}>{shortcut}</span>
+                            )}
+                        </div>
+                        {description && (
+                            <div style={{
                                 fontSize: '10px',
-                                color: '#71717a',
-                                background: '#27272a',
-                                padding: '1px 4px',
-                                borderRadius: '4px'
-                            }}>{shortcut}</span>
+                                color: '#a1a1aa',
+                                fontWeight: 400
+                            }}>
+                                {description}
+                            </div>
                         )}
-                        {/* Triangle */}
+                        {/* Triangle Arrow */}
                         <div style={{
                             position: 'absolute',
-                            bottom: '-4px',
+                            bottom: '-5px',
                             left: '50%',
-                            marginLeft: '-4px',
-                            width: '8px',
-                            height: '8px',
-                            background: '#18181b',
-                            borderRight: '1px solid #27272a',
-                            borderBottom: '1px solid #27272a',
+                            marginLeft: '-5px',
+                            width: '10px',
+                            height: '10px',
+                            background: 'rgba(15, 15, 20, 0.95)',
+                            borderRight: '1px solid rgba(255, 255, 255, 0.1)',
+                            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
                             transform: 'rotate(45deg)'
                         }} />
                     </motion.div>

@@ -1,31 +1,27 @@
 /**
  * WelcomeOverlay.jsx
  *
- * First-time user experience overlay.
- * Shows on first visit, guides users on how to use the app.
+ * Clean, utility-focused onboarding.
+ * Directs users to analyze their own repository.
  */
 
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-    Box,
     FolderSearch,
-    Play,
-    Sparkles,
     ArrowRight,
-    Code2
+    GitBranch,
+    Boxes
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
-import '../../../features/search/ui/CommandPalette.css'
 
 const STORAGE_KEY = 'codebase-city-welcomed'
 
 export default function WelcomeOverlay() {
     const [visible, setVisible] = useState(false)
-    const { fetchDemo, setAnalyzeModalOpen, cityData } = useStore()
+    const { setAnalyzeModalOpen, cityData } = useStore()
 
     useEffect(() => {
-        // Check if user has been welcomed before
         const welcomed = localStorage.getItem(STORAGE_KEY)
         if (!welcomed && !cityData) {
             setVisible(true)
@@ -35,11 +31,6 @@ export default function WelcomeOverlay() {
     const handleDismiss = () => {
         localStorage.setItem(STORAGE_KEY, 'true')
         setVisible(false)
-    }
-
-    const handleLoadDemo = () => {
-        fetchDemo()
-        handleDismiss()
     }
 
     const handleAnalyze = () => {
@@ -54,11 +45,12 @@ export default function WelcomeOverlay() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
                     style={{
                         position: 'fixed',
                         inset: 0,
-                        background: 'rgba(0, 0, 0, 0.85)',
-                        backdropFilter: 'blur(20px)',
+                        background: 'rgba(9, 9, 11, 0.9)',
+                        backdropFilter: 'blur(12px)',
                         zIndex: 3000,
                         display: 'flex',
                         alignItems: 'center',
@@ -67,84 +59,111 @@ export default function WelcomeOverlay() {
                     }}
                 >
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                        className="command-root"
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 12 }}
+                        transition={{ duration: 0.25, delay: 0.05 }}
                         style={{
-                            maxWidth: '520px',
+                            maxWidth: '420px',
                             width: '100%',
-                            padding: '48px',
+                            padding: '40px',
+                            background: 'rgba(24, 24, 27, 0.8)',
+                            border: '1px solid rgba(255, 255, 255, 0.08)',
+                            borderRadius: '16px',
                             textAlign: 'center'
                         }}
                     >
-                        {/* Logo */}
+                        {/* Icon */}
                         <div style={{
-                            width: '80px',
-                            height: '80px',
-                            background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
-                            borderRadius: '24px',
+                            width: '56px',
+                            height: '56px',
+                            background: 'rgba(59, 130, 246, 0.12)',
+                            borderRadius: '14px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            margin: '0 auto 24px auto',
-                            boxShadow: '0 20px 40px -10px rgba(99, 102, 241, 0.4)'
+                            margin: '0 auto 20px auto'
                         }}>
-                            <Code2 size={40} color="white" strokeWidth={1.5} />
+                            <Boxes size={26} color="#3b82f6" strokeWidth={1.5} />
                         </div>
 
                         {/* Title */}
                         <h1 style={{
-                            fontSize: '2rem',
-                            fontWeight: 700,
-                            color: 'white',
-                            margin: '0 0 12px 0',
-                            letterSpacing: '-0.02em'
+                            fontSize: '1.375rem',
+                            fontWeight: 600,
+                            color: '#f4f4f5',
+                            margin: '0 0 8px 0',
+                            letterSpacing: '-0.01em'
                         }}>
                             Codebase City
                         </h1>
 
-                        {/* Subtitle */}
+                        {/* Description */}
                         <p style={{
-                            fontSize: '1rem',
-                            color: 'rgba(255,255,255,0.6)',
-                            margin: '0 0 40px 0',
+                            fontSize: '0.875rem',
+                            color: '#a1a1aa',
+                            margin: '0 0 28px 0',
                             lineHeight: 1.6
                         }}>
-                            Visualize your codebase as an interactive 3D city.
-                            <br />
-                            Explore architecture, find hotspots, and understand dependencies.
+                            Visualize your codebase as a 3D city. Understand architecture, spot complexity, and explore dependencies.
                         </p>
 
-                        {/* Action Buttons */}
-                        <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                            <ActionButton
-                                icon={<Play size={18} fill="currentColor" />}
-                                label="Load Demo"
-                                description="Explore a sample project"
-                                onClick={handleLoadDemo}
-                                primary
-                            />
+                        {/* Primary Action */}
+                        <button
+                            onClick={handleAnalyze}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '10px',
+                                width: '100%',
+                                padding: '14px 20px',
+                                background: '#3b82f6',
+                                border: 'none',
+                                borderRadius: '10px',
+                                cursor: 'pointer',
+                                transition: 'background 0.15s ease',
+                                color: 'white',
+                                fontWeight: 500,
+                                fontSize: '0.9375rem'
+                            }}
+                            onMouseEnter={e => e.currentTarget.style.background = '#2563eb'}
+                            onMouseLeave={e => e.currentTarget.style.background = '#3b82f6'}
+                        >
+                            <FolderSearch size={18} />
+                            Analyze a Repository
+                        </button>
+
+                        {/* Features */}
+                        <div style={{
+                            display: 'flex',
+                            gap: '16px',
+                            marginTop: '24px',
+                            paddingTop: '20px',
+                            borderTop: '1px solid rgba(255, 255, 255, 0.06)'
+                        }}>
+                            <Feature icon={<GitBranch size={14} />} label="GitHub or Local" />
+                            <Feature icon={<Boxes size={14} />} label="Any Language" />
                         </div>
 
                         {/* Skip */}
                         <button
                             onClick={handleDismiss}
                             style={{
-                                marginTop: '32px',
+                                marginTop: '20px',
                                 background: 'none',
                                 border: 'none',
-                                color: 'rgba(255,255,255,0.4)',
-                                fontSize: '0.85rem',
+                                color: '#52525b',
+                                fontSize: '0.8125rem',
                                 cursor: 'pointer',
-                                display: 'flex',
+                                display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '6px',
-                                margin: '32px auto 0 auto'
+                                gap: '4px'
                             }}
+                            onMouseEnter={e => e.currentTarget.style.color = '#71717a'}
+                            onMouseLeave={e => e.currentTarget.style.color = '#52525b'}
                         >
-                            Skip for now <ArrowRight size={14} />
+                            Skip <ArrowRight size={12} />
                         </button>
                     </motion.div>
                 </motion.div>
@@ -153,54 +172,19 @@ export default function WelcomeOverlay() {
     )
 }
 
-function ActionButton({ icon, label, description, onClick, primary }) {
+function Feature({ icon, label }) {
     return (
-        <button
-            onClick={onClick}
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '20px 28px',
-                background: primary
-                    ? 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)'
-                    : 'rgba(255,255,255,0.05)',
-                border: primary ? 'none' : '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '16px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                minWidth: '180px'
-            }}
-            onMouseEnter={e => {
-                if (!primary) {
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
-                    e.currentTarget.style.transform = 'translateY(-2px)'
-                }
-            }}
-            onMouseLeave={e => {
-                if (!primary) {
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.05)'
-                    e.currentTarget.style.transform = 'translateY(0)'
-                }
-            }}
-        >
-            <div style={{ color: primary ? 'white' : 'var(--color-accent)' }}>
-                {icon}
-            </div>
-            <div style={{
-                color: 'white',
-                fontWeight: 600,
-                fontSize: '0.95rem'
-            }}>
-                {label}
-            </div>
-            <div style={{
-                color: primary ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.5)',
-                fontSize: '0.75rem'
-            }}>
-                {description}
-            </div>
-        </button>
+        <div style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
+            color: '#71717a',
+            fontSize: '0.75rem'
+        }}>
+            {icon}
+            <span>{label}</span>
+        </div>
     )
 }

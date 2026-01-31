@@ -33,7 +33,14 @@ class CodebaseAnalyzer:
         Analyze a repository from path.
         """
         import os
-        repo_name = os.path.basename(repo_path)
+
+        # Normalize path and extract repo name (handle trailing slashes)
+        normalized_path = repo_path.rstrip('/\\')
+        repo_name = os.path.basename(normalized_path)
+
+        # Fallback if still empty (e.g., root path)
+        if not repo_name:
+            repo_name = os.path.basename(os.path.dirname(normalized_path)) or 'Unnamed Project'
 
         # Initialize Context
         context = PipelineContext(repo_path, max_files)
@@ -42,8 +49,10 @@ class CodebaseAnalyzer:
         for step in self.steps:
             context = await step.execute(context)
 
-        # Update name if metadata found
-        repo_name = context.metadata.get('name', repo_name)
+        # Update name if metadata found (but not with empty string)
+        metadata_name = context.metadata.get('name', '').strip()
+        if metadata_name:
+            repo_name = metadata_name
 
         # Cache for search indexing
         self.last_parsed_files = context.parsed_files
@@ -83,7 +92,8 @@ class CodebaseAnalyzer:
                     churn=pf.get('churn', 0),
                     age_days=pf.get('age_days', 0),
                     dependencies_in=deps_in,
-                    dependencies_out=deps_out
+                    dependencies_out=deps_out,
+                    size_bytes=pf.get('size_bytes', 0)
                 ),
                 language=pf['language'],
                 decay_level=pf.get('decay_level', 0),
@@ -92,7 +102,7 @@ class CodebaseAnalyzer:
                 # Social / Git Metadata
                 author=pf.get('author', 'Unknown'),
                 email=pf.get('email', ''),
-                email_hash=pf.get('metrics', {}).get('email_hash') or pf.get('email_hash'),
+                email_hash=pf.get('email_hash'),
                 last_modified=pf.get('last_modified', 0)
             ))
 

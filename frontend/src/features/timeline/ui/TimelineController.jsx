@@ -7,7 +7,7 @@
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
-import { Play, Pause, ChevronLeft, ChevronRight, Clock, User } from 'lucide-react'
+import { Play, Pause, SkipBack, SkipForward, GitCommit, Calendar, User } from 'lucide-react'
 import useStore from '../../../store/useStore'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -132,7 +132,7 @@ export default function TimelineController() {
         setIsScrubbing(true)
         debounceRef.current = setTimeout(() => {
             performAnalysis(commit)
-        }, 400)
+        }, 200) // Faster debounce for snappier feel
     }, [performAnalysis])
 
     // Handle slider change
@@ -280,27 +280,28 @@ export default function TimelineController() {
                             setIsPlaying(p => !p)
                         }}
                         style={{
-                            width: '48px', // Larger hit target
-                            height: '48px',
-                            borderRadius: '50%',
+                            width: '44px',
+                            height: '44px',
+                            borderRadius: '12px',
                             background: isPlaying
-                                ? 'white'
-                                : 'linear-gradient(135deg, #3b82f6, #8b5cf6)', // Blue-Purple Gradient
-                            border: 'none',
+                                ? 'rgba(255, 255, 255, 0.1)'
+                                : 'linear-gradient(135deg, #3b82f6, #2563eb)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             cursor: 'pointer',
                             flexShrink: 0,
                             boxShadow: isPlaying
-                                ? '0 0 24px rgba(255,255,255,0.4)' // Brighter glow active
-                                : '0 4px 16px rgba(59, 130, 246, 0.4)', // Color glow inactive
-                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                                ? 'none'
+                                : '0 4px 16px rgba(59, 130, 246, 0.3)',
+                            transition: 'all 0.2s ease',
+                            color: 'white'
                         }}
                     >
                         {isPlaying
-                            ? <Pause size={20} fill="#09090b" stroke="#09090b" />
-                            : <Play size={20} fill="white" stroke="white" style={{ marginLeft: '3px' }} />
+                            ? <Pause size={18} strokeWidth={2.5} />
+                            : <Play size={18} strokeWidth={2.5} style={{ marginLeft: '2px' }} />
                         }
                     </button>
 
@@ -384,13 +385,11 @@ export default function TimelineController() {
                                 position: 'absolute',
                                 left: 0,
                                 width: `${progress}%`,
-                                height: '6px',
-                                background: isPlaying || isLoading
-                                    ? 'linear-gradient(90deg, #3b82f6, #a855f7)'
-                                    : '#3b82f6',
-                                borderRadius: '4px',
-                                transition: isScrubbing ? 'none' : 'width 0.2s linear', // Smoother logic
-                                boxShadow: '0 0 12px rgba(59, 130, 246, 0.5)', // Neon glow
+                                height: '4px',
+                                background: '#3b82f6',
+                                borderRadius: '2px',
+                                transition: isScrubbing ? 'none' : 'width 0.2s linear',
+                                boxShadow: '0 0 8px rgba(59, 130, 246, 0.4)',
                                 top: 0, bottom: 0, margin: 'auto'
                             }} />
 
@@ -450,14 +449,14 @@ export default function TimelineController() {
                         <StepButton
                             onClick={() => handleStep(-1)}
                             disabled={currentIndex <= 0}
-                            icon={<ChevronLeft size={16} />}
-                            title="Previous (←)"
+                            icon={<SkipBack size={14} />}
+                            title="Previous commit"
                         />
                         <StepButton
                             onClick={() => handleStep(1)}
                             disabled={currentIndex >= history.length - 1}
-                            icon={<ChevronRight size={16} />}
-                            title="Next (→)"
+                            icon={<SkipForward size={14} />}
+                            title="Next commit"
                         />
                     </div>
 

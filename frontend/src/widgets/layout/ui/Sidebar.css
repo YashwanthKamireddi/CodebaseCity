@@ -1,10 +1,10 @@
-/* Sidebar.css */
+/* Sidebar.css - Professional File Explorer */
 
 .sidebar-container {
     box-sizing: border-box;
 }
 
-/* Ensure the file tree container captures the width */
+/* File tree container */
 .file-tree-container {
     width: 100%;
     box-sizing: border-box;
@@ -12,44 +12,51 @@
     flex-direction: column;
 }
 
-/* Base Row Styles with Indentation Guide Support */
+/* Base Row Styles */
 .file-row, .folder-row {
-    position: relative; /* For Pseudo-elements if needed */
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 6px; /* Tighter gap like VS Code */
+    gap: 8px;
     width: 100%;
     min-width: 0;
     max-width: 100%;
     box-sizing: border-box;
     cursor: pointer;
-    border-radius: 4px; /* Sharper corners */
-    transition: background 0.1s ease;
+    border-radius: 6px;
+    transition: background 0.12s ease, color 0.12s ease;
     user-select: none;
-    border: 1px solid transparent; /* Prevent layout shift on focus */
+    border: 1px solid transparent;
 }
 
 .file-row {
-    padding: 3px 8px; /* Tighter padding */
+    padding: 6px 10px;
     color: #a1a1aa;
 }
 
 .folder-row {
-    padding: 4px 8px;
-    margin-bottom: 0px; /* Compact */
+    padding: 6px 10px;
+    margin-bottom: 2px;
+    color: #d4d4d8;
+    font-weight: 500;
+}
+
+/* Hover States - More visible */
+.file-row:hover {
+    background: rgba(59, 130, 246, 0.08);
     color: #e4e4e7;
-    font-weight: 600;
 }
 
-/* Hover States */
-.file-row:hover, .folder-row:hover {
-    background: #2a2a2e; /* VS Code dark hover */
+.folder-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
 }
 
-/* Active/Selected State - Handled in inline style for dynamism but can be reinforced */
+/* Active/Selected State */
 .file-row.selected {
-    background: #37373d !important;
-    color: #ffffff !important;
+    background: rgba(59, 130, 246, 0.15) !important;
+    color: #60a5fa !important;
+    border-color: rgba(59, 130, 246, 0.3);
 }
 
 /* Text Label */
@@ -59,12 +66,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-family: 'Inter', sans-serif; /* Clean sans */
-    font-size: 0.85rem;
-    line-height: 1.4;
+    font-family: var(--font-body), 'Inter', sans-serif;
+    font-size: 0.8125rem;
+    line-height: 1.5;
 }
 
-/* Indentation Guide Line (Experimental) */
-/* We can add a subtle left border to children container if we structure it that way,
-   but currently it's flat. For now, we rely on depth padding.
-   Future: Render vertical lines using absolute positioning based on depth. */
+/* Folder Count Badge */
+.folder-count {
+    font-size: 0.6875rem;
+    color: #52525b;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+}

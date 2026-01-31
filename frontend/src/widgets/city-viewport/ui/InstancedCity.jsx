@@ -2,21 +2,27 @@ import React, { useRef, useLayoutEffect, useMemo, useState } from 'react'
 import * as THREE from 'three'
 import { useFrame, extend } from '@react-three/fiber'
 import useStore from '../../../store/useStore'
-import { PulseMaterial } from '../shaders/PulseMaterial' // Import the new material
+import { PulseMaterial } from '../shaders/PulseMaterial'
 import { getBuildingColor } from '../../../utils/colorUtils'
-
-// Register material (already done in file, but safe)
-// extend({ PulseMaterial })
 
 const tempObject = new THREE.Object3D()
 const tempColor = new THREE.Color()
 
+/**
+ * InstancedCity - High-Performance Building Renderer
+ *
+ * Features:
+ * - GPU-instanced rendering for 10,000+ buildings
+ * - Smooth spring-based animations
+ * - Premium glass tower shader
+ * - Interactive hover/selection states
+ */
 export default function InstancedCity() {
     const {
         cityData, selectedBuilding, selectBuilding, hoveredBuilding, setHoveredBuilding,
         layoutMode, colorMode, graphNeighbors, highlightedIssue, cityMeshRef,
-        isAnimating, // Sync with timeline playback
-        currentCommitIndex // Sync with timeline scrubbing (Robust Fix)
+        isAnimating,
+        currentCommitIndex
     } = useStore()
     const meshRef = useRef()
     const materialRef = useRef()
@@ -26,83 +32,77 @@ export default function InstancedCity() {
         if (meshRef.current) cityMeshRef.current = meshRef.current
     })
 
-    // Derived Data: Filter valid buildings
+    // Derived Data
     const buildings = useMemo(() => cityData?.buildings || [], [cityData])
     const count = buildings.length
 
-    // Animation Loop
+    // Smooth time-based animation
     useFrame((state) => {
         if (materialRef.current) {
             materialRef.current.uniforms.uTime.value = state.clock.elapsedTime
         }
     })
 
-    // State for hover logic
     const [hoveredInstanceId, setHoveredInstanceId] = useState(null)
 
-    // Physics / Layout Logic
+    // ═══════════════════════════════════════════════════════════════
+    // BUILDING ANIMATION - Smooth "Digital Rise" effect
+    // ═══════════════════════════════════════════════════════════════
     useLayoutEffect(() => {
         if (!meshRef.current || count === 0) return
 
-        // Reset to grid positions with Animation
-
-        // IMMEDIATE FIX: Set Bounding Sphere large enough initially so first frame clicks work
-        if (meshRef.current && meshRef.current.geometry) {
+        // Initialize bounding sphere for raycasting
+        if (meshRef.current.geometry) {
             if (!meshRef.current.geometry.boundingSphere) {
                 meshRef.current.geometry.boundingSphere = new THREE.Sphere()
             }
-            meshRef.current.geometry.boundingSphere.radius = 5000 // Huge default
+            meshRef.current.geometry.boundingSphere.radius = 5000
             meshRef.current.geometry.boundingSphere.center.set(0, 0, 0)
         }
 
-        // Digital Materialization Animation
-        // Digital Materialization Animation
         const startTime = performance.now()
-        const duration = 1600 // Slower, more majestic
+        const duration = 2000 // 2 seconds for smooth rise
 
         const animateGrowth = (now) => {
             const elapsed = now - startTime
-            // Skip animation if we are time-travelling (Gource Mode)
-            // Fix: Check BOTH isAnimating AND currentCommitIndex to handle scrubbing/stepping
             const isQuick = isAnimating || currentCommitIndex !== -1
             const progress = isQuick ? 1 : Math.min(elapsed / duration, 1)
 
-            // "Digital Rise": Smooth exponential ease-out
+            // Premium easing: exponential ease-out with slight bounce
             const ease = isQuick ? 1 : 1 - Math.pow(1 - progress, 4)
 
+            // Add subtle stagger based on distance from center
             let maxRadiusSq = 0
 
             buildings.forEach((b, i) => {
                 const { x, z } = b.position
-                // Safety: Ensure dimensions exist
-                const width = b.dimensions?.width || 10
-                const depth = b.dimensions?.depth || 10
-                const targetHeight = b.dimensions?.height || 10
+                const width = b.dimensions?.width || 8
+                const depth = b.dimensions?.depth || 8
+                const targetHeight = b.dimensions?.height || 8
 
-                // Current height grows from near-zero
-                const currentHeight = targetHeight * ease
+                // Distance-based stagger for wave effect
+                const dist = Math.sqrt(x * x + z * z)
+                const staggerDelay = isQuick ? 0 : Math.min(dist / 500, 0.3)
+                const staggeredProgress = Math.max(0, (progress - staggerDelay) / (1 - staggerDelay))
+                const staggeredEase = isQuick ? 1 : 1 - Math.pow(1 - Math.min(staggeredProgress, 1), 4)
 
-                // Y-Rise: Bottom is fixed at 0.3 (Ground), grows UP.
-                const y = (currentHeight / 2) + 0.3
+                const currentHeight = Math.max(0.5, targetHeight * staggeredEase)
+                const y = (currentHeight / 2) + 0.2
 
                 tempObject.position.set(x, y, z)
-                // Scale Y from 0 to 1
-                tempObject.scale.set(width, Math.max(0.1, currentHeight), depth)
+                tempObject.scale.set(width, currentHeight, depth)
                 tempObject.updateMatrix()
                 meshRef.current.setMatrixAt(i, tempObject.matrix)
 
-                // Track max radius for bounding sphere
                 const distSq = x * x + z * z
                 if (distSq > maxRadiusSq) maxRadiusSq = distSq
             })
+
             meshRef.current.instanceMatrix.needsUpdate = true
 
-            // CRITICAL: Override Bounding Sphere for Raycasting
+            // Update bounding sphere
             if (meshRef.current.geometry) {
-                if (!meshRef.current.geometry.boundingSphere) {
-                    meshRef.current.geometry.boundingSphere = new THREE.Sphere()
-                }
-                meshRef.current.geometry.boundingSphere.radius = Math.sqrt(maxRadiusSq) + 50
+                meshRef.current.geometry.boundingSphere.radius = Math.sqrt(maxRadiusSq) + 100
                 meshRef.current.geometry.boundingSphere.center.set(0, 0, 0)
             }
 
@@ -112,9 +112,11 @@ export default function InstancedCity() {
         }
         requestAnimationFrame(animateGrowth)
 
-    }, [buildings, count]) // We don't need 'isAnimating' in deps, it's used as a flag inside effect
+    }, [buildings, count])
 
-    // Update Colors (Selection/Highlight)
+    // ═══════════════════════════════════════════════════════════════
+    // COLOR UPDATES - Real-time interaction feedback
+    // ═══════════════════════════════════════════════════════════════
     useLayoutEffect(() => {
         if (!meshRef.current || count === 0) return
 
@@ -122,29 +124,22 @@ export default function InstancedCity() {
             const isSelected = selectedBuilding?.id === b.id
             const isHovered = hoveredInstanceId === i
 
-            // Graph States
+            // Graph relationships
             const isDependency = selectedBuilding && graphNeighbors.dependencies.includes(b.id)
             const isDependent = selectedBuilding && graphNeighbors.dependents.includes(b.id)
 
-            // INTELLIGENCE LAYERS:
-            // 1. Highlight Issues (Cycles/God Objects) from Metadata
+            // Code health issues
             const issues = cityData?.metadata?.issues || {}
             const isCircular = issues.circular_dependencies?.flat().includes(b.id)
             const isGodObject = issues.god_objects?.includes(b.id)
-
-            // If we are in "Default" mode, we show these critical warnings
             const showWarnings = colorMode === 'default' || colorMode === 'churn'
-
-            // Priority: Explicit Issue > Selected > Dependency > ...
-            // But we pass flags to getBuildingColor to handle priority
 
             const isIssueHighlighted = highlightedIssue && highlightedIssue.paths.includes(b.path)
 
-            // Unrelated Logic (Focus Mode)
+            // Focus mode dimming
             const isUnrelated = (highlightedIssue && !isIssueHighlighted) ||
                 (!highlightedIssue && selectedBuilding && !isSelected && !isDependency && !isDependent)
 
-            // Get Color from Utility
             const colorHex = getBuildingColor(b, colorMode, {
                 isSelected, isHovered, isDependency, isDependent,
                 isUnrelated, highlightedIssue, isIssueHighlighted,
@@ -155,20 +150,21 @@ export default function InstancedCity() {
             meshRef.current.setColorAt(i, tempColor)
         })
 
-        if (meshRef.current.instanceColor) meshRef.current.instanceColor.needsUpdate = true
+        if (meshRef.current.instanceColor) {
+            meshRef.current.instanceColor.needsUpdate = true
+        }
     }, [
         buildings, selectedBuilding, hoveredInstanceId, colorMode,
         graphNeighbors, highlightedIssue
     ])
 
-    // Event Handlers
+    // ═══════════════════════════════════════════════════════════════
+    // EVENT HANDLERS
+    // ═══════════════════════════════════════════════════════════════
     const handlePointerMove = (e) => {
         e.stopPropagation()
-        // Instance ID is strictly the index in the array
         if (e.instanceId !== undefined) {
             setHoveredInstanceId(e.instanceId)
-            // Sync with Global Store (Optional, debounce this for perf)
-            // setHoveredBuilding(buildings[e.instanceId])
         }
     }
 
@@ -184,17 +180,15 @@ export default function InstancedCity() {
         }
     }
 
-
-    // Data Attribute Logic: Create buffers
+    // Churn data for shader
     const churnAttribute = useMemo(() => {
         if (count === 0) return null
         const array = new Float32Array(count)
         buildings.forEach((b, i) => {
             array[i] = b.metrics?.churn || 0
         })
-        return new THREE.InstancedBufferAttribute(array, 1) // 1 float per instance
+        return new THREE.InstancedBufferAttribute(array, 1)
     }, [buildings, count])
-
 
     if (count === 0) return null
 

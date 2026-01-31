@@ -1,0 +1,121 @@
+.toast {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: rgba(24, 24, 27, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow:
+        0 10px 25px -5px rgba(0, 0, 0, 0.4),
+        0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+    max-width: 400px;
+    min-width: 320px;
+}
+
+.toast--success { border-left: 3px solid #22c55e; }
+.toast--error { border-left: 3px solid #ef4444; }
+.toast--warning { border-left: 3px solid #f59e0b; }
+.toast--info { border-left: 3px solid #3b82f6; }
+
+.toast__icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+}
+
+.toast--success .toast__icon {
+    color: #22c55e;
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.toast--error .toast__icon {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.toast--warning .toast__icon {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.toast--info .toast__icon {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.toast__content {
+    flex: 1;
+    min-width: 0;
+}
+
+.toast__title {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #fafafa;
+    margin-bottom: 2px;
+}
+
+.toast__message {
+    font-size: 0.8125rem;
+    color: #a1a1aa;
+    line-height: 1.4;
+}
+
+.toast__close {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #71717a;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.toast__close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #d4d4d8;
+}
+
+.toast__close:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+.toast__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    animation: toast-progress linear forwards;
+    transform-origin: left;
+}
+
+.toast--success .toast__progress { background: #22c55e; }
+.toast--error .toast__progress { background: #ef4444; }
+.toast--warning .toast__progress { background: #f59e0b; }
+.toast--info .toast__progress { background: #3b82f6; }
+
+@keyframes toast-progress {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+}
+
+.toast--exiting {
+    pointer-events: none;
+}

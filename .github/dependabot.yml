@@ -1,0 +1,68 @@
+# Dependabot Configuration
+# Automated dependency updates for security and freshness
+
+version: 2
+updates:
+  # Frontend (npm)
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps(frontend)"
+    labels:
+      - "dependencies"
+      - "frontend"
+    groups:
+      react:
+        patterns:
+          - "react*"
+          - "@react-three/*"
+      three:
+        patterns:
+          - "three*"
+          - "@types/three"
+      dev:
+        patterns:
+          - "*"
+        dependency-type: "development"
+
+  # Backend (pip)
+  - package-ecosystem: "pip"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps(backend)"
+    labels:
+      - "dependencies"
+      - "backend"
+    groups:
+      fastapi:
+        patterns:
+          - "fastapi*"
+          - "pydantic*"
+          - "uvicorn*"
+      ai:
+        patterns:
+          - "google-genai*"
+          - "openai*"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "deps(actions)"
+    labels:
+      - "dependencies"
+      - "ci"

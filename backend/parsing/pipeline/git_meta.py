@@ -1,4 +1,5 @@
 import asyncio
+import hashlib
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import List, Dict
@@ -59,18 +60,23 @@ class GitMetaStep(PipelineStep):
             if result.returncode == 0 and result.stdout.strip():
                 parts = result.stdout.strip().split('|')
                 if len(parts) >= 3:
-                     file_data['author'] = parts[0]
-                     file_data['email'] = parts[1]
-                     file_data['last_modified'] = int(parts[2])
+                    file_data['author'] = parts[0]
+                    file_data['email'] = parts[1]
+                    file_data['last_modified'] = int(parts[2])
+                    # Generate MD5 hash for Gravatar
+                    email_clean = parts[1].strip().lower()
+                    file_data['email_hash'] = hashlib.md5(email_clean.encode()).hexdigest()
             else:
-                 # Fallback
-                 file_data['author'] = 'Unknown'
-                 file_data['email'] = ''
-                 file_data['last_modified'] = 0
+                # Fallback
+                file_data['author'] = 'Unknown'
+                file_data['email'] = ''
+                file_data['email_hash'] = None
+                file_data['last_modified'] = 0
 
         except Exception:
             file_data['author'] = 'Unknown'
             file_data['email'] = ''
+            file_data['email_hash'] = None
             file_data['last_modified'] = 0
 
         return file_data

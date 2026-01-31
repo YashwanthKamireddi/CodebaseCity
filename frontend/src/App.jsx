@@ -15,7 +15,7 @@ import BuildingPanel from './entities/building/ui/BuildingPanel'
 import { motion, AnimatePresence } from 'framer-motion'
 import LoadingScreen from './shared/ui/LoadingScreen'
 import { ErrorBoundary } from './shared/ui/ErrorBoundary'
-import CityBuilderLoader from './features/onboarding/ui/CityBuilderLoader'
+import { ToastContainer } from './shared/ui/Toast'
 
 
 import TimelineController from './features/timeline/ui/TimelineController'
@@ -28,6 +28,8 @@ import ViewControl from './widgets/layout/ui/ViewControl'
 import CanvasUI from './widgets/layout/ui/CanvasUI'
 import ChatInterface from './features/ai-architect/ui/ChatInterface'
 import WelcomeOverlay from './widgets/layout/ui/WelcomeOverlay'
+import DependencyGraph from './features/architect/ui/DependencyGraph'
+import ExportReport from './features/analysis/ui/ExportReport'
 import './features/FloatingDock.css'
 import { useVSCodeSync } from './hooks/useVSCodeSync'
 import useStore from './store/useStore'
@@ -54,12 +56,13 @@ function App() {
         isAnimating,
         layoutMode,
         vscodeConnected,
-        fetchDemo,
         selectBuilding
     } = useStore()
 
     const [sidebarOpen, setSidebarOpen] = useState(true)
     const [view, setView] = useState('3d') // '3d' or 'table'
+    const [showDependencyGraph, setShowDependencyGraph] = useState(false)
+    const [showExportReport, setShowExportReport] = useState(false)
     const { analyzeModalOpen, setAnalyzeModalOpen } = useStore()
 
     // DEBUG: Trace loading state
@@ -214,6 +217,8 @@ function App() {
                         view={view}
                         onViewChange={setView}
                         onAnalyze={() => setAnalyzeModalOpen(true)}
+                        onShowGraph={() => setShowDependencyGraph(true)}
+                        onShowExport={() => setShowExportReport(true)}
                     />
 
                     {selectedBuilding && (
@@ -244,19 +249,29 @@ function App() {
             {/* Analyze Repo Modal */}
             <AnalyzeModal open={analyzeModalOpen} onOpenChange={setAnalyzeModalOpen} />
 
-            {/* Loading - 3D City Builder */}
+            {/* 2D Dependency Graph Modal */}
+            <DependencyGraph
+                isOpen={showDependencyGraph}
+                onClose={() => setShowDependencyGraph(false)}
+            />
+
+            {/* Export Report Modal */}
+            <ExportReport
+                isOpen={showExportReport}
+                onClose={() => setShowExportReport(false)}
+            />
+
+            {/* Loading - Clean minimal loader */}
             <AnimatePresence>
                 {loading && (
                     <motion.div
                         key="loader"
                         initial={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.8, ease: "easeInOut" }}
+                        transition={{ duration: 0.3 }}
                         style={{ position: 'fixed', inset: 0, zIndex: 99999 }}
                     >
-                        <ErrorBoundary>
-                            <CityBuilderLoader />
-                        </ErrorBoundary>
+                        <LoadingScreen />
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -300,6 +315,9 @@ function App() {
 
             {/* Onboarding */}
             <WelcomeOverlay />
+
+            {/* Toast Notifications */}
+            <ToastContainer />
         </div>
     )
 }

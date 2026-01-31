@@ -1,0 +1,314 @@
+/**
+ * ExportReport.css
+ *
+ * Premium export modal styles
+ */
+
+/* Overlay */
+.export-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+/* Modal */
+.export-modal {
+    width: 100%;
+    max-width: 520px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 32px 64px -16px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+/* Header */
+.export-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.export-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.export-title svg {
+    color: #3b82f6;
+}
+
+.export-title h2 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.export-close {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 0.375rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.export-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+}
+
+/* Content */
+.export-content {
+    padding: 1.5rem;
+}
+
+/* Project Info */
+.export-project {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.export-project h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #f8fafc;
+}
+
+.export-project-stats {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.export-project-stats span {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.export-project-stats svg {
+    color: #64748b;
+}
+
+/* Sections */
+.export-section {
+    margin-bottom: 1.5rem;
+}
+
+.export-section:last-child {
+    margin-bottom: 0;
+}
+
+.export-section > label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+}
+
+/* Format Selection */
+.export-formats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.export-format {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+}
+
+.export-format:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.export-format.active {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.4);
+}
+
+.export-format.active svg {
+    color: #3b82f6;
+}
+
+.export-format svg {
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.export-format > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.export-format-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #f8fafc;
+}
+
+.export-format-desc {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+/* Options */
+.export-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.export-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.export-option:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.export-option input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #3b82f6;
+    cursor: pointer;
+}
+
+.export-option span {
+    font-size: 0.85rem;
+    color: #e2e8f0;
+}
+
+/* Error */
+.export-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 8px;
+    color: #fca5a5;
+    font-size: 0.85rem;
+    margin-top: 1rem;
+}
+
+.export-error svg {
+    flex-shrink: 0;
+}
+
+/* Footer */
+.export-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.export-cancel {
+    padding: 0.625rem 1.25rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.export-cancel:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #f8fafc;
+}
+
+.export-submit {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.5rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.export-submit:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.export-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.export-submit .spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .export-overlay {
+        padding: 1rem;
+    }
+
+    .export-options {
+        grid-template-columns: 1fr;
+    }
+}

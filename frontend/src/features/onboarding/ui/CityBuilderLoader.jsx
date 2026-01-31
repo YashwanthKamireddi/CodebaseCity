@@ -91,7 +91,7 @@ function BuilderScene() {
     return (
         <>
             <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1} color="#6366f1" />
+            <pointLight position={[10, 10, 10]} intensity={1} color="#3b82f6" />
 
             <MovingGrid />
 
@@ -183,7 +183,7 @@ export default function CityBuilderLoader() {
                 <color attach="background" args={['#050505']} />
                 <fog attach="fog" args={['#050505', 10, 50]} />
                 <ambientLight intensity={2} /> {/* Brighter */}
-                <pointLight position={[10, 10, 10]} intensity={3} color="#6366f1" />
+                <pointLight position={[10, 10, 10]} intensity={3} color="#3b82f6" />
                 <BuilderScene />
             </Canvas>
 

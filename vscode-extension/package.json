@@ -125,9 +125,9 @@
     "lint": "eslint src --ext ts"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "@types/vscode": "^1.85.0",
-    "@types/ws": "^8.5.10",
+    "@types/node": "^20.19.30",
+    "@types/vscode": "^1.108.1",
+    "@types/ws": "^8.18.1",
     "typescript": "^5.3.0"
   },
   "dependencies": {
