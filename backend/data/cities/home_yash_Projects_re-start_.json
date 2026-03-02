@@ -1,0 +1,468 @@
+{
+  "name": "re-start",
+  "path": "/home/yash/Projects/re-start",
+  "city_id": "home_yash_Projects_re-start_",
+  "buildings": [
+    {
+      "id": "vite.config.js",
+      "name": "vite.config.js",
+      "path": "vite.config.js",
+      "district_id": "district_0",
+      "position": {
+        "x": 2.8365875411140165,
+        "y": 0.0,
+        "z": 0.5335236337452461
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 5.6000000000000005,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 108,
+        "complexity": 7,
+        "churn": 4,
+        "age_days": 47,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3710
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "injectThemeScript",
+          "line": 1
+        },
+        {
+          "name": "excludeManifest",
+          "line": 2
+        },
+        {
+          "name": "buildManifest",
+          "line": 2
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.06438356164383562,
+      "is_hotspot": false,
+      "author": "refact0r",
+      "email": "34758569+refact0r@users.noreply.github.com",
+      "email_hash": "8fe4a5ad936527f68bffd3719f112c7c",
+      "last_modified": 1768172498
+    },
+    {
+      "id": "vitest.config.js",
+      "name": "vitest.config.js",
+      "path": "vitest.config.js",
+      "district_id": "district_1",
+      "position": {
+        "x": -16.17400517666612,
+        "y": 0.0,
+        "z": 16.672589809760506
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 6,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 83,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 93
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.1136986301369863,
+      "is_hotspot": false,
+      "author": "refact0r",
+      "email": "34758569+refact0r@users.noreply.github.com",
+      "email_hash": "8fe4a5ad936527f68bffd3719f112c7c",
+      "last_modified": 1765104873
+    },
+    {
+      "id": "svelte.config.js",
+      "name": "svelte.config.js",
+      "path": "svelte.config.js",
+      "district_id": "district_2",
+      "position": {
+        "x": 1.7666127280504382,
+        "y": 0.0,
+        "z": -32.239574789220065
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 8,
+        "complexity": 2,
+        "churn": 0,
+        "age_days": 236,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 234
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.3232876712328767,
+      "is_hotspot": false,
+      "author": "refact0r",
+      "email": "34758569+refact0r@users.noreply.github.com",
+      "email_hash": "8fe4a5ad936527f68bffd3719f112c7c",
+      "last_modified": 1751872583
+    },
+    {
+      "id": "scripts/build-manifest.js",
+      "name": "build-manifest.js",
+      "path": "scripts/build-manifest.js",
+      "district_id": "district_3",
+      "position": {
+        "x": 26.016343326105456,
+        "y": 0.0,
+        "z": 33.31755909544596
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 11.200000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 53,
+        "complexity": 14,
+        "churn": 4,
+        "age_days": 61,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1707
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.08356164383561644,
+      "is_hotspot": false,
+      "author": "refact0r",
+      "email": "34758569+refact0r@users.noreply.github.com",
+      "email_hash": "8fe4a5ad936527f68bffd3719f112c7c",
+      "last_modified": 1766986481
+    },
+    {
+      "id": "src/vite-env.d.ts",
+      "name": "vite-env.d.ts",
+      "path": "src/vite-env.d.ts",
+      "district_id": "district_4",
+      "position": {
+        "x": -52.79511622745964,
+        "y": 0.0,
+        "z": -9.189348369866774
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 21,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 62,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 575
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "getAuthToken",
+          "line": 1
+        },
+        {
+          "name": "removeCachedAuthToken",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.08493150684931507,
+      "is_hotspot": false,
+      "author": "refact0r",
+      "email": "34758569+refact0r@users.noreply.github.com",
+      "email_hash": "8fe4a5ad936527f68bffd3719f112c7c",
+      "last_modified": 1766901208
+    },
+    {
+      "id": "src/main.js",
+      "name": "main.js",
+      "path": "src/main.js",
+      "district_id": "district_5",
+      "position": {
+        "x": 48.259833559195755,
+        "y": 0.0,
+        "z": -27.07485778386889
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 10,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 236,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 174
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.3232876712328767,
+      "is_hotspot": false,
+      "author": "refact0r",
+      "email": "34758569+refact0r@users.noreply.github.com",
+      "email_hash": "8fe4a5ad936527f68bffd3719f112c7c",
+      "last_modified": 1751872583
+    }
+  ],
+  "districts": [
+    {
+      "id": "district_0",
+      "name": "Configuration",
+      "color": "#FF6B6B",
+      "center": {
+        "x": 2.156800990491179,
+        "y": -0.1462629168775914
+      },
+      "boundary": [
+        {
+          "x": -23.830235861819354,
+          "y": -11.400718268509905
+        },
+        {
+          "x": -23.165751968840144,
+          "y": -15.768999382718532
+        },
+        {
+          "x": 23.34869069508869,
+          "y": -17.00593283801595
+        },
+        {
+          "x": 34.18081063374718,
+          "y": 1.9534518141960433
+        },
+        {
+          "x": 5.133161988833461,
+          "y": 22.55096292277082
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_1",
+      "name": "Configuration",
+      "color": "#4ECDC4",
+      "center": {
+        "x": -16.811465932435198,
+        "y": 16.03512905399143
+      },
+      "boundary": [
+        {
+          "x": -23.830235861819354,
+          "y": -11.400718268509905
+        },
+        {
+          "x": -435.1732499735224,
+          "y": 500.0
+        },
+        {
+          "x": -278.8240039168919,
+          "y": 500.0
+        },
+        {
+          "x": 5.133161988833461,
+          "y": 22.55096292277082
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_2",
+      "name": "Configuration",
+      "color": "#45B7D1",
+      "center": {
+        "x": 1.290705330285523,
+        "y": -32.71548218698498
+      },
+      "boundary": [
+        {
+          "x": 23.34869069508869,
+          "y": -17.00593283801595
+        },
+        {
+          "x": -23.165751968840144,
+          "y": -15.768999382718532
+        },
+        {
+          "x": -331.25779554114115,
+          "y": -500.0
+        },
+        {
+          "x": -6.661338147750939e-16,
+          "y": -500.0
+        },
+        {
+          "x": 134.78559015292043,
+          "y": -500.0
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_3",
+      "name": "Scripts",
+      "color": "#96CEB4",
+      "center": {
+        "x": 25.567574658985436,
+        "y": 32.86879042832594
+      },
+      "boundary": [
+        {
+          "x": 5.133161988833461,
+          "y": 22.55096292277082
+        },
+        {
+          "x": 34.18081063374718,
+          "y": 1.9534518141960433
+        },
+        {
+          "x": 500.0,
+          "y": 278.66248507329954
+        },
+        {
+          "x": -7.815970093361102e-14,
+          "y": 500.0
+        },
+        {
+          "x": -278.8240039168919,
+          "y": 500.0
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_4",
+      "name": "Module 14",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -51.98835620785464,
+        "y": -8.382588350261782
+      },
+      "boundary": [
+        {
+          "x": -23.830235861819354,
+          "y": -11.400718268509905
+        },
+        {
+          "x": -23.165751968840144,
+          "y": -15.768999382718532
+        },
+        {
+          "x": -331.25779554114115,
+          "y": -500.0
+        },
+        {
+          "x": -500.0,
+          "y": 8.881784197001252e-15
+        },
+        {
+          "x": -435.1732499735224,
+          "y": 500.0
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_5",
+      "name": "AI Features",
+      "color": "#DDA0DD",
+      "center": {
+        "x": 48.6343030618271,
+        "y": -26.70038828123755
+      },
+      "boundary": [
+        {
+          "x": 34.18081063374718,
+          "y": 1.9534518141960433
+        },
+        {
+          "x": 500.0,
+          "y": 278.66248507329954
+        },
+        {
+          "x": 500.0,
+          "y": 1.0658141036401503e-14
+        },
+        {
+          "x": 134.78559015292043,
+          "y": -500.0
+        },
+        {
+          "x": 23.34869069508869,
+          "y": -17.00593283801595
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    }
+  ],
+  "roads": [],
+  "stats": {
+    "total_files": 6,
+    "total_loc": 206,
+    "total_districts": 6,
+    "total_dependencies": 0,
+    "hotspots": 0
+  },
+  "metadata": {
+    "num_files": 6,
+    "num_directories": 6,
+    "languages": {},
+    "layer_violations": [],
+    "duplicates": [],
+    "issues": {
+      "circular_dependencies": [],
+      "god_objects": [],
+      "orphans": [
+        "vite.config.js",
+        "vitest.config.js",
+        "svelte.config.js",
+        "scripts/build-manifest.js",
+        "src/vite-env.d.ts",
+        "src/main.js"
+      ],
+      "highly_coupled": [],
+      "large_files": []
+    },
+    "health": {
+      "score": 100,
+      "grade": "A"
+    }
+  }
+}

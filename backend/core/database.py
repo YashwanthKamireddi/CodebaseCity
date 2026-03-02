@@ -10,6 +10,10 @@ from datetime import datetime, timedelta
 from functools import wraps
 import asyncio
 
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
+
 # In-memory fallback cache
 _memory_cache: Dict[str, Dict[str, Any]] = {}
 
@@ -44,7 +48,12 @@ class CacheService:
             )
             # Test connection
             self.redis.ping()
-        except Exception:
+            logger.info("Redis connected successfully")
+        except ImportError:
+            logger.info("Redis package not installed, using in-memory cache")
+            self.redis = None
+        except Exception as e:
+            logger.info(f"Redis not available (using in-memory fallback): {e}")
             self.redis = None
 
     def _make_key(self, key: str) -> str:
@@ -70,8 +79,8 @@ class CacheService:
             try:
                 value = await asyncio.to_thread(self.redis.get, full_key)
                 return self._deserialize(value) if value else None
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Redis get failed for '{key}': {e}")
 
         # Fallback to memory cache
         entry = _memory_cache.get(full_key)
@@ -92,8 +101,8 @@ class CacheService:
             try:
                 await asyncio.to_thread(self.redis.setex, full_key, ttl, serialized)
                 return True
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Redis set failed for '{key}': {e}")
 
         # Fallback to memory cache
         _memory_cache[full_key] = {
@@ -109,8 +118,8 @@ class CacheService:
         if self.redis:
             try:
                 await asyncio.to_thread(self.redis.delete, full_key)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Redis delete failed for '{key}': {e}")
 
         if full_key in _memory_cache:
             del _memory_cache[full_key]
@@ -124,8 +133,8 @@ class CacheService:
         if self.redis:
             try:
                 return bool(await asyncio.to_thread(self.redis.exists, full_key))
-            except Exception:
-                pass
+            except Exception as e:
+                logger.debug(f"Redis exists check failed for '{key}': {e}")
 
         entry = _memory_cache.get(full_key)
         if entry:

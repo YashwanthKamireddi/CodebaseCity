@@ -33,9 +33,7 @@ const useStore = create((set, get) => ({
         })
 
         try {
-            // Simulated "Thinking" delay
             set({ agentStatus: 'analyzing' })
-            await new Promise(r => setTimeout(r, 600))
             const response = await fetch(`${API_BASE}/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

@@ -103,18 +103,20 @@ export default function IntelligenceDashboard() {
         cityData,
         cityId
     } = useStore()
-    
+
+    console.log('[IntelligenceDashboard] Render:', { activeIntelligencePanel, cityId, hasCityData: !!cityData })
+
     const [searchQuery, setSearchQuery] = useState('')
     const [searchType, setSearchType] = useState('exact')
     const [refactoringReport, setRefactoringReport] = useState(null)
     const [dependencyReport, setDependencyReport] = useState(null)
     const [loadingRefactor, setLoadingRefactor] = useState(false)
     const [loadingDeps, setLoadingDeps] = useState(false)
-    
+
     // Fetch data when panel changes
     useEffect(() => {
         if (!cityData) return
-        
+
         switch (activeIntelligencePanel) {
             case 'health':
                 if (!healthReport) fetchHealthReport()
@@ -136,7 +138,7 @@ export default function IntelligenceDashboard() {
                 break
         }
     }, [activeIntelligencePanel, cityData])
-    
+
     const fetchRefactoringReport = async () => {
         if (!cityId) return
         setLoadingRefactor(true)
@@ -151,7 +153,7 @@ export default function IntelligenceDashboard() {
         }
         setLoadingRefactor(false)
     }
-    
+
     const fetchDependencyReport = async () => {
         if (!cityId) return
         setLoadingDeps(true)
@@ -166,16 +168,16 @@ export default function IntelligenceDashboard() {
         }
         setLoadingDeps(false)
     }
-    
+
     if (!cityData) return null
-    
+
     const handleSearch = (e) => {
         e.preventDefault()
         if (searchQuery.trim()) {
             performSmartSearch(searchQuery, searchType)
         }
     }
-    
+
     const tabs = [
         { id: 'health', icon: <HealthIcon />, label: 'Health' },
         { id: 'quality', icon: <QualityIcon />, label: 'Quality' },
@@ -185,13 +187,13 @@ export default function IntelligenceDashboard() {
         { id: 'critical', icon: <CriticalIcon />, label: 'Critical' },
         { id: 'search', icon: <SearchIcon />, label: 'Search' }
     ]
-    
+
     return (
         <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="fixed right-4 top-20 w-96 max-h-[calc(100vh-120px)] bg-slate-900/95 
-                       backdrop-blur-xl rounded-xl border border-slate-700/50 shadow-2xl 
+            className="fixed right-4 top-20 w-96 max-h-[calc(100vh-120px)] bg-slate-900/95
+                       backdrop-blur-xl rounded-xl border border-slate-700/50 shadow-2xl
                        overflow-hidden z-50"
         >
             {/* Header */}
@@ -209,19 +211,19 @@ export default function IntelligenceDashboard() {
                         </svg>
                     </button>
                 </div>
-                
+
                 {/* Tabs */}
                 <div className="flex gap-1 mt-3 overflow-x-auto pb-1">
                     {tabs.map(tab => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveIntelligencePanel(tab.id)}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm 
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm
                                        whitespace-nowrap transition-all
                                        ${activeIntelligencePanel === tab.id
-                                           ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                                           : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
-                                       }`}
+                                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                                    : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                                }`}
                         >
                             {tab.icon}
                             {tab.label}
@@ -229,7 +231,7 @@ export default function IntelligenceDashboard() {
                     ))}
                 </div>
             </div>
-            
+
             {/* Content */}
             <div className="overflow-y-auto max-h-[calc(100vh-280px)] p-4">
                 <AnimatePresence mode="wait">
@@ -272,7 +274,7 @@ export default function IntelligenceDashboard() {
 function HealthPanel({ report, loading }) {
     if (loading) return <LoadingState message="Analyzing code health..." />
     if (!report) return <EmptyState message="Click to analyze code health" />
-    
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -286,20 +288,20 @@ function HealthPanel({ report, loading }) {
                     {report.overall_score}
                 </div>
                 <div className="text-slate-400 text-sm">Overall Health Score</div>
-                <div 
+                <div
                     className="inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold"
                     style={{ backgroundColor: `${gradeColors[report.overall_grade]}20`, color: gradeColors[report.overall_grade] }}
                 >
                     Grade {report.overall_grade}
                 </div>
             </div>
-            
+
             {/* Grade Distribution */}
             <div className="bg-slate-800/50 rounded-lg p-4">
                 <h3 className="text-sm font-medium text-slate-300 mb-3">Grade Distribution</h3>
                 <div className="flex gap-2">
                     {Object.entries(report.grade_distribution || {}).map(([grade, count]) => (
-                        <div 
+                        <div
                             key={grade}
                             className="flex-1 text-center py-2 rounded"
                             style={{ backgroundColor: `${gradeColors[grade]}15` }}
@@ -310,7 +312,7 @@ function HealthPanel({ report, loading }) {
                     ))}
                 </div>
             </div>
-            
+
             {/* Hotspots */}
             {report.hotspots?.length > 0 && (
                 <div className="bg-slate-800/50 rounded-lg p-4">
@@ -325,7 +327,7 @@ function HealthPanel({ report, loading }) {
                     </div>
                 </div>
             )}
-            
+
             {/* Recommendations */}
             {report.recommendations?.length > 0 && (
                 <div className="bg-slate-800/50 rounded-lg p-4">
@@ -345,7 +347,7 @@ function HealthPanel({ report, loading }) {
 function QualityPanel({ report, loading }) {
     if (loading) return <LoadingState message="Scanning for issues..." />
     if (!report) return <EmptyState message="Click to scan code quality" />
-    
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -364,13 +366,13 @@ function QualityPanel({ report, loading }) {
                     <div className="text-sm text-slate-400">Issues Found</div>
                 </div>
             </div>
-            
+
             {/* Issues by Severity */}
             <div className="bg-slate-800/50 rounded-lg p-4">
                 <h3 className="text-sm font-medium text-slate-300 mb-3">Issues by Severity</h3>
                 <div className="grid grid-cols-4 gap-2">
                     {Object.entries(report.by_severity || {}).map(([severity, count]) => (
-                        <div 
+                        <div
                             key={severity}
                             className="text-center py-2 rounded"
                             style={{ backgroundColor: `${severityColors[severity]}15` }}
@@ -381,7 +383,7 @@ function QualityPanel({ report, loading }) {
                     ))}
                 </div>
             </div>
-            
+
             {/* Top Issues */}
             {report.top_issues?.length > 0 && (
                 <div className="bg-slate-800/50 rounded-lg p-4">
@@ -399,7 +401,7 @@ function QualityPanel({ report, loading }) {
                     </div>
                 </div>
             )}
-            
+
             {/* Recommendations */}
             {report.recommendations?.length > 0 && (
                 <div className="bg-slate-800/50 rounded-lg p-4">
@@ -419,7 +421,7 @@ function QualityPanel({ report, loading }) {
 function DeadCodePanel({ report, loading }) {
     if (loading) return <LoadingState message="Detecting dead code..." />
     if (!report) return <EmptyState message="Click to find dead code" />
-    
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -431,16 +433,15 @@ function DeadCodePanel({ report, loading }) {
             <div className="bg-slate-800/50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-2">
                     <span className="text-slate-400">Health Status</span>
-                    <span className={`font-semibold ${
-                        report.health_status === 'healthy' ? 'text-green-400' :
-                        report.health_status === 'warning' ? 'text-yellow-400' : 'text-red-400'
-                    }`}>
+                    <span className={`font-semibold ${report.health_status === 'healthy' ? 'text-green-400' :
+                            report.health_status === 'warning' ? 'text-yellow-400' : 'text-red-400'
+                        }`}>
                         {report.health_status?.toUpperCase()}
                     </span>
                 </div>
                 <div className="text-sm text-slate-500">{report.summary?.message}</div>
             </div>
-            
+
             {/* Orphan Files */}
             {report.orphan_files?.length > 0 && (
                 <div className="bg-slate-800/50 rounded-lg p-4">
@@ -459,7 +460,7 @@ function DeadCodePanel({ report, loading }) {
                     </div>
                 </div>
             )}
-            
+
             {/* Low Usage Files */}
             {report.low_usage_files?.length > 0 && (
                 <div className="bg-slate-800/50 rounded-lg p-4">
@@ -484,7 +485,7 @@ function DeadCodePanel({ report, loading }) {
 function CriticalPathsPanel({ paths, loading }) {
     if (loading) return <LoadingState message="Finding critical files..." />
     if (!paths) return <EmptyState message="Click to find critical paths" />
-    
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -505,7 +506,7 @@ function CriticalPathsPanel({ paths, loading }) {
                             <div className="text-sm font-medium text-white truncate">{file.path}</div>
                             <div className="flex gap-4 mt-1 text-xs">
                                 <span className="text-blue-400">{file.direct_dependents} direct deps</span>
-                                <span className="text-purple-400">{file.transitive_dependents} transitive</span>
+                                <span className="text-cyan-400">{file.transitive_dependents} transitive</span>
                                 <span className="text-orange-400">Score: {file.criticality_score}</span>
                             </div>
                         </div>
@@ -543,9 +544,9 @@ function SearchPanel({ query, setQuery, type, setType, onSearch, results, loadin
                             onClick={() => setType(t)}
                             className={`flex-1 px-2 py-1.5 rounded text-xs transition-colors
                                        ${type === t
-                                           ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                                           : 'bg-slate-700/30 text-slate-400 hover:text-white'
-                                       }`}
+                                    ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
+                                    : 'bg-slate-700/30 text-slate-400 hover:text-white'
+                                }`}
                         >
                             {t}
                         </button>
@@ -554,13 +555,13 @@ function SearchPanel({ query, setQuery, type, setType, onSearch, results, loadin
                 <button
                     type="submit"
                     disabled={loading || !query.trim()}
-                    className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 
+                    className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50
                              text-white py-2 rounded-lg transition-colors"
                 >
                     {loading ? 'Searching...' : 'Search'}
                 </button>
             </form>
-            
+
             {/* Structural Search Help */}
             {type === 'structural' && (
                 <div className="bg-slate-800/50 rounded-lg p-3 text-xs text-slate-400">
@@ -572,7 +573,7 @@ function SearchPanel({ query, setQuery, type, setType, onSearch, results, loadin
                     </ul>
                 </div>
             )}
-            
+
             {/* Results */}
             {results && (
                 <div className="bg-slate-800/50 rounded-lg p-4">
@@ -619,13 +620,13 @@ function EmptyState({ message }) {
 function RefactoringPanel({ report, loading }) {
     if (loading) return <LoadingState message="Analyzing refactoring opportunities..." />
     if (!report) return <EmptyState message="Click to find refactoring suggestions" />
-    
+
     const priorityColors = {
         high: '#ef4444',
         medium: '#f59e0b',
         low: '#22c55e'
     }
-    
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -654,7 +655,7 @@ function RefactoringPanel({ report, loading }) {
                     </div>
                 </div>
             </div>
-            
+
             {/* Quick Wins */}
             {report.quick_wins?.length > 0 && (
                 <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
@@ -668,15 +669,15 @@ function RefactoringPanel({ report, loading }) {
                     </div>
                 </div>
             )}
-            
+
             {/* Top Suggestions */}
             {report.suggestions?.length > 0 && (
                 <div className="bg-slate-800/50 rounded-lg p-4">
                     <h3 className="text-sm font-medium text-slate-300 mb-3">Top Suggestions</h3>
                     <div className="space-y-3">
                         {report.suggestions.slice(0, 8).map((suggestion, i) => (
-                            <div 
-                                key={i} 
+                            <div
+                                key={i}
                                 className="border-l-2 pl-3"
                                 style={{ borderColor: priorityColors[suggestion.effort] || '#6b7280' }}
                             >
@@ -695,7 +696,7 @@ function RefactoringPanel({ report, loading }) {
                     </div>
                 </div>
             )}
-            
+
             {/* Recommendations */}
             {report.recommendations?.length > 0 && (
                 <div className="bg-slate-800/50 rounded-lg p-4">
@@ -715,14 +716,14 @@ function RefactoringPanel({ report, loading }) {
 function ArchitecturePanel({ report, loading }) {
     if (loading) return <LoadingState message="Analyzing architecture..." />
     if (!report) return <EmptyState message="Click to analyze architecture" />
-    
+
     const healthColors = {
         excellent: '#22c55e',
         good: '#84cc16',
         fair: '#eab308',
         needs_attention: '#ef4444'
     }
-    
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -734,9 +735,9 @@ function ArchitecturePanel({ report, loading }) {
             <div className="bg-slate-800/50 rounded-lg p-4">
                 <div className="flex items-center justify-between mb-3">
                     <span className="text-slate-400 text-sm">Architecture Health</span>
-                    <span 
+                    <span
                         className="px-2 py-0.5 rounded text-xs font-semibold"
-                        style={{ 
+                        style={{
                             backgroundColor: `${healthColors[report.summary?.health]}20`,
                             color: healthColors[report.summary?.health]
                         }}
@@ -759,7 +760,7 @@ function ArchitecturePanel({ report, loading }) {
                     </div>
                 </div>
             </div>
-            
+
             {/* Layers */}
             {report.layers && Object.keys(report.layers).length > 0 && (
                 <div className="bg-slate-800/50 rounded-lg p-4">
@@ -774,7 +775,7 @@ function ArchitecturePanel({ report, loading }) {
                     </div>
                 </div>
             )}
-            
+
             {/* Hubs */}
             {report.hubs?.length > 0 && (
                 <div className="bg-slate-800/50 rounded-lg p-4">
@@ -793,7 +794,7 @@ function ArchitecturePanel({ report, loading }) {
                     </div>
                 </div>
             )}
-            
+
             {/* Layer Violations */}
             {report.layer_violations?.length > 0 && (
                 <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
@@ -811,7 +812,7 @@ function ArchitecturePanel({ report, loading }) {
                     </div>
                 </div>
             )}
-            
+
             {/* Insights */}
             {report.summary?.insights?.length > 0 && (
                 <div className="bg-slate-800/50 rounded-lg p-4">

@@ -32,7 +32,7 @@ function Lighting() {
             <directionalLight
                 position={[0, 30, -80]}
                 intensity={0.3}
-                color="#00d4ff"
+                color="#ffffff"
             />
 
             {/* Ground bounce light */}
@@ -46,7 +46,7 @@ function Lighting() {
             <pointLight
                 position={[0, 20, 0]}
                 intensity={0.5}
-                color="#00d4ff"
+                color="#ffffff"
                 distance={100}
                 decay={2}
             />

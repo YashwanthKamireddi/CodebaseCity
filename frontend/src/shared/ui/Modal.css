@@ -17,11 +17,12 @@
 }
 
 .modal-overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(5, 5, 8, 0.98);
+  backdrop-filter: blur(20px);
   position: fixed;
   inset: 0;
   animation: overlayShow 150ms ease-out;
-  z-index: 9999;
+  z-index: var(--z-max);
 }
 
 .modal-content {
@@ -38,8 +39,8 @@
   max-width: 580px;
   max-height: 85vh;
   animation: contentShow 200ms cubic-bezier(0.32, 0.72, 0, 1);
-  z-index: 10000;
-  color: #f4f4f5;
+  z-index: var(--z-max);
+  color: var(--color-text-primary);
   outline: none;
   backdrop-filter: blur(20px) saturate(180%);
   overflow: hidden;

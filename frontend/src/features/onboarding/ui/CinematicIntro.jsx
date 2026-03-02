@@ -52,8 +52,8 @@ export default function CinematicIntro({ onComplete }) {
                 <div style={{
                     position: 'absolute', top: 0, left: 0, height: '100%',
                     width: `${progress}%`,
-                    background: '#00f2ff',
-                    boxShadow: '0 0 20px #00f2ff',
+                    background: '#ffffff',
+                    boxShadow: '0 0 20px #ffffff',
                     transition: 'width 0.2s ease-out'
                 }} />
             </div>
@@ -63,19 +63,19 @@ export default function CinematicIntro({ onComplete }) {
                 width: '600px', maxWidth: '90%',
                 display: 'flex', flexDirection: 'column',
                 gap: '8px',
-                color: '#00f2ff', opacity: 0.8
+                color: '#ffffff', opacity: 0.8
             }}>
                 {lines.map((line, i) => (
                     <div key={i} style={{
                         opacity: i === lines.length - 1 ? 1 : 0.5 - (lines.length - i) * 0.05,
-                        textShadow: i === lines.length - 1 ? '0 0 10px #00f2ff' : 'none',
+                        textShadow: i === lines.length - 1 ? '0 0 10px #ffffff' : 'none',
                         animation: 'fadeIn 0.2s ease-out'
                     }}>
                         {'>'} {line}
                     </div>
                 ))}
                 <div style={{
-                    width: '10px', height: '20px', background: '#00f2ff',
+                    width: '10px', height: '20px', background: '#ffffff',
                     animation: 'blink 1s infinite'
                 }} />
             </div>

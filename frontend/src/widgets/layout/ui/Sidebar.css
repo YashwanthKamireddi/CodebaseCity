@@ -1,10 +1,133 @@
-/* Sidebar.css - Professional File Explorer */
+/* ═══════════════════════════════════════════════════════════════
+   Sidebar.css — Unified with design-tokens.css
+   Professional File Explorer — Glass panel aesthetic
+   ═══════════════════════════════════════════════════════════════ */
 
-.sidebar-container {
-    box-sizing: border-box;
+/* ── Panel Container ─────────────────────────────────────────── */
+.sidebar-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    max-width: 80vw;
+    height: 100vh;
+    z-index: var(--z-modal-backdrop);
+    background: rgba(5, 10, 20, 0.85); /* Deep Void Background */
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 20px 0 60px rgba(0, 0, 0, 0.8), 5px 0 30px rgba(255, 255, 255, 0.05) inset;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    color: white;
 }
 
-/* File tree container */
+.sidebar-panel.open {
+    transform: translateX(0);
+}
+
+.sidebar-panel.resizing {
+    transition: none;
+    user-select: none;
+    box-shadow: none;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.sidebar-header {
+    padding: 24px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: transparent;
+}
+
+.sidebar-title {
+    font-size: 1.1rem;
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #fff;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.sidebar-close-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+}
+
+.sidebar-close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+/* ── Content ─────────────────────────────────────────────────── */
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+}
+
+.sidebar-explorer-wrapper {
+    padding: var(--space-6) var(--space-2-5);
+}
+
+.sidebar-section-label {
+    font-size: 0.70rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 16px;
+    padding-left: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* ── Resize Handle ───────────────────────────────────────────── */
+.sidebar-resize-handle {
+    position: absolute;
+    top: 0;
+    right: -4px;
+    width: 8px;
+    height: 100%;
+    cursor: col-resize;
+    z-index: 10;
+}
+
+.sidebar-resize-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   File Tree — Token-based colors
+   ═══════════════════════════════════════════════════════════════ */
 .file-tree-container {
     width: 100%;
     box-sizing: border-box;
@@ -13,7 +136,8 @@
 }
 
 /* Base Row Styles */
-.file-row, .folder-row {
+.file-row,
+.folder-row {
     position: relative;
     display: flex;
     align-items: center;
@@ -23,7 +147,7 @@
     max-width: 100%;
     box-sizing: border-box;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 4px; /* Sharper */
     transition: background 0.12s ease, color 0.12s ease;
     user-select: none;
     border: 1px solid transparent;
@@ -31,32 +155,55 @@
 
 .file-row {
     padding: 6px 10px;
-    color: #a1a1aa;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .folder-row {
     padding: 6px 10px;
     margin-bottom: 2px;
-    color: #d4d4d8;
+    color: rgba(255, 255, 255, 0.9);
     font-weight: 500;
 }
 
-/* Hover States - More visible */
+/* Hover States */
 .file-row:hover {
-    background: rgba(59, 130, 246, 0.08);
-    color: #e4e4e7;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
 }
 
 .folder-row:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
 }
 
-/* Active/Selected State */
+/* Selected State */
 .file-row.selected {
-    background: rgba(59, 130, 246, 0.15) !important;
-    color: #60a5fa !important;
-    border-color: rgba(59, 130, 246, 0.3);
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1) inset;
+}
+
+/* File/Folder icons */
+.file-icon {
+    color: rgba(255, 255, 255, 0.5);
+    flex-shrink: 0;
+}
+
+.file-icon.active {
+    color: #ffffff;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+.folder-chevron,
+.folder-icon-wrap {
+    display: flex;
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.folder-row.open .folder-icon-wrap {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 /* Text Label */
@@ -66,15 +213,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-family: var(--font-body), 'Inter', sans-serif;
-    font-size: 0.8125rem;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
     line-height: 1.5;
 }
 
 /* Folder Count Badge */
 .folder-count {
-    font-size: 0.6875rem;
-    color: #52525b;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.6);
     background: rgba(255, 255, 255, 0.05);
     padding: 2px 6px;
     border-radius: 4px;

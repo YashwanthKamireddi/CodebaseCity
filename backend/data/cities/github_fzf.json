@@ -1,0 +1,6110 @@
+{
+  "name": "fzf",
+  "path": "/tmp/codebase_city/fzf",
+  "city_id": "github_fzf",
+  "buildings": [
+    {
+      "id": "main.go",
+      "name": "main.go",
+      "path": "main.go",
+      "district_id": "district_0",
+      "position": {
+        "x": -3.5975132309693656,
+        "y": 0.0,
+        "z": -0.6718226052387404
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 10.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 105,
+        "complexity": 13,
+        "churn": 2,
+        "age_days": 8,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2046
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.010958904109589041,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771553026
+    },
+    {
+      "id": "src/winpty_windows.go",
+      "name": "winpty_windows.go",
+      "path": "src/winpty_windows.go",
+      "district_id": "district_1",
+      "position": {
+        "x": -19.33273876985182,
+        "y": 0.0,
+        "z": 20.191137293798047
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 81,
+        "complexity": 10,
+        "churn": 0,
+        "age_days": 517,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1781
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.7082191780821918,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1727606022
+    },
+    {
+      "id": "src/winpty.go",
+      "name": "winpty.go",
+      "path": "src/winpty.go",
+      "district_id": "district_2",
+      "position": {
+        "x": 2.702442937250402,
+        "y": 0.0,
+        "z": -34.12444037109991
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 14,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 646,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 206
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.8849315068493151,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1716457374
+    },
+    {
+      "id": "src/tokenizer_test.go",
+      "name": "tokenizer_test.go",
+      "path": "src/tokenizer_test.go",
+      "district_id": "district_3",
+      "position": {
+        "x": 25.552691819068148,
+        "y": 0.0,
+        "z": 33.419402308431586
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 25.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 126,
+        "complexity": 46,
+        "churn": 0,
+        "age_days": 384,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3042
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.5260273972602739,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1739069615
+    },
+    {
+      "id": "src/tokenizer.go",
+      "name": "tokenizer.go",
+      "path": "src/tokenizer.go",
+      "district_id": "district_4",
+      "position": {
+        "x": -49.212860694422496,
+        "y": 0.0,
+        "z": -9.059561498028856
+      },
+      "dimensions": {
+        "width": 3.37,
+        "height": 25.0,
+        "depth": 3.37
+      },
+      "metrics": {
+        "loc": 337,
+        "complexity": 80,
+        "churn": 1,
+        "age_days": 67,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7564
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.09178082191780822,
+      "is_hotspot": false,
+      "author": "Marcel Meyer",
+      "email": "mm.marcelmeyer@gmail.com",
+      "email_hash": "31aeb26acdd14712717f38cf93ca1219",
+      "last_modified": 1766448873
+    },
+    {
+      "id": "src/tmux.go",
+      "name": "tmux.go",
+      "path": "src/tmux.go",
+      "district_id": "district_5",
+      "position": {
+        "x": 45.22873415082749,
+        "y": 0.0,
+        "z": -28.163006133210978
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 13.600000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 73,
+        "complexity": 17,
+        "churn": 0,
+        "age_days": 263,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2127
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.36027397260273974,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1749564143
+    },
+    {
+      "id": "src/terminal_windows.go",
+      "name": "terminal_windows.go",
+      "path": "src/terminal_windows.go",
+      "district_id": "district_6",
+      "position": {
+        "x": -15.878170727875146,
+        "y": 0.0,
+        "z": 57.12748637666114
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 16,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 548,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 158
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.7506849315068493,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1724917312
+    },
+    {
+      "id": "src/terminal_unix.go",
+      "name": "terminal_unix.go",
+      "path": "src/terminal_unix.go",
+      "district_id": "district_7",
+      "position": {
+        "x": -35.38146806042257,
+        "y": 0.0,
+        "z": -57.717927291684205
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 25,
+        "complexity": 2,
+        "churn": 0,
+        "age_days": 548,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 353
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.7506849315068493,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1724917312
+    },
+    {
+      "id": "src/terminal_test.go",
+      "name": "terminal_test.go",
+      "path": "src/terminal_test.go",
+      "district_id": "district_8",
+      "position": {
+        "x": 66.89115343273512,
+        "y": 0.0,
+        "z": 19.373508932379494
+      },
+      "dimensions": {
+        "width": 7.71,
+        "height": 25.0,
+        "depth": 7.71
+      },
+      "metrics": {
+        "loc": 771,
+        "complexity": 82,
+        "churn": 1,
+        "age_days": 10,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 31807
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0136986301369863,
+      "is_hotspot": true,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771389302
+    },
+    {
+      "id": "src/terminal.go",
+      "name": "terminal.go",
+      "path": "src/terminal.go",
+      "district_id": "district_9",
+      "position": {
+        "x": -70.74910888536131,
+        "y": 0.0,
+        "z": 25.616485641582102
+      },
+      "dimensions": {
+        "width": 10.0,
+        "height": 25.0,
+        "depth": 10.0
+      },
+      "metrics": {
+        "loc": 7712,
+        "complexity": 1770,
+        "churn": 20,
+        "age_days": 3,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 210173
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": true,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771948247
+    },
+    {
+      "id": "src/server.go",
+      "name": "server.go",
+      "path": "src/server.go",
+      "district_id": "district_10",
+      "position": {
+        "x": 34.315387241228905,
+        "y": 0.0,
+        "z": -70.130153468232
+      },
+      "dimensions": {
+        "width": 2.78,
+        "height": 25.0,
+        "depth": 2.78
+      },
+      "metrics": {
+        "loc": 278,
+        "complexity": 56,
+        "churn": 1,
+        "age_days": 42,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 6908
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.057534246575342465,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1768630437
+    },
+    {
+      "id": "src/result_x86.go",
+      "name": "result_x86.go",
+      "path": "src/result_x86.go",
+      "district_id": "district_11",
+      "position": {
+        "x": 18.335949691369102,
+        "y": 0.0,
+        "z": 83.50003692870104
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 17,
+        "complexity": 5,
+        "churn": 1,
+        "age_days": 0,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 373
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1772257348
+    },
+    {
+      "id": "src/result_test.go",
+      "name": "result_test.go",
+      "path": "src/result_test.go",
+      "district_id": "district_12",
+      "position": {
+        "x": -77.2244268086098,
+        "y": 0.0,
+        "z": -47.20048068885745
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 25.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 185,
+        "complexity": 41,
+        "churn": 1,
+        "age_days": 13,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 6516
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.01780821917808219,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771085206
+    },
+    {
+      "id": "src/result_others.go",
+      "name": "result_others.go",
+      "path": "src/result_others.go",
+      "district_id": "district_13",
+      "position": {
+        "x": 88.44151681043368,
+        "y": 0.0,
+        "z": -11.575277089137167
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.800000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 17,
+        "complexity": 6,
+        "churn": 1,
+        "age_days": 0,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 348
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1772257348
+    },
+    {
+      "id": "src/result.go",
+      "name": "result.go",
+      "path": "src/result.go",
+      "district_id": "district_14",
+      "position": {
+        "x": -53.36259188652392,
+        "y": 0.0,
+        "z": 73.62965199509642
+      },
+      "dimensions": {
+        "width": 3.37,
+        "height": 25.0,
+        "depth": 3.37
+      },
+      "metrics": {
+        "loc": 337,
+        "complexity": 69,
+        "churn": 2,
+        "age_days": 13,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 8088
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.01780821917808219,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771085206
+    },
+    {
+      "id": "src/reader_test.go",
+      "name": "reader_test.go",
+      "path": "src/reader_test.go",
+      "district_id": "district_15",
+      "position": {
+        "x": -7.023386633297977,
+        "y": 0.0,
+        "z": -95.33340266964285
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 9.600000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 69,
+        "complexity": 12,
+        "churn": 0,
+        "age_days": 482,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1409
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.6602739726027397,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1730632367
+    },
+    {
+      "id": "src/reader.go",
+      "name": "reader.go",
+      "path": "src/reader.go",
+      "district_id": "district_16",
+      "position": {
+        "x": 74.30505361162672,
+        "y": 0.0,
+        "z": 71.54388766863019
+      },
+      "dimensions": {
+        "width": 3.78,
+        "height": 25.0,
+        "depth": 3.78
+      },
+      "metrics": {
+        "loc": 378,
+        "complexity": 75,
+        "churn": 2,
+        "age_days": 20,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 8352
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0273972602739726,
+      "is_hotspot": false,
+      "author": "Sam Killen",
+      "email": "49190113+skk64@users.noreply.github.com",
+      "email_hash": "0a8d60f4b12a752951088198f52b8696",
+      "last_modified": 1770523065
+    },
+    {
+      "id": "src/proxy_windows.go",
+      "name": "proxy_windows.go",
+      "path": "src/proxy_windows.go",
+      "district_id": "district_17",
+      "position": {
+        "x": -100.41247466204051,
+        "y": 0.0,
+        "z": 13.140201937900937
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 9.600000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 86,
+        "complexity": 12,
+        "churn": 0,
+        "age_days": 517,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1558
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.7082191780821918,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1727606022
+    },
+    {
+      "id": "src/proxy_unix.go",
+      "name": "proxy_unix.go",
+      "path": "src/proxy_unix.go",
+      "district_id": "district_18",
+      "position": {
+        "x": 79.1933849333602,
+        "y": 0.0,
+        "z": -69.96404768220587
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 42,
+        "complexity": 4,
+        "churn": 0,
+        "age_days": 517,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 690
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.7082191780821918,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1727606022
+    },
+    {
+      "id": "src/proxy.go",
+      "name": "proxy.go",
+      "path": "src/proxy.go",
+      "district_id": "district_19",
+      "position": {
+        "x": -13.246813765816635,
+        "y": 0.0,
+        "z": 107.78648968083066
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 21.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 163,
+        "complexity": 27,
+        "churn": 0,
+        "age_days": 190,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4155
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2602739726027397,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1755858241
+    },
+    {
+      "id": "src/pattern_test.go",
+      "name": "pattern_test.go",
+      "path": "src/pattern_test.go",
+      "district_id": "district_20",
+      "position": {
+        "x": -79.2821256063896,
+        "y": 0.0,
+        "z": -80.44276979528185
+      },
+      "dimensions": {
+        "width": 2.02,
+        "height": 25.0,
+        "depth": 2.02
+      },
+      "metrics": {
+        "loc": 202,
+        "complexity": 91,
+        "churn": 1,
+        "age_days": 5,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 8166
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.00684931506849315,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771778883
+    },
+    {
+      "id": "src/pattern.go",
+      "name": "pattern.go",
+      "path": "src/pattern.go",
+      "district_id": "district_21",
+      "position": {
+        "x": 110.6535200568288,
+        "y": 0.0,
+        "z": 14.03529858540313
+      },
+      "dimensions": {
+        "width": 4.72,
+        "height": 25.0,
+        "depth": 4.72
+      },
+      "metrics": {
+        "loc": 472,
+        "complexity": 102,
+        "churn": 1,
+        "age_days": 5,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 12238
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.00684931506849315,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771778883
+    },
+    {
+      "id": "src/options_test.go",
+      "name": "options_test.go",
+      "path": "src/options_test.go",
+      "district_id": "district_22",
+      "position": {
+        "x": -102.30836412630917,
+        "y": 0.0,
+        "z": 59.25938065557748
+      },
+      "dimensions": {
+        "width": 5.72,
+        "height": 25.0,
+        "depth": 5.72
+      },
+      "metrics": {
+        "loc": 572,
+        "complexity": 155,
+        "churn": 2,
+        "age_days": 9,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 17310
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.012328767123287671,
+      "is_hotspot": true,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771504223
+    },
+    {
+      "id": "src/options_pprof_test.go",
+      "name": "options_pprof_test.go",
+      "path": "src/options_pprof_test.go",
+      "district_id": "district_23",
+      "position": {
+        "x": 35.855096396885436,
+        "y": 0.0,
+        "z": -114.83690256037671
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 90,
+        "complexity": 11,
+        "churn": 0,
+        "age_days": 686,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2069
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.9397260273972603,
+      "is_hotspot": false,
+      "author": "Charlie Vieth",
+      "email": "charlie.vieth@gmail.com",
+      "email_hash": "39a0945273c89affe62714c529ef0890",
+      "last_modified": 1712987891
+    },
+    {
+      "id": "src/options_pprof.go",
+      "name": "options_pprof.go",
+      "path": "src/options_pprof.go",
+      "district_id": "district_24",
+      "position": {
+        "x": 65.48226388320033,
+        "y": 0.0,
+        "z": 100.26973981273761
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 10.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 74,
+        "complexity": 13,
+        "churn": 0,
+        "age_days": 686,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1628
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.9397260273972603,
+      "is_hotspot": false,
+      "author": "Charlie Vieth",
+      "email": "charlie.vieth@gmail.com",
+      "email_hash": "39a0945273c89affe62714c529ef0890",
+      "last_modified": 1712987891
+    },
+    {
+      "id": "src/options_no_pprof.go",
+      "name": "options_no_pprof.go",
+      "path": "src/options_no_pprof.go",
+      "district_id": "district_25",
+      "position": {
+        "x": -118.61376419843575,
+        "y": 0.0,
+        "z": -39.32818742749809
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 14,
+        "complexity": 5,
+        "churn": 0,
+        "age_days": 662,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 332
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.9068493150684932,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1715011602
+    },
+    {
+      "id": "src/options.go",
+      "name": "options.go",
+      "path": "src/options.go",
+      "district_id": "district_26",
+      "position": {
+        "x": 115.28180375108401,
+        "y": 0.0,
+        "z": -56.8554407456314
+      },
+      "dimensions": {
+        "width": 10.0,
+        "height": 25.0,
+        "depth": 10.0
+      },
+      "metrics": {
+        "loc": 3910,
+        "complexity": 1164,
+        "churn": 10,
+        "age_days": 2,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 107656
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0027397260273972603,
+      "is_hotspot": true,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1772085119
+    },
+    {
+      "id": "src/merger_test.go",
+      "name": "merger_test.go",
+      "path": "src/merger_test.go",
+      "district_id": "district_27",
+      "position": {
+        "x": -52.685159190409195,
+        "y": 0.0,
+        "z": 118.43981667738703
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 90,
+        "complexity": 11,
+        "churn": 0,
+        "age_days": 108,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2027
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.14794520547945206,
+      "is_hotspot": false,
+      "author": "phanium",
+      "email": "91544758+phanen@users.noreply.github.com",
+      "email_hash": "cba3dccc1173578803ed72d258898d9f",
+      "last_modified": 1762952717
+    },
+    {
+      "id": "src/merger.go",
+      "name": "merger.go",
+      "path": "src/merger.go",
+      "district_id": "district_28",
+      "position": {
+        "x": -54.81886568231763,
+        "y": 0.0,
+        "z": -118.63546483728135
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 21.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 191,
+        "complexity": 27,
+        "churn": 1,
+        "age_days": 5,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4303
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.00684931506849315,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771778883
+    },
+    {
+      "id": "src/matcher.go",
+      "name": "matcher.go",
+      "path": "src/matcher.go",
+      "district_id": "district_29",
+      "position": {
+        "x": 120.04833202985324,
+        "y": 0.0,
+        "z": 54.23010159136287
+      },
+      "dimensions": {
+        "width": 2.78,
+        "height": 25.0,
+        "depth": 2.78
+      },
+      "metrics": {
+        "loc": 278,
+        "complexity": 40,
+        "churn": 3,
+        "age_days": 2,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 6430
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0027397260273972603,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1772085119
+    },
+    {
+      "id": "src/item_test.go",
+      "name": "item_test.go",
+      "path": "src/item_test.go",
+      "district_id": "district_30",
+      "position": {
+        "x": -134.3940854637597,
+        "y": 0.0,
+        "z": 37.28489038121744
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.800000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 24,
+        "complexity": 6,
+        "churn": 0,
+        "age_days": 871,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 484
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 1.0,
+      "is_hotspot": false,
+      "author": "dependabot[bot]",
+      "email": "49699333+dependabot[bot]@users.noreply.github.com",
+      "email_hash": "48ea49be76d0c68403a7f3df87e3487d",
+      "last_modified": 1696997867
+    },
+    {
+      "id": "src/item.go",
+      "name": "item.go",
+      "path": "src/item.go",
+      "district_id": "district_31",
+      "position": {
+        "x": 83.47827014630613,
+        "y": 0.0,
+        "z": -114.36559712746846
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 60,
+        "complexity": 4,
+        "churn": 0,
+        "age_days": 367,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1455
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.5027397260273972,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1740497123
+    },
+    {
+      "id": "src/history_test.go",
+      "name": "history_test.go",
+      "path": "src/history_test.go",
+      "district_id": "district_32",
+      "position": {
+        "x": 35.84510268786031,
+        "y": 0.0,
+        "z": 136.06233302512342
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 68,
+        "complexity": 11,
+        "churn": 0,
+        "age_days": 108,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1501
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.14794520547945206,
+      "is_hotspot": false,
+      "author": "phanium",
+      "email": "91544758+phanen@users.noreply.github.com",
+      "email_hash": "cba3dccc1173578803ed72d258898d9f",
+      "last_modified": 1762952717
+    },
+    {
+      "id": "src/history.go",
+      "name": "history.go",
+      "path": "src/history.go",
+      "district_id": "district_33",
+      "position": {
+        "x": -108.03934902675634,
+        "y": 0.0,
+        "z": -96.9681428624303
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 11.200000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 96,
+        "complexity": 14,
+        "churn": 0,
+        "age_days": 871,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2071
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 1.0,
+      "is_hotspot": false,
+      "author": "dependabot[bot]",
+      "email": "49699333+dependabot[bot]@users.noreply.github.com",
+      "email_hash": "48ea49be76d0c68403a7f3df87e3487d",
+      "last_modified": 1696997867
+    },
+    {
+      "id": "src/functions.go",
+      "name": "functions.go",
+      "path": "src/functions.go",
+      "district_id": "district_34",
+      "position": {
+        "x": 145.8505051000121,
+        "y": 0.0,
+        "z": -21.00231922141859
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 36,
+        "complexity": 3,
+        "churn": 0,
+        "age_days": 648,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 675
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.8876712328767123,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1716221170
+    },
+    {
+      "id": "src/core.go",
+      "name": "core.go",
+      "path": "src/core.go",
+      "district_id": "district_35",
+      "position": {
+        "x": -97.636984470974,
+        "y": 0.0,
+        "z": 111.2077883470458
+      },
+      "dimensions": {
+        "width": 5.81,
+        "height": 25.0,
+        "depth": 5.81
+      },
+      "metrics": {
+        "loc": 581,
+        "complexity": 121,
+        "churn": 9,
+        "age_days": 2,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 14803
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0027397260273972603,
+      "is_hotspot": true,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1772085119
+    },
+    {
+      "id": "src/constants.go",
+      "name": "constants.go",
+      "path": "src/constants.go",
+      "district_id": "district_36",
+      "position": {
+        "x": -2.4165461023152535,
+        "y": 0.0,
+        "z": -150.8324520467727
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 79,
+        "complexity": 1,
+        "churn": 2,
+        "age_days": 5,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1781
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.00684931506849315,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771778883
+    },
+    {
+      "id": "src/chunklist_test.go",
+      "name": "chunklist_test.go",
+      "path": "src/chunklist_test.go",
+      "district_id": "district_37",
+      "position": {
+        "x": 101.34741484470102,
+        "y": 0.0,
+        "z": 113.26782880541394
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 18.400000000000002,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 117,
+        "complexity": 23,
+        "churn": 0,
+        "age_days": 108,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2830
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.14794520547945206,
+      "is_hotspot": false,
+      "author": "phanium",
+      "email": "91544758+phanen@users.noreply.github.com",
+      "email_hash": "cba3dccc1173578803ed72d258898d9f",
+      "last_modified": 1762952717
+    },
+    {
+      "id": "src/chunklist.go",
+      "name": "chunklist.go",
+      "path": "src/chunklist.go",
+      "district_id": "district_38",
+      "position": {
+        "x": -154.8680861996683,
+        "y": 0.0,
+        "z": -7.3201049471169775
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 17.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 156,
+        "complexity": 22,
+        "churn": 3,
+        "age_days": 4,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3368
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.005479452054794521,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771932399
+    },
+    {
+      "id": "src/cache_test.go",
+      "name": "cache_test.go",
+      "path": "src/cache_test.go",
+      "district_id": "district_39",
+      "position": {
+        "x": 120.18293638984755,
+        "y": 0.0,
+        "z": -101.19073958235667
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 6.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 40,
+        "complexity": 8,
+        "churn": 0,
+        "age_days": 871,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 859
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 1.0,
+      "is_hotspot": false,
+      "author": "dependabot[bot]",
+      "email": "49699333+dependabot[bot]@users.noreply.github.com",
+      "email_hash": "48ea49be76d0c68403a7f3df87e3487d",
+      "last_modified": 1696997867
+    },
+    {
+      "id": "src/cache.go",
+      "name": "cache.go",
+      "path": "src/cache.go",
+      "district_id": "district_40",
+      "position": {
+        "x": -42.01577265308285,
+        "y": 0.0,
+        "z": 155.03989353820126
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 12.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 96,
+        "complexity": 16,
+        "churn": 0,
+        "age_days": 628,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1872
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.8602739726027397,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1718019235
+    },
+    {
+      "id": "src/ansi_test.go",
+      "name": "ansi_test.go",
+      "path": "src/ansi_test.go",
+      "district_id": "district_41",
+      "position": {
+        "x": -92.34416477996888,
+        "y": 0.0,
+        "z": -125.9242696634058
+      },
+      "dimensions": {
+        "width": 5.6,
+        "height": 25.0,
+        "depth": 5.6
+      },
+      "metrics": {
+        "loc": 560,
+        "complexity": 90,
+        "churn": 1,
+        "age_days": 13,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 15095
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.01780821917808219,
+      "is_hotspot": true,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771085206
+    },
+    {
+      "id": "src/ansi.go",
+      "name": "ansi.go",
+      "path": "src/ansi.go",
+      "district_id": "district_42",
+      "position": {
+        "x": 151.54480744999177,
+        "y": 0.0,
+        "z": 50.242436183210074
+      },
+      "dimensions": {
+        "width": 5.78,
+        "height": 25.0,
+        "depth": 5.78
+      },
+      "metrics": {
+        "loc": 578,
+        "complexity": 171,
+        "churn": 1,
+        "age_days": 13,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 13349
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.01780821917808219,
+      "is_hotspot": true,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771085206
+    },
+    {
+      "id": "src/actiontype_string.go",
+      "name": "actiontype_string.go",
+      "path": "src/actiontype_string.go",
+      "district_id": "district_43",
+      "position": {
+        "x": -138.0610507037169,
+        "y": 0.0,
+        "z": 89.70478943557569
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 198,
+        "complexity": 3,
+        "churn": 5,
+        "age_days": 4,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 8917
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.005479452054794521,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771932399
+    },
+    {
+      "id": "src/algo/normalize.go",
+      "name": "normalize.go",
+      "path": "src/algo/normalize.go",
+      "district_id": "district_44",
+      "position": {
+        "x": 69.00387207864412,
+        "y": 0.0,
+        "z": -152.25865962350971
+      },
+      "dimensions": {
+        "width": 5.9,
+        "height": 4.0,
+        "depth": 5.9
+      },
+      "metrics": {
+        "loc": 590,
+        "complexity": 5,
+        "churn": 0,
+        "age_days": 240,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 23990
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.3287671232876712,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1751543839
+    },
+    {
+      "id": "src/algo/algo_test.go",
+      "name": "algo_test.go",
+      "path": "src/algo/algo_test.go",
+      "district_id": "district_45",
+      "position": {
+        "x": 62.09999957029562,
+        "y": 0.0,
+        "z": 155.14922811585842
+      },
+      "dimensions": {
+        "width": 2.12,
+        "height": 12.8,
+        "depth": 2.12
+      },
+      "metrics": {
+        "loc": 212,
+        "complexity": 16,
+        "churn": 1,
+        "age_days": 67,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 9152
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.09178082191780822,
+      "is_hotspot": false,
+      "author": "Marcel Meyer",
+      "email": "mm.marcelmeyer@gmail.com",
+      "email_hash": "31aeb26acdd14712717f38cf93ca1219",
+      "last_modified": 1766448873
+    },
+    {
+      "id": "src/algo/algo.go",
+      "name": "algo.go",
+      "path": "src/algo/algo.go",
+      "district_id": "district_46",
+      "position": {
+        "x": -150.81693213865918,
+        "y": 0.0,
+        "z": -78.95705731585738
+      },
+      "dimensions": {
+        "width": 10.0,
+        "height": 25.0,
+        "depth": 10.0
+      },
+      "metrics": {
+        "loc": 1035,
+        "complexity": 251,
+        "churn": 4,
+        "age_days": 5,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 28355
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.00684931506849315,
+      "is_hotspot": true,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771778883
+    },
+    {
+      "id": "src/protector/protector_openbsd.go",
+      "name": "protector_openbsd.go",
+      "path": "src/protector/protector_openbsd.go",
+      "district_id": "district_47",
+      "position": {
+        "x": 162.66005765968137,
+        "y": 0.0,
+        "z": -62.35359297589381
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 11,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 619,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 229
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.8479452054794521,
+      "is_hotspot": false,
+      "author": "bsdmp",
+      "email": "bsdmp@users.noreply.github.com",
+      "email_hash": "8818d54e543761e522e66ca65ffd4edc",
+      "last_modified": 1718763968
+    },
+    {
+      "id": "src/protector/protector.go",
+      "name": "protector.go",
+      "path": "src/protector/protector.go",
+      "district_id": "district_48",
+      "position": {
+        "x": -92.28017809701376,
+        "y": 0.0,
+        "z": 146.4097438060193
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 7,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 662,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 122
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.9068493150684932,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1715011602
+    },
+    {
+      "id": "src/tui/tui_test.go",
+      "name": "tui_test.go",
+      "path": "src/tui/tui_test.go",
+      "district_id": "district_49",
+      "position": {
+        "x": -35.09090003532222,
+        "y": 0.0,
+        "z": -170.97447380526663
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 19.200000000000003,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 61,
+        "complexity": 24,
+        "churn": 1,
+        "age_days": 10,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1638
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0136986301369863,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771389302
+    },
+    {
+      "id": "src/tui/tui.go",
+      "name": "tui.go",
+      "path": "src/tui/tui.go",
+      "district_id": "district_50",
+      "position": {
+        "x": 148.71245288121713,
+        "y": 0.0,
+        "z": 92.48005429972626
+      },
+      "dimensions": {
+        "width": 10.0,
+        "height": 25.0,
+        "depth": 10.0
+      },
+      "metrics": {
+        "loc": 1409,
+        "complexity": 76,
+        "churn": 4,
+        "age_days": 10,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 33774
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0136986301369863,
+      "is_hotspot": true,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771418195
+    },
+    {
+      "id": "src/tui/ttyname_windows.go",
+      "name": "ttyname_windows.go",
+      "path": "src/tui/ttyname_windows.go",
+      "district_id": "district_51",
+      "position": {
+        "x": -175.42133928702776,
+        "y": 0.0,
+        "z": 15.42559801936038
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 22,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 314,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 304
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.4301369863013699,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1745115890
+    },
+    {
+      "id": "src/tui/ttyname_unix.go",
+      "name": "ttyname_unix.go",
+      "path": "src/tui/ttyname_unix.go",
+      "district_id": "district_52",
+      "position": {
+        "x": 106.64387296275449,
+        "y": 0.0,
+        "z": -148.40264496274273
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 7.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 55,
+        "complexity": 9,
+        "churn": 0,
+        "age_days": 254,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 978
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.34794520547945207,
+      "is_hotspot": false,
+      "author": "曹家巧",
+      "email": "caojiaqiao@outlook.com",
+      "email_hash": "ee9039dc95419f208db2b14487e2c887",
+      "last_modified": 1750261634
+    },
+    {
+      "id": "src/tui/tcell_test.go",
+      "name": "tcell_test.go",
+      "path": "src/tui/tcell_test.go",
+      "district_id": "district_53",
+      "position": {
+        "x": 14.009486537875347,
+        "y": 0.0,
+        "z": 180.8544220754519
+      },
+      "dimensions": {
+        "width": 4.74,
+        "height": 13.600000000000001,
+        "depth": 4.74
+      },
+      "metrics": {
+        "loc": 474,
+        "complexity": 17,
+        "churn": 1,
+        "age_days": 10,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 23828
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0136986301369863,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771389302
+    },
+    {
+      "id": "src/tui/tcell.go",
+      "name": "tcell.go",
+      "path": "src/tui/tcell.go",
+      "district_id": "district_54",
+      "position": {
+        "x": -125.68144358388095,
+        "y": 0.0,
+        "z": -132.61681328658653
+      },
+      "dimensions": {
+        "width": 10.0,
+        "height": 25.0,
+        "depth": 10.0
+      },
+      "metrics": {
+        "loc": 1103,
+        "complexity": 250,
+        "churn": 5,
+        "age_days": 10,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 25439
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0136986301369863,
+      "is_hotspot": true,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771418195
+    },
+    {
+      "id": "src/tui/light_windows.go",
+      "name": "light_windows.go",
+      "path": "src/tui/light_windows.go",
+      "district_id": "district_55",
+      "position": {
+        "x": 185.81277396685928,
+        "y": 0.0,
+        "z": 13.524410289630431
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 20.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 184,
+        "complexity": 26,
+        "churn": 1,
+        "age_days": 50,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 5628
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0684931506849315,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1767886180
+    },
+    {
+      "id": "src/tui/light_unix.go",
+      "name": "light_unix.go",
+      "path": "src/tui/light_unix.go",
+      "district_id": "district_56",
+      "position": {
+        "x": -150.31729683065103,
+        "y": 0.0,
+        "z": 107.04227547074863
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 23.200000000000003,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 182,
+        "complexity": 29,
+        "churn": 1,
+        "age_days": 50,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3885
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0684931506849315,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1767886180
+    },
+    {
+      "id": "src/tui/light_test.go",
+      "name": "light_test.go",
+      "path": "src/tui/light_test.go",
+      "district_id": "district_57",
+      "position": {
+        "x": 21.09832893521907,
+        "y": 0.0,
+        "z": -186.4166136338397
+      },
+      "dimensions": {
+        "width": 3.53,
+        "height": 6.4,
+        "depth": 3.53
+      },
+      "metrics": {
+        "loc": 353,
+        "complexity": 8,
+        "churn": 1,
+        "age_days": 50,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 12922
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0684931506849315,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1767886180
+    },
+    {
+      "id": "src/tui/light.go",
+      "name": "light.go",
+      "path": "src/tui/light.go",
+      "district_id": "district_58",
+      "position": {
+        "x": 115.82899610397934,
+        "y": 0.0,
+        "z": 151.07297235509458
+      },
+      "dimensions": {
+        "width": 10.0,
+        "height": 25.0,
+        "depth": 10.0
+      },
+      "metrics": {
+        "loc": 1538,
+        "complexity": 375,
+        "churn": 6,
+        "age_days": 10,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 34769
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0136986301369863,
+      "is_hotspot": true,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771418195
+    },
+    {
+      "id": "src/tui/eventtype_string.go",
+      "name": "eventtype_string.go",
+      "path": "src/tui/eventtype_string.go",
+      "district_id": "district_59",
+      "position": {
+        "x": -187.31594380451193,
+        "y": 0.0,
+        "z": -35.37353237273864
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 178,
+        "complexity": 3,
+        "churn": 0,
+        "age_days": 104,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 5911
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.14246575342465753,
+      "is_hotspot": false,
+      "author": "Massimo Mund",
+      "email": "masmu@users.noreply.github.com",
+      "email_hash": "e165c6f10f2f8092e4b0d96a14bbd2d6",
+      "last_modified": 1763290824
+    },
+    {
+      "id": "src/tui/dummy.go",
+      "name": "dummy.go",
+      "path": "src/tui/dummy.go",
+      "district_id": "district_60",
+      "position": {
+        "x": 168.2394245441196,
+        "y": 0.0,
+        "z": -89.15300407468949
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 48,
+        "complexity": 2,
+        "churn": 1,
+        "age_days": 50,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2091
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0684931506849315,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1767886180
+    },
+    {
+      "id": "src/util/util_windows.go",
+      "name": "util_windows.go",
+      "path": "src/util/util_windows.go",
+      "district_id": "district_61",
+      "position": {
+        "x": -57.70541748098933,
+        "y": 0.0,
+        "z": 184.72012758996127
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 17.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 190,
+        "complexity": 22,
+        "churn": 0,
+        "age_days": 651,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4873
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.8917808219178082,
+      "is_hotspot": false,
+      "author": "Zhizhen He",
+      "email": "hezhizhen.yi@gmail.com",
+      "email_hash": "6eb1741e943fd1b46f00a2fa875a056e",
+      "last_modified": 1716019593
+    },
+    {
+      "id": "src/util/util_unix.go",
+      "name": "util_unix.go",
+      "path": "src/util/util_unix.go",
+      "district_id": "district_62",
+      "position": {
+        "x": -89.550658685433,
+        "y": 0.0,
+        "z": -172.0662130202136
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 5.6000000000000005,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 94,
+        "complexity": 7,
+        "churn": 0,
+        "age_days": 662,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2229
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.9068493150684932,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1715011602
+    },
+    {
+      "id": "src/util/util_test.go",
+      "name": "util_test.go",
+      "path": "src/util/util_test.go",
+      "district_id": "district_63",
+      "position": {
+        "x": 184.49239125606653,
+        "y": 0.0,
+        "z": 77.5352531437962
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 21.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 151,
+        "complexity": 27,
+        "churn": 2,
+        "age_days": 67,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3088
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.09178082191780822,
+      "is_hotspot": false,
+      "author": "Marcel Meyer",
+      "email": "mm.marcelmeyer@gmail.com",
+      "email_hash": "31aeb26acdd14712717f38cf93ca1219",
+      "last_modified": 1766448873
+    },
+    {
+      "id": "src/util/util.go",
+      "name": "util.go",
+      "path": "src/util/util.go",
+      "district_id": "district_64",
+      "position": {
+        "x": -187.8293998918062,
+        "y": 0.0,
+        "z": 72.32392423969442
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 21.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 164,
+        "complexity": 27,
+        "churn": 3,
+        "age_days": 27,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3290
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.036986301369863014,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1769911703
+    },
+    {
+      "id": "src/util/slab.go",
+      "name": "slab.go",
+      "path": "src/util/slab.go",
+      "district_id": "district_65",
+      "position": {
+        "x": 80.68695287006412,
+        "y": 0.0,
+        "z": -182.5806049799176
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 13,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 871,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 185
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 1.0,
+      "is_hotspot": false,
+      "author": "dependabot[bot]",
+      "email": "49699333+dependabot[bot]@users.noreply.github.com",
+      "email_hash": "48ea49be76d0c68403a7f3df87e3487d",
+      "last_modified": 1696997867
+    },
+    {
+      "id": "src/util/eventbox_test.go",
+      "name": "eventbox_test.go",
+      "path": "src/util/eventbox_test.go",
+      "district_id": "district_66",
+      "position": {
+        "x": 46.21964803899328,
+        "y": 0.0,
+        "z": 200.46581952432805
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.800000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 61,
+        "complexity": 6,
+        "churn": 0,
+        "age_days": 871,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 899
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 1.0,
+      "is_hotspot": false,
+      "author": "dependabot[bot]",
+      "email": "49699333+dependabot[bot]@users.noreply.github.com",
+      "email_hash": "48ea49be76d0c68403a7f3df87e3487d",
+      "last_modified": 1696997867
+    },
+    {
+      "id": "src/util/eventbox.go",
+      "name": "eventbox.go",
+      "path": "src/util/eventbox.go",
+      "district_id": "district_67",
+      "position": {
+        "x": -176.60635965734653,
+        "y": 0.0,
+        "z": -110.86386780072306
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 9.600000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 97,
+        "complexity": 12,
+        "churn": 0,
+        "age_days": 354,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1960
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.4849315068493151,
+      "is_hotspot": false,
+      "author": "Gabriel Marin",
+      "email": "gbrlmarn@gmail.com",
+      "email_hash": "2b68898c94f4885e82ea13b1b90413db",
+      "last_modified": 1741670694
+    },
+    {
+      "id": "src/util/concurrent_set.go",
+      "name": "concurrent_set.go",
+      "path": "src/util/concurrent_set.go",
+      "district_id": "district_68",
+      "position": {
+        "x": 201.74965332189518,
+        "y": 0.0,
+        "z": -46.15146034652993
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 40,
+        "complexity": 2,
+        "churn": 0,
+        "age_days": 252,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 851
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.3452054794520548,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1750515878
+    },
+    {
+      "id": "src/util/chars_test.go",
+      "name": "chars_test.go",
+      "path": "src/util/chars_test.go",
+      "district_id": "district_69",
+      "position": {
+        "x": -126.03681894958538,
+        "y": 0.0,
+        "z": 163.61069564794698
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 18.400000000000002,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 132,
+        "complexity": 23,
+        "churn": 1,
+        "age_days": 10,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4210
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0136986301369863,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771395656
+    },
+    {
+      "id": "src/util/chars.go",
+      "name": "chars.go",
+      "path": "src/util/chars.go",
+      "district_id": "district_70",
+      "position": {
+        "x": -20.35931851799338,
+        "y": 0.0,
+        "z": -205.976738406294
+      },
+      "dimensions": {
+        "width": 3.49,
+        "height": 25.0,
+        "depth": 3.49
+      },
+      "metrics": {
+        "loc": 349,
+        "complexity": 62,
+        "churn": 2,
+        "age_days": 10,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7223
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.0136986301369863,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771395656
+    },
+    {
+      "id": "src/util/atomicbool_test.go",
+      "name": "atomicbool_test.go",
+      "path": "src/util/atomicbool_test.go",
+      "district_id": "district_71",
+      "position": {
+        "x": 145.6832205480841,
+        "y": 0.0,
+        "z": 151.32003904540966
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 18,
+        "complexity": 5,
+        "churn": 0,
+        "age_days": 871,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 301
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 1.0,
+      "is_hotspot": false,
+      "author": "dependabot[bot]",
+      "email": "49699333+dependabot[bot]@users.noreply.github.com",
+      "email_hash": "48ea49be76d0c68403a7f3df87e3487d",
+      "last_modified": 1696997867
+    },
+    {
+      "id": "src/util/atomicbool.go",
+      "name": "atomicbool.go",
+      "path": "src/util/atomicbool.go",
+      "district_id": "district_72",
+      "position": {
+        "x": -212.23315015558674,
+        "y": 0.0,
+        "z": -15.934978202637135
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 35,
+        "complexity": 2,
+        "churn": 0,
+        "age_days": 871,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 748
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 1.0,
+      "is_hotspot": false,
+      "author": "dependabot[bot]",
+      "email": "49699333+dependabot[bot]@users.noreply.github.com",
+      "email_hash": "48ea49be76d0c68403a7f3df87e3487d",
+      "last_modified": 1696997867
+    },
+    {
+      "id": "src/util/atexit_test.go",
+      "name": "atexit_test.go",
+      "path": "src/util/atexit_test.go",
+      "district_id": "district_73",
+      "position": {
+        "x": 162.1480826131332,
+        "y": 0.0,
+        "z": -134.50432443688481
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 25,
+        "complexity": 4,
+        "churn": 0,
+        "age_days": 108,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 446
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.14794520547945206,
+      "is_hotspot": false,
+      "author": "phanium",
+      "email": "91544758+phanen@users.noreply.github.com",
+      "email_hash": "cba3dccc1173578803ed72d258898d9f",
+      "last_modified": 1762952717
+    },
+    {
+      "id": "src/util/atexit.go",
+      "name": "atexit.go",
+      "path": "src/util/atexit.go",
+      "district_id": "district_74",
+      "position": {
+        "x": -9.649448439086314,
+        "y": 0.0,
+        "z": 215.79863565807045
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 29,
+        "complexity": 3,
+        "churn": 0,
+        "age_days": 662,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 554
+      },
+      "language": "go",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.9068493150684932,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1715011602
+    },
+    {
+      "id": "test/test_shell_integration.rb",
+      "name": "test_shell_integration.rb",
+      "path": "test/test_shell_integration.rb",
+      "district_id": "district_75",
+      "position": {
+        "x": -143.53495942347308,
+        "y": 0.0,
+        "z": -160.0750060106564
+      },
+      "dimensions": {
+        "width": 10.0,
+        "height": 25.0,
+        "depth": 10.0
+      },
+      "metrics": {
+        "loc": 1056,
+        "complexity": 55,
+        "churn": 4,
+        "age_days": 9,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 33296
+      },
+      "language": "unknown",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.012328767123287671,
+      "is_hotspot": true,
+      "author": "bitraid",
+      "email": "bitraid@protonmail.ch",
+      "email_hash": "959cb94df07075e43d6ea20d9ee64a41",
+      "last_modified": 1771512086
+    },
+    {
+      "id": "test/test_server.rb",
+      "name": "test_server.rb",
+      "path": "test/test_server.rb",
+      "district_id": "district_76",
+      "position": {
+        "x": 210.55241743638553,
+        "y": 0.0,
+        "z": 53.74400630528247
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 63,
+        "complexity": 2,
+        "churn": 1,
+        "age_days": 42,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2529
+      },
+      "language": "unknown",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.057534246575342465,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1768630437
+    },
+    {
+      "id": "test/test_raw.rb",
+      "name": "test_raw.rb",
+      "path": "test/test_raw.rb",
+      "district_id": "district_77",
+      "position": {
+        "x": -178.30397681108698,
+        "y": 0.0,
+        "z": 131.9923814850607
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 114,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 142,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2770
+      },
+      "language": "unknown",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19452054794520549,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1759936620
+    },
+    {
+      "id": "test/test_preview.rb",
+      "name": "test_preview.rb",
+      "path": "test/test_preview.rb",
+      "district_id": "district_78",
+      "position": {
+        "x": 50.14329339514305,
+        "y": 0.0,
+        "z": -217.07000312412245
+      },
+      "dimensions": {
+        "width": 6.13,
+        "height": 8.8,
+        "depth": 6.13
+      },
+      "metrics": {
+        "loc": 613,
+        "complexity": 11,
+        "churn": 4,
+        "age_days": 9,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 24544
+      },
+      "language": "unknown",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.012328767123287671,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771504639
+    },
+    {
+      "id": "test/test_layout.rb",
+      "name": "test_layout.rb",
+      "path": "test/test_layout.rb",
+      "district_id": "district_79",
+      "position": {
+        "x": 104.88559203652498,
+        "y": 0.0,
+        "z": 192.98089072773246
+      },
+      "dimensions": {
+        "width": 10.0,
+        "height": 1.0,
+        "depth": 10.0
+      },
+      "metrics": {
+        "loc": 1302,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 105,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 50907
+      },
+      "language": "unknown",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.14383561643835616,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1763174511
+    },
+    {
+      "id": "test/test_filter.rb",
+      "name": "test_filter.rb",
+      "path": "test/test_filter.rb",
+      "district_id": "district_80",
+      "position": {
+        "x": -216.68147659017185,
+        "y": 0.0,
+        "z": -59.22669758850268
+      },
+      "dimensions": {
+        "width": 3.53,
+        "height": 9.600000000000001,
+        "depth": 3.53
+      },
+      "metrics": {
+        "loc": 353,
+        "complexity": 12,
+        "churn": 3,
+        "age_days": 5,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 10529
+      },
+      "language": "unknown",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.00684931506849315,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771778883
+    },
+    {
+      "id": "test/test_exec.rb",
+      "name": "test_exec.rb",
+      "path": "test/test_exec.rb",
+      "district_id": "district_81",
+      "position": {
+        "x": 212.28340327222392,
+        "y": 0.0,
+        "z": -71.05888751011815
+      },
+      "dimensions": {
+        "width": 4.18,
+        "height": 4.800000000000001,
+        "depth": 4.18
+      },
+      "metrics": {
+        "loc": 418,
+        "complexity": 6,
+        "churn": 0,
+        "age_days": 165,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 15463
+      },
+      "language": "unknown",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.22602739726027396,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1758025376
+    },
+    {
+      "id": "test/test_core.rb",
+      "name": "test_core.rb",
+      "path": "test/test_core.rb",
+      "district_id": "district_82",
+      "position": {
+        "x": -84.36268559408575,
+        "y": 0.0,
+        "z": 206.972879117991
+      },
+      "dimensions": {
+        "width": 10.0,
+        "height": 12.8,
+        "depth": 10.0
+      },
+      "metrics": {
+        "loc": 2262,
+        "complexity": 16,
+        "churn": 7,
+        "age_days": 3,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 83611
+      },
+      "language": "unknown",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": true,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1771948247
+    },
+    {
+      "id": "test/runner.rb",
+      "name": "runner.rb",
+      "path": "test/runner.rb",
+      "district_id": "district_83",
+      "position": {
+        "x": -72.16127124301595,
+        "y": 0.0,
+        "z": -215.2573942945824
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 6,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 399,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 116
+      },
+      "language": "unknown",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.5465753424657535,
+      "is_hotspot": false,
+      "author": "Junegunn Choi",
+      "email": "junegunn.c@gmail.com",
+      "email_hash": "8e0146e3bfad3b9e6076b1253933fabc",
+      "last_modified": 1737802660
+    }
+  ],
+  "districts": [
+    {
+      "id": "district_0",
+      "name": "AI Features",
+      "color": "#FF6B6B",
+      "center": {
+        "x": -2.9178387194250925,
+        "y": 0.007851906305532898
+      },
+      "boundary": [
+        {
+          "x": 30.0603817629234,
+          "y": 0.6419752146904187
+        },
+        {
+          "x": 21.169396452740244,
+          "y": -13.756331893086557
+        },
+        {
+          "x": -22.91162092719597,
+          "y": -20.75089524207413
+        },
+        {
+          "x": -26.28688116258015,
+          "y": -3.633298473676902
+        },
+        {
+          "x": 3.5026042213237076,
+          "y": 23.258225665162314
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_1",
+      "name": "Module 44",
+      "color": "#4ECDC4",
+      "center": {
+        "x": -20.28134362924184,
+        "y": 19.242532434408027
+      },
+      "boundary": [
+        {
+          "x": -0.4317922902187341,
+          "y": 36.05271638244209
+        },
+        {
+          "x": -43.27116586353101,
+          "y": 40.408956952099295
+        },
+        {
+          "x": -46.24077202697845,
+          "y": 16.76316644917423
+        },
+        {
+          "x": -26.28688116258015,
+          "y": -3.633298473676902
+        },
+        {
+          "x": 3.5026042213237076,
+          "y": 23.258225665162314
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_2",
+      "name": "Module 43",
+      "color": "#45B7D1",
+      "center": {
+        "x": 2.526091485558015,
+        "y": -34.30079182279229
+      },
+      "boundary": [
+        {
+          "x": 21.169396452740244,
+          "y": -13.756331893086557
+        },
+        {
+          "x": -22.91162092719597,
+          "y": -20.75089524207413
+        },
+        {
+          "x": -26.84735644683451,
+          "y": -28.854569384919003
+        },
+        {
+          "x": -4.641769902662817,
+          "y": -64.90784366287477
+        },
+        {
+          "x": 2.9336165786663564,
+          "y": -66.1802595150344
+        },
+        {
+          "x": 25.178612075426493,
+          "y": -46.101631529284916
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_3",
+      "name": "Tests",
+      "color": "#96CEB4",
+      "center": {
+        "x": 25.433442429501824,
+        "y": 33.30015291886526
+      },
+      "boundary": [
+        {
+          "x": 10.881838435500079,
+          "y": 56.48501076952856
+        },
+        {
+          "x": -0.4317922902187341,
+          "y": 36.05271638244209
+        },
+        {
+          "x": 3.5026042213237076,
+          "y": 23.258225665162314
+        },
+        {
+          "x": 30.0603817629234,
+          "y": 0.6419752146904187
+        },
+        {
+          "x": 37.41217271138915,
+          "y": 2.859613742046289
+        },
+        {
+          "x": 53.456664540982956,
+          "y": 47.1882656134849
+        },
+        {
+          "x": 42.42550497381323,
+          "y": 61.330214199733234
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_4",
+      "name": "Module 47",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -49.288933666305994,
+        "y": -9.135634469912358
+      },
+      "boundary": [
+        {
+          "x": -26.28688116258015,
+          "y": -3.633298473676902
+        },
+        {
+          "x": -22.91162092719597,
+          "y": -20.75089524207413
+        },
+        {
+          "x": -26.84735644683451,
+          "y": -28.854569384919003
+        },
+        {
+          "x": -51.55503237085658,
+          "y": -36.046309428016045
+        },
+        {
+          "x": -81.87682337216461,
+          "y": -13.955260356580801
+        },
+        {
+          "x": -76.51699103596566,
+          "y": -1.9779723335094452
+        },
+        {
+          "x": -46.24077202697845,
+          "y": 16.76316644917423
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_5",
+      "name": "Module 10",
+      "color": "#DDA0DD",
+      "center": {
+        "x": 44.264436645369024,
+        "y": -29.127303638669442
+      },
+      "boundary": [
+        {
+          "x": 37.41217271138915,
+          "y": 2.859613742046289
+        },
+        {
+          "x": 61.20521392259755,
+          "y": -8.02964638244331
+        },
+        {
+          "x": 73.42035112197722,
+          "y": -39.29527611167425
+        },
+        {
+          "x": 57.003060473713106,
+          "y": -53.6522361859161
+        },
+        {
+          "x": 25.178612075426493,
+          "y": -46.101631529284916
+        },
+        {
+          "x": 21.169396452740244,
+          "y": -13.756331893086557
+        },
+        {
+          "x": 30.0603817629234,
+          "y": 0.6419752146904187
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_6",
+      "name": "Module 77",
+      "color": "#98D8C8",
+      "center": {
+        "x": -16.49124959243783,
+        "y": 56.51440751209846
+      },
+      "boundary": [
+        {
+          "x": 10.881838435500079,
+          "y": 56.48501076952856
+        },
+        {
+          "x": -0.4317922902187341,
+          "y": 36.05271638244209
+        },
+        {
+          "x": -43.27116586353101,
+          "y": 40.408956952099295
+        },
+        {
+          "x": -45.24882921837602,
+          "y": 43.880264947854
+        },
+        {
+          "x": -25.831567398118644,
+          "y": 82.98541232719819
+        },
+        {
+          "x": -8.675504270701687,
+          "y": 81.8396105116827
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_7",
+      "name": "Module 20",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -35.20058488804415,
+        "y": -57.53704411930578
+      },
+      "boundary": [
+        {
+          "x": -59.37306324074133,
+          "y": -65.15638313560578
+        },
+        {
+          "x": -51.55503237085658,
+          "y": -36.046309428016045
+        },
+        {
+          "x": -26.84735644683451,
+          "y": -28.854569384919003
+        },
+        {
+          "x": -4.641769902662817,
+          "y": -64.90784366287477
+        },
+        {
+          "x": -40.42833654206164,
+          "y": -90.22280263041344
+        },
+        {
+          "x": -47.526996922067,
+          "y": -87.871234058139
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_8",
+      "name": "Tests",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 66.0991033667746,
+        "y": 18.581458866418977
+      },
+      "boundary": [
+        {
+          "x": 89.659792726128,
+          "y": 41.90371794464816
+        },
+        {
+          "x": 53.456664540982956,
+          "y": 47.1882656134849
+        },
+        {
+          "x": 37.41217271138915,
+          "y": 2.859613742046289
+        },
+        {
+          "x": 61.20521392259755,
+          "y": -8.02964638244331
+        },
+        {
+          "x": 88.27449137523912,
+          "y": 11.28687861893552
+        },
+        {
+          "x": 90.73331603750314,
+          "y": 40.283307111128856
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_9",
+      "name": "Module 59",
+      "color": "#85C1E9",
+      "center": {
+        "x": -70.78096170585171,
+        "y": 25.584632821091706
+      },
+      "boundary": [
+        {
+          "x": -73.60400082383688,
+          "y": 54.455199353275425
+        },
+        {
+          "x": -45.24882921837602,
+          "y": 43.880264947854
+        },
+        {
+          "x": -43.27116586353101,
+          "y": 40.408956952099295
+        },
+        {
+          "x": -46.24077202697845,
+          "y": 16.76316644917423
+        },
+        {
+          "x": -76.51699103596566,
+          "y": -1.9779723335094452
+        },
+        {
+          "x": -92.51425657258393,
+          "y": 36.87702939412553
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_10",
+      "name": "Module 19",
+      "color": "#F8B500",
+      "center": {
+        "x": 34.60486346059497,
+        "y": -69.84067724886593
+      },
+      "boundary": [
+        {
+          "x": 25.178612075426493,
+          "y": -46.101631529284916
+        },
+        {
+          "x": 2.9336165786663564,
+          "y": -66.1802595150344
+        },
+        {
+          "x": 19.407344581939007,
+          "y": -92.74693475366338
+        },
+        {
+          "x": 57.250312431281884,
+          "y": -91.46639722792924
+        },
+        {
+          "x": 57.003060473713106,
+          "y": -53.6522361859161
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_11",
+      "name": "Module 98",
+      "color": "#00CED1",
+      "center": {
+        "x": 17.804256730655712,
+        "y": 82.96834396798765
+      },
+      "boundary": [
+        {
+          "x": 36.622159424775276,
+          "y": 105.9099458231743
+        },
+        {
+          "x": 16.319966460099277,
+          "y": 112.67891074083143
+        },
+        {
+          "x": -8.675504270701687,
+          "y": 81.8396105116827
+        },
+        {
+          "x": 10.881838435500079,
+          "y": 56.48501076952856
+        },
+        {
+          "x": 42.42550497381323,
+          "y": 61.330214199733234
+        },
+        {
+          "x": 46.31886319605263,
+          "y": 79.51045035542725
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_12",
+      "name": "Tests",
+      "color": "#FF7F50",
+      "center": {
+        "x": -76.47579455740363,
+        "y": -46.45184843765128
+      },
+      "boundary": [
+        {
+          "x": -100.690432996819,
+          "y": -61.55196121880873
+        },
+        {
+          "x": -93.52625304757643,
+          "y": -18.52139893594683
+        },
+        {
+          "x": -81.87682337216461,
+          "y": -13.955260356580801
+        },
+        {
+          "x": -51.55503237085658,
+          "y": -36.046309428016045
+        },
+        {
+          "x": -59.37306324074133,
+          "y": -65.15638313560578
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_13",
+      "name": "Module 5",
+      "color": "#9ACD32",
+      "center": {
+        "x": 87.96142067660844,
+        "y": -12.055373222962404
+      },
+      "boundary": [
+        {
+          "x": 61.20521392259755,
+          "y": -8.02964638244331
+        },
+        {
+          "x": 73.42035112197722,
+          "y": -39.29527611167425
+        },
+        {
+          "x": 89.63868729105774,
+          "y": -41.65093754877422
+        },
+        {
+          "x": 115.32746723450823,
+          "y": -26.446268994418524
+        },
+        {
+          "x": 117.26515912119815,
+          "y": -14.027233236988355
+        },
+        {
+          "x": 88.27449137523912,
+          "y": 11.28687861893552
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_14",
+      "name": "Module 68",
+      "color": "#DA70D6",
+      "center": {
+        "x": -52.56552372604612,
+        "y": 74.42672015557423
+      },
+      "boundary": [
+        {
+          "x": -82.45731061450968,
+          "y": 83.64674776376377
+        },
+        {
+          "x": -71.77615113807985,
+          "y": 97.05205927720708
+        },
+        {
+          "x": -37.38692038756734,
+          "y": 96.59300077483499
+        },
+        {
+          "x": -25.831567398118644,
+          "y": 82.98541232719819
+        },
+        {
+          "x": -45.24882921837602,
+          "y": 43.880264947854
+        },
+        {
+          "x": -73.60400082383688,
+          "y": 54.455199353275425
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_15",
+      "name": "Tests",
+      "color": "#FF6B6B",
+      "center": {
+        "x": -7.867095799620497,
+        "y": -96.17711183596538
+      },
+      "boundary": [
+        {
+          "x": -4.641769902662817,
+          "y": -64.90784366287477
+        },
+        {
+          "x": -40.42833654206164,
+          "y": -90.22280263041344
+        },
+        {
+          "x": -23.265161314543764,
+          "y": -125.36027820082406
+        },
+        {
+          "x": 6.896496966120759,
+          "y": -122.66035047404736
+        },
+        {
+          "x": 19.407344581939007,
+          "y": -92.74693475366338
+        },
+        {
+          "x": 2.9336165786663564,
+          "y": -66.1802595150344
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_16",
+      "name": "Module 7",
+      "color": "#4ECDC4",
+      "center": {
+        "x": 73.74879945488836,
+        "y": 70.98763351189183
+      },
+      "boundary": [
+        {
+          "x": 46.31886319605263,
+          "y": 79.51045035542725
+        },
+        {
+          "x": 42.42550497381323,
+          "y": 61.330214199733234
+        },
+        {
+          "x": 53.456664540982956,
+          "y": 47.1882656134849
+        },
+        {
+          "x": 89.659792726128,
+          "y": 41.90371794464816
+        },
+        {
+          "x": 103.61935778546602,
+          "y": 81.34861570051602
+        },
+        {
+          "x": 88.88842880433361,
+          "y": 90.91331047696613
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_17",
+      "name": "Module 91",
+      "color": "#45B7D1",
+      "center": {
+        "x": -99.99663284925197,
+        "y": 13.556043750689478
+      },
+      "boundary": [
+        {
+          "x": -92.51425657258393,
+          "y": 36.87702939412553
+        },
+        {
+          "x": -76.51699103596566,
+          "y": -1.9779723335094452
+        },
+        {
+          "x": -81.87682337216461,
+          "y": -13.955260356580801
+        },
+        {
+          "x": -93.52625304757643,
+          "y": -18.52139893594683
+        },
+        {
+          "x": -123.35798593898919,
+          "y": -7.98575739928984
+        },
+        {
+          "x": -129.49477977146796,
+          "y": 8.019214229755782
+        },
+        {
+          "x": -109.57991040603815,
+          "y": 36.05941177797251
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_18",
+      "name": "Module 19",
+      "color": "#96CEB4",
+      "center": {
+        "x": 79.61103304537576,
+        "y": -69.54639957019032
+      },
+      "boundary": [
+        {
+          "x": 73.42035112197722,
+          "y": -39.29527611167425
+        },
+        {
+          "x": 89.63868729105774,
+          "y": -41.65093754877422
+        },
+        {
+          "x": 103.29458232559296,
+          "y": -81.05890049387469
+        },
+        {
+          "x": 95.77391059259575,
+          "y": -90.48538155503061
+        },
+        {
+          "x": 59.7306871753541,
+          "y": -93.86223836857012
+        },
+        {
+          "x": 57.250312431281884,
+          "y": -91.46639722792924
+        },
+        {
+          "x": 57.003060473713106,
+          "y": -53.6522361859161
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_19",
+      "name": "Module 18",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -13.054068693159216,
+        "y": 107.97923475348807
+      },
+      "boundary": [
+        {
+          "x": -8.675504270701687,
+          "y": 81.8396105116827
+        },
+        {
+          "x": -25.831567398118644,
+          "y": 82.98541232719819
+        },
+        {
+          "x": -37.38692038756734,
+          "y": 96.59300077483499
+        },
+        {
+          "x": -27.35231404537305,
+          "y": 131.52897738943372
+        },
+        {
+          "x": -3.8607765301899537,
+          "y": 146.4146829026941
+        },
+        {
+          "x": -2.643010613295168,
+          "y": 145.95688190070913
+        },
+        {
+          "x": 16.319966460099277,
+          "y": 112.67891074083143
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_20",
+      "name": "Tests",
+      "color": "#DDA0DD",
+      "center": {
+        "x": -79.45626750409122,
+        "y": -80.61691169298346
+      },
+      "boundary": [
+        {
+          "x": -100.690432996819,
+          "y": -61.55196121880873
+        },
+        {
+          "x": -59.37306324074133,
+          "y": -65.15638313560578
+        },
+        {
+          "x": -47.526996922067,
+          "y": -87.871234058139
+        },
+        {
+          "x": -77.67334777651705,
+          "y": -106.22117701662842
+        },
+        {
+          "x": -84.97425360677627,
+          "y": -104.05525168493068
+        },
+        {
+          "x": -106.22795750449109,
+          "y": -66.82791971982707
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_21",
+      "name": "Module 65",
+      "color": "#98D8C8",
+      "center": {
+        "x": 111.36153893122392,
+        "y": 14.743317459798247
+      },
+      "boundary": [
+        {
+          "x": 90.73331603750314,
+          "y": 40.283307111128856
+        },
+        {
+          "x": 88.27449137523912,
+          "y": 11.28687861893552
+        },
+        {
+          "x": 117.26515912119815,
+          "y": -14.027233236988355
+        },
+        {
+          "x": 147.14137645672676,
+          "y": 14.677798965440836
+        },
+        {
+          "x": 132.92361040830514,
+          "y": 30.774288901170603
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_22",
+      "name": "Tests",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -102.19186685310696,
+        "y": 59.375877928779694
+      },
+      "boundary": [
+        {
+          "x": -128.70928481529612,
+          "y": 64.11001670251574
+        },
+        {
+          "x": -109.57991040603815,
+          "y": 36.05941177797251
+        },
+        {
+          "x": -92.51425657258393,
+          "y": 36.87702939412553
+        },
+        {
+          "x": -73.60400082383688,
+          "y": 54.455199353275425
+        },
+        {
+          "x": -82.45731061450968,
+          "y": 83.64674776376377
+        },
+        {
+          "x": -110.88111761204232,
+          "y": 85.90044447348515
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_23",
+      "name": "Tests",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 36.11853982090219,
+        "y": -114.57345913635996
+      },
+      "boundary": [
+        {
+          "x": 19.407344581939007,
+          "y": -92.74693475366338
+        },
+        {
+          "x": 57.250312431281884,
+          "y": -91.46639722792924
+        },
+        {
+          "x": 59.7306871753541,
+          "y": -93.86223836857012
+        },
+        {
+          "x": 60.084082450511794,
+          "y": -126.80758140035316
+        },
+        {
+          "x": 33.102023078555675,
+          "y": -150.48796682109372
+        },
+        {
+          "x": 6.896496966120759,
+          "y": -122.66035047404736
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_24",
+      "name": "Module 94",
+      "color": "#85C1E9",
+      "center": {
+        "x": 65.81582432478038,
+        "y": 100.60330025431766
+      },
+      "boundary": [
+        {
+          "x": 36.622159424775276,
+          "y": 105.9099458231743
+        },
+        {
+          "x": 61.437735267392576,
+          "y": 127.55038312749627
+        },
+        {
+          "x": 75.74072156206756,
+          "y": 128.60946442234422
+        },
+        {
+          "x": 88.88842880433361,
+          "y": 90.91331047696613
+        },
+        {
+          "x": 46.31886319605263,
+          "y": 79.51045035542725
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_25",
+      "name": "Module 73",
+      "color": "#F8B500",
+      "center": {
+        "x": -118.70642612612949,
+        "y": -39.42084935519183
+      },
+      "boundary": [
+        {
+          "x": -100.690432996819,
+          "y": -61.55196121880873
+        },
+        {
+          "x": -93.52625304757643,
+          "y": -18.52139893594683
+        },
+        {
+          "x": -123.35798593898919,
+          "y": -7.98575739928984
+        },
+        {
+          "x": -153.67231011704547,
+          "y": -42.67109435256909
+        },
+        {
+          "x": -153.69852258526862,
+          "y": -43.24655842654138
+        },
+        {
+          "x": -121.10542197184174,
+          "y": -69.60900139191736
+        },
+        {
+          "x": -106.22795750449109,
+          "y": -66.82791971982707
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_26",
+      "name": "Module 48",
+      "color": "#00CED1",
+      "center": {
+        "x": 114.77665851059047,
+        "y": -57.36058598612494
+      },
+      "boundary": [
+        {
+          "x": 136.75751375584542,
+          "y": -77.27403200815449
+        },
+        {
+          "x": 103.29458232559296,
+          "y": -81.05890049387469
+        },
+        {
+          "x": 89.63868729105774,
+          "y": -41.65093754877422
+        },
+        {
+          "x": 115.32746723450823,
+          "y": -26.446268994418524
+        },
+        {
+          "x": 139.97882587659416,
+          "y": -47.50744267228291
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_27",
+      "name": "Tests",
+      "color": "#FF7F50",
+      "center": {
+        "x": -51.96842962045187,
+        "y": 119.15654624734435
+      },
+      "boundary": [
+        {
+          "x": -66.29537953877168,
+          "y": 141.91184250472358
+        },
+        {
+          "x": -27.35231404537305,
+          "y": 131.52897738943372
+        },
+        {
+          "x": -37.38692038756734,
+          "y": 96.59300077483499
+        },
+        {
+          "x": -71.77615113807985,
+          "y": 97.05205927720708
+        },
+        {
+          "x": -76.97317274031671,
+          "y": 125.4967338788236
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_28",
+      "name": "Module 40",
+      "color": "#9ACD32",
+      "center": {
+        "x": -55.748616687064676,
+        "y": -119.5652158420284
+      },
+      "boundary": [
+        {
+          "x": -47.526996922067,
+          "y": -87.871234058139
+        },
+        {
+          "x": -40.42833654206164,
+          "y": -90.22280263041344
+        },
+        {
+          "x": -23.265161314543764,
+          "y": -125.36027820082406
+        },
+        {
+          "x": -32.30566970421566,
+          "y": -140.38628918709816
+        },
+        {
+          "x": -62.97536347442943,
+          "y": -152.22695937900826
+        },
+        {
+          "x": -69.70991002223587,
+          "y": -147.88165664467516
+        },
+        {
+          "x": -77.67334777651705,
+          "y": -106.22117701662842
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_29",
+      "name": "Module 94",
+      "color": "#DA70D6",
+      "center": {
+        "x": 120.32317415493152,
+        "y": 54.50494371644115
+      },
+      "boundary": [
+        {
+          "x": 117.05626043931659,
+          "y": 85.81482132356152
+        },
+        {
+          "x": 103.61935778546602,
+          "y": 81.34861570051602
+        },
+        {
+          "x": 89.659792726128,
+          "y": 41.90371794464816
+        },
+        {
+          "x": 90.73331603750314,
+          "y": 40.283307111128856
+        },
+        {
+          "x": 132.92361040830514,
+          "y": 30.774288901170603
+        },
+        {
+          "x": 138.3513611428064,
+          "y": 70.00182211335571
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_30",
+      "name": "Tests",
+      "color": "#FF6B6B",
+      "center": {
+        "x": -133.98413445179378,
+        "y": 37.694841393183346
+      },
+      "boundary": [
+        {
+          "x": -128.70928481529612,
+          "y": 64.11001670251574
+        },
+        {
+          "x": -156.8021859599471,
+          "y": 61.589988018923464
+        },
+        {
+          "x": -166.25940258503985,
+          "y": 46.65023465058459
+        },
+        {
+          "x": -150.53909935471083,
+          "y": 17.84834532054331
+        },
+        {
+          "x": -129.49477977146796,
+          "y": 8.019214229755782
+        },
+        {
+          "x": -109.57991040603815,
+          "y": 36.05941177797251
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_31",
+      "name": "Module 36",
+      "color": "#4ECDC4",
+      "center": {
+        "x": 83.78167698217172,
+        "y": -114.06219029160287
+      },
+      "boundary": [
+        {
+          "x": 59.7306871753541,
+          "y": -93.86223836857012
+        },
+        {
+          "x": 60.084082450511794,
+          "y": -126.80758140035316
+        },
+        {
+          "x": 86.44233074837823,
+          "y": -136.96271880514135
+        },
+        {
+          "x": 107.23249487387963,
+          "y": -123.56836476513544
+        },
+        {
+          "x": 95.77391059259575,
+          "y": -90.48538155503061
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_32",
+      "name": "Tests",
+      "color": "#45B7D1",
+      "center": {
+        "x": 35.33691745821334,
+        "y": 135.55414779547647
+      },
+      "boundary": [
+        {
+          "x": 36.622159424775276,
+          "y": 105.9099458231743
+        },
+        {
+          "x": 16.319966460099277,
+          "y": 112.67891074083143
+        },
+        {
+          "x": -2.643010613295168,
+          "y": 145.95688190070913
+        },
+        {
+          "x": 35.424548589264965,
+          "y": 163.22771567586986
+        },
+        {
+          "x": 61.437735267392576,
+          "y": 127.55038312749627
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_33",
+      "name": "Module 13",
+      "color": "#96CEB4",
+      "center": {
+        "x": -107.96320104014696,
+        "y": -96.89199487582091
+      },
+      "boundary": [
+        {
+          "x": -136.67368782096221,
+          "y": -104.84822478231932
+        },
+        {
+          "x": -121.10542197184174,
+          "y": -69.60900139191736
+        },
+        {
+          "x": -106.22795750449109,
+          "y": -66.82791971982707
+        },
+        {
+          "x": -84.97425360677627,
+          "y": -104.05525168493068
+        },
+        {
+          "x": -111.53776973396572,
+          "y": -117.26845275596673
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_34",
+      "name": "Module 32",
+      "color": "#FFEAA7",
+      "center": {
+        "x": 145.7767580061925,
+        "y": -21.076066315238194
+      },
+      "boundary": [
+        {
+          "x": 139.97882587659416,
+          "y": -47.50744267228291
+        },
+        {
+          "x": 115.32746723450823,
+          "y": -26.446268994418524
+        },
+        {
+          "x": 117.26515912119815,
+          "y": -14.027233236988355
+        },
+        {
+          "x": 147.14137645672676,
+          "y": 14.677798965440836
+        },
+        {
+          "x": 149.45173976641047,
+          "y": 14.492448002605506
+        },
+        {
+          "x": 179.6360357846165,
+          "y": -20.522894084723433
+        },
+        {
+          "x": 173.57129843085323,
+          "y": -33.9621196510514
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_35",
+      "name": "Core",
+      "color": "#DDA0DD",
+      "center": {
+        "x": -98.12050141525998,
+        "y": 110.72427140275983
+      },
+      "boundary": [
+        {
+          "x": -110.88111761204232,
+          "y": 85.90044447348515
+        },
+        {
+          "x": -124.30045363636711,
+          "y": 111.09682318457308
+        },
+        {
+          "x": -125.56208764368962,
+          "y": 129.5906019923251
+        },
+        {
+          "x": -121.07384584344783,
+          "y": 132.05717784488502
+        },
+        {
+          "x": -76.97317274031671,
+          "y": 125.4967338788236
+        },
+        {
+          "x": -71.77615113807985,
+          "y": 97.05205927720708
+        },
+        {
+          "x": -82.45731061450968,
+          "y": 83.64674776376377
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_36",
+      "name": "Module 76",
+      "color": "#98D8C8",
+      "center": {
+        "x": -2.9287596320127256,
+        "y": -151.34466557647016
+      },
+      "boundary": [
+        {
+          "x": -32.30566970421566,
+          "y": -140.38628918709816
+        },
+        {
+          "x": -23.265161314543764,
+          "y": -125.36027820082406
+        },
+        {
+          "x": 6.896496966120759,
+          "y": -122.66035047404736
+        },
+        {
+          "x": 33.102023078555675,
+          "y": -150.48796682109372
+        },
+        {
+          "x": 33.08658595205208,
+          "y": -151.85470670822573
+        },
+        {
+          "x": -7.217426245265626,
+          "y": -180.33560269017846
+        },
+        {
+          "x": -7.751989816859993,
+          "y": -180.16262313262862
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_37",
+      "name": "Tests",
+      "color": "#F7DC6F",
+      "center": {
+        "x": 100.93007406450127,
+        "y": 112.85048802521419
+      },
+      "boundary": [
+        {
+          "x": 132.88333183251837,
+          "y": 121.08581424256215
+        },
+        {
+          "x": 130.99627521450734,
+          "y": 123.28009453333844
+        },
+        {
+          "x": 88.20767007864998,
+          "y": 140.2253442061503
+        },
+        {
+          "x": 75.74072156206756,
+          "y": 128.60946442234422
+        },
+        {
+          "x": 88.88842880433361,
+          "y": 90.91331047696613
+        },
+        {
+          "x": 103.61935778546602,
+          "y": 81.34861570051602
+        },
+        {
+          "x": 117.05626043931659,
+          "y": 85.81482132356152
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_38",
+      "name": "Module 24",
+      "color": "#BB8FCE",
+      "center": {
+        "x": -155.13283911775613,
+        "y": -7.584857865204811
+      },
+      "boundary": [
+        {
+          "x": -181.08289784087955,
+          "y": -11.059208904485502
+        },
+        {
+          "x": -150.53909935471083,
+          "y": 17.84834532054331
+        },
+        {
+          "x": -129.49477977146796,
+          "y": 8.019214229755782
+        },
+        {
+          "x": -123.35798593898919,
+          "y": -7.98575739928984
+        },
+        {
+          "x": -153.67231011704547,
+          "y": -42.67109435256909
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_39",
+      "name": "Tests",
+      "color": "#85C1E9",
+      "center": {
+        "x": 119.77973032318863,
+        "y": -101.5939456490156
+      },
+      "boundary": [
+        {
+          "x": 140.84253299712051,
+          "y": -81.73963484922555
+        },
+        {
+          "x": 148.08087989266386,
+          "y": -108.70150931149328
+        },
+        {
+          "x": 131.58796353693728,
+          "y": -130.56958116917272
+        },
+        {
+          "x": 107.23249487387963,
+          "y": -123.56836476513544
+        },
+        {
+          "x": 95.77391059259575,
+          "y": -90.48538155503061
+        },
+        {
+          "x": 103.29458232559296,
+          "y": -81.05890049387469
+        },
+        {
+          "x": 136.75751375584542,
+          "y": -77.27403200815449
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_40",
+      "name": "Module 85",
+      "color": "#F8B500",
+      "center": {
+        "x": -42.5415048646475,
+        "y": 154.5141613266366
+      },
+      "boundary": [
+        {
+          "x": -69.27499522297164,
+          "y": 159.10305946240743
+        },
+        {
+          "x": -66.29537953877168,
+          "y": 141.91184250472358
+        },
+        {
+          "x": -27.35231404537305,
+          "y": 131.52897738943372
+        },
+        {
+          "x": -3.8607765301899537,
+          "y": 146.4146829026941
+        },
+        {
+          "x": -20.91838015542333,
+          "y": 182.6481392278383
+        },
+        {
+          "x": -23.298472931493457,
+          "y": 183.9321771153474
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_41",
+      "name": "Tests",
+      "color": "#00CED1",
+      "center": {
+        "x": -93.13073640966243,
+        "y": -126.71084129309935
+      },
+      "boundary": [
+        {
+          "x": -105.61016752155422,
+          "y": -150.54058685337984
+        },
+        {
+          "x": -69.70991002223587,
+          "y": -147.88165664467516
+        },
+        {
+          "x": -77.67334777651705,
+          "y": -106.22117701662842
+        },
+        {
+          "x": -84.97425360677627,
+          "y": -104.05525168493068
+        },
+        {
+          "x": -111.53776973396572,
+          "y": -117.26845275596673
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_42",
+      "name": "Module 79",
+      "color": "#FF7F50",
+      "center": {
+        "x": 151.4942963564944,
+        "y": 50.19192508971272
+      },
+      "boundary": [
+        {
+          "x": 161.8945040992373,
+          "y": 71.99695016864754
+        },
+        {
+          "x": 181.20569979055372,
+          "y": 48.79626150682912
+        },
+        {
+          "x": 181.5261402503538,
+          "y": 43.44797337401483
+        },
+        {
+          "x": 149.45173976641047,
+          "y": 14.492448002605506
+        },
+        {
+          "x": 147.14137645672676,
+          "y": 14.677798965440836
+        },
+        {
+          "x": 132.92361040830514,
+          "y": 30.774288901170603
+        },
+        {
+          "x": 138.3513611428064,
+          "y": 70.00182211335571
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_43",
+      "name": "Module 36",
+      "color": "#9ACD32",
+      "center": {
+        "x": -138.60115437074393,
+        "y": 89.16468576854867
+      },
+      "boundary": [
+        {
+          "x": -128.70928481529612,
+          "y": 64.11001670251574
+        },
+        {
+          "x": -156.8021859599471,
+          "y": 61.589988018923464
+        },
+        {
+          "x": -164.90448226705018,
+          "y": 84.97218387713245
+        },
+        {
+          "x": -124.30045363636711,
+          "y": 111.09682318457308
+        },
+        {
+          "x": -110.88111761204232,
+          "y": 85.90044447348515
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_44",
+      "name": "Algo",
+      "color": "#DA70D6",
+      "center": {
+        "x": 69.10426369554105,
+        "y": -152.1582680066128
+      },
+      "boundary": [
+        {
+          "x": 33.102023078555675,
+          "y": -150.48796682109372
+        },
+        {
+          "x": 33.08658595205208,
+          "y": -151.85470670822573
+        },
+        {
+          "x": 50.421838885045574,
+          "y": -176.23764918385783
+        },
+        {
+          "x": 88.7326460026543,
+          "y": -162.65162870265783
+        },
+        {
+          "x": 86.44233074837823,
+          "y": -136.96271880514135
+        },
+        {
+          "x": 60.084082450511794,
+          "y": -126.80758140035316
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_45",
+      "name": "Algo",
+      "color": "#FF6B6B",
+      "center": {
+        "x": 61.79918190076367,
+        "y": 154.84841044632648
+      },
+      "boundary": [
+        {
+          "x": 75.74072156206756,
+          "y": 128.60946442234422
+        },
+        {
+          "x": 88.20767007864998,
+          "y": 140.2253442061503
+        },
+        {
+          "x": 89.90264594611124,
+          "y": 167.50681408810928
+        },
+        {
+          "x": 74.47389697130998,
+          "y": 184.89245879865106
+        },
+        {
+          "x": 40.62620785383157,
+          "y": 172.48990957837006
+        },
+        {
+          "x": 35.424548589264965,
+          "y": 163.22771567586986
+        },
+        {
+          "x": 61.437735267392576,
+          "y": 127.55038312749627
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_46",
+      "name": "Algo",
+      "color": "#4ECDC4",
+      "center": {
+        "x": -150.1252032670708,
+        "y": -78.26532844426899
+      },
+      "boundary": [
+        {
+          "x": -136.67368782096221,
+          "y": -104.84822478231932
+        },
+        {
+          "x": -121.10542197184174,
+          "y": -69.60900139191736
+        },
+        {
+          "x": -153.69852258526862,
+          "y": -43.24655842654138
+        },
+        {
+          "x": -183.55563779749158,
+          "y": -70.30549717250268
+        },
+        {
+          "x": -185.30082495178053,
+          "y": -76.04257286973936
+        },
+        {
+          "x": -144.9538492189991,
+          "y": -108.6008980082456
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_47",
+      "name": "Protector",
+      "color": "#45B7D1",
+      "center": {
+        "x": 162.48961379396826,
+        "y": -62.524036841606915
+      },
+      "boundary": [
+        {
+          "x": 140.84253299712051,
+          "y": -81.73963484922555
+        },
+        {
+          "x": 187.092166659535,
+          "y": -70.06171361074222
+        },
+        {
+          "x": 187.4979345576756,
+          "y": -67.50857903059223
+        },
+        {
+          "x": 173.57129843085323,
+          "y": -33.9621196510514
+        },
+        {
+          "x": 139.97882587659416,
+          "y": -47.50744267228291
+        },
+        {
+          "x": 136.75751375584542,
+          "y": -77.27403200815449
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_48",
+      "name": "Protector",
+      "color": "#96CEB4",
+      "center": {
+        "x": -92.90483191265605,
+        "y": 145.785089990377
+      },
+      "boundary": [
+        {
+          "x": -89.13680086478902,
+          "y": 177.02201065600417
+        },
+        {
+          "x": -69.27499522297164,
+          "y": 159.10305946240743
+        },
+        {
+          "x": -66.29537953877168,
+          "y": 141.91184250472358
+        },
+        {
+          "x": -76.97317274031671,
+          "y": 125.4967338788236
+        },
+        {
+          "x": -121.07384584344783,
+          "y": 132.05717784488502
+        },
+        {
+          "x": -97.73071452576659,
+          "y": 178.33851058609858
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_49",
+      "name": "Tui",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -35.67536398791015,
+        "y": -171.55893775785455
+      },
+      "boundary": [
+        {
+          "x": -62.97536347442943,
+          "y": -152.22695937900826
+        },
+        {
+          "x": -62.538089953569056,
+          "y": -185.39846475752483
+        },
+        {
+          "x": -48.01970593429298,
+          "y": -197.46896274862286
+        },
+        {
+          "x": -7.751989816859993,
+          "y": -180.16262313262862
+        },
+        {
+          "x": -32.30566970421566,
+          "y": -140.38628918709816
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_50",
+      "name": "Tui",
+      "color": "#DDA0DD",
+      "center": {
+        "x": 147.97329186428016,
+        "y": 91.7408932827893
+      },
+      "boundary": [
+        {
+          "x": 132.88333183251837,
+          "y": 121.08581424256215
+        },
+        {
+          "x": 117.05626043931659,
+          "y": 85.81482132356152
+        },
+        {
+          "x": 138.3513611428064,
+          "y": 70.00182211335571
+        },
+        {
+          "x": 161.8945040992373,
+          "y": 71.99695016864754
+        },
+        {
+          "x": 180.2703280150932,
+          "y": 122.80331260412581
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_51",
+      "name": "Tui",
+      "color": "#98D8C8",
+      "center": {
+        "x": -176.18647142270584,
+        "y": 14.660465883682308
+      },
+      "boundary": [
+        {
+          "x": -223.54727573693762,
+          "y": 34.683230322262155
+        },
+        {
+          "x": -185.775770873789,
+          "y": -9.952126464281788
+        },
+        {
+          "x": -181.08289784087955,
+          "y": -11.059208904485502
+        },
+        {
+          "x": -150.53909935471083,
+          "y": 17.84834532054331
+        },
+        {
+          "x": -166.25940258503985,
+          "y": 46.65023465058459
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_52",
+      "name": "Tui",
+      "color": "#F7DC6F",
+      "center": {
+        "x": 106.19511429160987,
+        "y": -148.85140363388734
+      },
+      "boundary": [
+        {
+          "x": 107.23249487387963,
+          "y": -123.56836476513544
+        },
+        {
+          "x": 86.44233074837823,
+          "y": -136.96271880514135
+        },
+        {
+          "x": 88.7326460026543,
+          "y": -162.65162870265783
+        },
+        {
+          "x": 152.90748438824838,
+          "y": -211.4519306640849
+        },
+        {
+          "x": 131.58796353693728,
+          "y": -130.56958116917272
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_53",
+      "name": "Tui",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 14.542746189121706,
+        "y": 181.38768172669828
+      },
+      "boundary": [
+        {
+          "x": 35.424548589264965,
+          "y": 163.22771567586986
+        },
+        {
+          "x": 40.62620785383157,
+          "y": 172.48990957837006
+        },
+        {
+          "x": 18.603790469754273,
+          "y": 209.717864573085
+        },
+        {
+          "x": -20.91838015542333,
+          "y": 182.6481392278383
+        },
+        {
+          "x": -3.8607765301899537,
+          "y": 146.4146829026941
+        },
+        {
+          "x": -2.643010613295168,
+          "y": 145.95688190070913
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_54",
+      "name": "Tui",
+      "color": "#85C1E9",
+      "center": {
+        "x": -125.55137559455231,
+        "y": -132.4867452972579
+      },
+      "boundary": [
+        {
+          "x": -136.67368782096221,
+          "y": -104.84822478231932
+        },
+        {
+          "x": -111.53776973396572,
+          "y": -117.26845275596673
+        },
+        {
+          "x": -105.61016752155422,
+          "y": -150.54058685337984
+        },
+        {
+          "x": -115.33998109885093,
+          "y": -159.29460616533913
+        },
+        {
+          "x": -155.7818385024297,
+          "y": -132.69903976006776
+        },
+        {
+          "x": -144.9538492189991,
+          "y": -108.6008980082456
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_55",
+      "name": "Tui",
+      "color": "#F8B500",
+      "center": {
+        "x": 185.1734574475135,
+        "y": 12.885093770284648
+      },
+      "boundary": [
+        {
+          "x": 149.45173976641047,
+          "y": 14.492448002605506
+        },
+        {
+          "x": 179.6360357846165,
+          "y": -20.522894084723433
+        },
+        {
+          "x": 252.09607263279017,
+          "y": -0.3760874995600787
+        },
+        {
+          "x": 181.5261402503538,
+          "y": 43.44797337401483
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_56",
+      "name": "Tui",
+      "color": "#00CED1",
+      "center": {
+        "x": -150.18726274642674,
+        "y": 107.17230955497293
+      },
+      "boundary": [
+        {
+          "x": -124.30045363636711,
+          "y": 111.09682318457308
+        },
+        {
+          "x": -125.56208764368962,
+          "y": 129.5906019923251
+        },
+        {
+          "x": -146.7851901849907,
+          "y": 138.51061849563632
+        },
+        {
+          "x": -180.5502827746407,
+          "y": 101.86041735349671
+        },
+        {
+          "x": -164.90448226705018,
+          "y": 84.97218387713245
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_57",
+      "name": "Tui",
+      "color": "#FF7F50",
+      "center": {
+        "x": 21.541630156864603,
+        "y": -185.97331241219416
+      },
+      "boundary": [
+        {
+          "x": -7.217426245265626,
+          "y": -180.33560269017846
+        },
+        {
+          "x": 13.031020836051844,
+          "y": -222.3510738395543
+        },
+        {
+          "x": 50.97189038944903,
+          "y": -187.71486930060385
+        },
+        {
+          "x": 50.421838885045574,
+          "y": -176.23764918385783
+        },
+        {
+          "x": 33.08658595205208,
+          "y": -151.85470670822573
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_58",
+      "name": "Tui",
+      "color": "#9ACD32",
+      "center": {
+        "x": 116.22311860879022,
+        "y": 151.46709485990547
+      },
+      "boundary": [
+        {
+          "x": 130.99627521450734,
+          "y": 123.28009453333844
+        },
+        {
+          "x": 131.0347318572248,
+          "y": 177.5977944943923
+        },
+        {
+          "x": 89.90264594611124,
+          "y": 167.50681408810928
+        },
+        {
+          "x": 88.20767007864998,
+          "y": 140.2253442061503
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_59",
+      "name": "Tui",
+      "color": "#DA70D6",
+      "center": {
+        "x": -188.19791390009186,
+        "y": -36.25550246831856
+      },
+      "boundary": [
+        {
+          "x": -181.08289784087955,
+          "y": -11.059208904485502
+        },
+        {
+          "x": -185.775770873789,
+          "y": -9.952126464281788
+        },
+        {
+          "x": -210.06519297539157,
+          "y": -37.167327789301474
+        },
+        {
+          "x": -183.55563779749158,
+          "y": -70.30549717250268
+        },
+        {
+          "x": -153.69852258526862,
+          "y": -43.24655842654138
+        },
+        {
+          "x": -153.67231011704547,
+          "y": -42.67109435256909
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_60",
+      "name": "Tui",
+      "color": "#FF6B6B",
+      "center": {
+        "x": 169.017022377559,
+        "y": -88.37540624125009
+      },
+      "boundary": [
+        {
+          "x": 140.84253299712051,
+          "y": -81.73963484922555
+        },
+        {
+          "x": 148.08087989266386,
+          "y": -108.70150931149328
+        },
+        {
+          "x": 206.12236527639845,
+          "y": -116.75364998828763
+        },
+        {
+          "x": 187.092166659535,
+          "y": -70.06171361074222
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_61",
+      "name": "Utilities",
+      "color": "#4ECDC4",
+      "center": {
+        "x": -58.45117055635178,
+        "y": 183.97437451459882
+      },
+      "boundary": [
+        {
+          "x": -47.27086496061145,
+          "y": 220.54630963745555
+        },
+        {
+          "x": -23.298472931493457,
+          "y": 183.9321771153474
+        },
+        {
+          "x": -69.27499522297164,
+          "y": 159.10305946240743
+        },
+        {
+          "x": -89.13680086478902,
+          "y": 177.02201065600417
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_62",
+      "name": "Utilities",
+      "color": "#45B7D1",
+      "center": {
+        "x": -89.756289162278,
+        "y": -172.2718434970586
+      },
+      "boundary": [
+        {
+          "x": -105.61016752155422,
+          "y": -150.54058685337984
+        },
+        {
+          "x": -69.70991002223587,
+          "y": -147.88165664467516
+        },
+        {
+          "x": -62.97536347442943,
+          "y": -152.22695937900826
+        },
+        {
+          "x": -62.538089953569056,
+          "y": -185.39846475752483
+        },
+        {
+          "x": -127.13578236397215,
+          "y": -213.83294387244652
+        },
+        {
+          "x": -115.33998109885093,
+          "y": -159.29460616533913
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_63",
+      "name": "Utilities",
+      "color": "#96CEB4",
+      "center": {
+        "x": 185.22478154629587,
+        "y": 78.26764343402554
+      },
+      "boundary": [
+        {
+          "x": 180.2703280150932,
+          "y": 122.80331260412581
+        },
+        {
+          "x": 332.35494647010887,
+          "y": 204.71922528276212
+        },
+        {
+          "x": 181.20569979055372,
+          "y": 48.79626150682912
+        },
+        {
+          "x": 161.8945040992373,
+          "y": 71.99695016864754
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_64",
+      "name": "Utilities",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -188.16237638843754,
+        "y": 71.99094774306307
+      },
+      "boundary": [
+        {
+          "x": -164.90448226705018,
+          "y": 84.97218387713245
+        },
+        {
+          "x": -180.5502827746407,
+          "y": 101.86041735349671
+        },
+        {
+          "x": -500.0,
+          "y": 232.6852610853718
+        },
+        {
+          "x": -500.0,
+          "y": 228.69893107789522
+        },
+        {
+          "x": -223.54727573693762,
+          "y": 34.683230322262155
+        },
+        {
+          "x": -166.25940258503985,
+          "y": 46.65023465058459
+        },
+        {
+          "x": -156.8021859599471,
+          "y": 61.589988018923464
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_65",
+      "name": "Utilities",
+      "color": "#DDA0DD",
+      "center": {
+        "x": 80.10071900817428,
+        "y": -183.16683884180745
+      },
+      "boundary": [
+        {
+          "x": 88.7326460026543,
+          "y": -162.65162870265783
+        },
+        {
+          "x": 50.421838885045574,
+          "y": -176.23764918385783
+        },
+        {
+          "x": 50.97189038944903,
+          "y": -187.71486930060385
+        },
+        {
+          "x": 236.45448565089998,
+          "y": -351.6813506640003
+        },
+        {
+          "x": 152.90748438824838,
+          "y": -211.4519306640849
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_66",
+      "name": "Utilities",
+      "color": "#98D8C8",
+      "center": {
+        "x": 45.3884968055132,
+        "y": 199.63466829084797
+      },
+      "boundary": [
+        {
+          "x": 18.603790469754273,
+          "y": 209.717864573085
+        },
+        {
+          "x": 40.62620785383157,
+          "y": 172.48990957837006
+        },
+        {
+          "x": 74.47389697130998,
+          "y": 184.89245879865106
+        },
+        {
+          "x": 103.40902234513113,
+          "y": 490.1200654781536
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_67",
+      "name": "Utilities",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -175.69725085076772,
+        "y": -109.95475899414426
+      },
+      "boundary": [
+        {
+          "x": -144.9538492189991,
+          "y": -108.6008980082456
+        },
+        {
+          "x": -185.30082495178053,
+          "y": -76.04257286973936
+        },
+        {
+          "x": -500.0,
+          "y": -464.2212965715125
+        },
+        {
+          "x": -500.0,
+          "y": -464.59308438604825
+        },
+        {
+          "x": -155.7818385024297,
+          "y": -132.69903976006776
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_68",
+      "name": "Utilities",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 201.623164542233,
+        "y": -46.277949126192105
+      },
+      "boundary": [
+        {
+          "x": 187.4979345576756,
+          "y": -67.50857903059223
+        },
+        {
+          "x": 319.8014662739538,
+          "y": -6.411401351934792
+        },
+        {
+          "x": 252.09607263279017,
+          "y": -0.3760874995600787
+        },
+        {
+          "x": 179.6360357846165,
+          "y": -20.522894084723433
+        },
+        {
+          "x": 173.57129843085323,
+          "y": -33.9621196510514
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_69",
+      "name": "Utilities",
+      "color": "#85C1E9",
+      "center": {
+        "x": -126.77777205034123,
+        "y": 162.86974254719115
+      },
+      "boundary": [
+        {
+          "x": -267.9145177199792,
+          "y": 342.15033435927376
+        },
+        {
+          "x": -146.7851901849907,
+          "y": 138.51061849563632
+        },
+        {
+          "x": -125.56208764368962,
+          "y": 129.5906019923251
+        },
+        {
+          "x": -121.07384584344783,
+          "y": 132.05717784488502
+        },
+        {
+          "x": -97.73071452576659,
+          "y": 178.33851058609858
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_70",
+      "name": "Utilities",
+      "color": "#F8B500",
+      "center": {
+        "x": -20.725733978882587,
+        "y": -206.34315386718322
+      },
+      "boundary": [
+        {
+          "x": -48.01970593429298,
+          "y": -197.46896274862286
+        },
+        {
+          "x": -15.061679659402667,
+          "y": -405.75039225100903
+        },
+        {
+          "x": 13.031020836051844,
+          "y": -222.3510738395543
+        },
+        {
+          "x": -7.217426245265626,
+          "y": -180.33560269017846
+        },
+        {
+          "x": -7.751989816859993,
+          "y": -180.16262313262862
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_71",
+      "name": "Utilities",
+      "color": "#00CED1",
+      "center": {
+        "x": 145.80932948261713,
+        "y": 151.44614797994268
+      },
+      "boundary": [
+        {
+          "x": 132.88333183251837,
+          "y": 121.08581424256215
+        },
+        {
+          "x": 130.99627521450734,
+          "y": 123.28009453333844
+        },
+        {
+          "x": 131.0347318572248,
+          "y": 177.5977944943923
+        },
+        {
+          "x": 500.0,
+          "y": 500.0
+        },
+        {
+          "x": 500.0,
+          "y": 448.06565055223075
+        },
+        {
+          "x": 332.35494647010887,
+          "y": 204.71922528276212
+        },
+        {
+          "x": 180.2703280150932,
+          "y": 122.80331260412581
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_72",
+      "name": "Utilities",
+      "color": "#FF7F50",
+      "center": {
+        "x": -211.63563409288156,
+        "y": -15.337462139931958
+      },
+      "boundary": [
+        {
+          "x": -500.0,
+          "y": 228.69893107789522
+        },
+        {
+          "x": -500.0,
+          "y": 54.819076715656166
+        },
+        {
+          "x": -210.06519297539157,
+          "y": -37.167327789301474
+        },
+        {
+          "x": -185.775770873789,
+          "y": -9.952126464281788
+        },
+        {
+          "x": -223.54727573693762,
+          "y": 34.683230322262155
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_73",
+      "name": "Utilities",
+      "color": "#9ACD32",
+      "center": {
+        "x": 162.6931373346707,
+        "y": -133.95926971534732
+      },
+      "boundary": [
+        {
+          "x": 131.58796353693728,
+          "y": -130.56958116917272
+        },
+        {
+          "x": 152.90748438824838,
+          "y": -211.4519306640849
+        },
+        {
+          "x": 236.45448565089998,
+          "y": -351.6813506640003
+        },
+        {
+          "x": 472.92624794433505,
+          "y": -500.0
+        },
+        {
+          "x": 500.0,
+          "y": -482.3866245666434
+        },
+        {
+          "x": 206.12236527639845,
+          "y": -116.75364998828763
+        },
+        {
+          "x": 148.08087989266386,
+          "y": -108.70150931149328
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_74",
+      "name": "Utilities",
+      "color": "#DA70D6",
+      "center": {
+        "x": -9.279538981720803,
+        "y": 216.16854511543596
+      },
+      "boundary": [
+        {
+          "x": -141.15591158659123,
+          "y": 500.0
+        },
+        {
+          "x": -5.861977570020827e-14,
+          "y": 500.0
+        },
+        {
+          "x": 199.83189968828447,
+          "y": 500.0
+        },
+        {
+          "x": 103.40902234513113,
+          "y": 490.1200654781536
+        },
+        {
+          "x": 18.603790469754273,
+          "y": 209.717864573085
+        },
+        {
+          "x": -20.91838015542333,
+          "y": 182.6481392278383
+        },
+        {
+          "x": -23.298472931493457,
+          "y": 183.9321771153474
+        },
+        {
+          "x": -47.27086496061145,
+          "y": 220.54630963745555
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_75",
+      "name": "Tests",
+      "color": "#FF6B6B",
+      "center": {
+        "x": -143.99976888005585,
+        "y": -160.53981546723918
+      },
+      "boundary": [
+        {
+          "x": -115.33998109885093,
+          "y": -159.29460616533913
+        },
+        {
+          "x": -127.13578236397215,
+          "y": -213.83294387244652
+        },
+        {
+          "x": -472.83554966002094,
+          "y": -500.0
+        },
+        {
+          "x": -500.0,
+          "y": -464.59308438604825
+        },
+        {
+          "x": -155.7818385024297,
+          "y": -132.69903976006776
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_76",
+      "name": "Tests",
+      "color": "#4ECDC4",
+      "center": {
+        "x": 210.53790976968597,
+        "y": 53.72949863858292
+      },
+      "boundary": [
+        {
+          "x": 181.5261402503538,
+          "y": 43.44797337401483
+        },
+        {
+          "x": 252.09607263279017,
+          "y": -0.3760874995600787
+        },
+        {
+          "x": 319.8014662739538,
+          "y": -6.411401351934792
+        },
+        {
+          "x": 500.0,
+          "y": 10.201308232940185
+        },
+        {
+          "x": 500.0,
+          "y": 448.06565055223075
+        },
+        {
+          "x": 332.35494647010887,
+          "y": 204.71922528276212
+        },
+        {
+          "x": 181.20569979055372,
+          "y": 48.79626150682912
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_77",
+      "name": "Tests",
+      "color": "#45B7D1",
+      "center": {
+        "x": -177.74013871561436,
+        "y": 132.5562195805333
+      },
+      "boundary": [
+        {
+          "x": -267.9145177199792,
+          "y": 342.15033435927376
+        },
+        {
+          "x": -146.7851901849907,
+          "y": 138.51061849563632
+        },
+        {
+          "x": -180.5502827746407,
+          "y": 101.86041735349671
+        },
+        {
+          "x": -500.0,
+          "y": 232.6852610853718
+        },
+        {
+          "x": -500.0,
+          "y": 500.0
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_78",
+      "name": "Tests",
+      "color": "#96CEB4",
+      "center": {
+        "x": 50.03167916913302,
+        "y": -217.18161735013248
+      },
+      "boundary": [
+        {
+          "x": 13.031020836051844,
+          "y": -222.3510738395543
+        },
+        {
+          "x": 50.97189038944903,
+          "y": -187.71486930060385
+        },
+        {
+          "x": 236.45448565089998,
+          "y": -351.6813506640003
+        },
+        {
+          "x": 472.92624794433505,
+          "y": -500.0
+        },
+        {
+          "x": 0.0,
+          "y": -500.0
+        },
+        {
+          "x": -33.70702433107857,
+          "y": -500.0
+        },
+        {
+          "x": -15.061679659402667,
+          "y": -405.75039225100903
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_79",
+      "name": "Tests",
+      "color": "#FFEAA7",
+      "center": {
+        "x": 105.81137059112052,
+        "y": 193.90666928232798
+      },
+      "boundary": [
+        {
+          "x": 103.40902234513113,
+          "y": 490.1200654781536
+        },
+        {
+          "x": 199.83189968828447,
+          "y": 500.0
+        },
+        {
+          "x": 500.0,
+          "y": 500.0
+        },
+        {
+          "x": 131.0347318572248,
+          "y": 177.5977944943923
+        },
+        {
+          "x": 89.90264594611124,
+          "y": 167.50681408810928
+        },
+        {
+          "x": 74.47389697130998,
+          "y": 184.89245879865106
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_80",
+      "name": "Tests",
+      "color": "#DDA0DD",
+      "center": {
+        "x": -215.75567553412773,
+        "y": -58.30089653245855
+      },
+      "boundary": [
+        {
+          "x": -185.30082495178053,
+          "y": -76.04257286973936
+        },
+        {
+          "x": -500.0,
+          "y": -464.2212965715125
+        },
+        {
+          "x": -500.0,
+          "y": 6.394884621840902e-14
+        },
+        {
+          "x": -500.0,
+          "y": 54.819076715656166
+        },
+        {
+          "x": -210.06519297539157,
+          "y": -37.167327789301474
+        },
+        {
+          "x": -183.55563779749158,
+          "y": -70.30549717250268
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_81",
+      "name": "Tests",
+      "color": "#98D8C8",
+      "center": {
+        "x": 212.81937939606775,
+        "y": -70.52291138627434
+      },
+      "boundary": [
+        {
+          "x": 187.4979345576756,
+          "y": -67.50857903059223
+        },
+        {
+          "x": 319.8014662739538,
+          "y": -6.411401351934792
+        },
+        {
+          "x": 500.0,
+          "y": 10.201308232940185
+        },
+        {
+          "x": 500.0,
+          "y": -2.842170943040401e-14
+        },
+        {
+          "x": 500.0,
+          "y": -482.3866245666434
+        },
+        {
+          "x": 206.12236527639845,
+          "y": -116.75364998828763
+        },
+        {
+          "x": 187.092166659535,
+          "y": -70.06171361074222
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_82",
+      "name": "Tests",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -83.38112092948634,
+        "y": 207.9544437825904
+      },
+      "boundary": [
+        {
+          "x": -267.9145177199792,
+          "y": 342.15033435927376
+        },
+        {
+          "x": -97.73071452576659,
+          "y": 178.33851058609858
+        },
+        {
+          "x": -89.13680086478902,
+          "y": 177.02201065600417
+        },
+        {
+          "x": -47.27086496061145,
+          "y": 220.54630963745555
+        },
+        {
+          "x": -141.15591158659123,
+          "y": 500.0
+        },
+        {
+          "x": -500.0,
+          "y": 500.0
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_83",
+      "name": "Tests",
+      "color": "#BB8FCE",
+      "center": {
+        "x": -71.24036195446672,
+        "y": -214.3364850060332
+      },
+      "boundary": [
+        {
+          "x": -62.538089953569056,
+          "y": -185.39846475752483
+        },
+        {
+          "x": -127.13578236397215,
+          "y": -213.83294387244652
+        },
+        {
+          "x": -472.83554966002094,
+          "y": -500.0
+        },
+        {
+          "x": -33.70702433107857,
+          "y": -500.0
+        },
+        {
+          "x": -15.061679659402667,
+          "y": -405.75039225100903
+        },
+        {
+          "x": -48.01970593429298,
+          "y": -197.46896274862286
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    }
+  ],
+  "roads": [],
+  "stats": {
+    "total_files": 84,
+    "total_loc": 34461,
+    "total_districts": 84,
+    "total_dependencies": 0,
+    "hotspots": 13
+  },
+  "metadata": {
+    "num_files": 84,
+    "num_directories": 84,
+    "languages": {},
+    "layer_violations": [],
+    "duplicates": [],
+    "issues": {
+      "circular_dependencies": [],
+      "god_objects": [],
+      "orphans": [
+        "main.go",
+        "src/winpty_windows.go",
+        "src/winpty.go",
+        "src/tokenizer_test.go",
+        "src/tokenizer.go",
+        "src/tmux.go",
+        "src/terminal_windows.go",
+        "src/terminal_unix.go",
+        "src/terminal_test.go",
+        "src/terminal.go",
+        "src/server.go",
+        "src/result_x86.go",
+        "src/result_test.go",
+        "src/result_others.go",
+        "src/result.go",
+        "src/reader_test.go",
+        "src/reader.go",
+        "src/proxy_windows.go",
+        "src/proxy_unix.go",
+        "src/proxy.go",
+        "src/pattern_test.go",
+        "src/pattern.go",
+        "src/options_test.go",
+        "src/options_pprof_test.go",
+        "src/options_pprof.go",
+        "src/options_no_pprof.go",
+        "src/options.go",
+        "src/merger_test.go",
+        "src/merger.go",
+        "src/matcher.go",
+        "src/item_test.go",
+        "src/item.go",
+        "src/history_test.go",
+        "src/history.go",
+        "src/functions.go",
+        "src/core.go",
+        "src/constants.go",
+        "src/chunklist_test.go",
+        "src/chunklist.go",
+        "src/cache_test.go",
+        "src/cache.go",
+        "src/ansi_test.go",
+        "src/ansi.go",
+        "src/actiontype_string.go",
+        "src/algo/normalize.go",
+        "src/algo/algo_test.go",
+        "src/algo/algo.go",
+        "src/protector/protector_openbsd.go",
+        "src/protector/protector.go",
+        "src/tui/tui_test.go",
+        "src/tui/tui.go",
+        "src/tui/ttyname_windows.go",
+        "src/tui/ttyname_unix.go",
+        "src/tui/tcell_test.go",
+        "src/tui/tcell.go",
+        "src/tui/light_windows.go",
+        "src/tui/light_unix.go",
+        "src/tui/light_test.go",
+        "src/tui/light.go",
+        "src/tui/eventtype_string.go",
+        "src/tui/dummy.go",
+        "src/util/util_windows.go",
+        "src/util/util_unix.go",
+        "src/util/util_test.go",
+        "src/util/util.go",
+        "src/util/slab.go",
+        "src/util/eventbox_test.go",
+        "src/util/eventbox.go",
+        "src/util/concurrent_set.go",
+        "src/util/chars_test.go",
+        "src/util/chars.go",
+        "src/util/atomicbool_test.go",
+        "src/util/atomicbool.go",
+        "src/util/atexit_test.go",
+        "src/util/atexit.go",
+        "test/test_shell_integration.rb",
+        "test/test_server.rb",
+        "test/test_raw.rb",
+        "test/test_preview.rb",
+        "test/test_layout.rb",
+        "test/test_filter.rb",
+        "test/test_exec.rb",
+        "test/test_core.rb",
+        "test/runner.rb"
+      ],
+      "highly_coupled": [],
+      "large_files": [
+        "src/terminal.go",
+        "src/options.go",
+        "src/algo/algo.go",
+        "src/tui/tui.go",
+        "src/tui/tcell.go",
+        "src/tui/light.go",
+        "test/test_shell_integration.rb",
+        "test/test_layout.rb",
+        "test/test_core.rb"
+      ]
+    },
+    "health": {
+      "score": 91,
+      "grade": "A"
+    }
+  }
+}

@@ -96,6 +96,8 @@ class CodebaseAnalyzer:
                     size_bytes=pf.get('size_bytes', 0)
                 ),
                 language=pf['language'],
+                functions=pf.get('functions', []),
+                classes=pf.get('classes', []),
                 decay_level=pf.get('decay_level', 0),
                 is_hotspot=pf.get('is_hotspot', False),
 

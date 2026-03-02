@@ -7,7 +7,7 @@
 
 import { forwardRef } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { clsx } from 'clsx'
 import './Modal.css'
@@ -29,18 +29,22 @@ const ModalTrigger = Dialog.Trigger
 
 const ModalPortal = Dialog.Portal
 
-const ModalOverlay = forwardRef(({ className, ...props }, ref) => (
-    <Dialog.Overlay asChild ref={ref}>
-        <motion.div
-            className={clsx('modal-overlay', className)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            {...props}
-        />
-    </Dialog.Overlay>
-))
+const ModalOverlay = forwardRef(({ className, ...props }, ref) => {
+    const shouldReduceMotion = useReducedMotion()
+
+    return (
+        <Dialog.Overlay asChild ref={ref}>
+            <motion.div
+                className={clsx('modal-overlay', className)}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: shouldReduceMotion ? 0.01 : 0.2 }}
+                {...props}
+            />
+        </Dialog.Overlay>
+    )
+})
 ModalOverlay.displayName = 'ModalOverlay'
 
 const ModalContent = forwardRef(({
@@ -49,36 +53,41 @@ const ModalContent = forwardRef(({
     size = 'md',
     showClose = true,
     ...props
-}, ref) => (
-    <AnimatePresence>
-        <ModalPortal>
-            <ModalOverlay />
-            <Dialog.Content asChild ref={ref}>
-                <motion.div
-                    className={clsx('modal-content', `modal-${size}`, className)}
-                    initial={{ opacity: 0, scale: 0.95, x: '-50%', y: '-48%' }}
-                    animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
-                    exit={{ opacity: 0, scale: 0.95, x: '-50%', y: '-48%' }}
-                    transition={{
-                        type: 'spring',
-                        damping: 25,
-                        stiffness: 300
-                    }}
-                    {...props}
-                >
-                    {children}
-                    {showClose && (
-                        <Dialog.Close asChild>
-                            <button className="modal-close" aria-label="Close">
-                                <X size={18} />
-                            </button>
-                        </Dialog.Close>
-                    )}
-                </motion.div>
-            </Dialog.Content>
-        </ModalPortal>
-    </AnimatePresence>
-))
+}, ref) => {
+    const shouldReduceMotion = useReducedMotion()
+
+    return (
+        <AnimatePresence>
+            <ModalPortal>
+                <ModalOverlay />
+                <Dialog.Content asChild ref={ref}>
+                    <motion.div
+                        className={clsx('modal-content', `modal-${size}`, className)}
+                        initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.95, x: '-50%', y: shouldReduceMotion ? '-50%' : '-48%' }}
+                        animate={{ opacity: 1, scale: 1, x: '-50%', y: '-50%' }}
+                        exit={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.95, x: '-50%', y: shouldReduceMotion ? '-50%' : '-48%' }}
+                        transition={{
+                            type: 'spring',
+                            damping: 25,
+                            stiffness: 300,
+                            duration: shouldReduceMotion ? 0.01 : undefined
+                        }}
+                        {...props}
+                    >
+                        {children}
+                        {showClose && (
+                            <Dialog.Close asChild>
+                                <button className="modal-close" aria-label="Close">
+                                    <X size={18} />
+                                </button>
+                            </Dialog.Close>
+                        )}
+                    </motion.div>
+                </Dialog.Content>
+            </ModalPortal>
+        </AnimatePresence>
+    )
+})
 ModalContent.displayName = 'ModalContent'
 
 const ModalHeader = ({ className, children, ...props }) => (

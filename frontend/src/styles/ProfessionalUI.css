@@ -19,14 +19,14 @@
 
 /* Glassmorphism 2.0 - High End */
 .p-panel-floating {
-  background: rgba(20, 20, 23, 0.75);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur-strong)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(180%);
+  border: 1px solid var(--glass-border);
   box-shadow:
     0 24px 48px -12px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset;
-  border-radius: 16px;
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  border-radius: var(--radius-2xl);
   overflow: hidden;
   position: relative;
   transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s ease;
@@ -111,7 +111,7 @@
   right: 0;
   width: 320px;
   height: 100vh;
-  z-index: 800;
+  z-index: var(--z-fixed);
   background: var(--color-bg-secondary);
   border-left: 1px solid var(--border-default);
   box-shadow: var(--shadow-xl);
@@ -147,9 +147,9 @@
   left: 0;
   width: 300px;
   height: 100vh;
-  z-index: 1500;
-  background: #09090b; /* Match Studio Dark */
-  border-right: 1px solid #27272a;
+  z-index: var(--z-modal-backdrop);
+  background: var(--color-bg-primary);
+  border-right: 1px solid var(--border-default);
   display: flex;
   flex-direction: column;
   transform: translateX(-100%);
@@ -166,14 +166,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #27272a;
+  border-bottom: 1px solid var(--border-default);
 }
 
 .sidebar-header h2 {
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
-  color: #f4f4f5;
+  color: var(--color-text-primary);
   letter-spacing: -0.02em;
 }
 
@@ -181,7 +181,7 @@
   background: transparent;
   border: none;
   font-size: 1.5rem;
-  color: #71717a;
+  color: var(--color-text-tertiary);
   cursor: pointer;
   line-height: 1;
 }

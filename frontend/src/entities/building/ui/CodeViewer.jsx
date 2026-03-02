@@ -46,50 +46,50 @@ export default function CodeViewer({ building, onClose }) {
                         width: '100%',
                         maxWidth: '1200px',
                         height: '90vh',
-                        background: '#09090b',
+                        background: 'rgba(5, 10, 20, 0.95)',
                         color: '#f4f4f5',
-                        borderRadius: '16px',
-                        boxShadow: '0 50px 100px -20px rgba(0, 0, 0, 0.9)',
-                        border: '1px solid #27272a',
+                        borderRadius: '12px',
+                        boxShadow: '0 40px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05) inset',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
                         display: 'flex',
                         flexDirection: 'column',
                         overflow: 'hidden'
                     }}
                     onClick={e => e.stopPropagation()}
                 >
-                    {/* Header - macOS Style Window Controls */}
+                    {/* Header - Minimalist Tech Style */}
                     <div style={{
                         height: '42px',
-                        background: 'rgba(255, 255, 255, 0.03)',
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         padding: '0 16px',
                         userSelect: 'none'
                     }}>
-                        {/* Traffic Lights (Red Only) */}
+                        {/* Close button */}
                         <div style={{ display: 'flex', gap: '8px' }}>
                             <div
                                 onClick={onClose}
                                 title="Close (Esc)"
                                 style={{
-                                    width: '12px', height: '12px', borderRadius: '50%',
-                                    background: '#ff5f56', cursor: 'pointer',
-                                    boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.1)',
+                                    width: '14px', height: '14px', borderRadius: '4px',
+                                    background: 'rgba(239, 68, 68, 0.2)', cursor: 'pointer',
+                                    border: '1px solid rgba(239, 68, 68, 0.5)',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center'
                                 }}
                             />
-                            {/* Min/Max removed as requested */}
                         </div>
 
                         {/* Title */}
                         <div style={{
                             position: 'absolute', left: '50%', transform: 'translateX(-50%)',
-                            color: 'rgba(255,255,255,0.6)', fontSize: '0.8rem', fontWeight: 500, fontFamily: 'var(--font-mono)',
-                            display: 'flex', alignItems: 'center', gap: '6px'
+                            color: '#ffffff', fontSize: '0.8rem', fontWeight: 500, fontFamily: 'var(--font-sans)',
+                            display: 'flex', alignItems: 'center', gap: '8px',
+                            letterSpacing: '0.02em', textShadow: '0 0 10px rgba(255, 255, 255, 0.2)'
                         }}>
-                            <FileCode2 size={12} opacity={0.5} />
+                            <FileCode2 size={14} color="#ffffff" opacity={0.5} />
                             {building.path.split('/').pop()}
                         </div>
 
@@ -100,20 +100,22 @@ export default function CodeViewer({ building, onClose }) {
                                 whileTap={{ scale: 0.95 }}
                                 style={{
                                     display: 'flex', alignItems: 'center', gap: '8px',
-                                    background: copied ? 'rgba(34, 197, 94, 0.2)' : 'rgba(255,255,255,0.05)',
-                                    color: copied ? '#4ade80' : '#a1a1aa',
-                                    border: copied ? '1px solid rgba(34, 197, 94, 0.3)' : '1px solid rgba(255,255,255,0.1)',
+                                    background: copied ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                                    color: copied ? '#ffffff' : 'rgba(255, 255, 255, 0.5)',
+                                    border: copied ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid transparent',
+                                    boxShadow: copied ? '0 0 10px rgba(255, 255, 255, 0.1)' : 'none',
                                     padding: '6px 12px',
                                     borderRadius: '6px',
                                     fontSize: '0.8rem',
                                     fontWeight: 500,
                                     cursor: 'pointer',
                                     transition: 'all 0.2s',
-                                    outline: 'none'
+                                    outline: 'none',
+                                    fontFamily: 'var(--font-sans)'
                                 }}
                             >
                                 {copied ? <Check size={14} /> : <Copy size={14} />}
-                                {copied ? 'Copied' : 'Copy Source'}
+                                {copied ? 'Copied' : 'Copy'}
                             </motion.button>
                         </div>
                     </div>
@@ -123,11 +125,11 @@ export default function CodeViewer({ building, onClose }) {
                         flex: 1,
                         overflow: 'auto',
                         padding: '24px',
-                        fontFamily: '"JetBrains Mono", "Fira Code", monospace',
-                        fontSize: '14px',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '13px',
                         lineHeight: '1.6',
-                        color: '#d4d4d4',
-                        background: '#1e1e1e'
+                        color: 'rgba(255, 255, 255, 0.8)',
+                        background: 'transparent'
                     }}>
                         {fileContent?.loading ? (
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: '#52525b' }}>
@@ -151,14 +153,18 @@ export default function CodeViewer({ building, onClose }) {
 
                     {/* Footer / Status */}
                     <div style={{
-                        height: '30px',
-                        background: '#007acc',
+                        height: '32px',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        borderTop: '1px solid rgba(255, 255, 255, 0.2)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        padding: '0 12px',
+                        padding: '0 16px',
                         fontSize: '0.75rem',
-                        color: 'white'
+                        fontFamily: 'var(--font-mono)',
+                        color: 'rgba(255, 255, 255, 0.6)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
                     }}>
                         <span>{building.language || 'Text'}</span>
                         <span>{building.metrics?.loc || building.metrics?.lines || '?'} lines • UTF-8</span>

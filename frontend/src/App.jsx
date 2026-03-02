@@ -24,6 +24,8 @@ import FileTable from './features/explorer/ui/FileTable'
 import FloatingDock from './widgets/layout/ui/FloatingDock'
 import AnalyzeModal from './features/analysis/ui/AnalyzeModal'
 import DiagnosticsHUD from './widgets/debug/ui/DiagnosticsHUD'
+import CityBuilderLoader from './features/onboarding/ui/CityBuilderLoader'
+import EmptyCityHero from './features/onboarding/ui/EmptyCityHero'
 import ViewControl from './widgets/layout/ui/ViewControl'
 import CanvasUI from './widgets/layout/ui/CanvasUI'
 import ChatInterface from './features/ai-architect/ui/ChatInterface'
@@ -58,7 +60,9 @@ function App() {
         isAnimating,
         layoutMode,
         vscodeConnected,
-        selectBuilding
+        selectBuilding,
+        activeIntelligencePanel,
+        error
     } = useStore()
 
     const [sidebarOpen, setSidebarOpen] = useState(true)
@@ -162,7 +166,7 @@ function App() {
                                         makeDefault
                                         position={[80, 50, 80]}
                                         fov={45}
-                                        near={0.1} // FIX: Prevent clipping when close
+                                        near={0.01} // FIX: Prevent clipping when getting extremely close
                                         far={3000} // Expanded render distance
                                     />
 
@@ -171,7 +175,7 @@ function App() {
                                         enablePan={true}
                                         enableZoom={true}
                                         enableRotate={true}
-                                        minDistance={1} // Allow extreme close-ups
+                                        minDistance={0.1} // Allow extreme close-ups without freezing
                                         maxDistance={2500}
                                         // Constrain to hemisphere (0 to PI/2)
                                         maxPolarAngle={Math.PI / 2}
@@ -212,49 +216,54 @@ function App() {
                         </div>
                     )}
 
-                    {/* Common Overlays */}
+                    {/* Common Overlays - ONLY SHOW IF PROJECT LOADED */}
+                    {cityData ? (
+                        <>
+                            {/* Floating Navigation Dock - World Class UX */}
+                            <FloatingDock
+                                view={view}
+                                onViewChange={setView}
+                                onAnalyze={() => setAnalyzeModalOpen(true)}
+                                onShowGraph={() => setShowDependencyGraph(true)}
+                                onShowExport={() => setShowExportReport(true)}
+                            />
 
-                    {/* Floating Navigation Dock - World Class UX */}
-                    <FloatingDock
-                        view={view}
-                        onViewChange={setView}
-                        onAnalyze={() => setAnalyzeModalOpen(true)}
-                        onShowGraph={() => setShowDependencyGraph(true)}
-                        onShowExport={() => setShowExportReport(true)}
-                    />
+                            {selectedBuilding && (
+                                <BuildingPanel building={selectedBuilding} />
+                            )}
 
-                    {selectedBuilding && (
-                        <BuildingPanel building={selectedBuilding} />
-                    )}
+                            {view === '3d' && <TimelineController />}
 
-                    {view === '3d' && <TimelineController />}
-
-                    {view === '3d' && <DiagnosticsHUD />}
-                    {view === '3d' && <ViewControl />}
-                    {view === '3d' && <CanvasUI />}
-                    <ChatInterface />
-                    {/* ROOT LEVEL CODE VIEWER */}
-                    {useStore.getState().codeViewerOpen && selectedBuilding && (
-                        <CodeViewer
-                            building={selectedBuilding}
-                            onClose={() => useStore.getState().setCodeViewerOpen(false)}
-                        />
+                            {view === '3d' && <DiagnosticsHUD />}
+                            {view === '3d' && <ViewControl />}
+                            {view === '3d' && <CanvasUI />}
+                            <ChatInterface />
+                            {/* ROOT LEVEL CODE VIEWER */}
+                            {useStore.getState().codeViewerOpen && selectedBuilding && (
+                                <CodeViewer
+                                    building={selectedBuilding}
+                                    onClose={() => useStore.getState().setCodeViewerOpen(false)}
+                                />
+                            )}
+                        </>
+                    ) : (
+                        view === '3d' && <EmptyCityHero />
                     )}
                 </div>
             </div>
 
-            <Sidebar />
+            {cityData && <Sidebar />}
 
             {/* Intelligence Dashboard */}
-            {useStore.getState().activeIntelligencePanel && (
+            {cityData && activeIntelligencePanel && (
                 <IntelligenceDashboard />
             )}
 
             {/* Impact Visualization */}
-            <ImpactVisualization />
+            {cityData && <ImpactVisualization />}
 
             {/* Command Palette - ⌘K */}
-            <CommandPalette />
+            {cityData && <CommandPalette />}
 
             {/* Analyze Repo Modal */}
             <AnalyzeModal open={analyzeModalOpen} onOpenChange={setAnalyzeModalOpen} />
@@ -281,33 +290,36 @@ function App() {
                         transition={{ duration: 0.3 }}
                         style={{ position: 'fixed', inset: 0, zIndex: 99999 }}
                     >
-                        <LoadingScreen />
+                        <CityBuilderLoader />
                     </motion.div>
                 )}
             </AnimatePresence>
 
             {/* Error Toast - Moved to Top Center to avoid overlap */}
-            {useStore.getState().error && (
+            {error && (
                 <div style={{
                     position: 'fixed',
                     top: '24px',
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    background: '#ef4444',
-                    color: 'white',
+                    background: '#050505',
+                    color: '#ffffff',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
                     padding: '12px 24px',
-                    borderRadius: '30px',
-                    boxShadow: '0 10px 30px -10px rgba(239, 68, 68, 0.5)',
+                    borderRadius: '8px',
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset',
                     zIndex: 10001,
                     display: 'flex',
                     alignItems: 'center',
                     gap: '12px',
-                    animation: 'slideDown 0.3s ease-out',
+                    animation: 'slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                     maxWidth: '80vw',
                     fontSize: '0.9rem',
-                    fontWeight: 500
+                    fontWeight: 500,
+                    fontFamily: 'var(--font-sans)'
                 }}>
-                    <span>⚠️ {useStore.getState().error}</span>
+                    <span style={{ color: '#ef4444' }}>⚠️</span>
+                    <span>{error}</span>
                     <button
                         onClick={() => useStore.getState().setError(null)}
                         style={{
@@ -323,8 +335,8 @@ function App() {
                 </div>
             )}
 
-            {/* Onboarding */}
-            <WelcomeOverlay />
+            {/* Onboarding - Replaced by EmptyCityHero */}
+            {/* <WelcomeOverlay /> */}
 
             {/* Toast Notifications */}
             <ToastContainer />

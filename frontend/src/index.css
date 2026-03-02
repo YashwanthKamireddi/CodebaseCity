@@ -1,63 +1,20 @@
 /*
- * Codebase City - Bionic Minimalism (Studio Edition)
- *
- * Design Philosophy:
- * - "Swiss Grid in Space"
- * - High Contrast, Low Noise.
- * - Glassmorphism for contextual UI.
- * - Zero "Gamey" effects.
+ * Codebase City — Global Styles
+ * Imports the design system and provides base resets.
  */
 
 @import './styles/design-system.css';
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
-:root {
-  /* --- The Studio Palette (Minimalist) --- */
-  --bg-studio: #f4f4f5; /* Soft Grey-White */
-  --bg-studio-dark: #09090b; /* Deep Zinc for Dark Mode */
-
-  --glass-panel: rgba(255, 255, 255, 0.75);
-  --glass-border: rgba(255, 255, 255, 0.4);
-  --glass-blur: 40px;
-
-  /* Text - High Contrast Swiss Style */
-  --text-primary: #18181b;
-  --text-secondary: #71717a;
-  --text-mono: #3f3f46;
-
-  /* Signals (Not Decor) */
-  --signal-active: #2563eb; /* Electric Blue */
-  --signal-danger: #ef4444; /* Alert Red */
-  --signal-success: #10b981; /* Valid Green */
-  --signal-warning: #f59e0b; /* Caution Amber */
-
-  /* Fonts */
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Outfit', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-}
-
-[data-theme='dark'] {
-  --bg-studio: #000000; /* Infinite Void */
-  --glass-panel: rgba(10, 10, 10, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.08);
-
-  --text-primary: #fafafa;
-  --text-secondary: #a1a1aa;
-  --text-mono: #d4d4d8;
-}
 
 body {
   margin: 0;
   padding: 0;
   width: 100vw;
   height: 100vh;
-  background-color: var(--bg-studio);
-  color: var(--text-primary);
-  font-family: var(--font-sans);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   overflow: hidden;
-  transition: background-color 0.5s ease;
 }
 
 #root {
@@ -65,7 +22,7 @@ body {
   height: 100%;
 }
 
-/* Scrollbar Handling */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -74,9 +31,9 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(120, 120, 120, 0.2);
+  background: rgba(120, 120, 120, 0.25);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(120, 120, 120, 0.4);
+  background: rgba(120, 120, 120, 0.45);
 }

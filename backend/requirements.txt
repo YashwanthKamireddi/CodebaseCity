@@ -24,6 +24,10 @@ httpx>=0.26.0
 tree-sitter>=0.21.0
 tree-sitter-python>=0.21.0
 tree-sitter-javascript>=0.21.0
+tree-sitter-typescript>=0.23.2
+
+# Graph Database (Persistent AST Storage)
+kuzu>=0.11.3
 
 # Git Integration
 gitpython>=3.1.41

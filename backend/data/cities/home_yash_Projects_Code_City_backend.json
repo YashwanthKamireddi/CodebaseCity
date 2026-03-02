@@ -1,0 +1,5934 @@
+{
+  "name": "backend",
+  "path": "/home/yash/Projects/Code_City/backend",
+  "city_id": "home_yash_Projects_Code_City_backend",
+  "buildings": [
+    {
+      "id": "main.py",
+      "name": "main.py",
+      "path": "main.py",
+      "district_id": "district_4",
+      "position": {
+        "x": -49.02431875512971,
+        "y": 0.0,
+        "z": -6.583048062925723
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 11.200000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 159,
+        "complexity": 14,
+        "churn": 6,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 8,
+        "size_bytes": 4970
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "lifespan",
+          "line": 1
+        },
+        {
+          "name": "ws_vscode_endpoint",
+          "line": 1
+        },
+        {
+          "name": "ws_frontend_endpoint",
+          "line": 1
+        },
+        {
+          "name": "root",
+          "line": 1
+        },
+        {
+          "name": "health",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "mcp_server.py",
+      "name": "mcp_server.py",
+      "path": "mcp_server.py",
+      "district_id": "district_2",
+      "position": {
+        "x": 5.816447171965899,
+        "y": 0.0,
+        "z": -35.23305260461157
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 9.600000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 80,
+        "complexity": 12,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 2636
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "notify_backend",
+          "line": 1
+        },
+        {
+          "name": "query_architecture",
+          "line": 1
+        },
+        {
+          "name": "get_blast_radius",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "check_cursor.py",
+      "name": "check_cursor.py",
+      "path": "check_cursor.py",
+      "district_id": "district_7",
+      "position": {
+        "x": -35.53994611655271,
+        "y": 0.0,
+        "z": -55.1365366986833
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 9,
+        "complexity": 3,
+        "churn": 1,
+        "age_days": 35,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 239
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.04794520547945205,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "check_api.py",
+      "name": "check_api.py",
+      "path": "check_api.py",
+      "district_id": "district_8",
+      "position": {
+        "x": 63.053513783086025,
+        "y": 0.0,
+        "z": 26.236668699183017
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 13,
+        "complexity": 2,
+        "churn": 1,
+        "age_days": 35,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 307
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.04794520547945205,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "test_ast.py",
+      "name": "test_ast.py",
+      "path": "test_ast.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -19.627476927538172,
+        "y": 0.0,
+        "z": 15.741439278081087
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 43,
+        "complexity": 2,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 866
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "test_ast",
+          "line": 1
+        },
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "start",
+          "line": 1
+        },
+        {
+          "name": "global_helper",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "MyServer",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "ai/gemini_client.py",
+      "name": "gemini_client.py",
+      "path": "ai/gemini_client.py",
+      "district_id": "district_5",
+      "position": {
+        "x": 49.92195610936825,
+        "y": 0.0,
+        "z": -30.922385177386403
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 25.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 181,
+        "complexity": 45,
+        "churn": 3,
+        "age_days": 33,
+        "dependencies_in": 2,
+        "dependencies_out": 2,
+        "size_bytes": 6216
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "_retry_with_backoff",
+          "line": 1
+        },
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "client",
+          "line": 1
+        },
+        {
+          "name": "generate",
+          "line": 1
+        },
+        {
+          "name": "_call",
+          "line": 1
+        },
+        {
+          "name": "get_embedding",
+          "line": 1
+        },
+        {
+          "name": "_call",
+          "line": 1
+        },
+        {
+          "name": "get_embeddings_batch",
+          "line": 1
+        },
+        {
+          "name": "_get_with_limit",
+          "line": 1
+        },
+        {
+          "name": "summarize_code",
+          "line": 1
+        },
+        {
+          "name": "name_cluster",
+          "line": 1
+        },
+        {
+          "name": "analyze_dependencies",
+          "line": 4
+        }
+      ],
+      "classes": [
+        {
+          "name": "GeminiClient",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "ai/advisor.py",
+      "name": "advisor.py",
+      "path": "ai/advisor.py",
+      "district_id": "district_6",
+      "position": {
+        "x": -20.52105329296783,
+        "y": 0.0,
+        "z": 58.885139936304675
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 6.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 36,
+        "complexity": 8,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 1078
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "get_migration_advice",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "ArchitectureAdvisor",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "ai/analyst.py",
+      "name": "analyst.py",
+      "path": "ai/analyst.py",
+      "district_id": "district_6",
+      "position": {
+        "x": -23.765398106786595,
+        "y": 0.0,
+        "z": 60.585802225675366
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 6.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 54,
+        "complexity": 8,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 1761
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "detect_god_objects",
+          "line": 1
+        },
+        {
+          "name": "analyze_circular_dependencies",
+          "line": 1
+        },
+        {
+          "name": "generate_refactoring_plan",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "RepositoryAnalyst",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "ai/city_guide.py",
+      "name": "city_guide.py",
+      "path": "ai/city_guide.py",
+      "district_id": "district_5",
+      "position": {
+        "x": 46.68168569046333,
+        "y": 0.0,
+        "z": -29.217648493101862
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 25.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 167,
+        "complexity": 57,
+        "churn": 2,
+        "age_days": 36,
+        "dependencies_in": 3,
+        "dependencies_out": 2,
+        "size_bytes": 7944
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "chat",
+          "line": 1
+        },
+        {
+          "name": "_get_fallback_response",
+          "line": 5
+        },
+        {
+          "name": "_extract_building_mentions",
+          "line": 5
+        },
+        {
+          "name": "_extract_navigation_target",
+          "line": 5
+        },
+        {
+          "name": "get_building_detail",
+          "line": 5
+        }
+      ],
+      "classes": [
+        {
+          "name": "CityGuide",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "ai/__init__.py",
+      "name": "__init__.py",
+      "path": "ai/__init__.py",
+      "district_id": "district_5",
+      "position": {
+        "x": 49.492218232761935,
+        "y": 0.0,
+        "z": -36.71565340109556
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 4,
+        "complexity": 1,
+        "churn": 2,
+        "age_days": 36,
+        "dependencies_in": 0,
+        "dependencies_out": 2,
+        "size_bytes": 84
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "core/database.py",
+      "name": "database.py",
+      "path": "core/database.py",
+      "district_id": "district_5",
+      "position": {
+        "x": 52.75693945767339,
+        "y": 0.0,
+        "z": -26.964917523315627
+      },
+      "dimensions": {
+        "width": 2.02,
+        "height": 25.0,
+        "depth": 2.02
+      },
+      "metrics": {
+        "loc": 202,
+        "complexity": 40,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 1,
+        "size_bytes": 5854
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "_init_redis",
+          "line": 1
+        },
+        {
+          "name": "_make_key",
+          "line": 1
+        },
+        {
+          "name": "_serialize",
+          "line": 1
+        },
+        {
+          "name": "_deserialize",
+          "line": 1
+        },
+        {
+          "name": "get",
+          "line": 1
+        },
+        {
+          "name": "set",
+          "line": 1
+        },
+        {
+          "name": "delete",
+          "line": 1
+        },
+        {
+          "name": "exists",
+          "line": 1
+        },
+        {
+          "name": "clear_memory_cache",
+          "line": 1
+        },
+        {
+          "name": "is_redis_connected",
+          "line": 1
+        },
+        {
+          "name": "cached",
+          "line": 1
+        },
+        {
+          "name": "analyze_repo",
+          "line": 1
+        },
+        {
+          "name": "decorator",
+          "line": 1
+        },
+        {
+          "name": "wrapper",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "CacheService",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "core/config.py",
+      "name": "config.py",
+      "path": "core/config.py",
+      "district_id": "district_5",
+      "position": {
+        "x": 42.205764488848835,
+        "y": 0.0,
+        "z": -32.964856053352996
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 5.6000000000000005,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 125,
+        "complexity": 7,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 2,
+        "dependencies_out": 0,
+        "size_bytes": 7806
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "is_production",
+          "line": 1
+        },
+        {
+          "name": "is_development",
+          "line": 1
+        },
+        {
+          "name": "get_settings",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "Settings",
+          "line": 1
+        },
+        {
+          "name": "Config",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "core/__init__.py",
+      "name": "__init__.py",
+      "path": "core/__init__.py",
+      "district_id": "district_5",
+      "position": {
+        "x": 57.293873942537914,
+        "y": 0.0,
+        "z": -34.35445846759477
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 15,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 2,
+        "size_bytes": 227
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "utils/cache.py",
+      "name": "cache.py",
+      "path": "utils/cache.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 1.7486308947611364,
+        "y": 0.0,
+        "z": 0.0861953528953247
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 25.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 170,
+        "complexity": 35,
+        "churn": 2,
+        "age_days": 28,
+        "dependencies_in": 7,
+        "dependencies_out": 0,
+        "size_bytes": 4805
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "get",
+          "line": 1
+        },
+        {
+          "name": "set",
+          "line": 1
+        },
+        {
+          "name": "delete",
+          "line": 1
+        },
+        {
+          "name": "clear",
+          "line": 1
+        },
+        {
+          "name": "__contains__",
+          "line": 1
+        },
+        {
+          "name": "__getitem__",
+          "line": 1
+        },
+        {
+          "name": "__setitem__",
+          "line": 1
+        },
+        {
+          "name": "__delitem__",
+          "line": 1
+        },
+        {
+          "name": "__len__",
+          "line": 1
+        },
+        {
+          "name": "keys",
+          "line": 1
+        },
+        {
+          "name": "values",
+          "line": 1
+        },
+        {
+          "name": "items",
+          "line": 1
+        },
+        {
+          "name": "stats",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "CacheEntry",
+          "line": 1
+        },
+        {
+          "name": "LRUCache",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "utils/middleware.py",
+      "name": "middleware.py",
+      "path": "utils/middleware.py",
+      "district_id": "district_3",
+      "position": {
+        "x": 26.30745113545069,
+        "y": 0.0,
+        "z": 35.692536457299894
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 12.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 121,
+        "complexity": 15,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 12,
+        "dependencies_out": 1,
+        "size_bytes": 3774
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "dispatch",
+          "line": 1
+        },
+        {
+          "name": "dispatch",
+          "line": 1
+        },
+        {
+          "name": "dispatch",
+          "line": 1
+        },
+        {
+          "name": "setup_middleware",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "CorrelationMiddleware",
+          "line": 1
+        },
+        {
+          "name": "TimingMiddleware",
+          "line": 1
+        },
+        {
+          "name": "SecurityHeadersMiddleware",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "utils/error_handler.py",
+      "name": "error_handler.py",
+      "path": "utils/error_handler.py",
+      "district_id": "district_4",
+      "position": {
+        "x": -52.03436942054662,
+        "y": 0.0,
+        "z": -4.648091625153178
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 12.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 184,
+        "complexity": 16,
+        "churn": 2,
+        "age_days": 28,
+        "dependencies_in": 2,
+        "dependencies_out": 2,
+        "size_bytes": 6044
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "_generate_error_id",
+          "line": 1
+        },
+        {
+          "name": "global_exception_handler",
+          "line": 1
+        },
+        {
+          "name": "http_exception_handler",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "AppError",
+          "line": 1
+        },
+        {
+          "name": "NotFoundError",
+          "line": 1
+        },
+        {
+          "name": "ValidationFailedError",
+          "line": 1
+        },
+        {
+          "name": "ExternalServiceError",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "utils/security.py",
+      "name": "security.py",
+      "path": "utils/security.py",
+      "district_id": "district_3",
+      "position": {
+        "x": 22.874997877936924,
+        "y": 0.0,
+        "z": 37.205090302975584
+      },
+      "dimensions": {
+        "width": 2.25,
+        "height": 24.8,
+        "depth": 2.25
+      },
+      "metrics": {
+        "loc": 225,
+        "complexity": 31,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 6208
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "sanitize_path",
+          "line": 1
+        },
+        {
+          "name": "validate_file_extension",
+          "line": 1
+        },
+        {
+          "name": "is_safe_file",
+          "line": 1
+        },
+        {
+          "name": "generate_secure_token",
+          "line": 1
+        },
+        {
+          "name": "hash_content",
+          "line": 1
+        },
+        {
+          "name": "sanitize_log_message",
+          "line": 1
+        },
+        {
+          "name": "mask_sensitive_data",
+          "line": 3
+        },
+        {
+          "name": "is_internal_path",
+          "line": 3
+        },
+        {
+          "name": "validate_github_url",
+          "line": 3
+        }
+      ],
+      "classes": [
+        {
+          "name": "RateLimitError",
+          "line": 3
+        },
+        {
+          "name": "SecurityViolationError",
+          "line": 3
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "utils/responses.py",
+      "name": "responses.py",
+      "path": "utils/responses.py",
+      "district_id": "district_4",
+      "position": {
+        "x": -48.570217791945055,
+        "y": 0.0,
+        "z": -11.492477446843903
+      },
+      "dimensions": {
+        "width": 2.2,
+        "height": 9.600000000000001,
+        "depth": 2.2
+      },
+      "metrics": {
+        "loc": 220,
+        "complexity": 12,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 3,
+        "dependencies_out": 0,
+        "size_bytes": 5658
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "success_response",
+          "line": 1
+        },
+        {
+          "name": "error_response",
+          "line": 1
+        },
+        {
+          "name": "paginated_response",
+          "line": 1
+        },
+        {
+          "name": "ok",
+          "line": 1
+        },
+        {
+          "name": "created",
+          "line": 1
+        },
+        {
+          "name": "deleted",
+          "line": 1
+        },
+        {
+          "name": "not_found",
+          "line": 1
+        },
+        {
+          "name": "bad_request",
+          "line": 1
+        },
+        {
+          "name": "server_error",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "ResponseStatus",
+          "line": 1
+        },
+        {
+          "name": "ErrorCode",
+          "line": 1
+        },
+        {
+          "name": "PaginationMeta",
+          "line": 1
+        },
+        {
+          "name": "PerformanceMeta",
+          "line": 1
+        },
+        {
+          "name": "APIResponse",
+          "line": 1
+        },
+        {
+          "name": "Config",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "utils/limiter.py",
+      "name": "limiter.py",
+      "path": "utils/limiter.py",
+      "district_id": "district_4",
+      "position": {
+        "x": -45.942463558196245,
+        "y": 0.0,
+        "z": -2.3787085602266194
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 6,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 3,
+        "dependencies_out": 0,
+        "size_bytes": 172
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "utils/__init__.py",
+      "name": "__init__.py",
+      "path": "utils/__init__.py",
+      "district_id": "district_4",
+      "position": {
+        "x": -56.58496691877998,
+        "y": 0.0,
+        "z": -8.469975482023177
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 99,
+        "complexity": 3,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 7,
+        "size_bytes": 1938
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "utils/logger.py",
+      "name": "logger.py",
+      "path": "utils/logger.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -0.3509711564751108,
+        "y": 0.0,
+        "z": 2.9316004048485302
+      },
+      "dimensions": {
+        "width": 2.26,
+        "height": 25.0,
+        "depth": 2.26
+      },
+      "metrics": {
+        "loc": 226,
+        "complexity": 34,
+        "churn": 2,
+        "age_days": 28,
+        "dependencies_in": 15,
+        "dependencies_out": 0,
+        "size_bytes": 7049
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "format",
+          "line": 1
+        },
+        {
+          "name": "format",
+          "line": 1
+        },
+        {
+          "name": "get_logger",
+          "line": 2
+        },
+        {
+          "name": "set_correlation_id",
+          "line": 2
+        },
+        {
+          "name": "get_correlation_id",
+          "line": 2
+        },
+        {
+          "name": "log_execution_time",
+          "line": 2
+        },
+        {
+          "name": "my_function",
+          "line": 2
+        },
+        {
+          "name": "decorator",
+          "line": 2
+        },
+        {
+          "name": "async_wrapper",
+          "line": 2
+        },
+        {
+          "name": "sync_wrapper",
+          "line": 2
+        }
+      ],
+      "classes": [
+        {
+          "name": "JsonFormatter",
+          "line": 1
+        },
+        {
+          "name": "ColorFormatter",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "utils/validators.py",
+      "name": "validators.py",
+      "path": "utils/validators.py",
+      "district_id": "district_4",
+      "position": {
+        "x": -41.74938023914757,
+        "y": 0.0,
+        "z": -10.112100670321608
+      },
+      "dimensions": {
+        "width": 2.72,
+        "height": 25.0,
+        "depth": 2.72
+      },
+      "metrics": {
+        "loc": 272,
+        "complexity": 48,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 1,
+        "size_bytes": 8862
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "validate_path",
+          "line": 1
+        },
+        {
+          "name": "validate_file_for_read",
+          "line": 1
+        },
+        {
+          "name": "parse_github_input",
+          "line": 1
+        },
+        {
+          "name": "validate_repo_allowed",
+          "line": 1
+        },
+        {
+          "name": "validate_search_query",
+          "line": 1
+        },
+        {
+          "name": "validate_limit",
+          "line": 1
+        },
+        {
+          "name": "validate_offset",
+          "line": 1
+        },
+        {
+          "name": "validate_path",
+          "line": 1
+        },
+        {
+          "name": "validate_file",
+          "line": 1
+        },
+        {
+          "name": "parse_github",
+          "line": 1
+        },
+        {
+          "name": "validate_query",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "PathValidator",
+          "line": 1
+        },
+        {
+          "name": "GitHubValidator",
+          "line": 1
+        },
+        {
+          "name": "QueryValidator",
+          "line": 1
+        },
+        {
+          "name": "LimitValidator",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/__init__.py",
+      "name": "__init__.py",
+      "path": "api/__init__.py",
+      "district_id": "district_9",
+      "position": {
+        "x": -68.85156590312057,
+        "y": 0.0,
+        "z": 29.99485324313075
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 2,
+        "complexity": 1,
+        "churn": 2,
+        "age_days": 36,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 15
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/websocket.py",
+      "name": "websocket.py",
+      "path": "api/websocket.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 1.1534977280280665,
+        "y": 0.0,
+        "z": -5.8724681609405875
+      },
+      "dimensions": {
+        "width": 2.34,
+        "height": 25.0,
+        "depth": 2.34
+      },
+      "metrics": {
+        "loc": 234,
+        "complexity": 35,
+        "churn": 1,
+        "age_days": 36,
+        "dependencies_in": 2,
+        "dependencies_out": 1,
+        "size_bytes": 8140
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "connect_vscode",
+          "line": 1
+        },
+        {
+          "name": "connect_frontend",
+          "line": 1
+        },
+        {
+          "name": "disconnect_vscode",
+          "line": 1
+        },
+        {
+          "name": "disconnect_frontend",
+          "line": 1
+        },
+        {
+          "name": "broadcast_to_frontends",
+          "line": 1
+        },
+        {
+          "name": "broadcast_to_vscode",
+          "line": 1
+        },
+        {
+          "name": "handle_vscode_message",
+          "line": 1
+        },
+        {
+          "name": "handle_frontend_message",
+          "line": 1
+        },
+        {
+          "name": "websocket_vscode",
+          "line": 1
+        },
+        {
+          "name": "websocket_frontend",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "ConnectionManager",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/models.py",
+      "name": "models.py",
+      "path": "api/models.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 4.549587329153564,
+        "y": 0.0,
+        "z": 4.009636093053389
+      },
+      "dimensions": {
+        "width": 3.22,
+        "height": 20.8,
+        "depth": 3.22
+      },
+      "metrics": {
+        "loc": 322,
+        "complexity": 26,
+        "churn": 8,
+        "age_days": 28,
+        "dependencies_in": 9,
+        "dependencies_out": 1,
+        "size_bytes": 12457
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "validate_query",
+          "line": 1
+        },
+        {
+          "name": "validate_path",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "LanguageType",
+          "line": 1
+        },
+        {
+          "name": "SearchRequest",
+          "line": 1
+        },
+        {
+          "name": "AnalyzeRequest",
+          "line": 1
+        },
+        {
+          "name": "BuildingMetrics",
+          "line": 1
+        },
+        {
+          "name": "Building",
+          "line": 1
+        },
+        {
+          "name": "District",
+          "line": 1
+        },
+        {
+          "name": "Road",
+          "line": 1
+        },
+        {
+          "name": "CityStats",
+          "line": 1
+        },
+        {
+          "name": "CityData",
+          "line": 1
+        },
+        {
+          "name": "ChatMessage",
+          "line": 1
+        },
+        {
+          "name": "ChatRequest",
+          "line": 1
+        },
+        {
+          "name": "ChatResponse",
+          "line": 1
+        },
+        {
+          "name": "BuildingDetailRequest",
+          "line": 1
+        },
+        {
+          "name": "BuildingDetail",
+          "line": 1
+        },
+        {
+          "name": "SearchResult",
+          "line": 1
+        },
+        {
+          "name": "SearchResponse",
+          "line": 1
+        },
+        {
+          "name": "SymbolSearchRequest",
+          "line": 1
+        },
+        {
+          "name": "SymbolResult",
+          "line": 1
+        },
+        {
+          "name": "SymbolSearchResponse",
+          "line": 1
+        },
+        {
+          "name": "FileContentResponse",
+          "line": 1
+        },
+        {
+          "name": "GraphNode",
+          "line": 1
+        },
+        {
+          "name": "GraphEdge",
+          "line": 1
+        },
+        {
+          "name": "DependencyGraphResponse",
+          "line": 1
+        },
+        {
+          "name": "DependencyPathRequest",
+          "line": 1
+        },
+        {
+          "name": "DependencyPathResponse",
+          "line": 1
+        },
+        {
+          "name": "ExportRequest",
+          "line": 1
+        },
+        {
+          "name": "IncrementalAnalysisRequest",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/history.py",
+      "name": "history.py",
+      "path": "api/history.py",
+      "district_id": "district_4",
+      "position": {
+        "x": -51.93430993475654,
+        "y": 0.0,
+        "z": 1.011886136553359
+      },
+      "dimensions": {
+        "width": 2.96,
+        "height": 25.0,
+        "depth": 2.96
+      },
+      "metrics": {
+        "loc": 296,
+        "complexity": 53,
+        "churn": 7,
+        "age_days": 31,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 10099
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "get_history",
+          "line": 1
+        },
+        {
+          "name": "analyze_at_commit",
+          "line": 2
+        }
+      ],
+      "classes": [
+        {
+          "name": "Commit",
+          "line": 1
+        },
+        {
+          "name": "HistoryResponse",
+          "line": 1
+        },
+        {
+          "name": "AnalyzeAtCommitRequest",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.04246575342465753,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/v2/graph.py",
+      "name": "graph.py",
+      "path": "api/v2/graph.py",
+      "district_id": "district_2",
+      "position": {
+        "x": 2.7415807406970787,
+        "y": 0.0,
+        "z": -33.36291193269094
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 6.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 50,
+        "complexity": 8,
+        "churn": 2,
+        "age_days": 33,
+        "dependencies_in": 0,
+        "dependencies_out": 2,
+        "size_bytes": 1636
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "trace_dependency",
+          "line": 1
+        },
+        {
+          "name": "get_communities",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "TraceRequest",
+          "line": 1
+        },
+        {
+          "name": "ClusterResponse",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/v2/router.py",
+      "name": "router.py",
+      "path": "api/v2/router.py",
+      "district_id": "district_4",
+      "position": {
+        "x": -54.31727333212023,
+        "y": 0.0,
+        "z": -15.825831320838727
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 10,
+        "complexity": 1,
+        "churn": 3,
+        "age_days": 33,
+        "dependencies_in": 1,
+        "dependencies_out": 2,
+        "size_bytes": 354
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/v2/intelligence.py",
+      "name": "intelligence.py",
+      "path": "api/v2/intelligence.py",
+      "district_id": "district_6",
+      "position": {
+        "x": -20.900903683930395,
+        "y": 0.0,
+        "z": 53.14175919823927
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 25.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 152,
+        "complexity": 32,
+        "churn": 3,
+        "age_days": 32,
+        "dependencies_in": 0,
+        "dependencies_out": 4,
+        "size_bytes": 5376
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "get_flowchart",
+          "line": 1
+        },
+        {
+          "name": "analyze_repo_intelligence",
+          "line": 3
+        },
+        {
+          "name": "advise_architecture",
+          "line": 3
+        }
+      ],
+      "classes": [
+        {
+          "name": "FlowchartRequest",
+          "line": 1
+        },
+        {
+          "name": "RepoAnalysisRequest",
+          "line": 1
+        },
+        {
+          "name": "AdvisorRequest",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/routes/analysis.py",
+      "name": "analysis.py",
+      "path": "api/routes/analysis.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -5.18635238009782,
+        "y": 0.0,
+        "z": -1.1750671774108123
+      },
+      "dimensions": {
+        "width": 2.12,
+        "height": 25.0,
+        "depth": 2.12
+      },
+      "metrics": {
+        "loc": 212,
+        "complexity": 41,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 1,
+        "dependencies_out": 8,
+        "size_bytes": 6972
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "analyze_codebase",
+          "line": 1
+        },
+        {
+          "name": "get_city",
+          "line": 1
+        },
+        {
+          "name": "get_demo_city",
+          "line": 1
+        },
+        {
+          "name": "clear_cache",
+          "line": 1
+        },
+        {
+          "name": "analyze_incremental",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/routes/graph.py",
+      "name": "graph.py",
+      "path": "api/routes/graph.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 9.128724308830304,
+        "y": 0.0,
+        "z": -3.3377023564135424
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 10.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 102,
+        "complexity": 13,
+        "churn": 0,
+        "age_days": 0,
+        "dependencies_in": 0,
+        "dependencies_out": 3,
+        "size_bytes": 3006
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "get_dependency_graph",
+          "line": 1
+        },
+        {
+          "name": "find_dependency_path",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.0,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/routes/chat.py",
+      "name": "chat.py",
+      "path": "api/routes/chat.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 0.2183230523486155,
+        "y": 0.0,
+        "z": 9.060812889588718
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 39,
+        "complexity": 4,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 1,
+        "dependencies_out": 3,
+        "size_bytes": 923
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "chat_with_guide",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/routes/files.py",
+      "name": "files.py",
+      "path": "api/routes/files.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -3.3947608111880103,
+        "y": 0.0,
+        "z": -9.00702503397631
+      },
+      "dimensions": {
+        "width": 2.08,
+        "height": 25.0,
+        "depth": 2.08
+      },
+      "metrics": {
+        "loc": 208,
+        "complexity": 36,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 1,
+        "dependencies_out": 4,
+        "size_bytes": 8411
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "get_file_content",
+          "line": 1
+        },
+        {
+          "name": "get_building_detail",
+          "line": 1
+        },
+        {
+          "name": "export_report",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/routes/_helpers.py",
+      "name": "_helpers.py",
+      "path": "api/routes/_helpers.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 11.187975248407705,
+        "y": 0.0,
+        "z": 3.6226424791301515
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 14.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 95,
+        "complexity": 18,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 3,
+        "dependencies_out": 2,
+        "size_bytes": 2857
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "get_cache_key",
+          "line": 1
+        },
+        {
+          "name": "get_cache_dir",
+          "line": 1
+        },
+        {
+          "name": "city_to_parsed_files",
+          "line": 1
+        },
+        {
+          "name": "load_city_from_cache",
+          "line": 1
+        },
+        {
+          "name": "build_nx_graph",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/routes/intelligence.py",
+      "name": "intelligence.py",
+      "path": "api/routes/intelligence.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -8.432973424716941,
+        "y": 0.0,
+        "z": 3.6165616618510064
+      },
+      "dimensions": {
+        "width": 4.06,
+        "height": 25.0,
+        "depth": 4.06
+      },
+      "metrics": {
+        "loc": 406,
+        "complexity": 34,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 0,
+        "dependencies_out": 3,
+        "size_bytes": 12674
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "_require_city",
+          "line": 1
+        },
+        {
+          "name": "get_code_health",
+          "line": 1
+        },
+        {
+          "name": "find_dead_code",
+          "line": 1
+        },
+        {
+          "name": "get_change_impact",
+          "line": 1
+        },
+        {
+          "name": "check_safe_delete",
+          "line": 1
+        },
+        {
+          "name": "get_critical_paths",
+          "line": 1
+        },
+        {
+          "name": "scan_code_quality",
+          "line": 1
+        },
+        {
+          "name": "smart_search",
+          "line": 1
+        },
+        {
+          "name": "get_refactoring_suggestions",
+          "line": 1
+        },
+        {
+          "name": "analyze_dependencies",
+          "line": 1
+        },
+        {
+          "name": "get_intelligence_overview",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/routes/__init__.py",
+      "name": "__init__.py",
+      "path": "api/routes/__init__.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 6.635013105601103,
+        "y": 0.0,
+        "z": -9.74317935801633
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 26,
+        "complexity": 2,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 0,
+        "dependencies_out": 7,
+        "size_bytes": 757
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/routes/search.py",
+      "name": "search.py",
+      "path": "api/routes/search.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 4.02437834899254,
+        "y": 0.0,
+        "z": 9.963915126710303
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 58,
+        "complexity": 11,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 0,
+        "dependencies_out": 3,
+        "size_bytes": 1719
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "search_code",
+          "line": 1
+        },
+        {
+          "name": "search_symbols",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "api/routes/mcp.py",
+      "name": "mcp.py",
+      "path": "api/routes/mcp.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -8.169036798272595,
+        "y": 0.0,
+        "z": -5.420587760106848
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 36,
+        "complexity": 3,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 1,
+        "dependencies_out": 2,
+        "size_bytes": 1092
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "mcp_notify",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "services/git_service.py",
+      "name": "git_service.py",
+      "path": "services/git_service.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 14.621247719904897,
+        "y": 0.0,
+        "z": -2.075915545943474
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 22.400000000000002,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 164,
+        "complexity": 28,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 6283
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "parse_url",
+          "line": 1
+        },
+        {
+          "name": "clone_repo",
+          "line": 1
+        },
+        {
+          "name": "extract_authors",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "GitService",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "graph/demo_city.py",
+      "name": "demo_city.py",
+      "path": "graph/demo_city.py",
+      "district_id": "district_2",
+      "position": {
+        "x": 4.914966302603839,
+        "y": 0.0,
+        "z": -41.49806382107648
+      },
+      "dimensions": {
+        "width": 2.43,
+        "height": 10.4,
+        "depth": 2.43
+      },
+      "metrics": {
+        "loc": 243,
+        "complexity": 13,
+        "churn": 2,
+        "age_days": 36,
+        "dependencies_in": 1,
+        "dependencies_out": 1,
+        "size_bytes": 10491
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "create_demo_city",
+          "line": 1
+        },
+        {
+          "name": "_create_building",
+          "line": 1
+        },
+        {
+          "name": "_create_road",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "graph/kuzu_engine.py",
+      "name": "kuzu_engine.py",
+      "path": "graph/kuzu_engine.py",
+      "district_id": "district_2",
+      "position": {
+        "x": 8.681099503900874,
+        "y": 0.0,
+        "z": -31.24591596691096
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 23.200000000000003,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 151,
+        "complexity": 29,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 2,
+        "dependencies_out": 0,
+        "size_bytes": 6444
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "init_schema",
+          "line": 1
+        },
+        {
+          "name": "ingest_parsed_data",
+          "line": 1
+        },
+        {
+          "name": "execute_query",
+          "line": 1
+        },
+        {
+          "name": "get_blast_radius",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "KuzuEngine",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "graph/graph_builder.py",
+      "name": "graph_builder.py",
+      "path": "graph/graph_builder.py",
+      "district_id": "district_2",
+      "position": {
+        "x": -1.663157985912873,
+        "y": 0.0,
+        "z": -37.03893701793753
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 25.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 196,
+        "complexity": 39,
+        "churn": 2,
+        "age_days": 36,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 6817
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "build",
+          "line": 1
+        },
+        {
+          "name": "_build_file_map",
+          "line": 1
+        },
+        {
+          "name": "_resolve_import",
+          "line": 1
+        },
+        {
+          "name": "get_centrality_metrics",
+          "line": 1
+        },
+        {
+          "name": "find_god_classes",
+          "line": 1
+        },
+        {
+          "name": "find_circular_dependencies",
+          "line": 1
+        },
+        {
+          "name": "get_subgraph",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "GraphBuilder",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "graph/clustering.py",
+      "name": "clustering.py",
+      "path": "graph/clustering.py",
+      "district_id": "district_2",
+      "position": {
+        "x": 12.682913084944639,
+        "y": 0.0,
+        "z": -39.170577815010866
+      },
+      "dimensions": {
+        "width": 2.72,
+        "height": 25.0,
+        "depth": 2.72
+      },
+      "metrics": {
+        "loc": 272,
+        "complexity": 42,
+        "churn": 2,
+        "age_days": 36,
+        "dependencies_in": 2,
+        "dependencies_out": 0,
+        "size_bytes": 9595
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "cluster",
+          "line": 1
+        },
+        {
+          "name": "_leiden_clustering",
+          "line": 1
+        },
+        {
+          "name": "_simple_clustering",
+          "line": 1
+        },
+        {
+          "name": "_create_single_district",
+          "line": 1
+        },
+        {
+          "name": "_enrich_clusters",
+          "line": 1
+        },
+        {
+          "name": "_generate_cluster_name",
+          "line": 1
+        },
+        {
+          "name": "_find_common_directory",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "ClusteringEngine",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "graph/__init__.py",
+      "name": "__init__.py",
+      "path": "graph/__init__.py",
+      "district_id": "district_2",
+      "position": {
+        "x": 3.6642504344473434,
+        "y": 0.0,
+        "z": -26.880323963024217
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 6,
+        "complexity": 1,
+        "churn": 2,
+        "age_days": 36,
+        "dependencies_in": 0,
+        "dependencies_out": 4,
+        "size_bytes": 175
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "graph/layout.py",
+      "name": "layout.py",
+      "path": "graph/layout.py",
+      "district_id": "district_2",
+      "position": {
+        "x": 1.0606342075522117,
+        "y": 0.0,
+        "z": -43.93869424994775
+      },
+      "dimensions": {
+        "width": 2.93,
+        "height": 25.0,
+        "depth": 2.93
+      },
+      "metrics": {
+        "loc": 293,
+        "complexity": 54,
+        "churn": 3,
+        "age_days": 36,
+        "dependencies_in": 2,
+        "dependencies_out": 0,
+        "size_bytes": 10702
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "generate",
+          "line": 1
+        },
+        {
+          "name": "_layout_districts",
+          "line": 1
+        },
+        {
+          "name": "_layout_buildings",
+          "line": 1
+        },
+        {
+          "name": "_generate_boundaries",
+          "line": 1
+        },
+        {
+          "name": "_clip_polygon",
+          "line": 1
+        },
+        {
+          "name": "_bundle_edges",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "LayoutEngine",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "graph/engine/graph_builder.py",
+      "name": "graph_builder.py",
+      "path": "graph/engine/graph_builder.py",
+      "district_id": "district_2",
+      "position": {
+        "x": 13.829336029351618,
+        "y": 0.0,
+        "z": -33.123060974637596
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 45,
+        "complexity": 11,
+        "churn": 1,
+        "age_days": 34,
+        "dependencies_in": 2,
+        "dependencies_out": 0,
+        "size_bytes": 1827
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "build",
+          "line": 1
+        },
+        {
+          "name": "reconstruct_edges_from_roads",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "GraphBuilder",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.04657534246575343,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "graph/engine/graph_service.py",
+      "name": "graph_service.py",
+      "path": "graph/engine/graph_service.py",
+      "district_id": "district_2",
+      "position": {
+        "x": -3.6250113696121433,
+        "y": 0.0,
+        "z": -30.962540517755855
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 11.200000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 74,
+        "complexity": 14,
+        "churn": 1,
+        "age_days": 34,
+        "dependencies_in": 1,
+        "dependencies_out": 1,
+        "size_bytes": 2704
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "get_graph",
+          "line": 1
+        },
+        {
+          "name": "compute_communities",
+          "line": 1
+        },
+        {
+          "name": "trace_shortest_path",
+          "line": 1
+        },
+        {
+          "name": "_get_path_details",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "GraphService",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.04657534246575343,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/metrics.py",
+      "name": "metrics.py",
+      "path": "parsing/metrics.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -22.134448733443794,
+        "y": 0.0,
+        "z": 18.17947457536492
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 20.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 138,
+        "complexity": 25,
+        "churn": 2,
+        "age_days": 36,
+        "dependencies_in": 2,
+        "dependencies_out": 1,
+        "size_bytes": 5650
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "cyclomatic_complexity",
+          "line": 1
+        },
+        {
+          "name": "get_file_age",
+          "line": 1
+        },
+        {
+          "name": "get_file_churn",
+          "line": 1
+        },
+        {
+          "name": "comment_density",
+          "line": 2
+        },
+        {
+          "name": "function_count",
+          "line": 3
+        },
+        {
+          "name": "class_count",
+          "line": 3
+        }
+      ],
+      "classes": [
+        {
+          "name": "MetricsCalculator",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/code_parser.py",
+      "name": "code_parser.py",
+      "path": "parsing/code_parser.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -18.506775170676594,
+        "y": 0.0,
+        "z": 11.498610687839825
+      },
+      "dimensions": {
+        "width": 2.02,
+        "height": 25.0,
+        "depth": 2.02
+      },
+      "metrics": {
+        "loc": 202,
+        "complexity": 54,
+        "churn": 3,
+        "age_days": 35,
+        "dependencies_in": 3,
+        "dependencies_out": 1,
+        "size_bytes": 9259
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "extract_imports",
+          "line": 1
+        },
+        {
+          "name": "_extract_imports_ast",
+          "line": 1
+        },
+        {
+          "name": "_extract_imports_regex",
+          "line": 1
+        },
+        {
+          "name": "extract_classes",
+          "line": 1
+        },
+        {
+          "name": "extract_functions",
+          "line": 3
+        },
+        {
+          "name": "extract_exports",
+          "line": 5
+        }
+      ],
+      "classes": [
+        {
+          "name": "CodeParser",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.04794520547945205,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/intelligence.py",
+      "name": "intelligence.py",
+      "path": "parsing/intelligence.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -14.178139749447078,
+        "y": 0.0,
+        "z": 22.313260761937823
+      },
+      "dimensions": {
+        "width": 5.19,
+        "height": 25.0,
+        "depth": 5.19
+      },
+      "metrics": {
+        "loc": 519,
+        "complexity": 130,
+        "churn": 5,
+        "age_days": 32,
+        "dependencies_in": 2,
+        "dependencies_out": 1,
+        "size_bytes": 18878
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "tokenize",
+          "line": 1
+        },
+        {
+          "name": "index_files",
+          "line": 1
+        },
+        {
+          "name": "search",
+          "line": 1
+        },
+        {
+          "name": "detect_layer",
+          "line": 1
+        },
+        {
+          "name": "detect_layer_violations",
+          "line": 1
+        },
+        {
+          "name": "calculate_complexity",
+          "line": 1
+        },
+        {
+          "name": "scan_security",
+          "line": 1
+        },
+        {
+          "name": "calculate_impact",
+          "line": 2
+        },
+        {
+          "name": "detect_graph_issues",
+          "line": 2
+        },
+        {
+          "name": "calculate_health_score",
+          "line": 2
+        },
+        {
+          "name": "detect_patterns",
+          "line": 2
+        },
+        {
+          "name": "detect_duplicates",
+          "line": 3
+        },
+        {
+          "name": "generate_flowchart",
+          "line": 3
+        }
+      ],
+      "classes": [
+        {
+          "name": "SearchEngine",
+          "line": 1
+        },
+        {
+          "name": "IntelligenceEngine",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": true,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/__init__.py",
+      "name": "__init__.py",
+      "path": "parsing/__init__.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -26.25321786283753,
+        "y": 0.0,
+        "z": 14.78941908733455
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 5,
+        "complexity": 1,
+        "churn": 2,
+        "age_days": 36,
+        "dependencies_in": 0,
+        "dependencies_out": 3,
+        "size_bytes": 136
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/analyzer.py",
+      "name": "analyzer.py",
+      "path": "parsing/analyzer.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -12.789243977159744,
+        "y": 0.0,
+        "z": 11.775681105081484
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 16.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 168,
+        "complexity": 21,
+        "churn": 7,
+        "age_days": 28,
+        "dependencies_in": 3,
+        "dependencies_out": 7,
+        "size_bytes": 6195
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "analyze",
+          "line": 1
+        },
+        {
+          "name": "_build_city",
+          "line": 1
+        },
+        {
+          "name": "_empty_city",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "CodebaseAnalyzer",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/search.py",
+      "name": "search.py",
+      "path": "parsing/search.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -6.266138272882127,
+        "y": 0.0,
+        "z": 10.316389326435038
+      },
+      "dimensions": {
+        "width": 2.32,
+        "height": 25.0,
+        "depth": 2.32
+      },
+      "metrics": {
+        "loc": 232,
+        "complexity": 60,
+        "churn": 2,
+        "age_days": 28,
+        "dependencies_in": 2,
+        "dependencies_out": 1,
+        "size_bytes": 8404
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "index_files",
+          "line": 1
+        },
+        {
+          "name": "search",
+          "line": 1
+        },
+        {
+          "name": "search_symbols",
+          "line": 2
+        },
+        {
+          "name": "get_file",
+          "line": 3
+        },
+        {
+          "name": "_build_preview",
+          "line": 3
+        }
+      ],
+      "classes": [
+        {
+          "name": "SearchMatch",
+          "line": 1
+        },
+        {
+          "name": "CodeSearchEngine",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/pipeline/graph.py",
+      "name": "graph.py",
+      "path": "parsing/pipeline/graph.py",
+      "district_id": "district_2",
+      "position": {
+        "x": 8.886503801623121,
+        "y": 0.0,
+        "z": -46.878752896705976
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 5.6000000000000005,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 50,
+        "complexity": 7,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 3,
+        "dependencies_out": 5,
+        "size_bytes": 1853
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "execute",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "GraphStep",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/pipeline/base.py",
+      "name": "base.py",
+      "path": "parsing/pipeline/base.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -21.449154044813977,
+        "y": 0.0,
+        "z": 24.4246875399112
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 22,
+        "complexity": 2,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 6,
+        "dependencies_out": 0,
+        "size_bytes": 739
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "execute",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "PipelineContext",
+          "line": 1
+        },
+        {
+          "name": "PipelineStep",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/pipeline/parsing.py",
+      "name": "parsing.py",
+      "path": "parsing/pipeline/parsing.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -23.907985341638373,
+        "y": 0.0,
+        "z": 7.511102183058401
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 95,
+        "complexity": 11,
+        "churn": 2,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 3,
+        "size_bytes": 3572
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "execute",
+          "line": 1
+        },
+        {
+          "name": "_parallel_parse",
+          "line": 1
+        },
+        {
+          "name": "_parse_file_sync",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "ParsingStep",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/pipeline/discovery.py",
+      "name": "discovery.py",
+      "path": "parsing/pipeline/discovery.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -9.295522686018597,
+        "y": 0.0,
+        "z": 20.170496292188922
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 12.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 69,
+        "complexity": 16,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 1,
+        "dependencies_out": 1,
+        "size_bytes": 2474
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "execute",
+          "line": 1
+        },
+        {
+          "name": "_fast_discover_files",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "DiscoveryStep",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/pipeline/git_meta.py",
+      "name": "git_meta.py",
+      "path": "parsing/pipeline/git_meta.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -28.148768745014003,
+        "y": 0.0,
+        "z": 20.93211808903902
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 13.600000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 83,
+        "complexity": 17,
+        "churn": 2,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 1,
+        "size_bytes": 3068
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "execute",
+          "line": 1
+        },
+        {
+          "name": "_parallel_git_info",
+          "line": 1
+        },
+        {
+          "name": "_get_git_info",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "GitMetaStep",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/pipeline/intelligence.py",
+      "name": "intelligence.py",
+      "path": "parsing/pipeline/intelligence.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -13.703108778123791,
+        "y": 0.0,
+        "z": 6.950050505743848
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 18.400000000000002,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 96,
+        "complexity": 23,
+        "churn": 2,
+        "age_days": 31,
+        "dependencies_in": 3,
+        "dependencies_out": 2,
+        "size_bytes": 4216
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "execute",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "IntelligenceStep",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.04246575342465753,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/intel/dead_code.py",
+      "name": "dead_code.py",
+      "path": "parsing/intel/dead_code.py",
+      "district_id": "district_3",
+      "position": {
+        "x": 25.733780298339905,
+        "y": 0.0,
+        "z": 29.755335273086267
+      },
+      "dimensions": {
+        "width": 2.02,
+        "height": 25.0,
+        "depth": 2.02
+      },
+      "metrics": {
+        "loc": 202,
+        "complexity": 35,
+        "churn": 0,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 1,
+        "size_bytes": 7109
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "analyze",
+          "line": 1
+        },
+        {
+          "name": "_find_orphan_files",
+          "line": 1
+        },
+        {
+          "name": "_find_unused_exports",
+          "line": 1
+        },
+        {
+          "name": "_find_one_way_dependencies",
+          "line": 1
+        },
+        {
+          "name": "_find_low_usage_files",
+          "line": 1
+        },
+        {
+          "name": "_is_entry_point",
+          "line": 1
+        },
+        {
+          "name": "_generate_summary",
+          "line": 1
+        },
+        {
+          "name": "_calculate_health_status",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "DeadCodeDetector",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/intel/impact.py",
+      "name": "impact.py",
+      "path": "parsing/intel/impact.py",
+      "district_id": "district_3",
+      "position": {
+        "x": 29.418684378929008,
+        "y": 0.0,
+        "z": 39.92625400654385
+      },
+      "dimensions": {
+        "width": 3.08,
+        "height": 25.0,
+        "depth": 3.08
+      },
+      "metrics": {
+        "loc": 308,
+        "complexity": 56,
+        "churn": 0,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 11363
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "get_blast_radius",
+          "line": 1
+        },
+        {
+          "name": "can_safely_delete",
+          "line": 1
+        },
+        {
+          "name": "preview_move",
+          "line": 1
+        },
+        {
+          "name": "find_critical_paths",
+          "line": 1
+        },
+        {
+          "name": "_get_all_dependents",
+          "line": 1
+        },
+        {
+          "name": "_calculate_risk_score",
+          "line": 1
+        },
+        {
+          "name": "_risk_level",
+          "line": 1
+        },
+        {
+          "name": "_get_recommendation",
+          "line": 1
+        },
+        {
+          "name": "_estimate_effort",
+          "line": 1
+        },
+        {
+          "name": "_get_move_recommendation",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "ImpactAnalyzer",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/intel/quality.py",
+      "name": "quality.py",
+      "path": "parsing/intel/quality.py",
+      "district_id": "district_3",
+      "position": {
+        "x": 18.893993548231098,
+        "y": 0.0,
+        "z": 33.952799614633115
+      },
+      "dimensions": {
+        "width": 4.67,
+        "height": 25.0,
+        "depth": 4.67
+      },
+      "metrics": {
+        "loc": 467,
+        "complexity": 73,
+        "churn": 0,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 1,
+        "size_bytes": 18734
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "to_dict",
+          "line": 1
+        },
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "scan",
+          "line": 1
+        },
+        {
+          "name": "_scan_file",
+          "line": 1
+        },
+        {
+          "name": "_check_file_size",
+          "line": 1
+        },
+        {
+          "name": "_check_function",
+          "line": 1
+        },
+        {
+          "name": "_check_class",
+          "line": 1
+        },
+        {
+          "name": "_check_source_patterns",
+          "line": 1
+        },
+        {
+          "name": "_check_nesting",
+          "line": 2
+        },
+        {
+          "name": "_check_naming",
+          "line": 2
+        },
+        {
+          "name": "_detect_cross_file_issues",
+          "line": 2
+        },
+        {
+          "name": "_generate_report",
+          "line": 2
+        },
+        {
+          "name": "_get_recommendations",
+          "line": 2
+        }
+      ],
+      "classes": [
+        {
+          "name": "IssueSeverity",
+          "line": 1
+        },
+        {
+          "name": "IssueCategory",
+          "line": 1
+        },
+        {
+          "name": "CodeIssue",
+          "line": 1
+        },
+        {
+          "name": "CodeQualityScanner",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/intel/refactoring.py",
+      "name": "refactoring.py",
+      "path": "parsing/intel/refactoring.py",
+      "district_id": "district_3",
+      "position": {
+        "x": 33.33788844830108,
+        "y": 0.0,
+        "z": 31.91898264677225
+      },
+      "dimensions": {
+        "width": 3.17,
+        "height": 25.0,
+        "depth": 3.17
+      },
+      "metrics": {
+        "loc": 317,
+        "complexity": 70,
+        "churn": 0,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 12567
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "to_dict",
+          "line": 1
+        },
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "analyze",
+          "line": 1
+        },
+        {
+          "name": "_analyze_file",
+          "line": 1
+        },
+        {
+          "name": "_find_merge_candidates",
+          "line": 1
+        },
+        {
+          "name": "_find_circular_dependencies",
+          "line": 1
+        },
+        {
+          "name": "_find_misplaced_files",
+          "line": 1
+        },
+        {
+          "name": "_generate_report",
+          "line": 1
+        },
+        {
+          "name": "_get_recommendations",
+          "line": 1
+        },
+        {
+          "name": "get_refactoring_suggestions",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "RefactoringType",
+          "line": 1
+        },
+        {
+          "name": "RefactoringSuggestion",
+          "line": 1
+        },
+        {
+          "name": "RefactoringHelper",
+          "line": 1
+        },
+        {
+          "name": "from",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/intel/dependencies.py",
+      "name": "dependencies.py",
+      "path": "parsing/intel/dependencies.py",
+      "district_id": "district_3",
+      "position": {
+        "x": 24.99259227251247,
+        "y": 0.0,
+        "z": 44.88260297346759
+      },
+      "dimensions": {
+        "width": 3.66,
+        "height": 25.0,
+        "depth": 3.66
+      },
+      "metrics": {
+        "loc": 366,
+        "complexity": 80,
+        "churn": 0,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 13423
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "to_dict",
+          "line": 1
+        },
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "analyze",
+          "line": 1
+        },
+        {
+          "name": "_detect_layers",
+          "line": 1
+        },
+        {
+          "name": "_find_hubs",
+          "line": 1
+        },
+        {
+          "name": "_classify_hub",
+          "line": 1
+        },
+        {
+          "name": "_calculate_coupling",
+          "line": 1
+        },
+        {
+          "name": "_coupling_level",
+          "line": 1
+        },
+        {
+          "name": "_analyze_patterns",
+          "line": 1
+        },
+        {
+          "name": "_find_layer_violations",
+          "line": 1
+        },
+        {
+          "name": "_generate_summary",
+          "line": 1
+        },
+        {
+          "name": "_assess_health",
+          "line": 1
+        },
+        {
+          "name": "_generate_insights",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "LayerInfo",
+          "line": 1
+        },
+        {
+          "name": "DependencyAnalyzer",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/intel/__init__.py",
+      "name": "__init__.py",
+      "path": "parsing/intel/__init__.py",
+      "district_id": "district_3",
+      "position": {
+        "x": 22.510620928004425,
+        "y": 0.0,
+        "z": 27.94587756893114
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 31,
+        "complexity": 3,
+        "churn": 0,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 7,
+        "size_bytes": 828
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/intel/health.py",
+      "name": "health.py",
+      "path": "parsing/intel/health.py",
+      "district_id": "district_3",
+      "position": {
+        "x": 35.38451343178112,
+        "y": 0.0,
+        "z": 38.866701526218584
+      },
+      "dimensions": {
+        "width": 3.03,
+        "height": 25.0,
+        "depth": 3.03
+      },
+      "metrics": {
+        "loc": 303,
+        "complexity": 64,
+        "churn": 0,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 11117
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "analyze_file",
+          "line": 1
+        },
+        {
+          "name": "analyze_codebase",
+          "line": 1
+        },
+        {
+          "name": "_score_complexity",
+          "line": 1
+        },
+        {
+          "name": "_score_size",
+          "line": 1
+        },
+        {
+          "name": "_score_churn",
+          "line": 1
+        },
+        {
+          "name": "_score_coupling",
+          "line": 1
+        },
+        {
+          "name": "_score_age",
+          "line": 1
+        },
+        {
+          "name": "_score_to_grade",
+          "line": 1
+        },
+        {
+          "name": "_aggregate_top_issues",
+          "line": 1
+        },
+        {
+          "name": "_generate_recommendations",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "HealthGrade",
+          "line": 1
+        },
+        {
+          "name": "HealthMetrics",
+          "line": 1
+        },
+        {
+          "name": "CodeHealthAnalyzer",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "parsing/intel/search.py",
+      "name": "search.py",
+      "path": "parsing/intel/search.py",
+      "district_id": "district_3",
+      "position": {
+        "x": 17.50110593476336,
+        "y": 0.0,
+        "z": 40.598161885046316
+      },
+      "dimensions": {
+        "width": 4.65,
+        "height": 25.0,
+        "depth": 4.65
+      },
+      "metrics": {
+        "loc": 465,
+        "complexity": 83,
+        "churn": 0,
+        "age_days": 28,
+        "dependencies_in": 2,
+        "dependencies_out": 1,
+        "size_bytes": 16615
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "_build_indexes",
+          "line": 1
+        },
+        {
+          "name": "search",
+          "line": 1
+        },
+        {
+          "name": "_exact_search",
+          "line": 2
+        },
+        {
+          "name": "_regex_search",
+          "line": 2
+        },
+        {
+          "name": "_fuzzy_search",
+          "line": 2
+        },
+        {
+          "name": "structural_search",
+          "line": 2
+        },
+        {
+          "name": "_search_functions",
+          "line": 2
+        },
+        {
+          "name": "_search_classes",
+          "line": 2
+        },
+        {
+          "name": "_search_imports",
+          "line": 2
+        },
+        {
+          "name": "_search_usages",
+          "line": 2
+        },
+        {
+          "name": "_determine_symbol_type",
+          "line": 2
+        },
+        {
+          "name": "_filter_files",
+          "line": 2
+        },
+        {
+          "name": "_levenshtein_similarity",
+          "line": 2
+        },
+        {
+          "name": "find_files_importing",
+          "line": 2
+        },
+        {
+          "name": "find_function_definition",
+          "line": 2
+        },
+        {
+          "name": "find_class_definition",
+          "line": 2
+        }
+      ],
+      "classes": [
+        {
+          "name": "SearchType",
+          "line": 1
+        },
+        {
+          "name": "SearchResult",
+          "line": 1
+        },
+        {
+          "name": "SmartSearch",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "tests/test_analyzer.py",
+      "name": "test_analyzer.py",
+      "path": "tests/test_analyzer.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -15.166161466033135,
+        "y": 0.0,
+        "z": 27.8047270591697
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 13.600000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 93,
+        "complexity": 17,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 3181
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "analyzer",
+          "line": 1
+        },
+        {
+          "name": "test_analyzer_initialization",
+          "line": 1
+        },
+        {
+          "name": "test_analyze_temp_project",
+          "line": 1
+        },
+        {
+          "name": "test_analyze_nonexistent_path",
+          "line": 1
+        },
+        {
+          "name": "test_file_extension_detection",
+          "line": 1
+        },
+        {
+          "name": "analyzer",
+          "line": 1
+        },
+        {
+          "name": "test_loc_calculation",
+          "line": 1
+        },
+        {
+          "name": "test_complexity_calculation",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "TestCodebaseAnalyzer",
+          "line": 1
+        },
+        {
+          "name": "TestMetricsCalculation",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "tests/test_models.py",
+      "name": "test_models.py",
+      "path": "tests/test_models.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -0.20263720391693263,
+        "y": 0.0,
+        "z": -13.56609524670381
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 167,
+        "complexity": 11,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 4940
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "test_valid_local_path",
+          "line": 1
+        },
+        {
+          "name": "test_valid_github_url",
+          "line": 1
+        },
+        {
+          "name": "test_valid_github_shorthand",
+          "line": 1
+        },
+        {
+          "name": "test_empty_path_rejected",
+          "line": 1
+        },
+        {
+          "name": "test_whitespace_path_rejected",
+          "line": 1
+        },
+        {
+          "name": "test_path_traversal_rejected",
+          "line": 1
+        },
+        {
+          "name": "test_max_files_default",
+          "line": 1
+        },
+        {
+          "name": "test_max_files_validation",
+          "line": 1
+        },
+        {
+          "name": "test_valid_query",
+          "line": 1
+        },
+        {
+          "name": "test_query_trimmed",
+          "line": 1
+        },
+        {
+          "name": "test_empty_query_rejected",
+          "line": 1
+        },
+        {
+          "name": "test_query_max_length",
+          "line": 1
+        },
+        {
+          "name": "test_valid_metrics",
+          "line": 1
+        },
+        {
+          "name": "test_default_values",
+          "line": 1
+        },
+        {
+          "name": "test_negative_loc_rejected",
+          "line": 1
+        },
+        {
+          "name": "test_valid_building",
+          "line": 1
+        },
+        {
+          "name": "test_empty_id_rejected",
+          "line": 1
+        },
+        {
+          "name": "test_supported_languages",
+          "line": 1
+        },
+        {
+          "name": "test_unknown_language",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "TestAnalyzeRequest",
+          "line": 1
+        },
+        {
+          "name": "TestSearchRequest",
+          "line": 1
+        },
+        {
+          "name": "TestBuildingMetrics",
+          "line": 1
+        },
+        {
+          "name": "TestBuilding",
+          "line": 1
+        },
+        {
+          "name": "TestLanguageType",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "tests/conftest.py",
+      "name": "conftest.py",
+      "path": "tests/conftest.py",
+      "district_id": "district_10",
+      "position": {
+        "x": 37.15183377678909,
+        "y": 0.0,
+        "z": -66.64924387113058
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 10.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 183,
+        "complexity": 13,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4955
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "test_client",
+          "line": 1
+        },
+        {
+          "name": "mock_city_data",
+          "line": 1
+        },
+        {
+          "name": "temp_project_dir",
+          "line": 1
+        },
+        {
+          "name": "main",
+          "line": 1
+        },
+        {
+          "name": "add",
+          "line": 1
+        },
+        {
+          "name": "multiply",
+          "line": 1
+        },
+        {
+          "name": "__init__",
+          "line": 2
+        },
+        {
+          "name": "__repr__",
+          "line": 2
+        },
+        {
+          "name": "mock_gemini_response",
+          "line": 2
+        },
+        {
+          "name": "mock_git_service",
+          "line": 2
+        }
+      ],
+      "classes": [
+        {
+          "name": "User",
+          "line": 2
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "tests/test_api.py",
+      "name": "test_api.py",
+      "path": "tests/test_api.py",
+      "district_id": "district_11",
+      "position": {
+        "x": 22.25903357998847,
+        "y": 0.0,
+        "z": 77.38010015540661
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 113,
+        "complexity": 4,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4046
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "test_root_endpoint",
+          "line": 1
+        },
+        {
+          "name": "test_health_endpoint",
+          "line": 1
+        },
+        {
+          "name": "test_analyze_requires_path",
+          "line": 1
+        },
+        {
+          "name": "test_analyze_rejects_empty_path",
+          "line": 1
+        },
+        {
+          "name": "test_analyze_rejects_path_traversal",
+          "line": 1
+        },
+        {
+          "name": "test_analyze_local_path",
+          "line": 1
+        },
+        {
+          "name": "test_search_requires_query",
+          "line": 1
+        },
+        {
+          "name": "test_search_rejects_empty_query",
+          "line": 1
+        },
+        {
+          "name": "test_chat_requires_message",
+          "line": 1
+        },
+        {
+          "name": "test_chat_returns_response",
+          "line": 1
+        },
+        {
+          "name": "test_files_content_requires_path",
+          "line": 1
+        },
+        {
+          "name": "test_files_content_nonexistent_file",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "TestHealthEndpoints",
+          "line": 1
+        },
+        {
+          "name": "TestAnalyzeEndpoint",
+          "line": 1
+        },
+        {
+          "name": "TestSearchEndpoint",
+          "line": 1
+        },
+        {
+          "name": "TestChatEndpoint",
+          "line": 1
+        },
+        {
+          "name": "TestFilesEndpoint",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    }
+  ],
+  "districts": [
+    {
+      "id": "district_4",
+      "name": "Utilities",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -49.1678782892145,
+        "y": -6.726607597010511
+      },
+      "boundary": [
+        {
+          "x": -44.74842708388342,
+          "y": 19.084078795617298
+        },
+        {
+          "x": -277.46332513304793,
+          "y": -100.23523174197547
+        },
+        {
+          "x": -24.19624998944122,
+          "y": -25.38004783288156
+        },
+        {
+          "x": -21.58754282290125,
+          "y": -20.525049211215904
+        },
+        {
+          "x": -23.070255394034863,
+          "y": -9.139204158440354
+        }
+      ],
+      "building_count": 8,
+      "description": null
+    },
+    {
+      "id": "district_2",
+      "name": "Graph Analysis",
+      "color": "#45B7D1",
+      "center": {
+        "x": 5.141279527306078,
+        "y": -35.908220249271395
+      },
+      "boundary": [
+        {
+          "x": 25.534527087656993,
+          "y": -15.781651585397935
+        },
+        {
+          "x": -21.58754282290125,
+          "y": -20.525049211215904
+        },
+        {
+          "x": -24.19624998944122,
+          "y": -25.38004783288156
+        },
+        {
+          "x": -1.6106350526693003,
+          "y": -73.87145659202619
+        },
+        {
+          "x": 28.572939782020903,
+          "y": -43.909676799333155
+        }
+      ],
+      "building_count": 11,
+      "description": null
+    },
+    {
+      "id": "district_7",
+      "name": "Module 17",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -35.01505754360545,
+        "y": -54.61164812573604
+      },
+      "boundary": [
+        {
+          "x": -277.46332513304793,
+          "y": -100.23523174197547
+        },
+        {
+          "x": -24.19624998944122,
+          "y": -25.38004783288156
+        },
+        {
+          "x": -1.6106350526693003,
+          "y": -73.87145659202619
+        },
+        {
+          "x": -149.9791441605568,
+          "y": -500.0
+        },
+        {
+          "x": -500.0,
+          "y": -286.25425118939074
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_8",
+      "name": "API Layer",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 63.83710199855322,
+        "y": 27.020256914650215
+      },
+      "boundary": [
+        {
+          "x": 38.424008843629274,
+          "y": 2.417824374076851
+        },
+        {
+          "x": 500.0,
+          "y": -194.7350738866084
+        },
+        {
+          "x": 500.0,
+          "y": 7.105427357601002e-15
+        },
+        {
+          "x": 500.0,
+          "y": 484.57929266147676
+        },
+        {
+          "x": 51.40424671711355,
+          "y": 59.14537571575602
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_1",
+      "name": "Parsing",
+      "color": "#4ECDC4",
+      "center": {
+        "x": -18.67106108187557,
+        "y": 16.69785512374369
+      },
+      "boundary": [
+        {
+          "x": -39.97486704427206,
+          "y": 36.16889112810673
+        },
+        {
+          "x": -1.4494592010292031,
+          "y": 38.57859187624348
+        },
+        {
+          "x": 4.6329459876428665,
+          "y": 24.145384923117952
+        },
+        {
+          "x": -23.070255394034863,
+          "y": -9.139204158440354
+        },
+        {
+          "x": -44.74842708388342,
+          "y": 19.084078795617298
+        }
+      ],
+      "building_count": 12,
+      "description": null
+    },
+    {
+      "id": "district_5",
+      "name": "AI Features",
+      "color": "#DDA0DD",
+      "center": {
+        "x": 49.755372491462595,
+        "y": -31.088968795292057
+      },
+      "boundary": [
+        {
+          "x": 38.424008843629274,
+          "y": 2.417824374076851
+        },
+        {
+          "x": 500.0,
+          "y": -194.7350738866084
+        },
+        {
+          "x": 500.0,
+          "y": -305.2827436433687
+        },
+        {
+          "x": 28.572939782020903,
+          "y": -43.909676799333155
+        },
+        {
+          "x": 25.534527087656993,
+          "y": -15.781651585397935
+        },
+        {
+          "x": 36.871098190925714,
+          "y": 1.8704039988609509
+        }
+      ],
+      "building_count": 6,
+      "description": null
+    },
+    {
+      "id": "district_6",
+      "name": "AI Features",
+      "color": "#98D8C8",
+      "center": {
+        "x": -21.26337518684289,
+        "y": 58.14281804242962
+      },
+      "boundary": [
+        {
+          "x": -39.97486704427206,
+          "y": 36.16889112810673
+        },
+        {
+          "x": -397.84728943762605,
+          "y": 500.0
+        },
+        {
+          "x": -298.9493916571435,
+          "y": 500.0
+        },
+        {
+          "x": 6.137299679201508,
+          "y": 54.58193105617369
+        },
+        {
+          "x": -1.4494592010292031,
+          "y": 38.57859187624348
+        }
+      ],
+      "building_count": 3,
+      "description": null
+    },
+    {
+      "id": "district_0",
+      "name": "API Layer",
+      "color": "#FF6B6B",
+      "center": {
+        "x": 1.5391042100231842,
+        "y": -0.12333133184262751
+      },
+      "boundary": [
+        {
+          "x": -23.070255394034863,
+          "y": -9.139204158440354
+        },
+        {
+          "x": -21.58754282290125,
+          "y": -20.525049211215904
+        },
+        {
+          "x": 25.534527087656993,
+          "y": -15.781651585397935
+        },
+        {
+          "x": 36.871098190925714,
+          "y": 1.8704039988609509
+        },
+        {
+          "x": 4.6329459876428665,
+          "y": 24.145384923117952
+        }
+      ],
+      "building_count": 16,
+      "description": null
+    },
+    {
+      "id": "district_3",
+      "name": "Parsing",
+      "color": "#96CEB4",
+      "center": {
+        "x": 26.238400208038392,
+        "y": 35.623485529887596
+      },
+      "boundary": [
+        {
+          "x": -1.4494592010292031,
+          "y": 38.57859187624348
+        },
+        {
+          "x": 6.137299679201508,
+          "y": 54.58193105617369
+        },
+        {
+          "x": 51.40424671711355,
+          "y": 59.14537571575602
+        },
+        {
+          "x": 38.424008843629274,
+          "y": 2.417824374076851
+        },
+        {
+          "x": 36.871098190925714,
+          "y": 1.8704039988609509
+        },
+        {
+          "x": 4.6329459876428665,
+          "y": 24.145384923117952
+        }
+      ],
+      "building_count": 10,
+      "description": null
+    },
+    {
+      "id": "district_9",
+      "name": "API Layer",
+      "color": "#85C1E9",
+      "center": {
+        "x": -68.28597323608345,
+        "y": 30.56044591016788
+      },
+      "boundary": [
+        {
+          "x": -39.97486704427206,
+          "y": 36.16889112810673
+        },
+        {
+          "x": -397.84728943762605,
+          "y": 500.0
+        },
+        {
+          "x": -500.0,
+          "y": 7.105427357601002e-14
+        },
+        {
+          "x": -500.0,
+          "y": -286.25425118939074
+        },
+        {
+          "x": -277.46332513304793,
+          "y": -100.23523174197547
+        },
+        {
+          "x": -44.74842708388342,
+          "y": 19.084078795617298
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_10",
+      "name": "Tests",
+      "color": "#F8B500",
+      "center": {
+        "x": 36.40136552186403,
+        "y": -67.39971212605565
+      },
+      "boundary": [
+        {
+          "x": 28.572939782020903,
+          "y": -43.909676799333155
+        },
+        {
+          "x": -1.6106350526693003,
+          "y": -73.87145659202619
+        },
+        {
+          "x": -149.9791441605568,
+          "y": -500.0
+        },
+        {
+          "x": -1.4921397450962104e-13,
+          "y": -500.0
+        },
+        {
+          "x": 500.0,
+          "y": -305.2827436433687
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_11",
+      "name": "Tests",
+      "color": "#00CED1",
+      "center": {
+        "x": 22.049919798945975,
+        "y": 77.17098637436412
+      },
+      "boundary": [
+        {
+          "x": 6.137299679201508,
+          "y": 54.58193105617369
+        },
+        {
+          "x": 51.40424671711355,
+          "y": 59.14537571575602
+        },
+        {
+          "x": 500.0,
+          "y": 484.57929266147676
+        },
+        {
+          "x": -2.1316282072803006e-14,
+          "y": 500.0
+        },
+        {
+          "x": -298.9493916571435,
+          "y": 500.0
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    }
+  ],
+  "roads": [
+    {
+      "source": "main.py",
+      "target": "utils/middleware.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "main.py",
+      "target": "utils/error_handler.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "main.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "main.py",
+      "target": "utils/limiter.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "main.py",
+      "target": "api/history.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "main.py",
+      "target": "api/websocket.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "main.py",
+      "target": "api/v2/router.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "main.py",
+      "target": "utils/responses.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "mcp_server.py",
+      "target": "graph/kuzu_engine.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "test_ast.py",
+      "target": "parsing/code_parser.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "ai/gemini_client.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "ai/gemini_client.py",
+      "target": "core/config.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "ai/city_guide.py",
+      "target": "ai/gemini_client.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "ai/city_guide.py",
+      "target": "api/models.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "ai/__init__.py",
+      "target": "ai/gemini_client.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "ai/__init__.py",
+      "target": "ai/city_guide.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "core/database.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "core/__init__.py",
+      "target": "core/database.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "core/__init__.py",
+      "target": "core/config.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "utils/middleware.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "utils/error_handler.py",
+      "target": "utils/responses.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "utils/error_handler.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "utils/security.py",
+      "target": "utils/middleware.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "utils/__init__.py",
+      "target": "utils/error_handler.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "utils/__init__.py",
+      "target": "utils/responses.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "utils/__init__.py",
+      "target": "utils/middleware.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "utils/__init__.py",
+      "target": "utils/cache.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "utils/__init__.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "utils/__init__.py",
+      "target": "utils/limiter.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "utils/__init__.py",
+      "target": "utils/validators.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "utils/validators.py",
+      "target": "utils/middleware.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/websocket.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/models.py",
+      "target": "utils/middleware.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/v2/graph.py",
+      "target": "utils/cache.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/v2/graph.py",
+      "target": "graph/engine/graph_service.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/v2/router.py",
+      "target": "parsing/pipeline/intelligence.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/v2/router.py",
+      "target": "parsing/pipeline/graph.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/v2/intelligence.py",
+      "target": "ai/advisor.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/v2/intelligence.py",
+      "target": "utils/cache.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/v2/intelligence.py",
+      "target": "ai/analyst.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/v2/intelligence.py",
+      "target": "parsing/intelligence.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/routes/analysis.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/analysis.py",
+      "target": "api/routes/_helpers.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/analysis.py",
+      "target": "api/models.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/analysis.py",
+      "target": "utils/cache.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/analysis.py",
+      "target": "parsing/search.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/analysis.py",
+      "target": "services/git_service.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/analysis.py",
+      "target": "utils/limiter.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/routes/analysis.py",
+      "target": "parsing/analyzer.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/routes/graph.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/graph.py",
+      "target": "api/models.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/graph.py",
+      "target": "api/routes/_helpers.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/chat.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/chat.py",
+      "target": "api/models.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/chat.py",
+      "target": "ai/city_guide.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/routes/files.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/files.py",
+      "target": "api/models.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/files.py",
+      "target": "utils/cache.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/files.py",
+      "target": "ai/city_guide.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/routes/_helpers.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/_helpers.py",
+      "target": "utils/cache.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/intelligence.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/intelligence.py",
+      "target": "api/routes/_helpers.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/intelligence.py",
+      "target": "utils/cache.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/__init__.py",
+      "target": "parsing/intel/search.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/routes/__init__.py",
+      "target": "api/routes/analysis.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/__init__.py",
+      "target": "parsing/pipeline/intelligence.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/routes/__init__.py",
+      "target": "parsing/pipeline/graph.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "api/routes/__init__.py",
+      "target": "api/routes/chat.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/__init__.py",
+      "target": "api/routes/files.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/__init__.py",
+      "target": "api/routes/mcp.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/search.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/search.py",
+      "target": "parsing/search.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/search.py",
+      "target": "api/models.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/mcp.py",
+      "target": "utils/logger.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api/routes/mcp.py",
+      "target": "api/websocket.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "graph/demo_city.py",
+      "target": "api/models.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "graph/__init__.py",
+      "target": "graph/demo_city.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "graph/__init__.py",
+      "target": "graph/engine/graph_builder.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "graph/__init__.py",
+      "target": "graph/clustering.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "graph/__init__.py",
+      "target": "graph/layout.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "graph/engine/graph_service.py",
+      "target": "graph/engine/graph_builder.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/metrics.py",
+      "target": "utils/middleware.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "parsing/code_parser.py",
+      "target": "utils/middleware.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "parsing/intelligence.py",
+      "target": "utils/middleware.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "parsing/__init__.py",
+      "target": "parsing/metrics.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/__init__.py",
+      "target": "parsing/analyzer.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/__init__.py",
+      "target": "parsing/code_parser.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/analyzer.py",
+      "target": "parsing/pipeline/parsing.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/analyzer.py",
+      "target": "parsing/pipeline/intelligence.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/analyzer.py",
+      "target": "api/models.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "parsing/analyzer.py",
+      "target": "parsing/pipeline/base.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/analyzer.py",
+      "target": "parsing/pipeline/graph.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "parsing/analyzer.py",
+      "target": "parsing/pipeline/git_meta.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/analyzer.py",
+      "target": "parsing/pipeline/discovery.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/search.py",
+      "target": "utils/middleware.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "parsing/pipeline/graph.py",
+      "target": "graph/kuzu_engine.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/pipeline/graph.py",
+      "target": "parsing/pipeline/base.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "parsing/pipeline/graph.py",
+      "target": "graph/graph_builder.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/pipeline/graph.py",
+      "target": "graph/layout.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/pipeline/graph.py",
+      "target": "graph/clustering.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/pipeline/parsing.py",
+      "target": "parsing/code_parser.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/pipeline/parsing.py",
+      "target": "parsing/pipeline/base.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/pipeline/parsing.py",
+      "target": "parsing/metrics.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/pipeline/discovery.py",
+      "target": "parsing/pipeline/base.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/pipeline/git_meta.py",
+      "target": "parsing/pipeline/base.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/pipeline/intelligence.py",
+      "target": "parsing/intelligence.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/pipeline/intelligence.py",
+      "target": "parsing/pipeline/base.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/intel/dead_code.py",
+      "target": "utils/middleware.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/intel/quality.py",
+      "target": "utils/middleware.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/intel/__init__.py",
+      "target": "parsing/intel/search.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/intel/__init__.py",
+      "target": "parsing/intel/impact.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/intel/__init__.py",
+      "target": "parsing/intel/dependencies.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/intel/__init__.py",
+      "target": "parsing/intel/dead_code.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/intel/__init__.py",
+      "target": "parsing/intel/health.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/intel/__init__.py",
+      "target": "parsing/intel/refactoring.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/intel/__init__.py",
+      "target": "parsing/intel/quality.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "parsing/intel/search.py",
+      "target": "utils/middleware.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "tests/test_analyzer.py",
+      "target": "parsing/analyzer.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "tests/test_models.py",
+      "target": "api/models.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    }
+  ],
+  "stats": {
+    "total_files": 71,
+    "total_loc": 10997,
+    "total_districts": 12,
+    "total_dependencies": 120,
+    "hotspots": 1
+  },
+  "metadata": {
+    "num_files": 71,
+    "num_directories": 12,
+    "languages": {},
+    "layer_violations": [],
+    "duplicates": [],
+    "issues": {
+      "circular_dependencies": [],
+      "god_objects": [],
+      "orphans": [
+        "check_cursor.py",
+        "check_api.py",
+        "api/__init__.py",
+        "tests/conftest.py",
+        "tests/test_api.py"
+      ],
+      "highly_coupled": [],
+      "large_files": []
+    },
+    "health": {
+      "score": 100,
+      "grade": "A"
+    }
+  }
+}

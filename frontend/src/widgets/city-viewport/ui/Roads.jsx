@@ -1,25 +1,29 @@
 /**
  * Roads.jsx - Premium Dependency Visualization
  *
- * World-class animated flow connections between files.
+ * Animated flow connections between files showing import/dependency relationships.
  * Features:
  * - Smooth animated particles flowing along curves
- * - Gradient colors based on connection type
- * - Glow effects at endpoints
- * - Selection-based highlighting with fade
+ * - Selection-based highlighting with dim/focus
+ * - Directional color coding (green = outgoing deps, red = incoming deps)
+ * - Performance-limited rendering (max visible connections)
  */
 import React, { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 
-export default function Roads({ roads, buildings }) {
+export default function Roads() {
     const showRoads = useStore((state) => state.showRoads)
     const selectedBuilding = useStore((state) => state.selectedBuilding)
+    const cityData = useStore((state) => state.cityData)
+
+    const roads = cityData?.roads || []
+    const buildings = cityData?.buildings || []
 
     const buildingPositions = useMemo(() => {
         const positions = {}
-        buildings?.forEach(b => {
+        buildings.forEach(b => {
             positions[b.id] = {
                 x: b.position.x,
                 y: (b.dimensions?.height || 10) / 2 + 0.5,
@@ -43,15 +47,15 @@ export default function Roads({ roads, buildings }) {
             )
 
             // Elegant arc height based on distance
-            const arcHeight = Math.min(8, 2 + distance * 0.08)
+            const arcHeight = Math.min(6, 1.5 + distance * 0.06)
 
             const midX = (srcPos.x + tgtPos.x) / 2
             const midZ = (srcPos.z + tgtPos.z) / 2
 
             const points = [
-                new THREE.Vector3(srcPos.x, 1.5, srcPos.z),
+                new THREE.Vector3(srcPos.x, 1.2, srcPos.z),
                 new THREE.Vector3(midX, arcHeight, midZ),
-                new THREE.Vector3(tgtPos.x, 1.5, tgtPos.z)
+                new THREE.Vector3(tgtPos.x, 1.2, tgtPos.z)
             ]
 
             const curve = new THREE.CatmullRomCurve3(points)
@@ -83,7 +87,7 @@ export default function Roads({ roads, buildings }) {
     // Filter: Show all if showRoads, or only highlighted if a building is selected
     const visibleRoads = selectedBuilding
         ? roadData.filter(r => r.isHighlighted)
-        : showRoads ? roadData.slice(0, 30) : [] // Limit for performance
+        : showRoads ? roadData.slice(0, 40) : [] // Limit for performance
 
     return (
         <group>
@@ -108,11 +112,11 @@ function FlowConnection({ curve, isHighlighted, isOutgoing, isCrossDistrict }) {
     const endGlowRef = useRef()
 
     // Generate points along the curve for particles
-    const { tubeGeometry, particlePositions, curveLength } = useMemo(() => {
-        const tubeGeo = new THREE.TubeGeometry(curve, 64, 0.08, 8, false)
+    const { tubeGeometry, particlePositions } = useMemo(() => {
+        const tubeGeo = new THREE.TubeGeometry(curve, 48, 0.06, 6, false)
 
         // Create particle positions along the curve
-        const numParticles = 12
+        const numParticles = 10
         const positions = []
         for (let i = 0; i < numParticles; i++) {
             const t = i / numParticles
@@ -122,8 +126,7 @@ function FlowConnection({ curve, isHighlighted, isOutgoing, isCrossDistrict }) {
 
         return {
             tubeGeometry: tubeGeo,
-            particlePositions: new Float32Array(positions),
-            curveLength: curve.getLength()
+            particlePositions: new Float32Array(positions)
         }
     }, [curve])
 
@@ -131,10 +134,10 @@ function FlowConnection({ curve, isHighlighted, isOutgoing, isCrossDistrict }) {
     useFrame((state) => {
         const time = state.clock.elapsedTime
 
-        // Animate tube opacity (subtle pulse when highlighted)
+        // Animate tube opacity
         if (tubeRef.current) {
-            const baseOpacity = isHighlighted ? 0.4 : 0.15
-            const pulse = isHighlighted ? Math.sin(time * 2) * 0.1 : 0
+            const baseOpacity = isHighlighted ? 0.35 : 0.12
+            const pulse = isHighlighted ? Math.sin(time * 1.5) * 0.08 : 0
             tubeRef.current.material.opacity = baseOpacity + pulse
         }
 
@@ -142,10 +145,9 @@ function FlowConnection({ curve, isHighlighted, isOutgoing, isCrossDistrict }) {
         if (particlesRef.current) {
             const positions = particlesRef.current.geometry.attributes.position.array
             const numParticles = positions.length / 3
-            const speed = isHighlighted ? 0.4 : 0.15
+            const speed = isHighlighted ? 0.35 : 0.12
 
             for (let i = 0; i < numParticles; i++) {
-                // Each particle has an offset phase
                 const phase = (i / numParticles + time * speed) % 1
                 const point = curve.getPointAt(isOutgoing ? phase : 1 - phase)
 
@@ -158,23 +160,23 @@ function FlowConnection({ curve, isHighlighted, isOutgoing, isCrossDistrict }) {
 
         // Animate endpoint glows
         if (startGlowRef.current && endGlowRef.current) {
-            const pulse = 0.8 + Math.sin(time * 3) * 0.2
-            const scale = isHighlighted ? 0.4 * pulse : 0.2
+            const pulse = 0.8 + Math.sin(time * 2.5) * 0.2
+            const scale = isHighlighted ? 0.35 * pulse : 0.15
             startGlowRef.current.scale.setScalar(scale)
-            endGlowRef.current.scale.setScalar(scale * 1.2)
+            endGlowRef.current.scale.setScalar(scale * 1.1)
         }
     })
 
-    // Color scheme
+    // Refined color scheme — muted, architectural
     const baseColor = isHighlighted
-        ? (isOutgoing ? '#4ade80' : '#f87171') // Green out (Dependency), Red in (Impact check)
-        : (isCrossDistrict ? '#475569' : '#334155')
+        ? (isOutgoing ? '#50d890' : '#e07070')
+        : (isCrossDistrict ? '#3a4a5a' : '#2a3a48')
 
     const particleColor = isHighlighted
-        ? (isOutgoing ? '#86efac' : '#fca5a5')
-        : '#64748b'
+        ? (isOutgoing ? '#78e8ac' : '#f0a0a0')
+        : '#506878'
 
-    const glowColor = isOutgoing ? '#22c55e' : '#ef4444'
+    const glowColor = isOutgoing ? '#40b870' : '#d05050'
 
     // Get start and end points
     const startPoint = curve.getPointAt(0)
@@ -182,17 +184,17 @@ function FlowConnection({ curve, isHighlighted, isOutgoing, isCrossDistrict }) {
 
     return (
         <group>
-            {/* Base Tube - Subtle path indicator */}
+            {/* Base Tube */}
             <mesh ref={tubeRef} geometry={tubeGeometry} raycast={() => null}>
                 <meshBasicMaterial
                     color={baseColor}
                     transparent
-                    opacity={0.2}
+                    opacity={0.15}
                     depthWrite={false}
                 />
             </mesh>
 
-            {/* Flow Particles - Animated dots */}
+            {/* Flow Particles */}
             <points ref={particlesRef} raycast={() => null}>
                 <bufferGeometry>
                     <bufferAttribute
@@ -204,35 +206,35 @@ function FlowConnection({ curve, isHighlighted, isOutgoing, isCrossDistrict }) {
                 </bufferGeometry>
                 <pointsMaterial
                     color={particleColor}
-                    size={isHighlighted ? 0.5 : 0.25}
+                    size={isHighlighted ? 0.4 : 0.2}
                     transparent
-                    opacity={isHighlighted ? 0.9 : 0.4}
+                    opacity={isHighlighted ? 0.85 : 0.35}
                     sizeAttenuation={true}
                     depthWrite={false}
                 />
             </points>
 
-            {/* Start Glow - Source indicator */}
+            {/* Start Glow */}
             {isHighlighted && (
                 <mesh ref={startGlowRef} position={[startPoint.x, startPoint.y, startPoint.z]}>
-                    <sphereGeometry args={[1, 16, 16]} />
+                    <sphereGeometry args={[1, 12, 12]} />
                     <meshBasicMaterial
                         color={glowColor}
                         transparent
-                        opacity={0.3}
+                        opacity={0.25}
                         depthWrite={false}
                     />
                 </mesh>
             )}
 
-            {/* End Glow - Target indicator */}
+            {/* End Glow */}
             {isHighlighted && (
                 <mesh ref={endGlowRef} position={[endPoint.x, endPoint.y, endPoint.z]}>
-                    <sphereGeometry args={[1, 16, 16]} />
+                    <sphereGeometry args={[1, 12, 12]} />
                     <meshBasicMaterial
-                        color={isOutgoing ? '#22c55e' : glowColor}
+                        color={isOutgoing ? '#40b870' : glowColor}
                         transparent
-                        opacity={0.4}
+                        opacity={0.3}
                         depthWrite={false}
                     />
                 </mesh>

@@ -1,16 +1,16 @@
 export const BUILDING_COLOR = '#1a1a2e'
 
 /**
- * Premium Building Color System
+ * Premium Building Color System — "Elevated Dark" 2026
  *
  * Design Philosophy:
- * - Dark glass base for all buildings (cyberpunk aesthetic)
- * - Accent colors for semantic meaning
- * - Smooth gradients based on metrics
- * - High contrast for selection states
+ * - VIBRANT but refined — buildings should pop against the dark ground
+ * - Colors serve function: they communicate meaning, not decoration
+ * - High contrast for interaction states (selected, hovered)
+ * - Inspired by: Linear, Vercel, GitHub's language colors, modern dashboards
  *
  * @param {Object} data - Building data object
- * @param {string} mode - Color mode ('layer', 'churn', 'language', 'complexity', 'default')
+ * @param {string} mode - Color mode
  * @param {Object} context - Interaction state
  * @returns {string} Hex color
  */
@@ -22,120 +22,113 @@ export function getBuildingColor(data, mode, context = {}) {
         isDependent,
         isUnrelated,
         highlightedIssue,
-        isIssueHighlighted
+        isIssueHighlighted,
+        activeIntelligencePanel,
+        blastLevel
     } = context
-
-    // Base building color - dark glass
-    const baseColor = '#1a1a2e'
 
     // ═══════════════════════════════════════════════════════════════
     // INTERACTION STATES (Highest Priority)
     // ═══════════════════════════════════════════════════════════════
 
-    // Issue highlighting mode
     if (highlightedIssue) {
-        if (isIssueHighlighted) return '#ff3366' // Hot pink for issues
-        return '#0a0a12' // Nearly invisible
+        if (isIssueHighlighted) return '#f43f5e' // Vivid rose for issues
+        return '#0e0f14' // Nearly invisible
     }
 
-    // Selection states
-    if (isSelected) return '#00ffaa'   // Bright cyan-green (selected)
-    if (isHovered) return '#00d4ff'    // Bright cyan (hover)
-    if (isDependency) return '#00ff88' // Green (imports this)
-    if (isDependent) return '#ff6b6b'  // Coral red (imported by)
+    // Blast Radius Mode
+    if (activeIntelligencePanel === 'impact') {
+        if (blastLevel === 0) return '#ffffff' // Pure White (Ground Zero / The File)
+        if (blastLevel === 1) return '#ef4444' // Red (Direct Impact)
+        if (blastLevel === 2) return '#f97316' // Orange (Secondary)
+        if (blastLevel === 3) return '#eab308' // Yellow (Tertiary)
+        return '#0e0f14' // Unimpacted shadow
+    }
 
-    // Focus mode - dim unrelated buildings
-    if (isUnrelated) return '#08080c'  // Almost black
+    // X-Ray Mode
+    if (activeIntelligencePanel === 'xray') {
+        if (isSelected) return '#050510' // Almost black, showing internal AST nodes brightly
+        return '#0e0f14' // Shadow for rest of the city
+    }
+
+    if (isSelected) return '#34d399'   // Emerald — bright, clear selection
+    if (isHovered) return '#60a5fa'    // Sky blue — obvious hover
+    if (isDependency) return '#4ade80' // Green — "imports this"
+    if (isDependent) return '#fb7185'  // Rose — "imported by"
+
+    if (isUnrelated) return '#0e0f14'  // Deep shadow
 
     // ═══════════════════════════════════════════════════════════════
     // COLOR MODES
     // ═══════════════════════════════════════════════════════════════
 
-    // LAYER MODE - Architecture visualization
+    // LAYER MODE — Vivid architectural layers
     if (mode === 'layer') {
         const p = data.path.toLowerCase()
         let layer = data.layer || 'other'
 
-        // Smart layer inference
         if (p.includes('component') || p.includes('page') || p.includes('ui') || p.match(/\.(jsx|tsx|vue|svelte)$/)) layer = 'ui'
         else if (p.includes('service') || p.includes('api') || p.includes('controller') || p.includes('handler')) layer = 'service'
         else if (p.includes('util') || p.includes('lib') || p.includes('helper') || p.includes('common')) layer = 'util'
         else if (p.includes('store') || p.includes('context') || p.includes('redux') || p.includes('hook')) layer = 'data'
         else if (p.includes('db') || p.includes('model') || p.includes('schema')) layer = 'db'
 
-        // Premium layer colors (neon accents on dark base)
         const layerColors = {
-            ui: '#00d4ff',       // Cyan - UI components
-            service: '#a855f7',  // Purple - Services/API
-            data: '#06b6d4',     // Teal - State management
-            util: '#22c55e',     // Green - Utilities
-            db: '#f59e0b',       // Amber - Database
-            other: '#64748b'     // Slate - Unknown
+            ui: '#ffffff',       // Pure white — UI components
+            service: '#ff6d00',  // Vivid orange — Services/API
+            data: '#40c4ff',     // Bright sky blue — State management
+            util: '#00e676',     // Neon green — Utilities
+            db: '#ffc400',       // Vivid gold — Database
+            other: '#78909c'     // Blue gray — Unknown
         }
         return layerColors[layer] || layerColors.other
     }
 
-    // CHURN MODE - Code change frequency
+    // CHURN MODE — Heat map (blue → red)
     if (mode === 'churn') {
-        if (data.is_hotspot) return '#ff3366' // Hot pink for hotspots
+        if (data.is_hotspot) return '#ef4444' // Red for hotspots
         const churn = data.metrics?.churn || 0
-        if (churn > 8) return '#ff6b35'   // Orange-red (very hot)
-        if (churn > 5) return '#fbbf24'   // Amber (hot)
-        if (churn > 2) return '#a3e635'   // Lime (warm)
-        return '#22d3ee'                  // Cyan (stable)
+        if (churn > 8) return '#f97316'   // Orange (very hot)
+        if (churn > 5) return '#eab308'   // Yellow (hot)
+        if (churn > 2) return '#84cc16'   // Lime (warm)
+        return '#38bdf8'                  // Sky blue (stable)
     }
 
-    // COMPLEXITY MODE - Cyclomatic complexity heatmap
+    // COMPLEXITY MODE — Gradient
     if (mode === 'complexity') {
         const c = data.metrics?.complexity || 0
-        if (c > 30) return '#ff0066'  // Hot pink (extreme)
-        if (c > 20) return '#a855f7'  // Purple (high)
+        if (c > 30) return '#e11d48'  // Deep rose (extreme)
+        if (c > 20) return '#f97316'  // Hot orange (high)
         if (c > 10) return '#f59e0b'  // Amber (medium)
         if (c > 5) return '#84cc16'   // Lime (low)
         return '#22c55e'              // Green (simple)
     }
 
-    // LANGUAGE MODE - File type colors (GitHub-inspired but enhanced)
+    // LANGUAGE MODE — GitHub-inspired vibrant colors
     if (mode === 'language') {
         const ext = data.path.split('.').pop().toLowerCase()
 
         const languageColors = {
-            // TypeScript/JavaScript ecosystem
             ts: '#3178c6', tsx: '#3178c6',
             js: '#f7df1e', jsx: '#f7df1e', cjs: '#f7df1e', mjs: '#f7df1e',
-
-            // Python
             py: '#3572a5',
-
-            // Systems languages
             go: '#00add8',
-            rs: '#ff6b35',
-            c: '#555555',
-            cpp: '#f34b7d', h: '#f34b7d', hpp: '#f34b7d',
-
-            // JVM
-            java: '#ed8b00',
-            kt: '#a855f7', kts: '#a855f7',
-
-            // Web
+            rs: '#dea584',
+            c: '#555555', cpp: '#f34b7d', h: '#f34b7d', hpp: '#f34b7d',
+            java: '#b07219',
+            kt: '#a97bff', kts: '#a97bff',
             html: '#e34c26',
-            css: '#663399', scss: '#cc6699', sass: '#cc6699',
-            vue: '#42b883',
+            css: '#563d7c', scss: '#c6538c', sass: '#c6538c',
+            vue: '#41b883',
             svelte: '#ff3e00',
-
-            // Data/Config
-            json: '#292929',
-            yaml: '#cb171e', yml: '#cb171e',
+            json: '#ffc400',
+            yaml: '#e53935', yml: '#e53935',
             md: '#083fa1',
-
-            // Shell/DevOps
-            sh: '#4eaa25', bash: '#4eaa25', zsh: '#4eaa25',
-            dockerfile: '#2496ed',
-
-            // Other
-            sql: '#f29111',
-            php: '#777bb3',
-            rb: '#cc342d',
+            sh: '#89e051', bash: '#89e051', zsh: '#89e051',
+            dockerfile: '#384d54',
+            sql: '#e38c00',
+            php: '#4F5D95',
+            rb: '#701516',
             swift: '#f05138',
             lua: '#000080',
             r: '#276dc3',
@@ -145,35 +138,35 @@ export function getBuildingColor(data, mode, context = {}) {
         return languageColors[ext] || '#64748b'
     }
 
-    // AUTHOR MODE - Contributor visualization
+    // AUTHOR MODE — Contributor visualization
     if (mode === 'author') {
         if (data.author) {
             const name = typeof data.author === 'object' ? data.author.author : data.author
             return stringToColor(name || 'Unknown')
         }
-        return '#475569'
+        return '#64748b'
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // DEFAULT MODE - Height/size based gradient
+    // DEFAULT MODE — Vibrant height gradient
+    // Cool blue (tiny) → warm coral (massive)
     // ═══════════════════════════════════════════════════════════════
 
     const height = data.dimensions?.height || 5
 
-    // Premium height gradient (small = cool, large = warm)
-    if (height < 3) return '#0ea5e9'   // Sky blue (tiny files)
-    if (height < 8) return '#22d3ee'   // Cyan
-    if (height < 15) return '#2dd4bf'  // Teal
-    if (height < 25) return '#34d399'  // Emerald
-    if (height < 40) return '#a3e635'  // Lime
-    if (height < 60) return '#facc15'  // Yellow
-    if (height < 80) return '#fb923c'  // Orange
-    return '#f87171'                   // Red (large files)
+    if (height < 3) return '#3b9eff'   // Bright blue (tiny files)
+    if (height < 8) return '#00d4aa'   // Vivid teal
+    if (height < 15) return '#00e676'  // Neon green
+    if (height < 25) return '#c6ff00'  // Electric lime
+    if (height < 40) return '#ffc400'  // Vivid gold
+    if (height < 60) return '#ff6d00'  // Bright orange
+    if (height < 80) return '#ff3d00'  // Fire red
+    return '#ff1744'                   // Hot red (massive files)
 }
 
 /**
- * Deterministic string to color conversion
- * Uses HSL for consistent saturation/lightness
+ * Deterministic string to color
+ * Full saturation for vibrancy
  */
 function stringToColor(str) {
     let hash = 0

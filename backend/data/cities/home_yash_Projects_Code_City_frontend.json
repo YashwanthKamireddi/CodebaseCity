@@ -1,0 +1,7958 @@
+{
+  "name": "frontend",
+  "path": "/home/yash/Projects/Code_City/frontend",
+  "city_id": "home_yash_Projects_Code_City_frontend",
+  "buildings": [
+    {
+      "id": "vite.config.js",
+      "name": "vite.config.js",
+      "path": "vite.config.js",
+      "district_id": "district_5",
+      "position": {
+        "x": 47.04761250353897,
+        "y": 0.0,
+        "z": -34.64936526912196
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 16,
+        "complexity": 1,
+        "churn": 2,
+        "age_days": 36,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 291
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "vitest.config.js",
+      "name": "vitest.config.js",
+      "path": "vitest.config.js",
+      "district_id": "district_6",
+      "position": {
+        "x": -12.289181558630226,
+        "y": 0.0,
+        "z": 62.23924182153857
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 45,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1172
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/main.jsx",
+      "name": "main.jsx",
+      "path": "src/main.jsx",
+      "district_id": "district_4",
+      "position": {
+        "x": -46.85489116131987,
+        "y": 0.0,
+        "z": -9.995277318824982
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 14,
+        "complexity": 1,
+        "churn": 4,
+        "age_days": 33,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 363
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/App.jsx",
+      "name": "App.jsx",
+      "path": "src/App.jsx",
+      "district_id": "district_4",
+      "position": {
+        "x": -48.26417458936344,
+        "y": 0.0,
+        "z": -6.459553643679101
+      },
+      "dimensions": {
+        "width": 3.06,
+        "height": 20.0,
+        "depth": 3.06
+      },
+      "metrics": {
+        "loc": 306,
+        "complexity": 25,
+        "churn": 22,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 11827
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "App",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": true,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/animations/micro.js",
+      "name": "micro.js",
+      "path": "src/shared/animations/micro.js",
+      "district_id": "district_7",
+      "position": {
+        "x": -30.344579408770016,
+        "y": 0.0,
+        "z": -60.988612640205275
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 36,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 575
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/animations/variants.js",
+      "name": "variants.js",
+      "path": "src/shared/animations/variants.js",
+      "district_id": "district_8",
+      "position": {
+        "x": 64.46312817220918,
+        "y": 0.0,
+        "z": 29.157339049241287
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 48,
+        "complexity": 2,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1310
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/ui/Modal.jsx",
+      "name": "Modal.jsx",
+      "path": "src/shared/ui/Modal.jsx",
+      "district_id": "district_9",
+      "position": {
+        "x": -69.43518342463017,
+        "y": 0.0,
+        "z": 24.158791089119138
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 142,
+        "complexity": 2,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4039
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [
+        {
+          "name": "feel",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/ui/SkipLink.jsx",
+      "name": "SkipLink.jsx",
+      "path": "src/shared/ui/SkipLink.jsx",
+      "district_id": "district_10",
+      "position": {
+        "x": 27.32634089340953,
+        "y": 0.0,
+        "z": -72.1913099657309
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 18,
+        "complexity": 2,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 320
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "SkipLink",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/ui/LoadingScreen.jsx",
+      "name": "LoadingScreen.jsx",
+      "path": "src/shared/ui/LoadingScreen.jsx",
+      "district_id": "district_11",
+      "position": {
+        "x": 30.261374430445947,
+        "y": 0.0,
+        "z": 77.33443312020428
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 112,
+        "complexity": 3,
+        "churn": 2,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3569
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "LoadingScreen",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/ui/index.js",
+      "name": "index.js",
+      "path": "src/shared/ui/index.js",
+      "district_id": "district_12",
+      "position": {
+        "x": -69.92927671423003,
+        "y": 0.0,
+        "z": -47.73262837502724
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 16,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 485
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/ui/VisuallyHidden.jsx",
+      "name": "VisuallyHidden.jsx",
+      "path": "src/shared/ui/VisuallyHidden.jsx",
+      "district_id": "district_13",
+      "position": {
+        "x": 86.39477008034311,
+        "y": 0.0,
+        "z": -13.740600827807812
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 31,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 595
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "VisuallyHidden",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/ui/ErrorBoundary.jsx",
+      "name": "ErrorBoundary.jsx",
+      "path": "src/shared/ui/ErrorBoundary.jsx",
+      "district_id": "district_14",
+      "position": {
+        "x": -54.35349371907424,
+        "y": 0.0,
+        "z": 73.4771179386496
+      },
+      "dimensions": {
+        "width": 2.5,
+        "height": 8.0,
+        "depth": 2.5
+      },
+      "metrics": {
+        "loc": 250,
+        "complexity": 10,
+        "churn": 2,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 9932
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [
+        {
+          "name": "error",
+          "line": 1
+        },
+        {
+          "name": "ErrorBoundary",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/ui/Skeleton/Skeleton.jsx",
+      "name": "Skeleton.jsx",
+      "path": "src/shared/ui/Skeleton/Skeleton.jsx",
+      "district_id": "district_15",
+      "position": {
+        "x": -9.7500967769045,
+        "y": 0.0,
+        "z": -96.2175518718162
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 18.400000000000002,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 147,
+        "complexity": 23,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4704
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "Skeleton",
+          "line": 1
+        },
+        {
+          "name": "SkeletonCard",
+          "line": 1
+        },
+        {
+          "name": "SkeletonListItem",
+          "line": 1
+        },
+        {
+          "name": "SkeletonTable",
+          "line": 1
+        },
+        {
+          "name": "SkeletonBuilding",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/ui/Skeleton/index.js",
+      "name": "index.js",
+      "path": "src/shared/ui/Skeleton/index.js",
+      "district_id": "district_16",
+      "position": {
+        "x": 70.49911416591245,
+        "y": 0.0,
+        "z": 72.50743272177041
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 8,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 123
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/ui/Toast/useToast.js",
+      "name": "useToast.js",
+      "path": "src/shared/ui/Toast/useToast.js",
+      "district_id": "district_2",
+      "position": {
+        "x": 2.239694417874669,
+        "y": 0.0,
+        "z": -37.7673231439225
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 65,
+        "complexity": 3,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 1862
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "useToast",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/ui/Toast/index.js",
+      "name": "index.js",
+      "path": "src/shared/ui/Toast/index.js",
+      "district_id": "district_17",
+      "position": {
+        "x": -105.11683105010944,
+        "y": 0.0,
+        "z": -2.9850993406585387
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 4,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 142
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/ui/Toast/ToastContainer.jsx",
+      "name": "ToastContainer.jsx",
+      "path": "src/shared/ui/Toast/ToastContainer.jsx",
+      "district_id": "district_2",
+      "position": {
+        "x": -0.2423951457518405,
+        "y": 0.0,
+        "z": -35.304405604359566
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 28,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 2,
+        "size_bytes": 735
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "ToastContainer",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/ui/Toast/Toast.jsx",
+      "name": "Toast.jsx",
+      "path": "src/shared/ui/Toast/Toast.jsx",
+      "district_id": "district_2",
+      "position": {
+        "x": 2.0587710949274958,
+        "y": 0.0,
+        "z": -43.31177681397252
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 5.6000000000000005,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 82,
+        "complexity": 7,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 2242
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "Toast",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/api/client.js",
+      "name": "client.js",
+      "path": "src/shared/api/client.js",
+      "district_id": "district_18",
+      "position": {
+        "x": 69.71786466930095,
+        "y": 0.0,
+        "z": -82.86917284306256
+      },
+      "dimensions": {
+        "width": 2.86,
+        "height": 25.0,
+        "depth": 2.86
+      },
+      "metrics": {
+        "loc": 286,
+        "complexity": 45,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 8089
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "fetchWithRetry",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "ApiError",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shared/api/index.js",
+      "name": "index.js",
+      "path": "src/shared/api/index.js",
+      "district_id": "district_19",
+      "position": {
+        "x": 2.82535724402105,
+        "y": 0.0,
+        "z": 108.75770551656588
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 2,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 51
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/store/useStore.js",
+      "name": "useStore.js",
+      "path": "src/store/useStore.js",
+      "district_id": "district_20",
+      "position": {
+        "x": -65.72362497733151,
+        "y": 0.0,
+        "z": -90.06253021931093
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 72,
+        "complexity": 4,
+        "churn": 15,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2547
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/store/__tests__/useStore.test.js",
+      "name": "useStore.test.js",
+      "path": "src/store/__tests__/useStore.test.js",
+      "district_id": "district_21",
+      "position": {
+        "x": 113.22554081940511,
+        "y": 0.0,
+        "z": 8.023486269752016
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 97,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2609
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/store/slices/createCitySlice.js",
+      "name": "createCitySlice.js",
+      "path": "src/store/slices/createCitySlice.js",
+      "district_id": "district_22",
+      "position": {
+        "x": -89.60732519908852,
+        "y": 0.0,
+        "z": 73.1486468289091
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 24.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 162,
+        "complexity": 30,
+        "churn": 3,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 5884
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/store/slices/createUISlice.js",
+      "name": "createUISlice.js",
+      "path": "src/store/slices/createUISlice.js",
+      "district_id": "district_23",
+      "position": {
+        "x": 16.422343137614636,
+        "y": 0.0,
+        "z": -115.38423308028156
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 81,
+        "complexity": 1,
+        "churn": 3,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2783
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/store/slices/createIntelligenceSlice.js",
+      "name": "createIntelligenceSlice.js",
+      "path": "src/store/slices/createIntelligenceSlice.js",
+      "district_id": "district_24",
+      "position": {
+        "x": 64.53613585952057,
+        "y": 0.0,
+        "z": 102.30662842952867
+      },
+      "dimensions": {
+        "width": 2.32,
+        "height": 22.400000000000002,
+        "depth": 2.32
+      },
+      "metrics": {
+        "loc": 232,
+        "complexity": 28,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7602
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/store/slices/createInteractionSlice.js",
+      "name": "createInteractionSlice.js",
+      "path": "src/store/slices/createInteractionSlice.js",
+      "district_id": "district_25",
+      "position": {
+        "x": -119.81495111406103,
+        "y": 0.0,
+        "z": -31.91198854278782
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 12.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 101,
+        "complexity": 15,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3319
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/store/slices/createTimeSlice.js",
+      "name": "createTimeSlice.js",
+      "path": "src/store/slices/createTimeSlice.js",
+      "district_id": "district_26",
+      "position": {
+        "x": 116.98675197894309,
+        "y": 0.0,
+        "z": -43.439904372022085
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 14.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 107,
+        "complexity": 18,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3345
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/entities/building/utils.js",
+      "name": "utils.js",
+      "path": "src/entities/building/utils.js",
+      "district_id": "district_1",
+      "position": {
+        "x": -17.2926962818119,
+        "y": 0.0,
+        "z": 14.107303959592112
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 15.200000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 36,
+        "complexity": 19,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 2,
+        "dependencies_out": 0,
+        "size_bytes": 1369
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "detectPattern",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/entities/building/model.js",
+      "name": "model.js",
+      "path": "src/entities/building/model.js",
+      "district_id": "district_1",
+      "position": {
+        "x": -20.928698907020213,
+        "y": 0.0,
+        "z": 15.416308437573251
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 11.200000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 64,
+        "complexity": 14,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 1738
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/entities/building/ui/CodeViewer.jsx",
+      "name": "CodeViewer.jsx",
+      "path": "src/entities/building/ui/CodeViewer.jsx",
+      "district_id": "district_1",
+      "position": {
+        "x": -17.88943519692554,
+        "y": 0.0,
+        "z": 8.147034697375629
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.800000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 179,
+        "complexity": 6,
+        "churn": 2,
+        "age_days": 31,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 8878
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "CodeViewer",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.04246575342465753,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/entities/building/ui/BuildingLabel.jsx",
+      "name": "BuildingLabel.jsx",
+      "path": "src/entities/building/ui/BuildingLabel.jsx",
+      "district_id": "district_1",
+      "position": {
+        "x": -14.909030581530747,
+        "y": 0.0,
+        "z": 17.613453965638904
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 10.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 127,
+        "complexity": 13,
+        "churn": 3,
+        "age_days": 31,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 4849
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "BuildingLabel",
+          "line": 1
+        },
+        {
+          "name": "AuthorHologram",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.04246575342465753,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/entities/building/ui/FileInsights.jsx",
+      "name": "FileInsights.jsx",
+      "path": "src/entities/building/ui/FileInsights.jsx",
+      "district_id": "district_27",
+      "position": {
+        "x": -43.210224957654205,
+        "y": 0.0,
+        "z": 122.19198161733348
+      },
+      "dimensions": {
+        "width": 2.15,
+        "height": 10.4,
+        "depth": 2.15
+      },
+      "metrics": {
+        "loc": 215,
+        "complexity": 13,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7961
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "generateInsights",
+          "line": 1
+        },
+        {
+          "name": "FileInsights",
+          "line": 1
+        },
+        {
+          "name": "getColorForType",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/entities/building/ui/BuildingPanel.jsx",
+      "name": "BuildingPanel.jsx",
+      "path": "src/entities/building/ui/BuildingPanel.jsx",
+      "district_id": "district_1",
+      "position": {
+        "x": -25.017583598909003,
+        "y": 0.0,
+        "z": 12.05613738704783
+      },
+      "dimensions": {
+        "width": 4.05,
+        "height": 20.8,
+        "depth": 4.05
+      },
+      "metrics": {
+        "loc": 405,
+        "complexity": 26,
+        "churn": 10,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 3,
+        "size_bytes": 18786
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "formatFileSize",
+          "line": 1
+        },
+        {
+          "name": "BuildingPanel",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": true,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/shaders/BuildingShader.js",
+      "name": "BuildingShader.js",
+      "path": "src/shaders/BuildingShader.js",
+      "district_id": "district_28",
+      "position": {
+        "x": -54.290115225951986,
+        "y": 0.0,
+        "z": -117.75493738511365
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 73,
+        "complexity": 4,
+        "churn": 2,
+        "age_days": 33,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2400
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/tour/ui/TourController.jsx",
+      "name": "TourController.jsx",
+      "path": "src/features/tour/ui/TourController.jsx",
+      "district_id": "district_29",
+      "position": {
+        "x": 123.06786681337107,
+        "y": 0.0,
+        "z": 60.557575903975426
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 6.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 147,
+        "complexity": 8,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 5407
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "TourController",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/tour/model/useTourStore.js",
+      "name": "useTourStore.js",
+      "path": "src/features/tour/model/useTourStore.js",
+      "district_id": "district_30",
+      "position": {
+        "x": -133.19384499403773,
+        "y": 0.0,
+        "z": 23.398687313602377
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.800000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 77,
+        "complexity": 6,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2538
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/architect/ui/ImpactSandbox.jsx",
+      "name": "ImpactSandbox.jsx",
+      "path": "src/features/architect/ui/ImpactSandbox.jsx",
+      "district_id": "district_31",
+      "position": {
+        "x": 74.28424666365454,
+        "y": 0.0,
+        "z": -115.86448082931207
+      },
+      "dimensions": {
+        "width": 2.56,
+        "height": 9.600000000000001,
+        "depth": 2.56
+      },
+      "metrics": {
+        "loc": 256,
+        "complexity": 12,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 12957
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "ImpactSandbox",
+          "line": 1
+        },
+        {
+          "name": "MetricBox",
+          "line": 7
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/architect/ui/DependencyGraph.jsx",
+      "name": "DependencyGraph.jsx",
+      "path": "src/features/architect/ui/DependencyGraph.jsx",
+      "district_id": "district_32",
+      "position": {
+        "x": 31.742492199062838,
+        "y": 0.0,
+        "z": 135.63711533734784
+      },
+      "dimensions": {
+        "width": 4.22,
+        "height": 25.0,
+        "depth": 4.22
+      },
+      "metrics": {
+        "loc": 422,
+        "complexity": 37,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 16710
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "DependencyGraph",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "UI",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/architect/model/useArchitectStore.js",
+      "name": "useArchitectStore.js",
+      "path": "src/features/architect/model/useArchitectStore.js",
+      "district_id": "district_33",
+      "position": {
+        "x": -108.99288327295497,
+        "y": 0.0,
+        "z": -90.82145818966485
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 7.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 76,
+        "complexity": 9,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2640
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/timeline/ui/AvatarSprites.jsx",
+      "name": "AvatarSprites.jsx",
+      "path": "src/features/timeline/ui/AvatarSprites.jsx",
+      "district_id": "district_34",
+      "position": {
+        "x": 146.85569945378688,
+        "y": 0.0,
+        "z": -14.588133762476707
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 113,
+        "complexity": 11,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4246
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "AvatarSprites",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/timeline/ui/TimelineController.jsx",
+      "name": "TimelineController.jsx",
+      "path": "src/features/timeline/ui/TimelineController.jsx",
+      "district_id": "district_35",
+      "position": {
+        "x": -94.13652663234588,
+        "y": 0.0,
+        "z": 115.02964300628929
+      },
+      "dimensions": {
+        "width": 5.06,
+        "height": 25.0,
+        "depth": 5.06
+      },
+      "metrics": {
+        "loc": 506,
+        "complexity": 49,
+        "churn": 21,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 21114
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "TimelineController",
+          "line": 1
+        },
+        {
+          "name": "StepButton",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": true,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/bookmarks/ui/BookmarksPanel.jsx",
+      "name": "BookmarksPanel.jsx",
+      "path": "src/features/bookmarks/ui/BookmarksPanel.jsx",
+      "district_id": "district_36",
+      "position": {
+        "x": 2.801351272552629,
+        "y": 0.0,
+        "z": -152.67702796292488
+      },
+      "dimensions": {
+        "width": 2.25,
+        "height": 4.800000000000001,
+        "depth": 2.25
+      },
+      "metrics": {
+        "loc": 225,
+        "complexity": 6,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 9970
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "BookmarksPanel",
+          "line": 1
+        },
+        {
+          "name": "BookmarkItem",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/bookmarks/model/useBookmarksStore.js",
+      "name": "useBookmarksStore.js",
+      "path": "src/features/bookmarks/model/useBookmarksStore.js",
+      "district_id": "district_37",
+      "position": {
+        "x": 101.3517667098095,
+        "y": 0.0,
+        "z": 111.62119663993569
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 56,
+        "complexity": 3,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1890
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/search/ui/CommandPalette.jsx",
+      "name": "CommandPalette.jsx",
+      "path": "src/features/search/ui/CommandPalette.jsx",
+      "district_id": "district_38",
+      "position": {
+        "x": -151.8257391054673,
+        "y": 0.0,
+        "z": -12.508427450703078
+      },
+      "dimensions": {
+        "width": 3.33,
+        "height": 14.4,
+        "depth": 3.33
+      },
+      "metrics": {
+        "loc": 333,
+        "complexity": 18,
+        "churn": 2,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 14694
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "CommandPalette",
+          "line": 1
+        },
+        {
+          "name": "CommandPaletteTrigger",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/analysis/ui/ExportReport.jsx",
+      "name": "ExportReport.jsx",
+      "path": "src/features/analysis/ui/ExportReport.jsx",
+      "district_id": "district_39",
+      "position": {
+        "x": 129.1003719034301,
+        "y": 0.0,
+        "z": -83.22602892655833
+      },
+      "dimensions": {
+        "width": 4.64,
+        "height": 25.0,
+        "depth": 4.64
+      },
+      "metrics": {
+        "loc": 464,
+        "complexity": 51,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 18423
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "ExportReport",
+          "line": 1
+        },
+        {
+          "name": "generateMarkdown",
+          "line": 1
+        },
+        {
+          "name": "generateHTML",
+          "line": 4
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/analysis/ui/AnalyzeModal.jsx",
+      "name": "AnalyzeModal.jsx",
+      "path": "src/features/analysis/ui/AnalyzeModal.jsx",
+      "district_id": "district_40",
+      "position": {
+        "x": -37.506292307251556,
+        "y": 0.0,
+        "z": 155.29421976500964
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 190,
+        "complexity": 5,
+        "churn": 3,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 9622
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "AnalyzeModal",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/explorer/ui/FileTable.jsx",
+      "name": "FileTable.jsx",
+      "path": "src/features/explorer/ui/FileTable.jsx",
+      "district_id": "district_3",
+      "position": {
+        "x": 22.988846610041474,
+        "y": 0.0,
+        "z": 34.8155739364982
+      },
+      "dimensions": {
+        "width": 2.25,
+        "height": 16.0,
+        "depth": 2.25
+      },
+      "metrics": {
+        "loc": 225,
+        "complexity": 20,
+        "churn": 2,
+        "age_days": 32,
+        "dependencies_in": 0,
+        "dependencies_out": 2,
+        "size_bytes": 11596
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "getHealthColor",
+          "line": 1
+        },
+        {
+          "name": "FileTable",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/explorer/ui/CodePage.jsx",
+      "name": "CodePage.jsx",
+      "path": "src/features/explorer/ui/CodePage.jsx",
+      "district_id": "district_41",
+      "position": {
+        "x": -78.9547493846709,
+        "y": 0.0,
+        "z": -141.93742765978052
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.800000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 44,
+        "complexity": 6,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1354
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "CodePage",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/explorer/ui/PatternList.jsx",
+      "name": "PatternList.jsx",
+      "path": "src/features/explorer/ui/PatternList.jsx",
+      "district_id": "district_3",
+      "position": {
+        "x": 20.686317681576515,
+        "y": 0.0,
+        "z": 37.45805211122269
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 11.200000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 192,
+        "complexity": 14,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 7309
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "PatternList",
+          "line": 1
+        },
+        {
+          "name": "PatternCard",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/explorer/ui/AuditStats.jsx",
+      "name": "AuditStats.jsx",
+      "path": "src/features/explorer/ui/AuditStats.jsx",
+      "district_id": "district_3",
+      "position": {
+        "x": 23.255887261831518,
+        "y": 0.0,
+        "z": 29.7190842411854
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 6.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 149,
+        "complexity": 8,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 4882
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "AuditStats",
+          "line": 1
+        },
+        {
+          "name": "StatCard",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/explorer/ui/ImpactPanel.jsx",
+      "name": "ImpactPanel.jsx",
+      "path": "src/features/explorer/ui/ImpactPanel.jsx",
+      "district_id": "district_42",
+      "position": {
+        "x": 158.4246188052633,
+        "y": 0.0,
+        "z": 34.732837733437485
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 92,
+        "complexity": 10,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3735
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "ImpactPanel",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/ai-architect/ui/ChatInterface.jsx",
+      "name": "ChatInterface.jsx",
+      "path": "src/features/ai-architect/ui/ChatInterface.jsx",
+      "district_id": "district_43",
+      "position": {
+        "x": -151.27065821107766,
+        "y": 0.0,
+        "z": 61.38876133262006
+      },
+      "dimensions": {
+        "width": 2.52,
+        "height": 5.6000000000000005,
+        "depth": 2.52
+      },
+      "metrics": {
+        "loc": 252,
+        "complexity": 7,
+        "churn": 2,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 12887
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "ChatInterface",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/onboarding/ui/CityBuilderLoader.jsx",
+      "name": "CityBuilderLoader.jsx",
+      "path": "src/features/onboarding/ui/CityBuilderLoader.jsx",
+      "district_id": "district_44",
+      "position": {
+        "x": 67.91977932584942,
+        "y": 0.0,
+        "z": -151.58904392306204
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 5.6000000000000005,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 194,
+        "complexity": 7,
+        "churn": 4,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 5972
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "MovingGrid",
+          "line": 1
+        },
+        {
+          "name": "FloatingBlock",
+          "line": 1
+        },
+        {
+          "name": "BuilderScene",
+          "line": 1
+        },
+        {
+          "name": "LoadingText",
+          "line": 1
+        },
+        {
+          "name": "CityBuilderLoader",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/features/onboarding/ui/CinematicIntro.jsx",
+      "name": "CinematicIntro.jsx",
+      "path": "src/features/onboarding/ui/CinematicIntro.jsx",
+      "district_id": "district_45",
+      "position": {
+        "x": 61.387873131251865,
+        "y": 0.0,
+        "z": 158.95796424404872
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 90,
+        "complexity": 2,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3213
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "CinematicIntro",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/utils/GraphNavigator.js",
+      "name": "GraphNavigator.js",
+      "path": "src/utils/GraphNavigator.js",
+      "district_id": "district_46",
+      "position": {
+        "x": -159.4924939229272,
+        "y": 0.0,
+        "z": -62.29642961415095
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 11.200000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 60,
+        "complexity": 14,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1639
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [
+        {
+          "name": "GraphNavigator",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/utils/RefactorUtils.js",
+      "name": "RefactorUtils.js",
+      "path": "src/utils/RefactorUtils.js",
+      "district_id": "district_47",
+      "position": {
+        "x": 166.42743419726327,
+        "y": 0.0,
+        "z": -47.92019399399038
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.800000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 46,
+        "complexity": 6,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1380
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/utils/colorUtils.js",
+      "name": "colorUtils.js",
+      "path": "src/utils/colorUtils.js",
+      "district_id": "district_48",
+      "position": {
+        "x": -75.36934763714237,
+        "y": 0.0,
+        "z": 153.17027776857478
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 25.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 179,
+        "complexity": 72,
+        "churn": 4,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7663
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "getBuildingColor",
+          "line": 1
+        },
+        {
+          "name": "stringToColor",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/utils/performance.js",
+      "name": "performance.js",
+      "path": "src/utils/performance.js",
+      "district_id": "district_49",
+      "position": {
+        "x": -34.83772981859339,
+        "y": 0.0,
+        "z": -172.81677705552303
+      },
+      "dimensions": {
+        "width": 2.04,
+        "height": 10.4,
+        "depth": 2.04
+      },
+      "metrics": {
+        "loc": 204,
+        "complexity": 13,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4215
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "calls",
+          "line": 1
+        },
+        {
+          "name": "debounce",
+          "line": 1
+        },
+        {
+          "name": "calls",
+          "line": 1
+        },
+        {
+          "name": "throttle",
+          "line": 1
+        },
+        {
+          "name": "createLazyLoader",
+          "line": 1
+        },
+        {
+          "name": "batchUpdate",
+          "line": 1
+        },
+        {
+          "name": "getVisibleRange",
+          "line": 1
+        },
+        {
+          "name": "measurePerformance",
+          "line": 1
+        },
+        {
+          "name": "createWorker",
+          "line": 1
+        },
+        {
+          "name": "getMemoryUsage",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "ObjectPool",
+          "line": 1
+        },
+        {
+          "name": "FPSMonitor",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/utils/accessibility.js",
+      "name": "accessibility.js",
+      "path": "src/utils/accessibility.js",
+      "district_id": "district_50",
+      "position": {
+        "x": 139.61645591430587,
+        "y": 0.0,
+        "z": 104.83590081396378
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 12.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 171,
+        "complexity": 16,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4305
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "announceToScreenReader",
+          "line": 1
+        },
+        {
+          "name": "createAnnouncer",
+          "line": 1
+        },
+        {
+          "name": "createFocusTrap",
+          "line": 1
+        },
+        {
+          "name": "prefersReducedMotion",
+          "line": 1
+        },
+        {
+          "name": "getAnimationDuration",
+          "line": 1
+        },
+        {
+          "name": "generateA11yId",
+          "line": 1
+        },
+        {
+          "name": "getContrastRatio",
+          "line": 1
+        },
+        {
+          "name": "meetsContrastAA",
+          "line": 1
+        },
+        {
+          "name": "handleListNavigation",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/utils/MockOpsData.js",
+      "name": "MockOpsData.js",
+      "path": "src/utils/MockOpsData.js",
+      "district_id": "district_51",
+      "position": {
+        "x": -174.47290393595983,
+        "y": 0.0,
+        "z": 35.11567150875547
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 31,
+        "complexity": 2,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1005
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/utils/__tests__/colorUtils.test.js",
+      "name": "colorUtils.test.js",
+      "path": "src/utils/__tests__/colorUtils.test.js",
+      "district_id": "district_52",
+      "position": {
+        "x": 124.18592178079085,
+        "y": 0.0,
+        "z": -134.5626571683811
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 16.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 146,
+        "complexity": 20,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 5276
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/hooks/useSmoothScroll.js",
+      "name": "useSmoothScroll.js",
+      "path": "src/hooks/useSmoothScroll.js",
+      "district_id": "district_53",
+      "position": {
+        "x": 11.225382367362393,
+        "y": 0.0,
+        "z": 181.39679081210193
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.800000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 89,
+        "complexity": 6,
+        "churn": 1,
+        "age_days": 36,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2024
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "useSmoothScroll",
+          "line": 1
+        },
+        {
+          "name": "raf",
+          "line": 1
+        },
+        {
+          "name": "scrollToElement",
+          "line": 1
+        },
+        {
+          "name": "animate",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/hooks/useIntersectionObserver.js",
+      "name": "useIntersectionObserver.js",
+      "path": "src/hooks/useIntersectionObserver.js",
+      "district_id": "district_54",
+      "position": {
+        "x": -138.72630997588848,
+        "y": 0.0,
+        "z": -117.80191471575918
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 40,
+        "complexity": 2,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 872
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "useIntersectionObserver",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/hooks/useVirtualList.js",
+      "name": "useVirtualList.js",
+      "path": "src/hooks/useVirtualList.js",
+      "district_id": "district_55",
+      "position": {
+        "x": 184.91886259820225,
+        "y": 0.0,
+        "z": 16.14762237242152
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 58,
+        "complexity": 2,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1504
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "useVirtualList",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/hooks/useDebounce.js",
+      "name": "useDebounce.js",
+      "path": "src/hooks/useDebounce.js",
+      "district_id": "district_56",
+      "position": {
+        "x": -136.87102884274609,
+        "y": 0.0,
+        "z": 126.64629657153955
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 25,
+        "complexity": 1,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 444
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "useDebounce",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/hooks/useVSCodeSync.js",
+      "name": "useVSCodeSync.js",
+      "path": "src/hooks/useVSCodeSync.js",
+      "district_id": "district_57",
+      "position": {
+        "x": 8.818899603160837,
+        "y": 0.0,
+        "z": -189.73689312345766
+      },
+      "dimensions": {
+        "width": 2.28,
+        "height": 25.0,
+        "depth": 2.28
+      },
+      "metrics": {
+        "loc": 228,
+        "complexity": 32,
+        "churn": 2,
+        "age_days": 32,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7531
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "useVSCodeSync",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/hooks/useSound.js",
+      "name": "useSound.js",
+      "path": "src/hooks/useSound.js",
+      "district_id": "district_58",
+      "position": {
+        "x": 104.14448680347132,
+        "y": 0.0,
+        "z": 162.62542497600438
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 83,
+        "complexity": 4,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2574
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/hooks/useCameraAnimation.js",
+      "name": "useCameraAnimation.js",
+      "path": "src/hooks/useCameraAnimation.js",
+      "district_id": "district_59",
+      "position": {
+        "x": -186.77085844044439,
+        "y": 0.0,
+        "z": -57.687628067110786
+      },
+      "dimensions": {
+        "width": 2.23,
+        "height": 8.8,
+        "depth": 2.23
+      },
+      "metrics": {
+        "loc": 223,
+        "complexity": 11,
+        "churn": 1,
+        "age_days": 36,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 5075
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "useCameraAnimation",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "transitions",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.049315068493150684,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/CameraController.jsx",
+      "name": "CameraController.jsx",
+      "path": "src/widgets/city-viewport/ui/CameraController.jsx",
+      "district_id": "district_0",
+      "position": {
+        "x": 1.7334441839559054,
+        "y": 0.0,
+        "z": -0.7165173764790681
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 17.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 149,
+        "complexity": 22,
+        "churn": 3,
+        "age_days": 31,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 5500
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "CameraController",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.04246575342465753,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/PostProcessing.jsx",
+      "name": "PostProcessing.jsx",
+      "path": "src/widgets/city-viewport/ui/PostProcessing.jsx",
+      "district_id": "district_60",
+      "position": {
+        "x": 161.0425842913929,
+        "y": 0.0,
+        "z": -106.60768414926945
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 33,
+        "complexity": 5,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 819
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "PostProcessing",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/CityErrorBoundary.jsx",
+      "name": "CityErrorBoundary.jsx",
+      "path": "src/widgets/city-viewport/ui/CityErrorBoundary.jsx",
+      "district_id": "district_61",
+      "position": {
+        "x": -77.0010174499964,
+        "y": 0.0,
+        "z": 181.84524471728577
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 50,
+        "complexity": 3,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1903
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [
+        {
+          "name": "CityErrorBoundary",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/DollhouseView.jsx",
+      "name": "DollhouseView.jsx",
+      "path": "src/widgets/city-viewport/ui/DollhouseView.jsx",
+      "district_id": "district_62",
+      "position": {
+        "x": -81.9511434595025,
+        "y": 0.0,
+        "z": -177.72160758227648
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 10.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 99,
+        "complexity": 13,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4014
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "DollhouseView",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/BlastRadius.jsx",
+      "name": "BlastRadius.jsx",
+      "path": "src/widgets/city-viewport/ui/BlastRadius.jsx",
+      "district_id": "district_0",
+      "position": {
+        "x": 0.12544108136532084,
+        "y": 0.0,
+        "z": 2.6204866241198
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 12.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 108,
+        "complexity": 16,
+        "churn": 0,
+        "age_days": 3,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 3891
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "BlastRadius",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.00410958904109589,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/CityScene.jsx",
+      "name": "CityScene.jsx",
+      "path": "src/widgets/city-viewport/ui/CityScene.jsx",
+      "district_id": "district_0",
+      "position": {
+        "x": 1.7007126480361454,
+        "y": 0.0,
+        "z": -6.11277925950167
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 120,
+        "complexity": 3,
+        "churn": 3,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 8,
+        "size_bytes": 5074
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "CityScene",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/BuildingXRay.jsx",
+      "name": "BuildingXRay.jsx",
+      "path": "src/widgets/city-viewport/ui/BuildingXRay.jsx",
+      "district_id": "district_0",
+      "position": {
+        "x": 5.021608940629727,
+        "y": 0.0,
+        "z": 3.6941316859603903
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 9.600000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 144,
+        "complexity": 12,
+        "churn": 0,
+        "age_days": 0,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 5245
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "BuildingXRay",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.0,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/InstancedTrace.jsx",
+      "name": "InstancedTrace.jsx",
+      "path": "src/widgets/city-viewport/ui/InstancedTrace.jsx",
+      "district_id": "district_0",
+      "position": {
+        "x": -4.320701081923877,
+        "y": 0.0,
+        "z": -1.0969418978060306
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 71,
+        "complexity": 11,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 2609
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "InstancedTrace",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/Ground.jsx",
+      "name": "Ground.jsx",
+      "path": "src/widgets/city-viewport/ui/Ground.jsx",
+      "district_id": "district_0",
+      "position": {
+        "x": 8.58563666139067,
+        "y": 0.0,
+        "z": -4.668316022422339
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 117,
+        "complexity": 4,
+        "churn": 3,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 3714
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "Ground",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/HolographicXRay.jsx",
+      "name": "HolographicXRay.jsx",
+      "path": "src/widgets/city-viewport/ui/HolographicXRay.jsx",
+      "district_id": "district_0",
+      "position": {
+        "x": -0.7049195513127349,
+        "y": 0.0,
+        "z": 7.350044267358207
+      },
+      "dimensions": {
+        "width": 2.15,
+        "height": 12.8,
+        "depth": 2.15
+      },
+      "metrics": {
+        "loc": 215,
+        "complexity": 16,
+        "churn": 4,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 11158
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "stringToColor",
+          "line": 1
+        },
+        {
+          "name": "HolographicXRay",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/Lighting.jsx",
+      "name": "Lighting.jsx",
+      "path": "src/widgets/city-viewport/ui/Lighting.jsx",
+      "district_id": "district_63",
+      "position": {
+        "x": 182.75425335718722,
+        "y": 0.0,
+        "z": 72.57250221851594
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 58,
+        "complexity": 3,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1652
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "Lighting",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/InstancedCity.jsx",
+      "name": "InstancedCity.jsx",
+      "path": "src/widgets/city-viewport/ui/InstancedCity.jsx",
+      "district_id": "district_0",
+      "position": {
+        "x": -2.991991796121539,
+        "y": 0.0,
+        "z": -9.391782037478999
+      },
+      "dimensions": {
+        "width": 2.66,
+        "height": 25.0,
+        "depth": 2.66
+      },
+      "metrics": {
+        "loc": 266,
+        "complexity": 62,
+        "churn": 4,
+        "age_days": 28,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 11229
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "InstancedCity",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/Roads.jsx",
+      "name": "Roads.jsx",
+      "path": "src/widgets/city-viewport/ui/Roads.jsx",
+      "district_id": "district_0",
+      "position": {
+        "x": 12.266028655144291,
+        "y": 0.0,
+        "z": 3.913169867297575
+      },
+      "dimensions": {
+        "width": 2.45,
+        "height": 22.400000000000002,
+        "depth": 2.45
+      },
+      "metrics": {
+        "loc": 245,
+        "complexity": 28,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 8714
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "Roads",
+          "line": 1
+        },
+        {
+          "name": "FlowConnection",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/CityLegend.jsx",
+      "name": "CityLegend.jsx",
+      "path": "src/widgets/city-viewport/ui/CityLegend.jsx",
+      "district_id": "district_64",
+      "position": {
+        "x": -190.67854591804578,
+        "y": 0.0,
+        "z": 67.10144854276592
+      },
+      "dimensions": {
+        "width": 2.35,
+        "height": 5.6000000000000005,
+        "depth": 2.35
+      },
+      "metrics": {
+        "loc": 235,
+        "complexity": 7,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 9601
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "CityLegend",
+          "line": 1
+        },
+        {
+          "name": "LegendTab",
+          "line": 1
+        },
+        {
+          "name": "ShapesContent",
+          "line": 1
+        },
+        {
+          "name": "ColorsContent",
+          "line": 1
+        },
+        {
+          "name": "MetricsContent",
+          "line": 1
+        },
+        {
+          "name": "LegendItem",
+          "line": 1
+        },
+        {
+          "name": "ColorRow",
+          "line": 1
+        },
+        {
+          "name": "ArrowUp",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/layers/ConfigNodesLayer.jsx",
+      "name": "ConfigNodesLayer.jsx",
+      "path": "src/widgets/city-viewport/ui/layers/ConfigNodesLayer.jsx",
+      "district_id": "district_65",
+      "position": {
+        "x": 84.81531017143304,
+        "y": 0.0,
+        "z": -185.45343667629072
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 9.600000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 90,
+        "complexity": 12,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3202
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "ConfigNodesLayer",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/layers/RefactoringLayer.jsx",
+      "name": "RefactoringLayer.jsx",
+      "path": "src/widgets/city-viewport/ui/layers/RefactoringLayer.jsx",
+      "district_id": "district_66",
+      "position": {
+        "x": 37.30541051177494,
+        "y": 0.0,
+        "z": 202.60477800804517
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 54,
+        "complexity": 11,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1891
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "RefactoringLayer",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/layers/TrafficLayer.jsx",
+      "name": "TrafficLayer.jsx",
+      "path": "src/widgets/city-viewport/ui/layers/TrafficLayer.jsx",
+      "district_id": "district_67",
+      "position": {
+        "x": -175.2110923010921,
+        "y": 0.0,
+        "z": -107.61447990498338
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 12.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 121,
+        "complexity": 15,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4404
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "TrafficLayer",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/layers/DigitalRain.jsx",
+      "name": "DigitalRain.jsx",
+      "path": "src/widgets/city-viewport/ui/layers/DigitalRain.jsx",
+      "district_id": "district_68",
+      "position": {
+        "x": 201.25220464625514,
+        "y": 0.0,
+        "z": -32.17126735355955
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 60,
+        "complexity": 3,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1836
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "DigitalRain",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/layers/HolographicLabelsLayer.jsx",
+      "name": "HolographicLabelsLayer.jsx",
+      "path": "src/widgets/city-viewport/ui/layers/HolographicLabelsLayer.jsx",
+      "district_id": "district_69",
+      "position": {
+        "x": -129.61110882915634,
+        "y": 0.0,
+        "z": 165.41360675865846
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 12.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 151,
+        "complexity": 15,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 5816
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "HolographicLabelsLayer",
+          "line": 1
+        },
+        {
+          "name": "LabelItem",
+          "line": 1
+        },
+        {
+          "name": "Line",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/layers/DataSilosLayer.jsx",
+      "name": "DataSilosLayer.jsx",
+      "path": "src/widgets/city-viewport/ui/layers/DataSilosLayer.jsx",
+      "district_id": "district_70",
+      "position": {
+        "x": -19.070204913979648,
+        "y": 0.0,
+        "z": -211.11978104760266
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 14.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 104,
+        "complexity": 18,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3801
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "DataSilosLayer",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/layers/InterfacePanelsLayer.jsx",
+      "name": "InterfacePanelsLayer.jsx",
+      "path": "src/widgets/city-viewport/ui/layers/InterfacePanelsLayer.jsx",
+      "district_id": "district_71",
+      "position": {
+        "x": 167.01803221548013,
+        "y": 0.0,
+        "z": 133.62634334124792
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 79,
+        "complexity": 11,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2793
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "InterfacePanelsLayer",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/layers/WeatherLayer.jsx",
+      "name": "WeatherLayer.jsx",
+      "path": "src/widgets/city-viewport/ui/layers/WeatherLayer.jsx",
+      "district_id": "district_72",
+      "position": {
+        "x": -209.6356704233301,
+        "y": 0.0,
+        "z": -20.09292561936144
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 16.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 147,
+        "complexity": 20,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 5146
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "WeatherLayer",
+          "line": 1
+        },
+        {
+          "name": "LightningFlash",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/layers/DependencyArcsLayer.jsx",
+      "name": "DependencyArcsLayer.jsx",
+      "path": "src/widgets/city-viewport/ui/layers/DependencyArcsLayer.jsx",
+      "district_id": "district_73",
+      "position": {
+        "x": 148.70837426578672,
+        "y": 0.0,
+        "z": -155.18663970835757
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 6.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 78,
+        "complexity": 8,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2819
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "DependencyArcsLayer",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/ui/layers/LogicTowersLayer.jsx",
+      "name": "LogicTowersLayer.jsx",
+      "path": "src/widgets/city-viewport/ui/layers/LogicTowersLayer.jsx",
+      "district_id": "district_74",
+      "position": {
+        "x": -2.1459106228811056,
+        "y": 0.0,
+        "z": 214.09823758090502
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 21.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 118,
+        "complexity": 27,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4501
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "LogicTowersLayer",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/shaders/HoloArchitectMaterial.js",
+      "name": "HoloArchitectMaterial.js",
+      "path": "src/widgets/city-viewport/shaders/HoloArchitectMaterial.js",
+      "district_id": "district_75",
+      "position": {
+        "x": -126.22307227693291,
+        "y": 0.0,
+        "z": -179.10088731777222
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 91,
+        "complexity": 2,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2588
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/city-viewport/shaders/PulseMaterial.js",
+      "name": "PulseMaterial.js",
+      "path": "src/widgets/city-viewport/shaders/PulseMaterial.js",
+      "district_id": "district_76",
+      "position": {
+        "x": 210.31921798683172,
+        "y": 0.0,
+        "z": 59.80955923454058
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 187,
+        "complexity": 11,
+        "churn": 2,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7050
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/code-inspector/ui/CodeInspector.jsx",
+      "name": "CodeInspector.jsx",
+      "path": "src/widgets/code-inspector/ui/CodeInspector.jsx",
+      "district_id": "district_77",
+      "position": {
+        "x": -183.2583583498862,
+        "y": 0.0,
+        "z": 121.60726908696563
+      },
+      "dimensions": {
+        "width": 2.81,
+        "height": 8.0,
+        "depth": 2.81
+      },
+      "metrics": {
+        "loc": 281,
+        "complexity": 10,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 14420
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "CodeInspector",
+          "line": 1
+        },
+        {
+          "name": "MetricCard",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/layout/ui/CanvasErrorBoundary.jsx",
+      "name": "CanvasErrorBoundary.jsx",
+      "path": "src/widgets/layout/ui/CanvasErrorBoundary.jsx",
+      "district_id": "district_78",
+      "position": {
+        "x": 64.0658893984465,
+        "y": 0.0,
+        "z": -209.22531818254743
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.800000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 89,
+        "complexity": 6,
+        "churn": 1,
+        "age_days": 32,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3230
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [
+        {
+          "name": "CanvasErrorBoundary",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/layout/ui/ViewControl.jsx",
+      "name": "ViewControl.jsx",
+      "path": "src/widgets/layout/ui/ViewControl.jsx",
+      "district_id": "district_79",
+      "position": {
+        "x": 94.29729278908898,
+        "y": 0.0,
+        "z": 201.83634555094238
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 5.6000000000000005,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 163,
+        "complexity": 7,
+        "churn": 5,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 6267
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "ViewControl",
+          "line": 1
+        },
+        {
+          "name": "ViewOption",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/layout/ui/WelcomeOverlay.jsx",
+      "name": "WelcomeOverlay.jsx",
+      "path": "src/widgets/layout/ui/WelcomeOverlay.jsx",
+      "district_id": "district_80",
+      "position": {
+        "x": -204.12436356295268,
+        "y": 0.0,
+        "z": -90.07924873686596
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 109,
+        "complexity": 4,
+        "churn": 2,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3800
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "WelcomeOverlay",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/layout/ui/Sidebar.jsx",
+      "name": "Sidebar.jsx",
+      "path": "src/widgets/layout/ui/Sidebar.jsx",
+      "district_id": "district_81",
+      "position": {
+        "x": 209.77566742735644,
+        "y": 0.0,
+        "z": -72.40110850393975
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 9.600000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 197,
+        "complexity": 12,
+        "churn": 9,
+        "age_days": 32,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 8336
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "Sidebar",
+          "line": 1
+        },
+        {
+          "name": "FileTree",
+          "line": 1
+        },
+        {
+          "name": "CollapsibleFolder",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/layout/ui/FloatingDock.jsx",
+      "name": "FloatingDock.jsx",
+      "path": "src/widgets/layout/ui/FloatingDock.jsx",
+      "district_id": "district_82",
+      "position": {
+        "x": -85.89567576004494,
+        "y": 0.0,
+        "z": 212.44069469826985
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 12.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 194,
+        "complexity": 16,
+        "churn": 5,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7043
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "FloatingDock",
+          "line": 1
+        },
+        {
+          "name": "DeckItem",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/layout/ui/CanvasUI.jsx",
+      "name": "CanvasUI.jsx",
+      "path": "src/widgets/layout/ui/CanvasUI.jsx",
+      "district_id": "district_83",
+      "position": {
+        "x": -55.48547655222777,
+        "y": 0.0,
+        "z": -218.80331328788236
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 41,
+        "complexity": 2,
+        "churn": 2,
+        "age_days": 32,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1392
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "CanvasUI",
+          "line": 1
+        },
+        {
+          "name": "ControlButton",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.043835616438356165,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/layout/ui/NeuralHUD.jsx",
+      "name": "NeuralHUD.jsx",
+      "path": "src/widgets/layout/ui/NeuralHUD.jsx",
+      "district_id": "district_84",
+      "position": {
+        "x": 200.55421155454687,
+        "y": 0.0,
+        "z": 115.82768412031857
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 15.200000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 182,
+        "complexity": 19,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 6570
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "NeuralHUD",
+          "line": 1
+        },
+        {
+          "name": "FileMatrix",
+          "line": 1
+        },
+        {
+          "name": "FolderGroup",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/widgets/debug/ui/DiagnosticsHUD.jsx",
+      "name": "DiagnosticsHUD.jsx",
+      "path": "src/widgets/debug/ui/DiagnosticsHUD.jsx",
+      "district_id": "district_85",
+      "position": {
+        "x": -224.5742244204198,
+        "y": 0.0,
+        "z": 60.27585224729741
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 16.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 195,
+        "complexity": 21,
+        "churn": 1,
+        "age_days": 33,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7793
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "useFps",
+          "line": 1
+        },
+        {
+          "name": "DiagnosticsHUD",
+          "line": 1
+        },
+        {
+          "name": "DiagnosticRow",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.045205479452054796,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/components/IntelligenceDashboard.jsx",
+      "name": "IntelligenceDashboard.jsx",
+      "path": "src/components/IntelligenceDashboard.jsx",
+      "district_id": "district_86",
+      "position": {
+        "x": 123.56121696578543,
+        "y": 0.0,
+        "z": -193.01070296519626
+      },
+      "dimensions": {
+        "width": 8.3,
+        "height": 25.0,
+        "depth": 8.3
+      },
+      "metrics": {
+        "loc": 830,
+        "complexity": 71,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 36192
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "IntelligenceDashboard",
+          "line": 1
+        },
+        {
+          "name": "HealthPanel",
+          "line": 1
+        },
+        {
+          "name": "QualityPanel",
+          "line": 1
+        },
+        {
+          "name": "DeadCodePanel",
+          "line": 1
+        },
+        {
+          "name": "CriticalPathsPanel",
+          "line": 1
+        },
+        {
+          "name": "SearchPanel",
+          "line": 1
+        },
+        {
+          "name": "LoadingState",
+          "line": 1
+        },
+        {
+          "name": "EmptyState",
+          "line": 1
+        },
+        {
+          "name": "RefactoringPanel",
+          "line": 1
+        },
+        {
+          "name": "ArchitecturePanel",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": true,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/components/ImpactVisualization.jsx",
+      "name": "ImpactVisualization.jsx",
+      "path": "src/components/ImpactVisualization.jsx",
+      "district_id": "district_87",
+      "position": {
+        "x": 37.44422065641126,
+        "y": 0.0,
+        "z": 231.00071390499562
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 8.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 194,
+        "complexity": 10,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 9496
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "ImpactVisualization",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/test/test-utils.jsx",
+      "name": "test-utils.jsx",
+      "path": "src/test/test-utils.jsx",
+      "district_id": "district_88",
+      "position": {
+        "x": -177.20528503512156,
+        "y": 0.0,
+        "z": -149.67873353113072
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 103,
+        "complexity": 4,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2219
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    },
+    {
+      "id": "src/test/setup.js",
+      "name": "setup.js",
+      "path": "src/test/setup.js",
+      "district_id": "district_89",
+      "position": {
+        "x": 236.54073834505556,
+        "y": 0.0,
+        "z": -18.908100425261235
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 5.6000000000000005,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 122,
+        "complexity": 7,
+        "churn": 1,
+        "age_days": 28,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3171
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.038356164383561646,
+      "is_hotspot": false,
+      "author": "Unknown",
+      "email": "",
+      "email_hash": null,
+      "last_modified": 0
+    }
+  ],
+  "districts": [
+    {
+      "id": "district_5",
+      "name": "Configuration",
+      "color": "#DDA0DD",
+      "center": {
+        "x": 47.499877062993946,
+        "y": -34.197100709666984
+      },
+      "boundary": [
+        {
+          "x": 40.382526001725296,
+          "y": 2.2956597900454128
+        },
+        {
+          "x": 55.21530855496514,
+          "y": -1.8083597099186122
+        },
+        {
+          "x": 79.94856489658355,
+          "y": -49.00681358712632
+        },
+        {
+          "x": 52.9056754261118,
+          "y": -61.16142580817151
+        },
+        {
+          "x": 25.606195941277473,
+          "y": -46.758234055098946
+        },
+        {
+          "x": 23.251667895909094,
+          "y": -19.359509206025162
+        },
+        {
+          "x": 39.233151156844755,
+          "y": 1.9031712270259504
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_6",
+      "name": "Configuration",
+      "color": "#98D8C8",
+      "center": {
+        "x": -12.415975360789751,
+        "y": 62.112448019379045
+      },
+      "boundary": [
+        {
+          "x": -3.3873704276550463,
+          "y": 36.56029629767245
+        },
+        {
+          "x": -39.43177703508813,
+          "y": 40.55642583233458
+        },
+        {
+          "x": -40.130366190392834,
+          "y": 41.60344179826615
+        },
+        {
+          "x": -27.80019642114531,
+          "y": 91.95871026537165
+        },
+        {
+          "x": 5.008807333667445,
+          "y": 81.72124754393352
+        },
+        {
+          "x": 13.28378681894261,
+          "y": 59.19722753982835
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_4",
+      "name": "AI Features",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -46.52733358541161,
+        "y": -9.667719742916722
+      },
+      "boundary": [
+        {
+          "x": -76.92944495255051,
+          "y": -17.306859470268584
+        },
+        {
+          "x": -44.719147380878944,
+          "y": -37.163880269334534
+        },
+        {
+          "x": -26.497502330950027,
+          "y": -31.004579664906323
+        },
+        {
+          "x": -19.412386183495368,
+          "y": -18.946256338261946
+        },
+        {
+          "x": -20.735081304507307,
+          "y": -12.136319263739404
+        },
+        {
+          "x": -44.1433745688218,
+          "y": 16.76308507080413
+        },
+        {
+          "x": -75.34761426197153,
+          "y": -4.793817632005529
+        }
+      ],
+      "building_count": 2,
+      "description": null
+    },
+    {
+      "id": "district_7",
+      "name": "Shared",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -29.47404696897296,
+        "y": -60.11808020040822
+      },
+      "boundary": [
+        {
+          "x": -26.497502330950027,
+          "y": -31.004579664906323
+        },
+        {
+          "x": -1.1655326489268063,
+          "y": -67.11685160063519
+        },
+        {
+          "x": -1.3657528800863652,
+          "y": -68.08500141601175
+        },
+        {
+          "x": -36.6085581208137,
+          "y": -87.51122882337104
+        },
+        {
+          "x": -53.6317906652783,
+          "y": -66.7977444667487
+        },
+        {
+          "x": -44.719147380878944,
+          "y": -37.163880269334534
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_8",
+      "name": "Shared",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 65.24566396307067,
+        "y": 29.939874840102778
+      },
+      "boundary": [
+        {
+          "x": 40.382526001725296,
+          "y": 2.2956597900454128
+        },
+        {
+          "x": 55.21530855496514,
+          "y": -1.8083597099186122
+        },
+        {
+          "x": 87.02665364419764,
+          "y": 13.425329020341202
+        },
+        {
+          "x": 97.64602296456528,
+          "y": 37.84604346802475
+        },
+        {
+          "x": 92.1660343194365,
+          "y": 48.27972721535504
+        },
+        {
+          "x": 48.52501885695277,
+          "y": 54.290513181734184
+        },
+        {
+          "x": 47.241876545142375,
+          "y": 53.37684736511814
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_9",
+      "name": "Shared",
+      "color": "#85C1E9",
+      "center": {
+        "x": -69.70759537197226,
+        "y": 23.88637914177705
+      },
+      "boundary": [
+        {
+          "x": -75.34761426197153,
+          "y": -4.793817632005529
+        },
+        {
+          "x": -101.73647689402843,
+          "y": 30.184910936472743
+        },
+        {
+          "x": -101.871511153872,
+          "y": 40.045352871806585
+        },
+        {
+          "x": -72.85405644432443,
+          "y": 51.32700499693132
+        },
+        {
+          "x": -40.130366190392834,
+          "y": 41.60344179826615
+        },
+        {
+          "x": -39.43177703508813,
+          "y": 40.55642583233458
+        },
+        {
+          "x": -44.1433745688218,
+          "y": 16.76308507080413
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_10",
+      "name": "Shared",
+      "color": "#F8B500",
+      "center": {
+        "x": 27.596895912749442,
+        "y": -71.92075494639099
+      },
+      "boundary": [
+        {
+          "x": -1.1655326489268063,
+          "y": -67.11685160063519
+        },
+        {
+          "x": 25.606195941277473,
+          "y": -46.758234055098946
+        },
+        {
+          "x": 52.9056754261118,
+          "y": -61.16142580817151
+        },
+        {
+          "x": 42.590086296257795,
+          "y": -99.79292788736
+        },
+        {
+          "x": 14.224895421008197,
+          "y": -92.08858190342335
+        },
+        {
+          "x": -1.3657528800863652,
+          "y": -68.08500141601175
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_11",
+      "name": "Shared",
+      "color": "#00CED1",
+      "center": {
+        "x": 30.983801816458755,
+        "y": 78.05686050621709
+      },
+      "boundary": [
+        {
+          "x": 47.241876545142375,
+          "y": 53.37684736511814
+        },
+        {
+          "x": 48.52501885695277,
+          "y": 54.290513181734184
+        },
+        {
+          "x": 52.07856572349381,
+          "y": 83.80599811952452
+        },
+        {
+          "x": 35.2298280639396,
+          "y": 107.2037520492647
+        },
+        {
+          "x": 31.089264543844564,
+          "y": 107.32174405590538
+        },
+        {
+          "x": 5.008807333667445,
+          "y": 81.72124754393352
+        },
+        {
+          "x": 13.28378681894261,
+          "y": 59.19722753982835
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_12",
+      "name": "Shared",
+      "color": "#FF7F50",
+      "center": {
+        "x": -70.09701605383445,
+        "y": -47.90036771463167
+      },
+      "boundary": [
+        {
+          "x": -76.92944495255051,
+          "y": -17.306859470268584
+        },
+        {
+          "x": -91.57695919562103,
+          "y": -28.35957609429641
+        },
+        {
+          "x": -100.82233830511593,
+          "y": -58.37201738333721
+        },
+        {
+          "x": -86.85243836275168,
+          "y": -71.00596994644403
+        },
+        {
+          "x": -53.6317906652783,
+          "y": -66.7977444667487
+        },
+        {
+          "x": -44.719147380878944,
+          "y": -37.163880269334534
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_13",
+      "name": "Shared",
+      "color": "#9ACD32",
+      "center": {
+        "x": 86.23818090370482,
+        "y": -13.8971900044461
+      },
+      "boundary": [
+        {
+          "x": 55.21530855496514,
+          "y": -1.8083597099186122
+        },
+        {
+          "x": 87.02665364419764,
+          "y": 13.425329020341202
+        },
+        {
+          "x": 112.31651018787424,
+          "y": -17.520719006452584
+        },
+        {
+          "x": 81.68152063296915,
+          "y": -49.42638774267216
+        },
+        {
+          "x": 79.94856489658355,
+          "y": -49.00681358712632
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_14",
+      "name": "Shared",
+      "color": "#DA70D6",
+      "center": {
+        "x": -55.23367076367417,
+        "y": 72.59694089404967
+      },
+      "boundary": [
+        {
+          "x": -27.953558690658355,
+          "y": 92.20758142453936
+        },
+        {
+          "x": -27.80019642114531,
+          "y": 91.95871026537165
+        },
+        {
+          "x": -40.130366190392834,
+          "y": 41.60344179826615
+        },
+        {
+          "x": -72.85405644432443,
+          "y": 51.32700499693132
+        },
+        {
+          "x": -71.38913919344787,
+          "y": 96.81432786536578
+        },
+        {
+          "x": -66.29196665402249,
+          "y": 101.44088723274737
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_15",
+      "name": "Shared",
+      "color": "#FF6B6B",
+      "center": {
+        "x": -9.637616082084007,
+        "y": -96.10507117699571
+      },
+      "boundary": [
+        {
+          "x": -1.3657528800863652,
+          "y": -68.08500141601175
+        },
+        {
+          "x": 14.224895421008197,
+          "y": -92.08858190342335
+        },
+        {
+          "x": -13.378368330236906,
+          "y": -126.61023765002143
+        },
+        {
+          "x": -21.740432234413817,
+          "y": -128.41938447457443
+        },
+        {
+          "x": -37.656139407110395,
+          "y": -95.89448725194552
+        },
+        {
+          "x": -36.6085581208137,
+          "y": -87.51122882337104
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_16",
+      "name": "Shared",
+      "color": "#4ECDC4",
+      "center": {
+        "x": 71.20595487245947,
+        "y": 73.21427342831744
+      },
+      "boundary": [
+        {
+          "x": 48.52501885695277,
+          "y": 54.290513181734184
+        },
+        {
+          "x": 92.1660343194365,
+          "y": 48.27972721535504
+        },
+        {
+          "x": 100.48063156598863,
+          "y": 80.66784234769715
+        },
+        {
+          "x": 85.93154486943476,
+          "y": 92.0256015616443
+        },
+        {
+          "x": 52.07856572349381,
+          "y": 83.80599811952452
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_2",
+      "name": "Shared",
+      "color": "#45B7D1",
+      "center": {
+        "x": 1.8904387672012586,
+        "y": -38.11657879459592
+      },
+      "boundary": [
+        {
+          "x": -19.412386183495368,
+          "y": -18.946256338261946
+        },
+        {
+          "x": 23.251667895909094,
+          "y": -19.359509206025162
+        },
+        {
+          "x": 25.606195941277473,
+          "y": -46.758234055098946
+        },
+        {
+          "x": -1.1655326489268063,
+          "y": -67.11685160063519
+        },
+        {
+          "x": -26.497502330950027,
+          "y": -31.004579664906323
+        }
+      ],
+      "building_count": 3,
+      "description": null
+    },
+    {
+      "id": "district_17",
+      "name": "Shared",
+      "color": "#45B7D1",
+      "center": {
+        "x": -104.47413232871023,
+        "y": -2.3424006192593185
+      },
+      "boundary": [
+        {
+          "x": -76.92944495255051,
+          "y": -17.306859470268584
+        },
+        {
+          "x": -91.57695919562103,
+          "y": -28.35957609429641
+        },
+        {
+          "x": -127.25984363145558,
+          "y": -9.553633445940385
+        },
+        {
+          "x": -128.9697237781533,
+          "y": -1.0791468174917878
+        },
+        {
+          "x": -101.73647689402843,
+          "y": 30.184910936472743
+        },
+        {
+          "x": -75.34761426197153,
+          "y": -4.793817632005529
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_18",
+      "name": "Shared",
+      "color": "#96CEB4",
+      "center": {
+        "x": 69.48192054229271,
+        "y": -83.1051169700708
+      },
+      "boundary": [
+        {
+          "x": 79.94856489658355,
+          "y": -49.00681358712632
+        },
+        {
+          "x": 81.68152063296915,
+          "y": -49.42638774267216
+        },
+        {
+          "x": 99.44644227225378,
+          "y": -70.7016058334447
+        },
+        {
+          "x": 99.57893965190189,
+          "y": -95.55031974085821
+        },
+        {
+          "x": 44.81136091176616,
+          "y": -103.40684536609581
+        },
+        {
+          "x": 42.590086296257795,
+          "y": -99.79292788736
+        },
+        {
+          "x": 52.9056754261118,
+          "y": -61.16142580817151
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_19",
+      "name": "Shared",
+      "color": "#FFEAA7",
+      "center": {
+        "x": 1.8274699545820632,
+        "y": 107.75981822712689
+      },
+      "boundary": [
+        {
+          "x": 31.089264543844564,
+          "y": 107.32174405590538
+        },
+        {
+          "x": -2.9956669095230524,
+          "y": 143.81956205273826
+        },
+        {
+          "x": -14.630691736006451,
+          "y": 134.1829160829902
+        },
+        {
+          "x": -27.953558690658355,
+          "y": 92.20758142453936
+        },
+        {
+          "x": -27.80019642114531,
+          "y": 91.95871026537165
+        },
+        {
+          "x": 5.008807333667445,
+          "y": 81.72124754393352
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_20",
+      "name": "State Management",
+      "color": "#DDA0DD",
+      "center": {
+        "x": -64.86490283030534,
+        "y": -89.20380807228476
+      },
+      "boundary": [
+        {
+          "x": -53.6317906652783,
+          "y": -66.7977444667487
+        },
+        {
+          "x": -36.6085581208137,
+          "y": -87.51122882337104
+        },
+        {
+          "x": -37.656139407110395,
+          "y": -95.89448725194552
+        },
+        {
+          "x": -83.82842869619708,
+          "y": -112.13811700282393
+        },
+        {
+          "x": -86.1146538620913,
+          "y": -111.5444719959593
+        },
+        {
+          "x": -86.85243836275168,
+          "y": -71.00596994644403
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_21",
+      "name": "State Management",
+      "color": "#98D8C8",
+      "center": {
+        "x": 113.95892476014977,
+        "y": 8.75687021049668
+      },
+      "boundary": [
+        {
+          "x": 141.51085450771694,
+          "y": 12.250104540799533
+        },
+        {
+          "x": 119.90776755451297,
+          "y": -17.078894503843316
+        },
+        {
+          "x": 112.31651018787424,
+          "y": -17.520719006452584
+        },
+        {
+          "x": 87.02665364419764,
+          "y": 13.425329020341202
+        },
+        {
+          "x": 97.64602296456528,
+          "y": 37.84604346802475
+        },
+        {
+          "x": 129.74741971819873,
+          "y": 32.470942925920326
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_22",
+      "name": "State Management",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -89.06935441629861,
+        "y": 73.686617611699
+      },
+      "boundary": [
+        {
+          "x": -123.89291543983809,
+          "y": 90.66770153925779
+        },
+        {
+          "x": -71.38913919344787,
+          "y": 96.81432786536578
+        },
+        {
+          "x": -72.85405644432443,
+          "y": 51.32700499693132
+        },
+        {
+          "x": -101.871511153872,
+          "y": 40.045352871806585
+        },
+        {
+          "x": -117.52461285061457,
+          "y": 53.79461566147204
+        },
+        {
+          "x": -124.7461375926301,
+          "y": 89.92177593414672
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_23",
+      "name": "State Management",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 15.556485478326437,
+        "y": -116.25009073956976
+      },
+      "boundary": [
+        {
+          "x": 44.81136091176616,
+          "y": -103.40684536609581
+        },
+        {
+          "x": 42.590086296257795,
+          "y": -99.79292788736
+        },
+        {
+          "x": 14.224895421008197,
+          "y": -92.08858190342335
+        },
+        {
+          "x": -13.378368330236906,
+          "y": -126.61023765002143
+        },
+        {
+          "x": 34.977000083990724,
+          "y": -143.68306296699208
+        },
+        {
+          "x": 44.94124151185365,
+          "y": -129.17135535377255
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_24",
+      "name": "State Management",
+      "color": "#85C1E9",
+      "center": {
+        "x": 64.21919840203991,
+        "y": 101.98969097204801
+      },
+      "boundary": [
+        {
+          "x": 52.07856572349381,
+          "y": 83.80599811952452
+        },
+        {
+          "x": 35.2298280639396,
+          "y": 107.2037520492647
+        },
+        {
+          "x": 60.42002319674216,
+          "y": 130.21665308952012
+        },
+        {
+          "x": 76.39133510231143,
+          "y": 131.08979266898248
+        },
+        {
+          "x": 85.93154486943476,
+          "y": 92.0256015616443
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_25",
+      "name": "State Management",
+      "color": "#F8B500",
+      "center": {
+        "x": -120.32922146386365,
+        "y": -32.42625889259044
+      },
+      "boundary": [
+        {
+          "x": -91.57695919562103,
+          "y": -28.35957609429641
+        },
+        {
+          "x": -127.25984363145558,
+          "y": -9.553633445940385
+        },
+        {
+          "x": -146.52510921734958,
+          "y": -38.174976626858744
+        },
+        {
+          "x": -126.97160454848395,
+          "y": -63.89843511162149
+        },
+        {
+          "x": -100.82233830511593,
+          "y": -58.37201738333721
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_26",
+      "name": "State Management",
+      "color": "#00CED1",
+      "center": {
+        "x": 116.9963122310861,
+        "y": -43.43034411987908
+      },
+      "boundary": [
+        {
+          "x": 81.68152063296915,
+          "y": -49.42638774267216
+        },
+        {
+          "x": 99.44644227225378,
+          "y": -70.7016058334447
+        },
+        {
+          "x": 140.9369252983038,
+          "y": -57.475497721758614
+        },
+        {
+          "x": 142.34007460494655,
+          "y": -40.31656746712423
+        },
+        {
+          "x": 119.90776755451297,
+          "y": -17.078894503843316
+        },
+        {
+          "x": 112.31651018787424,
+          "y": -17.520719006452584
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_1",
+      "name": "Entities",
+      "color": "#4ECDC4",
+      "center": {
+        "x": -17.793698634240034,
+        "y": 13.606301607163978
+      },
+      "boundary": [
+        {
+          "x": -20.735081304507307,
+          "y": -12.136319263739404
+        },
+        {
+          "x": 3.631421128474404,
+          "y": 23.272249782204554
+        },
+        {
+          "x": -3.3873704276550463,
+          "y": 36.56029629767245
+        },
+        {
+          "x": -39.43177703508813,
+          "y": 40.55642583233458
+        },
+        {
+          "x": -44.1433745688218,
+          "y": 16.76308507080413
+        }
+      ],
+      "building_count": 5,
+      "description": null
+    },
+    {
+      "id": "district_27",
+      "name": "Entities",
+      "color": "#FF7F50",
+      "center": {
+        "x": -43.314453860607756,
+        "y": 122.08775271437993
+      },
+      "boundary": [
+        {
+          "x": -55.70072481331019,
+          "y": 141.346198230548
+        },
+        {
+          "x": -14.630691736006451,
+          "y": 134.1829160829902
+        },
+        {
+          "x": -27.953558690658355,
+          "y": 92.20758142453936
+        },
+        {
+          "x": -66.29196665402249,
+          "y": 101.44088723274737
+        },
+        {
+          "x": -69.7524745606199,
+          "y": 126.99482593134044
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_28",
+      "name": "Shaders",
+      "color": "#9ACD32",
+      "center": {
+        "x": -54.68245389993878,
+        "y": -118.14727605910045
+      },
+      "boundary": [
+        {
+          "x": -21.740432234413817,
+          "y": -128.41938447457443
+        },
+        {
+          "x": -37.656139407110395,
+          "y": -95.89448725194552
+        },
+        {
+          "x": -83.82842869619708,
+          "y": -112.13811700282393
+        },
+        {
+          "x": -49.592653791610104,
+          "y": -147.08373034433413
+        },
+        {
+          "x": -28.028339435878166,
+          "y": -138.80802692698634
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_29",
+      "name": "Features",
+      "color": "#DA70D6",
+      "center": {
+        "x": 122.54494506277416,
+        "y": 60.03465415337852
+      },
+      "boundary": [
+        {
+          "x": 129.74741971819873,
+          "y": 32.470942925920326
+        },
+        {
+          "x": 97.64602296456528,
+          "y": 37.84604346802475
+        },
+        {
+          "x": 92.1660343194365,
+          "y": 48.27972721535504
+        },
+        {
+          "x": 100.48063156598863,
+          "y": 80.66784234769715
+        },
+        {
+          "x": 117.83207549702918,
+          "y": 88.1549938701629
+        },
+        {
+          "x": 151.2376244406057,
+          "y": 75.07795499236052
+        },
+        {
+          "x": 153.36226674831784,
+          "y": 65.38080533699778
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_30",
+      "name": "Features",
+      "color": "#FF6B6B",
+      "center": {
+        "x": -133.58086854096769,
+        "y": 23.011663766672427
+      },
+      "boundary": [
+        {
+          "x": -158.54525141331,
+          "y": 13.794981941193566
+        },
+        {
+          "x": -128.9697237781533,
+          "y": -1.0791468174917878
+        },
+        {
+          "x": -101.73647689402843,
+          "y": 30.184910936472743
+        },
+        {
+          "x": -101.871511153872,
+          "y": 40.045352871806585
+        },
+        {
+          "x": -117.52461285061457,
+          "y": 53.79461566147204
+        },
+        {
+          "x": -151.39891372698128,
+          "y": 37.96073330867522
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_31",
+      "name": "Features",
+      "color": "#4ECDC4",
+      "center": {
+        "x": 74.19423352226102,
+        "y": -115.9544939707056
+      },
+      "boundary": [
+        {
+          "x": 44.81136091176616,
+          "y": -103.40684536609581
+        },
+        {
+          "x": 99.57893965190189,
+          "y": -95.55031974085821
+        },
+        {
+          "x": 106.08144173985131,
+          "y": -106.40048535839371
+        },
+        {
+          "x": 94.77563875266958,
+          "y": -138.3623105191116
+        },
+        {
+          "x": 44.94124151185365,
+          "y": -129.17135535377255
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_32",
+      "name": "Features",
+      "color": "#45B7D1",
+      "center": {
+        "x": 32.65051933467309,
+        "y": 136.54514247295808
+      },
+      "boundary": [
+        {
+          "x": 35.2298280639396,
+          "y": 107.2037520492647
+        },
+        {
+          "x": 60.42002319674216,
+          "y": 130.21665308952012
+        },
+        {
+          "x": 33.70414520486851,
+          "y": 164.56269317529458
+        },
+        {
+          "x": -1.9276409556950895,
+          "y": 147.82136368309955
+        },
+        {
+          "x": -2.9956669095230524,
+          "y": 143.81956205273826
+        },
+        {
+          "x": 31.089264543844564,
+          "y": 107.32174405590538
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_33",
+      "name": "Features",
+      "color": "#96CEB4",
+      "center": {
+        "x": -108.16324565292341,
+        "y": -89.99182056963329
+      },
+      "boundary": [
+        {
+          "x": -86.85243836275168,
+          "y": -71.00596994644403
+        },
+        {
+          "x": -86.1146538620913,
+          "y": -111.5444719959593
+        },
+        {
+          "x": -106.10981511379713,
+          "y": -123.11334831091122
+        },
+        {
+          "x": -139.4492523287313,
+          "y": -86.49334419760214
+        },
+        {
+          "x": -126.97160454848395,
+          "y": -63.89843511162149
+        },
+        {
+          "x": -100.82233830511593,
+          "y": -58.37201738333721
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_34",
+      "name": "Features",
+      "color": "#FFEAA7",
+      "center": {
+        "x": 146.3454850288921,
+        "y": -15.098348187371473
+      },
+      "boundary": [
+        {
+          "x": 141.51085450771694,
+          "y": 12.250104540799533
+        },
+        {
+          "x": 119.90776755451297,
+          "y": -17.078894503843316
+        },
+        {
+          "x": 142.34007460494655,
+          "y": -40.31656746712423
+        },
+        {
+          "x": 175.07361751248055,
+          "y": -19.614894903645617
+        },
+        {
+          "x": 176.80859347916444,
+          "y": -13.992417018606682
+        },
+        {
+          "x": 158.99398467847877,
+          "y": 8.081252540441724
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_35",
+      "name": "Features",
+      "color": "#DDA0DD",
+      "center": {
+        "x": -93.93319387726052,
+        "y": 115.23297576137465
+      },
+      "boundary": [
+        {
+          "x": -69.7524745606199,
+          "y": 126.99482593134044
+        },
+        {
+          "x": -105.71006550358976,
+          "y": 144.66377950812807
+        },
+        {
+          "x": -108.91440602979627,
+          "y": 142.33852967988386
+        },
+        {
+          "x": -123.89291543983809,
+          "y": 90.66770153925779
+        },
+        {
+          "x": -71.38913919344787,
+          "y": 96.81432786536578
+        },
+        {
+          "x": -66.29196665402249,
+          "y": 101.44088723274737
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_36",
+      "name": "Features",
+      "color": "#98D8C8",
+      "center": {
+        "x": 2.6373133828728896,
+        "y": -152.84106585260463
+      },
+      "boundary": [
+        {
+          "x": -21.740432234413817,
+          "y": -128.41938447457443
+        },
+        {
+          "x": -13.378368330236906,
+          "y": -126.61023765002143
+        },
+        {
+          "x": 34.977000083990724,
+          "y": -143.68306296699208
+        },
+        {
+          "x": 35.2862150533797,
+          "y": -166.31140228092704
+        },
+        {
+          "x": -9.70255557545968,
+          "y": -173.87561983689545
+        },
+        {
+          "x": -28.028339435878166,
+          "y": -138.80802692698634
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_37",
+      "name": "Features",
+      "color": "#F7DC6F",
+      "center": {
+        "x": 100.6067964783164,
+        "y": 110.87622640844259
+      },
+      "boundary": [
+        {
+          "x": 100.48063156598863,
+          "y": 80.66784234769715
+        },
+        {
+          "x": 117.83207549702918,
+          "y": 88.1549938701629
+        },
+        {
+          "x": 124.06744965329405,
+          "y": 135.1846454881389
+        },
+        {
+          "x": 84.10611900020346,
+          "y": 137.46116031991215
+        },
+        {
+          "x": 76.39133510231143,
+          "y": 131.08979266898248
+        },
+        {
+          "x": 85.93154486943476,
+          "y": 92.0256015616443
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_38",
+      "name": "Features",
+      "color": "#BB8FCE",
+      "center": {
+        "x": -151.05905945903157,
+        "y": -11.741747804267339
+      },
+      "boundary": [
+        {
+          "x": -168.53221476178254,
+          "y": -34.65701232061602
+        },
+        {
+          "x": -146.52510921734958,
+          "y": -38.174976626858744
+        },
+        {
+          "x": -127.25984363145558,
+          "y": -9.553633445940385
+        },
+        {
+          "x": -128.9697237781533,
+          "y": -1.0791468174917878
+        },
+        {
+          "x": -158.54525141331,
+          "y": 13.794981941193566
+        },
+        {
+          "x": -182.83559609821637,
+          "y": 1.6507077021152057
+        },
+        {
+          "x": -178.80272777360926,
+          "y": -26.694229353004836
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_39",
+      "name": "Features",
+      "color": "#85C1E9",
+      "center": {
+        "x": 129.54153146304657,
+        "y": -82.78486936694188
+      },
+      "boundary": [
+        {
+          "x": 99.57893965190189,
+          "y": -95.55031974085821
+        },
+        {
+          "x": 99.44644227225378,
+          "y": -70.7016058334447
+        },
+        {
+          "x": 140.9369252983038,
+          "y": -57.475497721758614
+        },
+        {
+          "x": 159.4679957042915,
+          "y": -77.06827674982651
+        },
+        {
+          "x": 133.6906277597074,
+          "y": -108.92530794535669
+        },
+        {
+          "x": 106.08144173985131,
+          "y": -106.40048535839371
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_40",
+      "name": "Features",
+      "color": "#F8B500",
+      "center": {
+        "x": -37.52617314186229,
+        "y": 155.27433893039893
+      },
+      "boundary": [
+        {
+          "x": -39.3349673299894,
+          "y": 196.31205416151323
+        },
+        {
+          "x": -22.616008681365592,
+          "y": 186.26867691192237
+        },
+        {
+          "x": -1.9276409556950895,
+          "y": 147.82136368309955
+        },
+        {
+          "x": -2.9956669095230524,
+          "y": 143.81956205273826
+        },
+        {
+          "x": -14.630691736006451,
+          "y": 134.1829160829902
+        },
+        {
+          "x": -55.70072481331019,
+          "y": 141.346198230548
+        },
+        {
+          "x": -57.12800838203359,
+          "y": 168.92040605552273
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_3",
+      "name": "Features",
+      "color": "#96CEB4",
+      "center": {
+        "x": 23.692979231101315,
+        "y": 35.51970655755804
+      },
+      "boundary": [
+        {
+          "x": 40.382526001725296,
+          "y": 2.2956597900454128
+        },
+        {
+          "x": 47.241876545142375,
+          "y": 53.37684736511814
+        },
+        {
+          "x": 13.28378681894261,
+          "y": 59.19722753982835
+        },
+        {
+          "x": -3.3873704276550463,
+          "y": 36.56029629767245
+        },
+        {
+          "x": 3.631421128474404,
+          "y": 23.272249782204554
+        },
+        {
+          "x": 39.233151156844755,
+          "y": 1.9031712270259504
+        }
+      ],
+      "building_count": 3,
+      "description": null
+    },
+    {
+      "id": "district_41",
+      "name": "Features",
+      "color": "#00CED1",
+      "center": {
+        "x": -78.4185787286924,
+        "y": -141.40125700380202
+      },
+      "boundary": [
+        {
+          "x": -49.592653791610104,
+          "y": -147.08373034433413
+        },
+        {
+          "x": -60.102043550632104,
+          "y": -162.33579100217224
+        },
+        {
+          "x": -104.51180133488367,
+          "y": -157.16893702032056
+        },
+        {
+          "x": -114.42651919238153,
+          "y": -144.57796763406623
+        },
+        {
+          "x": -106.10981511379713,
+          "y": -123.11334831091122
+        },
+        {
+          "x": -86.1146538620913,
+          "y": -111.5444719959593
+        },
+        {
+          "x": -83.82842869619708,
+          "y": -112.13811700282393
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_42",
+      "name": "Features",
+      "color": "#FF7F50",
+      "center": {
+        "x": 158.16608214168141,
+        "y": 34.474301069855606
+      },
+      "boundary": [
+        {
+          "x": 141.51085450771694,
+          "y": 12.250104540799533
+        },
+        {
+          "x": 129.74741971819873,
+          "y": 32.470942925920326
+        },
+        {
+          "x": 153.36226674831784,
+          "y": 65.38080533699778
+        },
+        {
+          "x": 184.85057528207014,
+          "y": 44.81841188256046
+        },
+        {
+          "x": 185.13865112949426,
+          "y": 44.21695556740117
+        },
+        {
+          "x": 158.99398467847877,
+          "y": 8.081252540441724
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_43",
+      "name": "Features",
+      "color": "#9ACD32",
+      "center": {
+        "x": -151.44023170237205,
+        "y": 61.219187841325656
+      },
+      "boundary": [
+        {
+          "x": -124.7461375926301,
+          "y": 89.92177593414672
+        },
+        {
+          "x": -117.52461285061457,
+          "y": 53.79461566147204
+        },
+        {
+          "x": -151.39891372698128,
+          "y": 37.96073330867522
+        },
+        {
+          "x": -172.25774690103077,
+          "y": 56.36653498995325
+        },
+        {
+          "x": -167.16296045141183,
+          "y": 91.37551368475457
+        },
+        {
+          "x": -156.32907233006685,
+          "y": 97.25166137069975
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_44",
+      "name": "Features",
+      "color": "#DA70D6",
+      "center": {
+        "x": 67.55485186649892,
+        "y": -151.95397138241253
+      },
+      "boundary": [
+        {
+          "x": 44.94124151185365,
+          "y": -129.17135535377255
+        },
+        {
+          "x": 34.977000083990724,
+          "y": -143.68306296699208
+        },
+        {
+          "x": 35.2862150533797,
+          "y": -166.31140228092704
+        },
+        {
+          "x": 43.499945622452344,
+          "y": -179.08243154862046
+        },
+        {
+          "x": 54.14427781497828,
+          "y": -179.55555685317557
+        },
+        {
+          "x": 100.66381696683558,
+          "y": -157.0338130685887
+        },
+        {
+          "x": 94.77563875266958,
+          "y": -138.3623105191116
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_45",
+      "name": "Features",
+      "color": "#FF6B6B",
+      "center": {
+        "x": 61.1194598103698,
+        "y": 158.68955092316665
+      },
+      "boundary": [
+        {
+          "x": 60.42002319674216,
+          "y": 130.21665308952012
+        },
+        {
+          "x": 76.39133510231143,
+          "y": 131.08979266898248
+        },
+        {
+          "x": 84.10611900020346,
+          "y": 137.46116031991215
+        },
+        {
+          "x": 81.00396642807235,
+          "y": 177.19116983363114
+        },
+        {
+          "x": 64.97808627622325,
+          "y": 189.4601841019667
+        },
+        {
+          "x": 38.151553129125816,
+          "y": 174.18650694750437
+        },
+        {
+          "x": 33.70414520486851,
+          "y": 164.56269317529458
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_46",
+      "name": "Utilities",
+      "color": "#4ECDC4",
+      "center": {
+        "x": -159.07354984496317,
+        "y": -61.87748553618693
+      },
+      "boundary": [
+        {
+          "x": -176.4418430816569,
+          "y": -81.7066880456033
+        },
+        {
+          "x": -151.2665930860063,
+          "y": -90.74476398748949
+        },
+        {
+          "x": -139.4492523287313,
+          "y": -86.49334419760214
+        },
+        {
+          "x": -126.97160454848395,
+          "y": -63.89843511162149
+        },
+        {
+          "x": -146.52510921734958,
+          "y": -38.174976626858744
+        },
+        {
+          "x": -168.53221476178254,
+          "y": -34.65701232061602
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_47",
+      "name": "Utilities",
+      "color": "#45B7D1",
+      "center": {
+        "x": 166.84127663904795,
+        "y": -47.506351552205714
+      },
+      "boundary": [
+        {
+          "x": 159.4679957042915,
+          "y": -77.06827674982651
+        },
+        {
+          "x": 140.9369252983038,
+          "y": -57.475497721758614
+        },
+        {
+          "x": 142.34007460494655,
+          "y": -40.31656746712423
+        },
+        {
+          "x": 175.07361751248055,
+          "y": -19.614894903645617
+        },
+        {
+          "x": 191.02809306185017,
+          "y": -55.28806782198511
+        },
+        {
+          "x": 177.502586284043,
+          "y": -79.08734763202902
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_48",
+      "name": "Utilities",
+      "color": "#96CEB4",
+      "center": {
+        "x": -75.21617938806261,
+        "y": 153.32344601765453
+      },
+      "boundary": [
+        {
+          "x": -57.12800838203359,
+          "y": 168.92040605552273
+        },
+        {
+          "x": -55.70072481331019,
+          "y": 141.346198230548
+        },
+        {
+          "x": -69.7524745606199,
+          "y": 126.99482593134044
+        },
+        {
+          "x": -105.71006550358976,
+          "y": 144.66377950812807
+        },
+        {
+          "x": -101.33921118437536,
+          "y": 165.20760679701937
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_49",
+      "name": "Utilities",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -34.01699613089461,
+        "y": -171.99604336782426
+      },
+      "boundary": [
+        {
+          "x": -28.028339435878166,
+          "y": -138.80802692698634
+        },
+        {
+          "x": -9.70255557545968,
+          "y": -173.87561983689545
+        },
+        {
+          "x": -14.991994292089544,
+          "y": -186.66627540487025
+        },
+        {
+          "x": -40.2027297829037,
+          "y": -196.90660654987923
+        },
+        {
+          "x": -56.45992650033156,
+          "y": -189.59231113730146
+        },
+        {
+          "x": -60.102043550632104,
+          "y": -162.33579100217224
+        },
+        {
+          "x": -49.592653791610104,
+          "y": -147.08373034433413
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_50",
+      "name": "Utilities",
+      "color": "#DDA0DD",
+      "center": {
+        "x": 140.38308627788993,
+        "y": 105.60253117754782
+      },
+      "boundary": [
+        {
+          "x": 151.2376244406057,
+          "y": 75.07795499236052
+        },
+        {
+          "x": 171.30046524347338,
+          "y": 102.00618619631182
+        },
+        {
+          "x": 171.21339356896203,
+          "y": 102.5608835226823
+        },
+        {
+          "x": 131.64488669177985,
+          "y": 140.1375773306284
+        },
+        {
+          "x": 124.06744965329405,
+          "y": 135.1846454881389
+        },
+        {
+          "x": 117.83207549702918,
+          "y": 88.1549938701629
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_51",
+      "name": "Utilities",
+      "color": "#98D8C8",
+      "center": {
+        "x": -174.4816592774147,
+        "y": 35.106916167300604
+      },
+      "boundary": [
+        {
+          "x": -203.11767495315007,
+          "y": 40.52487668410094
+        },
+        {
+          "x": -172.25774690103077,
+          "y": 56.36653498995325
+        },
+        {
+          "x": -151.39891372698128,
+          "y": 37.96073330867522
+        },
+        {
+          "x": -158.54525141331,
+          "y": 13.794981941193566
+        },
+        {
+          "x": -182.83559609821637,
+          "y": 1.6507077021152057
+        },
+        {
+          "x": -213.1956508819274,
+          "y": 20.981544118361438
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_52",
+      "name": "Utilities",
+      "color": "#F7DC6F",
+      "center": {
+        "x": 124.86898857931374,
+        "y": -133.87959036985822
+      },
+      "boundary": [
+        {
+          "x": 94.77563875266958,
+          "y": -138.3623105191116
+        },
+        {
+          "x": 100.66381696683558,
+          "y": -157.0338130685887
+        },
+        {
+          "x": 108.22583949545836,
+          "y": -162.92937951494685
+        },
+        {
+          "x": 119.98536547443813,
+          "y": -163.05534004376136
+        },
+        {
+          "x": 149.67678583658267,
+          "y": -130.3118358684369
+        },
+        {
+          "x": 133.6906277597074,
+          "y": -108.92530794535669
+        },
+        {
+          "x": 106.08144173985131,
+          "y": -106.40048535839371
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_53",
+      "name": "Hooks",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 11.464811998577584,
+        "y": 181.63622044331711
+      },
+      "boundary": [
+        {
+          "x": -1.9276409556950895,
+          "y": 147.82136368309955
+        },
+        {
+          "x": -22.616008681365592,
+          "y": 186.26867691192237
+        },
+        {
+          "x": 15.41919647456846,
+          "y": 202.39873398870185
+        },
+        {
+          "x": 38.151553129125816,
+          "y": 174.18650694750437
+        },
+        {
+          "x": 33.70414520486851,
+          "y": 164.56269317529458
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_54",
+      "name": "Hooks",
+      "color": "#85C1E9",
+      "center": {
+        "x": -138.8938426267597,
+        "y": -117.9694473666304
+      },
+      "boundary": [
+        {
+          "x": -139.4492523287313,
+          "y": -86.49334419760214
+        },
+        {
+          "x": -106.10981511379713,
+          "y": -123.11334831091122
+        },
+        {
+          "x": -114.42651919238153,
+          "y": -144.57796763406623
+        },
+        {
+          "x": -143.81008666609387,
+          "y": -150.82225232121795
+        },
+        {
+          "x": -161.6506039693916,
+          "y": -129.2431369697683
+        },
+        {
+          "x": -151.2665930860063,
+          "y": -90.74476398748949
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_55",
+      "name": "Hooks",
+      "color": "#F8B500",
+      "center": {
+        "x": 184.3216422685259,
+        "y": 15.550402042745166
+      },
+      "boundary": [
+        {
+          "x": 158.99398467847877,
+          "y": 8.081252540441724
+        },
+        {
+          "x": 176.80859347916444,
+          "y": -13.992417018606682
+        },
+        {
+          "x": 210.03277134069498,
+          "y": -2.111420766069873
+        },
+        {
+          "x": 225.57977317360994,
+          "y": 20.72354920380969
+        },
+        {
+          "x": 185.13865112949426,
+          "y": 44.21695556740117
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_56",
+      "name": "Hooks",
+      "color": "#00CED1",
+      "center": {
+        "x": -136.06968513935394,
+        "y": 127.44764027493171
+      },
+      "boundary": [
+        {
+          "x": -123.89291543983809,
+          "y": 90.66770153925779
+        },
+        {
+          "x": -108.91440602979627,
+          "y": 142.33852967988386
+        },
+        {
+          "x": -163.59584890679685,
+          "y": 151.12509825171009
+        },
+        {
+          "x": -156.32907233006685,
+          "y": 97.25166137069975
+        },
+        {
+          "x": -124.7461375926301,
+          "y": 89.92177593414672
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_57",
+      "name": "Hooks",
+      "color": "#FF7F50",
+      "center": {
+        "x": 8.837663518045535,
+        "y": -189.71812920857298
+      },
+      "boundary": [
+        {
+          "x": 35.2862150533797,
+          "y": -166.31140228092704
+        },
+        {
+          "x": 43.499945622452344,
+          "y": -179.08243154862046
+        },
+        {
+          "x": 24.086497502298776,
+          "y": -238.00991299354246
+        },
+        {
+          "x": -14.991994292089544,
+          "y": -186.66627540487025
+        },
+        {
+          "x": -9.70255557545968,
+          "y": -173.87561983689545
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_58",
+      "name": "Hooks",
+      "color": "#9ACD32",
+      "center": {
+        "x": 103.51922184604003,
+        "y": 162.00016001857307
+      },
+      "boundary": [
+        {
+          "x": 157.3205799925628,
+          "y": 196.3479842603167
+        },
+        {
+          "x": 81.00396642807235,
+          "y": 177.19116983363114
+        },
+        {
+          "x": 84.10611900020346,
+          "y": 137.46116031991215
+        },
+        {
+          "x": 124.06744965329405,
+          "y": 135.1846454881389
+        },
+        {
+          "x": 131.64488669177985,
+          "y": 140.1375773306284
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_59",
+      "name": "Hooks",
+      "color": "#DA70D6",
+      "center": {
+        "x": -186.37158152858143,
+        "y": -57.28835115524784
+      },
+      "boundary": [
+        {
+          "x": -176.4418430816569,
+          "y": -81.7066880456033
+        },
+        {
+          "x": -168.53221476178254,
+          "y": -34.65701232061602
+        },
+        {
+          "x": -178.80272777360926,
+          "y": -26.694229353004836
+        },
+        {
+          "x": -226.6250311368407,
+          "y": -56.56356137669592
+        },
+        {
+          "x": -178.76345603020545,
+          "y": -82.1969270436613
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_0",
+      "name": "Widgets",
+      "color": "#FF6B6B",
+      "center": {
+        "x": 2.2577823595644317,
+        "y": -0.19217920087054174
+      },
+      "boundary": [
+        {
+          "x": -19.412386183495368,
+          "y": -18.946256338261946
+        },
+        {
+          "x": 23.251667895909094,
+          "y": -19.359509206025162
+        },
+        {
+          "x": 39.233151156844755,
+          "y": 1.9031712270259504
+        },
+        {
+          "x": 3.631421128474404,
+          "y": 23.272249782204554
+        },
+        {
+          "x": -20.735081304507307,
+          "y": -12.136319263739404
+        }
+      ],
+      "building_count": 9,
+      "description": null
+    },
+    {
+      "id": "district_60",
+      "name": "Widgets",
+      "color": "#FF6B6B",
+      "center": {
+        "x": 160.12143170709942,
+        "y": -107.52883673356293
+      },
+      "boundary": [
+        {
+          "x": 133.6906277597074,
+          "y": -108.92530794535669
+        },
+        {
+          "x": 159.4679957042915,
+          "y": -77.06827674982651
+        },
+        {
+          "x": 177.502586284043,
+          "y": -79.08734763202902
+        },
+        {
+          "x": 227.13501820977842,
+          "y": -149.06189657987278
+        },
+        {
+          "x": 149.67678583658267,
+          "y": -130.3118358684369
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_61",
+      "name": "Widgets",
+      "color": "#4ECDC4",
+      "center": {
+        "x": -77.56411473689282,
+        "y": 181.28214743038936
+      },
+      "boundary": [
+        {
+          "x": -39.3349673299894,
+          "y": 196.31205416151323
+        },
+        {
+          "x": -57.12800838203359,
+          "y": 168.92040605552273
+        },
+        {
+          "x": -101.33921118437536,
+          "y": 165.20760679701937
+        },
+        {
+          "x": -108.72753354300814,
+          "y": 188.999585101322
+        },
+        {
+          "x": -44.16254249454353,
+          "y": 207.42779620893967
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_62",
+      "name": "Widgets",
+      "color": "#45B7D1",
+      "center": {
+        "x": -82.73552995931831,
+        "y": -178.5059940820923
+      },
+      "boundary": [
+        {
+          "x": -60.102043550632104,
+          "y": -162.33579100217224
+        },
+        {
+          "x": -104.51180133488367,
+          "y": -157.16893702032056
+        },
+        {
+          "x": -104.00613986446054,
+          "y": -223.2437393980036
+        },
+        {
+          "x": -56.45992650033156,
+          "y": -189.59231113730146
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_63",
+      "name": "Widgets",
+      "color": "#96CEB4",
+      "center": {
+        "x": 183.59173748039805,
+        "y": 73.40998634172678
+      },
+      "boundary": [
+        {
+          "x": 184.85057528207014,
+          "y": 44.81841188256046
+        },
+        {
+          "x": 208.35818916375655,
+          "y": 87.68301755113188
+        },
+        {
+          "x": 171.30046524347338,
+          "y": 102.00618619631182
+        },
+        {
+          "x": 151.2376244406057,
+          "y": 75.07795499236052
+        },
+        {
+          "x": 153.36226674831784,
+          "y": 65.38080533699778
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_64",
+      "name": "Widgets",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -190.82868414024017,
+        "y": 66.95131032057155
+      },
+      "boundary": [
+        {
+          "x": -203.11767495315007,
+          "y": 40.52487668410094
+        },
+        {
+          "x": -213.76612284910624,
+          "y": 97.37991776966065
+        },
+        {
+          "x": -167.16296045141183,
+          "y": 91.37551368475457
+        },
+        {
+          "x": -172.25774690103077,
+          "y": 56.36653498995325
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_65",
+      "name": "Widgets",
+      "color": "#DDA0DD",
+      "center": {
+        "x": 84.11308985390752,
+        "y": -186.15565699381625
+      },
+      "boundary": [
+        {
+          "x": 108.22583949545836,
+          "y": -162.92937951494685
+        },
+        {
+          "x": 99.62878273235293,
+          "y": -218.8145232054146
+        },
+        {
+          "x": 54.14427781497828,
+          "y": -179.55555685317557
+        },
+        {
+          "x": 100.66381696683558,
+          "y": -157.0338130685887
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_66",
+      "name": "Widgets",
+      "color": "#98D8C8",
+      "center": {
+        "x": 36.54772741338946,
+        "y": 201.8470949096597
+      },
+      "boundary": [
+        {
+          "x": 64.97808627622325,
+          "y": 189.4601841019667
+        },
+        {
+          "x": 65.26875079502338,
+          "y": 215.71875453997143
+        },
+        {
+          "x": 19.84667890863374,
+          "y": 216.54830209698454
+        },
+        {
+          "x": 15.41919647456846,
+          "y": 202.39873398870185
+        },
+        {
+          "x": 38.151553129125816,
+          "y": 174.18650694750437
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_67",
+      "name": "Widgets",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -175.6515512554698,
+        "y": -108.05493885936109
+      },
+      "boundary": [
+        {
+          "x": -176.4418430816569,
+          "y": -81.7066880456033
+        },
+        {
+          "x": -151.2665930860063,
+          "y": -90.74476398748949
+        },
+        {
+          "x": -161.6506039693916,
+          "y": -129.2431369697683
+        },
+        {
+          "x": -208.58682048778002,
+          "y": -127.71355879384092
+        },
+        {
+          "x": -178.76345603020545,
+          "y": -82.1969270436613
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_68",
+      "name": "Widgets",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 201.35146065439207,
+        "y": -32.07201134542261
+      },
+      "boundary": [
+        {
+          "x": 175.07361751248055,
+          "y": -19.614894903645617
+        },
+        {
+          "x": 191.02809306185017,
+          "y": -55.28806782198511
+        },
+        {
+          "x": 226.49188894459726,
+          "y": -47.542355156373674
+        },
+        {
+          "x": 210.03277134069498,
+          "y": -2.111420766069873
+        },
+        {
+          "x": 176.80859347916444,
+          "y": -13.992417018606682
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_69",
+      "name": "Widgets",
+      "color": "#85C1E9",
+      "center": {
+        "x": -130.037598801386,
+        "y": 164.9871167864288
+      },
+      "boundary": [
+        {
+          "x": -101.33921118437536,
+          "y": 165.20760679701937
+        },
+        {
+          "x": -105.71006550358976,
+          "y": 144.66377950812807
+        },
+        {
+          "x": -108.91440602979627,
+          "y": 142.33852967988386
+        },
+        {
+          "x": -163.59584890679685,
+          "y": 151.12509825171009
+        },
+        {
+          "x": -465.73559386900786,
+          "y": 500.0
+        },
+        {
+          "x": -108.72753354300814,
+          "y": 188.999585101322
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_70",
+      "name": "Widgets",
+      "color": "#F8B500",
+      "center": {
+        "x": -18.398280711810276,
+        "y": -210.44785684543328
+      },
+      "boundary": [
+        {
+          "x": 24.086497502298776,
+          "y": -238.00991299354246
+        },
+        {
+          "x": 32.145589645399255,
+          "y": -500.0
+        },
+        {
+          "x": -40.2027297829037,
+          "y": -196.90660654987923
+        },
+        {
+          "x": -14.991994292089544,
+          "y": -186.66627540487025
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_71",
+      "name": "Widgets",
+      "color": "#00CED1",
+      "center": {
+        "x": 166.5848427201975,
+        "y": 133.1931538459653
+      },
+      "boundary": [
+        {
+          "x": 157.3205799925628,
+          "y": 196.3479842603167
+        },
+        {
+          "x": 131.64488669177985,
+          "y": 140.1375773306284
+        },
+        {
+          "x": 171.21339356896203,
+          "y": 102.5608835226823
+        },
+        {
+          "x": 319.12430825107106,
+          "y": 369.7778920054142
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_72",
+      "name": "Widgets",
+      "color": "#FF7F50",
+      "center": {
+        "x": -209.61585102459668,
+        "y": -20.07310622062801
+      },
+      "boundary": [
+        {
+          "x": -178.80272777360926,
+          "y": -26.694229353004836
+        },
+        {
+          "x": -182.83559609821637,
+          "y": 1.6507077021152057
+        },
+        {
+          "x": -213.1956508819274,
+          "y": 20.981544118361438
+        },
+        {
+          "x": -500.0,
+          "y": -123.68012108613215
+        },
+        {
+          "x": -226.6250311368407,
+          "y": -56.56356137669592
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_73",
+      "name": "Widgets",
+      "color": "#9ACD32",
+      "center": {
+        "x": 148.545680666193,
+        "y": -155.3493333079513
+      },
+      "boundary": [
+        {
+          "x": 149.67678583658267,
+          "y": -130.3118358684369
+        },
+        {
+          "x": 119.98536547443813,
+          "y": -163.05534004376136
+        },
+        {
+          "x": 500.0,
+          "y": -500.0
+        },
+        {
+          "x": 500.0,
+          "y": -478.42709008147347
+        },
+        {
+          "x": 227.13501820977842,
+          "y": -149.06189657987278
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_74",
+      "name": "Widgets",
+      "color": "#DA70D6",
+      "center": {
+        "x": -2.255345374688014,
+        "y": 213.98880282909812
+      },
+      "boundary": [
+        {
+          "x": -39.3349673299894,
+          "y": 196.31205416151323
+        },
+        {
+          "x": -22.616008681365592,
+          "y": 186.26867691192237
+        },
+        {
+          "x": 15.41919647456846,
+          "y": 202.39873398870185
+        },
+        {
+          "x": 19.84667890863374,
+          "y": 216.54830209698454
+        },
+        {
+          "x": -48.17342586494746,
+          "y": 377.30377090211243
+        },
+        {
+          "x": -44.16254249454353,
+          "y": 207.42779620893967
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_75",
+      "name": "Widgets",
+      "color": "#FF6B6B",
+      "center": {
+        "x": -125.95896208499899,
+        "y": -178.8367771258383
+      },
+      "boundary": [
+        {
+          "x": -104.51180133488367,
+          "y": -157.16893702032056
+        },
+        {
+          "x": -114.42651919238153,
+          "y": -144.57796763406623
+        },
+        {
+          "x": -143.81008666609387,
+          "y": -150.82225232121795
+        },
+        {
+          "x": -459.4816326096357,
+          "y": -500.0
+        },
+        {
+          "x": -400.7640830209015,
+          "y": -500.0
+        },
+        {
+          "x": -104.00613986446054,
+          "y": -223.2437393980036
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_76",
+      "name": "Widgets",
+      "color": "#4ECDC4",
+      "center": {
+        "x": 209.63636682999285,
+        "y": 59.12670807770171
+      },
+      "boundary": [
+        {
+          "x": 185.13865112949426,
+          "y": 44.21695556740117
+        },
+        {
+          "x": 225.57977317360994,
+          "y": 20.72354920380969
+        },
+        {
+          "x": 500.0,
+          "y": 172.26738280115785
+        },
+        {
+          "x": 208.35818916375655,
+          "y": 87.68301755113188
+        },
+        {
+          "x": 184.85057528207014,
+          "y": 44.81841188256046
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_77",
+      "name": "Widgets",
+      "color": "#45B7D1",
+      "center": {
+        "x": -183.86489562228766,
+        "y": 121.00073181456418
+      },
+      "boundary": [
+        {
+          "x": -156.32907233006685,
+          "y": 97.25166137069975
+        },
+        {
+          "x": -167.16296045141183,
+          "y": 91.37551368475457
+        },
+        {
+          "x": -213.76612284910624,
+          "y": 97.37991776966065
+        },
+        {
+          "x": -500.0,
+          "y": 438.07466132262374
+        },
+        {
+          "x": -500.0,
+          "y": 500.0
+        },
+        {
+          "x": -465.73559386900786,
+          "y": 500.0
+        },
+        {
+          "x": -163.59584890679685,
+          "y": 151.12509825171009
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_78",
+      "name": "Widgets",
+      "color": "#96CEB4",
+      "center": {
+        "x": 65.0531028364098,
+        "y": -208.23810474458412
+      },
+      "boundary": [
+        {
+          "x": 24.086497502298776,
+          "y": -238.00991299354246
+        },
+        {
+          "x": 32.145589645399255,
+          "y": -500.0
+        },
+        {
+          "x": 80.92718684501594,
+          "y": -500.0
+        },
+        {
+          "x": 282.5355716876189,
+          "y": -500.0
+        },
+        {
+          "x": 99.62878273235293,
+          "y": -218.8145232054146
+        },
+        {
+          "x": 54.14427781497828,
+          "y": -179.55555685317557
+        },
+        {
+          "x": 43.499945622452344,
+          "y": -179.08243154862046
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_79",
+      "name": "Widgets",
+      "color": "#FFEAA7",
+      "center": {
+        "x": 93.67567461950131,
+        "y": 201.2147273813547
+      },
+      "boundary": [
+        {
+          "x": 157.3205799925628,
+          "y": 196.3479842603167
+        },
+        {
+          "x": 81.00396642807235,
+          "y": 177.19116983363114
+        },
+        {
+          "x": 64.97808627622325,
+          "y": 189.4601841019667
+        },
+        {
+          "x": 65.26875079502338,
+          "y": 215.71875453997143
+        },
+        {
+          "x": 369.7230823096801,
+          "y": 500.0
+        },
+        {
+          "x": 500.0,
+          "y": 500.0
+        },
+        {
+          "x": 319.12430825107106,
+          "y": 369.7778920054142
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_80",
+      "name": "Widgets",
+      "color": "#DDA0DD",
+      "center": {
+        "x": -203.71339737798175,
+        "y": -89.66828255189503
+      },
+      "boundary": [
+        {
+          "x": -178.76345603020545,
+          "y": -82.1969270436613
+        },
+        {
+          "x": -208.58682048778002,
+          "y": -127.71355879384092
+        },
+        {
+          "x": -500.0,
+          "y": -384.9846034995252
+        },
+        {
+          "x": -500.0,
+          "y": -131.3615024034624
+        },
+        {
+          "x": -500.0,
+          "y": -123.68012108613215
+        },
+        {
+          "x": -226.6250311368407,
+          "y": -56.56356137669592
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_81",
+      "name": "Widgets",
+      "color": "#98D8C8",
+      "center": {
+        "x": 210.09095102211637,
+        "y": -72.0858249091798
+      },
+      "boundary": [
+        {
+          "x": 177.502586284043,
+          "y": -79.08734763202902
+        },
+        {
+          "x": 191.02809306185017,
+          "y": -55.28806782198511
+        },
+        {
+          "x": 226.49188894459726,
+          "y": -47.542355156373674
+        },
+        {
+          "x": 500.0,
+          "y": -344.1727188406875
+        },
+        {
+          "x": 500.0,
+          "y": -478.42709008147347
+        },
+        {
+          "x": 227.13501820977842,
+          "y": -149.06189657987278
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_82",
+      "name": "Widgets",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -86.33268894952789,
+        "y": 212.0036815087869
+      },
+      "boundary": [
+        {
+          "x": -44.16254249454353,
+          "y": 207.42779620893967
+        },
+        {
+          "x": -48.17342586494746,
+          "y": 377.30377090211243
+        },
+        {
+          "x": -151.27493786926954,
+          "y": 500.0
+        },
+        {
+          "x": -500.0,
+          "y": 500.0
+        },
+        {
+          "x": -465.73559386900786,
+          "y": 500.0
+        },
+        {
+          "x": -108.72753354300814,
+          "y": 188.999585101322
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_83",
+      "name": "Widgets",
+      "color": "#BB8FCE",
+      "center": {
+        "x": -54.74129862210986,
+        "y": -218.05913535776443
+      },
+      "boundary": [
+        {
+          "x": -56.45992650033156,
+          "y": -189.59231113730146
+        },
+        {
+          "x": -40.2027297829037,
+          "y": -196.90660654987923
+        },
+        {
+          "x": 32.145589645399255,
+          "y": -500.0
+        },
+        {
+          "x": 80.92718684501594,
+          "y": -500.0
+        },
+        {
+          "x": -6.394884621840902e-14,
+          "y": -500.0
+        },
+        {
+          "x": -400.7640830209015,
+          "y": -500.0
+        },
+        {
+          "x": -104.00613986446054,
+          "y": -223.2437393980036
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_84",
+      "name": "Widgets",
+      "color": "#85C1E9",
+      "center": {
+        "x": 199.6289749634991,
+        "y": 114.9024475292708
+      },
+      "boundary": [
+        {
+          "x": 319.12430825107106,
+          "y": 369.7778920054142
+        },
+        {
+          "x": 500.0,
+          "y": 500.0
+        },
+        {
+          "x": 500.0,
+          "y": 244.13777238282847
+        },
+        {
+          "x": 500.0,
+          "y": 172.26738280115785
+        },
+        {
+          "x": 208.35818916375655,
+          "y": 87.68301755113188
+        },
+        {
+          "x": 171.30046524347338,
+          "y": 102.00618619631182
+        },
+        {
+          "x": 171.21339356896203,
+          "y": 102.5608835226823
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_85",
+      "name": "Widgets",
+      "color": "#F8B500",
+      "center": {
+        "x": -224.13714792911307,
+        "y": 60.71292873860415
+      },
+      "boundary": [
+        {
+          "x": -203.11767495315007,
+          "y": 40.52487668410094
+        },
+        {
+          "x": -213.76612284910624,
+          "y": 97.37991776966065
+        },
+        {
+          "x": -500.0,
+          "y": 438.07466132262374
+        },
+        {
+          "x": -500.0,
+          "y": -7.815970093361102e-14
+        },
+        {
+          "x": -500.0,
+          "y": -131.3615024034624
+        },
+        {
+          "x": -500.0,
+          "y": -123.68012108613215
+        },
+        {
+          "x": -213.1956508819274,
+          "y": 20.981544118361438
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_86",
+      "name": "Components",
+      "color": "#00CED1",
+      "center": {
+        "x": 124.24291580402483,
+        "y": -192.32900412695685
+      },
+      "boundary": [
+        {
+          "x": 108.22583949545836,
+          "y": -162.92937951494685
+        },
+        {
+          "x": 99.62878273235293,
+          "y": -218.8145232054146
+        },
+        {
+          "x": 282.5355716876189,
+          "y": -500.0
+        },
+        {
+          "x": 500.0,
+          "y": -500.0
+        },
+        {
+          "x": 119.98536547443813,
+          "y": -163.05534004376136
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_87",
+      "name": "Components",
+      "color": "#FF7F50",
+      "center": {
+        "x": 37.073390178361095,
+        "y": 230.62988342694547
+      },
+      "boundary": [
+        {
+          "x": 19.84667890863374,
+          "y": 216.54830209698454
+        },
+        {
+          "x": 65.26875079502338,
+          "y": 215.71875453997143
+        },
+        {
+          "x": 369.7230823096801,
+          "y": 500.0
+        },
+        {
+          "x": -1.4210854715202004e-14,
+          "y": 500.0
+        },
+        {
+          "x": -151.27493786926954,
+          "y": 500.0
+        },
+        {
+          "x": -48.17342586494746,
+          "y": 377.30377090211243
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_88",
+      "name": "Tests",
+      "color": "#9ACD32",
+      "center": {
+        "x": -177.00136028969973,
+        "y": -149.4748087857089
+      },
+      "boundary": [
+        {
+          "x": -161.6506039693916,
+          "y": -129.2431369697683
+        },
+        {
+          "x": -143.81008666609387,
+          "y": -150.82225232121795
+        },
+        {
+          "x": -459.4816326096357,
+          "y": -500.0
+        },
+        {
+          "x": -500.0,
+          "y": -384.9846034995252
+        },
+        {
+          "x": -208.58682048778002,
+          "y": -127.71355879384092
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_89",
+      "name": "Tests",
+      "color": "#DA70D6",
+      "center": {
+        "x": 235.8896119912708,
+        "y": -19.55922677904599
+      },
+      "boundary": [
+        {
+          "x": 210.03277134069498,
+          "y": -2.111420766069873
+        },
+        {
+          "x": 225.57977317360994,
+          "y": 20.72354920380969
+        },
+        {
+          "x": 500.0,
+          "y": 172.26738280115785
+        },
+        {
+          "x": 500.0,
+          "y": 244.13777238282847
+        },
+        {
+          "x": 500.0,
+          "y": -1.3855583347321954e-13
+        },
+        {
+          "x": 500.0,
+          "y": -344.1727188406875
+        },
+        {
+          "x": 226.49188894459726,
+          "y": -47.542355156373674
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    }
+  ],
+  "roads": [
+    {
+      "source": "src/main.jsx",
+      "target": "src/App.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/shared/ui/Toast/ToastContainer.jsx",
+      "target": "src/shared/ui/Toast/Toast.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/shared/ui/Toast/ToastContainer.jsx",
+      "target": "src/shared/ui/Toast/useToast.js",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/entities/building/ui/BuildingLabel.jsx",
+      "target": "src/entities/building/utils.js",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/entities/building/ui/BuildingPanel.jsx",
+      "target": "src/entities/building/model.js",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/entities/building/ui/BuildingPanel.jsx",
+      "target": "src/entities/building/utils.js",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/entities/building/ui/BuildingPanel.jsx",
+      "target": "src/entities/building/ui/CodeViewer.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/features/explorer/ui/FileTable.jsx",
+      "target": "src/features/explorer/ui/PatternList.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/features/explorer/ui/FileTable.jsx",
+      "target": "src/features/explorer/ui/AuditStats.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/widgets/city-viewport/ui/CityScene.jsx",
+      "target": "src/widgets/city-viewport/ui/InstancedCity.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/widgets/city-viewport/ui/CityScene.jsx",
+      "target": "src/widgets/city-viewport/ui/CameraController.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/widgets/city-viewport/ui/CityScene.jsx",
+      "target": "src/widgets/city-viewport/ui/Roads.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/widgets/city-viewport/ui/CityScene.jsx",
+      "target": "src/widgets/city-viewport/ui/InstancedTrace.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/widgets/city-viewport/ui/CityScene.jsx",
+      "target": "src/widgets/city-viewport/ui/BuildingXRay.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/widgets/city-viewport/ui/CityScene.jsx",
+      "target": "src/widgets/city-viewport/ui/Ground.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/widgets/city-viewport/ui/CityScene.jsx",
+      "target": "src/widgets/city-viewport/ui/BlastRadius.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/widgets/city-viewport/ui/CityScene.jsx",
+      "target": "src/widgets/city-viewport/ui/HolographicXRay.jsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    }
+  ],
+  "stats": {
+    "total_files": 107,
+    "total_loc": 15183,
+    "total_districts": 90,
+    "total_dependencies": 17,
+    "hotspots": 4
+  },
+  "metadata": {
+    "num_files": 107,
+    "num_directories": 90,
+    "languages": {},
+    "layer_violations": [],
+    "duplicates": [],
+    "issues": {
+      "circular_dependencies": [],
+      "god_objects": [],
+      "orphans": [
+        "vite.config.js",
+        "vitest.config.js",
+        "src/shared/animations/micro.js",
+        "src/shared/animations/variants.js",
+        "src/shared/ui/Modal.jsx",
+        "src/shared/ui/SkipLink.jsx",
+        "src/shared/ui/LoadingScreen.jsx",
+        "src/shared/ui/index.js",
+        "src/shared/ui/VisuallyHidden.jsx",
+        "src/shared/ui/ErrorBoundary.jsx",
+        "src/shared/ui/Skeleton/Skeleton.jsx",
+        "src/shared/ui/Skeleton/index.js",
+        "src/shared/ui/Toast/index.js",
+        "src/shared/api/client.js",
+        "src/shared/api/index.js",
+        "src/store/useStore.js",
+        "src/store/__tests__/useStore.test.js",
+        "src/store/slices/createCitySlice.js",
+        "src/store/slices/createUISlice.js",
+        "src/store/slices/createIntelligenceSlice.js",
+        "src/store/slices/createInteractionSlice.js",
+        "src/store/slices/createTimeSlice.js",
+        "src/entities/building/ui/FileInsights.jsx",
+        "src/shaders/BuildingShader.js",
+        "src/features/tour/ui/TourController.jsx",
+        "src/features/tour/model/useTourStore.js",
+        "src/features/architect/ui/ImpactSandbox.jsx",
+        "src/features/architect/ui/DependencyGraph.jsx",
+        "src/features/architect/model/useArchitectStore.js",
+        "src/features/timeline/ui/AvatarSprites.jsx",
+        "src/features/timeline/ui/TimelineController.jsx",
+        "src/features/bookmarks/ui/BookmarksPanel.jsx",
+        "src/features/bookmarks/model/useBookmarksStore.js",
+        "src/features/search/ui/CommandPalette.jsx",
+        "src/features/analysis/ui/ExportReport.jsx",
+        "src/features/analysis/ui/AnalyzeModal.jsx",
+        "src/features/explorer/ui/CodePage.jsx",
+        "src/features/explorer/ui/ImpactPanel.jsx",
+        "src/features/ai-architect/ui/ChatInterface.jsx",
+        "src/features/onboarding/ui/CityBuilderLoader.jsx",
+        "src/features/onboarding/ui/CinematicIntro.jsx",
+        "src/utils/GraphNavigator.js",
+        "src/utils/RefactorUtils.js",
+        "src/utils/colorUtils.js",
+        "src/utils/performance.js",
+        "src/utils/accessibility.js",
+        "src/utils/MockOpsData.js",
+        "src/utils/__tests__/colorUtils.test.js",
+        "src/hooks/useSmoothScroll.js",
+        "src/hooks/useIntersectionObserver.js",
+        "src/hooks/useVirtualList.js",
+        "src/hooks/useDebounce.js",
+        "src/hooks/useVSCodeSync.js",
+        "src/hooks/useSound.js",
+        "src/hooks/useCameraAnimation.js",
+        "src/widgets/city-viewport/ui/PostProcessing.jsx",
+        "src/widgets/city-viewport/ui/CityErrorBoundary.jsx",
+        "src/widgets/city-viewport/ui/DollhouseView.jsx",
+        "src/widgets/city-viewport/ui/Lighting.jsx",
+        "src/widgets/city-viewport/ui/CityLegend.jsx",
+        "src/widgets/city-viewport/ui/layers/ConfigNodesLayer.jsx",
+        "src/widgets/city-viewport/ui/layers/RefactoringLayer.jsx",
+        "src/widgets/city-viewport/ui/layers/TrafficLayer.jsx",
+        "src/widgets/city-viewport/ui/layers/DigitalRain.jsx",
+        "src/widgets/city-viewport/ui/layers/HolographicLabelsLayer.jsx",
+        "src/widgets/city-viewport/ui/layers/DataSilosLayer.jsx",
+        "src/widgets/city-viewport/ui/layers/InterfacePanelsLayer.jsx",
+        "src/widgets/city-viewport/ui/layers/WeatherLayer.jsx",
+        "src/widgets/city-viewport/ui/layers/DependencyArcsLayer.jsx",
+        "src/widgets/city-viewport/ui/layers/LogicTowersLayer.jsx",
+        "src/widgets/city-viewport/shaders/HoloArchitectMaterial.js",
+        "src/widgets/city-viewport/shaders/PulseMaterial.js",
+        "src/widgets/code-inspector/ui/CodeInspector.jsx",
+        "src/widgets/layout/ui/CanvasErrorBoundary.jsx",
+        "src/widgets/layout/ui/ViewControl.jsx",
+        "src/widgets/layout/ui/WelcomeOverlay.jsx",
+        "src/widgets/layout/ui/Sidebar.jsx",
+        "src/widgets/layout/ui/FloatingDock.jsx",
+        "src/widgets/layout/ui/CanvasUI.jsx",
+        "src/widgets/layout/ui/NeuralHUD.jsx",
+        "src/widgets/debug/ui/DiagnosticsHUD.jsx",
+        "src/components/IntelligenceDashboard.jsx",
+        "src/components/ImpactVisualization.jsx",
+        "src/test/test-utils.jsx",
+        "src/test/setup.js"
+      ],
+      "highly_coupled": [],
+      "large_files": []
+    },
+    "health": {
+      "score": 100,
+      "grade": "A"
+    }
+  }
+}

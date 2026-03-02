@@ -3,15 +3,8 @@
  * Handles application interface state: Sidebars, Modals, Themes, View Modes, and Camera Actions.
  */
 
-// Helper: Get initial theme
-const getInitialTheme = () => {
-    if (typeof window !== 'undefined') {
-        const stored = localStorage.getItem('codebase-city-theme')
-        if (stored) return stored
-        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
-    }
-    return 'dark'
-}
+// Theme is always dark — this is a 3D city visualization
+const getInitialTheme = () => 'dark'
 
 export const createUISlice = (set, get) => ({
     // State
@@ -26,7 +19,7 @@ export const createUISlice = (set, get) => ({
 
     // Modals & Panels
     commandPaletteOpen: false,
-    analyzeModalOpen: true, // Open by default
+    analyzeModalOpen: false, // Open by default
     codeViewerOpen: false,
 
     // Highlights

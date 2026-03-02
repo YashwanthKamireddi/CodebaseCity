@@ -111,7 +111,7 @@
 .suggestion-action {
     font-size: 0.8125rem;
     font-weight: 600;
-    color: var(--color-accent, #6366f1);
+    color: var(--color-accent, #ffffff);
 }
 
 .suggestion-badges {

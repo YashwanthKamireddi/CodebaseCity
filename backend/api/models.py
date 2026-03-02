@@ -143,6 +143,7 @@ class CityData(BaseModel):
     """Complete city representation."""
     name: str = Field(..., min_length=1)
     path: Optional[str] = Field(default=None, description="Local absolute path to the repo")
+    city_id: Optional[str] = Field(default=None, description="Cache key for API calls")
     buildings: List[Building] = Field(default_factory=list)
     districts: List[District] = Field(default_factory=list)
     roads: List[Road] = Field(default_factory=list)

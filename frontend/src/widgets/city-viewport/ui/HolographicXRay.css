@@ -1,0 +1,202 @@
+/* ═══════════════════════════════════════════════════════════════
+   HolographicXRay.css — Unified with design-tokens.css
+   3D floating card overlay for selected buildings
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Wrapper ─────────────────────────────────────────────────── */
+.holo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+.holo-card {
+    background: rgba(5, 10, 20, 0.85);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05) inset, 0 20px 40px -10px rgba(0,0,0,0.8);
+    padding: var(--space-4);
+    border-radius: 8px;
+    color: white;
+    font-family: var(--font-sans);
+    position: relative;
+    overflow: hidden;
+}
+
+.holo-card--social { width: max-content; min-width: 250px; max-width: 350px; }
+.holo-card--default { width: max-content; min-width: 200px; max-width: 350px; }
+
+/* Top Glow Line */
+.holo-glow-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.holo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.holo-header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.holo-header-label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+}
+
+.holo-header-name {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+/* Status Badge */
+.holo-status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 4px 8px;
+    border-radius: var(--radius-full);
+}
+
+.holo-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: #ffffff;
+    box-shadow: 0 0 8px #ffffff;
+}
+
+.holo-status-text {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: #ffffff;
+    font-family: var(--font-mono);
+}
+
+/* ── Social Mode ─────────────────────────────────────────────── */
+.holo-social {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+}
+
+.holo-author-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.holo-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.holo-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.holo-avatar-fallback {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.holo-author-name {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.holo-author-email {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Stats */
+.holo-stats-row {
+    display: flex;
+    gap: var(--space-4);
+}
+
+.holo-stat-card {
+    flex: 1;
+    background: var(--color-bg-hover);
+    padding: var(--space-3);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.holo-stat-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.holo-stat-label {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ── Minimal / Default Mode ──────────────────────────────────── */
+.holo-minimal {
+    padding: var(--space-2) 0;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+}
+
+.holo-minimal-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ── Tether & Anchor ─────────────────────────────────────────── */
+.holo-tether {
+    width: 1px;
+}
+
+.holo-anchor {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: #ffffff;
+}

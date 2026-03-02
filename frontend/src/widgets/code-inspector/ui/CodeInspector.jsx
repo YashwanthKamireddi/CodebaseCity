@@ -1,10 +1,13 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Code, GitCommit, FileCode, Layers, Activity, AlertTriangle } from 'lucide-react'
+import { X, Code, GitCommit, FileCode, Layers, Activity, AlertTriangle, ScanEye } from 'lucide-react'
 import useStore from '../../../store/useStore'
 
 export default function CodeInspector() {
-    const { selectedBuilding, clearSelection, graphNeighbors } = useStore()
+    const {
+        selectedBuilding, clearSelection, graphNeighbors,
+        fetchImpactAnalysis, activeIntelligencePanel, setActiveIntelligencePanel, intelligenceLoading
+    } = useStore()
 
     if (!selectedBuilding) return null
 
@@ -32,53 +35,57 @@ export default function CodeInspector() {
                 top: '90px',
                 right: '24px',
                 width: '320px',
-                background: 'var(--glass-surface)',
-                backdropFilter: 'var(--glass-backdrop)',
-                WebkitBackdropFilter: 'var(--glass-backdrop)',
-                border: '1px solid var(--glass-border)',
-                borderRadius: '16px',
-                boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+                background: 'rgba(5, 10, 20, 0.8)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                boxShadow: '0 0 40px rgba(255, 255, 255, 0.05) inset, 0 20px 40px rgba(0,0,0,0.8)',
+                borderRadius: '8px', // Sharper corners for tech look
                 display: 'flex',
                 flexDirection: 'column',
                 zIndex: 1500,
                 color: 'white',
-                fontFamily: 'var(--font-sans)',
+                fontFamily: '"Fira Code", monospace, var(--font-sans)',
                 overflow: 'hidden'
             }}
         >
             {/* Header */}
             <div style={{
                 padding: '16px',
-                background: 'rgba(255,255,255,0.03)',
-                borderBottom: '1px solid rgba(255,255,255,0.05)',
+                background: 'linear-gradient(90deg, rgba(255, 255, 255,0.1), transparent)',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'start'
             }}>
                 <div style={{ flex: 1, overflow: 'hidden' }}>
                     <div style={{
-                        fontSize: '0.75rem',
-                        color: 'rgba(255,255,255,0.5)',
+                        fontSize: '0.65rem',
+                        color: '#ffffff',
                         textTransform: 'uppercase',
-                        letterSpacing: '1px',
-                        marginBottom: '4px',
-                        display: 'flex', alignItems: 'center', gap: '6px'
+                        letterSpacing: '2px',
+                        marginBottom: '8px',
+                        display: 'flex', alignItems: 'center', gap: '6px',
+                        opacity: 0.9
                     }}>
-                        <FileCode size={12} /> {language}
+                        <Code size={12} /> Deep Dive Inspection
                     </div>
                     <div style={{
-                        fontSize: '1.1rem',
+                        fontSize: '1rem',
                         fontWeight: 700,
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
-                        textOverflow: 'ellipsis'
+                        textOverflow: 'ellipsis',
+                        color: '#fff',
+                        textShadow: '0 0 10px rgba(255, 255, 255,0.4)',
+                        fontFamily: 'var(--font-sans)'
                     }}>
                         {name}
                     </div>
                     <div style={{
-                        fontSize: '0.8rem',
-                        color: 'rgba(255,255,255,0.4)',
-                        marginTop: '2px',
+                        fontSize: '0.75rem',
+                        color: 'rgba(255, 255, 255,0.6)',
+                        marginTop: '4px',
                         whiteSpace: 'nowrap',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis'
@@ -89,90 +96,164 @@ export default function CodeInspector() {
                 <button
                     onClick={clearSelection}
                     style={{
-                        background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)',
-                        cursor: 'pointer', padding: '4px'
+                        background: 'transparent', border: 'none', color: '#ffffff',
+                        cursor: 'pointer', padding: '4px', opacity: 0.7
                     }}
+                    onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+                    onMouseLeave={e => e.currentTarget.style.opacity = '0.7'}
                 >
                     <X size={20} />
                 </button>
             </div>
 
             {/* Content */}
-            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
 
-                {/* Health Score */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{ position: 'relative', width: '60px', height: '60px' }}>
-                        <svg width="60" height="60" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="10" />
-                            <circle cx="50" cy="50" r="45" fill="none" stroke={getHealthColor(healthScore)} strokeWidth="10"
-                                strokeDasharray={`${healthScore * 2.8} 280`} strokeLinecap="round" transform="rotate(-90 50 50)" />
+                {/* Health Score HUD */}
+                <div style={{
+                    display: 'flex', alignItems: 'center', gap: '16px',
+                    padding: '12px', background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '6px'
+                }}>
+                    <div style={{ position: 'relative', width: '50px', height: '50px' }}>
+                        <svg width="50" height="50" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255, 255, 255,0.1)" strokeWidth="8" />
+                            <circle cx="50" cy="50" r="45" fill="none" stroke={getHealthColor(healthScore)} strokeWidth="8"
+                                strokeDasharray={`${healthScore * 2.8} 280`} strokeLinecap="square" transform="rotate(-90 50 50)"
+                                style={{ filter: `drop-shadow(0 0 4px ${getHealthColor(healthScore)})` }} />
                         </svg>
                         <div style={{
                             position: 'absolute', inset: 0,
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontWeight: 'bold', fontSize: '1.2rem', color: getHealthColor(healthScore)
+                            fontWeight: 'bold', fontSize: '1.1rem', color: getHealthColor(healthScore),
+                            textShadow: `0 0 10px ${getHealthColor(healthScore)}`
                         }}>
                             {healthScore}
                         </div>
                     </div>
                     <div>
-                        <div style={{ fontWeight: 600, color: '#e4e4e7' }}>Health Score</div>
-                        <div style={{ fontSize: '0.8rem', color: '#a1a1aa' }}>Based on complexity & churn</div>
+                        <div style={{ fontWeight: 600, color: '#ffffff', fontSize: '0.8rem', letterSpacing: '1px' }}>SYSTEM HEALTH</div>
+                        <div style={{ fontSize: '0.7rem', color: 'rgba(255, 255, 255,0.5)', marginTop: '2px' }}>Complexity / Churn Ratio</div>
                     </div>
                 </div>
 
                 {/* Metrics Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                    <MetricCard icon={<Code size={16} />} label="LOC" value={metrics.loc} color="#38bdf8" />
-                    <MetricCard icon={<Activity size={16} />} label="Complexity" value={metrics.complexity} color="#f472b6" />
-                    <MetricCard icon={<GitCommit size={16} />} label="Churn" value={metrics.churn} color="#fbbf24" />
-                    <MetricCard icon={<Layers size={16} />} label="Dependencies" value={graphNeighbors.dependencies.length} color="#c084fc" />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                    <MetricCard label="LINES" value={metrics.loc} />
+                    <MetricCard label="COMPLEX" value={metrics.complexity} />
+                    <MetricCard label="CHURN" value={metrics.churn} />
+                    <MetricCard label="DEPENDS" value={graphNeighbors.dependencies.length} />
                 </div>
 
-                {/* Dependency Flow */}
+                {/* Dependency Flow HUD */}
                 <div style={{
-                    background: 'rgba(0,0,0,0.2)',
-                    borderRadius: '12px',
+                    background: 'transparent',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: '6px',
                     padding: '12px',
-                    border: '1px solid rgba(255,255,255,0.05)'
+                    position: 'relative'
                 }}>
-                    <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#a1a1aa', marginBottom: '8px' }}>
-                        DEPENDENCY FLOW
+                    {/* Decorative HUD corners */}
+                    <div style={{ position: 'absolute', top: '-1px', left: '-1px', width: '4px', height: '4px', background: '#ffffff' }} />
+                    <div style={{ position: 'absolute', top: '-1px', right: '-1px', width: '4px', height: '4px', background: '#ffffff' }} />
+                    <div style={{ position: 'absolute', bottom: '-1px', left: '-1px', width: '4px', height: '4px', background: '#ffffff' }} />
+                    <div style={{ position: 'absolute', bottom: '-1px', right: '-1px', width: '4px', height: '4px', background: '#ffffff' }} />
+
+                    <div style={{ fontSize: '0.65rem', color: 'rgba(255, 255, 255,0.8)', letterSpacing: '1px', marginBottom: '12px' }}>
+                        DATA TRACING
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#ff0055' }}>
+                        <div style={{ textAlign: 'center', flex: 1 }}>
+                            <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#ff0055', textShadow: '0 0 10px rgba(255,0,85,0.5)' }}>
                                 {graphNeighbors.dependents.length}
                             </div>
-                            <div style={{ fontSize: '0.7rem', color: '#a1a1aa' }}>Incoming</div>
+                            <div style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.5)' }}>INBOUND</div>
                         </div>
-                        <div style={{ height: '1px', flex: 1, background: 'rgba(255,255,255,0.1)', margin: '0 12px' }} />
-                        <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#00f2ff' }}>
+                        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div style={{ width: '100%', height: '1px', background: 'linear-gradient(90deg, #ff0055, #ffffff)', opacity: 0.5 }} />
+                        </div>
+                        <div style={{ textAlign: 'center', flex: 1 }}>
+                            <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#ffffff', textShadow: '0 0 10px rgba(255, 255, 255,0.5)' }}>
                                 {graphNeighbors.dependencies.length}
                             </div>
-                            <div style={{ fontSize: '0.7rem', color: '#a1a1aa' }}>Outgoing</div>
+                            <div style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.5)' }}>OUTBOUND</div>
                         </div>
                     </div>
+                </div>
+
+                {/* Intelligence Actions Row */}
+                <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
+                    {/* X-Ray */}
+                    <button
+                        onClick={() => setActiveIntelligencePanel(activeIntelligencePanel === 'xray' ? null : 'xray')}
+                        style={{
+                            flex: 1,
+                            background: activeIntelligencePanel === 'xray' ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
+                            border: `1px solid ${activeIntelligencePanel === 'xray' ? '#ffffff' : 'rgba(255, 255, 255,0.2)'}`,
+                            padding: '10px',
+                            borderRadius: '4px',
+                            color: activeIntelligencePanel === 'xray' ? '#fff' : '#ffffff',
+                            fontSize: '0.75rem',
+                            letterSpacing: '1px',
+                            cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                            transition: 'all 0.2s',
+                            boxShadow: activeIntelligencePanel === 'xray' ? '0 0 15px rgba(255, 255, 255, 0.4)' : 'none'
+                        }}
+                        onMouseEnter={e => { if (activeIntelligencePanel !== 'xray') e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)' }}
+                        onMouseLeave={e => { if (activeIntelligencePanel !== 'xray') e.currentTarget.style.background = 'transparent' }}
+                    >
+                        <ScanEye size={14} /> X-RAY
+                    </button>
+
+                    {/* Blast Radius */}
+                    <button
+                        onClick={() => {
+                            if (activeIntelligencePanel === 'impact') {
+                                setActiveIntelligencePanel(null)
+                            } else {
+                                setActiveIntelligencePanel('impact')
+                                fetchImpactAnalysis(selectedBuilding.id)
+                            }
+                        }}
+                        style={{
+                            flex: 1,
+                            background: activeIntelligencePanel === 'impact' ? 'rgba(255, 0, 85, 0.2)' : 'transparent',
+                            border: `1px solid ${activeIntelligencePanel === 'impact' ? '#ff0055' : 'rgba(255,0,85,0.2)'}`,
+                            padding: '10px',
+                            borderRadius: '4px',
+                            color: activeIntelligencePanel === 'impact' ? '#fff' : '#ff0055',
+                            fontSize: '0.75rem',
+                            letterSpacing: '1px',
+                            cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                            transition: 'all 0.2s',
+                            boxShadow: activeIntelligencePanel === 'impact' ? '0 0 15px rgba(255, 0, 85, 0.4)' : 'none'
+                        }}
+                        onMouseEnter={e => { if (activeIntelligencePanel !== 'impact') e.currentTarget.style.background = 'rgba(255, 0, 85, 0.1)' }}
+                        onMouseLeave={e => { if (activeIntelligencePanel !== 'impact') e.currentTarget.style.background = 'transparent' }}
+                    >
+                        <AlertTriangle size={14} /> IMPACT
+                    </button>
                 </div>
 
                 {/* VS Code Button */}
                 <button style={{
-                    background: 'rgba(255,255,255,0.1)',
-                    border: '1px solid rgba(255,255,255,0.1)',
+                    background: 'transparent',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
                     padding: '10px',
-                    borderRadius: '8px',
-                    color: 'white',
-                    fontWeight: 600,
+                    borderRadius: '4px',
+                    color: '#ffffff',
+                    fontSize: '0.75rem',
+                    letterSpacing: '1px',
                     cursor: 'pointer',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                    transition: 'background 0.2s'
+                    transition: 'all 0.2s'
                 }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
-                    <Code size={16} /> Open in Editor
+                    <FileCode size={14} /> VIEW SOURCE
                 </button>
 
             </div>
@@ -180,19 +261,20 @@ export default function CodeInspector() {
     )
 }
 
-function MetricCard({ icon, label, value, color }) {
+function MetricCard({ label, value }) {
     return (
         <div style={{
-            background: 'rgba(255,255,255,0.03)',
-            borderRadius: '8px',
-            padding: '10px',
-            display: 'flex', flexDirection: 'column', gap: '4px',
-            border: '1px solid rgba(255,255,255,0.05)'
+            background: 'transparent',
+            padding: '8px',
+            display: 'flex', flexDirection: 'column', gap: '2px',
+            borderLeft: '2px solid rgba(255, 255, 255, 0.3)'
         }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: color, fontSize: '0.75rem' }}>
-                {icon} <span style={{ opacity: 0.8 }}>{label}</span>
+            <div style={{ color: 'rgba(255, 255, 255,0.6)', fontSize: '0.6rem', letterSpacing: '1px' }}>
+                {label}
             </div>
-            <div style={{ fontSize: '1.1rem', fontWeight: 600 }}>{value}</div>
+            <div style={{ fontSize: '1.1rem', fontWeight: 600, color: '#fff', textShadow: '0 0 5px rgba(255, 255, 255,0.3)' }}>
+                {value}
+            </div>
         </div>
     )
 }

@@ -13,7 +13,7 @@ export const createIntelligenceSlice = (set, get) => ({
     impactAnalysis: null,
     criticalPaths: null,
     searchResults: null,
-    
+
     // Loading States
     intelligenceLoading: {
         health: false,
@@ -23,26 +23,33 @@ export const createIntelligenceSlice = (set, get) => ({
         critical: false,
         search: false
     },
-    
+
     // Active Intelligence Panel
     activeIntelligencePanel: null, // 'health' | 'deadCode' | 'quality' | 'impact' | 'search'
-    
+
     setActiveIntelligencePanel: (panel) => set({ activeIntelligencePanel: panel }),
-    
+
     // Fetch Code Health Report
     fetchHealthReport: async () => {
         const { cityId } = get()
-        if (!cityId) return
-        
+        console.log('[Intelligence] Fetching health report for cityId:', cityId)
+        if (!cityId) {
+            console.warn('[Intelligence] No cityId available')
+            return
+        }
+
         set(state => ({
             intelligenceLoading: { ...state.intelligenceLoading, health: true }
         }))
-        
+
         try {
-            const response = await fetch(`${API_BASE}/intelligence/health/${cityId}`)
+            const url = `${API_BASE}/intelligence/health/${cityId}`
+            console.log('[Intelligence] Fetching:', url)
+            const response = await fetch(url)
             if (!response.ok) throw new Error('Health analysis failed')
-            
+
             const data = await response.json()
+            console.log('[Intelligence] Health report received:', data)
             set(state => ({
                 healthReport: data.health,
                 intelligenceLoading: { ...state.intelligenceLoading, health: false }
@@ -54,20 +61,20 @@ export const createIntelligenceSlice = (set, get) => ({
             }))
         }
     },
-    
+
     // Fetch Dead Code Report
     fetchDeadCodeReport: async () => {
         const { cityId } = get()
         if (!cityId) return
-        
+
         set(state => ({
             intelligenceLoading: { ...state.intelligenceLoading, deadCode: true }
         }))
-        
+
         try {
             const response = await fetch(`${API_BASE}/intelligence/dead-code/${cityId}`)
             if (!response.ok) throw new Error('Dead code detection failed')
-            
+
             const data = await response.json()
             set(state => ({
                 deadCodeReport: data.dead_code,
@@ -80,20 +87,20 @@ export const createIntelligenceSlice = (set, get) => ({
             }))
         }
     },
-    
+
     // Fetch Code Quality Report
     fetchQualityReport: async () => {
         const { cityId } = get()
         if (!cityId) return
-        
+
         set(state => ({
             intelligenceLoading: { ...state.intelligenceLoading, quality: true }
         }))
-        
+
         try {
             const response = await fetch(`${API_BASE}/intelligence/quality/${cityId}`)
             if (!response.ok) throw new Error('Quality scan failed')
-            
+
             const data = await response.json()
             set(state => ({
                 qualityReport: data.quality,
@@ -106,22 +113,22 @@ export const createIntelligenceSlice = (set, get) => ({
             }))
         }
     },
-    
+
     // Fetch Impact Analysis for a specific file
     fetchImpactAnalysis: async (fileId, depth = 3) => {
         const { cityId } = get()
         if (!cityId || !fileId) return
-        
+
         set(state => ({
             intelligenceLoading: { ...state.intelligenceLoading, impact: true }
         }))
-        
+
         try {
             const response = await fetch(
                 `${API_BASE}/intelligence/impact/${cityId}/${fileId}?depth=${depth}`
             )
             if (!response.ok) throw new Error('Impact analysis failed')
-            
+
             const data = await response.json()
             set(state => ({
                 impactAnalysis: data.impact,
@@ -134,18 +141,18 @@ export const createIntelligenceSlice = (set, get) => ({
             }))
         }
     },
-    
+
     // Check Safe Delete
     checkSafeDelete: async (fileId) => {
         const { cityId } = get()
         if (!cityId || !fileId) return null
-        
+
         try {
             const response = await fetch(
                 `${API_BASE}/intelligence/safe-delete/${cityId}/${fileId}`
             )
             if (!response.ok) throw new Error('Safe delete check failed')
-            
+
             const data = await response.json()
             return data.deletion_analysis
         } catch (error) {
@@ -153,20 +160,20 @@ export const createIntelligenceSlice = (set, get) => ({
             return null
         }
     },
-    
+
     // Fetch Critical Paths
     fetchCriticalPaths: async () => {
         const { cityId } = get()
         if (!cityId) return
-        
+
         set(state => ({
             intelligenceLoading: { ...state.intelligenceLoading, critical: true }
         }))
-        
+
         try {
             const response = await fetch(`${API_BASE}/intelligence/critical-paths/${cityId}`)
             if (!response.ok) throw new Error('Critical path analysis failed')
-            
+
             const data = await response.json()
             set(state => ({
                 criticalPaths: data.critical_files,
@@ -179,25 +186,25 @@ export const createIntelligenceSlice = (set, get) => ({
             }))
         }
     },
-    
+
     // Smart Search
     performSmartSearch: async (query, type = 'exact', fileFilter = null) => {
         const { cityId } = get()
         if (!cityId || !query) return
-        
+
         set(state => ({
             intelligenceLoading: { ...state.intelligenceLoading, search: true }
         }))
-        
+
         try {
             const response = await fetch(`${API_BASE}/intelligence/search/${cityId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query, type, file_filter: fileFilter })
             })
-            
+
             if (!response.ok) throw new Error('Search failed')
-            
+
             const data = await response.json()
             set(state => ({
                 searchResults: data.search_results,
@@ -210,7 +217,7 @@ export const createIntelligenceSlice = (set, get) => ({
             }))
         }
     },
-    
+
     // Clear Intelligence Data (on city change)
     clearIntelligenceData: () => set({
         healthReport: null,

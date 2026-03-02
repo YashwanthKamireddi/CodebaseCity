@@ -1,44 +1,25 @@
-/* Code World Design System - The Gold Standard */
+/**
+ * Design System — Utility Layer
+ *
+ * NOTE: All design tokens (spacing, colors, typography, z-index, radii)
+ * are defined in design-tokens.css — the single source of truth.
+ *
+ * This file provides:
+ * - Fluid typography clamp() variants
+ * - Accessibility target sizes
+ * - Reusable utility classes (glassmorphism, touch targets)
+ */
+
 :root {
-  /* ------------------------------------------- */
-  /* SPACING SYSTEM (8pt Grid)                   */
-  /* ------------------------------------------- */
-  /* Micro-spacing (4pt grid for high density) */
-  --space-0_5: 0.125rem; /* 2px */
-  --space-1: 0.25rem;    /* 4px */
-  --space-1_5: 0.375rem; /* 6px */
-
-  /* Macro-spacing (8pt grid) */
-  --space-2: 0.5rem;     /* 8px */
-  --space-3: 0.75rem;    /* 12px */
-  --space-4: 1rem;       /* 16px */
-  --space-5: 1.25rem;    /* 20px */
-  --space-6: 1.5rem;     /* 24px */
-  --space-8: 2rem;       /* 32px */
-  --space-10: 2.5rem;    /* 40px */
-  --space-12: 3rem;      /* 48px */
-  --space-16: 4rem;      /* 64px */
-
-  /* ------------------------------------------- */
-  /* FLUID TYPOGRAPHY (Clamp)                    */
-  /* ------------------------------------------- */
-  /* Scales smoothly between 320px and 1920px viewports */
-
-  /* Labels / Captions */
+  /* ── Fluid Typography (viewport-responsive) ────────────── */
   --font-xs: clamp(0.7rem, 0.65rem + 0.25vw, 0.8rem);
   --font-sm: clamp(0.8rem, 0.75rem + 0.25vw, 0.9rem);
-
-  /* Body */
-  --font-base: clamp(0.9rem, 0.85rem + 0.25vw, 1rem); /* 14.4px -> 16px */
-
-  /* Headings */
+  --font-base: clamp(0.9rem, 0.85rem + 0.25vw, 1rem);
   --font-lg: clamp(1.1rem, 1rem + 0.5vw, 1.3rem);
   --font-xl: clamp(1.3rem, 1.1rem + 1vw, 1.8rem);
   --font-2xl: clamp(1.8rem, 1.5rem + 1.5vw, 2.5rem);
 
-  /* ------------------------------------------- */
-  /* SEMANTIC Z-INDEX                            */
-  /* ------------------------------------------- */
+  /* ── Semantic Z-Index (extends design-tokens.css) ──────── */
   --z-canvas: 0;
   --z-ui-base: 100;
   --z-hud: 500;
@@ -48,17 +29,12 @@
   --z-toast: 1500;
   --z-tooltip: 2000;
 
-  /* ------------------------------------------- */
-  /* TARGET SIZES (Accessibility)                */
-  /* ------------------------------------------- */
-  --target-touch: 44px; /* Min touch target */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-full: 9999px;
+  /* ── Accessibility ─────────────────────────────────────── */
+  --target-touch: 44px;
 }
 
-/* Utility Classes */
+/* ── Utility Classes ─────────────────────────────────────── */
+
 .touch-target {
   min-width: var(--target-touch);
   min-height: var(--target-touch);

@@ -52,7 +52,7 @@ export default function NeuralHUD() {
                     <div className="status-dot" title="Connected" />
                 </div>
 
-                {/* Satellite Scan Input */}
+                {/* Search Input */}
                 <div className="scan-input-wrapper">
                     <input
                         type="text"
@@ -70,15 +70,15 @@ export default function NeuralHUD() {
             {!scanQuery && (
                 <div className="diagnostic-grid">
                     <div className="diag-card">
-                        <div className="diag-value" style={{ color: 'white' }}>{diagnostics.files}</div>
+                        <div className="diag-value">{diagnostics.files}</div>
                         <div className="diag-label">Modules</div>
                     </div>
                     <div className="diag-card">
-                        <div className="diag-value" style={{ color: '#fbbf24' }}>{diagnostics.loc}</div>
+                        <div className="diag-value" style={{ color: 'var(--color-warning)' }}>{diagnostics.loc}</div>
                         <div className="diag-label">Lines</div>
                     </div>
                     <div className="diag-card">
-                        <div className="diag-value" style={{ color: '#f87171' }}>{diagnostics.critical}</div>
+                        <div className="diag-value" style={{ color: 'var(--color-error)' }}>{diagnostics.critical}</div>
                         <div className="diag-label">Hotspots</div>
                     </div>
                     <div className="diag-card">
@@ -90,7 +90,7 @@ export default function NeuralHUD() {
 
             {/* 3. Matrix View (File Tree) */}
             <div className="matrix-container">
-                <div style={{ padding: '0 20px 8px', fontSize: '0.6em', color: '#6b7280', letterSpacing: '0.05em', fontWeight: 600 }}>
+                <div className="matrix-section-label">
                     {scanQuery ? 'SEARCH RESULTS' : 'EXPLORER'}
                 </div>
 
@@ -103,16 +103,9 @@ export default function NeuralHUD() {
             </div>
 
             {/* Footer Control */}
-            <div style={{
-                padding: '12px 20px',
-                borderTop: '1px solid rgba(255,255,255,0.05)',
-                fontSize: '0.7em',
-                color: '#4b5563',
-                display: 'flex',
-                justifyContent: 'space-between'
-            }}>
+            <div className="hud-footer">
                 <span>READY</span>
-                <span style={{ cursor: 'pointer' }} onClick={() => setSidebarOpen(false)}>CLOSE</span>
+                <span className="hud-footer-action" onClick={() => setSidebarOpen(false)}>CLOSE</span>
             </div>
         </div>
     )
@@ -148,13 +141,7 @@ function FileMatrix({ files, onSelect, selectedId, isScanning }) {
                         onClick={() => onSelect(item)}
                         style={{ paddingLeft: `${depth * 12 + 20}px` }}
                     >
-                        {/* Icon based on file type? Keeping it minimal text for now or simple dot */}
-                        <div style={{
-                            width: 6, height: 6, borderRadius: '50%',
-                            background: selectedId === item.id ? '#3b82f6' : '#475569',
-                            marginRight: 10,
-                            opacity: selectedId === item.id ? 1 : 0.5
-                        }} />
+                        <div className={`matrix-dot ${selectedId === item.id ? 'active' : ''}`} />
                         {name}
                     </div>
                 )
@@ -182,11 +169,11 @@ function FolderGroup({ name, depth, children, forceOpen }) {
         <div>
             <div
                 className="matrix-node"
-                style={{ paddingLeft: `${depth * 12 + 20}px`, color: isOpen ? '#9ca3af' : '#6b7280' }}
+                style={{ paddingLeft: `${depth * 12 + 20}px` }}
                 onClick={() => setIsOpen(!isOpen)}
             >
-                <span style={{ marginRight: 6, fontSize: '0.8em' }}>{isOpen ? '▼' : '▶'}</span>
-                <span style={{ fontWeight: 600, fontSize: '0.75em', letterSpacing: '0.05em' }}>{name.toUpperCase()}</span>
+                <span className="matrix-folder-chevron">{isOpen ? '▼' : '▶'}</span>
+                <span className="matrix-folder-name">{name.toUpperCase()}</span>
             </div>
             {isOpen && children}
         </div>

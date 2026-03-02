@@ -1,15 +1,13 @@
 /**
- * DependencyGraph.css
- *
+ * DependencyGraph.css — Unified with design-tokens.css
  * Premium 2D graph visualization styles
- * World-class design with clean, modern aesthetics
  */
 
 /* Overlay */
 .dependency-graph-overlay {
     position: fixed;
     inset: 0;
-    z-index: 1000;
+    z-index: var(--z-modal-backdrop);
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(8px);
     display: flex;
@@ -27,12 +25,10 @@
     width: 100%;
     max-width: 1400px;
     height: 85vh;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow:
-        0 32px 64px -16px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg-elevated);
+    border-radius: var(--radius-2xl);
+    border: 1px solid var(--glass-border-strong);
+    box-shadow: var(--shadow-xl);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -50,8 +46,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 1rem 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--color-bg-secondary);
 }
 
 .dg-title {
@@ -61,22 +57,22 @@
 }
 
 .dg-title svg {
-    color: #3b82f6;
+    color: var(--color-accent);
 }
 
 .dg-title h2 {
     margin: 0;
-    font-size: 1.125rem;
+    font-size: var(--text-lg);
     font-weight: 600;
-    color: #f8fafc;
+    color: var(--color-text-primary);
 }
 
 .dg-stats {
-    font-size: 0.75rem;
-    color: #64748b;
-    background: rgba(255, 255, 255, 0.05);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    background: var(--color-bg-hover);
     padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-family: var(--font-mono);
 }
 
@@ -91,43 +87,43 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    background: var(--color-bg-hover);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
     padding: 0.5rem 0.75rem;
 }
 
 .dg-search svg {
-    color: #64748b;
+    color: var(--color-text-muted);
 }
 
 .dg-search input {
     background: transparent;
     border: none;
     outline: none;
-    color: #f8fafc;
-    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    font-size: var(--text-sm);
     width: 150px;
 }
 
 .dg-search input::placeholder {
-    color: #475569;
+    color: var(--color-text-muted);
 }
 
 /* Filter Select */
 .dg-filter {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    background: var(--color-bg-hover);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
     padding: 0.5rem 0.75rem;
-    color: #f8fafc;
-    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    font-size: var(--text-sm);
     cursor: pointer;
     outline: none;
 }
 
 .dg-filter option {
-    background: #1e293b;
+    background: var(--color-bg-secondary);
 }
 
 /* Zoom Controls */
@@ -135,17 +131,17 @@
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
+    background: var(--color-bg-hover);
+    border-radius: var(--radius-lg);
     padding: 0.25rem;
 }
 
 .dg-zoom-controls button {
     background: transparent;
     border: none;
-    color: #94a3b8;
+    color: var(--color-text-secondary);
     padding: 0.375rem;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -155,12 +151,12 @@
 
 .dg-zoom-controls button:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: #f8fafc;
+    color: var(--color-text-primary);
 }
 
 .dg-zoom-level {
-    font-size: 0.75rem;
-    color: #64748b;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
     min-width: 40px;
     text-align: center;
     font-family: var(--font-mono);
@@ -168,10 +164,10 @@
 
 /* Buttons */
 .dg-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    color: #94a3b8;
+    background: var(--color-bg-hover);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-secondary);
     padding: 0.5rem;
     cursor: pointer;
     display: flex;
@@ -182,12 +178,12 @@
 
 .dg-btn:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: #f8fafc;
+    color: var(--color-text-primary);
 }
 
 .dg-close:hover {
-    background: rgba(239, 68, 68, 0.2);
-    color: #ef4444;
+    background: var(--color-error-muted);
+    color: var(--color-error);
     border-color: rgba(239, 68, 68, 0.3);
 }
 
@@ -199,7 +195,7 @@
 }
 
 .dg-graph svg {
-    background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+    background: var(--color-bg-primary);
 }
 
 /* Legend */
@@ -207,19 +203,19 @@
     position: absolute;
     bottom: 1.5rem;
     left: 1.5rem;
-    background: rgba(15, 23, 42, 0.9);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    background: var(--glass-bg-elevated);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
     padding: 1rem;
     min-width: 140px;
 }
 
 .dg-legend h4 {
     margin: 0 0 0.75rem 0;
-    font-size: 0.75rem;
+    font-size: var(--text-xs);
     font-weight: 600;
-    color: #94a3b8;
+    color: var(--color-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -229,8 +225,8 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.25rem 0;
-    font-size: 0.8rem;
-    color: #cbd5e1;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
     text-transform: capitalize;
 }
 
@@ -241,7 +237,7 @@
 .dg-legend-hotspot {
     margin-top: 0.5rem;
     padding-top: 0.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--border-subtle);
 }
 
 /* Details Panel */
@@ -250,10 +246,10 @@
     top: 1.5rem;
     right: 1.5rem;
     width: 280px;
-    background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    background: var(--glass-bg-elevated);
+    backdrop-filter: blur(var(--glass-blur-strong));
+    border: 1px solid var(--glass-border-strong);
+    border-radius: var(--radius-xl);
     overflow: hidden;
 }
 
@@ -262,15 +258,15 @@
     align-items: center;
     justify-content: space-between;
     padding: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--color-bg-secondary);
 }
 
 .dg-details-header h3 {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: var(--text-base);
     font-weight: 600;
-    color: #f8fafc;
+    color: var(--color-text-primary);
     font-family: var(--font-mono);
     max-width: 200px;
     overflow: hidden;
@@ -281,18 +277,18 @@
 .dg-details-header button {
     background: transparent;
     border: none;
-    color: #64748b;
+    color: var(--color-text-muted);
     cursor: pointer;
     padding: 0.25rem;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .dg-details-header button:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #f8fafc;
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
 }
 
 .dg-details-content {
@@ -304,7 +300,7 @@
     justify-content: space-between;
     align-items: flex-start;
     padding: 0.5rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 .dg-detail-row:last-child {
@@ -312,14 +308,14 @@
 }
 
 .dg-detail-row span:first-child {
-    color: #64748b;
-    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
 }
 
 .dg-detail-row span:last-child,
 .dg-detail-row code {
-    color: #e2e8f0;
-    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
     font-family: var(--font-mono);
     max-width: 150px;
     overflow: hidden;
@@ -328,17 +324,17 @@
 }
 
 .dg-detail-row .warning {
-    color: #fbbf24;
+    color: var(--color-warning);
 }
 
 .dg-hotspot-badge {
     margin-top: 0.75rem;
     padding: 0.5rem;
-    background: rgba(239, 68, 68, 0.15);
+    background: var(--color-error-muted);
     border: 1px solid rgba(239, 68, 68, 0.3);
-    border-radius: 6px;
-    font-size: 0.8rem;
-    color: #fca5a5;
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--color-error);
     text-align: center;
 }
 
@@ -388,6 +384,6 @@
         bottom: 0;
         top: auto;
         right: 0;
-        border-radius: 12px 12px 0 0;
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     }
 }

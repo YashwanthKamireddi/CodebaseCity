@@ -1,13 +1,7 @@
-/* HUD.css - Project Interface (Professional Theme) */
-:root {
-    --hud-glass: rgba(15, 23, 42, 0.85); /* Deep Slate */
-    --hud-border: 1px solid rgba(255, 255, 255, 0.1);
-    --hud-accent: #e2e8f0; /* Neutral Slate-200 */
-    --hud-highlight: #3b82f6; /* Standard Blue */
-    --hud-warning: #f59e0b; /* Amber */
-    --hud-text: #f8fafc;
-    --hud-muted: #94a3b8;
-}
+/* ═══════════════════════════════════════════════════════════════
+   HUD.css - Unified with design-tokens.css
+   No duplicate :root — all values from design tokens
+   ═══════════════════════════════════════════════════════════════ */
 
 .neural-hud-container {
     position: fixed;
@@ -15,20 +9,19 @@
     left: 20px;
     bottom: 20px;
     width: 320px;
-    background: var(--hud-glass);
-    backdrop-filter: blur(24px) saturate(110%);
-    -webkit-backdrop-filter: blur(24px) saturate(110%);
-    border: var(--hud-border);
-    border-radius: 8px; /* Sharper */
-    z-index: 1000;
+    background: var(--glass-bg-elevated);
+    backdrop-filter: blur(var(--glass-blur-strong)) saturate(110%);
+    -webkit-backdrop-filter: blur(var(--glass-blur-strong)) saturate(110%);
+    border: 1px solid var(--glass-border-strong);
+    border-radius: var(--radius-lg);
+    z-index: var(--z-modal-backdrop);
     display: flex;
     flex-direction: column;
-    box-shadow:
-        0 20px 50px rgba(0,0,0,0.5),
-        0 0 0 1px rgba(255,255,255,0.05);
-    font-family: 'Inter', system-ui, sans-serif;
+    box-shadow: var(--shadow-xl),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    font-family: var(--font-body);
     opacity: 0;
-    animation: hudBoot 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: hudBoot 0.4s var(--ease-out-expo) forwards;
     overflow: hidden;
 }
 
@@ -39,8 +32,8 @@
 
 /* Header Section */
 .hud-header {
-    padding: 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding: var(--space-5);
+    border-bottom: 1px solid var(--border-subtle);
     background: transparent;
 }
 
@@ -48,27 +41,28 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: var(--space-4);
 }
 
 .status-dot {
     width: 6px;
     height: 6px;
-    background: #10b981; /* Standard Green */
-    box-shadow: 0 0 4px rgba(16, 185, 129, 0.4);
-    border-radius: 50%;
+    background: var(--color-success);
+    box-shadow: 0 0 4px rgba(34, 197, 94, 0.4);
+    border-radius: var(--radius-full);
 }
 
 .project-title {
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     font-weight: 600;
-    color: var(--hud-accent);
+    color: var(--color-text-primary);
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-family: var(--font-display);
 }
 
-/* Satellite Search */
+/* Search Input */
 .scan-input-wrapper {
     position: relative;
     margin-bottom: 0;
@@ -79,27 +73,32 @@
     bottom: 0;
     left: 0;
     height: 1px;
-    background: var(--hud-highlight);
+    background: var(--color-accent);
     width: 0%;
     transition: width 0.2s;
 }
 
 .scan-input {
     width: 100%;
-    background: rgba(0,0,0,0.2);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 8px 12px;
-    color: white;
-    font-family: inherit;
-    font-size: 0.8rem;
-    border-radius: 4px;
+    background: var(--color-bg-hover);
+    border: 1px solid var(--border-default);
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    border-radius: var(--radius-sm);
     outline: none;
     transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.scan-input::placeholder {
+    color: var(--color-text-muted);
 }
 
 .scan-input:focus {
-    background: rgba(255,255,255,0.05);
-    border-color: var(--hud-highlight);
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-accent);
 }
 
 .scan-input:focus + .scan-line {
@@ -110,66 +109,125 @@
 .diagnostic-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    padding: 12px 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 .diag-card {
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.05);
-    padding: 8px 12px;
-    border-radius: 4px;
+    border: 1px solid var(--border-subtle);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
     cursor: default;
 }
 
 .diag-value {
-    font-size: 1.1em;
+    font-size: var(--text-lg);
     font-weight: 600;
-    color: white; /* Neutral override handled in JS usually, but defaults here */
+    color: var(--color-text-primary);
+    font-family: var(--font-mono);
 }
 
 .diag-label {
-    font-size: 0.65em;
+    font-size: var(--text-2xs);
     text-transform: uppercase;
-    color: var(--hud-muted);
+    color: var(--color-text-muted);
     letter-spacing: 0.05em;
-    margin-top: 4px;
+    margin-top: var(--space-1);
 }
 
 /* File Matrix (Tree) */
 .matrix-container {
     flex: 1;
     overflow-y: auto;
-    padding: 10px 0;
+    padding: var(--space-2-5) 0;
 }
 
 .matrix-container::-webkit-scrollbar {
     width: 4px;
 }
+
 .matrix-container::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+}
+
+.matrix-section-label {
+    padding: 0 var(--space-5) var(--space-2);
+    font-size: var(--text-2xs);
+    color: var(--color-text-muted);
+    letter-spacing: 0.05em;
+    font-weight: 600;
 }
 
 .matrix-node {
     display: flex;
     align-items: center;
-    padding: 6px 20px;
+    padding: 6px var(--space-5);
     cursor: pointer;
-    font-size: 0.8rem;
-    color: var(--hud-muted);
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
     transition: all 0.1s;
     border-left: 2px solid transparent;
 }
 
 .matrix-node:hover {
-    color: white;
-    background: rgba(255,255,255,0.02);
+    color: var(--color-text-primary);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .matrix-node.active {
-    color: white;
-    background: rgba(59, 130, 246, 0.15);
-    border-left-color: var(--hud-highlight);
+    color: var(--color-text-primary);
+    background: var(--color-accent-muted);
+    border-left-color: var(--color-accent);
     font-weight: 500;
+}
+
+/* HUD Footer */
+.hud-footer {
+    padding: var(--space-3) var(--space-5);
+    border-top: 1px solid var(--border-subtle);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    display: flex;
+    justify-content: space-between;
+}
+
+.hud-footer-action {
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.hud-footer-action:hover {
+    color: var(--color-text-secondary);
+}
+
+/* Matrix Node Indicators */
+.matrix-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--color-text-muted);
+    margin-right: var(--space-2-5);
+    opacity: 0.5;
+    flex-shrink: 0;
+}
+
+.matrix-dot.active {
+    background: var(--color-accent);
+    opacity: 1;
+}
+
+.matrix-folder-chevron {
+    margin-right: 6px;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+}
+
+.matrix-folder-name {
+    font-weight: 600;
+    font-size: var(--text-xs);
+    letter-spacing: 0.05em;
+    color: var(--color-text-tertiary);
 }

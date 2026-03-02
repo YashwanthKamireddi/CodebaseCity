@@ -49,8 +49,8 @@ class TestAnalyzeEndpoint:
         response = test_client.post("/api/analyze", json={"path": "../../../etc/passwd"})
         assert response.status_code == 422
 
-    @patch('api.routes.analyzer')
-    @patch('api.routes.GitService')
+    @patch('api.routes.analysis.analyzer')
+    @patch('api.routes.analysis.GitService')
     def test_analyze_local_path(self, mock_git, mock_analyzer, test_client, mock_city_data, temp_project_dir):
         """Test analyzing a local directory."""
         mock_git.parse_url.return_value = (temp_project_dir, False, "test")
@@ -84,7 +84,7 @@ class TestChatEndpoint:
         response = test_client.post("/api/chat", json={})
         assert response.status_code == 422
 
-    @patch('api.routes.guide')
+    @patch('api.routes.chat.guide')
     def test_chat_returns_response(self, mock_guide, test_client):
         """Test that chat returns AI response."""
         mock_guide.chat.return_value = "This is a test response from the AI guide."

@@ -1,0 +1,6566 @@
+{
+  "name": "Float-AI",
+  "path": "/tmp/codebase_city/Float-AI",
+  "city_id": "github_Float-AI",
+  "buildings": [
+    {
+      "id": "api_server.py",
+      "name": "api_server.py",
+      "path": "api_server.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -2.4531792445115235,
+        "y": 0.0,
+        "z": -0.9701625144015634
+      },
+      "dimensions": {
+        "width": 3.37,
+        "height": 25.0,
+        "depth": 3.37
+      },
+      "metrics": {
+        "loc": 337,
+        "complexity": 51,
+        "churn": 0,
+        "age_days": 94,
+        "dependencies_in": 0,
+        "dependencies_out": 3,
+        "size_bytes": 12007
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "add_request_context",
+          "line": 1
+        },
+        {
+          "name": "_enforce_rate_limit",
+          "line": 1
+        },
+        {
+          "name": "enforce_auth_and_rate_limit",
+          "line": 1
+        },
+        {
+          "name": "handle_config_error",
+          "line": 1
+        },
+        {
+          "name": "handle_data_access_error",
+          "line": 1
+        },
+        {
+          "name": "ask_question",
+          "line": 1
+        },
+        {
+          "name": "_parse_iso_dt",
+          "line": 1
+        },
+        {
+          "name": "get_health",
+          "line": 1
+        },
+        {
+          "name": "get_database_stats",
+          "line": 1
+        },
+        {
+          "name": "list_floats",
+          "line": 1
+        },
+        {
+          "name": "get_float_profile",
+          "line": 1
+        },
+        {
+          "name": "get_float_time_series",
+          "line": 1
+        },
+        {
+          "name": "get_float_quality",
+          "line": 1
+        },
+        {
+          "name": "get_float_trajectory",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "QueryRequest",
+          "line": 1
+        },
+        {
+          "name": "AssistantMessage",
+          "line": 1
+        },
+        {
+          "name": "QueryResponse",
+          "line": 1
+        },
+        {
+          "name": "DatabaseStats",
+          "line": 1
+        },
+        {
+          "name": "FloatSummary",
+          "line": 1
+        },
+        {
+          "name": "FloatProfileResponse",
+          "line": 1
+        },
+        {
+          "name": "TimeSeriesPoint",
+          "line": 1
+        },
+        {
+          "name": "TimeSeriesPayload",
+          "line": 1
+        },
+        {
+          "name": "DataQualityMetric",
+          "line": 1
+        },
+        {
+          "name": "TrajectoryPoint",
+          "line": 1
+        },
+        {
+          "name": "HealthResponse",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.12876712328767123,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1764081788
+    },
+    {
+      "id": "ai_core/sample_data.py",
+      "name": "sample_data.py",
+      "path": "ai_core/sample_data.py",
+      "district_id": "district_5",
+      "position": {
+        "x": 49.58058964545561,
+        "y": 0.0,
+        "z": -28.408737138718358
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 7.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 109,
+        "complexity": 9,
+        "churn": 0,
+        "age_days": 97,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4202
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "_now",
+          "line": 1
+        },
+        {
+          "name": "stats",
+          "line": 1
+        },
+        {
+          "name": "float_catalog",
+          "line": 1
+        },
+        {
+          "name": "profile",
+          "line": 1
+        },
+        {
+          "name": "time_series",
+          "line": 1
+        },
+        {
+          "name": "trajectory",
+          "line": 1
+        },
+        {
+          "name": "quality",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.13287671232876713,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1763905272
+    },
+    {
+      "id": "ai_core/main_agent.py",
+      "name": "main_agent.py",
+      "path": "ai_core/main_agent.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -4.388047475476602,
+        "y": 0.0,
+        "z": 2.0399763578228107
+      },
+      "dimensions": {
+        "width": 5.72,
+        "height": 25.0,
+        "depth": 5.72
+      },
+      "metrics": {
+        "loc": 572,
+        "complexity": 91,
+        "churn": 0,
+        "age_days": 94,
+        "dependencies_in": 3,
+        "dependencies_out": 1,
+        "size_bytes": 20553
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "_get_google_api_key",
+          "line": 1
+        },
+        {
+          "name": "_get_database_uri",
+          "line": 1
+        },
+        {
+          "name": "_initialise_sql_engine",
+          "line": 1
+        },
+        {
+          "name": "_get_faiss_index_path",
+          "line": 1
+        },
+        {
+          "name": "_get_retriever_k",
+          "line": 1
+        },
+        {
+          "name": "_load_embedding_model",
+          "line": 1
+        },
+        {
+          "name": "_normalize_value",
+          "line": 1
+        },
+        {
+          "name": "_normalize_records",
+          "line": 1
+        },
+        {
+          "name": "_looks_like_sql",
+          "line": 1
+        },
+        {
+          "name": "_validate_sql",
+          "line": 1
+        },
+        {
+          "name": "_build_data_messages",
+          "line": 1
+        },
+        {
+          "name": "_build_conversational_messages",
+          "line": 3
+        },
+        {
+          "name": "_diagnose_exception",
+          "line": 3
+        },
+        {
+          "name": "get_health_report",
+          "line": 3
+        },
+        {
+          "name": "_initialise_components",
+          "line": 3
+        },
+        {
+          "name": "initialize_ai_core",
+          "line": 3
+        },
+        {
+          "name": "get_sql_engine",
+          "line": 3
+        },
+        {
+          "name": "get_sql_database",
+          "line": 3
+        },
+        {
+          "name": "run_ai_pipeline",
+          "line": 3
+        }
+      ],
+      "classes": [
+        {
+          "name": "ConfigError",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.12876712328767123,
+      "is_hotspot": true,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1764083556
+    },
+    {
+      "id": "ai_core/knowledge_curator.py",
+      "name": "knowledge_curator.py",
+      "path": "ai_core/knowledge_curator.py",
+      "district_id": "district_6",
+      "position": {
+        "x": -18.598676434970187,
+        "y": 0.0,
+        "z": 59.45048230626109
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 16.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 69,
+        "complexity": 20,
+        "churn": 0,
+        "age_days": 144,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2975
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19726027397260273,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759764844
+    },
+    {
+      "id": "ai_core/data_access.py",
+      "name": "data_access.py",
+      "path": "ai_core/data_access.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -1.7734983707839524,
+        "y": 0.0,
+        "z": -5.654011987776834
+      },
+      "dimensions": {
+        "width": 3.99,
+        "height": 25.0,
+        "depth": 3.99
+      },
+      "metrics": {
+        "loc": 399,
+        "complexity": 78,
+        "churn": 0,
+        "age_days": 94,
+        "dependencies_in": 1,
+        "dependencies_out": 1,
+        "size_bytes": 14244
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "_ensure_table",
+          "line": 1
+        },
+        {
+          "name": "_coerce_datetime",
+          "line": 1
+        },
+        {
+          "name": "_get_engine",
+          "line": 1
+        },
+        {
+          "name": "fetch_database_stats",
+          "line": 1
+        },
+        {
+          "name": "_compute_status",
+          "line": 1
+        },
+        {
+          "name": "_match_status_filter",
+          "line": 1
+        },
+        {
+          "name": "fetch_float_catalog",
+          "line": 1
+        },
+        {
+          "name": "fetch_float_profile",
+          "line": 1
+        },
+        {
+          "name": "fetch_time_series",
+          "line": 1
+        },
+        {
+          "name": "fetch_float_trajectory",
+          "line": 1
+        },
+        {
+          "name": "fetch_quality_report",
+          "line": 1
+        },
+        {
+          "name": "ratio",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "FloatFilters",
+          "line": 1
+        },
+        {
+          "name": "DataAccessError",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.12876712328767123,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1764081788
+    },
+    {
+      "id": "ai_core/curated_knowledge.py",
+      "name": "curated_knowledge.py",
+      "path": "ai_core/curated_knowledge.py",
+      "district_id": "district_7",
+      "position": {
+        "x": -24.446021186690125,
+        "y": 0.0,
+        "z": -62.32238610509019
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 9.600000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 29,
+        "complexity": 12,
+        "churn": 0,
+        "age_days": 144,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2754
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19726027397260273,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759764844
+    },
+    {
+      "id": "ai_core/create_vector_db.py",
+      "name": "create_vector_db.py",
+      "path": "ai_core/create_vector_db.py",
+      "district_id": "district_8",
+      "position": {
+        "x": 64.26577583653813,
+        "y": 0.0,
+        "z": 27.598253008689714
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 5.6000000000000005,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 46,
+        "complexity": 7,
+        "churn": 0,
+        "age_days": 145,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2123
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19863013698630136,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759753129
+    },
+    {
+      "id": "ai_core/config.py",
+      "name": "config.py",
+      "path": "ai_core/config.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 2.0031310707030587,
+        "y": 0.0,
+        "z": 4.608632106578657
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 7.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 53,
+        "complexity": 9,
+        "churn": 0,
+        "age_days": 94,
+        "dependencies_in": 2,
+        "dependencies_out": 0,
+        "size_bytes": 1881
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "get_settings",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "Settings",
+          "line": 1
+        },
+        {
+          "name": "Config",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.12876712328767123,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1764081788
+    },
+    {
+      "id": "data_pipeline/data_quality_checker.py",
+      "name": "data_quality_checker.py",
+      "path": "data_pipeline/data_quality_checker.py",
+      "district_id": "district_9",
+      "position": {
+        "x": -73.72563280643266,
+        "y": 0.0,
+        "z": 23.920261791709
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 25.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 97,
+        "complexity": 34,
+        "churn": 0,
+        "age_days": 144,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3758
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19726027397260273,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759764844
+    },
+    {
+      "id": "data_pipeline/check_and_download_from_index.py",
+      "name": "check_and_download_from_index.py",
+      "path": "data_pipeline/check_and_download_from_index.py",
+      "district_id": "district_10",
+      "position": {
+        "x": 32.33267196943174,
+        "y": 0.0,
+        "z": -74.51834129573705
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 14.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 82,
+        "complexity": 18,
+        "churn": 0,
+        "age_days": 159,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2739
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "load_index",
+          "line": 1
+        },
+        {
+          "name": "filter_index",
+          "line": 1
+        },
+        {
+          "name": "show_and_download",
+          "line": 1
+        },
+        {
+          "name": "main",
+          "line": 3
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.21780821917808219,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758538027
+    },
+    {
+      "id": "data_pipeline/build_database.py",
+      "name": "build_database.py",
+      "path": "data_pipeline/build_database.py",
+      "district_id": "district_4",
+      "position": {
+        "x": -18.125499846656012,
+        "y": 0.0,
+        "z": 18.657913274973822
+      },
+      "dimensions": {
+        "width": 3.23,
+        "height": 25.0,
+        "depth": 3.23
+      },
+      "metrics": {
+        "loc": 323,
+        "complexity": 41,
+        "churn": 0,
+        "age_days": 97,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 10440
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "_resolve_env_config",
+          "line": 1
+        },
+        {
+          "name": "_parse_args",
+          "line": 1
+        },
+        {
+          "name": "_create_engine",
+          "line": 1
+        },
+        {
+          "name": "_collect_profile_files",
+          "line": 1
+        },
+        {
+          "name": "_ensure_table",
+          "line": 1
+        },
+        {
+          "name": "_truncate_table",
+          "line": 1
+        },
+        {
+          "name": "_create_supporting_indexes",
+          "line": 1
+        },
+        {
+          "name": "_extract_float_id",
+          "line": 1
+        },
+        {
+          "name": "_select_columns",
+          "line": 1
+        },
+        {
+          "name": "_select_optional_columns",
+          "line": 1
+        },
+        {
+          "name": "_normalise_profile_dataframe",
+          "line": 1
+        },
+        {
+          "name": "_dataset_to_dataframe",
+          "line": 1
+        },
+        {
+          "name": "_copy_dataframe",
+          "line": 1
+        },
+        {
+          "name": "_process_file",
+          "line": 1
+        },
+        {
+          "name": "run_pipeline",
+          "line": 1
+        },
+        {
+          "name": "main",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "PipelineConfig",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.13287671232876713,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1763828183
+    },
+    {
+      "id": "data_pipeline/attribute_inspector.py",
+      "name": "attribute_inspector.py",
+      "path": "data_pipeline/attribute_inspector.py",
+      "district_id": "district_11",
+      "position": {
+        "x": 18.713771573296963,
+        "y": 0.0,
+        "z": 78.55543596227626
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 23.200000000000003,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 84,
+        "complexity": 29,
+        "churn": 0,
+        "age_days": 159,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3057
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.21780821917808219,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758538027
+    },
+    {
+      "id": "frontend/vite.config.ts",
+      "name": "vite.config.ts",
+      "path": "frontend/vite.config.ts",
+      "district_id": "district_12",
+      "position": {
+        "x": -76.06451608527874,
+        "y": 0.0,
+        "z": -44.04222228704187
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 46,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 94,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 918
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.12876712328767123,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1764092610
+    },
+    {
+      "id": "frontend/tailwind.config.ts",
+      "name": "tailwind.config.ts",
+      "path": "frontend/tailwind.config.ts",
+      "district_id": "district_13",
+      "position": {
+        "x": 88.54113643961269,
+        "y": 0.0,
+        "z": -10.957025967910646
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 75,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2185
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1759047751
+    },
+    {
+      "id": "frontend/postcss.config.js",
+      "name": "postcss.config.js",
+      "path": "frontend/postcss.config.js",
+      "district_id": "district_14",
+      "position": {
+        "x": -51.708269797955786,
+        "y": 0.0,
+        "z": 77.58674149212194
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 7,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 81
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/eslint.config.js",
+      "name": "eslint.config.js",
+      "path": "frontend/eslint.config.js",
+      "district_id": "district_15",
+      "position": {
+        "x": -7.6309434738775535,
+        "y": 0.0,
+        "z": -98.50433235886949
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 30,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 144,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 926
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19726027397260273,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759764844
+    },
+    {
+      "id": "frontend/src/vite-env.d.ts",
+      "name": "vite-env.d.ts",
+      "path": "frontend/src/vite-env.d.ts",
+      "district_id": "district_16",
+      "position": {
+        "x": 80.90942473995452,
+        "y": 0.0,
+        "z": 56.51248871223187
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 2,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 38
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/main.tsx",
+      "name": "main.tsx",
+      "path": "frontend/src/main.tsx",
+      "district_id": "district_1",
+      "position": {
+        "x": 7.235520530703292,
+        "y": 0.0,
+        "z": -33.393859011097305
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 11,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 97,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 241
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.13287671232876713,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1763828183
+    },
+    {
+      "id": "frontend/src/App.tsx",
+      "name": "App.tsx",
+      "path": "frontend/src/App.tsx",
+      "district_id": "district_1",
+      "position": {
+        "x": 4.095244713830251,
+        "y": 0.0,
+        "z": -31.589127724780894
+      },
+      "dimensions": {
+        "width": 8.75,
+        "height": 25.0,
+        "depth": 8.75
+      },
+      "metrics": {
+        "loc": 875,
+        "complexity": 115,
+        "churn": 0,
+        "age_days": 94,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 33239
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "App",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.12876712328767123,
+      "is_hotspot": true,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1764126765
+    },
+    {
+      "id": "frontend/src/components/ThemeToggle.tsx",
+      "name": "ThemeToggle.tsx",
+      "path": "frontend/src/components/ThemeToggle.tsx",
+      "district_id": "district_17",
+      "position": {
+        "x": -105.0243186961478,
+        "y": 0.0,
+        "z": 3.270331992061706
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 33,
+        "complexity": 2,
+        "churn": 0,
+        "age_days": 97,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1150
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "ThemeToggle",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.13287671232876713,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1763828183
+    },
+    {
+      "id": "frontend/src/components/ThemeProvider.tsx",
+      "name": "ThemeProvider.tsx",
+      "path": "frontend/src/components/ThemeProvider.tsx",
+      "district_id": "district_18",
+      "position": {
+        "x": 78.36007611873931,
+        "y": 0.0,
+        "z": -75.17952580197762
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 7.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 86,
+        "complexity": 9,
+        "churn": 0,
+        "age_days": 145,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2338
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "ThemeProvider",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.19863013698630136,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759753129
+    },
+    {
+      "id": "frontend/src/components/StreamingDataVisualization.tsx",
+      "name": "StreamingDataVisualization.tsx",
+      "path": "frontend/src/components/StreamingDataVisualization.tsx",
+      "district_id": "district_19",
+      "position": {
+        "x": 4.997738195226016,
+        "y": 0.0,
+        "z": 107.03536466315994
+      },
+      "dimensions": {
+        "width": 3.52,
+        "height": 20.0,
+        "depth": 3.52
+      },
+      "metrics": {
+        "loc": 352,
+        "complexity": 25,
+        "churn": 0,
+        "age_days": 144,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 14747
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19726027397260273,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759764844
+    },
+    {
+      "id": "frontend/src/components/RealTimeOceanMap.tsx",
+      "name": "RealTimeOceanMap.tsx",
+      "path": "frontend/src/components/RealTimeOceanMap.tsx",
+      "district_id": "district_20",
+      "position": {
+        "x": -68.9595442013734,
+        "y": 0.0,
+        "z": -92.00669504202605
+      },
+      "dimensions": {
+        "width": 4.34,
+        "height": 12.8,
+        "depth": 4.34
+      },
+      "metrics": {
+        "loc": 434,
+        "complexity": 16,
+        "churn": 0,
+        "age_days": 97,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 18788
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.13287671232876713,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1763905272
+    },
+    {
+      "id": "frontend/src/components/OceanMap.tsx",
+      "name": "OceanMap.tsx",
+      "path": "frontend/src/components/OceanMap.tsx",
+      "district_id": "district_21",
+      "position": {
+        "x": 112.41557944884016,
+        "y": 0.0,
+        "z": 21.464776653546952
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 148,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 6421
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/LandingPage.tsx",
+      "name": "LandingPage.tsx",
+      "path": "frontend/src/components/LandingPage.tsx",
+      "district_id": "district_22",
+      "position": {
+        "x": -92.67706964424663,
+        "y": 0.0,
+        "z": 73.54567509185357
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 4.800000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 183,
+        "complexity": 6,
+        "churn": 0,
+        "age_days": 97,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 11708
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.13287671232876713,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1763905272
+    },
+    {
+      "id": "frontend/src/components/InteractiveOceanMap.tsx",
+      "name": "InteractiveOceanMap.tsx",
+      "path": "frontend/src/components/InteractiveOceanMap.tsx",
+      "district_id": "district_23",
+      "position": {
+        "x": 22.79623513167928,
+        "y": 0.0,
+        "z": -120.19970310384724
+      },
+      "dimensions": {
+        "width": 8.85,
+        "height": 25.0,
+        "depth": 8.85
+      },
+      "metrics": {
+        "loc": 885,
+        "complexity": 55,
+        "churn": 0,
+        "age_days": 97,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 38659
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.13287671232876713,
+      "is_hotspot": true,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1763905272
+    },
+    {
+      "id": "frontend/src/components/ErrorBoundary.tsx",
+      "name": "ErrorBoundary.tsx",
+      "path": "frontend/src/components/ErrorBoundary.tsx",
+      "district_id": "district_24",
+      "position": {
+        "x": 68.20059691413242,
+        "y": 0.0,
+        "z": 103.07945884706916
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 72,
+        "complexity": 4,
+        "churn": 0,
+        "age_days": 144,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2334
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [
+        {
+          "name": "ErrorBoundary",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.19726027397260273,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759764844
+    },
+    {
+      "id": "frontend/src/components/EnhancedChatInterface.tsx",
+      "name": "EnhancedChatInterface.tsx",
+      "path": "frontend/src/components/EnhancedChatInterface.tsx",
+      "district_id": "district_2",
+      "position": {
+        "x": 24.71289134433352,
+        "y": 0.0,
+        "z": 38.127308703338066
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 12.8,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 170,
+        "complexity": 16,
+        "churn": 0,
+        "age_days": 144,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 4233
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19726027397260273,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759764844
+    },
+    {
+      "id": "frontend/src/components/DataVisualization.tsx",
+      "name": "DataVisualization.tsx",
+      "path": "frontend/src/components/DataVisualization.tsx",
+      "district_id": "district_3",
+      "position": {
+        "x": -46.64608896481707,
+        "y": 0.0,
+        "z": -8.17917256143673
+      },
+      "dimensions": {
+        "width": 8.01,
+        "height": 25.0,
+        "depth": 8.01
+      },
+      "metrics": {
+        "loc": 801,
+        "complexity": 87,
+        "churn": 0,
+        "age_days": 94,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 38633
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.12876712328767123,
+      "is_hotspot": true,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1764081788
+    },
+    {
+      "id": "frontend/src/components/CommandPalette.tsx",
+      "name": "CommandPalette.tsx",
+      "path": "frontend/src/components/CommandPalette.tsx",
+      "district_id": "district_25",
+      "position": {
+        "x": -121.46251249937109,
+        "y": 0.0,
+        "z": -25.666496127153124
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 6.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 194,
+        "complexity": 8,
+        "churn": 0,
+        "age_days": 97,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7537
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.13287671232876713,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1763905272
+    },
+    {
+      "id": "frontend/src/components/CodeSnippet.tsx",
+      "name": "CodeSnippet.tsx",
+      "path": "frontend/src/components/CodeSnippet.tsx",
+      "district_id": "district_3",
+      "position": {
+        "x": -49.296028522301064,
+        "y": 0.0,
+        "z": -5.884105015731274
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 30,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 144,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 705
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19726027397260273,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759764844
+    },
+    {
+      "id": "frontend/src/components/ChatInterface.tsx",
+      "name": "ChatInterface.tsx",
+      "path": "frontend/src/components/ChatInterface.tsx",
+      "district_id": "district_2",
+      "position": {
+        "x": 20.89847115247402,
+        "y": 0.0,
+        "z": 39.257895614668016
+      },
+      "dimensions": {
+        "width": 7.56,
+        "height": 25.0,
+        "depth": 7.56
+      },
+      "metrics": {
+        "loc": 756,
+        "complexity": 100,
+        "churn": 0,
+        "age_days": 94,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 30381
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "and",
+          "line": 1
+        },
+        {
+          "name": "will",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.12876712328767123,
+      "is_hotspot": true,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1764081788
+    },
+    {
+      "id": "frontend/src/components/ui/use-toast.ts",
+      "name": "use-toast.ts",
+      "path": "frontend/src/components/ui/use-toast.ts",
+      "district_id": "district_26",
+      "position": {
+        "x": 122.33578213801277,
+        "y": 0.0,
+        "z": -43.42475477815929
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 4,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 82
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/tooltip.tsx",
+      "name": "tooltip.tsx",
+      "path": "frontend/src/components/ui/tooltip.tsx",
+      "district_id": "district_27",
+      "position": {
+        "x": -55.22205450621051,
+        "y": 0.0,
+        "z": 115.26150020349883
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 29,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1149
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/toggle.tsx",
+      "name": "toggle.tsx",
+      "path": "frontend/src/components/ui/toggle.tsx",
+      "district_id": "district_28",
+      "position": {
+        "x": -52.777693848379336,
+        "y": 0.0,
+        "z": -118.88171677919722
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 38,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1408
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/toggle-group.tsx",
+      "name": "toggle-group.tsx",
+      "path": "frontend/src/components/ui/toggle-group.tsx",
+      "district_id": "district_29",
+      "position": {
+        "x": 115.52943918074658,
+        "y": 0.0,
+        "z": 71.14274967218881
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 50,
+        "complexity": 3,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1714
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/toaster.tsx",
+      "name": "toaster.tsx",
+      "path": "frontend/src/components/ui/toaster.tsx",
+      "district_id": "district_30",
+      "position": {
+        "x": -132.52117306877653,
+        "y": 0.0,
+        "z": 44.32285187424544
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 25,
+        "complexity": 3,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 730
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "Toaster",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/toast.tsx",
+      "name": "toast.tsx",
+      "path": "frontend/src/components/ui/toast.tsx",
+      "district_id": "district_31",
+      "position": {
+        "x": 63.22774820767414,
+        "y": 0.0,
+        "z": -122.48680193163268
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 112,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4790
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/textarea.tsx",
+      "name": "textarea.tsx",
+      "path": "frontend/src/components/ui/textarea.tsx",
+      "district_id": "district_32",
+      "position": {
+        "x": 27.754770158832574,
+        "y": 0.0,
+        "z": 138.42559672631833
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 22,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 745
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/tabs.tsx",
+      "name": "tabs.tsx",
+      "path": "frontend/src/components/ui/tabs.tsx",
+      "district_id": "district_33",
+      "position": {
+        "x": -113.17471929151705,
+        "y": 0.0,
+        "z": -88.57879550790183
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 54,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1887
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/table.tsx",
+      "name": "table.tsx",
+      "path": "frontend/src/components/ui/table.tsx",
+      "district_id": "district_34",
+      "position": {
+        "x": 145.27334852496136,
+        "y": 0.0,
+        "z": -10.456377171116305
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 73,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2694
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/switch.tsx",
+      "name": "switch.tsx",
+      "path": "frontend/src/components/ui/switch.tsx",
+      "district_id": "district_35",
+      "position": {
+        "x": -99.49998744432163,
+        "y": 0.0,
+        "z": 111.9617387008036
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 28,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1147
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/sonner.tsx",
+      "name": "sonner.tsx",
+      "path": "frontend/src/components/ui/sonner.tsx",
+      "district_id": "district_36",
+      "position": {
+        "x": -8.815330921466723,
+        "y": 0.0,
+        "z": -148.96594637661335
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 28,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 877
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/slider.tsx",
+      "name": "slider.tsx",
+      "path": "frontend/src/components/ui/slider.tsx",
+      "district_id": "district_37",
+      "position": {
+        "x": 101.01821270464166,
+        "y": 0.0,
+        "z": 114.14300822237949
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 29,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 144,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1823
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19726027397260273,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759770711
+    },
+    {
+      "id": "frontend/src/components/ui/skeleton.tsx",
+      "name": "skeleton.tsx",
+      "path": "frontend/src/components/ui/skeleton.tsx",
+      "district_id": "district_38",
+      "position": {
+        "x": -149.50201269937142,
+        "y": 0.0,
+        "z": -25.665605684180843
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 8,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 234
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "Skeleton",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/sidebar.tsx",
+      "name": "sidebar.tsx",
+      "path": "frontend/src/components/ui/sidebar.tsx",
+      "district_id": "district_39",
+      "position": {
+        "x": 119.15824383292406,
+        "y": 0.0,
+        "z": -102.07654583457348
+      },
+      "dimensions": {
+        "width": 6.38,
+        "height": 15.200000000000001,
+        "depth": 6.38
+      },
+      "metrics": {
+        "loc": 638,
+        "complexity": 19,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 22810
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "useSidebar",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": true,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/sheet.tsx",
+      "name": "sheet.tsx",
+      "path": "frontend/src/components/ui/sheet.tsx",
+      "district_id": "district_40",
+      "position": {
+        "x": -25.072656395317843,
+        "y": 0.0,
+        "z": 158.33568269548857
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 108,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4197
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/separator.tsx",
+      "name": "separator.tsx",
+      "path": "frontend/src/components/ui/separator.tsx",
+      "district_id": "district_41",
+      "position": {
+        "x": -91.78791513132127,
+        "y": 0.0,
+        "z": -132.57456440180212
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 21,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 698
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/select.tsx",
+      "name": "select.tsx",
+      "path": "frontend/src/components/ui/select.tsx",
+      "district_id": "district_42",
+      "position": {
+        "x": 158.37525890997142,
+        "y": 0.0,
+        "z": 29.55149581073001
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 144,
+        "complexity": 3,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 5547
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/scroll-area.tsx",
+      "name": "scroll-area.tsx",
+      "path": "frontend/src/components/ui/scroll-area.tsx",
+      "district_id": "district_43",
+      "position": {
+        "x": -144.27966123197356,
+        "y": 0.0,
+        "z": 81.32969446512192
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 46,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 152,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2172
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.20821917808219179,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759125827
+    },
+    {
+      "id": "frontend/src/components/ui/resizable.tsx",
+      "name": "resizable.tsx",
+      "path": "frontend/src/components/ui/resizable.tsx",
+      "district_id": "district_44",
+      "position": {
+        "x": 72.3252277648711,
+        "y": 0.0,
+        "z": -147.21874109099087
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 38,
+        "complexity": 2,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1696
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/radio-group.tsx",
+      "name": "radio-group.tsx",
+      "path": "frontend/src/components/ui/radio-group.tsx",
+      "district_id": "district_45",
+      "position": {
+        "x": 75.17471496343283,
+        "y": 0.0,
+        "z": 148.4681495774196
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 37,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1447
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/progress.tsx",
+      "name": "progress.tsx",
+      "path": "frontend/src/components/ui/progress.tsx",
+      "district_id": "district_46",
+      "position": {
+        "x": -148.67449089272367,
+        "y": 0.0,
+        "z": -78.8108109635052
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 24,
+        "complexity": 2,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 765
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/popover.tsx",
+      "name": "popover.tsx",
+      "path": "frontend/src/components/ui/popover.tsx",
+      "district_id": "district_47",
+      "position": {
+        "x": 162.7261019221931,
+        "y": 0.0,
+        "z": -55.91665155976936
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 30,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1239
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/pagination.tsx",
+      "name": "pagination.tsx",
+      "path": "frontend/src/components/ui/pagination.tsx",
+      "district_id": "district_48",
+      "position": {
+        "x": -90.99692991869746,
+        "y": 0.0,
+        "z": 150.00089066047465
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 82,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2683
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/navigation-menu.tsx",
+      "name": "navigation-menu.tsx",
+      "path": "frontend/src/components/ui/navigation-menu.tsx",
+      "district_id": "district_49",
+      "position": {
+        "x": -34.81841448693852,
+        "y": 0.0,
+        "z": -169.59942652468536
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 121,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 5030
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/menubar.tsx",
+      "name": "menubar.tsx",
+      "path": "frontend/src/components/ui/menubar.tsx",
+      "district_id": "district_50",
+      "position": {
+        "x": 138.17530619145606,
+        "y": 0.0,
+        "z": 108.74086488857833
+      },
+      "dimensions": {
+        "width": 2.08,
+        "height": 3.2,
+        "depth": 2.08
+      },
+      "metrics": {
+        "loc": 208,
+        "complexity": 4,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7805
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/label.tsx",
+      "name": "label.tsx",
+      "path": "frontend/src/components/ui/label.tsx",
+      "district_id": "district_51",
+      "position": {
+        "x": -176.62059766011407,
+        "y": 0.0,
+        "z": 10.915264780998477
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 18,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 696
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/input.tsx",
+      "name": "input.tsx",
+      "path": "frontend/src/components/ui/input.tsx",
+      "district_id": "district_52",
+      "position": {
+        "x": 107.46348845119233,
+        "y": 0.0,
+        "z": -146.35433136889708
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 23,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 799
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/input-otp.tsx",
+      "name": "input-otp.tsx",
+      "path": "frontend/src/components/ui/input-otp.tsx",
+      "district_id": "district_53",
+      "position": {
+        "x": -1.3460625752163349,
+        "y": 0.0,
+        "z": 181.03689666966528
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 62,
+        "complexity": 3,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2166
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/hover-card.tsx",
+      "name": "hover-card.tsx",
+      "path": "frontend/src/components/ui/hover-card.tsx",
+      "district_id": "district_54",
+      "position": {
+        "x": -120.00565338467288,
+        "y": 0.0,
+        "z": -138.563627715632
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 28,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1193
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/form.tsx",
+      "name": "form.tsx",
+      "path": "frontend/src/components/ui/form.tsx",
+      "district_id": "district_55",
+      "position": {
+        "x": 187.87618668690368,
+        "y": 0.0,
+        "z": 4.1970002400403965
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 130,
+        "complexity": 4,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4014
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/dropdown-menu.tsx",
+      "name": "dropdown-menu.tsx",
+      "path": "frontend/src/components/ui/dropdown-menu.tsx",
+      "district_id": "district_56",
+      "position": {
+        "x": -144.82437760540887,
+        "y": 0.0,
+        "z": 120.9941967631812
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 180,
+        "complexity": 4,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7210
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/drawer.tsx",
+      "name": "drawer.tsx",
+      "path": "frontend/src/components/ui/drawer.tsx",
+      "district_id": "district_57",
+      "position": {
+        "x": 29.559020368113657,
+        "y": 0.0,
+        "z": -188.35959427483806
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 88,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2934
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/dialog.tsx",
+      "name": "dialog.tsx",
+      "path": "frontend/src/components/ui/dialog.tsx",
+      "district_id": "district_58",
+      "position": {
+        "x": 111.9969011612432,
+        "y": 0.0,
+        "z": 150.98589028305855
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.6,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 102,
+        "complexity": 2,
+        "churn": 0,
+        "age_days": 144,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3909
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19726027397260273,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759770711
+    },
+    {
+      "id": "frontend/src/components/ui/context-menu.tsx",
+      "name": "context-menu.tsx",
+      "path": "frontend/src/components/ui/context-menu.tsx",
+      "district_id": "district_59",
+      "position": {
+        "x": -183.0439992345303,
+        "y": 0.0,
+        "z": -61.1417458060599
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 3.2,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 179,
+        "complexity": 4,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7141
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/command.tsx",
+      "name": "command.tsx",
+      "path": "frontend/src/components/ui/command.tsx",
+      "district_id": "district_60",
+      "position": {
+        "x": 161.58826981365308,
+        "y": 0.0,
+        "z": -106.85105519752467
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 172,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 97,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 7474
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.13287671232876713,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1763905272
+    },
+    {
+      "id": "frontend/src/components/ui/collapsible.tsx",
+      "name": "collapsible.tsx",
+      "path": "frontend/src/components/ui/collapsible.tsx",
+      "district_id": "district_61",
+      "position": {
+        "x": -78.18470384128783,
+        "y": 0.0,
+        "z": 175.47171205547076
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 10,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 320
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/checkbox.tsx",
+      "name": "checkbox.tsx",
+      "path": "frontend/src/components/ui/checkbox.tsx",
+      "district_id": "district_62",
+      "position": {
+        "x": -82.31397420641888,
+        "y": 0.0,
+        "z": -178.1876509104058
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 27,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1053
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/chart.tsx",
+      "name": "chart.tsx",
+      "path": "frontend/src/components/ui/chart.tsx",
+      "district_id": "district_63",
+      "position": {
+        "x": 186.34075786092154,
+        "y": 0.0,
+        "z": 75.37015509817242
+      },
+      "dimensions": {
+        "width": 3.45,
+        "height": 25.0,
+        "depth": 3.45
+      },
+      "metrics": {
+        "loc": 345,
+        "complexity": 45,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 11202
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "useChart",
+          "line": 1
+        },
+        {
+          "name": "getPayloadConfigFromPayload",
+          "line": 3
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759066069
+    },
+    {
+      "id": "frontend/src/components/ui/carousel.tsx",
+      "name": "carousel.tsx",
+      "path": "frontend/src/components/ui/carousel.tsx",
+      "district_id": "district_64",
+      "position": {
+        "x": -194.61248866781355,
+        "y": 0.0,
+        "z": 57.87680817095173
+      },
+      "dimensions": {
+        "width": 2.25,
+        "height": 8.0,
+        "depth": 2.25
+      },
+      "metrics": {
+        "loc": 225,
+        "complexity": 10,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 6249
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "useCarousel",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/card.tsx",
+      "name": "card.tsx",
+      "path": "frontend/src/components/ui/card.tsx",
+      "district_id": "district_65",
+      "position": {
+        "x": 87.32515379620236,
+        "y": 0.0,
+        "z": -182.3210131113107
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 44,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1785
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/calendar.tsx",
+      "name": "calendar.tsx",
+      "path": "frontend/src/components/ui/calendar.tsx",
+      "district_id": "district_66",
+      "position": {
+        "x": 66.36824112914245,
+        "y": 0.0,
+        "z": 189.94750965413567
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 55,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2563
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "Calendar",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/button.tsx",
+      "name": "button.tsx",
+      "path": "frontend/src/components/ui/button.tsx",
+      "district_id": "district_67",
+      "position": {
+        "x": -173.43530621292095,
+        "y": 0.0,
+        "z": -102.79570088078177
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 48,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1822
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/breadcrumb.tsx",
+      "name": "breadcrumb.tsx",
+      "path": "frontend/src/components/ui/breadcrumb.tsx",
+      "district_id": "district_68",
+      "position": {
+        "x": 203.00146482662265,
+        "y": 0.0,
+        "z": -37.236590568348745
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 91,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2671
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/badge.tsx",
+      "name": "badge.tsx",
+      "path": "frontend/src/components/ui/badge.tsx",
+      "district_id": "district_69",
+      "position": {
+        "x": -116.72996284282458,
+        "y": 0.0,
+        "z": 174.56460916325614
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 30,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1085
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "Badge",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamiredddi@gmail.com",
+      "email_hash": "06f23b1782bf4235402f3adca62232a5",
+      "last_modified": 1759063680
+    },
+    {
+      "id": "frontend/src/components/ui/avatar.tsx",
+      "name": "avatar.tsx",
+      "path": "frontend/src/components/ui/avatar.tsx",
+      "district_id": "district_70",
+      "position": {
+        "x": -35.72174383466137,
+        "y": 0.0,
+        "z": -205.2027532267486
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 39,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1365
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/aspect-ratio.tsx",
+      "name": "aspect-ratio.tsx",
+      "path": "frontend/src/components/ui/aspect-ratio.tsx",
+      "district_id": "district_4",
+      "position": {
+        "x": -21.582308736853967,
+        "y": 0.0,
+        "z": 20.14611148796532
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 6,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 143
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/alert.tsx",
+      "name": "alert.tsx",
+      "path": "frontend/src/components/ui/alert.tsx",
+      "district_id": "district_71",
+      "position": {
+        "x": 145.13342998775042,
+        "y": 0.0,
+        "z": 156.66184079351248
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 44,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1546
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/alert-dialog.tsx",
+      "name": "alert-dialog.tsx",
+      "path": "frontend/src/components/ui/alert-dialog.tsx",
+      "district_id": "district_72",
+      "position": {
+        "x": -212.1391826163571,
+        "y": 0.0,
+        "z": 4.4388070031850235
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 105,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 4313
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/components/ui/accordion.tsx",
+      "name": "accordion.tsx",
+      "path": "frontend/src/components/ui/accordion.tsx",
+      "district_id": "district_73",
+      "position": {
+        "x": 153.73791816611947,
+        "y": 0.0,
+        "z": -146.85442623592857
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 53,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 1976
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/hooks/use-toast.ts",
+      "name": "use-toast.ts",
+      "path": "frontend/src/hooks/use-toast.ts",
+      "district_id": "district_74",
+      "position": {
+        "x": -13.597601357131422,
+        "y": 0.0,
+        "z": 216.14129786217018
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 9.600000000000001,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 187,
+        "complexity": 12,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 3935
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "genId",
+          "line": 1
+        },
+        {
+          "name": "dispatch",
+          "line": 1
+        },
+        {
+          "name": "toast",
+          "line": 1
+        },
+        {
+          "name": "useToast",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/hooks/use-mobile.tsx",
+      "name": "use-mobile.tsx",
+      "path": "frontend/src/hooks/use-mobile.tsx",
+      "district_id": "district_75",
+      "position": {
+        "x": -141.46875650010819,
+        "y": 0.0,
+        "z": -165.90850143931493
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 20,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 576
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "useIsMobile",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/pages/NotFound.tsx",
+      "name": "NotFound.tsx",
+      "path": "frontend/src/pages/NotFound.tsx",
+      "district_id": "district_76",
+      "position": {
+        "x": 212.2608424588096,
+        "y": 0.0,
+        "z": 37.35513237783801
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 25,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 153,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 721
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.2095890410958904,
+      "is_hotspot": false,
+      "author": "Krishna Srinivas Madhira",
+      "email": "krishnasrinivas2409@gmail.com",
+      "email_hash": "e190b5ce057f5a3f212cf81cd66f3e9a",
+      "last_modified": 1758995203
+    },
+    {
+      "id": "frontend/src/services/api.ts",
+      "name": "api.ts",
+      "path": "frontend/src/services/api.ts",
+      "district_id": "district_77",
+      "position": {
+        "x": -176.1187811489948,
+        "y": 0.0,
+        "z": 128.11823120329353
+      },
+      "dimensions": {
+        "width": 3.41,
+        "height": 24.0,
+        "depth": 3.41
+      },
+      "metrics": {
+        "loc": 341,
+        "complexity": 30,
+        "churn": 0,
+        "age_days": 97,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 10408
+      },
+      "language": "typescript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "fetchJson",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.13287671232876713,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1763905272
+    },
+    {
+      "id": "nc files/script.py",
+      "name": "script.py",
+      "path": "nc files/script.py",
+      "district_id": "district_78",
+      "position": {
+        "x": 66.69330447093171,
+        "y": 0.0,
+        "z": -211.938301028428
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 14.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 73,
+        "complexity": 18,
+        "churn": 0,
+        "age_days": 160,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 2567
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "download_profiles",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.2191780821917808,
+      "is_hotspot": false,
+      "author": "Uma",
+      "email": "136799062+Umasaisrimasina@users.noreply.github.com",
+      "email_hash": "74378f971ae787200851a49b6b7dd9cb",
+      "last_modified": 1758450216
+    },
+    {
+      "id": "tests/test_sql_validation.py",
+      "name": "test_sql_validation.py",
+      "path": "tests/test_sql_validation.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -9.319239459245582,
+        "y": 0.0,
+        "z": -2.1625019845828017
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 2.4000000000000004,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 29,
+        "complexity": 3,
+        "churn": 0,
+        "age_days": 94,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 733
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "test_validate_sql_allows_read_only",
+          "line": 1
+        },
+        {
+          "name": "test_validate_sql_blocks_writes_or_cross_table",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.12876712328767123,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1764081788
+    }
+  ],
+  "districts": [
+    {
+      "id": "district_0",
+      "name": "Ai Core",
+      "color": "#FF6B6B",
+      "center": {
+        "x": -1.6336385183506867,
+        "y": -0.15062178824072647
+      },
+      "boundary": [
+        {
+          "x": 25.176695043714204,
+          "y": -11.963408881430922
+        },
+        {
+          "x": 33.79963259919392,
+          "y": 3.2307396931542733
+        },
+        {
+          "x": 4.819083076266114,
+          "y": 23.018479956335433
+        },
+        {
+          "x": -24.359298599580818,
+          "y": -4.342710083275956
+        },
+        {
+          "x": -20.955585717428548,
+          "y": -22.636083553251364
+        }
+      ],
+      "building_count": 5,
+      "description": null
+    },
+    {
+      "id": "district_5",
+      "name": "Ai Core",
+      "color": "#DDA0DD",
+      "center": {
+        "x": 49.065871418854684,
+        "y": -28.92345536531929
+      },
+      "boundary": [
+        {
+          "x": 60.331187448385116,
+          "y": -1.1638903258472109
+        },
+        {
+          "x": 38.39695825554061,
+          "y": 4.963172580606113
+        },
+        {
+          "x": 33.79963259919392,
+          "y": 3.2307396931542733
+        },
+        {
+          "x": 25.176695043714204,
+          "y": -11.963408881430922
+        },
+        {
+          "x": 29.713550086307624,
+          "y": -47.73026084947248
+        },
+        {
+          "x": 55.50302411210669,
+          "y": -57.222548350192824
+        },
+        {
+          "x": 79.20851734173404,
+          "y": -42.44604051396843
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_6",
+      "name": "Ai Core",
+      "color": "#98D8C8",
+      "center": {
+        "x": -18.876135882655465,
+        "y": 59.173022858575806
+      },
+      "boundary": [
+        {
+          "x": -22.839477743054598,
+          "y": 91.39603206708065
+        },
+        {
+          "x": -48.02227128050569,
+          "y": 45.14531307851491
+        },
+        {
+          "x": -43.79658791931429,
+          "y": 38.52288558732204
+        },
+        {
+          "x": -2.2861150628743587,
+          "y": 38.684034758446394
+        },
+        {
+          "x": 6.678966910740332,
+          "y": 56.410149302239766
+        },
+        {
+          "x": -7.515310491713089,
+          "y": 83.68965401530556
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_7",
+      "name": "Ai Core",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -25.121354412604145,
+        "y": -62.99771933100421
+      },
+      "boundary": [
+        {
+          "x": -45.686029271410234,
+          "y": -39.67121754484662
+        },
+        {
+          "x": -25.183578820478253,
+          "y": -31.397319142556174
+        },
+        {
+          "x": 4.5409590151248125,
+          "y": -63.97843472117626
+        },
+        {
+          "x": 3.0359054920721746,
+          "y": -71.42418877266351
+        },
+        {
+          "x": -37.823850229121774,
+          "y": -91.17564374213146
+        },
+        {
+          "x": -54.949931372457826,
+          "y": -65.2239967188493
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_8",
+      "name": "Ai Core",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 65.08273919018376,
+        "y": 28.415216362335343
+      },
+      "boundary": [
+        {
+          "x": 86.64799523123577,
+          "y": 14.68298295185807
+        },
+        {
+          "x": 89.82247496447003,
+          "y": 33.488245174674574
+        },
+        {
+          "x": 49.784463012700954,
+          "y": 56.6057990195438
+        },
+        {
+          "x": 38.39695825554061,
+          "y": 4.963172580606113
+        },
+        {
+          "x": 60.331187448385116,
+          "y": -1.1638903258472109
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_9",
+      "name": "Data Pipeline",
+      "color": "#85C1E9",
+      "center": {
+        "x": -73.02374415336769,
+        "y": 24.622150444773972
+      },
+      "boundary": [
+        {
+          "x": -76.78561628766698,
+          "y": -5.064365627751318
+        },
+        {
+          "x": -46.171683948342945,
+          "y": 18.84645399207176
+        },
+        {
+          "x": -43.79658791931429,
+          "y": 38.52288558732204
+        },
+        {
+          "x": -48.02227128050569,
+          "y": 45.14531307851491
+        },
+        {
+          "x": -70.42170494641223,
+          "y": 54.07144373053718
+        },
+        {
+          "x": -100.26836708350444,
+          "y": 42.16350367018405
+        },
+        {
+          "x": -103.01194176737303,
+          "y": 33.83056754037071
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_10",
+      "name": "Data Pipeline",
+      "color": "#F8B500",
+      "center": {
+        "x": 32.255397696186584,
+        "y": -74.5956155689822
+      },
+      "boundary": [
+        {
+          "x": 17.607401209428197,
+          "y": -95.64459983372245
+        },
+        {
+          "x": 3.0359054920721746,
+          "y": -71.42418877266351
+        },
+        {
+          "x": 4.5409590151248125,
+          "y": -63.97843472117626
+        },
+        {
+          "x": 29.713550086307624,
+          "y": -47.73026084947248
+        },
+        {
+          "x": 55.50302411210669,
+          "y": -57.222548350192824
+        },
+        {
+          "x": 54.80279460440191,
+          "y": -94.18896027407078
+        },
+        {
+          "x": 43.48010980391909,
+          "y": -101.31745845998697
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_4",
+      "name": "Data Pipeline",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -18.716556284385238,
+        "y": 18.066856837244597
+      },
+      "boundary": [
+        {
+          "x": -46.171683948342945,
+          "y": 18.84645399207176
+        },
+        {
+          "x": -43.79658791931429,
+          "y": 38.52288558732204
+        },
+        {
+          "x": -2.2861150628743587,
+          "y": 38.684034758446394
+        },
+        {
+          "x": 4.819083076266114,
+          "y": 23.018479956335433
+        },
+        {
+          "x": -24.359298599580818,
+          "y": -4.342710083275956
+        }
+      ],
+      "building_count": 2,
+      "description": null
+    },
+    {
+      "id": "district_11",
+      "name": "Data Pipeline",
+      "color": "#00CED1",
+      "center": {
+        "x": 19.082045217687366,
+        "y": 78.92370960666666
+      },
+      "boundary": [
+        {
+          "x": 36.62611627552995,
+          "y": 104.89030350601197
+        },
+        {
+          "x": -7.515310491713089,
+          "y": 83.68965401530556
+        },
+        {
+          "x": 6.678966910740332,
+          "y": 56.410149302239766
+        },
+        {
+          "x": 48.134708940866936,
+          "y": 61.37654184640782
+        },
+        {
+          "x": 52.15067075484551,
+          "y": 73.11503112780134
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_12",
+      "name": "Frontend",
+      "color": "#FF7F50",
+      "center": {
+        "x": -76.42161984097883,
+        "y": -44.399326042741954
+      },
+      "boundary": [
+        {
+          "x": -78.28725332052142,
+          "y": -12.939708380570128
+        },
+        {
+          "x": -45.686029271410234,
+          "y": -39.67121754484662
+        },
+        {
+          "x": -54.949931372457826,
+          "y": -65.2239967188493
+        },
+        {
+          "x": -89.8945624021479,
+          "y": -70.89989552322355
+        },
+        {
+          "x": -107.64428766246283,
+          "y": -56.11006884389762
+        },
+        {
+          "x": -93.92974074105689,
+          "y": -22.69473983758418
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_13",
+      "name": "Frontend",
+      "color": "#9ACD32",
+      "center": {
+        "x": 88.6971191098661,
+        "y": -10.801043297657236
+      },
+      "boundary": [
+        {
+          "x": 86.64799523123577,
+          "y": 14.68298295185807
+        },
+        {
+          "x": 116.78441623272165,
+          "y": -7.243828978492422
+        },
+        {
+          "x": 116.77436580251137,
+          "y": -15.885985246282797
+        },
+        {
+          "x": 88.59655051779146,
+          "y": -43.9880631063187
+        },
+        {
+          "x": 79.20851734173404,
+          "y": -42.44604051396843
+        },
+        {
+          "x": 60.331187448385116,
+          "y": -1.1638903258472109
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_14",
+      "name": "Frontend",
+      "color": "#DA70D6",
+      "center": {
+        "x": -52.05604600821364,
+        "y": 77.23896528186408
+      },
+      "boundary": [
+        {
+          "x": -26.51446671826055,
+          "y": 98.38903103766745
+        },
+        {
+          "x": -74.05167658498567,
+          "y": 94.96447049338313
+        },
+        {
+          "x": -70.42170494641223,
+          "y": 54.07144373053718
+        },
+        {
+          "x": -48.02227128050569,
+          "y": 45.14531307851491
+        },
+        {
+          "x": -22.839477743054598,
+          "y": 91.39603206708065
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_15",
+      "name": "Frontend",
+      "color": "#FF6B6B",
+      "center": {
+        "x": -7.851144488333099,
+        "y": -98.72453337332503
+      },
+      "boundary": [
+        {
+          "x": 17.607401209428197,
+          "y": -95.64459983372245
+        },
+        {
+          "x": 3.0359054920721746,
+          "y": -71.42418877266351
+        },
+        {
+          "x": -37.823850229121774,
+          "y": -91.17564374213146
+        },
+        {
+          "x": -38.076382278013284,
+          "y": -93.38740040487104
+        },
+        {
+          "x": -24.26246311724514,
+          "y": -123.43225789567003
+        },
+        {
+          "x": -3.0806799615279026,
+          "y": -123.60197899834787
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_16",
+      "name": "Frontend",
+      "color": "#4ECDC4",
+      "center": {
+        "x": 81.84741241994551,
+        "y": 57.45047639222287
+      },
+      "boundary": [
+        {
+          "x": 52.15067075484551,
+          "y": 73.11503112780134
+        },
+        {
+          "x": 48.134708940866936,
+          "y": 61.37654184640782
+        },
+        {
+          "x": 49.784463012700954,
+          "y": 56.6057990195438
+        },
+        {
+          "x": 89.82247496447003,
+          "y": 33.488245174674574
+        },
+        {
+          "x": 105.72690031008679,
+          "y": 46.28872959540896
+        },
+        {
+          "x": 90.2426587826367,
+          "y": 84.84441232670659
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_1",
+      "name": "Frontend",
+      "color": "#4ECDC4",
+      "center": {
+        "x": 6.27855684621207,
+        "y": -34.350822695588526
+      },
+      "boundary": [
+        {
+          "x": 4.5409590151248125,
+          "y": -63.97843472117626
+        },
+        {
+          "x": 29.713550086307624,
+          "y": -47.73026084947248
+        },
+        {
+          "x": 25.176695043714204,
+          "y": -11.963408881430922
+        },
+        {
+          "x": -20.955585717428548,
+          "y": -22.636083553251364
+        },
+        {
+          "x": -25.183578820478253,
+          "y": -31.397319142556174
+        }
+      ],
+      "building_count": 2,
+      "description": null
+    },
+    {
+      "id": "district_17",
+      "name": "Frontend",
+      "color": "#45B7D1",
+      "center": {
+        "x": -105.7173650021327,
+        "y": 2.577285686076808
+      },
+      "boundary": [
+        {
+          "x": -78.28725332052142,
+          "y": -12.939708380570128
+        },
+        {
+          "x": -93.92974074105689,
+          "y": -22.69473983758418
+        },
+        {
+          "x": -136.6834787331474,
+          "y": 1.255830006092537
+        },
+        {
+          "x": -140.85135797300507,
+          "y": 7.647873911971757
+        },
+        {
+          "x": -140.61174461500948,
+          "y": 9.564351275802181
+        },
+        {
+          "x": -103.01194176737303,
+          "y": 33.83056754037071
+        },
+        {
+          "x": -76.78561628766698,
+          "y": -5.064365627751318
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_18",
+      "name": "Frontend",
+      "color": "#96CEB4",
+      "center": {
+        "x": 78.07603725388145,
+        "y": -75.46356466683548
+      },
+      "boundary": [
+        {
+          "x": 79.20851734173404,
+          "y": -42.44604051396843
+        },
+        {
+          "x": 55.50302411210669,
+          "y": -57.222548350192824
+        },
+        {
+          "x": 54.80279460440191,
+          "y": -94.18896027407078
+        },
+        {
+          "x": 88.02324161481134,
+          "y": -104.91981995847607
+        },
+        {
+          "x": 109.18766920309727,
+          "y": -72.5712017530846
+        },
+        {
+          "x": 88.59655051779146,
+          "y": -43.9880631063187
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_19",
+      "name": "Frontend",
+      "color": "#FFEAA7",
+      "center": {
+        "x": 5.391298715731473,
+        "y": 107.4289251836654
+      },
+      "boundary": [
+        {
+          "x": 36.62611627552995,
+          "y": 104.89030350601197
+        },
+        {
+          "x": -7.515310491713089,
+          "y": 83.68965401530556
+        },
+        {
+          "x": -22.839477743054598,
+          "y": 91.39603206708065
+        },
+        {
+          "x": -26.51446671826055,
+          "y": 98.38903103766745
+        },
+        {
+          "x": -22.914789159721664,
+          "y": 124.72376572157997
+        },
+        {
+          "x": -3.1763120242327822,
+          "y": 136.88119235594385
+        },
+        {
+          "x": 36.86496846703159,
+          "y": 108.09529949485179
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_20",
+      "name": "Frontend",
+      "color": "#DDA0DD",
+      "center": {
+        "x": -68.72677695585952,
+        "y": -91.77392779651217
+      },
+      "boundary": [
+        {
+          "x": -54.949931372457826,
+          "y": -65.2239967188493
+        },
+        {
+          "x": -37.823850229121774,
+          "y": -91.17564374213146
+        },
+        {
+          "x": -38.076382278013284,
+          "y": -93.38740040487104
+        },
+        {
+          "x": -76.18705346291853,
+          "y": -113.81547103181266
+        },
+        {
+          "x": -92.05565256905051,
+          "y": -104.98457786110461
+        },
+        {
+          "x": -89.8945624021479,
+          "y": -70.89989552322355
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_21",
+      "name": "Frontend",
+      "color": "#98D8C8",
+      "center": {
+        "x": 111.52601937716265,
+        "y": 20.575216581869437
+      },
+      "boundary": [
+        {
+          "x": 86.64799523123577,
+          "y": 14.68298295185807
+        },
+        {
+          "x": 89.82247496447003,
+          "y": 33.488245174674574
+        },
+        {
+          "x": 105.72690031008679,
+          "y": 46.28872959540896
+        },
+        {
+          "x": 131.43417400295,
+          "y": 44.3835380588051
+        },
+        {
+          "x": 137.46707286236844,
+          "y": 14.685885564656807
+        },
+        {
+          "x": 116.78441623272165,
+          "y": -7.243828978492422
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_22",
+      "name": "Frontend",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -92.58108581139913,
+        "y": 73.64165892470106
+      },
+      "boundary": [
+        {
+          "x": -70.42170494641223,
+          "y": 54.07144373053718
+        },
+        {
+          "x": -100.26836708350444,
+          "y": 42.16350367018405
+        },
+        {
+          "x": -119.910037107492,
+          "y": 68.90043383807975
+        },
+        {
+          "x": -117.25426388094586,
+          "y": 89.21585911558137
+        },
+        {
+          "x": -75.68175077410424,
+          "y": 96.42924813539908
+        },
+        {
+          "x": -74.05167658498567,
+          "y": 94.96447049338313
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_23",
+      "name": "Frontend",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 22.104577282356484,
+        "y": -120.89136095317004
+      },
+      "boundary": [
+        {
+          "x": 25.262022998823337,
+          "y": -154.8762977486473
+        },
+        {
+          "x": -3.0806799615279026,
+          "y": -123.60197899834787
+        },
+        {
+          "x": 17.607401209428197,
+          "y": -95.64459983372245
+        },
+        {
+          "x": 43.48010980391909,
+          "y": -101.31745845998697
+        },
+        {
+          "x": 41.239914880342695,
+          "y": -144.66161081493289
+        },
+        {
+          "x": 36.2727616585055,
+          "y": -153.7368194549458
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_24",
+      "name": "Frontend",
+      "color": "#85C1E9",
+      "center": {
+        "x": 67.89218716336406,
+        "y": 102.7710490963008
+      },
+      "boundary": [
+        {
+          "x": 79.00204513284399,
+          "y": 124.08542431776434
+        },
+        {
+          "x": 91.5988196015407,
+          "y": 86.85757397589559
+        },
+        {
+          "x": 90.2426587826367,
+          "y": 84.84441232670659
+        },
+        {
+          "x": 52.15067075484551,
+          "y": 73.11503112780134
+        },
+        {
+          "x": 36.62611627552995,
+          "y": 104.89030350601197
+        },
+        {
+          "x": 36.86496846703159,
+          "y": 108.09529949485179
+        },
+        {
+          "x": 54.01592779291303,
+          "y": 127.69526822000758
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_2",
+      "name": "Frontend",
+      "color": "#45B7D1",
+      "center": {
+        "x": 24.048984709168483,
+        "y": 37.463402068173025
+      },
+      "boundary": [
+        {
+          "x": 38.39695825554061,
+          "y": 4.963172580606113
+        },
+        {
+          "x": 33.79963259919392,
+          "y": 3.2307396931542733
+        },
+        {
+          "x": 4.819083076266114,
+          "y": 23.018479956335433
+        },
+        {
+          "x": -2.2861150628743587,
+          "y": 38.684034758446394
+        },
+        {
+          "x": 6.678966910740332,
+          "y": 56.410149302239766
+        },
+        {
+          "x": 48.134708940866936,
+          "y": 61.37654184640782
+        },
+        {
+          "x": 49.784463012700954,
+          "y": 56.6057990195438
+        }
+      ],
+      "building_count": 2,
+      "description": null
+    },
+    {
+      "id": "district_3",
+      "name": "Frontend",
+      "color": "#96CEB4",
+      "center": {
+        "x": -47.0718998614287,
+        "y": -8.604983458048359
+      },
+      "boundary": [
+        {
+          "x": -78.28725332052142,
+          "y": -12.939708380570128
+        },
+        {
+          "x": -45.686029271410234,
+          "y": -39.67121754484662
+        },
+        {
+          "x": -25.183578820478253,
+          "y": -31.397319142556174
+        },
+        {
+          "x": -20.955585717428548,
+          "y": -22.636083553251364
+        },
+        {
+          "x": -24.359298599580818,
+          "y": -4.342710083275956
+        },
+        {
+          "x": -46.171683948342945,
+          "y": 18.84645399207176
+        },
+        {
+          "x": -76.78561628766698,
+          "y": -5.064365627751318
+        }
+      ],
+      "building_count": 2,
+      "description": null
+    },
+    {
+      "id": "district_25",
+      "name": "Frontend",
+      "color": "#F8B500",
+      "center": {
+        "x": -121.6375233378429,
+        "y": -25.841506965624937
+      },
+      "boundary": [
+        {
+          "x": -93.92974074105689,
+          "y": -22.69473983758418
+        },
+        {
+          "x": -107.64428766246283,
+          "y": -56.11006884389762
+        },
+        {
+          "x": -124.13627893676129,
+          "y": -58.22955408575338
+        },
+        {
+          "x": -135.36591696825948,
+          "y": -52.46414044031411
+        },
+        {
+          "x": -136.6834787331474,
+          "y": 1.255830006092537
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_26",
+      "name": "Frontend",
+      "color": "#00CED1",
+      "center": {
+        "x": 121.78372079980582,
+        "y": -43.97681611636625
+      },
+      "boundary": [
+        {
+          "x": 88.59655051779146,
+          "y": -43.9880631063187
+        },
+        {
+          "x": 109.18766920309727,
+          "y": -72.5712017530846
+        },
+        {
+          "x": 135.69807505649715,
+          "y": -73.83891191825903
+        },
+        {
+          "x": 146.18553525652632,
+          "y": -36.387041658003376
+        },
+        {
+          "x": 116.77436580251137,
+          "y": -15.885985246282797
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_27",
+      "name": "Frontend",
+      "color": "#FF7F50",
+      "center": {
+        "x": -54.823859204925895,
+        "y": 115.65969550478344
+      },
+      "boundary": [
+        {
+          "x": -22.914789159721664,
+          "y": 124.72376572157997
+        },
+        {
+          "x": -57.27540581070959,
+          "y": 148.54179512328025
+        },
+        {
+          "x": -78.11380647942714,
+          "y": 127.59864496649081
+        },
+        {
+          "x": -75.68175077410424,
+          "y": 96.42924813539908
+        },
+        {
+          "x": -74.05167658498567,
+          "y": 94.96447049338313
+        },
+        {
+          "x": -26.51446671826055,
+          "y": 98.38903103766745
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_28",
+      "name": "Frontend",
+      "color": "#9ACD32",
+      "center": {
+        "x": -53.701363070809414,
+        "y": -119.8053860016273
+      },
+      "boundary": [
+        {
+          "x": -76.18705346291853,
+          "y": -113.81547103181266
+        },
+        {
+          "x": -38.076382278013284,
+          "y": -93.38740040487104
+        },
+        {
+          "x": -24.26246311724514,
+          "y": -123.43225789567003
+        },
+        {
+          "x": -35.942057112476675,
+          "y": -141.9975399656671
+        },
+        {
+          "x": -63.612581996029434,
+          "y": -151.87264049454592
+        },
+        {
+          "x": -64.0399718776095,
+          "y": -151.65980760060478
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_29",
+      "name": "Frontend",
+      "color": "#DA70D6",
+      "center": {
+        "x": 115.25315358168108,
+        "y": 70.86646407312331
+      },
+      "boundary": [
+        {
+          "x": 91.5988196015407,
+          "y": 86.85757397589559
+        },
+        {
+          "x": 116.93537129321653,
+          "y": 95.38443239957071
+        },
+        {
+          "x": 150.32176460845585,
+          "y": 75.30978408211361
+        },
+        {
+          "x": 150.8645272584971,
+          "y": 65.32706760170197
+        },
+        {
+          "x": 131.43417400295,
+          "y": 44.3835380588051
+        },
+        {
+          "x": 105.72690031008679,
+          "y": 46.28872959540896
+        },
+        {
+          "x": 90.2426587826367,
+          "y": 84.84441232670659
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_30",
+      "name": "Frontend",
+      "color": "#FF6B6B",
+      "center": {
+        "x": -132.6050484887846,
+        "y": 44.23897645423736
+      },
+      "boundary": [
+        {
+          "x": -140.61174461500948,
+          "y": 9.564351275802181
+        },
+        {
+          "x": -165.46015598614986,
+          "y": 42.49896819703598
+        },
+        {
+          "x": -162.8773296599195,
+          "y": 54.095529356397584
+        },
+        {
+          "x": -119.910037107492,
+          "y": 68.90043383807975
+        },
+        {
+          "x": -100.26836708350444,
+          "y": 42.16350367018405
+        },
+        {
+          "x": -103.01194176737303,
+          "y": 33.83056754037071
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_31",
+      "name": "Frontend",
+      "color": "#4ECDC4",
+      "center": {
+        "x": 62.72382782105329,
+        "y": -122.99072231825353
+      },
+      "boundary": [
+        {
+          "x": 43.48010980391909,
+          "y": -101.31745845998697
+        },
+        {
+          "x": 54.80279460440191,
+          "y": -94.18896027407078
+        },
+        {
+          "x": 88.02324161481134,
+          "y": -104.91981995847607
+        },
+        {
+          "x": 93.17190369746548,
+          "y": -118.88049217866956
+        },
+        {
+          "x": 88.66615422006875,
+          "y": -127.85445187836726
+        },
+        {
+          "x": 41.239914880342695,
+          "y": -144.66161081493289
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_32",
+      "name": "Frontend",
+      "color": "#45B7D1",
+      "center": {
+        "x": 27.470891287725678,
+        "y": 138.14171785521143
+      },
+      "boundary": [
+        {
+          "x": 54.01592779291303,
+          "y": 127.69526822000758
+        },
+        {
+          "x": 46.66312792760068,
+          "y": 163.88319313885532
+        },
+        {
+          "x": 34.17791660170559,
+          "y": 173.23300210530476
+        },
+        {
+          "x": 2.8751775287332615,
+          "y": 153.2385516725027
+        },
+        {
+          "x": -3.1763120242327822,
+          "y": 136.88119235594385
+        },
+        {
+          "x": 36.86496846703159,
+          "y": 108.09529949485179
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_33",
+      "name": "Frontend",
+      "color": "#96CEB4",
+      "center": {
+        "x": -113.52921740470944,
+        "y": -88.93329362109422
+      },
+      "boundary": [
+        {
+          "x": -107.64428766246283,
+          "y": -56.11006884389762
+        },
+        {
+          "x": -124.13627893676129,
+          "y": -58.22955408575338
+        },
+        {
+          "x": -138.67836457687568,
+          "y": -110.87531882364111
+        },
+        {
+          "x": -110.2312980922309,
+          "y": -114.54892883721556
+        },
+        {
+          "x": -92.05565256905051,
+          "y": -104.98457786110461
+        },
+        {
+          "x": -89.8945624021479,
+          "y": -70.89989552322355
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_34",
+      "name": "Frontend",
+      "color": "#FFEAA7",
+      "center": {
+        "x": 144.8633636396144,
+        "y": -10.866362056463286
+      },
+      "boundary": [
+        {
+          "x": 116.78441623272165,
+          "y": -7.243828978492422
+        },
+        {
+          "x": 137.46707286236844,
+          "y": 14.685885564656807
+        },
+        {
+          "x": 163.2776701826602,
+          "y": 5.7734973314446005
+        },
+        {
+          "x": 173.90515125706855,
+          "y": -24.338725788392622
+        },
+        {
+          "x": 173.50549463992618,
+          "y": -25.237655286361193
+        },
+        {
+          "x": 146.18553525652632,
+          "y": -36.387041658003376
+        },
+        {
+          "x": 116.77436580251137,
+          "y": -15.885985246282797
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_35",
+      "name": "Frontend",
+      "color": "#DDA0DD",
+      "center": {
+        "x": -99.27003400213631,
+        "y": 112.19169214298891
+      },
+      "boundary": [
+        {
+          "x": -117.33131633435798,
+          "y": 136.83609040113961
+        },
+        {
+          "x": -125.15746099893045,
+          "y": 100.64799657625731
+        },
+        {
+          "x": -117.25426388094586,
+          "y": 89.21585911558137
+        },
+        {
+          "x": -75.68175077410424,
+          "y": 96.42924813539908
+        },
+        {
+          "x": -78.11380647942714,
+          "y": 127.59864496649081
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_36",
+      "name": "Frontend",
+      "color": "#98D8C8",
+      "center": {
+        "x": -8.249172307272598,
+        "y": -148.3997877624192
+      },
+      "boundary": [
+        {
+          "x": -3.8938334620148467,
+          "y": -181.86096022332862
+        },
+        {
+          "x": 25.262022998823337,
+          "y": -154.8762977486473
+        },
+        {
+          "x": -3.0806799615279026,
+          "y": -123.60197899834787
+        },
+        {
+          "x": -24.26246311724514,
+          "y": -123.43225789567003
+        },
+        {
+          "x": -35.942057112476675,
+          "y": -141.9975399656671
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_37",
+      "name": "Frontend",
+      "color": "#F7DC6F",
+      "center": {
+        "x": 100.77167375185643,
+        "y": 113.89646926959426
+      },
+      "boundary": [
+        {
+          "x": 79.00204513284399,
+          "y": 124.08542431776434
+        },
+        {
+          "x": 94.74405445924533,
+          "y": 136.38603182204943
+        },
+        {
+          "x": 121.79864587078976,
+          "y": 127.95489403474764
+        },
+        {
+          "x": 116.93537129321653,
+          "y": 95.38443239957071
+        },
+        {
+          "x": 91.5988196015407,
+          "y": 86.85757397589559
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_38",
+      "name": "Frontend",
+      "color": "#BB8FCE",
+      "center": {
+        "x": -150.38293780535454,
+        "y": -26.546530790163967
+      },
+      "boundary": [
+        {
+          "x": -140.85135797300507,
+          "y": 7.647873911971757
+        },
+        {
+          "x": -187.3144099259367,
+          "y": -23.918587568560234
+        },
+        {
+          "x": -156.4632272071031,
+          "y": -53.01923639288731
+        },
+        {
+          "x": -135.36591696825948,
+          "y": -52.46414044031411
+        },
+        {
+          "x": -136.6834787331474,
+          "y": 1.255830006092537
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_39",
+      "name": "Frontend",
+      "color": "#85C1E9",
+      "center": {
+        "x": 118.99775550565086,
+        "y": -102.23703416184668
+      },
+      "boundary": [
+        {
+          "x": 142.80082048668658,
+          "y": -80.54735426710836
+        },
+        {
+          "x": 135.69807505649715,
+          "y": -73.83891191825903
+        },
+        {
+          "x": 109.18766920309727,
+          "y": -72.5712017530846
+        },
+        {
+          "x": 88.02324161481134,
+          "y": -104.91981995847607
+        },
+        {
+          "x": 93.17190369746548,
+          "y": -118.88049217866956
+        },
+        {
+          "x": 131.39588153212378,
+          "y": -128.48520696798732
+        },
+        {
+          "x": 138.86486704176414,
+          "y": -122.47108699914979
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_40",
+      "name": "Frontend",
+      "color": "#F8B500",
+      "center": {
+        "x": -25.623921170701188,
+        "y": 157.78441792010523
+      },
+      "boundary": [
+        {
+          "x": -3.1763120242327822,
+          "y": 136.88119235594385
+        },
+        {
+          "x": 2.8751775287332615,
+          "y": 153.2385516725027
+        },
+        {
+          "x": -31.665840895056828,
+          "y": 189.24810340392375
+        },
+        {
+          "x": -42.67355354138971,
+          "y": 191.4775009789674
+        },
+        {
+          "x": -57.47095568835948,
+          "y": 150.35632797748522
+        },
+        {
+          "x": -57.27540581070959,
+          "y": 148.54179512328025
+        },
+        {
+          "x": -22.914789159721664,
+          "y": 124.72376572157997
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_41",
+      "name": "Frontend",
+      "color": "#00CED1",
+      "center": {
+        "x": -90.9862485753311,
+        "y": -131.77289784581197
+      },
+      "boundary": [
+        {
+          "x": -110.2312980922309,
+          "y": -114.54892883721556
+        },
+        {
+          "x": -100.2470118458085,
+          "y": -157.5915704915776
+        },
+        {
+          "x": -64.0399718776095,
+          "y": -151.65980760060478
+        },
+        {
+          "x": -76.18705346291853,
+          "y": -113.81547103181266
+        },
+        {
+          "x": -92.05565256905051,
+          "y": -104.98457786110461
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_42",
+      "name": "Frontend",
+      "color": "#FF7F50",
+      "center": {
+        "x": 159.0540026129859,
+        "y": 30.2302395137445
+      },
+      "boundary": [
+        {
+          "x": 131.43417400295,
+          "y": 44.3835380588051
+        },
+        {
+          "x": 150.8645272584971,
+          "y": 65.32706760170197
+        },
+        {
+          "x": 184.23537205184792,
+          "y": 45.35509848911458
+        },
+        {
+          "x": 186.17069304148916,
+          "y": 31.45677741785932
+        },
+        {
+          "x": 163.2776701826602,
+          "y": 5.7734973314446005
+        },
+        {
+          "x": 137.46707286236844,
+          "y": 14.685885564656807
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_43",
+      "name": "Frontend",
+      "color": "#9ACD32",
+      "center": {
+        "x": -145.10182203896542,
+        "y": 80.50753365813006
+      },
+      "boundary": [
+        {
+          "x": -164.93796044840357,
+          "y": 101.74483817237598
+        },
+        {
+          "x": -180.22501050412652,
+          "y": 92.1775374359595
+        },
+        {
+          "x": -162.8773296599195,
+          "y": 54.095529356397584
+        },
+        {
+          "x": -119.910037107492,
+          "y": 68.90043383807975
+        },
+        {
+          "x": -117.25426388094586,
+          "y": 89.21585911558137
+        },
+        {
+          "x": -125.15746099893045,
+          "y": 100.64799657625731
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_44",
+      "name": "Frontend",
+      "color": "#DA70D6",
+      "center": {
+        "x": 71.57555343979003,
+        "y": -147.96841541607196
+      },
+      "boundary": [
+        {
+          "x": 36.2727616585055,
+          "y": -153.7368194549458
+        },
+        {
+          "x": 57.27076823481481,
+          "y": -175.57093288955758
+        },
+        {
+          "x": 90.60131919336338,
+          "y": -159.75530204255756
+        },
+        {
+          "x": 88.66615422006875,
+          "y": -127.85445187836726
+        },
+        {
+          "x": 41.239914880342695,
+          "y": -144.66161081493289
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_45",
+      "name": "Frontend",
+      "color": "#FF6B6B",
+      "center": {
+        "x": 74.37931464861988,
+        "y": 147.67274926260666
+      },
+      "boundary": [
+        {
+          "x": 79.00204513284399,
+          "y": 124.08542431776434
+        },
+        {
+          "x": 94.74405445924533,
+          "y": 136.38603182204943
+        },
+        {
+          "x": 91.11348377572693,
+          "y": 172.81698075357977
+        },
+        {
+          "x": 46.66312792760068,
+          "y": 163.88319313885532
+        },
+        {
+          "x": 54.01592779291303,
+          "y": 127.69526822000758
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_46",
+      "name": "Frontend",
+      "color": "#4ECDC4",
+      "center": {
+        "x": -148.99925591384093,
+        "y": -79.13557598462248
+      },
+      "boundary": [
+        {
+          "x": -135.36591696825948,
+          "y": -52.46414044031411
+        },
+        {
+          "x": -124.13627893676129,
+          "y": -58.22955408575338
+        },
+        {
+          "x": -138.67836457687568,
+          "y": -110.87531882364111
+        },
+        {
+          "x": -141.04747702386337,
+          "y": -112.03574169612219
+        },
+        {
+          "x": -171.61224497700076,
+          "y": -80.47874503200924
+        },
+        {
+          "x": -156.4632272071031,
+          "y": -53.01923639288731
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_47",
+      "name": "Frontend",
+      "color": "#45B7D1",
+      "center": {
+        "x": 163.0971453904453,
+        "y": -55.54560809151716
+      },
+      "boundary": [
+        {
+          "x": 199.64322248880217,
+          "y": -81.60732811229568
+        },
+        {
+          "x": 173.50549463992618,
+          "y": -25.237655286361193
+        },
+        {
+          "x": 146.18553525652632,
+          "y": -36.387041658003376
+        },
+        {
+          "x": 135.69807505649715,
+          "y": -73.83891191825903
+        },
+        {
+          "x": 142.80082048668658,
+          "y": -80.54735426710836
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_48",
+      "name": "Frontend",
+      "color": "#96CEB4",
+      "center": {
+        "x": -90.16938442172503,
+        "y": 150.8284361574471
+      },
+      "boundary": [
+        {
+          "x": -121.0554838360145,
+          "y": 143.75085450134858
+        },
+        {
+          "x": -96.56562728953378,
+          "y": 170.07822528750603
+        },
+        {
+          "x": -57.47095568835948,
+          "y": 150.35632797748522
+        },
+        {
+          "x": -57.27540581070959,
+          "y": 148.54179512328025
+        },
+        {
+          "x": -78.11380647942714,
+          "y": 127.59864496649081
+        },
+        {
+          "x": -117.33131633435798,
+          "y": 136.83609040113961
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_49",
+      "name": "Frontend",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -35.638215526939064,
+        "y": -170.41922756468588
+      },
+      "boundary": [
+        {
+          "x": -3.8938334620148467,
+          "y": -181.86096022332862
+        },
+        {
+          "x": -35.942057112476675,
+          "y": -141.9975399656671
+        },
+        {
+          "x": -63.612581996029434,
+          "y": -151.87264049454592
+        },
+        {
+          "x": -57.045164353506635,
+          "y": -187.85675113092628
+        },
+        {
+          "x": -5.320607589598556,
+          "y": -186.89194898146062
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_50",
+      "name": "Frontend",
+      "color": "#DDA0DD",
+      "center": {
+        "x": 137.8017468979115,
+        "y": 108.36730559503377
+      },
+      "boundary": [
+        {
+          "x": 116.93537129321653,
+          "y": 95.38443239957071
+        },
+        {
+          "x": 150.32176460845585,
+          "y": 75.30978408211361
+        },
+        {
+          "x": 185.9590189192347,
+          "y": 125.9662101466285
+        },
+        {
+          "x": 131.08635583801222,
+          "y": 133.41104006378956
+        },
+        {
+          "x": 121.79864587078976,
+          "y": 127.95489403474764
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_51",
+      "name": "Frontend",
+      "color": "#98D8C8",
+      "center": {
+        "x": -176.1522437712033,
+        "y": 11.383618669909259
+      },
+      "boundary": [
+        {
+          "x": -140.85135797300507,
+          "y": 7.647873911971757
+        },
+        {
+          "x": -187.3144099259367,
+          "y": -23.918587568560234
+        },
+        {
+          "x": -188.06972342660495,
+          "y": -23.8516346020983
+        },
+        {
+          "x": -197.90802949560856,
+          "y": 29.752733513806994
+        },
+        {
+          "x": -165.46015598614986,
+          "y": 42.49896819703598
+        },
+        {
+          "x": -140.61174461500948,
+          "y": 9.564351275802181
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_52",
+      "name": "Frontend",
+      "color": "#F7DC6F",
+      "center": {
+        "x": 108.06278799472689,
+        "y": -145.75503182536252
+      },
+      "boundary": [
+        {
+          "x": 93.17190369746548,
+          "y": -118.88049217866956
+        },
+        {
+          "x": 131.39588153212378,
+          "y": -128.48520696798732
+        },
+        {
+          "x": 130.88109261962884,
+          "y": -182.4191106393392
+        },
+        {
+          "x": 90.60131919336338,
+          "y": -159.75530204255756
+        },
+        {
+          "x": 88.66615422006875,
+          "y": -127.85445187836726
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_53",
+      "name": "Frontend",
+      "color": "#BB8FCE",
+      "center": {
+        "x": -0.4808287979782845,
+        "y": 181.90213044690333
+      },
+      "boundary": [
+        {
+          "x": 29.56415427902295,
+          "y": 213.35264272850856
+        },
+        {
+          "x": -31.665840895056828,
+          "y": 189.24810340392375
+        },
+        {
+          "x": 2.8751775287332615,
+          "y": 153.2385516725027
+        },
+        {
+          "x": 34.17791660170559,
+          "y": 173.23300210530476
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_54",
+      "name": "Frontend",
+      "color": "#85C1E9",
+      "center": {
+        "x": -119.9284290941884,
+        "y": -138.48640342514753
+      },
+      "boundary": [
+        {
+          "x": -138.67836457687568,
+          "y": -110.87531882364111
+        },
+        {
+          "x": -110.2312980922309,
+          "y": -114.54892883721556
+        },
+        {
+          "x": -100.2470118458085,
+          "y": -157.5915704915776
+        },
+        {
+          "x": -111.08633240326851,
+          "y": -167.38417521197016
+        },
+        {
+          "x": -154.9005173373914,
+          "y": -133.03993769406614
+        },
+        {
+          "x": -141.04747702386337,
+          "y": -112.03574169612219
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_55",
+      "name": "Frontend",
+      "color": "#F8B500",
+      "center": {
+        "x": 188.05718146099196,
+        "y": 4.377995014128659
+      },
+      "boundary": [
+        {
+          "x": 186.17069304148916,
+          "y": 31.45677741785932
+        },
+        {
+          "x": 163.2776701826602,
+          "y": 5.7734973314446005
+        },
+        {
+          "x": 173.90515125706855,
+          "y": -24.338725788392622
+        },
+        {
+          "x": 232.43635248064962,
+          "y": -2.6219990412747363
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_56",
+      "name": "Frontend",
+      "color": "#00CED1",
+      "center": {
+        "x": -143.96172448786214,
+        "y": 121.85684988072792
+      },
+      "boundary": [
+        {
+          "x": -121.0554838360145,
+          "y": 143.75085450134858
+        },
+        {
+          "x": -151.96304973004413,
+          "y": 159.86060087435737
+        },
+        {
+          "x": -164.93796044840357,
+          "y": 101.74483817237598
+        },
+        {
+          "x": -125.15746099893045,
+          "y": 100.64799657625731
+        },
+        {
+          "x": -117.33131633435798,
+          "y": 136.83609040113961
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_57",
+      "name": "Frontend",
+      "color": "#FF7F50",
+      "center": {
+        "x": 29.131016711366613,
+        "y": -188.7875979315851
+      },
+      "boundary": [
+        {
+          "x": -3.8938334620148467,
+          "y": -181.86096022332862
+        },
+        {
+          "x": 25.262022998823337,
+          "y": -154.8762977486473
+        },
+        {
+          "x": 36.2727616585055,
+          "y": -153.7368194549458
+        },
+        {
+          "x": 57.27076823481481,
+          "y": -175.57093288955758
+        },
+        {
+          "x": 58.27043314993911,
+          "y": -184.13027415307494
+        },
+        {
+          "x": 11.674486124717973,
+          "y": -256.33286011655787
+        },
+        {
+          "x": -5.320607589598556,
+          "y": -186.89194898146062
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_58",
+      "name": "Frontend",
+      "color": "#9ACD32",
+      "center": {
+        "x": 112.48081129601027,
+        "y": 151.4698004178256
+      },
+      "boundary": [
+        {
+          "x": 91.11348377572693,
+          "y": 172.81698075357977
+        },
+        {
+          "x": 120.85202098217158,
+          "y": 209.150423809021
+        },
+        {
+          "x": 131.08635583801222,
+          "y": 133.41104006378956
+        },
+        {
+          "x": 121.79864587078976,
+          "y": 127.95489403474764
+        },
+        {
+          "x": 94.74405445924533,
+          "y": 136.38603182204943
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_59",
+      "name": "Frontend",
+      "color": "#DA70D6",
+      "center": {
+        "x": -182.53605662018506,
+        "y": -60.633803191714655
+      },
+      "boundary": [
+        {
+          "x": -156.4632272071031,
+          "y": -53.01923639288731
+        },
+        {
+          "x": -171.61224497700076,
+          "y": -80.47874503200924
+        },
+        {
+          "x": -441.7782663704912,
+          "y": -136.92316171802295
+        },
+        {
+          "x": -188.06972342660495,
+          "y": -23.8516346020983
+        },
+        {
+          "x": -187.3144099259367,
+          "y": -23.918587568560234
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_60",
+      "name": "Frontend",
+      "color": "#FF6B6B",
+      "center": {
+        "x": 162.15091437926597,
+        "y": -106.28841063191179
+      },
+      "boundary": [
+        {
+          "x": 199.64322248880217,
+          "y": -81.60732811229568
+        },
+        {
+          "x": 142.80082048668658,
+          "y": -80.54735426710836
+        },
+        {
+          "x": 138.86486704176414,
+          "y": -122.47108699914979
+        },
+        {
+          "x": 331.53532544077393,
+          "y": -159.9144130756763
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_61",
+      "name": "Frontend",
+      "color": "#4ECDC4",
+      "center": {
+        "x": -77.28266447183368,
+        "y": 176.3737514249249
+      },
+      "boundary": [
+        {
+          "x": -96.56562728953378,
+          "y": 170.07822528750603
+        },
+        {
+          "x": -100.39142852999113,
+          "y": 284.13718516298434
+        },
+        {
+          "x": -42.67355354138971,
+          "y": 191.4775009789674
+        },
+        {
+          "x": -57.47095568835948,
+          "y": 150.35632797748522
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_62",
+      "name": "Frontend",
+      "color": "#45B7D1",
+      "center": {
+        "x": -83.23179987406834,
+        "y": -179.10547657805526
+      },
+      "boundary": [
+        {
+          "x": -64.0399718776095,
+          "y": -151.65980760060478
+        },
+        {
+          "x": -63.612581996029434,
+          "y": -151.87264049454592
+        },
+        {
+          "x": -57.045164353506635,
+          "y": -187.85675113092628
+        },
+        {
+          "x": -161.81528616235352,
+          "y": -386.96172914549584
+        },
+        {
+          "x": -111.08633240326851,
+          "y": -167.38417521197016
+        },
+        {
+          "x": -100.2470118458085,
+          "y": -157.5915704915776
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_63",
+      "name": "Frontend",
+      "color": "#96CEB4",
+      "center": {
+        "x": 185.66539712830377,
+        "y": 74.69479436555464
+      },
+      "boundary": [
+        {
+          "x": 150.8645272584971,
+          "y": 65.32706760170197
+        },
+        {
+          "x": 184.23537205184792,
+          "y": 45.35509848911458
+        },
+        {
+          "x": 500.0,
+          "y": 313.388308114923
+        },
+        {
+          "x": 185.9590189192347,
+          "y": 125.9662101466285
+        },
+        {
+          "x": 150.32176460845585,
+          "y": 75.30978408211361
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_64",
+      "name": "Frontend",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -194.47126258631855,
+        "y": 58.01803425244674
+      },
+      "boundary": [
+        {
+          "x": -165.46015598614986,
+          "y": 42.49896819703598
+        },
+        {
+          "x": -162.8773296599195,
+          "y": 54.095529356397584
+        },
+        {
+          "x": -180.22501050412652,
+          "y": 92.1775374359595
+        },
+        {
+          "x": -500.0,
+          "y": 282.37544916561137
+        },
+        {
+          "x": -500.0,
+          "y": 261.0279816910009
+        },
+        {
+          "x": -197.90802949560856,
+          "y": 29.752733513806994
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_65",
+      "name": "Frontend",
+      "color": "#DDA0DD",
+      "center": {
+        "x": 87.69883789235223,
+        "y": -181.94732901516082
+      },
+      "boundary": [
+        {
+          "x": 90.60131919336338,
+          "y": -159.75530204255756
+        },
+        {
+          "x": 57.27076823481481,
+          "y": -175.57093288955758
+        },
+        {
+          "x": 58.27043314993911,
+          "y": -184.13027415307494
+        },
+        {
+          "x": 176.6522276026147,
+          "y": -267.8109203801668
+        },
+        {
+          "x": 130.88109261962884,
+          "y": -182.4191106393392
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_66",
+      "name": "Frontend",
+      "color": "#98D8C8",
+      "center": {
+        "x": 65.96402630550236,
+        "y": 189.5432948304956
+      },
+      "boundary": [
+        {
+          "x": 46.66312792760068,
+          "y": 163.88319313885532
+        },
+        {
+          "x": 34.17791660170559,
+          "y": 173.23300210530476
+        },
+        {
+          "x": 29.56415427902295,
+          "y": 213.35264272850856
+        },
+        {
+          "x": 259.4394573948053,
+          "y": 500.0
+        },
+        {
+          "x": 368.91514343301344,
+          "y": 500.0
+        },
+        {
+          "x": 120.85202098217158,
+          "y": 209.150423809021
+        },
+        {
+          "x": 91.11348377572693,
+          "y": 172.81698075357977
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_67",
+      "name": "Frontend",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -173.67690843560234,
+        "y": -103.03730310346316
+      },
+      "boundary": [
+        {
+          "x": -141.04747702386337,
+          "y": -112.03574169612219
+        },
+        {
+          "x": -154.9005173373914,
+          "y": -133.03993769406614
+        },
+        {
+          "x": -500.0,
+          "y": -426.6297608675089
+        },
+        {
+          "x": -500.0,
+          "y": -288.6822445156629
+        },
+        {
+          "x": -441.7782663704912,
+          "y": -136.92316171802295
+        },
+        {
+          "x": -171.61224497700076,
+          "y": -80.47874503200924
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_68",
+      "name": "Frontend",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 203.36316546746494,
+        "y": -36.874889927506445
+      },
+      "boundary": [
+        {
+          "x": 199.64322248880217,
+          "y": -81.60732811229568
+        },
+        {
+          "x": 173.50549463992618,
+          "y": -25.237655286361193
+        },
+        {
+          "x": 173.90515125706855,
+          "y": -24.338725788392622
+        },
+        {
+          "x": 232.43635248064962,
+          "y": -2.6219990412747363
+        },
+        {
+          "x": 500.0,
+          "y": -109.50759389250268
+        },
+        {
+          "x": 500.0,
+          "y": -364.35846567350234
+        },
+        {
+          "x": 331.53532544077393,
+          "y": -159.9144130756763
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_69",
+      "name": "Frontend",
+      "color": "#85C1E9",
+      "center": {
+        "x": -116.22710723858833,
+        "y": 175.06746476749237
+      },
+      "boundary": [
+        {
+          "x": -121.0554838360145,
+          "y": 143.75085450134858
+        },
+        {
+          "x": -151.96304973004413,
+          "y": 159.86060087435737
+        },
+        {
+          "x": -500.0,
+          "y": 500.0
+        },
+        {
+          "x": -322.1431009399071,
+          "y": 500.0
+        },
+        {
+          "x": -100.39142852999113,
+          "y": 284.13718516298434
+        },
+        {
+          "x": -96.56562728953378,
+          "y": 170.07822528750603
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_70",
+      "name": "Frontend",
+      "color": "#F8B500",
+      "center": {
+        "x": -35.00281906882381,
+        "y": -204.48382846091104
+      },
+      "boundary": [
+        {
+          "x": -5.320607589598556,
+          "y": -186.89194898146062
+        },
+        {
+          "x": 11.674486124717973,
+          "y": -256.33286011655787
+        },
+        {
+          "x": -60.63964603634177,
+          "y": -500.0
+        },
+        {
+          "x": -325.4353183731771,
+          "y": -500.0
+        },
+        {
+          "x": -161.81528616235352,
+          "y": -386.96172914549584
+        },
+        {
+          "x": -57.045164353506635,
+          "y": -187.85675113092628
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_71",
+      "name": "Frontend",
+      "color": "#00CED1",
+      "center": {
+        "x": 144.23175743235294,
+        "y": 155.760168238115
+      },
+      "boundary": [
+        {
+          "x": 368.91514343301344,
+          "y": 500.0
+        },
+        {
+          "x": 500.0,
+          "y": 416.70903839115795
+        },
+        {
+          "x": 500.0,
+          "y": 313.388308114923
+        },
+        {
+          "x": 185.9590189192347,
+          "y": 125.9662101466285
+        },
+        {
+          "x": 131.08635583801222,
+          "y": 133.41104006378956
+        },
+        {
+          "x": 120.85202098217158,
+          "y": 209.150423809021
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_72",
+      "name": "Frontend",
+      "color": "#FF7F50",
+      "center": {
+        "x": -211.72283896144805,
+        "y": 4.855150658094053
+      },
+      "boundary": [
+        {
+          "x": -197.90802949560856,
+          "y": 29.752733513806994
+        },
+        {
+          "x": -500.0,
+          "y": 261.0279816910009
+        },
+        {
+          "x": -500.0,
+          "y": -5.5067062021407764e-14
+        },
+        {
+          "x": -500.0,
+          "y": -288.6822445156629
+        },
+        {
+          "x": -441.7782663704912,
+          "y": -136.92316171802295
+        },
+        {
+          "x": -188.06972342660495,
+          "y": -23.8516346020983
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_73",
+      "name": "Frontend",
+      "color": "#9ACD32",
+      "center": {
+        "x": 154.39507961388418,
+        "y": -146.19726478816386
+      },
+      "boundary": [
+        {
+          "x": 331.53532544077393,
+          "y": -159.9144130756763
+        },
+        {
+          "x": 500.0,
+          "y": -364.35846567350234
+        },
+        {
+          "x": 479.0876027641184,
+          "y": -500.0
+        },
+        {
+          "x": 176.6522276026147,
+          "y": -267.8109203801668
+        },
+        {
+          "x": 130.88109261962884,
+          "y": -182.4191106393392
+        },
+        {
+          "x": 131.39588153212378,
+          "y": -128.48520696798732
+        },
+        {
+          "x": 138.86486704176414,
+          "y": -122.47108699914979
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_74",
+      "name": "Frontend",
+      "color": "#DA70D6",
+      "center": {
+        "x": -13.857512974815831,
+        "y": 215.88138624448578
+      },
+      "boundary": [
+        {
+          "x": 259.4394573948053,
+          "y": 500.0
+        },
+        {
+          "x": -1.5987211554602254e-14,
+          "y": 500.0
+        },
+        {
+          "x": -322.1431009399071,
+          "y": 500.0
+        },
+        {
+          "x": -100.39142852999113,
+          "y": 284.13718516298434
+        },
+        {
+          "x": -42.67355354138971,
+          "y": 191.4775009789674
+        },
+        {
+          "x": -31.665840895056828,
+          "y": 189.24810340392375
+        },
+        {
+          "x": 29.56415427902295,
+          "y": 213.35264272850856
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_75",
+      "name": "Frontend",
+      "color": "#FF6B6B",
+      "center": {
+        "x": -141.25958521544803,
+        "y": -165.69933015465477
+      },
+      "boundary": [
+        {
+          "x": -111.08633240326851,
+          "y": -167.38417521197016
+        },
+        {
+          "x": -161.81528616235352,
+          "y": -386.96172914549584
+        },
+        {
+          "x": -325.4353183731771,
+          "y": -500.0
+        },
+        {
+          "x": -500.0,
+          "y": -426.6297608675089
+        },
+        {
+          "x": -154.9005173373914,
+          "y": -133.03993769406614
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_76",
+      "name": "Frontend",
+      "color": "#4ECDC4",
+      "center": {
+        "x": 212.59088218928693,
+        "y": 37.685172108315335
+      },
+      "boundary": [
+        {
+          "x": 186.17069304148916,
+          "y": 31.45677741785932
+        },
+        {
+          "x": 184.23537205184792,
+          "y": 45.35509848911458
+        },
+        {
+          "x": 500.0,
+          "y": 313.388308114923
+        },
+        {
+          "x": 500.0,
+          "y": 416.70903839115795
+        },
+        {
+          "x": 500.0,
+          "y": 7.105427357601002e-15
+        },
+        {
+          "x": 500.0,
+          "y": -109.50759389250268
+        },
+        {
+          "x": 232.43635248064962,
+          "y": -2.6219990412747363
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_77",
+      "name": "Frontend",
+      "color": "#45B7D1",
+      "center": {
+        "x": -175.36833125946941,
+        "y": 128.86868109281892
+      },
+      "boundary": [
+        {
+          "x": -164.93796044840357,
+          "y": 101.74483817237598
+        },
+        {
+          "x": -180.22501050412652,
+          "y": 92.1775374359595
+        },
+        {
+          "x": -500.0,
+          "y": 282.37544916561137
+        },
+        {
+          "x": -500.0,
+          "y": 500.0
+        },
+        {
+          "x": -151.96304973004413,
+          "y": 159.86060087435737
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_78",
+      "name": "Nc Files",
+      "color": "#96CEB4",
+      "center": {
+        "x": 66.03075638935377,
+        "y": -212.60084911000592
+      },
+      "boundary": [
+        {
+          "x": 58.27043314993911,
+          "y": -184.13027415307494
+        },
+        {
+          "x": 176.6522276026147,
+          "y": -267.8109203801668
+        },
+        {
+          "x": 479.0876027641184,
+          "y": -500.0
+        },
+        {
+          "x": -1.1368683772161603e-13,
+          "y": -500.0
+        },
+        {
+          "x": -60.63964603634177,
+          "y": -500.0
+        },
+        {
+          "x": 11.674486124717973,
+          "y": -256.33286011655787
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    }
+  ],
+  "roads": [
+    {
+      "source": "api_server.py",
+      "target": "ai_core/main_agent.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api_server.py",
+      "target": "ai_core/config.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "api_server.py",
+      "target": "ai_core/data_access.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "ai_core/main_agent.py",
+      "target": "ai_core/config.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "ai_core/data_access.py",
+      "target": "ai_core/main_agent.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "data_pipeline/build_database.py",
+      "target": "frontend/src/components/ui/aspect-ratio.tsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "frontend/src/main.tsx",
+      "target": "frontend/src/App.tsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "frontend/src/components/EnhancedChatInterface.tsx",
+      "target": "frontend/src/components/ChatInterface.tsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "frontend/src/components/DataVisualization.tsx",
+      "target": "frontend/src/components/CodeSnippet.tsx",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "tests/test_sql_validation.py",
+      "target": "ai_core/main_agent.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    }
+  ],
+  "stats": {
+    "total_files": 87,
+    "total_loc": 12166,
+    "total_districts": 79,
+    "total_dependencies": 10,
+    "hotspots": 6
+  },
+  "metadata": {
+    "num_files": 87,
+    "num_directories": 79,
+    "languages": {},
+    "layer_violations": [],
+    "duplicates": [],
+    "issues": {
+      "circular_dependencies": [],
+      "god_objects": [],
+      "orphans": [
+        "ai_core/sample_data.py",
+        "ai_core/knowledge_curator.py",
+        "ai_core/curated_knowledge.py",
+        "ai_core/create_vector_db.py",
+        "data_pipeline/data_quality_checker.py",
+        "data_pipeline/check_and_download_from_index.py",
+        "data_pipeline/attribute_inspector.py",
+        "frontend/vite.config.ts",
+        "frontend/tailwind.config.ts",
+        "frontend/postcss.config.js",
+        "frontend/eslint.config.js",
+        "frontend/src/vite-env.d.ts",
+        "frontend/src/components/ThemeToggle.tsx",
+        "frontend/src/components/ThemeProvider.tsx",
+        "frontend/src/components/StreamingDataVisualization.tsx",
+        "frontend/src/components/RealTimeOceanMap.tsx",
+        "frontend/src/components/OceanMap.tsx",
+        "frontend/src/components/LandingPage.tsx",
+        "frontend/src/components/InteractiveOceanMap.tsx",
+        "frontend/src/components/ErrorBoundary.tsx",
+        "frontend/src/components/CommandPalette.tsx",
+        "frontend/src/components/ui/use-toast.ts",
+        "frontend/src/components/ui/tooltip.tsx",
+        "frontend/src/components/ui/toggle.tsx",
+        "frontend/src/components/ui/toggle-group.tsx",
+        "frontend/src/components/ui/toaster.tsx",
+        "frontend/src/components/ui/toast.tsx",
+        "frontend/src/components/ui/textarea.tsx",
+        "frontend/src/components/ui/tabs.tsx",
+        "frontend/src/components/ui/table.tsx",
+        "frontend/src/components/ui/switch.tsx",
+        "frontend/src/components/ui/sonner.tsx",
+        "frontend/src/components/ui/slider.tsx",
+        "frontend/src/components/ui/skeleton.tsx",
+        "frontend/src/components/ui/sidebar.tsx",
+        "frontend/src/components/ui/sheet.tsx",
+        "frontend/src/components/ui/separator.tsx",
+        "frontend/src/components/ui/select.tsx",
+        "frontend/src/components/ui/scroll-area.tsx",
+        "frontend/src/components/ui/resizable.tsx",
+        "frontend/src/components/ui/radio-group.tsx",
+        "frontend/src/components/ui/progress.tsx",
+        "frontend/src/components/ui/popover.tsx",
+        "frontend/src/components/ui/pagination.tsx",
+        "frontend/src/components/ui/navigation-menu.tsx",
+        "frontend/src/components/ui/menubar.tsx",
+        "frontend/src/components/ui/label.tsx",
+        "frontend/src/components/ui/input.tsx",
+        "frontend/src/components/ui/input-otp.tsx",
+        "frontend/src/components/ui/hover-card.tsx",
+        "frontend/src/components/ui/form.tsx",
+        "frontend/src/components/ui/dropdown-menu.tsx",
+        "frontend/src/components/ui/drawer.tsx",
+        "frontend/src/components/ui/dialog.tsx",
+        "frontend/src/components/ui/context-menu.tsx",
+        "frontend/src/components/ui/command.tsx",
+        "frontend/src/components/ui/collapsible.tsx",
+        "frontend/src/components/ui/checkbox.tsx",
+        "frontend/src/components/ui/chart.tsx",
+        "frontend/src/components/ui/carousel.tsx",
+        "frontend/src/components/ui/card.tsx",
+        "frontend/src/components/ui/calendar.tsx",
+        "frontend/src/components/ui/button.tsx",
+        "frontend/src/components/ui/breadcrumb.tsx",
+        "frontend/src/components/ui/badge.tsx",
+        "frontend/src/components/ui/avatar.tsx",
+        "frontend/src/components/ui/alert.tsx",
+        "frontend/src/components/ui/alert-dialog.tsx",
+        "frontend/src/components/ui/accordion.tsx",
+        "frontend/src/hooks/use-toast.ts",
+        "frontend/src/hooks/use-mobile.tsx",
+        "frontend/src/pages/NotFound.tsx",
+        "frontend/src/services/api.ts",
+        "nc files/script.py"
+      ],
+      "highly_coupled": [],
+      "large_files": []
+    },
+    "health": {
+      "score": 100,
+      "grade": "A"
+    }
+  }
+}

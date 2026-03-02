@@ -1,24 +1,41 @@
-import React, { useState } from 'react'
-import { Folder, Globe, ArrowRight } from 'lucide-react'
+import React, { useState, useEffect, useRef } from 'react'
+import { Folder, ArrowRight, Loader2 } from 'lucide-react'
 import useStore from '../../../store/useStore'
-import { Modal, ModalContent, ModalTitle, ModalDescription } from '../../../shared/ui/Modal'
-import { motion, AnimatePresence } from 'framer-motion'
+import { Modal, ModalContent } from '../../../shared/ui/Modal'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { slideUp, getReducedMotionVariants } from '../../../shared/animations/variants'
 
 export default function AnalyzeModal({ open, onOpenChange }) {
     const { analyzeRepo } = useStore()
     const [path, setPath] = useState('')
     const [isFocused, setIsFocused] = useState(false)
     const [submitting, setSubmitting] = useState(false)
+    const inputRef = useRef(null)
+    const shouldReduceMotion = useReducedMotion()
+
+    // Auto focus when modal opens
+    useEffect(() => {
+        if (open) {
+            setPath('')
+            setTimeout(() => {
+                inputRef.current?.focus()
+            }, 100)
+        }
+    }, [open])
 
     const handleSubmit = (e) => {
         e.preventDefault()
         if (path.trim() && !submitting) {
             setSubmitting(true)
+
+            // Instantly close modal and trigger global 3D loader
+            onOpenChange(false)
+
+            // Allow React cycle to unmount modal before freezing thread with heavy fetch
             setTimeout(() => {
                 analyzeRepo(path.trim())
-                onOpenChange(false)
                 setSubmitting(false)
-            }, 600)
+            }, 50)
         }
     }
 
@@ -26,149 +43,149 @@ export default function AnalyzeModal({ open, onOpenChange }) {
         <Modal open={open} onOpenChange={onOpenChange}>
             <ModalContent style={{
                 padding: 0,
-                background: 'rgba(5, 5, 10, 0.4)', // Ultra-deep void
-                border: '1px solid rgba(255,255,255,0.05)',
-                boxShadow: '0 0 0 1px rgba(0,0,0,0.5), 0 20px 40px -10px rgba(0,0,0,0.5)',
-                backdropFilter: 'blur(30px) saturate(180%)', // Apple-like blur
-                borderRadius: '20px',
+                background: 'rgba(5, 5, 8, 0.95)', // Extremely dark, minimal transparency
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                boxShadow: '0 40px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255, 255, 255, 0.02) inset',
+                backdropFilter: 'blur(40px) saturate(150%)',
+                WebkitBackdropFilter: 'blur(40px) saturate(150%)',
+                borderRadius: '24px',
                 width: '100%',
-                maxWidth: '520px',
+                maxWidth: '480px',
                 overflow: 'hidden',
                 fontFamily: 'var(--font-sans)',
-                color: 'var(--text-primary)'
+                color: 'white'
             }}>
-                {/* SUBTLE TOP GLOW */}
-                <div style={{
-                    position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
-                    background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)'
-                }} />
+                <div style={{ padding: '48px 40px 40px 40px' }}>
 
-                <div style={{ padding: '40px' }}>
-
-                    {/* CUSTOM LOGO IDENTITY */}
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '32px' }}>
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.15 }}
-                            style={{
-                                width: '64px', height: '64px',
-                                borderRadius: '16px',
-                                background: 'rgba(59, 130, 246, 0.12)',
-                                border: '1px solid rgba(59, 130, 246, 0.2)',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                marginBottom: '20px'
-                            }}
-                        >
-                            {/* Universe Icon */}
-                            <Globe size={32} color="#60a5fa" strokeWidth={1.5} />
-                        </motion.div>
-
-                        <ModalTitle style={{
+                    {/* Header */}
+                    <div style={{ marginBottom: '32px' }}>
+                        <h2 style={{
                             margin: 0,
-                            fontFamily: 'var(--font-display)',
+                            fontFamily: 'var(--font-sans)',
                             fontSize: '1.75rem',
-                            fontWeight: 600,
-                            color: '#f4f4f5',
-                            marginBottom: '8px',
-                            letterSpacing: '-0.02em',
-                            textAlign: 'center'
-                        }}>
-                            Initialize Workspace
-                        </ModalTitle>
-                        <ModalDescription style={{
-                            margin: 0,
-                            fontSize: '1rem',
-                            color: 'rgba(255,255,255,0.6)',
                             fontWeight: 400,
-                            textAlign: 'center'
+                            letterSpacing: '-0.02em',
+                            color: '#ffffff',
+                            marginBottom: '8px'
                         }}>
-                            Connect a repository to visualize structure.
-                        </ModalDescription>
+                            Workspace Connection
+                        </h2>
+                        <p style={{
+                            margin: 0,
+                            fontSize: '0.95rem',
+                            color: 'rgba(255, 255, 255, 0.5)',
+                            fontWeight: 400,
+                            fontFamily: 'var(--font-sans)',
+                            lineHeight: 1.5
+                        }}>
+                            Enter the absolute path to your local repository to begin architectural analysis.
+                        </p>
                     </div>
 
-                    {/* INPUT FORM */}
-                    <form onSubmit={handleSubmit} style={{ marginTop: '32px' }}>
-                        <motion.div
-                            className="premium-input-wrapper"
-                            style={{
-                                display: 'flex', alignItems: 'center',
-                                paddingRight: '16px',
-                                background: 'rgba(255,255,255,0.03)',
-                                borderRadius: '16px',
-                                border: '1px solid rgba(255,255,255,0.08)',
-                                transition: 'all 0.2s ease',
-                                boxShadow: isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.5)' : 'none',
-                                marginBottom: '24px' // Space between input and button
-                            }}
-                        >
+                    {/* Form */}
+                    <form onSubmit={handleSubmit}>
+                        <div style={{
+                            position: 'relative',
+                            marginBottom: '32px'
+                        }}>
                             <div style={{
-                                width: '56px', height: '64px',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                color: isFocused ? '#fff' : 'rgba(255,255,255,0.4)',
+                                position: 'absolute',
+                                left: '16px',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                color: isFocused ? '#ffffff' : 'rgba(255, 255, 255, 0.3)',
+                                transition: 'color 0.2s ease',
+                                pointerEvents: 'none'
                             }}>
-                                <Folder size={24} />
+                                <Folder size={18} strokeWidth={1.5} />
                             </div>
-
                             <input
+                                ref={inputRef}
                                 type="text"
-                                placeholder="Enter repository path..."
+                                placeholder="/Users/name/Projects/repo..."
                                 value={path}
                                 onChange={e => setPath(e.target.value)}
                                 onFocus={() => setIsFocused(true)}
                                 onBlur={() => setIsFocused(false)}
                                 style={{
-                                    flex: 1,
-                                    height: '64px',
+                                    width: '100%',
+                                    background: 'rgba(255, 255, 255, 0.03)',
+                                    border: `1px solid ${isFocused ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.08)'}`,
+                                    borderRadius: '12px',
+                                    padding: '16px 16px 16px 44px',
+                                    color: '#ffffff',
+                                    fontSize: '1rem',
+                                    fontFamily: 'var(--font-mono)',
+                                    outline: 'none',
+                                    transition: 'all 0.2s ease',
+                                    boxSizing: 'border-box',
+                                    boxShadow: isFocused ? '0 4px 12px rgba(0,0,0,0.2)' : 'none'
+                                }}
+                            />
+                        </div>
+
+                        {/* Actions */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <button
+                                type="button"
+                                onClick={() => onOpenChange(false)}
+                                style={{
                                     background: 'transparent',
                                     border: 'none',
-                                    outline: 'none',
-                                    color: 'white',
-                                    fontSize: '1.1rem',
-                                    fontFamily: 'var(--font-mono)',
-                                    fontWeight: 500,
+                                    color: 'rgba(255, 255, 255, 0.5)',
+                                    fontSize: '0.95rem',
+                                    cursor: 'pointer',
+                                    padding: '8px 12px',
+                                    margin: '-8px -12px',
+                                    transition: 'color 0.2s ease'
                                 }}
-                                autoFocus
-                            />
-                        </motion.div>
+                                onMouseEnter={(e) => e.currentTarget.style.color = '#ffffff'}
+                                onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.5)'}
+                            >
+                                Cancel
+                            </button>
 
-                        {/* ACTION BUTTON ROW */}
-                        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                            <AnimatePresence>
-                                {path && (
-                                    <motion.button
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: 10 }}
-                                        type="submit"
-                                        disabled={submitting}
-                                        style={{
-                                            height: '48px',
-                                            padding: '0 32px',
-                                            borderRadius: '12px',
-                                            border: 'none',
-                                            background: '#3b82f6',
-                                            color: '#fff',
-                                            fontSize: '1rem',
-                                            fontWeight: 600,
-                                            cursor: 'pointer',
-                                            display: 'flex', alignItems: 'center', gap: '8px',
-                                            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.4)',
-                                            width: '100%', // Full width on mobile/small modals
-                                            justifyContent: 'center'
-                                        }}
-                                    >
-                                        {submitting ? 'Connecting...' : (
-                                            <>
-                                                Analyze Repository <ArrowRight size={18} />
-                                            </>
-                                        )}
-                                    </motion.button>
+                            <button
+                                type="submit"
+                                disabled={!path.trim() || submitting}
+                                style={{
+                                    background: path.trim() ? '#ffffff' : 'rgba(255, 255, 255, 0.1)',
+                                    color: path.trim() ? '#000000' : 'rgba(255, 255, 255, 0.3)',
+                                    border: 'none',
+                                    padding: '0 24px',
+                                    height: '44px',
+                                    borderRadius: '22px',
+                                    fontSize: '0.95rem',
+                                    fontWeight: 500,
+                                    cursor: path.trim() ? 'pointer' : 'not-allowed',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    transition: 'all 0.2s ease',
+                                    fontFamily: 'var(--font-sans)',
+                                    opacity: submitting ? 0.7 : 1
+                                }}
+                            >
+                                {submitting ? (
+                                    <>
+                                        <motion.div
+                                            animate={{ rotate: 360 }}
+                                            transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                                            style={{ display: 'flex' }}
+                                        >
+                                            <Loader2 size={16} />
+                                        </motion.div>
+                                        Connecting...
+                                    </>
+                                ) : (
+                                    <>
+                                        Connect
+                                        <ArrowRight size={16} />
+                                    </>
                                 )}
-                            </AnimatePresence>
+                            </button>
                         </div>
                     </form>
-
                 </div>
             </ModalContent>
         </Modal>

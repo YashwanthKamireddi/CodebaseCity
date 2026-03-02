@@ -22,7 +22,9 @@ export default function InstancedCity() {
         cityData, selectedBuilding, selectBuilding, hoveredBuilding, setHoveredBuilding,
         layoutMode, colorMode, graphNeighbors, highlightedIssue, cityMeshRef,
         isAnimating,
-        currentCommitIndex
+        currentCommitIndex,
+        activeIntelligencePanel,
+        impactAnalysis
     } = useStore()
     const meshRef = useRef()
     const materialRef = useRef()
@@ -130,39 +132,79 @@ export default function InstancedCity() {
 
             // Code health issues
             const issues = cityData?.metadata?.issues || {}
-            const isCircular = issues.circular_dependencies?.flat().includes(b.id)
-            const isGodObject = issues.god_objects?.includes(b.id)
+            const isCircular = issues.circular_dependencies?.flat()?.includes(b.id) || false
+            const isGodObject = issues.god_objects?.includes(b.id) || false
             const showWarnings = colorMode === 'default' || colorMode === 'churn'
 
             const isIssueHighlighted = highlightedIssue && highlightedIssue.paths.includes(b.path)
 
+            // Blast Radius logic
+            let blastLevel = null
+            if (activeIntelligencePanel === 'impact' && impactAnalysis) {
+                if (impactAnalysis.file_id === b.id) blastLevel = 0
+                else if (impactAnalysis.levels?.level_1?.find(f => f.id === b.id)) blastLevel = 1
+                else if (impactAnalysis.levels?.level_2?.find(f => f.id === b.id)) blastLevel = 2
+                else if (impactAnalysis.levels?.level_3?.find(f => f.id === b.id)) blastLevel = 3
+            }
+
             // Focus mode dimming
-            const isUnrelated = (highlightedIssue && !isIssueHighlighted) ||
+            let isUnrelated = (highlightedIssue && !isIssueHighlighted) ||
                 (!highlightedIssue && selectedBuilding && !isSelected && !isDependency && !isDependent)
+
+            // Override dimming if we are in impact mode
+            if (activeIntelligencePanel === 'impact') {
+                isUnrelated = blastLevel === null
+            }
 
             const colorHex = getBuildingColor(b, colorMode, {
                 isSelected, isHovered, isDependency, isDependent,
                 isUnrelated, highlightedIssue, isIssueHighlighted,
-                isCircular, isGodObject, showWarnings
+                isCircular, isGodObject, showWarnings,
+                activeIntelligencePanel, blastLevel
             })
 
             tempColor.set(colorHex)
             meshRef.current.setColorAt(i, tempColor)
+
+            // X-Ray transparent logic (hide selected building)
+            if (activeIntelligencePanel === 'xray' && isSelected) {
+                tempObject.position.set(b.position.x, -100, b.position.z) // hide underground
+                tempObject.scale.set(0.001, 0.001, 0.001)
+                tempObject.updateMatrix()
+                meshRef.current.setMatrixAt(i, tempObject.matrix)
+            } else {
+                // Restore normal position and scale (bypasses initial anim if interrupted, but acceptable)
+                const width = b.dimensions?.width || 8
+                const depth = b.dimensions?.depth || 8
+                const height = b.dimensions?.height || 8
+                tempObject.position.set(b.position.x, (height / 2) + 0.2, b.position.z)
+                tempObject.scale.set(width, height, depth)
+                tempObject.updateMatrix()
+                meshRef.current.setMatrixAt(i, tempObject.matrix)
+            }
         })
 
         if (meshRef.current.instanceColor) {
             meshRef.current.instanceColor.needsUpdate = true
         }
+        if (meshRef.current.instanceMatrix) {
+            meshRef.current.instanceMatrix.needsUpdate = true
+        }
     }, [
         buildings, selectedBuilding, hoveredInstanceId, colorMode,
-        graphNeighbors, highlightedIssue
+        graphNeighbors, highlightedIssue, activeIntelligencePanel, impactAnalysis
     ])
 
     // ═══════════════════════════════════════════════════════════════
-    // EVENT HANDLERS
+    // EVENT HANDLERS — throttled for performance
     // ═══════════════════════════════════════════════════════════════
+    const lastPointerTime = useRef(0)
     const handlePointerMove = (e) => {
         e.stopPropagation()
+        // Throttle: only update hover every 50ms to prevent raycast spam during orbit
+        const now = performance.now()
+        if (now - lastPointerTime.current < 50) return
+        lastPointerTime.current = now
         if (e.instanceId !== undefined) {
             setHoveredInstanceId(e.instanceId)
         }
@@ -199,12 +241,7 @@ export default function InstancedCity() {
             frustumCulled={false}
             onPointerMove={handlePointerMove}
             onPointerOut={handlePointerOut}
-            onClick={(e) => {
-                e.stopPropagation()
-                if (e.instanceId !== undefined) {
-                    selectBuilding(buildings[e.instanceId])
-                }
-            }}
+            onClick={handleClick}
         >
             <boxGeometry args={[1, 1, 1]}>
                 {churnAttribute && (

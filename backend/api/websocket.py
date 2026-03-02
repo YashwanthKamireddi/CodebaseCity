@@ -8,6 +8,10 @@ from typing import Dict, Set, Optional
 import json
 import asyncio
 
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
+
 
 class ConnectionManager:
     """Manages WebSocket connections for VS Code and frontend clients"""
@@ -78,7 +82,8 @@ class ConnectionManager:
         for ws in self.frontend_connections:
             try:
                 await ws.send_json(message)
-            except:
+            except Exception as e:
+                logger.warning(f"Failed to send to frontend, marking dead: {e}")
                 dead_connections.append(ws)
 
         for ws in dead_connections:
@@ -90,7 +95,8 @@ class ConnectionManager:
         for workspace, ws in self.vscode_connections.items():
             try:
                 await ws.send_json(message)
-            except:
+            except Exception as e:
+                logger.warning(f"Failed to send to VS Code workspace '{workspace}', marking dead: {e}")
                 dead_connections.append(workspace)
 
         for workspace in dead_connections:
@@ -206,7 +212,7 @@ async def websocket_vscode(websocket: WebSocket):
     except WebSocketDisconnect:
         manager.disconnect_vscode(workspace)
     except Exception as e:
-        print(f"VS Code WebSocket error: {e}")
+        logger.error(f"VS Code WebSocket error: {e}", exc_info=True)
         manager.disconnect_vscode(workspace)
 
 
@@ -223,5 +229,5 @@ async def websocket_frontend(websocket: WebSocket):
     except WebSocketDisconnect:
         manager.disconnect_frontend(websocket)
     except Exception as e:
-        print(f"Frontend WebSocket error: {e}")
+        logger.error(f"Frontend WebSocket error: {e}", exc_info=True)
         manager.disconnect_frontend(websocket)

@@ -1,10 +1,12 @@
 import React, { useMemo, useState } from 'react'
 import useStore from '../../../store/useStore'
-import { Folder, File, Code, Hash, Link as LinkIcon, ChevronRight, ChevronDown } from 'lucide-react'
+import { Folder, File, Code, Hash, Link as LinkIcon, ChevronRight, ChevronDown, FolderOpen } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { slideUp, fadeIn } from '../../../shared/animations/variants'
 import './Sidebar.css'
 
 export default function Sidebar() {
-    const { cityData, selectBuilding, selectedBuilding, sidebarOpen, setSidebarOpen, sidebarWidth, setSidebarWidth } = useStore()
+    const { cityData, selectBuilding, selectedBuilding, sidebarOpen, setSidebarOpen, sidebarWidth, setSidebarWidth, loading, setAnalyzeModalOpen } = useStore()
     const onClose = () => setSidebarOpen(false)
 
     // Global State for layout coordination
@@ -37,98 +39,85 @@ export default function Sidebar() {
         }
     }, [resize, stopResizing])
 
-    // EARLY RETURN ONLY AFTER HOOKS
-    if (!cityData) return null
+    const displayTitle = cityData?.name || (loading ? 'Loading...' : 'Codebase Explorer')
 
     return (
         <div
+            className={`sidebar-panel ${sidebarOpen ? 'open' : ''} ${isResizing ? 'resizing' : ''}`}
             style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
                 width: `${sidebarWidth}px`,
-                maxWidth: '80vw', // Safety cap
-                height: '100vh',
-                zIndex: 'var(--z-modal-backdrop)',
-                background: 'var(--bg-studio-dark)',
-                borderRight: '1px solid var(--glass-border)',
-                boxShadow: isResizing ? 'none' : '20px 0 40px rgba(0,0,0,0.5)',
-                display: 'flex',
-                flexDirection: 'column',
-                transform: sidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-                // Disable transition during resize for performance
-                transition: isResizing ? 'none' : 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                color: 'var(--text-primary)',
-                userSelect: isResizing ? 'none' : 'auto'
             }}
         >
             {/* Header */}
-            <div className="sidebar-header" style={{
-                padding: 'var(--space-5) var(--space-6)',
-                borderBottom: '1px solid var(--glass-border)',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                background: 'var(--bg-studio-dark)'
-            }}>
-                <h2 style={{ fontSize: 'var(--font-lg)', margin: 0, fontWeight: 700, letterSpacing: '-0.02em', color: 'white' }}>
-                    {cityData.name}
-                </h2>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                    <button
-                        onClick={onClose}
-                        className="touch-target"
-                        style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', fontSize: '1.5rem', cursor: 'pointer' }}
-                    >
-                        ×
-                    </button>
-                </div>
+            <div className="sidebar-header">
+                <h2 className="sidebar-title">{displayTitle}</h2>
+                <button onClick={onClose} className="sidebar-close-btn" aria-label="Close sidebar">
+                    ×
+                </button>
             </div>
 
             {/* Scrollable Content - PURE FILE EXPLORER */}
-            <div className="sidebar-content" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
-                <div style={{ padding: '24px 10px' }}>
-                    <div style={{
-                        fontSize: '0.75rem',
-                        fontWeight: 600,
-                        color: '#52525b',
-                        marginBottom: '16px',
-                        paddingLeft: '8px',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.1em'
-                    }}>
-                        Explorer
-                    </div>
-                    <FileTree
-                        files={cityData.buildings}
-                        onSelect={selectBuilding}
-                        selectedId={selectedBuilding?.id}
-                    />
+            <div className="sidebar-content">
+                <div className="sidebar-explorer-wrapper">
+                    <div className="sidebar-section-label">Explorer</div>
+
+                    {loading && !cityData ? (
+                        <div style={{ padding: '20px 0', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            {[...Array(6)].map((_, i) => (
+                                <motion.div
+                                    key={i}
+                                    style={{
+                                        width: `${100 - (i * 10)}%`,
+                                        height: '24px',
+                                        background: 'rgba(255,255,255,0.05)',
+                                        borderRadius: '4px',
+                                        marginLeft: `${(i % 3) * 12}px`
+                                    }}
+                                    animate={{ opacity: [0.3, 0.7, 0.3] }}
+                                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.1 }}
+                                />
+                            ))}
+                        </div>
+                    ) : !cityData ? (
+                        <motion.div
+                            variants={slideUp} initial="initial" animate="animate"
+                            style={{ padding: '40px 20px', textAlign: 'center', opacity: 0.6 }}
+                        >
+                            <FolderOpen size={48} strokeWidth={1} style={{ margin: '0 auto 16px', display: 'block' }} />
+                            <p style={{ fontSize: '0.85rem', marginBottom: '16px', lineHeight: 1.5 }}>
+                                No project loaded. Analyze a repository to explore its files here.
+                            </p>
+                            <button
+                                onClick={() => setAnalyzeModalOpen(true)}
+                                style={{
+                                    background: 'rgba(59, 130, 246, 0.2)',
+                                    color: '#60a5fa',
+                                    border: '1px solid rgba(59, 130, 246, 0.4)',
+                                    padding: '6px 12px',
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    fontSize: '0.8rem',
+                                    fontWeight: 500
+                                }}
+                            >
+                                Analyze Repo
+                            </button>
+                        </motion.div>
+                    ) : (
+                        <FileTree
+                            files={cityData.buildings}
+                            onSelect={selectBuilding}
+                            selectedId={selectedBuilding?.id}
+                        />
+                    )}
                 </div>
             </div>
 
             {/* Drag Handle */}
-            <div
-                onMouseDown={startResizing}
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: -4, // Slop area
-                    width: '8px',
-                    height: '100%',
-                    cursor: 'col-resize',
-                    zIndex: 10
-                }}
-            />
+            <div className="sidebar-resize-handle" onMouseDown={startResizing} />
+
             {/* Visual Border Highlight when resizing */}
-            {isResizing && (
-                <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    width: '2px',
-                    height: '100%',
-                    background: '#3b82f6'
-                }} />
-            )}
+            {isResizing && <div className="sidebar-resize-indicator" />}
         </div>
     )
 }
@@ -162,15 +151,10 @@ function FileTree({ files, onSelect, selectedId }) {
                     <div
                         key={item.id}
                         onClick={() => onSelect(item)}
-                        className="file-row"
-                        style={{
-                            paddingLeft: `${(depth + 1) * 10 + 10}px`, // Tighter indentation
-                            color: isSelected ? '#60a5fa' : '#a1a1aa',
-                            background: isSelected ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
-                            fontWeight: isSelected ? 500 : 400,
-                        }}
+                        className={`file-row ${isSelected ? 'selected' : ''}`}
+                        style={{ paddingLeft: `${(depth + 1) * 10 + 10}px` }}
                     >
-                        <File size={14} strokeWidth={1.5} className={item.language} color={isSelected ? '#60a5fa' : '#52525b'} style={{ flexShrink: 0 }} />
+                        <File size={14} strokeWidth={1.5} className={`file-icon ${isSelected ? 'active' : ''}`} />
                         <span className="row-label">{name}</span>
                     </div>
                 )
@@ -194,21 +178,17 @@ function CollapsibleFolder({ name, depth, children }) {
         <div>
             <div
                 onClick={() => setIsOpen(!isOpen)}
-                className="folder-row"
-                style={{
-                    paddingLeft: `${depth * 10 + 10}px`, // Tighter indentation
-                }}
+                className={`folder-row ${isOpen ? 'open' : ''}`}
+                style={{ paddingLeft: `${depth * 10 + 10}px` }}
                 title={name}
             >
-                <div style={{ display: 'flex', flexShrink: 0 }}>
+                <div className="folder-chevron">
                     {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                 </div>
-                <div style={{ display: 'flex', flexShrink: 0 }}>
-                    <Folder size={14} fill={isOpen ? "#52525b" : "none"} strokeWidth={1.5} color="#71717a" />
+                <div className="folder-icon-wrap">
+                    <Folder size={14} fill={isOpen ? "currentColor" : "none"} strokeWidth={1.5} />
                 </div>
-                <span className="row-label">
-                    {name}
-                </span>
+                <span className="row-label">{name}</span>
             </div>
             {isOpen && children}
         </div>

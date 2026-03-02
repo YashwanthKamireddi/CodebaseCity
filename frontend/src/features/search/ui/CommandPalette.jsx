@@ -212,10 +212,35 @@ export default function CommandPalette() {
                                     No results found.
                                 </Command.Empty>
 
-
+                                {/* Search Skeleton */}
+                                {isSearching && (
+                                    <div style={{ padding: '8px' }}>
+                                        {[...Array(3)].map((_, i) => (
+                                            <div key={i} style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', gap: '12px' }}>
+                                                <motion.div
+                                                    style={{ width: '16px', height: '16px', borderRadius: '4px', background: 'rgba(255,255,255,0.05)' }}
+                                                    animate={{ opacity: [0.3, 0.7, 0.3] }}
+                                                    transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
+                                                />
+                                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                                    <motion.div
+                                                        style={{ width: '40%', height: '12px', borderRadius: '4px', background: 'rgba(255,255,255,0.05)' }}
+                                                        animate={{ opacity: [0.3, 0.7, 0.3] }}
+                                                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 + 0.1 }}
+                                                    />
+                                                    <motion.div
+                                                        style={{ width: '60%', height: '10px', borderRadius: '4px', background: 'rgba(255,255,255,0.05)' }}
+                                                        animate={{ opacity: [0.3, 0.7, 0.3] }}
+                                                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 + 0.2 }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
 
                                 {/* Files */}
-                                {fileResults.length > 0 && (
+                                {!isSearching && fileResults.length > 0 && (
                                     <Command.Group heading="Files" className="command-group">
                                         {fileResults.map((building) => (
                                             <Command.Item

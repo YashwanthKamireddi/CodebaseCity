@@ -1,59 +1,29 @@
 import React from 'react'
-import { Plus, Minus, Maximize, Crosshair, RefreshCw } from 'lucide-react'
-import { useThree } from '@react-three/fiber'
+import { Plus, Minus, Maximize, Crosshair } from 'lucide-react'
 import useStore from '../../../store/useStore'
 
-// This component must be inside Canvas to access useThree,
-// OR use a specialized store subscriber if outside.
-// For overlay UI, it's easier to keep it outside Canvas and communicate via Store/Events.
-// However, accurate camera manipulation requires Three context.
-// Let's make a bridging component or use the store to trigger camera actions.
-
-// Actually, we can just make a UI component that dispatches events to the store,
-// and have a logic component inside the canvas listening for them.
-// OR, simpler: Just absolute position this over the canvas.
-
+/**
+ * CanvasUI — Camera control overlay
+ * Positioned outside the Canvas for reliable HTML rendering.
+ * Communicates via store actions that CameraController listens to.
+ */
 export default function CanvasUI() {
     const { setCameraAction } = useStore()
 
     return (
-        <div style={{
-            position: 'fixed',
-            bottom: '32px',
-            right: '24px', // Right aligned
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-            zIndex: 900 // Below BuildingPanel (1000)
-        }}>
+        <div className="canvas-ui-controls">
             {/* Zoom Group */}
-            < div style={{
-                display: 'flex', flexDirection: 'column',
-                background: 'rgba(9, 9, 11, 0.9)',
-                backdropFilter: 'blur(12px)',
-                borderRadius: '12px',
-                border: '1px solid rgba(255,255,255,0.1)',
-                padding: '4px',
-                gap: '2px'
-            }}>
-                <ControlButton icon={<Plus size={20} />} onClick={() => setCameraAction('ZOOM_IN')} title="Zoom In" />
-                <ControlButton icon={<Minus size={20} />} onClick={() => setCameraAction('ZOOM_OUT')} title="Zoom Out" />
-            </div >
+            <div className="canvas-ui-group">
+                <ControlButton icon={<Plus size={18} />} onClick={() => setCameraAction('ZOOM_IN')} title="Zoom In" />
+                <ControlButton icon={<Minus size={18} />} onClick={() => setCameraAction('ZOOM_OUT')} title="Zoom Out" />
+            </div>
 
             {/* View Group */}
-            < div style={{
-                display: 'flex', flexDirection: 'column',
-                background: 'rgba(9, 9, 11, 0.9)',
-                backdropFilter: 'blur(12px)',
-                borderRadius: '12px',
-                border: '1px solid rgba(255,255,255,0.1)',
-                padding: '4px',
-                gap: '2px'
-            }}>
-                <ControlButton icon={<Maximize size={20} />} onClick={() => setCameraAction('FIT')} title="Reset View" />
-                <ControlButton icon={<Crosshair size={20} />} onClick={() => setCameraAction('CENTER')} title="Center Origin" />
-            </div >
-        </div >
+            <div className="canvas-ui-group">
+                <ControlButton icon={<Maximize size={18} />} onClick={() => setCameraAction('FIT')} title="Reset View" />
+                <ControlButton icon={<Crosshair size={18} />} onClick={() => setCameraAction('CENTER')} title="Center Origin" />
+            </div>
+        </div>
     )
 }
 
@@ -62,21 +32,7 @@ function ControlButton({ icon, onClick, title }) {
         <button
             onClick={onClick}
             title={title}
-            style={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '8px',
-                background: 'transparent', // Transparent by default
-                border: 'none',
-                color: '#e2e8f0',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'all 0.2s'
-            }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'rgba(9, 9, 11, 0.8)'}
+            className="canvas-ui-btn"
         >
             {icon}
         </button>

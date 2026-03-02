@@ -31,46 +31,46 @@ describe('colorUtils', () => {
     describe('interaction states', () => {
       it('should return cyan-green for selected building', () => {
         const color = getBuildingColor(mockBuilding, 'default', { isSelected: true })
-        expect(color).toBe('#00ffaa')
+        expect(color).toBe('#34d399')
       })
 
       it('should return cyan for hovered building', () => {
         const color = getBuildingColor(mockBuilding, 'default', { isHovered: true })
-        expect(color).toBe('#00d4ff')
+        expect(color).toBe('#60a5fa')
       })
 
       it('should return green for dependency', () => {
         const color = getBuildingColor(mockBuilding, 'default', { isDependency: true })
-        expect(color).toBe('#00ff88')
+        expect(color).toBe('#4ade80')
       })
 
       it('should return coral for dependent', () => {
         const color = getBuildingColor(mockBuilding, 'default', { isDependent: true })
-        expect(color).toBe('#ff6b6b')
+        expect(color).toBe('#fb7185')
       })
 
       it('should return near-black for unrelated in focus mode', () => {
         const color = getBuildingColor(mockBuilding, 'default', { isUnrelated: true })
-        expect(color).toBe('#08080c')
+        expect(color).toBe('#0e0f14')
       })
     })
 
     describe('layer mode', () => {
       it('should return cyan for UI components', () => {
         const color = getBuildingColor(mockBuilding, 'layer', {})
-        expect(color).toBe('#00d4ff')
+        expect(color).toBe('#ffffff')
       })
 
-      it('should return purple for service files', () => {
+      it('should return orange for service files', () => {
         const serviceBuilding = { ...mockBuilding, path: 'src/services/api.js' }
         const color = getBuildingColor(serviceBuilding, 'layer', {})
-        expect(color).toBe('#a855f7')
+        expect(color).toBe('#ff6d00')
       })
 
       it('should return green for utility files', () => {
         const utilBuilding = { ...mockBuilding, path: 'src/utils/helpers.js' }
         const color = getBuildingColor(utilBuilding, 'layer', {})
-        expect(color).toBe('#22c55e')
+        expect(color).toBe('#00e676')
       })
     })
 
@@ -78,19 +78,19 @@ describe('colorUtils', () => {
       it('should return hot pink for hotspots', () => {
         const hotspotBuilding = { ...mockBuilding, is_hotspot: true }
         const color = getBuildingColor(hotspotBuilding, 'churn', {})
-        expect(color).toBe('#ff3366')
+        expect(color).toBe('#ef4444')
       })
 
       it('should return orange-red for high churn', () => {
         const highChurnBuilding = { ...mockBuilding, metrics: { ...mockBuilding.metrics, churn: 10 } }
         const color = getBuildingColor(highChurnBuilding, 'churn', {})
-        expect(color).toBe('#ff6b35')
+        expect(color).toBe('#f97316')
       })
 
       it('should return cyan for stable files', () => {
         const stableBuilding = { ...mockBuilding, metrics: { ...mockBuilding.metrics, churn: 0 } }
         const color = getBuildingColor(stableBuilding, 'churn', {})
-        expect(color).toBe('#22d3ee')
+        expect(color).toBe('#38bdf8')
       })
     })
 
@@ -124,7 +124,7 @@ describe('colorUtils', () => {
       it('should return hot pink for extreme complexity', () => {
         const complexBuilding = { ...mockBuilding, metrics: { ...mockBuilding.metrics, complexity: 35 } }
         const color = getBuildingColor(complexBuilding, 'complexity', {})
-        expect(color).toBe('#ff0066')
+        expect(color).toBe('#e11d48')
       })
     })
 
@@ -132,13 +132,13 @@ describe('colorUtils', () => {
       it('should return color based on height', () => {
         const smallBuilding = { ...mockBuilding, dimensions: { height: 2 } }
         const color = getBuildingColor(smallBuilding, 'default', {})
-        expect(color).toBe('#0ea5e9') // Sky blue for tiny files
+        expect(color).toBe('#3b9eff') // Bright blue for tiny files
       })
 
       it('should return red for large files', () => {
         const largeBuilding = { ...mockBuilding, dimensions: { height: 100 } }
         const color = getBuildingColor(largeBuilding, 'default', {})
-        expect(color).toBe('#f87171') // Red for large files
+        expect(color).toBe('#ff1744') // Hot red for large files
       })
     })
   })

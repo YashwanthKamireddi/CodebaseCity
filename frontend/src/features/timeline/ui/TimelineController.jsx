@@ -224,6 +224,9 @@ export default function TimelineController() {
 
     if (!cityData || !showTimeline) return null
 
+    // Don't render until history is loaded — prevents blank bar flash
+    if (history.length === 0) return null
+
     const currentCommit = history[currentIndex] || {}
     const progress = history.length > 1 ? (currentIndex / (history.length - 1)) * 100 : 100
 
@@ -255,13 +258,13 @@ export default function TimelineController() {
                 }}
             >
                 <div style={{
-                    background: 'rgba(5, 5, 10, 0.65)',
+                    background: 'rgba(14, 16, 24, 0.80)',
                     backdropFilter: 'blur(24px) saturate(180%)',
                     WebkitBackdropFilter: 'blur(24px) saturate(180%)',
                     borderRadius: '24px',
                     padding: '16px 24px',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.8)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.6)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '32px',

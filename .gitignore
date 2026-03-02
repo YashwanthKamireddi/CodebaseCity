@@ -33,3 +33,6 @@ npm-debug.log*
 tmp/
 temp/
 *.tmp
+
+# KuzuDB Storage
+.kuzudb/

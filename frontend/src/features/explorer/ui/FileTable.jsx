@@ -10,8 +10,10 @@ import {
 import useStore from '../../../store/useStore'
 import './FileTable.css'
 import { BuildingModel } from '../../../entities/building/model'
-import AuditStats from './AuditStats' // Import KPI Cards
-import PatternList from './PatternList' // Import Pattern Library
+import AuditStats from './AuditStats'
+import PatternList from './PatternList'
+import { slideUp } from '../../../shared/animations/variants'
+import { FolderSearch } from 'lucide-react'
 
 // Health color utility
 function getHealthColor(health) {
@@ -191,7 +193,16 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                     </tbody>
                 </table>
                 {sortedFiles.length === 0 && (
-                    <div style={{ padding: 32, textAlign: 'center', color: '#64748b' }}>No files found matching filters.</div>
+                    <motion.div
+                        variants={slideUp}
+                        initial="initial"
+                        animate="animate"
+                        style={{ padding: '60px 32px', textAlign: 'center', color: '#64748b' }}
+                    >
+                        <FolderSearch size={48} strokeWidth={1} style={{ margin: '0 auto 16px', opacity: 0.5, display: 'block' }} />
+                        <h3 style={{ margin: '0 0 8px 0', color: '#e2e8f0', fontWeight: 500 }}>No files found</h3>
+                        <p style={{ margin: 0, fontSize: '0.9rem' }}>Adjust your filters or analyze a new repository to see metrics.</p>
+                    </motion.div>
                 )}
             </div>
 

@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react'
 import useStore from '../../../store/useStore'
 import { Send, X, Bot, User, Sparkles, Box, ArrowUp } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { slideUp, slideDown, getReducedMotionVariants } from '../../../shared/animations/variants'
 import ReactMarkdown from 'react-markdown'
 
 export default function ChatInterface() {
     const { chatOpen, messages, sendMessage, chatLoading, agentStatus } = useStore()
     const [input, setInput] = useState('')
     const messagesEndRef = useRef(null)
+    const shouldReduceMotion = useReducedMotion()
 
     // Auto-scroll to bottom
     useEffect(() => {
@@ -25,10 +27,10 @@ export default function ChatInterface() {
     return (
         <AnimatePresence>
             <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 20, scale: 0.98 }}
-                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                variants={getReducedMotionVariants(slideUp, shouldReduceMotion)}
+                initial="initial"
+                animate="animate"
+                exit="exit"
                 style={{
                     position: 'fixed',
                     top: '100px', // Below top header
@@ -109,8 +111,9 @@ export default function ChatInterface() {
 
                     {messages.map((msg, i) => (
                         <motion.div
-                            initial={{ opacity: 0, y: 10 }}
+                            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
                             animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: shouldReduceMotion ? 0.01 : 0.2 }}
                             key={i}
                             style={{
                                 display: 'flex',
@@ -226,8 +229,8 @@ export default function ChatInterface() {
                                 border: 'none',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 cursor: input.trim() ? 'pointer' : 'default',
-                                transition: 'all 0.2s',
-                                transform: input.trim() ? 'scale(1)' : 'scale(0.9)'
+                                transition: shouldReduceMotion ? 'none' : 'all 0.2s',
+                                transform: input.trim() ? 'scale(1)' : (shouldReduceMotion ? 'scale(1)' : 'scale(0.9)')
                             }}
                         >
                             <ArrowUp size={16} color={input.trim() ? '#000' : '#52525b'} strokeWidth={2.5} />

@@ -1,0 +1,1712 @@
+{
+  "name": "Context-Aware-Music-Recommendation-System",
+  "path": "/home/yash/Projects/Context-Aware-Music-Recommendation-System",
+  "city_id": "home_yash_Projects_Context-Aware-Music-Recommendation-System_",
+  "buildings": [
+    {
+      "id": "backend/server.py",
+      "name": "server.py",
+      "path": "backend/server.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -19.64931439326974,
+        "y": 0.0,
+        "z": 17.20438873826337
+      },
+      "dimensions": {
+        "width": 5.17,
+        "height": 25.0,
+        "depth": 5.17
+      },
+      "metrics": {
+        "loc": 517,
+        "complexity": 104,
+        "churn": 0,
+        "age_days": 117,
+        "dependencies_in": 0,
+        "dependencies_out": 3,
+        "size_bytes": 19666
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "lifespan",
+          "line": 1
+        },
+        {
+          "name": "load_tracks_dataset",
+          "line": 1
+        },
+        {
+          "name": "home",
+          "line": 1
+        },
+        {
+          "name": "health_check",
+          "line": 1
+        },
+        {
+          "name": "get_moods",
+          "line": 1
+        },
+        {
+          "name": "recommend_tracks",
+          "line": 1
+        },
+        {
+          "name": "setup_spotify",
+          "line": 1
+        },
+        {
+          "name": "search_tracks",
+          "line": 4
+        },
+        {
+          "name": "get_stats",
+          "line": 4
+        }
+      ],
+      "classes": [
+        {
+          "name": "RecommendationRequest",
+          "line": 1
+        },
+        {
+          "name": "PlaylistCreate",
+          "line": 1
+        },
+        {
+          "name": "SpotifySetup",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.16027397260273973,
+      "is_hotspot": true,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1762102199
+    },
+    {
+      "id": "scripts/evaluate_models.py",
+      "name": "evaluate_models.py",
+      "path": "scripts/evaluate_models.py",
+      "district_id": "district_2",
+      "position": {
+        "x": 2.8253360922557693,
+        "y": 0.0,
+        "z": -37.72512423370997
+      },
+      "dimensions": {
+        "width": 2.01,
+        "height": 25.0,
+        "depth": 2.01
+      },
+      "metrics": {
+        "loc": 201,
+        "complexity": 58,
+        "churn": 0,
+        "age_days": 117,
+        "dependencies_in": 0,
+        "dependencies_out": 2,
+        "size_bytes": 7960
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "evaluate_mood",
+          "line": 1
+        },
+        {
+          "name": "professor_explain",
+          "line": 1
+        },
+        {
+          "name": "main",
+          "line": 3
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.16027397260273973,
+      "is_hotspot": false,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1762102199
+    },
+    {
+      "id": "scripts/train_models.py",
+      "name": "train_models.py",
+      "path": "scripts/train_models.py",
+      "district_id": "district_2",
+      "position": {
+        "x": -0.7476396125992439,
+        "y": 0.0,
+        "z": -36.353092835375534
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 6.4,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 82,
+        "complexity": 8,
+        "churn": 0,
+        "age_days": 117,
+        "dependencies_in": 0,
+        "dependencies_out": 2,
+        "size_bytes": 2354
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "parse_args",
+          "line": 1
+        },
+        {
+          "name": "main",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.16027397260273973,
+      "is_hotspot": false,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1762102199
+    },
+    {
+      "id": "frontend/static/config.js",
+      "name": "config.js",
+      "path": "frontend/static/config.js",
+      "district_id": "district_3",
+      "position": {
+        "x": 25.52806512652249,
+        "y": 0.0,
+        "z": 34.381813612180615
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 1,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 141,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 0
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19315068493150686,
+      "is_hotspot": false,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1760026432
+    },
+    {
+      "id": "frontend/static/js/spotify_app.js",
+      "name": "spotify_app.js",
+      "path": "frontend/static/js/spotify_app.js",
+      "district_id": "district_4",
+      "position": {
+        "x": -51.33580765749165,
+        "y": 0.0,
+        "z": -13.373542753638127
+      },
+      "dimensions": {
+        "width": 10.0,
+        "height": 25.0,
+        "depth": 10.0
+      },
+      "metrics": {
+        "loc": 1110,
+        "complexity": 148,
+        "churn": 0,
+        "age_days": 117,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 38228
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "updateVolumeSliderUI",
+          "line": 1
+        },
+        {
+          "name": "showToast",
+          "line": 1
+        },
+        {
+          "name": "showLoading",
+          "line": 1
+        },
+        {
+          "name": "switchView",
+          "line": 1
+        },
+        {
+          "name": "updateNavButtons",
+          "line": 1
+        },
+        {
+          "name": "formatDuration",
+          "line": 1
+        },
+        {
+          "name": "getMoodIcon",
+          "line": 1
+        },
+        {
+          "name": "getMoodTitle",
+          "line": 1
+        },
+        {
+          "name": "getMoodDescription",
+          "line": 1
+        },
+        {
+          "name": "getMoodGradient",
+          "line": 1
+        },
+        {
+          "name": "createPlaylistKey",
+          "line": 1
+        },
+        {
+          "name": "isCurrentPlaylistSaved",
+          "line": 1
+        },
+        {
+          "name": "updateSaveButtonState",
+          "line": 1
+        },
+        {
+          "name": "persistLibrary",
+          "line": 1
+        },
+        {
+          "name": "loadLibraryFromStorage",
+          "line": 1
+        },
+        {
+          "name": "formatRelativeDate",
+          "line": 1
+        },
+        {
+          "name": "renderLibrary",
+          "line": 1
+        },
+        {
+          "name": "getNextTrackIndex",
+          "line": 1
+        },
+        {
+          "name": "displayPlaylist",
+          "line": 1
+        },
+        {
+          "name": "createTrackRow",
+          "line": 1
+        },
+        {
+          "name": "playTrack",
+          "line": 1
+        },
+        {
+          "name": "updateProgressBar",
+          "line": 1
+        },
+        {
+          "name": "resetProgressBar",
+          "line": 1
+        },
+        {
+          "name": "selectMood",
+          "line": 1
+        },
+        {
+          "name": "handleSearch",
+          "line": 1
+        },
+        {
+          "name": "displaySearchResults",
+          "line": 1
+        },
+        {
+          "name": "initializeApp",
+          "line": 1
+        },
+        {
+          "name": "setupEventListeners",
+          "line": 1
+        },
+        {
+          "name": "setupResponsiveSidebar",
+          "line": 1
+        },
+        {
+          "name": "setGreeting",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.16027397260273973,
+      "is_hotspot": true,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1762103627
+    },
+    {
+      "id": "frontend/static/js/app.js",
+      "name": "app.js",
+      "path": "frontend/static/js/app.js",
+      "district_id": "district_5",
+      "position": {
+        "x": 51.189594920509485,
+        "y": 0.0,
+        "z": -24.333614206183565
+      },
+      "dimensions": {
+        "width": 3.4,
+        "height": 25.0,
+        "depth": 3.4
+      },
+      "metrics": {
+        "loc": 340,
+        "complexity": 42,
+        "churn": 0,
+        "age_days": 117,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 10914
+      },
+      "language": "javascript",
+      "summary": null,
+      "functions": [
+        {
+          "name": "setupEventListeners",
+          "line": 1
+        },
+        {
+          "name": "checkHealth",
+          "line": 1
+        },
+        {
+          "name": "updateStatus",
+          "line": 1
+        },
+        {
+          "name": "setupSpotify",
+          "line": 1
+        },
+        {
+          "name": "selectMood",
+          "line": 1
+        },
+        {
+          "name": "loadStats",
+          "line": 1
+        },
+        {
+          "name": "showSection",
+          "line": 1
+        },
+        {
+          "name": "showLoading",
+          "line": 1
+        },
+        {
+          "name": "displayRecommendations",
+          "line": 1
+        },
+        {
+          "name": "createTrackCard",
+          "line": 1
+        },
+        {
+          "name": "formatDuration",
+          "line": 1
+        },
+        {
+          "name": "setSelectedMood",
+          "line": 1
+        },
+        {
+          "name": "updateModelReady",
+          "line": 1
+        },
+        {
+          "name": "setStatusPill",
+          "line": 1
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.16027397260273973,
+      "is_hotspot": false,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1762102199
+    },
+    {
+      "id": "src/ml_mood_classifier.py",
+      "name": "ml_mood_classifier.py",
+      "path": "src/ml_mood_classifier.py",
+      "district_id": "district_2",
+      "position": {
+        "x": 3.1993350903394884,
+        "y": 0.0,
+        "z": -42.714655582729094
+      },
+      "dimensions": {
+        "width": 5.33,
+        "height": 25.0,
+        "depth": 5.33
+      },
+      "metrics": {
+        "loc": 533,
+        "complexity": 130,
+        "churn": 0,
+        "age_days": 117,
+        "dependencies_in": 3,
+        "dependencies_out": 0,
+        "size_bytes": 19097
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "_normalize_genre",
+          "line": 1
+        },
+        {
+          "name": "_to_numeric",
+          "line": 1
+        },
+        {
+          "name": "track_passes_filters",
+          "line": 1
+        },
+        {
+          "name": "filter_soft_scores",
+          "line": 1
+        },
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "_load_models",
+          "line": 1
+        },
+        {
+          "name": "predict_mood",
+          "line": 1
+        },
+        {
+          "name": "predict_all_moods",
+          "line": 1
+        },
+        {
+          "name": "batch_predict_mood",
+          "line": 1
+        },
+        {
+          "name": "create_mood_labels",
+          "line": 1
+        },
+        {
+          "name": "train_mood_model",
+          "line": 1
+        },
+        {
+          "name": "save_trained_model",
+          "line": 1
+        },
+        {
+          "name": "load_and_train_all_models",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "MLMoodClassifier",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.16027397260273973,
+      "is_hotspot": true,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1762102199
+    },
+    {
+      "id": "src/realistic_mood_classifier.py",
+      "name": "realistic_mood_classifier.py",
+      "path": "src/realistic_mood_classifier.py",
+      "district_id": "district_6",
+      "position": {
+        "x": -18.10890988923433,
+        "y": 0.0,
+        "z": 55.82023481645495
+      },
+      "dimensions": {
+        "width": 3.06,
+        "height": 25.0,
+        "depth": 3.06
+      },
+      "metrics": {
+        "loc": 306,
+        "complexity": 33,
+        "churn": 0,
+        "age_days": 136,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 10889
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "_calculate_workout_score",
+          "line": 1
+        },
+        {
+          "name": "_calculate_sleep_score",
+          "line": 1
+        },
+        {
+          "name": "_calculate_party_score",
+          "line": 1
+        },
+        {
+          "name": "_calculate_focus_score",
+          "line": 1
+        },
+        {
+          "name": "_calculate_chill_score",
+          "line": 1
+        },
+        {
+          "name": "calculate_mood_scores",
+          "line": 1
+        },
+        {
+          "name": "get_primary_mood",
+          "line": 1
+        },
+        {
+          "name": "get_mood_rankings",
+          "line": 1
+        },
+        {
+          "name": "calculate_similarity",
+          "line": 1
+        },
+        {
+          "name": "get_track_mood_scores",
+          "line": 1
+        },
+        {
+          "name": "get_mood_recommendations",
+          "line": 1
+        },
+        {
+          "name": "analyze_mood_distribution",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "RealisticMoodClassifier",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.1863013698630137,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1760458784
+    },
+    {
+      "id": "src/spotify_client.py",
+      "name": "spotify_client.py",
+      "path": "src/spotify_client.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -21.114370103662267,
+        "y": 0.0,
+        "z": 20.684340131060296
+      },
+      "dimensions": {
+        "width": 3.23,
+        "height": 25.0,
+        "depth": 3.23
+      },
+      "metrics": {
+        "loc": 323,
+        "complexity": 60,
+        "churn": 0,
+        "age_days": 143,
+        "dependencies_in": 1,
+        "dependencies_out": 0,
+        "size_bytes": 11747
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "search_tracks",
+          "line": 1
+        },
+        {
+          "name": "get_audio_features",
+          "line": 1
+        },
+        {
+          "name": "get_playlist_tracks",
+          "line": 1
+        },
+        {
+          "name": "fetch_tracks_by_genre",
+          "line": 1
+        },
+        {
+          "name": "build_dataset_from_genres",
+          "line": 1
+        },
+        {
+          "name": "create_playlist",
+          "line": 1
+        },
+        {
+          "name": "test_spotify_connection",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "SpotifyClient",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.1958904109589041,
+      "is_hotspot": false,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759926140
+    },
+    {
+      "id": "src/feature_engineering.py",
+      "name": "feature_engineering.py",
+      "path": "src/feature_engineering.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 0.6107221815004042,
+        "y": 0.0,
+        "z": 0.8740952604490161
+      },
+      "dimensions": {
+        "width": 2.64,
+        "height": 25.0,
+        "depth": 2.64
+      },
+      "metrics": {
+        "loc": 264,
+        "complexity": 45,
+        "churn": 0,
+        "age_days": 143,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 8826
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "calculate_mood_profile",
+          "line": 1
+        },
+        {
+          "name": "add_interaction_features",
+          "line": 1
+        },
+        {
+          "name": "add_statistical_features",
+          "line": 1
+        },
+        {
+          "name": "create_feature_matrix",
+          "line": 1
+        },
+        {
+          "name": "get_feature_names",
+          "line": 1
+        },
+        {
+          "name": "select_features",
+          "line": 1
+        },
+        {
+          "name": "engineer_features_for_mood",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "FeatureEngineer",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.1958904109589041,
+      "is_hotspot": false,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759926140
+    },
+    {
+      "id": "src/model_trainer.py",
+      "name": "model_trainer.py",
+      "path": "src/model_trainer.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -3.4973347038604468,
+        "y": 0.0,
+        "z": 1.7110454782776177
+      },
+      "dimensions": {
+        "width": 3.08,
+        "height": 25.0,
+        "depth": 3.08
+      },
+      "metrics": {
+        "loc": 308,
+        "complexity": 35,
+        "churn": 0,
+        "age_days": 136,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 9803
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "prepare_data",
+          "line": 1
+        },
+        {
+          "name": "train_baseline",
+          "line": 1
+        },
+        {
+          "name": "train_lightgbm",
+          "line": 1
+        },
+        {
+          "name": "hyperparameter_tuning",
+          "line": 1
+        },
+        {
+          "name": "train_models_for_mood",
+          "line": 1
+        },
+        {
+          "name": "save_models",
+          "line": 4
+        },
+        {
+          "name": "train_all_moods",
+          "line": 4
+        }
+      ],
+      "classes": [
+        {
+          "name": "ModelTrainer",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.1863013698630137,
+      "is_hotspot": false,
+      "author": "Yashwanth Kamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1760458784
+    },
+    {
+      "id": "src/load_kaggle_data.py",
+      "name": "load_kaggle_data.py",
+      "path": "src/load_kaggle_data.py",
+      "district_id": "district_7",
+      "position": {
+        "x": -31.791008337890275,
+        "y": 0.0,
+        "z": -59.952325007717036
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 25.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 175,
+        "complexity": 36,
+        "churn": 0,
+        "age_days": 142,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 5803
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "load_kaggle_spotify_data",
+          "line": 1
+        },
+        {
+          "name": "find_kaggle_dataset",
+          "line": 5
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.19452054794520549,
+      "is_hotspot": false,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759938402
+    },
+    {
+      "id": "src/__init__.py",
+      "name": "__init__.py",
+      "path": "src/__init__.py",
+      "district_id": "district_8",
+      "position": {
+        "x": 66.94721759629572,
+        "y": 0.0,
+        "z": 25.023471095730113
+      },
+      "dimensions": {
+        "width": 2.0,
+        "height": 1.0,
+        "depth": 2.0
+      },
+      "metrics": {
+        "loc": 1,
+        "complexity": 1,
+        "churn": 0,
+        "age_days": 142,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 0
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [],
+      "classes": [],
+      "decay_level": 0.19452054794520549,
+      "is_hotspot": false,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759938402
+    },
+    {
+      "id": "src/data_pipeline.py",
+      "name": "data_pipeline.py",
+      "path": "src/data_pipeline.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 0.9833023751186731,
+        "y": 0.0,
+        "z": -4.116854893035557
+      },
+      "dimensions": {
+        "width": 2.96,
+        "height": 25.0,
+        "depth": 2.96
+      },
+      "metrics": {
+        "loc": 296,
+        "complexity": 47,
+        "churn": 0,
+        "age_days": 117,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 10102
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "load_data",
+          "line": 1
+        },
+        {
+          "name": "clean_data",
+          "line": 1
+        },
+        {
+          "name": "assign_mood_labels",
+          "line": 1
+        },
+        {
+          "name": "create_training_data",
+          "line": 1
+        },
+        {
+          "name": "split_data",
+          "line": 1
+        },
+        {
+          "name": "save_processed_data",
+          "line": 1
+        },
+        {
+          "name": "run_pipeline",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "DataPipeline",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.16027397260273973,
+      "is_hotspot": false,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1762102199
+    },
+    {
+      "id": "src/utils.py",
+      "name": "utils.py",
+      "path": "src/utils.py",
+      "district_id": "district_0",
+      "position": {
+        "x": 2.548626806587374,
+        "y": 0.0,
+        "z": 3.9344841913016233
+      },
+      "dimensions": {
+        "width": 2.48,
+        "height": 18.400000000000002,
+        "depth": 2.48
+      },
+      "metrics": {
+        "loc": 248,
+        "complexity": 23,
+        "churn": 0,
+        "age_days": 142,
+        "dependencies_in": 8,
+        "dependencies_out": 0,
+        "size_bytes": 6248
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "setup_logging",
+          "line": 1
+        },
+        {
+          "name": "load_config",
+          "line": 1
+        },
+        {
+          "name": "ensure_dir",
+          "line": 1
+        },
+        {
+          "name": "save_model",
+          "line": 1
+        },
+        {
+          "name": "load_model",
+          "line": 1
+        },
+        {
+          "name": "save_json",
+          "line": 1
+        },
+        {
+          "name": "load_json",
+          "line": 1
+        },
+        {
+          "name": "normalize_features",
+          "line": 1
+        },
+        {
+          "name": "print_section",
+          "line": 1
+        },
+        {
+          "name": "format_track_info",
+          "line": 3
+        },
+        {
+          "name": "calculate_diversity",
+          "line": 3
+        },
+        {
+          "name": "create_sample_dataset",
+          "line": 3
+        },
+        {
+          "name": "get_project_root",
+          "line": 3
+        }
+      ],
+      "classes": [],
+      "decay_level": 0.19452054794520549,
+      "is_hotspot": false,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759938402
+    },
+    {
+      "id": "src/recommender.py",
+      "name": "recommender.py",
+      "path": "src/recommender.py",
+      "district_id": "district_1",
+      "position": {
+        "x": -17.967739939805476,
+        "y": 0.0,
+        "z": 13.522432844624792
+      },
+      "dimensions": {
+        "width": 4.76,
+        "height": 25.0,
+        "depth": 4.76
+      },
+      "metrics": {
+        "loc": 476,
+        "complexity": 100,
+        "churn": 0,
+        "age_days": 117,
+        "dependencies_in": 1,
+        "dependencies_out": 2,
+        "size_bytes": 17872
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "_prepare_candidates",
+          "line": 1
+        },
+        {
+          "name": "load_models",
+          "line": 1
+        },
+        {
+          "name": "create_user_profile",
+          "line": 1
+        },
+        {
+          "name": "_get_feature_scale",
+          "line": 1
+        },
+        {
+          "name": "calculate_mood_match_score",
+          "line": 1
+        },
+        {
+          "name": "calculate_user_match_score",
+          "line": 1
+        },
+        {
+          "name": "predict_suitability",
+          "line": 1
+        },
+        {
+          "name": "calculate_diversity_penalty",
+          "line": 1
+        },
+        {
+          "name": "rank_tracks",
+          "line": 1
+        },
+        {
+          "name": "recommend",
+          "line": 1
+        }
+      ],
+      "classes": [
+        {
+          "name": "MoodRecommender",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.16027397260273973,
+      "is_hotspot": false,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1762102199
+    },
+    {
+      "id": "src/evaluator.py",
+      "name": "evaluator.py",
+      "path": "src/evaluator.py",
+      "district_id": "district_0",
+      "position": {
+        "x": -7.553289470592081,
+        "y": 0.0,
+        "z": -1.6161956470906507
+      },
+      "dimensions": {
+        "width": 3.52,
+        "height": 20.0,
+        "depth": 3.52
+      },
+      "metrics": {
+        "loc": 352,
+        "complexity": 25,
+        "churn": 0,
+        "age_days": 143,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 12353
+      },
+      "language": "python",
+      "summary": null,
+      "functions": [
+        {
+          "name": "__init__",
+          "line": 1
+        },
+        {
+          "name": "predict",
+          "line": 1
+        },
+        {
+          "name": "calculate_metrics",
+          "line": 1
+        },
+        {
+          "name": "precision_at_k",
+          "line": 1
+        },
+        {
+          "name": "evaluate_model",
+          "line": 1
+        },
+        {
+          "name": "plot_confusion_matrix",
+          "line": 1
+        },
+        {
+          "name": "plot_roc_curve",
+          "line": 1
+        },
+        {
+          "name": "plot_feature_importance",
+          "line": 1
+        },
+        {
+          "name": "compare_models",
+          "line": 1
+        },
+        {
+          "name": "evaluate_all_models",
+          "line": 4
+        }
+      ],
+      "classes": [
+        {
+          "name": "ModelEvaluator",
+          "line": 1
+        }
+      ],
+      "decay_level": 0.1958904109589041,
+      "is_hotspot": false,
+      "author": "YashwanthKamireddi",
+      "email": "yashwanthkamireddi@gmail.com",
+      "email_hash": "2227a585339138a36826295d717bc5c6",
+      "last_modified": 1759926140
+    }
+  ],
+  "districts": [
+    {
+      "id": "district_1",
+      "name": "Backend",
+      "color": "#4ECDC4",
+      "center": {
+        "x": -18.80393688409616,
+        "y": 18.04976624743695
+      },
+      "boundary": [
+        {
+          "x": -0.4784093313355413,
+          "y": 36.60217303756717
+        },
+        {
+          "x": -68.78486495749736,
+          "y": 37.77146115131199
+        },
+        {
+          "x": -25.36591213606637,
+          "y": -7.204042488256999
+        },
+        {
+          "x": 4.410302762110597,
+          "y": 23.31864489166124
+        }
+      ],
+      "building_count": 3,
+      "description": null
+    },
+    {
+      "id": "district_2",
+      "name": "Scripts",
+      "color": "#45B7D1",
+      "center": {
+        "x": 2.2765938093027343,
+        "y": -38.273866516663006
+      },
+      "boundary": [
+        {
+          "x": -26.652006076410217,
+          "y": -30.534604779631188
+        },
+        {
+          "x": 64.56599461995475,
+          "y": -173.71203545156908
+        },
+        {
+          "x": 22.428441494035063,
+          "y": -17.71284752651309
+        },
+        {
+          "x": -21.939264200986553,
+          "y": -20.680610509856596
+        }
+      ],
+      "building_count": 3,
+      "description": null
+    },
+    {
+      "id": "district_3",
+      "name": "Frontend",
+      "color": "#96CEB4",
+      "center": {
+        "x": 25.50176121557654,
+        "y": 34.355509701234666
+      },
+      "boundary": [
+        {
+          "x": -0.4784093313355413,
+          "y": 36.60217303756717
+        },
+        {
+          "x": 92.27443459059351,
+          "y": 225.6989655469974
+        },
+        {
+          "x": 40.40771601065265,
+          "y": 5.571456499280412
+        },
+        {
+          "x": 32.45566267959941,
+          "y": 2.281989423806152
+        },
+        {
+          "x": 4.410302762110597,
+          "y": 23.31864489166124
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_4",
+      "name": "Frontend",
+      "color": "#FFEAA7",
+      "center": {
+        "x": -50.835094135567104,
+        "y": -12.87282923171358
+      },
+      "boundary": [
+        {
+          "x": -68.78486495749736,
+          "y": 37.77146115131199
+        },
+        {
+          "x": -500.0,
+          "y": 335.45967295621654
+        },
+        {
+          "x": -500.0,
+          "y": 8.881784197001252e-15
+        },
+        {
+          "x": -500.0,
+          "y": -312.41938375672527
+        },
+        {
+          "x": -26.652006076410217,
+          "y": -30.534604779631188
+        },
+        {
+          "x": -21.939264200986553,
+          "y": -20.680610509856596
+        },
+        {
+          "x": -25.36591213606637,
+          "y": -7.204042488256999
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_5",
+      "name": "Frontend",
+      "color": "#DDA0DD",
+      "center": {
+        "x": 50.19194670270613,
+        "y": -25.331262423986917
+      },
+      "boundary": [
+        {
+          "x": 40.40771601065265,
+          "y": 5.571456499280412
+        },
+        {
+          "x": 500.0,
+          "y": -243.91326841700777
+        },
+        {
+          "x": 300.43770708160946,
+          "y": -500.0
+        },
+        {
+          "x": 64.56599461995475,
+          "y": -173.71203545156908
+        },
+        {
+          "x": 22.428441494035063,
+          "y": -17.71284752651309
+        },
+        {
+          "x": 32.45566267959941,
+          "y": 2.281989423806152
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_6",
+      "name": "Module 29",
+      "color": "#98D8C8",
+      "center": {
+        "x": -18.158215970468348,
+        "y": 55.770928735220934
+      },
+      "boundary": [
+        {
+          "x": -0.4784093313355413,
+          "y": 36.60217303756717
+        },
+        {
+          "x": 92.27443459059351,
+          "y": 225.6989655469974
+        },
+        {
+          "x": 284.73134591611137,
+          "y": 500.0
+        },
+        {
+          "x": -1.1013412404281553e-13,
+          "y": 500.0
+        },
+        {
+          "x": -500.0,
+          "y": 335.45967295621654
+        },
+        {
+          "x": -68.78486495749736,
+          "y": 37.77146115131199
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_0",
+      "name": "Data Models",
+      "color": "#FF6B6B",
+      "center": {
+        "x": -0.28228618849507603,
+        "y": -0.018913109546464177
+      },
+      "boundary": [
+        {
+          "x": 4.410302762110597,
+          "y": 23.31864489166124
+        },
+        {
+          "x": 32.45566267959941,
+          "y": 2.281989423806152
+        },
+        {
+          "x": 22.428441494035063,
+          "y": -17.71284752651309
+        },
+        {
+          "x": -21.939264200986553,
+          "y": -20.680610509856596
+        },
+        {
+          "x": -25.36591213606637,
+          "y": -7.204042488256999
+        }
+      ],
+      "building_count": 5,
+      "description": null
+    },
+    {
+      "id": "district_7",
+      "name": "Data Layer",
+      "color": "#F7DC6F",
+      "center": {
+        "x": -31.862459635768452,
+        "y": -60.02377630559521
+      },
+      "boundary": [
+        {
+          "x": -26.652006076410217,
+          "y": -30.534604779631188
+        },
+        {
+          "x": -500.0,
+          "y": -312.41938375672527
+        },
+        {
+          "x": -1.5987211554602254e-13,
+          "y": -500.0
+        },
+        {
+          "x": 300.43770708160946,
+          "y": -500.0
+        },
+        {
+          "x": 64.56599461995475,
+          "y": -173.71203545156908
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    },
+    {
+      "id": "district_8",
+      "name": "Module 26",
+      "color": "#BB8FCE",
+      "center": {
+        "x": 66.59646967498422,
+        "y": 24.67272317441861
+      },
+      "boundary": [
+        {
+          "x": 40.40771601065265,
+          "y": 5.571456499280412
+        },
+        {
+          "x": 500.0,
+          "y": -243.91326841700777
+        },
+        {
+          "x": 500.0,
+          "y": -3.907985046680551e-14
+        },
+        {
+          "x": 284.73134591611137,
+          "y": 500.0
+        },
+        {
+          "x": 92.27443459059351,
+          "y": 225.6989655469974
+        }
+      ],
+      "building_count": 1,
+      "description": null
+    }
+  ],
+  "roads": [
+    {
+      "source": "backend/server.py",
+      "target": "src/spotify_client.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "backend/server.py",
+      "target": "src/utils.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "backend/server.py",
+      "target": "src/recommender.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "scripts/evaluate_models.py",
+      "target": "src/utils.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "scripts/evaluate_models.py",
+      "target": "src/ml_mood_classifier.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "scripts/train_models.py",
+      "target": "src/utils.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "scripts/train_models.py",
+      "target": "src/ml_mood_classifier.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/feature_engineering.py",
+      "target": "src/utils.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/model_trainer.py",
+      "target": "src/utils.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/data_pipeline.py",
+      "target": "src/utils.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
+    {
+      "source": "src/recommender.py",
+      "target": "src/utils.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "src/recommender.py",
+      "target": "src/ml_mood_classifier.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": true
+    },
+    {
+      "source": "src/evaluator.py",
+      "target": "src/utils.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    }
+  ],
+  "stats": {
+    "total_files": 17,
+    "total_loc": 5533,
+    "total_districts": 9,
+    "total_dependencies": 13,
+    "hotspots": 3
+  },
+  "metadata": {
+    "num_files": 17,
+    "num_directories": 9,
+    "languages": {},
+    "layer_violations": [],
+    "duplicates": [],
+    "issues": {
+      "circular_dependencies": [],
+      "god_objects": [],
+      "orphans": [
+        "frontend/static/config.js",
+        "frontend/static/js/spotify_app.js",
+        "frontend/static/js/app.js",
+        "src/realistic_mood_classifier.py",
+        "src/load_kaggle_data.py",
+        "src/__init__.py"
+      ],
+      "highly_coupled": [],
+      "large_files": [
+        "frontend/static/js/spotify_app.js"
+      ]
+    },
+    "health": {
+      "score": 99,
+      "grade": "A"
+    }
+  }
+}

@@ -92,7 +92,7 @@
      COLORS - Rich, vibrant, accessible (Dark Mode Default)
      ════════════════════════════════════════════════════════════════════════ */
 
-  /* Neutral scale - zinc-inspired with warmth */
+  /* Neutral scale — elevated zinc with cool undertone */
   --gray-50: #fafafa;
   --gray-100: #f4f4f5;
   --gray-200: #e4e4e7;
@@ -105,27 +105,27 @@
   --gray-900: #18181b;
   --gray-950: #09090b;
 
-  /* Semantic Surfaces - Slightly elevated for better readability */
-  --color-bg-primary: #0f0f11;
-  --color-bg-secondary: #121214;
-  --color-bg-tertiary: var(--gray-900);
-  --color-bg-elevated: #1e1e21;
-  --color-bg-hover: var(--gray-800);
-  --color-bg-active: var(--gray-700);
+  /* Semantic Surfaces — "Elevated Dark": spacious, breathable, perfectly dark */
+  --color-bg-primary: #050505;
+  --color-bg-secondary: #0a0a0a;
+  --color-bg-tertiary: #111111;
+  --color-bg-elevated: #161616;
+  --color-bg-hover: #1f1f1f;
+  --color-bg-active: #2a2a2a;
 
-  /* Text hierarchy */
-  --color-text-primary: var(--gray-50);
-  --color-text-secondary: var(--gray-400);
-  --color-text-tertiary: var(--gray-500);
-  --color-text-muted: var(--gray-600);
+  /* Text hierarchy — high contrast for readability */
+  --color-text-primary: #f0f0f4;
+  --color-text-secondary: #b0b3c5;
+  --color-text-tertiary: #7a7e95;
+  --color-text-muted: #555870;
   --color-text-inverse: var(--gray-950);
 
-  /* Brand accent - Blue (clean, professional) */
-  --color-accent: #3b82f6;
-  --color-accent-hover: #60a5fa;
-  --color-accent-active: #2563eb;
-  --color-accent-muted: rgba(59, 130, 246, 0.15);
-  --color-accent-subtle: rgba(59, 130, 246, 0.08);
+  /* Brand accent — Pure White / Silver (Distinctive, completely stripped of cheap sci-fi cyan) */
+  --color-accent: #ffffff;
+  --color-accent-hover: #f4f4f5;
+  --color-accent-active: #e4e4e7;
+  --color-accent-muted: rgba(255, 255, 255, 0.15);
+  --color-accent-subtle: rgba(255, 255, 255, 0.08);
 
   /* Semantic colors */
   --color-success: #22c55e;
@@ -134,8 +134,8 @@
   --color-warning-muted: rgba(245, 158, 11, 0.15);
   --color-error: #ef4444;
   --color-error-muted: rgba(239, 68, 68, 0.15);
-  --color-info: #0ea5e9;
-  --color-info-muted: rgba(14, 165, 233, 0.15);
+  --color-info: #38bdf8;
+  --color-info-muted: rgba(56, 189, 248, 0.15);
 
   /* Code health colors */
   --color-health-excellent: #22c55e;
@@ -149,11 +149,11 @@
      ════════════════════════════════════════════════════════════════════════ */
   --border-subtle: rgba(255, 255, 255, 0.04);
   --border-default: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.12);
-  --border-intense: rgba(255, 255, 255, 0.16);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-intense: rgba(255, 255, 255, 0.20);
   --border-focus: var(--color-accent);
 
-  /* Border radius - slightly larger for modern feel */
+  /* Border radius */
   --radius-none: 0;
   --radius-sm: 4px;
   --radius-md: 6px;
@@ -183,23 +183,23 @@
     0 25px 50px rgba(0, 0, 0, 0.5),
     0 12px 24px rgba(0, 0, 0, 0.3);
 
-  /* Glow shadows - Blue accent */
-  --shadow-glow-accent: 0 0 40px rgba(59, 130, 246, 0.30);
-  --shadow-glow-accent-intense: 0 0 60px rgba(59, 130, 246, 0.45);
-  --shadow-glow-success: 0 0 40px rgba(34, 197, 94, 0.35);
-  --shadow-glow-error: 0 0 40px rgba(239, 68, 68, 0.35);
-  --shadow-glow-warning: 0 0 40px rgba(245, 158, 11, 0.35);
+  /* Glow shadows — Soft pure white elegant dispersion */
+  --shadow-glow-accent: 0 0 40px rgba(255, 255, 255, 0.15);
+  --shadow-glow-accent-intense: 0 0 60px rgba(255, 255, 255, 0.25);
+  --shadow-glow-success: 0 0 40px rgba(34, 197, 94, 0.30);
+  --shadow-glow-error: 0 0 40px rgba(239, 68, 68, 0.30);
+  --shadow-glow-warning: 0 0 40px rgba(245, 158, 11, 0.30);
 
   /* ════════════════════════════════════════════════════════════════════════
-     GLASSMORPHISM - Slightly elevated for better contrast
+     GLASSMORPHISM — Translucent, breathable (see through to the city)
      ════════════════════════════════════════════════════════════════════════ */
-  --glass-bg: rgba(18, 18, 21, 0.88);
-  --glass-bg-elevated: rgba(26, 26, 30, 0.92);
-  --glass-bg-subtle: rgba(18, 18, 21, 0.65);
-  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-bg: rgba(5, 5, 8, 0.70);
+  --glass-bg-elevated: rgba(10, 10, 14, 0.85);
+  --glass-bg-subtle: rgba(5, 5, 8, 0.40);
+  --glass-border: rgba(255, 255, 255, 0.08);
   --glass-border-strong: rgba(255, 255, 255, 0.12);
-  --glass-blur: 20px;
-  --glass-blur-strong: 40px;
+  --glass-blur: 24px;
+  --glass-blur-strong: 48px;
 
   /* ════════════════════════════════════════════════════════════════════════
      ANIMATION - Spring-based curves (inspired by Linear/Vercel)
@@ -243,11 +243,11 @@
   /* ════════════════════════════════════════════════════════════════════════
      3D CITY SPECIFIC
      ════════════════════════════════════════════════════════════════════════ */
-  --city-ground: #0d1117;
-  --city-sky-dark: #0a0a12;
-  --city-sky-light: #1e3a5f;
-  --city-fog: rgba(10, 10, 18, 0.8);
-  --city-glow: rgba(99, 102, 241, 0.2);
+  --city-ground: #030303;
+  --city-sky-dark: #000000;
+  --city-sky-light: #0a0a0a;
+  --city-fog: rgba(0, 0, 0, 0.9);
+  --city-glow: rgba(255, 255, 255, 0.1);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -292,12 +292,12 @@
     0 10px 25px rgba(0, 0, 0, 0.1),
     0 4px 10px rgba(0, 0, 0, 0.05);
 
-  /* Glow - more subtle */
-  --shadow-glow-accent: 0 0 30px rgba(99, 102, 241, 0.2);
+  /* Glow */
+  --shadow-glow-accent: 0 0 30px rgba(255, 255, 255, 0.2);
 
   /* City */
   --city-ground: #e8f4f8;
-  --city-sky-dark: #87ceeb;
+  --city-sky-dark: #c8e0f0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -351,6 +351,7 @@
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -358,6 +359,7 @@
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

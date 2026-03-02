@@ -15,7 +15,9 @@ export function useVSCodeSync() {
         selectBuilding,
         cityData,
         setHoveredBuilding,
-        setVSCodeConnected
+        setVSCodeConnected,
+        fetchImpactAnalysis,
+        setActiveIntelligencePanel
     } = useStore()
 
     // Find building by file path
@@ -149,10 +151,26 @@ export function useVSCodeSync() {
                 }
                 break
 
+            case 'mcp_blast_radius':
+                // MCP agent queried blast radius, sync UI
+                console.log('MCP queried blast radius for:', payload.file_id)
+                const targetBuilding = findBuildingByPath(payload.file_id)
+                if (targetBuilding) {
+                    selectBuilding(targetBuilding)
+                    setActiveIntelligencePanel('impact')
+                    fetchImpactAnalysis(targetBuilding.id)
+
+                    // Fly to building
+                    window.dispatchEvent(new CustomEvent('flyToBuilding', {
+                        detail: { building: targetBuilding }
+                    }))
+                }
+                break
+
             default:
                 console.log('Unknown sync message:', type)
         }
-    }, [findBuildingByPath, selectBuilding, setHoveredBuilding, setVSCodeConnected])
+    }, [findBuildingByPath, selectBuilding, setHoveredBuilding, setVSCodeConnected, fetchImpactAnalysis, setActiveIntelligencePanel])
 
     // Schedule reconnection
     const scheduleReconnect = useCallback(() => {

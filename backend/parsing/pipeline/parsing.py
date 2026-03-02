@@ -66,6 +66,9 @@ class ParsingStep(PipelineStep):
             churn = self.metrics.get_file_churn(file_path)
 
             imports = self.parser.extract_imports(content, language)
+            classes = self.parser.extract_classes(content, language)
+            functions = self.parser.extract_functions(content, language)
+
             is_hotspot = complexity > 15 and (churn > 8 or loc > 500)
             decay = min(1.0, age_days / 730)
 
@@ -80,6 +83,8 @@ class ParsingStep(PipelineStep):
                 'age_days': age_days,
                 'churn': churn,
                 'imports': imports,
+                'classes': classes,
+                'functions': functions,
                 'is_hotspot': is_hotspot,
                 'decay_level': decay,
                 'size_bytes': file_size

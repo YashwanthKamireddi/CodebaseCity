@@ -66,7 +66,7 @@ export default function CityScene() {
             <directionalLight
                 position={[0, 50, -150]}
                 intensity={0.5}
-                color="#00d4ff"        // Cyan accent (neon signs feel)
+                color="#ffffff"        // Cyan accent (neon signs feel)
             />
 
             {/* ACCENT LIGHT - Top-down for roof definition */}

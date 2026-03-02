@@ -41,7 +41,7 @@ describe('City Store', () => {
       const { result } = renderHook(() => useStore())
 
       // The fetchCity should set loading
-      expect(typeof result.current.fetchCity).toBe('function')
+      expect(typeof result.current.fetchDemo).toBe('function')
     })
   })
 
