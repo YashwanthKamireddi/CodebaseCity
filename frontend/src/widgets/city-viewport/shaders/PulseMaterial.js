@@ -24,6 +24,7 @@ const PulseMaterial = shaderMaterial(
     varying vec3 vPosition;
     varying vec3 vWorldPosition;
     varying vec3 vLocalPosition;
+    varying vec3 vLocalNormal;
     varying vec3 vNormal;
     varying vec3 vViewDir;
     varying vec3 vColor;
@@ -35,6 +36,7 @@ const PulseMaterial = shaderMaterial(
       vUv = uv;
       vPosition = position;
       vLocalPosition = position;
+      vLocalNormal = normal;
       vNormal = normalize(normalMatrix * normal);
       vColor = instanceColor;
       vChurn = aChurn;
@@ -67,6 +69,7 @@ const PulseMaterial = shaderMaterial(
     varying vec3 vPosition;
     varying vec3 vWorldPosition;
     varying vec3 vLocalPosition;
+    varying vec3 vLocalNormal;
     varying vec3 vNormal;
     varying vec3 vViewDir;
     varying vec3 vColor;
@@ -75,16 +78,16 @@ const PulseMaterial = shaderMaterial(
     varying float vHeight;
 
     void main() {
-      bool isSide = abs(vNormal.y) < 0.5;
-      bool isTop = vNormal.y > 0.5;
+      bool isSide = abs(vLocalNormal.y) < 0.5;
+      bool isTop = vLocalNormal.y > 0.5;
 
       // Face UV and Scale mapping
       vec2 faceUV;
       vec2 faceScale;
-      if (abs(vNormal.x) > 0.5) {
+      if (abs(vLocalNormal.x) > 0.5) {
         faceUV = vLocalPosition.zy;
         faceScale = vScale.zy;
-      } else if (abs(vNormal.z) > 0.5) {
+      } else if (abs(vLocalNormal.z) > 0.5) {
         faceUV = vLocalPosition.xy;
         faceScale = vScale.xy;
       } else {
@@ -115,59 +118,52 @@ const PulseMaterial = shaderMaterial(
       float innerGrid = min(gridXLines + gridYLines, 1.0);
 
       // ── Base Colors ──
-      // Scale down neon brightness slightly since we're opaque now
-      vec3 neonColor = vColor * 1.5;
+      vec3 neonColor = vColor;
 
-      // Solid premium dark metal/glass core
-      vec3 finalColor = vec3(0.03, 0.04, 0.05);
+      // Enhance brightness to trigger post-processing bloom
+      neonColor *= 1.8;
+
+      // Glass core - extremely dark, almost invisible to let background through
+      vec3 finalColor = vec3(0.005, 0.008, 0.012);
 
       if (isSide) {
-          // Architectural floor lines (tight vertical spacing, no horizontal grid needed for a sleek tower look)
-          float floorSpacing = 1.0;
-          float floorY = fract(vLocalPosition.y / floorSpacing);
-          float floorLines = step(0.95, floorY); // Crisp horizontal line for every "floor"
+          // Add grid and edges
+          finalColor = mix(finalColor, neonColor * 0.4, innerGrid);
+          finalColor = mix(finalColor, neonColor * 1.5, outerEdge);
 
-          finalColor = mix(finalColor, neonColor * 0.3, floorLines);
-
-          // Add a subtle vertical shading to give the box depth
-          float shadow = abs(vNormal.x) > 0.0 ? 0.8 : 1.0;
-          finalColor *= shadow;
-
-          // Strong crisp vertical edges
-          finalColor = mix(finalColor, neonColor * 1.2, outerEdge);
-
-          // Add a subtle height gradient
-          float heightGrad = (vLocalPosition.y + 0.5) * 0.5;
-          finalColor += neonColor * 0.05 * heightGrad;
+          // Add a holographic vertical gradient
+          float heightGrad = (vLocalPosition.y + 0.5);
+          finalColor += neonColor * 0.1 * heightGrad;
 
           // ── Sweeping Scanner Effect ──
           float sweep = fract(vWorldPosition.y * 0.03 - uTime * 0.5);
+          // Sharp line with a trailing fade
           float scanner = smoothstep(0.95, 1.0, sweep) * (1.0 - smoothstep(0.99, 1.0, sweep));
-          float scannerGlow = smoothstep(0.8, 1.0, sweep) * 0.1;
-          finalColor += neonColor * (scanner + scannerGlow);
+          float scannerGlow = smoothstep(0.8, 1.0, sweep) * 0.2;
+          finalColor += neonColor * (scanner + scannerGlow) * 2.0;
 
       } else if (isTop) {
           // Roof edge
-          finalColor = mix(finalColor, neonColor * 1.2, outerEdge);
+          finalColor = mix(finalColor, neonColor * 1.5, outerEdge);
 
-          // Roof inner grid - sharp structural cross-hatch
-          float roofGridSpacing = 2.0;
+          // Roof inner grid
+          float roofGridSpacing = 3.0;
           vec2 roofGridFract = fract(vec2(gridUV.x / roofGridSpacing, gridUV.y / roofGridSpacing));
-          float rLineThickness = 0.05;
+          float rLineThickness = 0.08;
           float rGridLines = step(1.0 - rLineThickness, roofGridFract.x) + step(roofGridFract.x, rLineThickness) +
                              step(1.0 - rLineThickness, roofGridFract.y) + step(roofGridFract.y, rLineThickness);
           rGridLines = min(rGridLines, 1.0);
-          finalColor = mix(finalColor, neonColor * 0.4, rGridLines * (1.0 - outerEdge));
+          finalColor = mix(finalColor, neonColor * 0.3, rGridLines * (1.0 - outerEdge));
 
           // Central Data Core / Antenna pulse
           float centerDist = length(faceUV);
           float beacon = smoothstep(0.15, 0.0, centerDist);
           float pulse = sin(uTime * 4.0 + vWorldPosition.x) * 0.5 + 0.5;
-          finalColor += neonColor * beacon * pulse * 2.0;
+          finalColor += neonColor * beacon * pulse * 3.0;
 
       } else {
           // Bottom face
-          finalColor = vec3(0.01, 0.01, 0.015);
+          finalColor = vec3(0.0);
       }
 
       // ── Hotspot Churn Highlight ──
@@ -180,10 +176,8 @@ const PulseMaterial = shaderMaterial(
           finalColor += hotColor * pulse * intensity;
       }
 
-      // With additive blending, the alpha channel controls how transparent it is
-      // relative to the background when drawing. But in React Three Fiber AdditiveBlending,
-      // you typically want premultiplied alpha or just raw color addition.
-      gl_FragColor = vec4(finalColor, 1.0);
+      // Add solid opacity so depthWrite actually occludes background items
+      gl_FragColor = vec4(finalColor, 0.95);
     }
   `
 )

@@ -166,7 +166,7 @@ function App() {
                                         makeDefault
                                         position={[80, 50, 80]}
                                         fov={45}
-                                        near={0.01} // FIX: Prevent clipping when getting extremely close
+                                        near={0.1} // FIX: Prevent clipping when close
                                         far={3000} // Expanded render distance
                                     />
 
@@ -175,7 +175,7 @@ function App() {
                                         enablePan={true}
                                         enableZoom={true}
                                         enableRotate={true}
-                                        minDistance={0.1} // Allow extreme close-ups without freezing
+                                        minDistance={1} // Allow extreme close-ups
                                         maxDistance={2500}
                                         // Constrain to hemisphere (0 to PI/2)
                                         maxPolarAngle={Math.PI / 2}

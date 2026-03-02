@@ -89,7 +89,7 @@ export default function InstancedCity() {
                 const staggeredEase = isQuick ? 1 : 1 - Math.pow(1 - Math.min(staggeredProgress, 1), 4)
 
                 const currentHeight = Math.max(0.5, targetHeight * staggeredEase)
-                const y = (currentHeight / 2) + 0.2
+                const y = currentHeight / 2 // Removed arbitrary + 0.2 hover offset
 
                 tempObject.position.set(x, y, z)
                 tempObject.scale.set(width, currentHeight, depth)
@@ -177,7 +177,7 @@ export default function InstancedCity() {
                 const width = b.dimensions?.width || 8
                 const depth = b.dimensions?.depth || 8
                 const height = b.dimensions?.height || 8
-                tempObject.position.set(b.position.x, (height / 2) + 0.2, b.position.z)
+                tempObject.position.set(b.position.x, height / 2, b.position.z)
                 tempObject.scale.set(width, height, depth)
                 tempObject.updateMatrix()
                 meshRef.current.setMatrixAt(i, tempObject.matrix)
@@ -255,8 +255,9 @@ export default function InstancedCity() {
             {/* The Living Material */}
             <pulseMaterial
                 ref={materialRef}
-                transparent={false}
+                transparent={true}
                 depthWrite={true}
+                blending={THREE.NormalBlending}
                 vertexColors={true} // Vital for instanceColor support
             />
         </instancedMesh>
