@@ -145,11 +145,10 @@ class CodeParser:
                 tree = parser.parse(bytes(content, "utf8"))
                 query = getattr(self, f"{language[:2]}_class_query", getattr(self, f"{language}_class_query", None))
                 if query:
-                    for match in query.matches(tree.root_node):
-                        for name, node_list in match[1].items():
-                             for node in (node_list if isinstance(node_list, list) else [node_list]):
-                                 text = content[node.start_byte:node.end_byte]
-                                 classes.append({'name': text, 'line': node.start_point[0] + 1})
+                    captures = query.captures(tree.root_node)
+                    for node, name in captures:
+                        text = content[node.start_byte:node.end_byte]
+                        classes.append({'name': text, 'line': node.start_point[0] + 1})
                     if classes: return classes
             except Exception as e:
                 print(f"AST Class error {language}: {e}")
@@ -175,11 +174,10 @@ class CodeParser:
                 tree = parser.parse(bytes(content, "utf8"))
                 query = getattr(self, f"{language[:2]}_func_query", getattr(self, f"{language}_func_query", None))
                 if query:
-                    for match in query.matches(tree.root_node):
-                        for name, node_list in match[1].items():
-                             for node in (node_list if isinstance(node_list, list) else [node_list]):
-                                 text = content[node.start_byte:node.end_byte]
-                                 functions.append({'name': text, 'line': node.start_point[0] + 1})
+                    captures = query.captures(tree.root_node)
+                    for node, name in captures:
+                        text = content[node.start_byte:node.end_byte]
+                        functions.append({'name': text, 'line': node.start_point[0] + 1})
                     if functions: return functions
             except Exception as e:
                 print(f"AST Function error {language}: {e}")

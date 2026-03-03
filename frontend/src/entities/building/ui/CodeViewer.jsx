@@ -167,7 +167,7 @@ export default function CodeViewer({ building, onClose }) {
                         letterSpacing: '0.05em'
                     }}>
                         <span>{building.language || 'Text'}</span>
-                        <span>{building.metrics?.loc || building.metrics?.lines || '?'} lines • UTF-8</span>
+                        <span>Complexity: {building.metrics?.complexity || 1} • UTF-8</span>
                     </div>
                 </motion.div>
             </motion.div>

@@ -16,10 +16,33 @@ export const createCitySlice = (set, get) => ({
     analysisProgress: 0,
     fileContent: null, // { path: string, content: string, loading: boolean }
 
+    // Refactoring Simulator State (Workstream 12B)
+    refactoringDrifts: [], // Array of { buildingId, oldPath, newPath, oldDistrictId, newDistrictId }
+    refactoringModeActive: false,
+
+    // Exploration Mode State (First-Person Flight)
+    explorationMode: false,
+
+    // Landing overlay state — true until user dismisses the hero
+    isLandingOverlayActive: true,
+    setLandingOverlayActive: (active) => set({ isLandingOverlayActive: active }),
+
+    // Auth State
+    authToken: localStorage.getItem('codebase_city_token') || null,
+
     // Primitive Actions
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error, loading: false }),
     setProgress: (progress) => set({ analysisProgress: progress }),
+
+    setAuthToken: (token) => {
+        if (token) {
+            localStorage.setItem('codebase_city_token', token)
+        } else {
+            localStorage.removeItem('codebase_city_token')
+        }
+        set({ authToken: token })
+    },
 
     setCityData: (data) => {
         // Use city_id from API response, or generate from path as fallback
@@ -38,9 +61,45 @@ export const createCitySlice = (set, get) => ({
             currentRepoPath: data.path || state.currentRepoPath,
             loading: false,
             error: null,
-            analysisProgress: 100
+            analysisProgress: 100,
+            refactoringDrifts: [], // Reset drifts on new city
+            refactoringModeActive: false
         }))
     },
+
+    // Refactoring Actions
+    toggleRefactoringMode: () => set((state) => ({ refactoringModeActive: !state.refactoringModeActive })),
+    clearRefactoringDrifts: () => set({ refactoringDrifts: [], refactoringModeActive: false }),
+
+    // Exploration Mode Actions
+    toggleExplorationMode: () => set((state) => ({ explorationMode: !state.explorationMode })),
+    setExplorationMode: (active) => set({ explorationMode: active }),
+
+    applyRefactoringDrift: (buildingId, oldDistrictId, newDistrictId) => set((state) => {
+        // Prevent no-op drags
+        if (oldDistrictId === newDistrictId) return state;
+
+        const newDrifts = [...state.refactoringDrifts];
+        const existingDriftIndex = newDrifts.findIndex(d => d.buildingId === buildingId);
+
+        if (existingDriftIndex >= 0) {
+            // Update existing drift
+            newDrifts[existingDriftIndex].newDistrictId = newDistrictId;
+            // If dragging back to origin, remove the drift
+            if (newDrifts[existingDriftIndex].originalDistrictId === newDistrictId) {
+                newDrifts.splice(existingDriftIndex, 1);
+            }
+        } else {
+            // Add new drift
+            newDrifts.push({
+                buildingId,
+                originalDistrictId: oldDistrictId,
+                newDistrictId
+            });
+        }
+
+        return { refactoringDrifts: newDrifts };
+    }),
 
     // Async Actions
     fetchDemo: async () => {
@@ -75,9 +134,16 @@ export const createCitySlice = (set, get) => ({
 
         try {
             setProgress(10)
+
+            const { authToken } = get()
+            const headers = { 'Content-Type': 'application/json' }
+            if (authToken) {
+                headers['Authorization'] = `Bearer ${authToken}`
+            }
+
             const response = await fetch(`${API_BASE}/analyze`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: headers,
                 body: JSON.stringify({ path, max_files: 5000 })
             })
             setProgress(80)
@@ -149,6 +215,11 @@ export const createCitySlice = (set, get) => ({
         set({ fileContent: { path, content: null, loading: true } })
 
         const { currentRepoPath, cityData } = get()
+        if (cityData?.id?.startsWith('demo_')) {
+            set({ fileContent: { path, content: '// Source code not available in demo mode.\n// Try analyzing a real GitHub repository!', loading: false } })
+            return
+        }
+
         let fullPath = path
 
         // Path resolution logic

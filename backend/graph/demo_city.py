@@ -12,7 +12,7 @@ def create_demo_city() -> CityData:
     Create a demo city representing a typical web application architecture.
     Useful for testing the frontend without needing a real repository.
     """
-    
+
     # Define demo districts
     districts = [
         District(
@@ -86,7 +86,7 @@ def create_demo_city() -> CityData:
             description="User authentication and authorization"
         )
     ]
-    
+
     # Define demo buildings
     buildings = [
         # API District
@@ -95,7 +95,7 @@ def create_demo_city() -> CityData:
         _create_building("api/validators.py", "API Gateway", "api_district", -60, -20, 120, 6, decay=0.2),
         _create_building("api/responses.py", "API Gateway", "api_district", -100, 10, 60, 4, decay=0.0),
         _create_building("api/errors.py", "API Gateway", "api_district", -80, 10, 45, 3, decay=0.4),
-        
+
         # Services District - including a "hotspot"
         _create_building("services/user_service.py", "Business Services", "services_district", -20, -40, 280, 18, decay=0.2, is_hotspot=True, churn=25),
         _create_building("services/order_service.py", "Business Services", "services_district", 10, -40, 220, 14, decay=0.1),
@@ -105,13 +105,13 @@ def create_demo_city() -> CityData:
         _create_building("services/cache.py", "Business Services", "services_district", 10, 20, 90, 6, decay=0.4),
         _create_building("services/scheduler.py", "Business Services", "services_district", -5, 40, 110, 7, decay=0.2),
         _create_building("services/legacy_billing.py", "Business Services", "services_district", 20, 40, 450, 25, decay=0.9, is_hotspot=True, churn=5),  # Old legacy code
-        
+
         # Data District
         _create_building("models/user.py", "Data Layer", "data_district", 60, -20, 120, 8, decay=0.2),
         _create_building("models/order.py", "Data Layer", "data_district", 90, -20, 150, 10, decay=0.1),
         _create_building("repositories/user_repo.py", "Data Layer", "data_district", 60, 10, 180, 12, decay=0.3),
         _create_building("repositories/order_repo.py", "Data Layer", "data_district", 90, 10, 200, 14, decay=0.2),
-        
+
         # Utils District - includes a "God Class"
         _create_building("utils/helpers.py", "Utilities", "utils_district", -20, 70, 320, 20, decay=0.7, deps_in=18),  # God class
         _create_building("utils/validators.py", "Utilities", "utils_district", 10, 70, 80, 5, decay=0.4),
@@ -119,14 +119,14 @@ def create_demo_city() -> CityData:
         _create_building("utils/constants.py", "Utilities", "utils_district", 10, 85, 40, 2, decay=0.2),
         _create_building("utils/logger.py", "Utilities", "utils_district", -5, 95, 100, 6, decay=0.3),
         _create_building("utils/config.py", "Utilities", "utils_district", 20, 75, 55, 3, decay=0.1),
-        
+
         # Auth District
         _create_building("auth/login.py", "Authentication", "auth_district", -20, -85, 160, 12, decay=0.2),
         _create_building("auth/register.py", "Authentication", "auth_district", 10, -85, 140, 10, decay=0.2),
         _create_building("auth/jwt.py", "Authentication", "auth_district", -20, -70, 100, 8, decay=0.4),
         _create_building("auth/permissions.py", "Authentication", "auth_district", 10, -70, 120, 9, decay=0.3),
     ]
-    
+
     # Define demo roads (dependencies)
     roads = [
         # API -> Services
@@ -134,13 +134,13 @@ def create_demo_city() -> CityData:
         _create_road("api/routes.py", "services/order_service.py", is_cross=True),
         _create_road("api/routes.py", "services/payment_service.py", is_cross=True),
         _create_road("api/middleware.py", "auth/jwt.py", is_cross=True),
-        
+
         # Services -> Data
         _create_road("services/user_service.py", "repositories/user_repo.py", is_cross=True),
         _create_road("services/order_service.py", "repositories/order_repo.py", is_cross=True),
         _create_road("services/user_service.py", "models/user.py", is_cross=True),
         _create_road("services/order_service.py", "models/order.py", is_cross=True),
-        
+
         # Services -> Utils (many deps to God class)
         _create_road("services/user_service.py", "utils/helpers.py", is_cross=True, weight=2),
         _create_road("services/order_service.py", "utils/helpers.py", is_cross=True, weight=2),
@@ -149,11 +149,11 @@ def create_demo_city() -> CityData:
         _create_road("services/analytics.py", "utils/helpers.py", is_cross=True),
         _create_road("api/routes.py", "utils/helpers.py", is_cross=True),
         _create_road("auth/login.py", "utils/helpers.py", is_cross=True),
-        
+
         # Services -> Auth
         _create_road("services/user_service.py", "auth/permissions.py", is_cross=True),
         _create_road("api/routes.py", "auth/login.py", is_cross=True),
-        
+
         # Internal dependencies
         _create_road("services/order_service.py", "services/payment_service.py", is_cross=False),
         _create_road("services/payment_service.py", "services/notification.py", is_cross=False),
@@ -162,7 +162,7 @@ def create_demo_city() -> CityData:
         _create_road("repositories/user_repo.py", "models/user.py", is_cross=False),
         _create_road("repositories/order_repo.py", "models/order.py", is_cross=False),
     ]
-    
+
     return CityData(
         name="Demo Web Application",
         buildings=buildings,
@@ -195,7 +195,7 @@ def _create_building(
 ) -> Building:
     """Helper to create a building"""
     name = path.split("/")[-1]
-    
+
     return Building(
         id=path,
         name=name,
@@ -203,9 +203,9 @@ def _create_building(
         district_id=district_id,
         position={"x": x, "y": 0, "z": z},
         dimensions={
-            "width": max(3, loc / 40),
-            "height": max(2, complexity * 0.8),
-            "depth": max(3, loc / 40)
+            "width": max(3, 3 + (deps_in * 1.5)),
+            "height": max(2, complexity * 1.2),
+            "depth": max(3, 3 + (deps_in * 1.5))
         },
         metrics=BuildingMetrics(
             loc=loc,
@@ -213,7 +213,9 @@ def _create_building(
             churn=churn,
             age_days=int(decay * 730),
             dependencies_in=deps_in,
-            dependencies_out=random.randint(1, 5)
+            dependencies_out=random.randint(1, 5),
+            coverage=max(10.0, 100.0 - (decay * 80.0) - (complexity * 1.5)),
+            debt=min(1.0, decay + (complexity * 0.02))
         ),
         language="python",
         decay_level=decay,

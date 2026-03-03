@@ -12,7 +12,7 @@ import { detectPattern } from '../utils'
 import { BuildingModel } from '../model'
 import CodeViewer from './CodeViewer'
 
-import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Activity, Maximize2, Minimize2, Eye, User, Mail } from 'lucide-react'
+import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Activity, Maximize2, Minimize2, Eye, User, Mail, AlertTriangle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 // Styles imported from index.css mostly, inline for layout
 
@@ -47,6 +47,34 @@ export default function BuildingPanel({ building }) {
     const { metrics, name, path, is_hotspot, decay_level, language, author, email } = building
 
     const isContentReady = fileContent?.path === path && !fileContent?.loading
+
+    // Diagnostics Engine: Calculate Actionable Infractions
+    const infractions = []
+    const complexity = metrics?.complexity || 1
+    const depsIn = metrics?.dependencies_in || metrics?.attributes || 0
+    const commits = metrics?.commits || 1
+
+    if (complexity > 10) {
+        infractions.push({
+            type: 'danger',
+            title: 'God-Class Detected',
+            desc: `Cyclomatic complexity is severely high (${complexity}). Extract logic into smaller, testable sub-modules to reduce cognitive load.`
+        })
+    }
+    if (depsIn > 8) {
+        infractions.push({
+            type: 'warning',
+            title: 'Fragile Base Class Risk',
+            desc: `${depsIn} inbound dependencies detected. Massive blast radius on edits. Mandate Dependency Inversion (DIP) to decouple.`
+        })
+    }
+    if (commits > 50 || is_hotspot) {
+        infractions.push({
+            type: 'warning',
+            title: 'Code Churn Hotspot',
+            desc: 'Extreme historical volatility. Isolate the changing domain logic from the stable infrastructure.'
+        })
+    }
 
     return (
         <AnimatePresence>
@@ -200,14 +228,14 @@ export default function BuildingPanel({ building }) {
                         marginBottom: '32px'
                     }}>
                         <SwissMetric
-                            label="Lines of Code"
-                            value={metrics?.loc || metrics?.lines || 'N/A'}
-                            highlight={false}
-                        />
-                        <SwissMetric
                             label="Complexity"
                             value={metrics?.complexity || '1'}
                             highlight={(metrics?.complexity || 1) > 10}
+                        />
+                        <SwissMetric
+                            label="Coupling (Inbound)"
+                            value={metrics?.dependencies_in || metrics?.attributes || '0'}
+                            highlight={(metrics?.dependencies_in || 0) > 8}
                         />
                         <SwissMetric
                             label="File Size"
@@ -220,6 +248,48 @@ export default function BuildingPanel({ building }) {
                             highlight={false}
                         />
                     </div>
+
+                    {/* ACTIONABLE INFRACTIONS HUD */}
+                    {infractions.length > 0 && (
+                        <div style={{ marginBottom: '32px' }}>
+                            <SectionHeader title="Actionable Infractions" icon={<AlertTriangle size={14} color="var(--signal-danger)" />} />
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                {infractions.map((inf, idx) => (
+                                    <div key={idx} style={{
+                                        background: inf.type === 'danger' ? 'rgba(239, 68, 68, 0.05)' : 'rgba(245, 158, 11, 0.05)',
+                                        border: `1px solid ${inf.type === 'danger' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(245, 158, 11, 0.2)'}`,
+                                        borderRadius: '8px',
+                                        padding: '16px',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '8px',
+                                        position: 'relative',
+                                        overflow: 'hidden'
+                                    }}>
+                                        {/* Left Accent Bar */}
+                                        <div style={{
+                                            position: 'absolute', top: 0, left: 0, bottom: 0, width: '3px',
+                                            background: inf.type === 'danger' ? 'var(--signal-danger)' : 'var(--signal-warning)'
+                                        }} />
+
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <AlertTriangle size={16} color={inf.type === 'danger' ? "var(--signal-danger)" : "var(--signal-warning)"} />
+                                            <span style={{
+                                                fontSize: '0.85rem', fontWeight: 600,
+                                                color: inf.type === 'danger' ? '#fca5a5' : '#fcd34d',
+                                                letterSpacing: '0.05em', textTransform: 'uppercase'
+                                            }}>
+                                                {inf.title}
+                                            </span>
+                                        </div>
+                                        <p style={{ margin: 0, fontSize: '0.85rem', color: '#a1a1aa', lineHeight: 1.5 }}>
+                                            {inf.desc}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
 
                     {/* DEPENDENCIES */}
                     {(metrics?.imports || []).length > 0 && (

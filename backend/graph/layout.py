@@ -132,7 +132,7 @@ class LayoutEngine:
             n_files = len(files)
 
             # Spiral/Cluster layout for buildings too
-            building_spacing = 3.5 # Maximum density without clipping
+            building_spacing = 18  # Massively increased spacing for huge repositories (e.g. OpenCV)
             phi = (1 + math.sqrt(5)) / 2
 
             for i, pf in enumerate(files):

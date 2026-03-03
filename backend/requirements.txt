@@ -20,6 +20,9 @@ numpy>=1.26.4
 # HTTP Client
 httpx>=0.26.0
 
+# Authentication
+PyJWT>=2.8.0
+
 # Code Parsing (Tree-sitter AST)
 tree-sitter>=0.21.0
 tree-sitter-python>=0.21.0

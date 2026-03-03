@@ -9,6 +9,8 @@ import InstancedTrace from './InstancedTrace'
 import HolographicXRay from './HolographicXRay'
 import CameraController from './CameraController'
 import Ground from './Ground'
+import BlastRadius from './BlastRadius'
+import FaultLine from './FaultLine'
 
 /**
  * CityScene - Premium Cinematic City Environment
@@ -21,6 +23,17 @@ import Ground from './Ground'
 export default function CityScene() {
     const { cityData } = useStore()
     const groupRef = useRef()
+
+    // Dynamic fog: compute bounds from buildings
+    const cityRadius = useMemo(() => {
+        if (!cityData?.buildings?.length) return 100
+        let maxR = 0
+        for (const b of cityData.buildings) {
+            const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
+            if (r > maxR) maxR = r
+        }
+        return Math.max(100, maxR + 50)
+    }, [cityData])
 
     return (
         <group>
@@ -110,6 +123,8 @@ export default function CityScene() {
                 {/* Gource Mode: Social Avatars */}
                 <AvatarSprites />
 
+                <BlastRadius />
+                <FaultLine />
                 <Roads />
                 <Ground />
             </group>
@@ -130,7 +145,7 @@ export default function CityScene() {
             />
 
             {/* Atmospheric fog - creates depth and mood */}
-            <fog attach="fog" args={['#050810', 60, 450]} />
+            <fog attach="fog" args={['#050810', cityRadius * 0.3, cityRadius * 3]} />
 
             {/* Background color - deep space blue */}
             <color attach="background" args={['#030508']} />

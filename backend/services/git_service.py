@@ -49,13 +49,21 @@ class GitService:
         return path, is_github, repo_name
 
     @classmethod
-    def clone_repo(cls, url: str, repo_name: str) -> str:
+    def clone_repo(cls, url: str, repo_name: str, github_token: Optional[str] = None) -> str:
         """
         Clones a git repo to a temp directory.
+        If github_token is provided, it injects it into the HTTPS URL for private auth.
         Returns the absolute path to the cloned directory.
         """
         if repo_name.lower() in cls.BLOCKED_REPOS:
              raise HTTPException(status_code=413, detail=f"Repository too large: {cls.BLOCKED_REPOS[repo_name.lower()]}")
+
+        # Secure URL creation for OAuth flow
+        clone_url = url
+        if github_token and "github.com" in url:
+            # We strip https:// and insert oauth2:token@
+            clean_url = url.replace("https://", "").replace("http://", "")
+            clone_url = f"https://oauth2:{github_token}@{clean_url}"
 
         temp_dir = os.path.join(tempfile.gettempdir(), "codebase_city", repo_name)
 
@@ -71,12 +79,12 @@ class GitService:
             # Social City Upgrade: Need history for behavioral analysis
             # Depth 1000 gives us "Who owns this code" without downloading 10 years of history.
             clone_result = subprocess.run(
-                ["git", "clone", "--single-branch", "--depth", "1000", url, temp_dir],
+                ["git", "clone", "--single-branch", "--depth", "1000", clone_url, temp_dir],
                 capture_output=True, text=True, timeout=600
             )
 
             if clone_result.returncode != 0:
-                 raise HTTPException(status_code=400, detail=f"Failed to clone: {clone_result.stderr}")
+                raise HTTPException(status_code=400, detail=f"Failed to clone: {clone_result.stderr}")
 
             return temp_dir
         except subprocess.TimeoutExpired:

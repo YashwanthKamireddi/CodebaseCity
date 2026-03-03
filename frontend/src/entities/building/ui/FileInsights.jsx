@@ -25,13 +25,13 @@ function generateInsights(file) {
     const { metrics = {}, decay_level = 0, is_hotspot } = file
     const { loc = 0, complexity = 0, churn = 0, dependencies_in = 0, dependencies_out = 0 } = metrics
 
-    // High LOC
+    // High LOC (Reframed as Footprint Warning)
     if (loc > 300) {
         insights.push({
             type: 'warning',
             icon: FileCode,
-            title: 'Large file',
-            description: `${loc.toLocaleString()} lines of code. Files over 300 lines are harder to maintain.`
+            title: 'Large footprint',
+            description: `${loc.toLocaleString()} lines of code. This structure's dimensions are driven by its logic paths and dependencies, but its length makes it harder to maintain.`
         })
         suggestions.push({
             action: 'Split into smaller modules',

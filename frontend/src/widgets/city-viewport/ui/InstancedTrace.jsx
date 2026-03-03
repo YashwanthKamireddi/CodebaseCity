@@ -1,10 +1,12 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { QuadraticBezierLine } from '@react-three/drei'
 import * as THREE from 'three'
+import { useFrame } from '@react-three/fiber'
 import useStore from '../../../store/useStore'
 
 export default function InstancedTrace() {
     const { activeTrace, cityData, layoutMode } = useStore()
+    const groupRef = useRef()
 
     const segments = useMemo(() => {
         if (!activeTrace || !activeTrace.path || !cityData) return []
@@ -35,31 +37,50 @@ export default function InstancedTrace() {
         return segs
     }, [activeTrace, cityData, layoutMode])
 
+    // Animate the Data-Flow Kinetics (Streams of light passing through the geometry)
+    useFrame((state, delta) => {
+        if (groupRef.current) {
+            groupRef.current.children.forEach(group => {
+                group.children.forEach(lineMesh => {
+                    if (lineMesh.material && lineMesh.material.dashed) {
+                        lineMesh.material.dashOffset -= delta * 5.0 // Adjust speed of traffic
+                    }
+                })
+            })
+        }
+    })
+
     if (segments.length === 0) return null
 
     return (
-        <group>
+        <group ref={groupRef}>
             {segments.map((seg, i) => (
                 <group key={i}>
-                    {/* Core Beam */}
+                    {/* Core Beam (Data Packets) */}
                     <QuadraticBezierLine
                         start={seg.start}
                         end={seg.end}
                         mid={seg.control}
-                        color="#ffffff" // Neon Cyan
-                        lineWidth={3}
-                        dashed={false}
-                        opacity={0.9}
+                        color="#00ffcc" // Neon Cyan
+                        lineWidth={3.5}
+                        dashed={true}
+                        dashScale={50}
+                        dashSize={5}
+                        gapSize={10}
+                        opacity={1.0}
                         transparent
                     />
-                    {/* Glow Halo */}
+                    {/* Glow Halo (Packet Trail) */}
                     <QuadraticBezierLine
                         start={seg.start}
                         end={seg.end}
                         mid={seg.control}
                         color="#3b82f6" // Deep blue halo
-                        lineWidth={10}
-                        dashed={false}
+                        lineWidth={12}
+                        dashed={true}
+                        dashScale={50}
+                        dashSize={5}
+                        gapSize={15}
                         opacity={0.3}
                         transparent
                     />

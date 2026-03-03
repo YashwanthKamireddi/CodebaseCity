@@ -1,126 +1,193 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/compass.svg" width="60" height="60" alt="Codebase City Logo" />
+<img src="docs/hero-banner.png" width="100%" alt="Codebase City — 3D Software Architecture Visualization" />
 
 # Codebase City
 
-**A 3D Software Architecture Visualization Tool**
+**Transform any codebase into a living, breathing 3D city.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status: Production](https://img.shields.io/badge/Status-Production-success.svg)](#)
-[![Tech: React Three Fiber](https://img.shields.io/badge/Tech-Three.js_|_React-black.svg)](#)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](https://react.dev)
+[![Three.js](https://img.shields.io/badge/Three.js-r160-black?logo=threedotjs)](https://threejs.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Tree-sitter](https://img.shields.io/badge/Tree--sitter-AST-yellow)](https://tree-sitter.github.io)
 
-*Transform complex software repositories into interactive, navigable 3D environments.*
+*Navigate software architecture spatially. Spot tech debt instantly. Plan refactors visually.*
 
-[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Technical Architecture](#technical-architecture)
+[✨ Try Live Demo](#) · [📖 Documentation](docs/) · [🐛 Report Bug](https://github.com/YashwanthKamireddi/CodebaseCity/issues) · [💡 Request Feature](https://github.com/YashwanthKamireddi/CodebaseCity/issues)
 
 </div>
 
 ---
 
-## Overview
+## What is Codebase City?
 
-Codebase City is an open-source static analysis and visualization platform for software engineers. It parses local repositories or Git history to generate a 1:1 scale, interactive 3D spatial representation of code complexity, dependencies, and architectural structure.
+Codebase City renders your software repository as an explorable **3D cityscape**. Each file becomes a building. Each directory becomes a district. Height = complexity. Color = health. Dependency flows become glowing trace lines between structures.
 
-By treating directories as "districts" and files as "buildings", developers can intuitively identify technical debt, heavily coupled modules, and code churn through spatial exploration rather than reading flat text reports.
+Instead of reading static reports, you **fly through** your architecture and see problems the way a city planner sees urban blight — instantly, spatially, intuitively.
 
-### Key Use Cases
-*   **Technical Debt Discovery**: Visually identify "God Objects" (massive, highly centralized files) instantly.
-*   **Project Onboarding**: Allow new engineers to spatially explore unfamiliar project layouts and system flow.
-*   **Refactoring Planning**: Map dependency structures to see the blast radius of potential architectural changes.
+### Who is this for?
+
+- **Tech Leads** — Spot god-objects and circular dependencies at a glance
+- **New Engineers** — Spatially explore unfamiliar codebases during onboarding
+- **Architecture Reviews** — Visualize blast radius before any refactoring
 
 ---
 
 ## Features
 
-### 1. Spatial Code Analysis
-*   **Complexity Mapping**: Building height directly correlates to Lines of Code (LOC) and cyclomatic complexity.
-*   **Dependency Tracing**: System logic flows are represented as dynamic visual links between modules.
-*   **Hotspot Detection**: Files with high change frequency (churn) or error rates are highlighted utilizing heatmap rendering.
+### 🏙️ Spatial Code Intelligence
+- **Complexity Mapping** — Building height = Lines of Code × Cyclomatic Complexity
+- **Dependency Tracing** — Glowing trace lines between imports/exports
+- **Hotspot Detection** — High-churn files erupt with 3D flame plumes (Flamegraph)
+- **Debt Swamp Topography** — Heavily indebted files sink below ground into fog
 
-### 2. Temporal Analysis
-*   **Git Replay Timeline**: Scrub through the project's commit history to watch the architecture grow and evolve over time.
-*   **Author Attribution**: Identify active contributors via 3D markers overlaid on the files they recently modified.
+### 🔬 Deep Inspection
+- **Architectural X-Ray** — Click a building to reveal its internal AST structure
+- **Blast Radius Analysis** — See exactly which files break if you change one module
+- **Actionable Infractions HUD** — Get specific refactoring commands (e.g., "God-Class Detected: Extract into sub-modules")
 
-### 3. Deep Inspection
-*   **File Metrics**: Click any building in the 3D space to view associated source code, exact LOC, and complexity metrics.
-*   **Universal Search**: Use the command palette to instantly jump the camera to any file, class, or function in the codebase.
+### 🔄 Refactoring Simulator
+- **Drag-and-Drop Dry Run** — Grab a building, move it to a different district, see if it fixes architectural drift *before writing code*
+- **Live Stability Score** — Real-time calculation of blast radius and encapsulation risks
+
+### ⏰ Time Travel
+- **Git Replay Timeline** — Scrub through commit history and watch the architecture grow
+- **Author Attribution** — See who modified which buildings recently
+
+### 🤖 AI Architect
+- **Natural Language Queries** — Ask "What are the most coupled modules?" and get instant visual answers
+- **MCP Server** — Connect to Claude, Cursor, or any MCP-compatible agent for AI-driven architecture analysis
+
+### 🔐 GitHub Integration
+- **OAuth Login** — Securely analyze private repositories
+- **1-Click Repo Select** — Browse and select from your GitHub repositories
+- **Ephemeral Parsing** — Source code is immediately deleted after analysis — zero persistence
 
 ---
 
-## Installation
+## Quick Start
 
-### Prerequisites
-*   Node.js (v18 or higher)
-*   Python (3.11 or higher)
-*   Git (required for temporal analysis features)
+### Option 1: Docker (Recommended)
 
-### Local Setup
-
-1. **Clone the repository**
 ```bash
 git clone https://github.com/YashwanthKamireddi/CodebaseCity.git
 cd CodebaseCity
+cp backend/.env.example backend/.env  # Add your GEMINI_API_KEY
+docker compose up
 ```
 
-2. **Initialize the Analysis Engine (Backend/Python)**
-Codebase City uses a FastAPI backend to parse Abstract Syntax Trees (ASTs) and Git history securely on your local machine.
+Open [http://localhost:5173](http://localhost:5173) → Enter any repo path → Explore your city.
+
+### Option 2: Manual Setup
+
+**Prerequisites:** Node.js 18+, Python 3.11+, Git
+
 ```bash
+# Backend
 cd backend
-python -m venv venv
-source venv/bin/activate  # Or `venv\Scripts\activate` on Windows
+python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-python -m uvicorn main:app --reload --port 8000 &
-```
+cp .env.example .env  # Add your GEMINI_API_KEY
+uvicorn main:app --reload --port 8000 &
 
-3. **Initialize the Visualization Client (Frontend/React)**
-```bash
+# Frontends
 cd ../frontend
 npm install
 npm run dev
 ```
 
-The application will now be available locally at `http://localhost:5173`.
+Open [http://localhost:5173](http://localhost:5173)
 
 ---
 
-## Usage
+## Architecture
 
-1. **Launch the Interface**: Navigate to `http://localhost:5173` in any modern web browser.
-2. **Analyze a Project**: Enter the absolute path to a local project directory (e.g., `/home/user/my_react_app`).
-3. **Exploration Controls**:
-   * `W`/`A`/`S`/`D`: Move Camera position
-   * `Q`/`E`: Rotate viewpoint
-   * `Mouse/Scroll`: Pan and Zoom
-   * `Left Click`: Inspect individual buildings/files
+```mermaid
+graph TB
+    subgraph Frontend ["Frontend (React + Three.js)"]
+        A[InstancedCity GPU Renderer] --> B[PulseMaterial Neon Shader]
+        C[Zustand Global Store] --> A
+        D[FloatingDock Controls] --> C
+        E[BuildingPanel Inspector] --> C
+        F[AI Architect Chat] --> C
+    end
+
+    subgraph Backend ["Backend (FastAPI + Python)"]
+        G[Analysis Engine] --> H[Tree-sitter AST Parser]
+        G --> I[NetworkX Graph Engine]
+        G --> J[Git History Analyzer]
+        K[Intelligence API] --> L[Impact Analyzer]
+        K --> M[Code Health Scanner]
+        K --> N[Refactoring Simulator]
+        O[MCP Server] --> K
+    end
+
+    C <-->|REST API| G
+    C <-->|WebSocket| K
+    F <-->|Gemini AI| P[Google Gemini API]
+```
 
 ---
 
-## Technical Architecture
+## Tech Stack
 
-Codebase City relies on a highly optimized, dual-stack architecture designed to handle enterprise-scale repositories.
+| Layer | Technology |
+|-------|-----------|
+| **3D Rendering** | Three.js, React Three Fiber, custom GLSL shaders |
+| **Frontend** | React 18, Zustand, Framer Motion, Lucide Icons |
+| **Backend** | FastAPI, Python 3.11, Uvicorn |
+| **Code Parsing** | Tree-sitter (Python, JS, TS grammars) |
+| **Graph Analysis** | NetworkX, Leiden Algorithm, KuzuDB |
+| **AI** | Google Gemini API |
+| **Deployment** | Vercel (frontend), Render (backend), Docker |
 
-*   **Frontend**: Built with **React** and **@react-three/fiber**. The 3D view utilizes GPU instancing (`THREE.InstancedMesh`) to render upwards of 10,000+ files in a single WebGL draw call, ensuring a consistent 60+ FPS during deep zoom and rotation.
-*   **Backend**: Built with **Python** and **FastAPI**. It leverages local AST parsers and the `git` CLI to safely analyze code structures without sending proprietary source code to external servers.
+---
+
+## Environment Variables
+
+### Backend (`backend/.env`)
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GEMINI_API_KEY` | ✅ | Google Gemini API key for AI features |
+| `GITHUB_CLIENT_ID` | Optional | GitHub OAuth app client ID |
+| `GITHUB_CLIENT_SECRET` | Optional | GitHub OAuth app client secret |
+| `JWT_SECRET` | Optional | JWT signing secret (auto-generated if unset) |
+
+---
+
+## Controls
+
+| Key | Action |
+|-----|--------|
+| **Click** | Select/inspect a building |
+| **Scroll** | Zoom in/out |
+| **Drag** | Orbit camera |
+| **Right-click drag** | Pan |
+| **⌘K** | Command palette (search files, commands) |
+| **L** | Toggle labels |
+| **D** | Toggle dependency roads |
+| **V** | Toggle table/3D view |
+| **Esc** | Clear selection |
 
 ---
 
 ## Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/YashwanthKamireddi/CodebaseCity/issues).
+Contributions are welcome! See our [contributing guide](CONTRIBUTING.md).
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
 ---
 
-## Intellectual Property & License
+## License
 
 **Codebase City** and its core 3D architectural rendering concepts are the intellectual property of **Yashwanth Kamireddi**.
 
 Copyright © 2026 **Yashwanth Kamireddi**. All Rights Reserved.
 
-This project is open-source and distributed under the MIT License. See `LICENSE` for more information. Contributors agree that their submissions become part of the project under the standard MIT License terms.
+This project is open-source and distributed under the [MIT License](LICENSE).

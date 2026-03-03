@@ -1,12 +1,15 @@
 import React, { useRef, useLayoutEffect, useMemo, useState } from 'react'
 import * as THREE from 'three'
-import { useFrame, extend } from '@react-three/fiber'
+import { useFrame, extend, useThree } from '@react-three/fiber'
+import { useDrag } from '@use-gesture/react'
 import useStore from '../../../store/useStore'
 import { PulseMaterial } from '../shaders/PulseMaterial'
 import { getBuildingColor } from '../../../utils/colorUtils'
 
 const tempObject = new THREE.Object3D()
 const tempColor = new THREE.Color()
+const planeNormal = new THREE.Vector3(0, 1, 0)
+const intersectPoint = new THREE.Vector3()
 
 /**
  * InstancedCity - High-Performance Building Renderer
@@ -24,10 +27,17 @@ export default function InstancedCity() {
         isAnimating,
         currentCommitIndex,
         activeIntelligencePanel,
-        impactAnalysis
+        impactAnalysis,
+        refactoringModeActive, applyRefactoringDrift, refactoringDrifts
     } = useStore()
     const meshRef = useRef()
     const materialRef = useRef()
+    const { camera, raycaster, pointer } = useThree()
+
+    // Drag State
+    const [draggedInstanceId, setDraggedInstanceId] = useState(null)
+    const [dragActive, setDragActive] = useState(false)
+    const dragPlane = useRef(new THREE.Plane(planeNormal, 0))
 
     // Expose Ref
     useLayoutEffect(() => {
@@ -67,7 +77,7 @@ export default function InstancedCity() {
 
         const animateGrowth = (now) => {
             const elapsed = now - startTime
-            const isQuick = isAnimating || currentCommitIndex !== -1
+            const isQuick = isAnimating || currentCommitIndex !== -1 || count > 500
             const progress = isQuick ? 1 : Math.min(elapsed / duration, 1)
 
             // Premium easing: exponential ease-out with slight bounce
@@ -166,22 +176,20 @@ export default function InstancedCity() {
             tempColor.set(colorHex)
             meshRef.current.setColorAt(i, tempColor)
 
-            // X-Ray transparent logic (hide selected building)
-            if (activeIntelligencePanel === 'xray' && isSelected) {
-                tempObject.position.set(b.position.x, -100, b.position.z) // hide underground
-                tempObject.scale.set(0.001, 0.001, 0.001)
-                tempObject.updateMatrix()
-                meshRef.current.setMatrixAt(i, tempObject.matrix)
-            } else {
-                // Restore normal position and scale (bypasses initial anim if interrupted, but acceptable)
-                const width = b.dimensions?.width || 8
-                const depth = b.dimensions?.depth || 8
-                const height = b.dimensions?.height || 8
-                tempObject.position.set(b.position.x, height / 2, b.position.z)
-                tempObject.scale.set(width, height, depth)
-                tempObject.updateMatrix()
-                meshRef.current.setMatrixAt(i, tempObject.matrix)
-            }
+            // Structural transform calculations (size / vertical layout)
+            const width = b.dimensions?.width || 8
+            const depth = b.dimensions?.depth || 8
+            const height = b.dimensions?.height || 8
+
+            // Swamp Topography Logic
+            // Files with extreme debt sink heavily into the ground (below y=0) into the foggy void.
+            const debt = b.metrics?.debt || 0
+            const swampOffset = (debt * debt) * -15.0 // Sink up to 15 units down
+
+            tempObject.position.set(b.position.x, (height / 2) + swampOffset, b.position.z)
+            tempObject.scale.set(width, height, depth)
+            tempObject.updateMatrix()
+            meshRef.current.setMatrixAt(i, tempObject.matrix)
         })
 
         if (meshRef.current.instanceColor) {
@@ -217,20 +225,114 @@ export default function InstancedCity() {
 
     const handleClick = (e) => {
         e.stopPropagation()
+        // Do not select if we just finished a drag
+        if (dragActive) return
+
         if (e.instanceId !== undefined) {
             selectBuilding(buildings[e.instanceId])
         }
     }
 
-    // Churn data for shader
+    // ═══════════════════════════════════════════════════════════════
+    // DRAG-AND-DROP REFACTORING ENGINE
+    // ═══════════════════════════════════════════════════════════════
+    const bindDrag = useDrag(({ active, movement: [mx, my], first, last, event }) => {
+        if (!refactoringModeActive) return
+
+        if (first && event.instanceId !== undefined) {
+            event.stopPropagation()
+            document.body.style.cursor = 'grabbing'
+            setDraggedInstanceId(event.instanceId)
+            setDragActive(true)
+
+            // Set the invisible drag plane to the height of the clicked building
+            const b = buildings[event.instanceId]
+            const height = b.dimensions?.height || 8
+            dragPlane.current.constant = -(height / 2) // Three.js uses -d for plane equation
+        }
+
+        if (active && draggedInstanceId !== null) {
+            // Unproject mouse coordinates to find intersection with the drag plane
+            raycaster.setFromCamera(pointer, camera)
+            raycaster.ray.intersectPlane(dragPlane.current, intersectPoint)
+
+            if (intersectPoint) {
+                // Update transformation matrix of ONLY the dragged building
+                const b = buildings[draggedInstanceId]
+                const width = b.dimensions?.width || 8
+                const depth = b.dimensions?.depth || 8
+                const height = b.dimensions?.height || 8
+
+                tempObject.position.copy(intersectPoint)
+                tempObject.scale.set(width, height, depth)
+                tempObject.updateMatrix()
+                meshRef.current.setMatrixAt(draggedInstanceId, tempObject.matrix)
+                meshRef.current.instanceMatrix.needsUpdate = true
+            }
+        }
+
+        if (last && draggedInstanceId !== null) {
+            document.body.style.cursor = 'auto'
+            setDragActive(false)
+
+            // Calculate which district we dropped it in
+            raycaster.setFromCamera(pointer, camera)
+
+            // NOTE: A robust implementation would raycast against the 'District' meshes here.
+            // For now, we update the position visually, but we need the backend / district layout
+            // bounds to definitively say "moved from District A to District B".
+
+            // Snap back for now, or keep position if registered
+            setDraggedInstanceId(null)
+
+            // Trigger reactivity to snap back
+            meshRef.current.instanceMatrix.needsUpdate = true
+        }
+    }, { filterTaps: true })
+
+    // Telemetry Heat data for shader (Normalized Churn/Commits)
     const churnAttribute = useMemo(() => {
         if (count === 0) return null
         const array = new Float32Array(count)
+
+        let maxCommits = 10 // Baseline
+        buildings.forEach(b => {
+            const commits = b.metrics?.commits || 0
+            if (commits > maxCommits) maxCommits = commits
+        })
+
         buildings.forEach((b, i) => {
-            array[i] = b.metrics?.churn || 0
+            const commits = b.metrics?.commits || 0
+            // Non-linear scaling to make hotspots stand out more rapidly
+            const normalized = Math.pow(commits / maxCommits, 2.0)
+            array[i] = normalized
         })
         return new THREE.InstancedBufferAttribute(array, 1)
     }, [buildings, count])
+
+    // X-Ray Semantic Ghosting data
+    const opacityAttribute = useMemo(() => {
+        if (count === 0) return null
+        const array = new Float32Array(count)
+        buildings.forEach((b, i) => {
+            let opacity = 0.95 // Default solid
+            if (activeIntelligencePanel === 'xray') {
+                const complexity = b.metrics?.complexity || 1
+                // High complexity stays solid (1.0). Boilerplate fades to faint glass (0.15)
+                if (b.id === selectedBuilding?.id) {
+                    opacity = 0.0 // Completely hide selected building to show internal AST nodes
+                } else if (complexity < 5) {
+                    opacity = 0.15 // Fades out simple files
+                } else if (complexity < 15) {
+                    opacity = 0.4  // Med complexity, semi-transparent
+                } else {
+                    opacity = 0.95 // High complexity blocks remain solid
+                }
+            }
+            array[i] = opacity
+        })
+        return new THREE.InstancedBufferAttribute(array, 1)
+    }, [buildings, count, activeIntelligencePanel, selectedBuilding])
 
     if (count === 0) return null
 
@@ -242,12 +344,19 @@ export default function InstancedCity() {
             onPointerMove={handlePointerMove}
             onPointerOut={handlePointerOut}
             onClick={handleClick}
+            {...(refactoringModeActive ? bindDrag() : {})}
         >
             <boxGeometry args={[1, 1, 1]}>
                 {churnAttribute && (
                     <instancedBufferAttribute
                         attach="attributes-aChurn" // Attach to geometry.attributes.aChurn
                         args={[churnAttribute.array, 1]}
+                    />
+                )}
+                {opacityAttribute && (
+                    <instancedBufferAttribute
+                        attach="attributes-aOpacityOverride"
+                        args={[opacityAttribute.array, 1]}
                     />
                 )}
             </boxGeometry>

@@ -39,7 +39,7 @@ export default function FileTable({ buildings = [], onSelectFile }) {
             health: BuildingModel.calculateHealth(b.metrics, b.decay_level),
             complexity: b.metrics?.complexity || 0,
             churn: b.metrics?.churn || 0,
-            loc: b.metrics?.loc || 0
+            coupling: b.metrics?.dependencies_in || 0
         }))
     }, [buildings])
 
@@ -131,7 +131,7 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                             <th onClick={() => handleSort('health')} className="sortable numeric">Health</th>
                             <th onClick={() => handleSort('complexity')} className="sortable numeric">Complexity</th>
                             <th onClick={() => handleSort('churn')} className="sortable numeric">Churn</th>
-                            <th onClick={() => handleSort('loc')} className="sortable numeric">LOC</th>
+                            <th onClick={() => handleSort('coupling')} className="sortable numeric">Coupling</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -179,7 +179,7 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                                         </div>
                                     </td>
                                     <td className="numeric" style={{ fontFamily: 'var(--font-mono)', opacity: 0.7 }}>
-                                        {file.loc}
+                                        {file.coupling}
                                     </td>
 
                                     <td className="actions">

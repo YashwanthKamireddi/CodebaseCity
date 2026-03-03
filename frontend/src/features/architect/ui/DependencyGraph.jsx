@@ -128,7 +128,7 @@ export default function DependencyGraph({ isOpen, onClose }) {
                 .strength(0.5))
             .force('charge', d3.forceManyBody().strength(-300))
             .force('center', d3.forceCenter(width / 2, height / 2))
-            .force('collision', d3.forceCollide().radius(d => Math.sqrt(d.loc) / 2 + 20))
+            .force('collision', d3.forceCollide().radius(d => Math.sqrt(d.complexity * 10) + 20))
 
         // Draw edges
         const links = g.append('g')
@@ -166,7 +166,7 @@ export default function DependencyGraph({ isOpen, onClose }) {
 
         // Node circles
         nodes.append('circle')
-            .attr('r', d => Math.max(8, Math.sqrt(d.loc) / 3))
+            .attr('r', d => Math.max(8, Math.sqrt(d.complexity * 10)))
             .attr('fill', d => languageColors[d.language] || languageColors.unknown)
             .attr('stroke', d => d.isHotspot ? '#ef4444' : 'rgba(255,255,255,0.2)')
             .attr('stroke-width', d => d.isHotspot ? 3 : 1)
@@ -176,7 +176,7 @@ export default function DependencyGraph({ isOpen, onClose }) {
         nodes.append('text')
             .text(d => d.name.length > 15 ? d.name.slice(0, 15) + '...' : d.name)
             .attr('x', 0)
-            .attr('y', d => Math.max(8, Math.sqrt(d.loc) / 3) + 14)
+            .attr('y', d => Math.max(8, Math.sqrt(d.complexity * 10)) + 14)
             .attr('text-anchor', 'middle')
             .attr('fill', 'rgba(255,255,255,0.7)')
             .attr('font-size', '10px')
@@ -195,11 +195,11 @@ export default function DependencyGraph({ isOpen, onClose }) {
 
         // Hover effects
         nodes
-            .on('mouseenter', function(event, d) {
+            .on('mouseenter', function (event, d) {
                 d3.select(this).select('circle')
                     .transition()
                     .duration(200)
-                    .attr('r', d => Math.max(10, Math.sqrt(d.loc) / 3 + 4))
+                    .attr('r', d => Math.max(10, Math.sqrt(d.complexity * 10) + 4))
 
                 // Highlight connected edges
                 links
@@ -212,11 +212,11 @@ export default function DependencyGraph({ isOpen, onClose }) {
                             ? 2
                             : 1)
             })
-            .on('mouseleave', function(event, d) {
+            .on('mouseleave', function (event, d) {
                 d3.select(this).select('circle')
                     .transition()
                     .duration(200)
-                    .attr('r', d => Math.max(8, Math.sqrt(d.loc) / 3))
+                    .attr('r', d => Math.max(8, Math.sqrt(d.complexity * 10)))
 
                 links
                     .attr('stroke', 'rgba(100, 150, 200, 0.3)')
@@ -399,11 +399,7 @@ export default function DependencyGraph({ isOpen, onClose }) {
                                     </span>
                                 </div>
                                 <div className="dg-detail-row">
-                                    <span>Lines of Code</span>
-                                    <span>{selectedNode.loc}</span>
-                                </div>
-                                <div className="dg-detail-row">
-                                    <span>Complexity</span>
+                                    <span>Cyclomatic Cost</span>
                                     <span className={selectedNode.complexity > 15 ? 'warning' : ''}>
                                         {selectedNode.complexity}
                                     </span>

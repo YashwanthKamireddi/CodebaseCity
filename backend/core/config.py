@@ -93,6 +93,16 @@ class Settings(BaseSettings):
     api_key_header: str = Field(default="X-API-Key", description="API key header name")
     trusted_hosts: List[str] = Field(default=["*"], description="Trusted hosts")
 
+    # ═══════════════════════════════════════════════════════════════════════════
+    # AUTHENTICATION (OAuth)
+    # ═══════════════════════════════════════════════════════════════════════════
+
+    github_client_id: Optional[str] = Field(default=None, description="GitHub OAuth App Client ID")
+    github_client_secret: Optional[str] = Field(default=None, description="GitHub OAuth App Client Secret")
+    jwt_secret: str = Field(default="dev-secret-change-in-prod-codebase-city", description="Secret key for signing JWTs")
+    jwt_algorithm: str = Field(default="HS256", description="Algorithm for signing JWTs")
+    jwt_expiration_hours: int = Field(default=24, description="JWT expiration in hours")
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

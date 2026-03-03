@@ -20,6 +20,7 @@ from parsing.intel import (
     RefactoringHelper,
     DependencyAnalyzer
 )
+from parsing.intel.simulator import RefactoringSimulator
 
 from ._helpers import city_to_parsed_files, load_city_from_cache, build_nx_graph
 
@@ -164,6 +165,38 @@ async def check_safe_delete(city_id: str, file_id: str):
     except Exception as e:
         logger.error(f"Safe delete check failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Safe delete check failed: {str(e)}")
+
+
+@router.post("/intelligence/simulate/{city_id}", tags=["Intelligence"])
+async def simulate_refactoring(city_id: str, request: Request):
+    """
+    Simulates the impact of architectural structural drifts (Drag-and-Drop file moves).
+    """
+    city = _require_city(city_id)
+
+    try:
+        body = await request.json()
+        drifts = body.get("drifts", [])
+
+        graph = build_nx_graph(city)
+        parsed_files = [{
+            'id': b.id,
+            'path': b.path,
+            'name': b.name,
+            'loc': b.metrics.loc
+        } for b in city.buildings]
+
+        simulator = RefactoringSimulator(graph, parsed_files)
+        result = simulator.simulate_drifts(drifts)
+
+        return {
+            "status": "success",
+            "city_id": city_id,
+            "simulation": result
+        }
+    except Exception as e:
+        logger.error(f"Simulation failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Simulation failed: {str(e)}")
 
 
 @router.get("/intelligence/critical-paths/{city_id}", tags=["Intelligence"])

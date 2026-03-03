@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import gsap from 'gsap'
@@ -7,6 +7,17 @@ import useStore from '../../../store/useStore'
 export default function CameraController() {
     const { camera, controls } = useThree()
     const { cityData, cityMeshRef, layoutMode } = useStore()
+
+    // Compute city bounding radius
+    const cityRadius = React.useMemo(() => {
+        if (!cityData?.buildings?.length) return 80
+        let maxR = 0
+        for (const b of cityData.buildings) {
+            const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
+            if (r > maxR) maxR = r
+        }
+        return Math.max(40, maxR * 0.7)
+    }, [cityData])
 
     useEffect(() => {
         const handleFlyTo = (event) => {
@@ -124,7 +135,7 @@ export default function CameraController() {
         } else if (type === 'FIT' || type === 'RESET') {
             gsap.to(camera.position, {
                 duration: 1.0,
-                x: 80, y: 50, z: 80,
+                x: cityRadius * 1.2, y: cityRadius * 0.8, z: cityRadius * 1.2,
                 ease: 'power2.inOut'
             })
             gsap.to(controls.target, {

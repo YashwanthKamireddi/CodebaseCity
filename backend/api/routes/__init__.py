@@ -12,6 +12,7 @@ from .files import router as files_router
 from .graph import router as graph_router
 from .chat import router as chat_router
 from .mcp import router as mcp_router
+from .auth import router as auth_router
 
 # Aggregate router that includes all domain routers
 router = APIRouter()
@@ -23,3 +24,4 @@ router.include_router(files_router)
 router.include_router(graph_router)
 router.include_router(chat_router)
 router.include_router(mcp_router)
+router.include_router(auth_router, prefix="/auth")

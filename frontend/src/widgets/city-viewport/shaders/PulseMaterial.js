@@ -19,6 +19,7 @@ const PulseMaterial = shaderMaterial(
   // ════════════════════════════════════════════════════════════════════
   `
     attribute float aChurn;
+    attribute float aOpacityOverride;
 
     varying vec2 vUv;
     varying vec3 vPosition;
@@ -31,6 +32,7 @@ const PulseMaterial = shaderMaterial(
     varying float vChurn;
     varying vec3 vScale;
     varying float vHeight;
+    varying float vOpacityOverride;
 
     void main() {
       vUv = uv;
@@ -40,6 +42,7 @@ const PulseMaterial = shaderMaterial(
       vNormal = normalize(normalMatrix * normal);
       vColor = instanceColor;
       vChurn = aChurn;
+      vOpacityOverride = aOpacityOverride;
 
       // Extract scale from instance matrix for architectural proportions
       vScale = vec3(
@@ -76,6 +79,7 @@ const PulseMaterial = shaderMaterial(
     varying float vChurn;
     varying vec3 vScale;
     varying float vHeight;
+    varying float vOpacityOverride;
 
     void main() {
       bool isSide = abs(vLocalNormal.y) < 0.5;
@@ -166,18 +170,39 @@ const PulseMaterial = shaderMaterial(
           finalColor = vec3(0.0);
       }
 
-      // ── Hotspot Churn Highlight ──
-      if (vChurn > 2.0) {
-          float pulse = sin(uTime * 3.0) * 0.5 + 0.5;
-          vec3 hotColor = vec3(1.0, 0.2, 0.4);
+      // ── Live Telemetry Flamegraph ──
+      // vChurn is normalized 0.0 to 1.0 (squared curve for extreme outliers)
+      if (vChurn > 0.2) {
+          // Heat rises: intense at the top (+0.5), dissipating towards the bottom (-0.5)
+          float heightHeat = smoothstep(-0.2, 0.5, vLocalPosition.y);
+          float intensity = vChurn * heightHeat;
 
-          // Flash the whole building strongly
-          float intensity = min(vChurn, 10.0) / 10.0;
-          finalColor += hotColor * pulse * intensity;
+          // Flame gradient: from dark plasma orange to white-hot core
+          vec3 flameColor = mix(vec3(1.0, 0.2, 0.0), vec3(1.0, 0.9, 0.7), intensity);
+
+          // Wild kinetic flicker effect
+          float flicker = sin(uTime * 12.0 + vWorldPosition.x * 2.0) * 0.15 + 0.85;
+
+          finalColor = mix(finalColor, flameColor, intensity * 0.5); // Overpower base
+          finalColor += flameColor * intensity * flicker * 3.5;       // Intense bloom additive
+
+          // Roof erupts with extreme heat
+          if (isTop) {
+              finalColor += vec3(1.0, 0.95, 0.8) * vChurn * 5.0 * flicker;
+          }
+      }
+
+      // ── X-Ray Semantic Ghosting ──
+      float finalOpacity = vOpacityOverride > 0.0 ? vOpacityOverride : 0.95;
+
+      // X-Ray targets become faint glass, retaining neon edges but losing solid core
+      if (finalOpacity < 0.5) {
+          finalColor = mix(finalColor, vec3(0.0), 0.8); // Drop the solid core
+          finalColor += neonColor * outerEdge * 0.3;    // Keep faint glowing edges for structure
       }
 
       // Add solid opacity so depthWrite actually occludes background items
-      gl_FragColor = vec4(finalColor, 0.95);
+      gl_FragColor = vec4(finalColor, finalOpacity);
     }
   `
 )

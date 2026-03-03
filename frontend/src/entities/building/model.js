@@ -13,13 +13,13 @@ export const BuildingModel = {
     calculateHealth: (metrics, decay = 0) => {
         if (!metrics) return 100
 
-        const { complexity = 0, loc = 0 } = metrics
+        const { complexity = 0, dependencies_in = 0 } = metrics
         let health = 100
 
-        // Penalties
-        health -= Math.min(30, complexity * 1.5)           // Complexity penalty
-        health -= Math.min(30, decay * 30)                 // Age/Decay penalty
-        health -= Math.min(20, Math.log10(loc + 1) * 5)    // Size penalty
+        // Architectural Risk Penalties (ARM)
+        health -= Math.min(40, complexity * 2.0)           // Severe Complexity penalty
+        health -= Math.min(25, decay * 30)                 // Age/Decay penalty
+        health -= Math.min(25, dependencies_in * 3.0)      // Coupling / Blast Radius penalty
 
         return Math.max(0, Math.round(health))
     },

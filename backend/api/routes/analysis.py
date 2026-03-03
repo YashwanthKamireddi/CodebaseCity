@@ -3,13 +3,16 @@ Analysis Routes
 Codebase analysis, city generation, and cache management endpoints.
 """
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Depends, Header
 import os
 import json
+from typing import Optional
+import jwt
 
 from utils.limiter import limiter
 from utils.cache import city_cache
 from utils.logger import get_logger
+from core.config import settings
 
 from api.models import AnalyzeRequest, CityData
 
@@ -30,7 +33,11 @@ search_engine = CodeSearchEngine()
 
 @router.post("/analyze", response_model=CityData, tags=["Analysis"])
 @limiter.limit("5/minute")
-async def analyze_codebase(request: Request, body: AnalyzeRequest):
+async def analyze_codebase(
+    request: Request,
+    body: AnalyzeRequest,
+    authorization: Optional[str] = Header(None)
+):
     """
     Analyze a codebase and return city data.
 
@@ -39,8 +46,18 @@ async def analyze_codebase(request: Request, body: AnalyzeRequest):
     - GitHub URLs (e.g., https://github.com/owner/repo)
     - GitHub shorthand (e.g., owner/repo)
 
+    If the Authorization header contains a valid JWT, passes the embedded github_token to access private repos.
     Returns a complete city representation with buildings, districts, and roads.
     """
+    github_token = None
+    if authorization and authorization.startswith("Bearer "):
+        token = authorization.split(" ")[1]
+        try:
+            payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
+            github_token = payload.get("github_token")
+        except Exception as e:
+            logger.warning(f"Invalid or expired JWT provided during analysis: {e}")
+
     try:
         path, is_github, repo_name = GitService.parse_url(body.path)
         cache_key = get_cache_key(path, is_github, repo_name)
@@ -75,11 +92,21 @@ async def analyze_codebase(request: Request, body: AnalyzeRequest):
 
         # 3. Perform Analysis
         if is_github:
-            path = GitService.clone_repo(path, repo_name)
-            logger.info(f"Analyzing GitHub repo: {repo_name}")
+            path = GitService.clone_repo(path, repo_name, github_token=github_token)
+            logger.info(f"Analyzing GitHub repo: {repo_name} (Authenticated: {bool(github_token)})")
             city_data = await analyzer.analyze(path, body.max_files)
             city_data.name = repo_name
             city_data.path = path
+
+            # Ephemeral Garbage Collection for Enterprise Security Phase 2
+            # Immediately delete the source code from the container after extracting the geometry context
+            try:
+                import shutil
+                shutil.rmtree(path)
+                logger.info(f"Ephemeral Parsing Complete: Purged source code for {repo_name}")
+            except Exception as e:
+                logger.error(f"Failed to purge ephemeral source code for {repo_name}: {e}")
+
         else:
             if not os.path.exists(path):
                 raise HTTPException(status_code=404, detail=f"Path not found: {body.path}")

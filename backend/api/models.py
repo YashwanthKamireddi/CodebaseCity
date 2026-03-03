@@ -89,6 +89,8 @@ class BuildingMetrics(BaseModel):
     dependencies_in: int = Field(default=0, ge=0, description="Incoming dependencies")
     dependencies_out: int = Field(default=0, ge=0, description="Outgoing dependencies")
     size_bytes: int = Field(default=0, ge=0, description="File size in bytes")
+    coverage: float = Field(default=80.0, ge=0.0, le=100.0, description="Simulated test coverage percentage")
+    debt: float = Field(default=0.0, ge=0.0, le=1.0, description="Technical debt ratio (0-1)")
 
 
 class Building(BaseModel):

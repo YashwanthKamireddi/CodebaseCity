@@ -38,6 +38,9 @@ import './features/FloatingDock.css'
 import { useVSCodeSync } from './hooks/useVSCodeSync'
 import useStore from './store/useStore'
 import CodeViewer from './entities/building/ui/CodeViewer'
+import DragModeHUD from './widgets/layout/ui/DragModeHUD'
+import ExplorationMode from './widgets/city-viewport/ui/ExplorationMode'
+import ExplorationHUD from './widgets/layout/ui/ExplorationHUD'
 
 // Design tokens
 import './styles/design-tokens.css'
@@ -45,11 +48,17 @@ import './styles/ProfessionalUI.css'
 import './App.css'
 
 import CodePage from './features/explorer/ui/CodePage'
+import AuthCallback from './features/onboarding/ui/AuthCallback'
 
 function App() {
     // Simple Client-Side Routing for Standalone Code View
     if (window.location.pathname === '/code') {
         return <CodePage />
+    }
+
+    // Auth Callback Route
+    if (window.location.pathname === '/auth/callback') {
+        return <AuthCallback />
     }
 
     const {
@@ -62,13 +71,24 @@ function App() {
         vscodeConnected,
         selectBuilding,
         activeIntelligencePanel,
-        error
+        error,
+        refactoringModeActive,
+        codeViewerOpen,
+        setCodeViewerOpen,
+        explorationMode,
+        setExplorationMode,
+        toggleExplorationMode,
+        isLandingOverlayActive
     } = useStore()
 
     const [sidebarOpen, setSidebarOpen] = useState(true)
     const [view, setView] = useState('3d') // '3d' or 'table'
     const [showDependencyGraph, setShowDependencyGraph] = useState(false)
     const [showExportReport, setShowExportReport] = useState(false)
+
+    // Mobile performance detection
+    const isMobile = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0
+    const dprRange = isMobile ? [0.75, 1] : [1, 1.5]
     const { analyzeModalOpen, setAnalyzeModalOpen } = useStore()
 
     // DEBUG: Trace loading state
@@ -99,15 +119,27 @@ function App() {
 
     useEffect(() => {
         const handleKeyDown = (e) => {
+            // Block hotkeys on the landing page
+            const state = useStore.getState()
+            if (state.isLandingOverlayActive) return;
             // Skip if in input
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
                 if (e.key === 'Escape') e.target.blur()
                 return
             }
 
+            // Ctrl+K / Cmd+K for command palette
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault()
+                document.querySelector('[data-command-palette-trigger]')?.click()
+                return
+            }
+
             switch (e.key.toLowerCase()) {
                 case 'escape':
-                    if (isAnimating) {
+                    if (explorationMode) {
+                        setExplorationMode(false)
+                    } else if (isAnimating) {
                         stopTimeTravel()
                     } else {
                         clearSelection()
@@ -116,6 +148,9 @@ function App() {
                 case '/':
                     e.preventDefault()
                     document.querySelector('input[placeholder*="Search"]')?.focus()
+                    break
+                case 'f':
+                    if (cityData) toggleExplorationMode()
                     break
                 case 'l':
                     toggleLabels()
@@ -133,7 +168,7 @@ function App() {
 
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [clearSelection, toggleLabels, toggleRoads, isAnimating, stopTimeTravel])
+    }, [clearSelection, toggleLabels, toggleRoads, isAnimating, stopTimeTravel, explorationMode, setExplorationMode, toggleExplorationMode, cityData])
 
     return (
         <div className="app-layout">
@@ -149,13 +184,13 @@ function App() {
                 <div className="canvas-wrapper">
                     {view === '3d' ? (
                         <>
-                            {/* 3D View */}
+                            {/* 3D View — ALWAYS rendered (demo city loads for landing page) */}
                             <CanvasErrorBoundary>
                                 <Canvas
-                                    shadows
-                                    dpr={[1, 1.5]}
+                                    shadows={!isMobile}
+                                    dpr={dprRange}
                                     gl={{
-                                        antialias: true,
+                                        antialias: !isMobile,
                                         alpha: false,
                                         powerPreference: 'high-performance',
                                         stencil: false,
@@ -166,23 +201,31 @@ function App() {
                                         makeDefault
                                         position={[80, 50, 80]}
                                         fov={45}
-                                        near={0.1} // FIX: Prevent clipping when close
-                                        far={3000} // Expanded render distance
+                                        near={0.1}
+                                        far={3000}
                                     />
 
-                                    <OrbitControls
-                                        makeDefault
-                                        enablePan={true}
-                                        enableZoom={true}
-                                        enableRotate={true}
-                                        minDistance={1} // Allow extreme close-ups
-                                        maxDistance={2500}
-                                        // Constrain to hemisphere (0 to PI/2)
-                                        maxPolarAngle={Math.PI / 2}
-                                        minPolarAngle={0}
-                                        dampingFactor={0.08}
-                                        enableDamping={true}
-                                        target={[0, 0, 0]}
+                                    {/* Camera Controls: Orbit (default) or Exploration (first-person flight) */}
+                                    {!explorationMode && (
+                                        <OrbitControls
+                                            makeDefault
+                                            enablePan={true}
+                                            enableZoom={true}
+                                            enableRotate={true}
+                                            minDistance={1}
+                                            maxDistance={2500}
+                                            maxPolarAngle={Math.PI / 2}
+                                            minPolarAngle={0}
+                                            dampingFactor={0.08}
+                                            enableDamping={true}
+                                            autoRotate={!cityData || !selectedBuilding} // Auto-rotate on landing
+                                            autoRotateSpeed={0.5}
+                                            target={[0, 0, 0]}
+                                        />
+                                    )}
+                                    <ExplorationMode
+                                        active={explorationMode}
+                                        onExit={() => setExplorationMode(false)}
                                     />
 
                                     <Suspense fallback={null}>
@@ -191,11 +234,6 @@ function App() {
                                     </Suspense>
                                 </Canvas>
                             </CanvasErrorBoundary>
-
-                            {/* 3D-only Overlays */}
-                            {/* Compass/Legend removed as requested */}
-
-
                         </>
                     ) : (
                         /* Table View */
@@ -210,14 +248,16 @@ function App() {
                                 buildings={cityData?.buildings || []}
                                 onSelectFile={(file) => {
                                     selectBuilding(file)
-                                    // Keep in table view but show panel
                                 }}
                             />
                         </div>
                     )}
 
-                    {/* Common Overlays - ONLY SHOW IF PROJECT LOADED */}
-                    {cityData ? (
+                    {/* Landing Page Hero Overlay — shown when no user-analyzed city is loaded */}
+                    <EmptyCityHero />
+
+                    {/* Common Overlays - ONLY SHOW IF PROJECT LOADED AND LANDING DISMISSED */}
+                    {cityData && !isLandingOverlayActive && (
                         <>
                             {/* Floating Navigation Dock - World Class UX */}
                             <FloatingDock
@@ -239,20 +279,26 @@ function App() {
                             {view === '3d' && <CanvasUI />}
                             <ChatInterface />
                             {/* ROOT LEVEL CODE VIEWER */}
-                            {useStore.getState().codeViewerOpen && selectedBuilding && (
+                            {codeViewerOpen && selectedBuilding && (
                                 <CodeViewer
                                     building={selectedBuilding}
-                                    onClose={() => useStore.getState().setCodeViewerOpen(false)}
+                                    onClose={() => setCodeViewerOpen(false)}
                                 />
                             )}
+
+                            {/* REFACTORING SIMULATOR HUD */}
+                            {refactoringModeActive && (
+                                <DragModeHUD />
+                            )}
+
+                            {/* EXPLORATION MODE HUD */}
+                            <ExplorationHUD />
                         </>
-                    ) : (
-                        view === '3d' && <EmptyCityHero />
                     )}
                 </div>
             </div>
 
-            {cityData && <Sidebar />}
+            {cityData && !isLandingOverlayActive && <Sidebar />}
 
             {/* Intelligence Dashboard */}
             {cityData && activeIntelligencePanel && (

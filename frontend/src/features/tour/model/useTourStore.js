@@ -27,7 +27,7 @@ export const useTourStore = create((set, get) => ({
             waypoints.push({
                 position: [tallest.position.x + 40, tallest.dimensions.height + 40, tallest.position.z + 40],
                 target: [tallest.position.x, tallest.dimensions.height/2, tallest.position.z],
-                text: `This is ${tallest.name}, the tallest structure in the city. Height represents lines of code or complexity.`,
+                text: `This is ${tallest.name}, the tallest structure in the city. Height represents Cyclomatic Complexity and structural risk.`,
                 duration: 6000
             })
         }

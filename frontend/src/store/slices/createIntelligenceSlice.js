@@ -119,6 +119,11 @@ export const createIntelligenceSlice = (set, get) => ({
         const { cityId } = get()
         if (!cityId || !fileId) return
 
+        if (cityId.startsWith('demo_')) {
+            set({ impactAnalysis: { file_id: fileId, levels: { level_1: [], level_2: [], level_3: [] } } })
+            return
+        }
+
         set(state => ({
             intelligenceLoading: { ...state.intelligenceLoading, impact: true }
         }))

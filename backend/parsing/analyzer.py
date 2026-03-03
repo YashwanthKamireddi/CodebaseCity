@@ -69,15 +69,20 @@ class CodebaseAnalyzer:
             pos = context.layout['positions'].get(pf['id'], {'x': 0, 'y': 0, 'z': 0})
             cluster_id = context.layout['file_clusters'].get(pf['id'], 'default')
 
-            # Visual Dimensions
-            width = max(2, min(10, pf['loc'] / 100))
-            height = max(1, min(25, pf['complexity'] * 0.8))
-            depth = max(2, min(10, pf['loc'] / 100))
-
             # Graph Metrics
             g = context.graph
             deps_in = g.in_degree(pf['id']) if g.has_node(pf['id']) else 0
             deps_out = g.out_degree(pf['id']) if g.has_node(pf['id']) else 0
+
+            # ARM Visual Dimensions (Architectural Risk Metric)
+            # 1. Height = Cyclomatic Complexity (log-scaled, capped for readability)
+            import math
+            height = max(2, min(40, 3 + 8 * math.log2(1 + pf['complexity'])))
+
+            # 2. Width/Girth = Centrality (log-scaled, capped to prevent overlap)
+            girth = max(3, min(12, 3 + math.log2(1 + deps_in) * 3))
+            width = girth
+            depth = girth
 
             buildings.append(Building(
                 id=pf['id'],

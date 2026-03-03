@@ -1,0 +1,5416 @@
+{
+  "id": "demo_react_app",
+  "name": "Codebase City Engine DEMO",
+  "path": "demo/react-starter",
+  "status": "ready",
+  "git_metadata": {
+    "branch": "main",
+    "last_commit": "abcdef1234567890",
+    "commit_msg": "Initial demo city commit"
+  },
+  "buildings": [
+    {
+      "id": "b_1",
+      "name": "Module_b_1.ja",
+      "path": "src/core/auth/Module_b_1.ja",
+      "district_id": "src/core/auth",
+      "position": {
+        "x": -13.004239774776567,
+        "y": 0,
+        "z": -0.1196330186802399
+      },
+      "dimensions": {
+        "width": 10.754887502163468,
+        "height": 29.575424759098897,
+        "depth": 10.754887502163468
+      },
+      "metrics": {
+        "loc": 1339,
+        "complexity": 9,
+        "churn": 35,
+        "age_days": 601,
+        "dependencies_in": 5,
+        "dependencies_out": 5,
+        "size_bytes": 4084
+      },
+      "language": "javascript",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_2",
+      "name": "Module_b_2.ja",
+      "path": "src/core/auth/Module_b_2.ja",
+      "district_id": "src/core/auth",
+      "position": {
+        "x": 7.279292198948866,
+        "y": 0,
+        "z": 6.046609909827083
+      },
+      "dimensions": {
+        "width": 9.0,
+        "height": 40,
+        "depth": 9.0
+      },
+      "metrics": {
+        "loc": 506,
+        "complexity": 25,
+        "churn": 100,
+        "age_days": 70,
+        "dependencies_in": 3,
+        "dependencies_out": 2,
+        "size_bytes": 36704
+      },
+      "language": "javascript",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_3",
+      "name": "Module_b_3.ja",
+      "path": "src/core/auth/Module_b_3.ja",
+      "district_id": "src/core/auth",
+      "position": {
+        "x": -14.329400669492808,
+        "y": 0,
+        "z": -3.1723466541173355
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1163,
+        "complexity": 31,
+        "churn": 10,
+        "age_days": 350,
+        "dependencies_in": 14,
+        "dependencies_out": 7,
+        "size_bytes": 30848
+      },
+      "language": "javascript",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_4",
+      "name": "Module_b_4.ja",
+      "path": "src/core/auth/Module_b_4.ja",
+      "district_id": "src/core/auth",
+      "position": {
+        "x": -2.930321113543892,
+        "y": 0,
+        "z": -13.537081422153637
+      },
+      "dimensions": {
+        "width": 11.422064766172813,
+        "height": 38.67545294909838,
+        "depth": 11.422064766172813
+      },
+      "metrics": {
+        "loc": 1335,
+        "complexity": 21,
+        "churn": 37,
+        "age_days": 429,
+        "dependencies_in": 6,
+        "dependencies_out": 0,
+        "size_bytes": 49041
+      },
+      "language": "javascript",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_5",
+      "name": "Module_b_5.ja",
+      "path": "src/core/auth/Module_b_5.ja",
+      "district_id": "src/core/auth",
+      "position": {
+        "x": -13.650608819218299,
+        "y": 0,
+        "z": 6.918244623704673
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 58,
+        "complexity": 33,
+        "churn": 89,
+        "age_days": 193,
+        "dependencies_in": 13,
+        "dependencies_out": 8,
+        "size_bytes": 46939
+      },
+      "language": "javascript",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_6",
+      "name": "Module_b_6.ja",
+      "path": "src/core/auth/Module_b_6.ja",
+      "district_id": "src/core/auth",
+      "position": {
+        "x": 4.221606186207179,
+        "y": 0,
+        "z": -3.9649419252089864
+      },
+      "dimensions": {
+        "width": 6.0,
+        "height": 39.67970000576925,
+        "depth": 6.0
+      },
+      "metrics": {
+        "loc": 723,
+        "complexity": 23,
+        "churn": 21,
+        "age_days": 716,
+        "dependencies_in": 1,
+        "dependencies_out": 4,
+        "size_bytes": 39840
+      },
+      "language": "javascript",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_7",
+      "name": "Module_b_7.go",
+      "path": "src/core/db/Module_b_7.go",
+      "district_id": "src/core/db",
+      "position": {
+        "x": -35.15933637731132,
+        "y": 0,
+        "z": 46.21353780850341
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1240,
+        "complexity": 35,
+        "churn": 99,
+        "age_days": 650,
+        "dependencies_in": 13,
+        "dependencies_out": 2,
+        "size_bytes": 33908
+      },
+      "language": "go",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_8",
+      "name": "Module_b_8.go",
+      "path": "src/core/db/Module_b_8.go",
+      "district_id": "src/core/db",
+      "position": {
+        "x": -53.278910957928886,
+        "y": 0,
+        "z": 43.19416033057915
+      },
+      "dimensions": {
+        "width": 6.0,
+        "height": 37.5754247590989,
+        "depth": 6.0
+      },
+      "metrics": {
+        "loc": 350,
+        "complexity": 19,
+        "churn": 24,
+        "age_days": 503,
+        "dependencies_in": 1,
+        "dependencies_out": 8,
+        "size_bytes": 17953
+      },
+      "language": "go",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_9",
+      "name": "Module_b_9.go",
+      "path": "src/core/db/Module_b_9.go",
+      "district_id": "src/core/db",
+      "position": {
+        "x": -36.77571333851016,
+        "y": 0,
+        "z": 59.7792046232207
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 534,
+        "complexity": 45,
+        "churn": 77,
+        "age_days": 734,
+        "dependencies_in": 14,
+        "dependencies_out": 3,
+        "size_bytes": 46279
+      },
+      "language": "go",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_10",
+      "name": "Module_b_10.go",
+      "path": "src/core/db/Module_b_10.go",
+      "district_id": "src/core/db",
+      "position": {
+        "x": -61.84069699941414,
+        "y": 0,
+        "z": 57.70900111229773
+      },
+      "dimensions": {
+        "width": 10.754887502163468,
+        "height": 21.575424759098897,
+        "depth": 10.754887502163468
+      },
+      "metrics": {
+        "loc": 1156,
+        "complexity": 4,
+        "churn": 46,
+        "age_days": 619,
+        "dependencies_in": 5,
+        "dependencies_out": 5,
+        "size_bytes": 20667
+      },
+      "language": "go",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_11",
+      "name": "Module_b_11.go",
+      "path": "src/core/db/Module_b_11.go",
+      "district_id": "src/core/db",
+      "position": {
+        "x": -54.344772545200904,
+        "y": 0,
+        "z": 49.42890169915573
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1420,
+        "complexity": 43,
+        "churn": 15,
+        "age_days": 121,
+        "dependencies_in": 15,
+        "dependencies_out": 3,
+        "size_bytes": 3199
+      },
+      "language": "go",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_12",
+      "name": "Module_b_12.go",
+      "path": "src/core/db/Module_b_12.go",
+      "district_id": "src/core/db",
+      "position": {
+        "x": -58.20134966466131,
+        "y": 0,
+        "z": 46.81881114928534
+      },
+      "dimensions": {
+        "width": 3,
+        "height": 28.359400011538497,
+        "depth": 3
+      },
+      "metrics": {
+        "loc": 196,
+        "complexity": 8,
+        "churn": 98,
+        "age_days": 985,
+        "dependencies_in": 0,
+        "dependencies_out": 3,
+        "size_bytes": 48530
+      },
+      "language": "go",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_13",
+      "name": "Module_b_13.go",
+      "path": "src/core/db/Module_b_13.go",
+      "district_id": "src/core/db",
+      "position": {
+        "x": -41.19666918371253,
+        "y": 0,
+        "z": 48.25795747613631
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1337,
+        "complexity": 49,
+        "churn": 37,
+        "age_days": 198,
+        "dependencies_in": 13,
+        "dependencies_out": 4,
+        "size_bytes": 48354
+      },
+      "language": "go",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_14",
+      "name": "Module_b_14.go",
+      "path": "src/core/db/Module_b_14.go",
+      "district_id": "src/core/db",
+      "position": {
+        "x": -62.34731506011663,
+        "y": 0,
+        "z": 55.5271587759411
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1289,
+        "complexity": 25,
+        "churn": 70,
+        "age_days": 884,
+        "dependencies_in": 8,
+        "dependencies_out": 2,
+        "size_bytes": 19492
+      },
+      "language": "go",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_15",
+      "name": "Module_b_15.go",
+      "path": "src/core/db/Module_b_15.go",
+      "district_id": "src/core/db",
+      "position": {
+        "x": -42.038014234127616,
+        "y": 0,
+        "z": 32.0405332407632
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1416,
+        "complexity": 24,
+        "churn": 42,
+        "age_days": 38,
+        "dependencies_in": 11,
+        "dependencies_out": 1,
+        "size_bytes": 48760
+      },
+      "language": "go",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_16",
+      "name": "Module_b_16.go",
+      "path": "src/core/db/Module_b_16.go",
+      "district_id": "src/core/db",
+      "position": {
+        "x": -56.25727683835871,
+        "y": 0,
+        "z": 46.923202008819025
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 31.67970000576925,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1146,
+        "complexity": 11,
+        "churn": 4,
+        "age_days": 555,
+        "dependencies_in": 9,
+        "dependencies_out": 6,
+        "size_bytes": 3136
+      },
+      "language": "go",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_17",
+      "name": "Module_b_17.go",
+      "path": "src/core/db/Module_b_17.go",
+      "district_id": "src/core/db",
+      "position": {
+        "x": -57.09593998464873,
+        "y": 0,
+        "z": 40.67110923206084
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 19.0,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 268,
+        "complexity": 3,
+        "churn": 69,
+        "age_days": 421,
+        "dependencies_in": 15,
+        "dependencies_out": 5,
+        "size_bytes": 41528
+      },
+      "language": "go",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_18",
+      "name": "Module_b_18.go",
+      "path": "src/core/db/Module_b_18.go",
+      "district_id": "src/core/db",
+      "position": {
+        "x": -55.66755254950918,
+        "y": 0,
+        "z": 31.894132571742524
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1202,
+        "complexity": 39,
+        "churn": 59,
+        "age_days": 436,
+        "dependencies_in": 15,
+        "dependencies_out": 6,
+        "size_bytes": 40767
+      },
+      "language": "go",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_19",
+      "name": "Module_b_19.go",
+      "path": "src/core/network/Module_b_19.go",
+      "district_id": "src/core/network",
+      "position": {
+        "x": 9.183875174152387,
+        "y": 0,
+        "z": -89.87150729585923
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 27.0,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 690,
+        "complexity": 7,
+        "churn": 64,
+        "age_days": 717,
+        "dependencies_in": 10,
+        "dependencies_out": 5,
+        "size_bytes": 36095
+      },
+      "language": "go",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_20",
+      "name": "Module_b_20.go",
+      "path": "src/core/network/Module_b_20.go",
+      "district_id": "src/core/network",
+      "position": {
+        "x": -0.6292061938126032,
+        "y": 0,
+        "z": -104.7085299054872
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 623,
+        "complexity": 42,
+        "churn": 81,
+        "age_days": 760,
+        "dependencies_in": 12,
+        "dependencies_out": 3,
+        "size_bytes": 15737
+      },
+      "language": "go",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_21",
+      "name": "Module_b_21.go",
+      "path": "src/core/network/Module_b_21.go",
+      "district_id": "src/core/network",
+      "position": {
+        "x": 20.14288510688361,
+        "y": 0,
+        "z": -80.44951434707173
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 314,
+        "complexity": 26,
+        "churn": 31,
+        "age_days": 923,
+        "dependencies_in": 7,
+        "dependencies_out": 3,
+        "size_bytes": 14930
+      },
+      "language": "go",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_22",
+      "name": "Module_b_22.go",
+      "path": "src/core/network/Module_b_22.go",
+      "district_id": "src/core/network",
+      "position": {
+        "x": 11.111271325986515,
+        "y": 0,
+        "z": -109.37625020606369
+      },
+      "dimensions": {
+        "width": 3,
+        "height": 30.67545294909838,
+        "depth": 3
+      },
+      "metrics": {
+        "loc": 1130,
+        "complexity": 10,
+        "churn": 75,
+        "age_days": 294,
+        "dependencies_in": 0,
+        "dependencies_out": 1,
+        "size_bytes": 19045
+      },
+      "language": "go",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_23",
+      "name": "Module_b_23.go",
+      "path": "src/core/network/Module_b_23.go",
+      "district_id": "src/core/network",
+      "position": {
+        "x": 15.281263098741622,
+        "y": 0,
+        "z": -96.34648389951883
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 21.575424759098897,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 333,
+        "complexity": 4,
+        "churn": 57,
+        "age_days": 850,
+        "dependencies_in": 9,
+        "dependencies_out": 6,
+        "size_bytes": 9973
+      },
+      "language": "go",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_24",
+      "name": "Module_b_24.go",
+      "path": "src/core/network/Module_b_24.go",
+      "district_id": "src/core/network",
+      "position": {
+        "x": 13.443664147423327,
+        "y": 0,
+        "z": -96.43919694582993
+      },
+      "dimensions": {
+        "width": 9.965784284662087,
+        "height": 40,
+        "depth": 9.965784284662087
+      },
+      "metrics": {
+        "loc": 934,
+        "complexity": 32,
+        "churn": 72,
+        "age_days": 744,
+        "dependencies_in": 4,
+        "dependencies_out": 0,
+        "size_bytes": 28510
+      },
+      "language": "go",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_25",
+      "name": "Module_b_25.go",
+      "path": "src/core/network/Module_b_25.go",
+      "district_id": "src/core/network",
+      "position": {
+        "x": 11.985120228178559,
+        "y": 0,
+        "z": -96.25657399457188
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 549,
+        "complexity": 48,
+        "churn": 93,
+        "age_days": 655,
+        "dependencies_in": 8,
+        "dependencies_out": 5,
+        "size_bytes": 13918
+      },
+      "language": "go",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_26",
+      "name": "Module_b_26.go",
+      "path": "src/core/network/Module_b_26.go",
+      "district_id": "src/core/network",
+      "position": {
+        "x": 21.95213334836177,
+        "y": 0,
+        "z": -87.05902106842795
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 29.575424759098897,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 641,
+        "complexity": 9,
+        "churn": 46,
+        "age_days": 369,
+        "dependencies_in": 10,
+        "dependencies_out": 4,
+        "size_bytes": 10207
+      },
+      "language": "go",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_27",
+      "name": "Module_b_27.js",
+      "path": "src/core/crypto/Module_b_27.js",
+      "district_id": "src/core/crypto",
+      "position": {
+        "x": 82.67835899780064,
+        "y": 0,
+        "z": 86.45456619292219
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1364,
+        "complexity": 29,
+        "churn": 99,
+        "age_days": 550,
+        "dependencies_in": 14,
+        "dependencies_out": 8,
+        "size_bytes": 23476
+      },
+      "language": "json",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_28",
+      "name": "Module_b_28.js",
+      "path": "src/core/crypto/Module_b_28.js",
+      "district_id": "src/core/crypto",
+      "position": {
+        "x": 63.981997615457125,
+        "y": 0,
+        "z": 105.06044560700578
+      },
+      "dimensions": {
+        "width": 10.754887502163468,
+        "height": 40,
+        "depth": 10.754887502163468
+      },
+      "metrics": {
+        "loc": 441,
+        "complexity": 35,
+        "churn": 9,
+        "age_days": 460,
+        "dependencies_in": 5,
+        "dependencies_out": 8,
+        "size_bytes": 25359
+      },
+      "language": "json",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_29",
+      "name": "Module_b_29.js",
+      "path": "src/core/crypto/Module_b_29.js",
+      "district_id": "src/core/crypto",
+      "position": {
+        "x": 76.38285873924251,
+        "y": 0,
+        "z": 83.79276152182005
+      },
+      "dimensions": {
+        "width": 9.965784284662087,
+        "height": 23.67970000576925,
+        "depth": 9.965784284662087
+      },
+      "metrics": {
+        "loc": 379,
+        "complexity": 5,
+        "churn": 1,
+        "age_days": 563,
+        "dependencies_in": 4,
+        "dependencies_out": 1,
+        "size_bytes": 32079
+      },
+      "language": "json",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_30",
+      "name": "Module_b_30.js",
+      "path": "src/core/crypto/Module_b_30.js",
+      "district_id": "src/core/crypto",
+      "position": {
+        "x": 61.61184479893009,
+        "y": 0,
+        "z": 78.68014806075425
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 29.575424759098897,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1275,
+        "complexity": 9,
+        "churn": 71,
+        "age_days": 159,
+        "dependencies_in": 9,
+        "dependencies_out": 6,
+        "size_bytes": 42286
+      },
+      "language": "json",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_31",
+      "name": "Module_b_31.js",
+      "path": "src/core/crypto/Module_b_31.js",
+      "district_id": "src/core/crypto",
+      "position": {
+        "x": 63.49681096033077,
+        "y": 0,
+        "z": 91.10251767602873
+      },
+      "dimensions": {
+        "width": 10.754887502163468,
+        "height": 40,
+        "depth": 10.754887502163468
+      },
+      "metrics": {
+        "loc": 181,
+        "complexity": 26,
+        "churn": 71,
+        "age_days": 236,
+        "dependencies_in": 5,
+        "dependencies_out": 8,
+        "size_bytes": 33661
+      },
+      "language": "json",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_32",
+      "name": "Module_b_32.js",
+      "path": "src/core/crypto/Module_b_32.js",
+      "district_id": "src/core/crypto",
+      "position": {
+        "x": 69.16359178613533,
+        "y": 0,
+        "z": 82.51577643423101
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1407,
+        "complexity": 25,
+        "churn": 50,
+        "age_days": 468,
+        "dependencies_in": 14,
+        "dependencies_out": 8,
+        "size_bytes": 47557
+      },
+      "language": "json",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_33",
+      "name": "Module_b_33.js",
+      "path": "src/core/crypto/Module_b_33.js",
+      "district_id": "src/core/crypto",
+      "position": {
+        "x": 73.83995687751253,
+        "y": 0,
+        "z": 92.67833849459745
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1304,
+        "complexity": 34,
+        "churn": 68,
+        "age_days": 357,
+        "dependencies_in": 9,
+        "dependencies_out": 3,
+        "size_bytes": 18481
+      },
+      "language": "json",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_34",
+      "name": "Module_b_34.js",
+      "path": "src/core/crypto/Module_b_34.js",
+      "district_id": "src/core/crypto",
+      "position": {
+        "x": 81.39153622580233,
+        "y": 0,
+        "z": 92.56230311434733
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 71,
+        "complexity": 39,
+        "churn": 13,
+        "age_days": 905,
+        "dependencies_in": 7,
+        "dependencies_out": 2,
+        "size_bytes": 15440
+      },
+      "language": "json",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_35",
+      "name": "Module_b_35.ty",
+      "path": "src/api/routes/Module_b_35.ty",
+      "district_id": "src/api/routes",
+      "position": {
+        "x": -134.5693295979097,
+        "y": 0,
+        "z": -8.550054708928702
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 36.98342010754868,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1446,
+        "complexity": 18,
+        "churn": 80,
+        "age_days": 764,
+        "dependencies_in": 9,
+        "dependencies_out": 3,
+        "size_bytes": 15154
+      },
+      "language": "typescript",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_36",
+      "name": "Module_b_36.ty",
+      "path": "src/api/routes/Module_b_36.ty",
+      "district_id": "src/api/routes",
+      "position": {
+        "x": -124.59476721131372,
+        "y": 0,
+        "z": -35.19794379972632
+      },
+      "dimensions": {
+        "width": 9.0,
+        "height": 40,
+        "depth": 9.0
+      },
+      "metrics": {
+        "loc": 1229,
+        "complexity": 45,
+        "churn": 52,
+        "age_days": 711,
+        "dependencies_in": 3,
+        "dependencies_out": 8,
+        "size_bytes": 8560
+      },
+      "language": "typescript",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_37",
+      "name": "Module_b_37.ty",
+      "path": "src/api/routes/Module_b_37.ty",
+      "district_id": "src/api/routes",
+      "position": {
+        "x": -118.81326397815454,
+        "y": 0,
+        "z": -16.440578963019927
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 99,
+        "complexity": 49,
+        "churn": 7,
+        "age_days": 436,
+        "dependencies_in": 11,
+        "dependencies_out": 2,
+        "size_bytes": 19421
+      },
+      "language": "typescript",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_38",
+      "name": "Module_b_38.ty",
+      "path": "src/api/routes/Module_b_38.ty",
+      "district_id": "src/api/routes",
+      "position": {
+        "x": -123.40235025272007,
+        "y": 0,
+        "z": -20.204476537767913
+      },
+      "dimensions": {
+        "width": 9.0,
+        "height": 30.67545294909838,
+        "depth": 9.0
+      },
+      "metrics": {
+        "loc": 802,
+        "complexity": 10,
+        "churn": 89,
+        "age_days": 735,
+        "dependencies_in": 3,
+        "dependencies_out": 6,
+        "size_bytes": 31886
+      },
+      "language": "typescript",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_39",
+      "name": "Module_b_39.ty",
+      "path": "src/api/routes/Module_b_39.ty",
+      "district_id": "src/api/routes",
+      "position": {
+        "x": -133.10834506554758,
+        "y": 0,
+        "z": -16.306713285372176
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 855,
+        "complexity": 40,
+        "churn": 50,
+        "age_days": 995,
+        "dependencies_in": 11,
+        "dependencies_out": 0,
+        "size_bytes": 19133
+      },
+      "language": "typescript",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_40",
+      "name": "Module_b_40.ty",
+      "path": "src/api/routes/Module_b_40.ty",
+      "district_id": "src/api/routes",
+      "position": {
+        "x": -119.11757333144985,
+        "y": 0,
+        "z": -12.174758397401767
+      },
+      "dimensions": {
+        "width": 10.754887502163468,
+        "height": 40,
+        "depth": 10.754887502163468
+      },
+      "metrics": {
+        "loc": 834,
+        "complexity": 41,
+        "churn": 21,
+        "age_days": 741,
+        "dependencies_in": 5,
+        "dependencies_out": 3,
+        "size_bytes": 42704
+      },
+      "language": "typescript",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_41",
+      "name": "Module_b_41.ty",
+      "path": "src/api/routes/Module_b_41.ty",
+      "district_id": "src/api/routes",
+      "position": {
+        "x": -135.47643388459764,
+        "y": 0,
+        "z": -20.832201413532594
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1415,
+        "complexity": 50,
+        "churn": 72,
+        "age_days": 560,
+        "dependencies_in": 15,
+        "dependencies_out": 8,
+        "size_bytes": 16186
+      },
+      "language": "typescript",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_42",
+      "name": "Module_b_42.ja",
+      "path": "src/api/middleware/Module_b_42.ja",
+      "district_id": "src/api/middleware",
+      "position": {
+        "x": 113.19899285515493,
+        "y": 0,
+        "z": -83.74420899314437
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 463,
+        "complexity": 28,
+        "churn": 94,
+        "age_days": 334,
+        "dependencies_in": 7,
+        "dependencies_out": 8,
+        "size_bytes": 7921
+      },
+      "language": "javascript",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_43",
+      "name": "Module_b_43.ja",
+      "path": "src/api/middleware/Module_b_43.ja",
+      "district_id": "src/api/middleware",
+      "position": {
+        "x": 125.30408306559418,
+        "y": 0,
+        "z": -92.0008403781288
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 21.575424759098897,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 578,
+        "complexity": 4,
+        "churn": 76,
+        "age_days": 363,
+        "dependencies_in": 13,
+        "dependencies_out": 4,
+        "size_bytes": 11228
+      },
+      "language": "javascript",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_44",
+      "name": "Module_b_44.ja",
+      "path": "src/api/middleware/Module_b_44.ja",
+      "district_id": "src/api/middleware",
+      "position": {
+        "x": 120.41516448012167,
+        "y": 0,
+        "z": -66.98789087587251
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 794,
+        "complexity": 43,
+        "churn": 33,
+        "age_days": 760,
+        "dependencies_in": 8,
+        "dependencies_out": 0,
+        "size_bytes": 17979
+      },
+      "language": "javascript",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_45",
+      "name": "Module_b_45.ja",
+      "path": "src/api/middleware/Module_b_45.ja",
+      "district_id": "src/api/middleware",
+      "position": {
+        "x": 120.28309055903804,
+        "y": 0,
+        "z": -85.31711887717003
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 19.0,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 159,
+        "complexity": 3,
+        "churn": 12,
+        "age_days": 212,
+        "dependencies_in": 13,
+        "dependencies_out": 2,
+        "size_bytes": 40746
+      },
+      "language": "javascript",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_46",
+      "name": "Module_b_46.ja",
+      "path": "src/api/middleware/Module_b_46.ja",
+      "district_id": "src/api/middleware",
+      "position": {
+        "x": 121.75048980924072,
+        "y": 0,
+        "z": -75.34657789605507
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1256,
+        "complexity": 42,
+        "churn": 54,
+        "age_days": 531,
+        "dependencies_in": 8,
+        "dependencies_out": 1,
+        "size_bytes": 23881
+      },
+      "language": "javascript",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_47",
+      "name": "Module_b_47.ja",
+      "path": "src/api/middleware/Module_b_47.ja",
+      "district_id": "src/api/middleware",
+      "position": {
+        "x": 129.50293269438475,
+        "y": 0,
+        "z": -79.3483714953856
+      },
+      "dimensions": {
+        "width": 9.965784284662087,
+        "height": 23.67970000576925,
+        "depth": 9.965784284662087
+      },
+      "metrics": {
+        "loc": 363,
+        "complexity": 5,
+        "churn": 28,
+        "age_days": 688,
+        "dependencies_in": 4,
+        "dependencies_out": 5,
+        "size_bytes": 10679
+      },
+      "language": "javascript",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_48",
+      "name": "Module_b_48.ja",
+      "path": "src/api/middleware/Module_b_48.ja",
+      "district_id": "src/api/middleware",
+      "position": {
+        "x": 118.51477408069566,
+        "y": 0,
+        "z": -73.88350599739617
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 36.98342010754868,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 828,
+        "complexity": 18,
+        "churn": 78,
+        "age_days": 291,
+        "dependencies_in": 15,
+        "dependencies_out": 0,
+        "size_bytes": 20913
+      },
+      "language": "javascript",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_49",
+      "name": "Module_b_49.ja",
+      "path": "src/api/middleware/Module_b_49.ja",
+      "district_id": "src/api/middleware",
+      "position": {
+        "x": 125.68000029016974,
+        "y": 0,
+        "z": -81.79536363295043
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 432,
+        "complexity": 41,
+        "churn": 58,
+        "age_days": 512,
+        "dependencies_in": 14,
+        "dependencies_out": 1,
+        "size_bytes": 45457
+      },
+      "language": "javascript",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_50",
+      "name": "Module_b_50.ja",
+      "path": "src/api/middleware/Module_b_50.ja",
+      "district_id": "src/api/middleware",
+      "position": {
+        "x": 137.53280671958902,
+        "y": 0,
+        "z": -74.8164227931767
+      },
+      "dimensions": {
+        "width": 10.754887502163468,
+        "height": 40,
+        "depth": 10.754887502163468
+      },
+      "metrics": {
+        "loc": 1370,
+        "complexity": 44,
+        "churn": 56,
+        "age_days": 235,
+        "dependencies_in": 5,
+        "dependencies_out": 3,
+        "size_bytes": 31158
+      },
+      "language": "javascript",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_51",
+      "name": "Module_b_51.ja",
+      "path": "src/api/middleware/Module_b_51.ja",
+      "district_id": "src/api/middleware",
+      "position": {
+        "x": 137.19824868529807,
+        "y": 0,
+        "z": -92.81902712418685
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1295,
+        "complexity": 47,
+        "churn": 81,
+        "age_days": 353,
+        "dependencies_in": 8,
+        "dependencies_out": 7,
+        "size_bytes": 26754
+      },
+      "language": "javascript",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_52",
+      "name": "Module_b_52.ja",
+      "path": "src/api/middleware/Module_b_52.ja",
+      "district_id": "src/api/middleware",
+      "position": {
+        "x": 117.30256448739402,
+        "y": 0,
+        "z": -73.50048020147828
+      },
+      "dimensions": {
+        "width": 9.0,
+        "height": 40,
+        "depth": 9.0
+      },
+      "metrics": {
+        "loc": 1487,
+        "complexity": 30,
+        "churn": 38,
+        "age_days": 433,
+        "dependencies_in": 3,
+        "dependencies_out": 4,
+        "size_bytes": 8558
+      },
+      "language": "javascript",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_53",
+      "name": "Module_b_53.ja",
+      "path": "src/api/middleware/Module_b_53.ja",
+      "district_id": "src/api/middleware",
+      "position": {
+        "x": 126.77925756623333,
+        "y": 0,
+        "z": -71.35956288617166
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 36.98342010754868,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1390,
+        "complexity": 18,
+        "churn": 58,
+        "age_days": 717,
+        "dependencies_in": 7,
+        "dependencies_out": 2,
+        "size_bytes": 9556
+      },
+      "language": "javascript",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_54",
+      "name": "Module_b_54.ja",
+      "path": "src/api/controllers/Module_b_54.ja",
+      "district_id": "src/api/controllers",
+      "position": {
+        "x": -53.8343640171215,
+        "y": 0,
+        "z": 158.7953552097941
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1342,
+        "complexity": 41,
+        "churn": 51,
+        "age_days": 945,
+        "dependencies_in": 9,
+        "dependencies_out": 7,
+        "size_bytes": 41330
+      },
+      "language": "javascript",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_55",
+      "name": "Module_b_55.ja",
+      "path": "src/api/controllers/Module_b_55.ja",
+      "district_id": "src/api/controllers",
+      "position": {
+        "x": -49.81884122510613,
+        "y": 0,
+        "z": 156.29823697228596
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 191,
+        "complexity": 46,
+        "churn": 79,
+        "age_days": 934,
+        "dependencies_in": 12,
+        "dependencies_out": 1,
+        "size_bytes": 36539
+      },
+      "language": "javascript",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_56",
+      "name": "Module_b_56.ja",
+      "path": "src/api/controllers/Module_b_56.ja",
+      "district_id": "src/api/controllers",
+      "position": {
+        "x": -41.67118344771626,
+        "y": 0,
+        "z": 168.5715172490603
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 32.60351774512874,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 816,
+        "complexity": 12,
+        "churn": 34,
+        "age_days": 178,
+        "dependencies_in": 11,
+        "dependencies_out": 4,
+        "size_bytes": 13262
+      },
+      "language": "javascript",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_57",
+      "name": "Module_b_57.ja",
+      "path": "src/api/controllers/Module_b_57.ja",
+      "district_id": "src/api/controllers",
+      "position": {
+        "x": -39.35170834299004,
+        "y": 0,
+        "z": 148.30086641388402
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 30.67545294909838,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 278,
+        "complexity": 10,
+        "churn": 45,
+        "age_days": 994,
+        "dependencies_in": 10,
+        "dependencies_out": 4,
+        "size_bytes": 21839
+      },
+      "language": "javascript",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_58",
+      "name": "Module_b_58.ja",
+      "path": "src/api/controllers/Module_b_58.ja",
+      "district_id": "src/api/controllers",
+      "position": {
+        "x": -42.78202935372525,
+        "y": 0,
+        "z": 155.36568420677472
+      },
+      "dimensions": {
+        "width": 10.754887502163468,
+        "height": 38.67545294909838,
+        "depth": 10.754887502163468
+      },
+      "metrics": {
+        "loc": 600,
+        "complexity": 21,
+        "churn": 82,
+        "age_days": 911,
+        "dependencies_in": 5,
+        "dependencies_out": 0,
+        "size_bytes": 18597
+      },
+      "language": "javascript",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_59",
+      "name": "Module_b_59.ja",
+      "path": "src/api/controllers/Module_b_59.ja",
+      "district_id": "src/api/controllers",
+      "position": {
+        "x": -36.419652120967676,
+        "y": 0,
+        "z": 154.32727388139568
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 25.458839376460833,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1085,
+        "complexity": 6,
+        "churn": 48,
+        "age_days": 397,
+        "dependencies_in": 7,
+        "dependencies_out": 4,
+        "size_bytes": 39037
+      },
+      "language": "javascript",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_60",
+      "name": "Module_b_60.ja",
+      "path": "src/api/controllers/Module_b_60.ja",
+      "district_id": "src/api/controllers",
+      "position": {
+        "x": -30.782699469653927,
+        "y": 0,
+        "z": 157.5094336787377
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 34.25512476486815,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 284,
+        "complexity": 14,
+        "churn": 89,
+        "age_days": 436,
+        "dependencies_in": 7,
+        "dependencies_out": 3,
+        "size_bytes": 14628
+      },
+      "language": "javascript",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_61",
+      "name": "Module_b_61.ja",
+      "path": "src/api/controllers/Module_b_61.ja",
+      "district_id": "src/api/controllers",
+      "position": {
+        "x": -44.070080989474135,
+        "y": 0,
+        "z": 145.6945182651173
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1200,
+        "complexity": 29,
+        "churn": 64,
+        "age_days": 278,
+        "dependencies_in": 9,
+        "dependencies_out": 5,
+        "size_bytes": 25381
+      },
+      "language": "javascript",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_62",
+      "name": "Module_b_62.js",
+      "path": "src/ui/components/Module_b_62.js",
+      "district_id": "src/ui/components",
+      "position": {
+        "x": -78.81210084794596,
+        "y": 0,
+        "z": -147.6261509135547
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1470,
+        "complexity": 48,
+        "churn": 78,
+        "age_days": 344,
+        "dependencies_in": 14,
+        "dependencies_out": 6,
+        "size_bytes": 20297
+      },
+      "language": "json",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_63",
+      "name": "Module_b_63.js",
+      "path": "src/ui/components/Module_b_63.js",
+      "district_id": "src/ui/components",
+      "position": {
+        "x": -85.07211947827112,
+        "y": 0,
+        "z": -162.98463698547653
+      },
+      "dimensions": {
+        "width": 11.422064766172813,
+        "height": 27.0,
+        "depth": 11.422064766172813
+      },
+      "metrics": {
+        "loc": 374,
+        "complexity": 7,
+        "churn": 39,
+        "age_days": 216,
+        "dependencies_in": 6,
+        "dependencies_out": 1,
+        "size_bytes": 6104
+      },
+      "language": "json",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_64",
+      "name": "Module_b_64.js",
+      "path": "src/ui/components/Module_b_64.js",
+      "district_id": "src/ui/components",
+      "position": {
+        "x": -84.93168617176448,
+        "y": 0,
+        "z": -164.6850842276426
+      },
+      "dimensions": {
+        "width": 11.422064766172813,
+        "height": 36.98342010754868,
+        "depth": 11.422064766172813
+      },
+      "metrics": {
+        "loc": 1173,
+        "complexity": 18,
+        "churn": 78,
+        "age_days": 646,
+        "dependencies_in": 6,
+        "dependencies_out": 8,
+        "size_bytes": 16286
+      },
+      "language": "json",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_65",
+      "name": "Module_b_65.js",
+      "path": "src/ui/components/Module_b_65.js",
+      "district_id": "src/ui/components",
+      "position": {
+        "x": -86.0912731407656,
+        "y": 0,
+        "z": -156.30913835108856
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 30.67545294909838,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 270,
+        "complexity": 10,
+        "churn": 24,
+        "age_days": 433,
+        "dependencies_in": 13,
+        "dependencies_out": 6,
+        "size_bytes": 5557
+      },
+      "language": "json",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_66",
+      "name": "Module_b_66.js",
+      "path": "src/ui/components/Module_b_66.js",
+      "district_id": "src/ui/components",
+      "position": {
+        "x": -90.38040689258757,
+        "y": 0,
+        "z": -169.47201987702155
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 25.458839376460833,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 389,
+        "complexity": 6,
+        "churn": 58,
+        "age_days": 265,
+        "dependencies_in": 11,
+        "dependencies_out": 8,
+        "size_bytes": 27832
+      },
+      "language": "json",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_67",
+      "name": "Module_b_67.js",
+      "path": "src/ui/components/Module_b_67.js",
+      "district_id": "src/ui/components",
+      "position": {
+        "x": -87.61868304944655,
+        "y": 0,
+        "z": -151.31404041446964
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 535,
+        "complexity": 27,
+        "churn": 70,
+        "age_days": 105,
+        "dependencies_in": 10,
+        "dependencies_out": 4,
+        "size_bytes": 44110
+      },
+      "language": "json",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_68",
+      "name": "Module_b_68.js",
+      "path": "src/ui/hooks/Module_b_68.js",
+      "district_id": "src/ui/hooks",
+      "position": {
+        "x": 177.64987633202773,
+        "y": 0,
+        "z": 51.73810015221575
+      },
+      "dimensions": {
+        "width": 7.754887502163468,
+        "height": 40,
+        "depth": 7.754887502163468
+      },
+      "metrics": {
+        "loc": 766,
+        "complexity": 28,
+        "churn": 69,
+        "age_days": 887,
+        "dependencies_in": 2,
+        "dependencies_out": 7,
+        "size_bytes": 14629
+      },
+      "language": "json",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_69",
+      "name": "Module_b_69.js",
+      "path": "src/ui/hooks/Module_b_69.js",
+      "district_id": "src/ui/hooks",
+      "position": {
+        "x": 163.8747108718779,
+        "y": 0,
+        "z": 56.87959606125226
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 30.67545294909838,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 318,
+        "complexity": 10,
+        "churn": 24,
+        "age_days": 447,
+        "dependencies_in": 12,
+        "dependencies_out": 4,
+        "size_bytes": 44342
+      },
+      "language": "json",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_70",
+      "name": "Module_b_70.js",
+      "path": "src/ui/hooks/Module_b_70.js",
+      "district_id": "src/ui/hooks",
+      "position": {
+        "x": 180.24936464165697,
+        "y": 0,
+        "z": 55.356862770831
+      },
+      "dimensions": {
+        "width": 6.0,
+        "height": 40,
+        "depth": 6.0
+      },
+      "metrics": {
+        "loc": 844,
+        "complexity": 35,
+        "churn": 97,
+        "age_days": 692,
+        "dependencies_in": 1,
+        "dependencies_out": 2,
+        "size_bytes": 49771
+      },
+      "language": "json",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_71",
+      "name": "Module_b_71.js",
+      "path": "src/ui/hooks/Module_b_71.js",
+      "district_id": "src/ui/hooks",
+      "position": {
+        "x": 173.83982277468633,
+        "y": 0,
+        "z": 69.02244459112876
+      },
+      "dimensions": {
+        "width": 11.422064766172813,
+        "height": 28.359400011538497,
+        "depth": 11.422064766172813
+      },
+      "metrics": {
+        "loc": 774,
+        "complexity": 8,
+        "churn": 77,
+        "age_days": 279,
+        "dependencies_in": 6,
+        "dependencies_out": 6,
+        "size_bytes": 1952
+      },
+      "language": "json",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_72",
+      "name": "Module_b_72.js",
+      "path": "src/ui/hooks/Module_b_72.js",
+      "district_id": "src/ui/hooks",
+      "position": {
+        "x": 163.55372492918383,
+        "y": 0,
+        "z": 70.91903966602307
+      },
+      "dimensions": {
+        "width": 9.965784284662087,
+        "height": 33.45883937646083,
+        "depth": 9.965784284662087
+      },
+      "metrics": {
+        "loc": 225,
+        "complexity": 13,
+        "churn": 47,
+        "age_days": 411,
+        "dependencies_in": 4,
+        "dependencies_out": 7,
+        "size_bytes": 22130
+      },
+      "language": "json",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_73",
+      "name": "Module_b_73.ty",
+      "path": "src/ui/styles/Module_b_73.ty",
+      "district_id": "src/ui/styles",
+      "position": {
+        "x": -190.67743659757986,
+        "y": 0,
+        "z": 72.64499604938064
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 39.188495648456104,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 850,
+        "complexity": 22,
+        "churn": 66,
+        "age_days": 911,
+        "dependencies_in": 15,
+        "dependencies_out": 6,
+        "size_bytes": 4677
+      },
+      "language": "typescript",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_74",
+      "name": "Module_b_74.ty",
+      "path": "src/ui/styles/Module_b_74.ty",
+      "district_id": "src/ui/styles",
+      "position": {
+        "x": -190.55650001606347,
+        "y": 0,
+        "z": 80.93960034924112
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 86,
+        "complexity": 25,
+        "churn": 19,
+        "age_days": 454,
+        "dependencies_in": 10,
+        "dependencies_out": 7,
+        "size_bytes": 33084
+      },
+      "language": "typescript",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_75",
+      "name": "Module_b_75.ty",
+      "path": "src/ui/styles/Module_b_75.ty",
+      "district_id": "src/ui/styles",
+      "position": {
+        "x": -174.190643224064,
+        "y": 0,
+        "z": 87.26777335155376
+      },
+      "dimensions": {
+        "width": 9.0,
+        "height": 40,
+        "depth": 9.0
+      },
+      "metrics": {
+        "loc": 780,
+        "complexity": 46,
+        "churn": 48,
+        "age_days": 444,
+        "dependencies_in": 3,
+        "dependencies_out": 8,
+        "size_bytes": 3727
+      },
+      "language": "typescript",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_76",
+      "name": "Module_b_76.ty",
+      "path": "src/ui/styles/Module_b_76.ty",
+      "district_id": "src/ui/styles",
+      "position": {
+        "x": -187.26072656728536,
+        "y": 0,
+        "z": 69.7785075752878
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1187,
+        "complexity": 27,
+        "churn": 55,
+        "age_days": 344,
+        "dependencies_in": 13,
+        "dependencies_out": 0,
+        "size_bytes": 34721
+      },
+      "language": "typescript",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_77",
+      "name": "Module_b_77.cs",
+      "path": "src/ui/pages/Module_b_77.cs",
+      "district_id": "src/ui/pages",
+      "position": {
+        "x": 95.7120496382704,
+        "y": 0,
+        "z": -196.3206664162421
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 36.98342010754868,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 155,
+        "complexity": 18,
+        "churn": 9,
+        "age_days": 982,
+        "dependencies_in": 10,
+        "dependencies_out": 3,
+        "size_bytes": 14276
+      },
+      "language": "css",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_78",
+      "name": "Module_b_78.cs",
+      "path": "src/ui/pages/Module_b_78.cs",
+      "district_id": "src/ui/pages",
+      "position": {
+        "x": 77.14961446750223,
+        "y": 0,
+        "z": -177.96826621254263
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 38.67545294909838,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 725,
+        "complexity": 21,
+        "churn": 2,
+        "age_days": 224,
+        "dependencies_in": 12,
+        "dependencies_out": 7,
+        "size_bytes": 43004
+      },
+      "language": "css",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_79",
+      "name": "Module_b_79.cs",
+      "path": "src/ui/pages/Module_b_79.cs",
+      "district_id": "src/ui/pages",
+      "position": {
+        "x": 86.0316779149477,
+        "y": 0,
+        "z": -198.97214994368238
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 678,
+        "complexity": 40,
+        "churn": 11,
+        "age_days": 737,
+        "dependencies_in": 12,
+        "dependencies_out": 7,
+        "size_bytes": 45906
+      },
+      "language": "css",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_80",
+      "name": "Module_b_80.cs",
+      "path": "src/ui/pages/Module_b_80.cs",
+      "district_id": "src/ui/pages",
+      "position": {
+        "x": 75.72595235216457,
+        "y": 0,
+        "z": -205.44173435634184
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 782,
+        "complexity": 48,
+        "churn": 17,
+        "age_days": 934,
+        "dependencies_in": 12,
+        "dependencies_out": 5,
+        "size_bytes": 22345
+      },
+      "language": "css",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_81",
+      "name": "Module_b_81.cs",
+      "path": "src/ui/pages/Module_b_81.cs",
+      "district_id": "src/ui/pages",
+      "position": {
+        "x": 79.57651046479137,
+        "y": 0,
+        "z": -198.35630818602772
+      },
+      "dimensions": {
+        "width": 3,
+        "height": 40,
+        "depth": 3
+      },
+      "metrics": {
+        "loc": 69,
+        "complexity": 37,
+        "churn": 60,
+        "age_days": 998,
+        "dependencies_in": 0,
+        "dependencies_out": 2,
+        "size_bytes": 2921
+      },
+      "language": "css",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_82",
+      "name": "Module_b_82.cs",
+      "path": "src/ui/pages/Module_b_82.cs",
+      "district_id": "src/ui/pages",
+      "position": {
+        "x": 83.29675020282275,
+        "y": 0,
+        "z": -199.1345780921289
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 148,
+        "complexity": 37,
+        "churn": 67,
+        "age_days": 9,
+        "dependencies_in": 8,
+        "dependencies_out": 4,
+        "size_bytes": 29945
+      },
+      "language": "css",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_83",
+      "name": "Module_b_83.cs",
+      "path": "src/ui/pages/Module_b_83.cs",
+      "district_id": "src/ui/pages",
+      "position": {
+        "x": 79.88048311638468,
+        "y": 0,
+        "z": -183.4655931024667
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1046,
+        "complexity": 25,
+        "churn": 21,
+        "age_days": 392,
+        "dependencies_in": 8,
+        "dependencies_out": 6,
+        "size_bytes": 48755
+      },
+      "language": "css",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_84",
+      "name": "Module_b_84.cs",
+      "path": "src/ui/pages/Module_b_84.cs",
+      "district_id": "src/ui/pages",
+      "position": {
+        "x": 86.57491868503445,
+        "y": 0,
+        "z": -190.0789692582926
+      },
+      "dimensions": {
+        "width": 10.754887502163468,
+        "height": 15.679700005769249,
+        "depth": 10.754887502163468
+      },
+      "metrics": {
+        "loc": 214,
+        "complexity": 2,
+        "churn": 56,
+        "age_days": 798,
+        "dependencies_in": 5,
+        "dependencies_out": 2,
+        "size_bytes": 39484
+      },
+      "language": "css",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_85",
+      "name": "Module_b_85.cs",
+      "path": "src/ui/pages/Module_b_85.cs",
+      "district_id": "src/ui/pages",
+      "position": {
+        "x": 81.51264882152569,
+        "y": 0,
+        "z": -190.03574347977946
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 31.67970000576925,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 362,
+        "complexity": 11,
+        "churn": 73,
+        "age_days": 648,
+        "dependencies_in": 15,
+        "dependencies_out": 3,
+        "size_bytes": 19797
+      },
+      "language": "css",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_86",
+      "name": "Module_b_86.cs",
+      "path": "src/ui/pages/Module_b_86.cs",
+      "district_id": "src/ui/pages",
+      "position": {
+        "x": 104.35479538832263,
+        "y": 0,
+        "z": -189.74393142583952
+      },
+      "dimensions": {
+        "width": 6.0,
+        "height": 32.60351774512874,
+        "depth": 6.0
+      },
+      "metrics": {
+        "loc": 464,
+        "complexity": 12,
+        "churn": 38,
+        "age_days": 569,
+        "dependencies_in": 1,
+        "dependencies_out": 6,
+        "size_bytes": 30238
+      },
+      "language": "css",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_87",
+      "name": "Module_b_87.cs",
+      "path": "src/ui/pages/Module_b_87.cs",
+      "district_id": "src/ui/pages",
+      "position": {
+        "x": 95.04416931601929,
+        "y": 0,
+        "z": -178.07401381218767
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 32.60351774512874,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 739,
+        "complexity": 12,
+        "churn": 92,
+        "age_days": 778,
+        "dependencies_in": 11,
+        "dependencies_out": 8,
+        "size_bytes": 6858
+      },
+      "language": "css",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_88",
+      "name": "Module_b_88.go",
+      "path": "src/utils/math/Module_b_88.go",
+      "district_id": "src/utils/math",
+      "position": {
+        "x": 79.10596523524879,
+        "y": 0,
+        "z": 204.70840442219264
+      },
+      "dimensions": {
+        "width": 6.0,
+        "height": 40,
+        "depth": 6.0
+      },
+      "metrics": {
+        "loc": 1328,
+        "complexity": 30,
+        "churn": 35,
+        "age_days": 184,
+        "dependencies_in": 1,
+        "dependencies_out": 1,
+        "size_bytes": 31627
+      },
+      "language": "go",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_89",
+      "name": "Module_b_89.go",
+      "path": "src/utils/math/Module_b_89.go",
+      "district_id": "src/utils/math",
+      "position": {
+        "x": 60.81877003240548,
+        "y": 0,
+        "z": 212.90400836509514
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 890,
+        "complexity": 38,
+        "churn": 53,
+        "age_days": 266,
+        "dependencies_in": 15,
+        "dependencies_out": 0,
+        "size_bytes": 48548
+      },
+      "language": "go",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_90",
+      "name": "Module_b_90.go",
+      "path": "src/utils/math/Module_b_90.go",
+      "district_id": "src/utils/math",
+      "position": {
+        "x": 55.5598923728442,
+        "y": 0,
+        "z": 198.68010115743667
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1361,
+        "complexity": 49,
+        "churn": 39,
+        "age_days": 59,
+        "dependencies_in": 8,
+        "dependencies_out": 2,
+        "size_bytes": 44958
+      },
+      "language": "go",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_91",
+      "name": "Module_b_91.go",
+      "path": "src/utils/math/Module_b_91.go",
+      "district_id": "src/utils/math",
+      "position": {
+        "x": 75.00231236182253,
+        "y": 0,
+        "z": 206.97000284498566
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 486,
+        "complexity": 41,
+        "churn": 89,
+        "age_days": 464,
+        "dependencies_in": 8,
+        "dependencies_out": 5,
+        "size_bytes": 32437
+      },
+      "language": "go",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_92",
+      "name": "Module_b_92.go",
+      "path": "src/utils/math/Module_b_92.go",
+      "district_id": "src/utils/math",
+      "position": {
+        "x": 67.81081828384359,
+        "y": 0,
+        "z": 213.25646200087294
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 25.458839376460833,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1135,
+        "complexity": 6,
+        "churn": 71,
+        "age_days": 74,
+        "dependencies_in": 12,
+        "dependencies_out": 0,
+        "size_bytes": 35547
+      },
+      "language": "go",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_93",
+      "name": "Module_b_93.go",
+      "path": "src/utils/math/Module_b_93.go",
+      "district_id": "src/utils/math",
+      "position": {
+        "x": 80.17356950014997,
+        "y": 0,
+        "z": 221.28453400481473
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 33.45883937646083,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 408,
+        "complexity": 13,
+        "churn": 36,
+        "age_days": 416,
+        "dependencies_in": 12,
+        "dependencies_out": 7,
+        "size_bytes": 11951
+      },
+      "language": "go",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_94",
+      "name": "Module_b_94.go",
+      "path": "src/utils/math/Module_b_94.go",
+      "district_id": "src/utils/math",
+      "position": {
+        "x": 53.08164569003335,
+        "y": 0,
+        "z": 214.57549765361048
+      },
+      "dimensions": {
+        "width": 9.965784284662087,
+        "height": 28.359400011538497,
+        "depth": 9.965784284662087
+      },
+      "metrics": {
+        "loc": 1412,
+        "complexity": 8,
+        "churn": 87,
+        "age_days": 140,
+        "dependencies_in": 4,
+        "dependencies_out": 3,
+        "size_bytes": 27979
+      },
+      "language": "go",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_95",
+      "name": "Module_b_95.go",
+      "path": "src/utils/math/Module_b_95.go",
+      "district_id": "src/utils/math",
+      "position": {
+        "x": 59.69672961435162,
+        "y": 0,
+        "z": 203.95160377032246
+      },
+      "dimensions": {
+        "width": 9.0,
+        "height": 29.575424759098897,
+        "depth": 9.0
+      },
+      "metrics": {
+        "loc": 613,
+        "complexity": 9,
+        "churn": 10,
+        "age_days": 472,
+        "dependencies_in": 3,
+        "dependencies_out": 6,
+        "size_bytes": 38716
+      },
+      "language": "go",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_96",
+      "name": "Module_b_96.py",
+      "path": "src/utils/format/Module_b_96.py",
+      "district_id": "src/utils/format",
+      "position": {
+        "x": -191.45540828626554,
+        "y": 0,
+        "z": -101.87045362549645
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1072,
+        "complexity": 28,
+        "churn": 11,
+        "age_days": 710,
+        "dependencies_in": 14,
+        "dependencies_out": 6,
+        "size_bytes": 27904
+      },
+      "language": "python",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_97",
+      "name": "Module_b_97.py",
+      "path": "src/utils/format/Module_b_97.py",
+      "district_id": "src/utils/format",
+      "position": {
+        "x": -186.70540404627693,
+        "y": 0,
+        "z": -112.95863221033152
+      },
+      "dimensions": {
+        "width": 10.754887502163468,
+        "height": 32.60351774512874,
+        "depth": 10.754887502163468
+      },
+      "metrics": {
+        "loc": 57,
+        "complexity": 12,
+        "churn": 31,
+        "age_days": 675,
+        "dependencies_in": 5,
+        "dependencies_out": 0,
+        "size_bytes": 9456
+      },
+      "language": "python",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_98",
+      "name": "Module_b_98.py",
+      "path": "src/utils/format/Module_b_98.py",
+      "district_id": "src/utils/format",
+      "position": {
+        "x": -188.95973616480447,
+        "y": 0,
+        "z": -103.01457414270222
+      },
+      "dimensions": {
+        "width": 6.0,
+        "height": 40,
+        "depth": 6.0
+      },
+      "metrics": {
+        "loc": 1153,
+        "complexity": 44,
+        "churn": 18,
+        "age_days": 35,
+        "dependencies_in": 1,
+        "dependencies_out": 5,
+        "size_bytes": 26888
+      },
+      "language": "python",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_99",
+      "name": "Module_b_99.py",
+      "path": "src/utils/format/Module_b_99.py",
+      "district_id": "src/utils/format",
+      "position": {
+        "x": -204.08122498344164,
+        "y": 0,
+        "z": -121.98377005313831
+      },
+      "dimensions": {
+        "width": 9.0,
+        "height": 40,
+        "depth": 9.0
+      },
+      "metrics": {
+        "loc": 157,
+        "complexity": 45,
+        "churn": 45,
+        "age_days": 344,
+        "dependencies_in": 3,
+        "dependencies_out": 6,
+        "size_bytes": 10939
+      },
+      "language": "python",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_100",
+      "name": "Module_b_100.py",
+      "path": "src/utils/format/Module_b_100.py",
+      "district_id": "src/utils/format",
+      "position": {
+        "x": -215.83034636825528,
+        "y": 0,
+        "z": -112.16064464719967
+      },
+      "dimensions": {
+        "width": 7.754887502163468,
+        "height": 15.679700005769249,
+        "depth": 7.754887502163468
+      },
+      "metrics": {
+        "loc": 504,
+        "complexity": 2,
+        "churn": 78,
+        "age_days": 505,
+        "dependencies_in": 2,
+        "dependencies_out": 4,
+        "size_bytes": 11388
+      },
+      "language": "python",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_101",
+      "name": "Module_b_101.go",
+      "path": "src/utils/validation/Module_b_101.go",
+      "district_id": "src/utils/validation",
+      "position": {
+        "x": 225.00792140362117,
+        "y": 0,
+        "z": -38.56247414217225
+      },
+      "dimensions": {
+        "width": 9.0,
+        "height": 40,
+        "depth": 9.0
+      },
+      "metrics": {
+        "loc": 265,
+        "complexity": 34,
+        "churn": 45,
+        "age_days": 850,
+        "dependencies_in": 3,
+        "dependencies_out": 0,
+        "size_bytes": 23964
+      },
+      "language": "go",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_102",
+      "name": "Module_b_102.go",
+      "path": "src/utils/validation/Module_b_102.go",
+      "district_id": "src/utils/validation",
+      "position": {
+        "x": 222.79484107050266,
+        "y": 0,
+        "z": -38.86434276746121
+      },
+      "dimensions": {
+        "width": 11.422064766172813,
+        "height": 33.45883937646083,
+        "depth": 11.422064766172813
+      },
+      "metrics": {
+        "loc": 909,
+        "complexity": 13,
+        "churn": 35,
+        "age_days": 749,
+        "dependencies_in": 6,
+        "dependencies_out": 7,
+        "size_bytes": 32898
+      },
+      "language": "go",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_103",
+      "name": "Module_b_103.go",
+      "path": "src/utils/validation/Module_b_103.go",
+      "district_id": "src/utils/validation",
+      "position": {
+        "x": 248.7872232102004,
+        "y": 0,
+        "z": -37.087141654735106
+      },
+      "dimensions": {
+        "width": 10.754887502163468,
+        "height": 39.67970000576925,
+        "depth": 10.754887502163468
+      },
+      "metrics": {
+        "loc": 948,
+        "complexity": 23,
+        "churn": 74,
+        "age_days": 369,
+        "dependencies_in": 5,
+        "dependencies_out": 8,
+        "size_bytes": 23979
+      },
+      "language": "go",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_104",
+      "name": "Module_b_104.go",
+      "path": "src/utils/validation/Module_b_104.go",
+      "district_id": "src/utils/validation",
+      "position": {
+        "x": 241.5609831207209,
+        "y": 0,
+        "z": -60.150790780889366
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 39.67970000576925,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 346,
+        "complexity": 23,
+        "churn": 74,
+        "age_days": 180,
+        "dependencies_in": 7,
+        "dependencies_out": 6,
+        "size_bytes": 35009
+      },
+      "language": "go",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_105",
+      "name": "Module_b_105.go",
+      "path": "src/utils/validation/Module_b_105.go",
+      "district_id": "src/utils/validation",
+      "position": {
+        "x": 232.3959719020513,
+        "y": 0,
+        "z": -40.30098057203084
+      },
+      "dimensions": {
+        "width": 3,
+        "height": 33.45883937646083,
+        "depth": 3
+      },
+      "metrics": {
+        "loc": 440,
+        "complexity": 13,
+        "churn": 84,
+        "age_days": 941,
+        "dependencies_in": 0,
+        "dependencies_out": 0,
+        "size_bytes": 10210
+      },
+      "language": "go",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_106",
+      "name": "Module_b_106.go",
+      "path": "src/utils/validation/Module_b_106.go",
+      "district_id": "src/utils/validation",
+      "position": {
+        "x": 233.19115488237603,
+        "y": 0,
+        "z": -53.45465239787013
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1441,
+        "complexity": 47,
+        "churn": 11,
+        "age_days": 380,
+        "dependencies_in": 10,
+        "dependencies_out": 6,
+        "size_bytes": 23824
+      },
+      "language": "go",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_107",
+      "name": "Module_b_107.go",
+      "path": "src/utils/validation/Module_b_107.go",
+      "district_id": "src/utils/validation",
+      "position": {
+        "x": 244.12544200512028,
+        "y": 0,
+        "z": -54.62408312062124
+      },
+      "dimensions": {
+        "width": 3,
+        "height": 40,
+        "depth": 3
+      },
+      "metrics": {
+        "loc": 188,
+        "complexity": 29,
+        "churn": 99,
+        "age_days": 221,
+        "dependencies_in": 0,
+        "dependencies_out": 7,
+        "size_bytes": 8932
+      },
+      "language": "go",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_108",
+      "name": "Module_b_108.go",
+      "path": "src/utils/validation/Module_b_108.go",
+      "district_id": "src/utils/validation",
+      "position": {
+        "x": 249.1601113263946,
+        "y": 0,
+        "z": -56.17846174442799
+      },
+      "dimensions": {
+        "width": 9.0,
+        "height": 40,
+        "depth": 9.0
+      },
+      "metrics": {
+        "loc": 366,
+        "complexity": 47,
+        "churn": 19,
+        "age_days": 312,
+        "dependencies_in": 3,
+        "dependencies_out": 1,
+        "size_bytes": 4007
+      },
+      "language": "go",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_109",
+      "name": "Module_b_109.go",
+      "path": "src/utils/validation/Module_b_109.go",
+      "district_id": "src/utils/validation",
+      "position": {
+        "x": 248.1215235029301,
+        "y": 0,
+        "z": -41.773883906000705
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 50,
+        "complexity": 39,
+        "churn": 51,
+        "age_days": 5,
+        "dependencies_in": 8,
+        "dependencies_out": 8,
+        "size_bytes": 46134
+      },
+      "language": "go",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_110",
+      "name": "Module_b_110.go",
+      "path": "src/utils/validation/Module_b_110.go",
+      "district_id": "src/utils/validation",
+      "position": {
+        "x": 237.77386640669778,
+        "y": 0,
+        "z": -46.288317843206556
+      },
+      "dimensions": {
+        "width": 9.965784284662087,
+        "height": 40,
+        "depth": 9.965784284662087
+      },
+      "metrics": {
+        "loc": 1148,
+        "complexity": 26,
+        "churn": 53,
+        "age_days": 23,
+        "dependencies_in": 4,
+        "dependencies_out": 2,
+        "size_bytes": 7739
+      },
+      "language": "go",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_111",
+      "name": "Module_b_111.go",
+      "path": "src/utils/validation/Module_b_111.go",
+      "district_id": "src/utils/validation",
+      "position": {
+        "x": 232.31775032849177,
+        "y": 0,
+        "z": -61.72117154793504
+      },
+      "dimensions": {
+        "width": 7.754887502163468,
+        "height": 28.359400011538497,
+        "depth": 7.754887502163468
+      },
+      "metrics": {
+        "loc": 860,
+        "complexity": 8,
+        "churn": 91,
+        "age_days": 443,
+        "dependencies_in": 2,
+        "dependencies_out": 7,
+        "size_bytes": 28918
+      },
+      "language": "go",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_112",
+      "name": "Module_b_112.go",
+      "path": "src/utils/validation/Module_b_112.go",
+      "district_id": "src/utils/validation",
+      "position": {
+        "x": 241.63435537620674,
+        "y": 0,
+        "z": -37.440993361666756
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 35.0,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 349,
+        "complexity": 15,
+        "churn": 52,
+        "age_days": 271,
+        "dependencies_in": 15,
+        "dependencies_out": 7,
+        "size_bytes": 5301
+      },
+      "language": "go",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_113",
+      "name": "Module_b_113.ru",
+      "path": "src/workers/background/Module_b_113.ru",
+      "district_id": "src/workers/background",
+      "position": {
+        "x": -150.56144814660183,
+        "y": 0,
+        "z": 198.07057128742022
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 455,
+        "complexity": 46,
+        "churn": 32,
+        "age_days": 179,
+        "dependencies_in": 8,
+        "dependencies_out": 0,
+        "size_bytes": 6356
+      },
+      "language": "rust",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_114",
+      "name": "Module_b_114.ru",
+      "path": "src/workers/background/Module_b_114.ru",
+      "district_id": "src/workers/background",
+      "position": {
+        "x": -140.5760504501153,
+        "y": 0,
+        "z": 192.34922259453032
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 35.0,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 499,
+        "complexity": 15,
+        "churn": 79,
+        "age_days": 673,
+        "dependencies_in": 13,
+        "dependencies_out": 7,
+        "size_bytes": 40343
+      },
+      "language": "rust",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_115",
+      "name": "Module_b_115.ru",
+      "path": "src/workers/background/Module_b_115.ru",
+      "district_id": "src/workers/background",
+      "position": {
+        "x": -155.27153721552094,
+        "y": 0,
+        "z": 194.82624312443858
+      },
+      "dimensions": {
+        "width": 9.0,
+        "height": 39.188495648456104,
+        "depth": 9.0
+      },
+      "metrics": {
+        "loc": 939,
+        "complexity": 22,
+        "churn": 27,
+        "age_days": 196,
+        "dependencies_in": 3,
+        "dependencies_out": 3,
+        "size_bytes": 49194
+      },
+      "language": "rust",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_116",
+      "name": "Module_b_116.ru",
+      "path": "src/workers/background/Module_b_116.ru",
+      "district_id": "src/workers/background",
+      "position": {
+        "x": -135.15922633549474,
+        "y": 0,
+        "z": 203.95561714604568
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 250,
+        "complexity": 50,
+        "churn": 90,
+        "age_days": 637,
+        "dependencies_in": 14,
+        "dependencies_out": 3,
+        "size_bytes": 4855
+      },
+      "language": "rust",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_117",
+      "name": "Module_b_117.ru",
+      "path": "src/workers/background/Module_b_117.ru",
+      "district_id": "src/workers/background",
+      "position": {
+        "x": -144.7327513857433,
+        "y": 0,
+        "z": 213.2556429137676
+      },
+      "dimensions": {
+        "width": 11.422064766172813,
+        "height": 32.60351774512874,
+        "depth": 11.422064766172813
+      },
+      "metrics": {
+        "loc": 468,
+        "complexity": 12,
+        "churn": 99,
+        "age_days": 84,
+        "dependencies_in": 6,
+        "dependencies_out": 4,
+        "size_bytes": 48442
+      },
+      "language": "rust",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_118",
+      "name": "Module_b_118.ru",
+      "path": "src/workers/background/Module_b_118.ru",
+      "district_id": "src/workers/background",
+      "position": {
+        "x": -130.50617559352457,
+        "y": 0,
+        "z": 208.17869697073365
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 146,
+        "complexity": 34,
+        "churn": 39,
+        "age_days": 541,
+        "dependencies_in": 11,
+        "dependencies_out": 4,
+        "size_bytes": 28803
+      },
+      "language": "rust",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_119",
+      "name": "Module_b_119.ru",
+      "path": "src/workers/background/Module_b_119.ru",
+      "district_id": "src/workers/background",
+      "position": {
+        "x": -142.78295105042832,
+        "y": 0,
+        "z": 212.49884546708805
+      },
+      "dimensions": {
+        "width": 3,
+        "height": 21.575424759098897,
+        "depth": 3
+      },
+      "metrics": {
+        "loc": 1340,
+        "complexity": 4,
+        "churn": 89,
+        "age_days": 484,
+        "dependencies_in": 0,
+        "dependencies_out": 7,
+        "size_bytes": 15672
+      },
+      "language": "rust",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_120",
+      "name": "Module_b_120.js",
+      "path": "src/workers/queue/Module_b_120.js",
+      "district_id": "src/workers/queue",
+      "position": {
+        "x": -31.170297169538287,
+        "y": 0,
+        "z": -260.0159033704736
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1011,
+        "complexity": 49,
+        "churn": 98,
+        "age_days": 138,
+        "dependencies_in": 15,
+        "dependencies_out": 3,
+        "size_bytes": 46842
+      },
+      "language": "json",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_121",
+      "name": "Module_b_121.js",
+      "path": "src/workers/queue/Module_b_121.js",
+      "district_id": "src/workers/queue",
+      "position": {
+        "x": -34.272944440291454,
+        "y": 0,
+        "z": -244.7610335314222
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 762,
+        "complexity": 29,
+        "churn": 28,
+        "age_days": 406,
+        "dependencies_in": 15,
+        "dependencies_out": 4,
+        "size_bytes": 9164
+      },
+      "language": "json",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_122",
+      "name": "Module_b_122.js",
+      "path": "src/workers/queue/Module_b_122.js",
+      "district_id": "src/workers/queue",
+      "position": {
+        "x": -44.559055719961776,
+        "y": 0,
+        "z": -243.5398025643098
+      },
+      "dimensions": {
+        "width": 11.422064766172813,
+        "height": 25.458839376460833,
+        "depth": 11.422064766172813
+      },
+      "metrics": {
+        "loc": 239,
+        "complexity": 6,
+        "churn": 68,
+        "age_days": 472,
+        "dependencies_in": 6,
+        "dependencies_out": 3,
+        "size_bytes": 8539
+      },
+      "language": "json",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_123",
+      "name": "Module_b_123.js",
+      "path": "src/workers/queue/Module_b_123.js",
+      "district_id": "src/workers/queue",
+      "position": {
+        "x": -44.55369164716022,
+        "y": 0,
+        "z": -254.53170259194488
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 38.67545294909838,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 403,
+        "complexity": 21,
+        "churn": 53,
+        "age_days": 473,
+        "dependencies_in": 11,
+        "dependencies_out": 5,
+        "size_bytes": 21631
+      },
+      "language": "json",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_124",
+      "name": "Module_b_124.js",
+      "path": "src/workers/queue/Module_b_124.js",
+      "district_id": "src/workers/queue",
+      "position": {
+        "x": -26.033440577566438,
+        "y": 0,
+        "z": -262.0352930307437
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 753,
+        "complexity": 45,
+        "churn": 21,
+        "age_days": 534,
+        "dependencies_in": 14,
+        "dependencies_out": 4,
+        "size_bytes": 5543
+      },
+      "language": "json",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_125",
+      "name": "Module_b_125.js",
+      "path": "src/workers/queue/Module_b_125.js",
+      "district_id": "src/workers/queue",
+      "position": {
+        "x": -35.27732349782003,
+        "y": 0,
+        "z": -246.3725742240181
+      },
+      "dimensions": {
+        "width": 11.422064766172813,
+        "height": 38.138539382230086,
+        "depth": 11.422064766172813
+      },
+      "metrics": {
+        "loc": 385,
+        "complexity": 20,
+        "churn": 5,
+        "age_days": 115,
+        "dependencies_in": 6,
+        "dependencies_out": 7,
+        "size_bytes": 36493
+      },
+      "language": "json",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_126",
+      "name": "Module_b_126.js",
+      "path": "src/workers/queue/Module_b_126.js",
+      "district_id": "src/workers/queue",
+      "position": {
+        "x": -24.83993462917507,
+        "y": 0,
+        "z": -263.7782242080913
+      },
+      "dimensions": {
+        "width": 9.965784284662087,
+        "height": 29.575424759098897,
+        "depth": 9.965784284662087
+      },
+      "metrics": {
+        "loc": 177,
+        "complexity": 9,
+        "churn": 61,
+        "age_days": 105,
+        "dependencies_in": 4,
+        "dependencies_out": 3,
+        "size_bytes": 17552
+      },
+      "language": "json",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_127",
+      "name": "Module_b_127.js",
+      "path": "src/workers/queue/Module_b_127.js",
+      "district_id": "src/workers/queue",
+      "position": {
+        "x": -30.43367385164369,
+        "y": 0,
+        "z": -271.60209508010365
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 278,
+        "complexity": 38,
+        "churn": 48,
+        "age_days": 765,
+        "dependencies_in": 10,
+        "dependencies_out": 2,
+        "size_bytes": 26189
+      },
+      "language": "json",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_128",
+      "name": "Module_b_128.js",
+      "path": "src/workers/queue/Module_b_128.js",
+      "district_id": "src/workers/queue",
+      "position": {
+        "x": -29.439258575455256,
+        "y": 0,
+        "z": -255.60999421122625
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 28.359400011538497,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 366,
+        "complexity": 8,
+        "churn": 69,
+        "age_days": 979,
+        "dependencies_in": 11,
+        "dependencies_out": 8,
+        "size_bytes": 24972
+      },
+      "language": "json",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_129",
+      "name": "Module_b_129.js",
+      "path": "src/workers/queue/Module_b_129.js",
+      "district_id": "src/workers/queue",
+      "position": {
+        "x": -18.99210909148827,
+        "y": 0,
+        "z": -255.58184542488414
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 34.25512476486815,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 775,
+        "complexity": 14,
+        "churn": 51,
+        "age_days": 348,
+        "dependencies_in": 15,
+        "dependencies_out": 7,
+        "size_bytes": 22474
+      },
+      "language": "json",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_130",
+      "name": "Module_b_130.js",
+      "path": "src/workers/queue/Module_b_130.js",
+      "district_id": "src/workers/queue",
+      "position": {
+        "x": -18.943277425828025,
+        "y": 0,
+        "z": -264.0058178694831
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 886,
+        "complexity": 40,
+        "churn": 63,
+        "age_days": 663,
+        "dependencies_in": 8,
+        "dependencies_out": 7,
+        "size_bytes": 1053
+      },
+      "language": "json",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_131",
+      "name": "Module_b_131.js",
+      "path": "src/workers/cache/Module_b_131.js",
+      "district_id": "src/workers/cache",
+      "position": {
+        "x": 194.77468034619213,
+        "y": 0,
+        "z": 166.5948666329845
+      },
+      "dimensions": {
+        "width": 7.754887502163468,
+        "height": 31.67970000576925,
+        "depth": 7.754887502163468
+      },
+      "metrics": {
+        "loc": 318,
+        "complexity": 11,
+        "churn": 96,
+        "age_days": 339,
+        "dependencies_in": 2,
+        "dependencies_out": 7,
+        "size_bytes": 4099
+      },
+      "language": "json",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_132",
+      "name": "Module_b_132.js",
+      "path": "src/workers/cache/Module_b_132.js",
+      "district_id": "src/workers/cache",
+      "position": {
+        "x": 215.4700337738325,
+        "y": 0,
+        "z": 165.58984582587496
+      },
+      "dimensions": {
+        "width": 11.422064766172813,
+        "height": 40,
+        "depth": 11.422064766172813
+      },
+      "metrics": {
+        "loc": 1448,
+        "complexity": 49,
+        "churn": 7,
+        "age_days": 236,
+        "dependencies_in": 6,
+        "dependencies_out": 5,
+        "size_bytes": 47338
+      },
+      "language": "json",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_133",
+      "name": "Module_b_133.js",
+      "path": "src/workers/cache/Module_b_133.js",
+      "district_id": "src/workers/cache",
+      "position": {
+        "x": 209.42478855626024,
+        "y": 0,
+        "z": 174.07976011561868
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 525,
+        "complexity": 29,
+        "churn": 94,
+        "age_days": 684,
+        "dependencies_in": 15,
+        "dependencies_out": 8,
+        "size_bytes": 32533
+      },
+      "language": "json",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_134",
+      "name": "Module_b_134.js",
+      "path": "src/workers/cache/Module_b_134.js",
+      "district_id": "src/workers/cache",
+      "position": {
+        "x": 211.1297108173463,
+        "y": 0,
+        "z": 180.41834071501302
+      },
+      "dimensions": {
+        "width": 11.422064766172813,
+        "height": 40,
+        "depth": 11.422064766172813
+      },
+      "metrics": {
+        "loc": 1434,
+        "complexity": 30,
+        "churn": 75,
+        "age_days": 51,
+        "dependencies_in": 6,
+        "dependencies_out": 3,
+        "size_bytes": 8917
+      },
+      "language": "json",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_135",
+      "name": "Module_b_135.js",
+      "path": "src/workers/cache/Module_b_135.js",
+      "district_id": "src/workers/cache",
+      "position": {
+        "x": 213.48351821195007,
+        "y": 0,
+        "z": 159.03856029604518
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 25.458839376460833,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 435,
+        "complexity": 6,
+        "churn": 44,
+        "age_days": 457,
+        "dependencies_in": 10,
+        "dependencies_out": 0,
+        "size_bytes": 15956
+      },
+      "language": "json",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_136",
+      "name": "Module_b_136.js",
+      "path": "src/workers/cache/Module_b_136.js",
+      "district_id": "src/workers/cache",
+      "position": {
+        "x": 209.89448851131934,
+        "y": 0,
+        "z": 158.9877754286077
+      },
+      "dimensions": {
+        "width": 6.0,
+        "height": 40,
+        "depth": 6.0
+      },
+      "metrics": {
+        "loc": 108,
+        "complexity": 34,
+        "churn": 24,
+        "age_days": 836,
+        "dependencies_in": 1,
+        "dependencies_out": 6,
+        "size_bytes": 5015
+      },
+      "language": "json",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_137",
+      "name": "Module_b_137.js",
+      "path": "src/workers/cache/Module_b_137.js",
+      "district_id": "src/workers/cache",
+      "position": {
+        "x": 210.58543983362765,
+        "y": 0,
+        "z": 178.9322259714773
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 661,
+        "complexity": 25,
+        "churn": 63,
+        "age_days": 212,
+        "dependencies_in": 11,
+        "dependencies_out": 0,
+        "size_bytes": 31304
+      },
+      "language": "json",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_138",
+      "name": "Module_b_138.js",
+      "path": "src/workers/cache/Module_b_138.js",
+      "district_id": "src/workers/cache",
+      "position": {
+        "x": 212.92562304462058,
+        "y": 0,
+        "z": 181.02853343852132
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 39.188495648456104,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1323,
+        "complexity": 22,
+        "churn": 92,
+        "age_days": 985,
+        "dependencies_in": 13,
+        "dependencies_out": 6,
+        "size_bytes": 16221
+      },
+      "language": "json",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_139",
+      "name": "Module_b_139.js",
+      "path": "src/workers/cache/Module_b_139.js",
+      "district_id": "src/workers/cache",
+      "position": {
+        "x": 190.51530293793053,
+        "y": 0,
+        "z": 186.50793860717317
+      },
+      "dimensions": {
+        "width": 7.754887502163468,
+        "height": 36.3594000115385,
+        "depth": 7.754887502163468
+      },
+      "metrics": {
+        "loc": 649,
+        "complexity": 17,
+        "churn": 54,
+        "age_days": 293,
+        "dependencies_in": 2,
+        "dependencies_out": 4,
+        "size_bytes": 28238
+      },
+      "language": "json",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_140",
+      "name": "Module_b_140.js",
+      "path": "src/workers/cache/Module_b_140.js",
+      "district_id": "src/workers/cache",
+      "position": {
+        "x": 214.92202099081842,
+        "y": 0,
+        "z": 170.37157605143733
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 141,
+        "complexity": 49,
+        "churn": 14,
+        "age_days": 442,
+        "dependencies_in": 7,
+        "dependencies_out": 6,
+        "size_bytes": 45239
+      },
+      "language": "json",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_141",
+      "name": "Module_b_141.cs",
+      "path": "tests/unit/Module_b_141.cs",
+      "district_id": "tests/unit",
+      "position": {
+        "x": -283.23866671621283,
+        "y": 0,
+        "z": 22.273727200426478
+      },
+      "dimensions": {
+        "width": 9.0,
+        "height": 40,
+        "depth": 9.0
+      },
+      "metrics": {
+        "loc": 710,
+        "complexity": 50,
+        "churn": 56,
+        "age_days": 712,
+        "dependencies_in": 3,
+        "dependencies_out": 4,
+        "size_bytes": 46790
+      },
+      "language": "css",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_142",
+      "name": "Module_b_142.cs",
+      "path": "tests/unit/Module_b_142.cs",
+      "district_id": "tests/unit",
+      "position": {
+        "x": -268.28522530056034,
+        "y": 0,
+        "z": 6.910848257947048
+      },
+      "dimensions": {
+        "width": 10.754887502163468,
+        "height": 36.3594000115385,
+        "depth": 10.754887502163468
+      },
+      "metrics": {
+        "loc": 1454,
+        "complexity": 17,
+        "churn": 6,
+        "age_days": 887,
+        "dependencies_in": 5,
+        "dependencies_out": 5,
+        "size_bytes": 37934
+      },
+      "language": "css",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_143",
+      "name": "Module_b_143.cs",
+      "path": "tests/unit/Module_b_143.cs",
+      "district_id": "tests/unit",
+      "position": {
+        "x": -273.61993283036054,
+        "y": 0,
+        "z": 19.04278105159583
+      },
+      "dimensions": {
+        "width": 3,
+        "height": 40,
+        "depth": 3
+      },
+      "metrics": {
+        "loc": 1291,
+        "complexity": 46,
+        "churn": 71,
+        "age_days": 752,
+        "dependencies_in": 0,
+        "dependencies_out": 4,
+        "size_bytes": 15492
+      },
+      "language": "css",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_144",
+      "name": "Module_b_144.cs",
+      "path": "tests/unit/Module_b_144.cs",
+      "district_id": "tests/unit",
+      "position": {
+        "x": -290.79903803286567,
+        "y": 0,
+        "z": 19.703942899327522
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 35.0,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 330,
+        "complexity": 15,
+        "churn": 28,
+        "age_days": 633,
+        "dependencies_in": 7,
+        "dependencies_out": 7,
+        "size_bytes": 28031
+      },
+      "language": "css",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_145",
+      "name": "Module_b_145.cs",
+      "path": "tests/unit/Module_b_145.cs",
+      "district_id": "tests/unit",
+      "position": {
+        "x": -280.1623658807158,
+        "y": 0,
+        "z": 16.8179326137249
+      },
+      "dimensions": {
+        "width": 3,
+        "height": 40,
+        "depth": 3
+      },
+      "metrics": {
+        "loc": 197,
+        "complexity": 39,
+        "churn": 60,
+        "age_days": 809,
+        "dependencies_in": 0,
+        "dependencies_out": 8,
+        "size_bytes": 49742
+      },
+      "language": "css",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_146",
+      "name": "Module_b_146.cs",
+      "path": "tests/integration/Module_b_146.cs",
+      "district_id": "tests/integration",
+      "position": {
+        "x": 200.54602685375386,
+        "y": 0,
+        "z": -215.03625151603697
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 928,
+        "complexity": 34,
+        "churn": 2,
+        "age_days": 883,
+        "dependencies_in": 13,
+        "dependencies_out": 1,
+        "size_bytes": 10302
+      },
+      "language": "css",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_147",
+      "name": "Module_b_147.cs",
+      "path": "tests/integration/Module_b_147.cs",
+      "district_id": "tests/integration",
+      "position": {
+        "x": 216.55016333700422,
+        "y": 0,
+        "z": -196.32807931388004
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 831,
+        "complexity": 49,
+        "churn": 85,
+        "age_days": 564,
+        "dependencies_in": 9,
+        "dependencies_out": 5,
+        "size_bytes": 9907
+      },
+      "language": "css",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_148",
+      "name": "Module_b_148.cs",
+      "path": "tests/integration/Module_b_148.cs",
+      "district_id": "tests/integration",
+      "position": {
+        "x": 200.55859596122977,
+        "y": 0,
+        "z": -203.8365425407233
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 32.60351774512874,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1302,
+        "complexity": 12,
+        "churn": 87,
+        "age_days": 432,
+        "dependencies_in": 13,
+        "dependencies_out": 0,
+        "size_bytes": 27825
+      },
+      "language": "css",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_149",
+      "name": "Module_b_149.cs",
+      "path": "tests/integration/Module_b_149.cs",
+      "district_id": "tests/integration",
+      "position": {
+        "x": 206.19894699776225,
+        "y": 0,
+        "z": -201.4697488226239
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 34.25512476486815,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1346,
+        "complexity": 14,
+        "churn": 53,
+        "age_days": 558,
+        "dependencies_in": 14,
+        "dependencies_out": 6,
+        "size_bytes": 41343
+      },
+      "language": "css",
+      "author": "Bot-Auto",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_150",
+      "name": "Module_b_150.cs",
+      "path": "tests/integration/Module_b_150.cs",
+      "district_id": "tests/integration",
+      "position": {
+        "x": 208.41900762346162,
+        "y": 0,
+        "z": -196.27891785322805
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 337,
+        "complexity": 28,
+        "churn": 80,
+        "age_days": 692,
+        "dependencies_in": 15,
+        "dependencies_out": 5,
+        "size_bytes": 17624
+      },
+      "language": "css",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_151",
+      "name": "Module_b_151.cs",
+      "path": "tests/integration/Module_b_151.cs",
+      "district_id": "tests/integration",
+      "position": {
+        "x": 212.08995293113782,
+        "y": 0,
+        "z": -193.34852470240597
+      },
+      "dimensions": {
+        "width": 6.0,
+        "height": 40,
+        "depth": 6.0
+      },
+      "metrics": {
+        "loc": 705,
+        "complexity": 25,
+        "churn": 16,
+        "age_days": 730,
+        "dependencies_in": 1,
+        "dependencies_out": 6,
+        "size_bytes": 17825
+      },
+      "language": "css",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_152",
+      "name": "Module_b_152.cs",
+      "path": "tests/integration/Module_b_152.cs",
+      "district_id": "tests/integration",
+      "position": {
+        "x": 201.71758712851064,
+        "y": 0,
+        "z": -212.50297914991836
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 23.67970000576925,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1022,
+        "complexity": 5,
+        "churn": 87,
+        "age_days": 230,
+        "dependencies_in": 8,
+        "dependencies_out": 6,
+        "size_bytes": 2896
+      },
+      "language": "css",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_153",
+      "name": "Module_b_153.cs",
+      "path": "tests/integration/Module_b_153.cs",
+      "district_id": "tests/integration",
+      "position": {
+        "x": 215.32186415532252,
+        "y": 0,
+        "z": -193.9890674189262
+      },
+      "dimensions": {
+        "width": 3,
+        "height": 38.67545294909838,
+        "depth": 3
+      },
+      "metrics": {
+        "loc": 1171,
+        "complexity": 21,
+        "churn": 28,
+        "age_days": 152,
+        "dependencies_in": 0,
+        "dependencies_out": 5,
+        "size_bytes": 2078
+      },
+      "language": "css",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_154",
+      "name": "Module_b_154.cs",
+      "path": "tests/integration/Module_b_154.cs",
+      "district_id": "tests/integration",
+      "position": {
+        "x": 196.72955603303782,
+        "y": 0,
+        "z": -208.51770884614496
+      },
+      "dimensions": {
+        "width": 3,
+        "height": 28.359400011538497,
+        "depth": 3
+      },
+      "metrics": {
+        "loc": 181,
+        "complexity": 8,
+        "churn": 96,
+        "age_days": 830,
+        "dependencies_in": 0,
+        "dependencies_out": 5,
+        "size_bytes": 27208
+      },
+      "language": "css",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_155",
+      "name": "Module_b_155.cs",
+      "path": "tests/integration/Module_b_155.cs",
+      "district_id": "tests/integration",
+      "position": {
+        "x": 210.18544154975174,
+        "y": 0,
+        "z": -201.06935580916013
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 36.3594000115385,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 436,
+        "complexity": 17,
+        "churn": 6,
+        "age_days": 292,
+        "dependencies_in": 14,
+        "dependencies_out": 0,
+        "size_bytes": 7689
+      },
+      "language": "css",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_156",
+      "name": "Module_b_156.cs",
+      "path": "tests/integration/Module_b_156.cs",
+      "district_id": "tests/integration",
+      "position": {
+        "x": 205.32998617666723,
+        "y": 0,
+        "z": -195.41577624689216
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 343,
+        "complexity": 30,
+        "churn": 49,
+        "age_days": 20,
+        "dependencies_in": 8,
+        "dependencies_out": 5,
+        "size_bytes": 7468
+      },
+      "language": "css",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_157",
+      "name": "Module_b_157.ty",
+      "path": "tests/e2e/Module_b_157.ty",
+      "district_id": "tests/e2e",
+      "position": {
+        "x": -2.237781797193678,
+        "y": 0,
+        "z": 279.9165670059123
+      },
+      "dimensions": {
+        "width": 9.0,
+        "height": 33.45883937646083,
+        "depth": 9.0
+      },
+      "metrics": {
+        "loc": 988,
+        "complexity": 13,
+        "churn": 59,
+        "age_days": 942,
+        "dependencies_in": 3,
+        "dependencies_out": 6,
+        "size_bytes": 43246
+      },
+      "language": "typescript",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_158",
+      "name": "Module_b_158.ty",
+      "path": "tests/e2e/Module_b_158.ty",
+      "district_id": "tests/e2e",
+      "position": {
+        "x": -27.937728840903397,
+        "y": 0,
+        "z": 292.93640246257314
+      },
+      "dimensions": {
+        "width": 7.754887502163468,
+        "height": 40,
+        "depth": 7.754887502163468
+      },
+      "metrics": {
+        "loc": 662,
+        "complexity": 49,
+        "churn": 44,
+        "age_days": 552,
+        "dependencies_in": 2,
+        "dependencies_out": 0,
+        "size_bytes": 32710
+      },
+      "language": "typescript",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_159",
+      "name": "Module_b_159.ty",
+      "path": "tests/e2e/Module_b_159.ty",
+      "district_id": "tests/e2e",
+      "position": {
+        "x": -9.373912986635203,
+        "y": 0,
+        "z": 297.4167759427625
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 182,
+        "complexity": 25,
+        "churn": 92,
+        "age_days": 173,
+        "dependencies_in": 8,
+        "dependencies_out": 4,
+        "size_bytes": 26903
+      },
+      "language": "typescript",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_160",
+      "name": "Module_b_160.ty",
+      "path": "tests/e2e/Module_b_160.ty",
+      "district_id": "tests/e2e",
+      "position": {
+        "x": -11.90532470354527,
+        "y": 0,
+        "z": 301.83994059869747
+      },
+      "dimensions": {
+        "width": 7.754887502163468,
+        "height": 28.359400011538497,
+        "depth": 7.754887502163468
+      },
+      "metrics": {
+        "loc": 816,
+        "complexity": 8,
+        "churn": 40,
+        "age_days": 331,
+        "dependencies_in": 2,
+        "dependencies_out": 4,
+        "size_bytes": 25874
+      },
+      "language": "typescript",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_161",
+      "name": "Module_b_161.ty",
+      "path": "tests/e2e/Module_b_161.ty",
+      "district_id": "tests/e2e",
+      "position": {
+        "x": -0.7477587326551909,
+        "y": 0,
+        "z": 295.1358301118673
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 35.69970273000271,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 445,
+        "complexity": 16,
+        "churn": 96,
+        "age_days": 944,
+        "dependencies_in": 9,
+        "dependencies_out": 1,
+        "size_bytes": 40066
+      },
+      "language": "typescript",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_162",
+      "name": "Module_b_162.ty",
+      "path": "tests/e2e/Module_b_162.ty",
+      "district_id": "tests/e2e",
+      "position": {
+        "x": -9.970170612162809,
+        "y": 0,
+        "z": 298.8751119753782
+      },
+      "dimensions": {
+        "width": 3,
+        "height": 40,
+        "depth": 3
+      },
+      "metrics": {
+        "loc": 1044,
+        "complexity": 39,
+        "churn": 51,
+        "age_days": 580,
+        "dependencies_in": 0,
+        "dependencies_out": 5,
+        "size_bytes": 39957
+      },
+      "language": "typescript",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_163",
+      "name": "Module_b_163.ty",
+      "path": "tests/e2e/Module_b_163.ty",
+      "district_id": "tests/e2e",
+      "position": {
+        "x": -13.415084912078802,
+        "y": 0,
+        "z": 291.41599400685044
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 23.67970000576925,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 953,
+        "complexity": 5,
+        "churn": 26,
+        "age_days": 116,
+        "dependencies_in": 7,
+        "dependencies_out": 1,
+        "size_bytes": 21656
+      },
+      "language": "typescript",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_164",
+      "name": "Module_b_164.go",
+      "path": "scripts/deploy/Module_b_164.go",
+      "district_id": "scripts/deploy",
+      "position": {
+        "x": -182.94483193001622,
+        "y": 0,
+        "z": -220.43578952827727
+      },
+      "dimensions": {
+        "width": 3,
+        "height": 40,
+        "depth": 3
+      },
+      "metrics": {
+        "loc": 606,
+        "complexity": 24,
+        "churn": 4,
+        "age_days": 514,
+        "dependencies_in": 0,
+        "dependencies_out": 4,
+        "size_bytes": 46957
+      },
+      "language": "go",
+      "author": "Alex Chen",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_165",
+      "name": "Module_b_165.go",
+      "path": "scripts/deploy/Module_b_165.go",
+      "district_id": "scripts/deploy",
+      "position": {
+        "x": -177.81431659944764,
+        "y": 0,
+        "z": -221.28131449862653
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1371,
+        "complexity": 39,
+        "churn": 15,
+        "age_days": 507,
+        "dependencies_in": 11,
+        "dependencies_out": 5,
+        "size_bytes": 14786
+      },
+      "language": "go",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_166",
+      "name": "Module_b_166.go",
+      "path": "scripts/deploy/Module_b_166.go",
+      "district_id": "scripts/deploy",
+      "position": {
+        "x": -186.47160159422256,
+        "y": 0,
+        "z": -226.37942429769578
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 23.67970000576925,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1213,
+        "complexity": 5,
+        "churn": 9,
+        "age_days": 355,
+        "dependencies_in": 7,
+        "dependencies_out": 0,
+        "size_bytes": 18316
+      },
+      "language": "go",
+      "author": "Emma Watson",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_167",
+      "name": "Module_b_167.go",
+      "path": "scripts/deploy/Module_b_167.go",
+      "district_id": "scripts/deploy",
+      "position": {
+        "x": -178.26326529694416,
+        "y": 0,
+        "z": -226.20846362972853
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 53,
+        "complexity": 41,
+        "churn": 18,
+        "age_days": 119,
+        "dependencies_in": 12,
+        "dependencies_out": 6,
+        "size_bytes": 1028
+      },
+      "language": "go",
+      "author": "Yash Kamireddi",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_168",
+      "name": "Module_b_168.go",
+      "path": "scripts/deploy/Module_b_168.go",
+      "district_id": "scripts/deploy",
+      "position": {
+        "x": -185.77797206718878,
+        "y": 0,
+        "z": -216.6193595433641
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 242,
+        "complexity": 33,
+        "churn": 94,
+        "age_days": 985,
+        "dependencies_in": 9,
+        "dependencies_out": 7,
+        "size_bytes": 27542
+      },
+      "language": "go",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_169",
+      "name": "Module_b_169.go",
+      "path": "scripts/deploy/Module_b_169.go",
+      "district_id": "scripts/deploy",
+      "position": {
+        "x": -195.89054469354804,
+        "y": 0,
+        "z": -230.84378535141852
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 25.458839376460833,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1485,
+        "complexity": 6,
+        "churn": 6,
+        "age_days": 157,
+        "dependencies_in": 7,
+        "dependencies_out": 8,
+        "size_bytes": 31990
+      },
+      "language": "go",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_170",
+      "name": "Module_b_170.go",
+      "path": "scripts/deploy/Module_b_170.go",
+      "district_id": "scripts/deploy",
+      "position": {
+        "x": -189.01024114991026,
+        "y": 0,
+        "z": -218.1329305983612
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 1345,
+        "complexity": 45,
+        "churn": 74,
+        "age_days": 108,
+        "dependencies_in": 13,
+        "dependencies_out": 1,
+        "size_bytes": 29958
+      },
+      "language": "go",
+      "author": "Miguel Santos",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_171",
+      "name": "Module_b_171.go",
+      "path": "scripts/deploy/Module_b_171.go",
+      "district_id": "scripts/deploy",
+      "position": {
+        "x": -191.07748443316882,
+        "y": 0,
+        "z": -237.20216251981708
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 378,
+        "complexity": 50,
+        "churn": 100,
+        "age_days": 45,
+        "dependencies_in": 7,
+        "dependencies_out": 6,
+        "size_bytes": 10363
+      },
+      "language": "go",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    },
+    {
+      "id": "b_172",
+      "name": "Module_b_172.go",
+      "path": "scripts/deploy/Module_b_172.go",
+      "district_id": "scripts/deploy",
+      "position": {
+        "x": -193.42983156515658,
+        "y": 0,
+        "z": -216.00154297554926
+      },
+      "dimensions": {
+        "width": 12,
+        "height": 40,
+        "depth": 12
+      },
+      "metrics": {
+        "loc": 114,
+        "complexity": 46,
+        "churn": 74,
+        "age_days": 126,
+        "dependencies_in": 9,
+        "dependencies_out": 0,
+        "size_bytes": 35536
+      },
+      "language": "go",
+      "author": "Sarah Jenkins",
+      "email": "dev@codebase.city",
+      "last_modified": "2023-10-25T14:32:00Z"
+    }
+  ],
+  "roads": [
+    {
+      "source": "b_62",
+      "target": "b_41",
+      "type": "imports"
+    },
+    {
+      "source": "b_63",
+      "target": "b_37",
+      "type": "imports"
+    },
+    {
+      "source": "b_64",
+      "target": "b_51",
+      "type": "imports"
+    },
+    {
+      "source": "b_65",
+      "target": "b_43",
+      "type": "imports"
+    },
+    {
+      "source": "b_66",
+      "target": "b_54",
+      "type": "imports"
+    },
+    {
+      "source": "b_67",
+      "target": "b_47",
+      "type": "imports"
+    },
+    {
+      "source": "b_68",
+      "target": "b_49",
+      "type": "imports"
+    },
+    {
+      "source": "b_69",
+      "target": "b_46",
+      "type": "imports"
+    },
+    {
+      "source": "b_71",
+      "target": "b_42",
+      "type": "imports"
+    },
+    {
+      "source": "b_73",
+      "target": "b_50",
+      "type": "imports"
+    },
+    {
+      "source": "b_74",
+      "target": "b_43",
+      "type": "imports"
+    },
+    {
+      "source": "b_80",
+      "target": "b_50",
+      "type": "imports"
+    },
+    {
+      "source": "b_81",
+      "target": "b_55",
+      "type": "imports"
+    },
+    {
+      "source": "b_83",
+      "target": "b_37",
+      "type": "imports"
+    },
+    {
+      "source": "b_84",
+      "target": "b_37",
+      "type": "imports"
+    },
+    {
+      "source": "b_86",
+      "target": "b_52",
+      "type": "imports"
+    },
+    {
+      "source": "b_87",
+      "target": "b_41",
+      "type": "imports"
+    },
+    {
+      "source": "b_35",
+      "target": "b_30",
+      "type": "imports"
+    },
+    {
+      "source": "b_37",
+      "target": "b_27",
+      "type": "imports"
+    },
+    {
+      "source": "b_39",
+      "target": "b_4",
+      "type": "imports"
+    },
+    {
+      "source": "b_40",
+      "target": "b_26",
+      "type": "imports"
+    },
+    {
+      "source": "b_41",
+      "target": "b_12",
+      "type": "imports"
+    },
+    {
+      "source": "b_42",
+      "target": "b_22",
+      "type": "imports"
+    },
+    {
+      "source": "b_44",
+      "target": "b_18",
+      "type": "imports"
+    },
+    {
+      "source": "b_45",
+      "target": "b_1",
+      "type": "imports"
+    },
+    {
+      "source": "b_46",
+      "target": "b_15",
+      "type": "imports"
+    },
+    {
+      "source": "b_47",
+      "target": "b_14",
+      "type": "imports"
+    },
+    {
+      "source": "b_48",
+      "target": "b_26",
+      "type": "imports"
+    },
+    {
+      "source": "b_49",
+      "target": "b_29",
+      "type": "imports"
+    },
+    {
+      "source": "b_51",
+      "target": "b_29",
+      "type": "imports"
+    },
+    {
+      "source": "b_52",
+      "target": "b_27",
+      "type": "imports"
+    },
+    {
+      "source": "b_53",
+      "target": "b_25",
+      "type": "imports"
+    },
+    {
+      "source": "b_54",
+      "target": "b_24",
+      "type": "imports"
+    },
+    {
+      "source": "b_55",
+      "target": "b_12",
+      "type": "imports"
+    },
+    {
+      "source": "b_57",
+      "target": "b_4",
+      "type": "imports"
+    },
+    {
+      "source": "b_58",
+      "target": "b_11",
+      "type": "imports"
+    },
+    {
+      "source": "b_59",
+      "target": "b_14",
+      "type": "imports"
+    },
+    {
+      "source": "b_60",
+      "target": "b_6",
+      "type": "imports"
+    },
+    {
+      "source": "b_61",
+      "target": "b_32",
+      "type": "imports"
+    },
+    {
+      "source": "b_5",
+      "target": "b_14",
+      "type": "imports"
+    },
+    {
+      "source": "b_7",
+      "target": "b_36",
+      "type": "imports"
+    },
+    {
+      "source": "b_11",
+      "target": "b_16",
+      "type": "imports"
+    },
+    {
+      "source": "b_12",
+      "target": "b_74",
+      "type": "imports"
+    },
+    {
+      "source": "b_13",
+      "target": "b_59",
+      "type": "imports"
+    },
+    {
+      "source": "b_17",
+      "target": "b_67",
+      "type": "imports"
+    },
+    {
+      "source": "b_28",
+      "target": "b_94",
+      "type": "imports"
+    },
+    {
+      "source": "b_38",
+      "target": "b_3",
+      "type": "imports"
+    },
+    {
+      "source": "b_41",
+      "target": "b_140",
+      "type": "imports"
+    },
+    {
+      "source": "b_42",
+      "target": "b_32",
+      "type": "imports"
+    },
+    {
+      "source": "b_43",
+      "target": "b_33",
+      "type": "imports"
+    },
+    {
+      "source": "b_47",
+      "target": "b_170",
+      "type": "imports"
+    },
+    {
+      "source": "b_59",
+      "target": "b_16",
+      "type": "imports"
+    },
+    {
+      "source": "b_60",
+      "target": "b_61",
+      "type": "imports"
+    },
+    {
+      "source": "b_70",
+      "target": "b_44",
+      "type": "imports"
+    },
+    {
+      "source": "b_71",
+      "target": "b_34",
+      "type": "imports"
+    },
+    {
+      "source": "b_73",
+      "target": "b_102",
+      "type": "imports"
+    },
+    {
+      "source": "b_75",
+      "target": "b_146",
+      "type": "imports"
+    },
+    {
+      "source": "b_76",
+      "target": "b_8",
+      "type": "imports"
+    },
+    {
+      "source": "b_79",
+      "target": "b_140",
+      "type": "imports"
+    },
+    {
+      "source": "b_83",
+      "target": "b_124",
+      "type": "imports"
+    },
+    {
+      "source": "b_90",
+      "target": "b_39",
+      "type": "imports"
+    },
+    {
+      "source": "b_98",
+      "target": "b_89",
+      "type": "imports"
+    },
+    {
+      "source": "b_102",
+      "target": "b_46",
+      "type": "imports"
+    },
+    {
+      "source": "b_103",
+      "target": "b_33",
+      "type": "imports"
+    },
+    {
+      "source": "b_112",
+      "target": "b_47",
+      "type": "imports"
+    },
+    {
+      "source": "b_126",
+      "target": "b_71",
+      "type": "imports"
+    },
+    {
+      "source": "b_130",
+      "target": "b_18",
+      "type": "imports"
+    },
+    {
+      "source": "b_132",
+      "target": "b_38",
+      "type": "imports"
+    },
+    {
+      "source": "b_138",
+      "target": "b_125",
+      "type": "imports"
+    },
+    {
+      "source": "b_146",
+      "target": "b_36",
+      "type": "imports"
+    },
+    {
+      "source": "b_149",
+      "target": "b_100",
+      "type": "imports"
+    },
+    {
+      "source": "b_150",
+      "target": "b_66",
+      "type": "imports"
+    },
+    {
+      "source": "b_152",
+      "target": "b_145",
+      "type": "imports"
+    },
+    {
+      "source": "b_154",
+      "target": "b_170",
+      "type": "imports"
+    },
+    {
+      "source": "b_155",
+      "target": "b_87",
+      "type": "imports"
+    },
+    {
+      "source": "b_161",
+      "target": "b_134",
+      "type": "imports"
+    },
+    {
+      "source": "b_163",
+      "target": "b_27",
+      "type": "imports"
+    },
+    {
+      "source": "b_166",
+      "target": "b_65",
+      "type": "imports"
+    },
+    {
+      "source": "b_168",
+      "target": "b_119",
+      "type": "imports"
+    }
+  ],
+  "metadata": {
+    "total_files": 172,
+    "total_loc": 126169,
+    "dominant_language": "javascript",
+    "issues": {
+      "god_objects": [
+        "b_28",
+        "b_77",
+        "b_87"
+      ],
+      "circular_dependencies": [
+        [
+          "b_61",
+          "b_94"
+        ]
+      ]
+    }
+  }
+}
