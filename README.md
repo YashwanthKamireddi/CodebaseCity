@@ -117,8 +117,10 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 
 ---
 
-## License
+## Intellectual Property & License
+
+**Codebase City** and its core 3D architectural rendering concepts are the intellectual property of **Yashwanth Kamireddi**.
 
 Copyright © 2026 **Yashwanth Kamireddi**. All Rights Reserved.
 
-Distributed under the MIT License. See `LICENSE` for more information.
+This project is open-source and distributed under the MIT License. See `LICENSE` for more information. Contributors agree that their submissions become part of the project under the standard MIT License terms.
