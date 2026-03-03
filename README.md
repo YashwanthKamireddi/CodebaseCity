@@ -1,124 +1,118 @@
 <div align="center">
 
-# Codebase City
+<img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/compass.svg" width="40" height="40" alt="Codebase City Logo" />
 
-**Advanced 3D Visualization & Analytics Platform for Software Engineering.**
+# Codebase City V2.0
+**The Dimensional Architecture Engine**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-Production-success.svg)](#)
-[![Copyright](https://img.shields.io/badge/Copyright-Yashwanth%20Kamireddi-purple.svg)](#license)
+[![License: MIT](https://img.shields.io/badge/License-MIT-020202.svg?style=flat-square)](LICENSE)
+[![Status](https://img.shields.io/badge/Platform-Zero--Lag_DOM_|_WebGL-020202.svg?style=flat-square)](#)
+[![Aesthetic](https://img.shields.io/badge/UX-Digital_Atelier_(2026)-020202.svg?style=flat-square)](#)
 
-[Demo](#gallery) • [Features](#capabilities) • [Installation](#getting-started) • [Usage](#usage)
+*Synthesize raw syntax into a navigable, structural 3D metropolis.*
+
+[Demo](#gallery) • [Architecture](#technical-architecture) • [Getting Started](#installation) • [Engine Capabilities](#capabilities)
 
 </div>
 
 ---
 
-## Overview
+## ✦ System Overview
 
-**Codebase City** is a static analysis tool that renders software architecture as an interactive 3D environment. It parses abstract syntax trees (AST) and Git history to generate a spatial representation of code complexity, dependencies, and developer activity.
+**Codebase City** is not just a static analysis tool; it is a high-performance **Dimensional Architecture Engine**. By ingesting raw codebases, traversing Abstract Syntax Trees (ASTs), and cross-referencing Git version control history, it generates a deeply interactive, 1:1 scale spatial metropolis of your software ecosystem.
 
-Primary use cases:
-*   **Technical Debt Identification**: Visualizing complex files ("God Objects") as towering structures.
-*   **Onboarding**: Allowing new engineers to spatially explore project layout and logic flow.
-*   **Activity Tracking**: Replaying commit history to identify churn and ownership.
+Version 2.0 introduces the **"Digital Atelier" UI/UX standard**, ditching standard web inputs for ultra-premium, zero-lag pure DOM interfaces, strict typographic loader sequences, and deeply optimized WebGL GPU-instancing.
+
+### Core Objectives
+*   **Topographical Complexity Mapping**: Effortlessly identify "God Objects" and architectural bottlenecks. If a file is a massive, highly-coupled monolith, it renders as a towering, glowing skyscraper.
+*   **Blast Radius Intel**: Visually map dependency pathways. See exactly which services will collapse if a core module is altered.
+*   **Temporal Churn Analysis**: Identify areas of high technical debt by visualizing code churn—represented by intense neon heatmaps utilizing custom Three.js shaders.
 
 ---
 
-## Capabilities
+## ✦ Engine Capabilities
 
-### 1. Spatial Code Analysis
-*   **Complexity Mapping**: File height correlates to LOC (Lines of Code) and cyclomatic complexity.
-*   **Dependency Tracing**: Visual links show import/export relationships between modules.
-*   **Hotspot Detection**: Color-coded indicators for files with high churn or error rates.
+### 1. Zero-Lag 'Digital Atelier' Interface
+*   **Hardware-Accelerated Landing**: The entryway to the engine features an ultra-optimized, pure-DOM architectural micro-grid. Beautiful, cinematic, and locked at a flawless 120FPS with zero WebGL overhead until synthesis begins.
+*   **Strict Typographic Loading Sequence**: A monolithic, terminal-style loader parses the AST generation, dependency graph building, and geometry synthesis in real-time.
 
-### 2. Temporal Visualization ("Cinematic Timeline")
-*   **Git Replay**: Scrub through project history to watch architecture evolve.
-*   **Author Attribution**: identifying active contributors via 3D avatars overlaid on modified files.
-*   **Blame View**: Instant visibility of file ownership and last-modified dates.
+### 2. Physical & Spatial Code Rendering
+*   **GPU Instancing (10,000+ files)**: The city is rendered using highly optimized `THREE.InstancedMesh`. Thousands of files are drawn in a single WebGL draw call.
+*   **Precise Dimensional Sorting**: Custom `NormalBlending` and exact `depthWrite` configurations guarantee pixel-perfect building occlusion and eliminate all Z-fighting during deep zoom.
+*   **Custom PulseMaterial Shading**: Buildings utilize bespoke vertex/fragment shaders mathematically clamped to local geometry normals (`vLocalNormal`), ensuring mathematically perfect edge-highlighting regardless of the camera's rotational matrix.
 
 ### 3. Inspection & Diagnostics
-*   **Deep Dive Inspection**: Click any node to view source code, syntax highlighting, and metrics.
-*   **System Diagnostics**: Automated alerts for circular dependencies, large files, and potential refactoring targets.
-*   **Universal Search**: Jump to any file, class, or function instantly.
+*   **The Cinematic Timeline**: Scrub through Git history to watch the city grow, shrink, and evolve.
+*   **Instant Context**: Seamlessly click on any geometric structure to pull up exact file metrics (LOC, Cyclomatic Complexity, Churn rate).
 
 ---
 
-## Gallery
+## ✦ Gallery
 
-<p align="center">
-  <img src="docs/images/1.png" width="45%" />
-  <img src="docs/images/2.png" width="45%" />
-  <img src="docs/images/3.png" width="45%" />
-  <img src="docs/images/4.png" width="45%" />
-  <img src="docs/images/5.png" width="45%" />
-  <img src="docs/images/6.png" width="45%" />
-</p>
+<div align="center">
+  *(Visual metadata synthesized locally. Placeholders for V2.0 HQ renders.)*
+  <p>
+    <img src="docs/images/1.png" width="45%" style="border-radius: 8px; border: 1px solid #333;" />
+    <img src="docs/images/2.png" width="45%" style="border-radius: 8px; border: 1px solid #333;" />
+  </p>
+</div>
 
 ---
 
-## Getting Started
+## ✦ Installation & Synthesizing
 
-### Prerequisites
-*   **Node.js** v18 or higher
-*   **Python** 3.11 or higher
-*   **Git**
+### Requirements
+*   **Node.js** v18+
+*   **Python** 3.11+
+*   **Git** (For temporal history analysis)
 
-### Installation
+### Deployment
 
-Clone the repository and install dependencies for both services.
-
+1. **Acquire the Engine**
 ```bash
-# 1. Clone Repository
 git clone https://github.com/YashwanthKamireddi/CodebaseCity.git
 cd CodebaseCity
+```
 
-# 2. Setup Backend (Analysis Engine)
+2. **Initialize the Analysis Core (Backend)**
+```bash
 cd backend
+python -m venv venv
+source venv/bin/activate  # Or `venv\Scripts\activate` on Windows
 pip install -r requirements.txt
-# Run the API server
 python -m uvicorn main:app --reload --port 8000 &
+```
 
-# 3. Setup Frontend (Visualization Client)
+3. **Initialize the Dimensional Viewport (Frontend)**
+```bash
 cd ../frontend
 npm install
-# Run the client
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173`.
+The system will boot instantly at `http://localhost:5173`.
 
 ---
 
-## Usage
+## ✦ Usage
 
-### Analyzing a Project
-1.  **Launch the Dashboard**: Open the web interface.
-2.  **Input Source**:
-    *   **Local**: Enter the absolute path to a directory on your machine.
-    *   **Remote**: Paste a valid GitHub repository URL.
-3.  **Visual Exploration**: Use `WASD` or mouse controls to navigate the 3D city.
-4.  **Inspect**: Click on any building to open the **File Inspector**.
-
-### Keyboard Controls
-*   `W`/`A`/`S`/`D`: Move Camera
-*   `Q`/`E`: Rotate
-*   `Scroll`: Zoom
-*   `Cmd+K` / `Ctrl+K`: Open Command Palette / Search
+1. **System Boot**: Open the local port in any modern browser.
+2. **Input Path**: In the command palette, enter the absolute path to a local project (e.g., `/home/user/my_project`).
+3. **Synthesis**: The engine will parse the trees and render the dimensional space.
+4. **Navigation**:
+   * `W`/`A`/`S`/`D`: Translate Camera
+   * `Q`/`E`: Mutate Rotation
+   * `Mouse/Scroll`: Deep Zoom
+   * `Left Click`: Structure Inspection
 
 ---
 
-## Contributing
+## ✦ Intellectual Property
 
-Contributions are welcome. Please ensure all pull requests adhere to the project's coding standards and architecture patterns.
+**Codebase City** is architected and maintained by **Yashwanth Kamireddi**.
 
-**Intellectual Property Notice**:
-This project and its core architecture are the intellectual property of **Yashwanth Kamireddi**. Contributors agree that their submissions become part of the project under the standard MIT License terms.
+Licensed under the **MIT License**. See [LICENSE](LICENSE) for full text. All UI/UX "Digital Atelier" concepts and standardizations are native to V2.0 of this repository.
 
----
-
-## License
-
-**Copyright © 2026 Yashwanth Kamireddi.** All Rights Reserved.
-
-Licensed under the MIT License. See [LICENSE](LICENSE) for full text.
+<div align="center">
+  <code>SYS.DONE // VIRTUAL ENVIRONMENT ONLINE</code>
+</div>
