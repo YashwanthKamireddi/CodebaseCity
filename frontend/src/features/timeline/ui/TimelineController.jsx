@@ -1,38 +1,42 @@
 /**
  * TimelineController.jsx
  *
- * Premium Timeline UI - "Gource Mode"
- * Design: Minimal floating bar with smooth scrubbing and keyboard support.
- * Refactored for smooth async playback loop to prevent API overload.
+ * Premium Timeline UI — smooth city growth playback
+ * Design: Matches app theme (dark, white accents, glass panels)
+ * Features: Play/pause, scrubbing, commit info, keyboard shortcuts
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
-import { Play, Pause, SkipBack, SkipForward, GitCommit, Calendar, User } from 'lucide-react'
+import { Play, Pause, SkipBack, SkipForward, ChevronFirst, ChevronLast } from 'lucide-react'
 import useStore from '../../../store/useStore'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function TimelineController() {
-    const { cityData, showTimeline, setCityData, setAnimating, setCommitIndex, sidebarOpen, sidebarWidth, selectedBuilding } = useStore()
+    const { cityData, showTimeline, setCityData, setAnimating, setCommitIndex } = useStore()
     const [history, setHistory] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
     const [isPlaying, setIsPlaying] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [isScrubbing, setIsScrubbing] = useState(false)
+    const [hoveredIndex, setHoveredIndex] = useState(null)
+    const [playbackSpeed, setPlaybackSpeed] = useState(1)
     const debounceRef = useRef(null)
+    const abortControllerRef = useRef(null)
+    const trackRef = useRef(null)
 
-    // Sync global animation state (for InstancedCity optimization)
+    // Sync global animation state
     useEffect(() => {
         setAnimating(isPlaying || isScrubbing)
         return () => setAnimating(false)
     }, [isPlaying, isScrubbing, setAnimating])
 
-    // Sync global Commit Index (Critical for disabling growth animation during time travel)
+    // Sync global commit index
     useEffect(() => {
         setCommitIndex(currentIndex)
-        return () => setCommitIndex(-1) // Reset on unmount
+        return () => setCommitIndex(-1)
     }, [currentIndex, setCommitIndex])
 
-    // Fetch History
+    // Fetch history
     useEffect(() => {
         if (!cityData?.path || !showTimeline) return
 
@@ -70,16 +74,12 @@ export default function TimelineController() {
         fetchHistory()
     }, [cityData?.path, showTimeline])
 
-    const abortControllerRef = useRef(null)
-
-    // Raw API Call (Memoized)
+    // API call
     const performAnalysis = useCallback(async (commit) => {
-        // Cancel previous request
         if (abortControllerRef.current) {
             abortControllerRef.current.abort()
         }
 
-        // Create new controller
         const controller = new AbortController()
         abortControllerRef.current = controller
 
@@ -92,7 +92,7 @@ export default function TimelineController() {
                     path: cityData.path,
                     commit_hash: commit.hash
                 }),
-                signal: controller.signal // Bind signal
+                signal: controller.signal
             })
 
             if (res.ok) {
@@ -100,13 +100,9 @@ export default function TimelineController() {
                 setCityData(newCityData)
             }
         } catch (e) {
-            if (e.name === 'AbortError') {
-                console.log('Analysis aborted')
-                return
-            }
+            if (e.name === 'AbortError') return
             console.error("Time Travel Failed:", e)
         } finally {
-            // Only clear loading if THIS request finished (wasn't aborted)
             if (abortControllerRef.current === controller) {
                 setIsLoading(false)
                 setIsScrubbing(false)
@@ -115,7 +111,7 @@ export default function TimelineController() {
         }
     }, [cityData?.path, setCityData])
 
-    // Cleanup on unmount
+    // Cleanup
     useEffect(() => {
         return () => {
             if (abortControllerRef.current) {
@@ -124,7 +120,7 @@ export default function TimelineController() {
         }
     }, [])
 
-    // Debounced Wrapper for SCRUBBING
+    // Debounced scrub
     const debouncedTravel = useCallback((commit) => {
         if (!commit || commit.short_hash === 'HEAD' || commit.short_hash === 'LOCAL') return
         if (debounceRef.current) clearTimeout(debounceRef.current)
@@ -132,67 +128,68 @@ export default function TimelineController() {
         setIsScrubbing(true)
         debounceRef.current = setTimeout(() => {
             performAnalysis(commit)
-        }, 200) // Faster debounce for snappier feel
+        }, 200)
     }, [performAnalysis])
 
-    // Handle slider change
+    // Slider change
     const handleSliderChange = (e) => {
         const newIndex = parseInt(e.target.value)
-        setIsPlaying(false) // Kill Loop
-        setIsScrubbing(true) // Visual Feedback
+        setIsPlaying(false)
+        setIsScrubbing(true)
         setCurrentIndex(newIndex)
-        // Debounce actual API call to prevent flooding during drag
         debouncedTravel(history[newIndex])
     }
 
-    // Step navigation
-    const handleStep = (direction) => {
+    // Step
+    const handleStep = useCallback((direction) => {
         setIsPlaying(false)
         const newIndex = currentIndex + direction
         if (newIndex >= 0 && newIndex < history.length) {
             setCurrentIndex(newIndex)
             performAnalysis(history[newIndex])
         }
+    }, [currentIndex, history, performAnalysis])
+
+    // Jump to start/end
+    const handleJumpStart = () => {
+        setIsPlaying(false)
+        setCurrentIndex(0)
+        if (history[0]?.hash) performAnalysis(history[0])
     }
 
-    // Async Recursive Playback Engine (Robust)
+    const handleJumpEnd = () => {
+        setIsPlaying(false)
+        const last = history.length - 1
+        setCurrentIndex(last)
+        if (history[last]?.hash) performAnalysis(history[last])
+    }
+
+    // Playback loop
     useEffect(() => {
         let isCancelled = false
 
         const loop = async () => {
             if (!isPlaying || isCancelled) return
 
-            // 1. Calculate Next
             let nextIndex = currentIndex + 1
             if (nextIndex >= history.length) {
                 setIsPlaying(false)
                 return
             }
 
-            // 2. Optimistic UI Update
             setCurrentIndex(nextIndex)
-
-            // 3. Perform Analysis (BLOCKING)
-            // We await this so we don't pile up requests
             await performAnalysis(history[nextIndex])
 
-            // 4. Check if we should continue
-            // (User might have paused DURING the await)
             if (!isPlaying || isCancelled) return
 
-            // 5. Schedule next frame (Delay for readability)
-            setTimeout(loop, 800)
+            const delay = Math.max(300, 1200 / playbackSpeed)
+            setTimeout(loop, delay)
         }
 
-        if (isPlaying) {
-            // Kickstart loop
-            loop()
-        }
+        if (isPlaying) loop()
 
-        return () => {
-            isCancelled = true // Kill any pending loops on unmount/dep change
-        }
-    }, [isPlaying, history]) // Removed dependencies that cause re-eval loops
+        return () => { isCancelled = true }
+    }, [isPlaying, history]) // eslint-disable-line react-hooks/exhaustive-deps
 
     // Keyboard shortcuts
     useEffect(() => {
@@ -220,183 +217,247 @@ export default function TimelineController() {
 
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [showTimeline, currentIndex, history])
+    }, [showTimeline, handleStep])
 
-    if (!cityData || !showTimeline) return null
+    // Speed cycle
+    const cycleSpeed = () => {
+        setPlaybackSpeed(s => s === 0.5 ? 1 : s === 1 ? 2 : 0.5)
+    }
 
-    // Don't render until history is loaded — prevents blank bar flash
-    if (history.length === 0) return null
+    if (!cityData || !showTimeline || history.length === 0) return null
 
     const currentCommit = history[currentIndex] || {}
     const progress = history.length > 1 ? (currentIndex / (history.length - 1)) * 100 : 100
+    const hoverCommit = hoveredIndex !== null ? history[hoveredIndex] : null
 
     return createPortal(
         <AnimatePresence>
             <motion.div
                 key="timeline-bar"
                 initial={{ y: 80, opacity: 0 }}
-                animate={{
-                    y: 0,
-                    opacity: 1
-                }}
+                animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 80, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 style={{
                     position: 'fixed',
-                    bottom: '130px',
-                    left: 0,
-                    right: 0,
-                    marginInline: 'auto', // CSS Native Centering (Robust)
-                    width: 'fit-content', // Hugs content
-                    maxWidth: '90vw',
+                    bottom: '100px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
                     zIndex: 9000,
-                    padding: '0 24px',
-                    pointerEvents: 'none', // Allow clicking through side gaps
-                    boxSizing: 'border-box',
-                    display: 'flex',
-                    justifyContent: 'center'
+                    pointerEvents: 'none',
                 }}
             >
                 <div style={{
-                    background: 'rgba(14, 16, 24, 0.80)',
+                    background: 'var(--color-bg-tertiary, #111)',
                     backdropFilter: 'blur(24px) saturate(180%)',
                     WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-                    borderRadius: '24px',
-                    padding: '16px 24px',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    boxShadow: '0 24px 48px -12px rgba(0, 0, 0, 0.6)',
+                    borderRadius: '16px',
+                    padding: '14px 20px',
+                    border: '1px solid var(--border-default, rgba(255,255,255,0.08))',
+                    boxShadow: '0 20px 60px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.03) inset',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '32px',
-                    pointerEvents: 'auto', // Re-enable clicks
-                    minWidth: '600px'
+                    gap: '16px',
+                    pointerEvents: 'auto',
+                    minWidth: '560px',
+                    maxWidth: '700px',
+                    fontFamily: 'var(--font-body, Inter, sans-serif)',
                 }}>
 
-                    {/* Play/Pause Button */}
-                    {/* Play/Pause Button - Prominent Primary Action */}
-                    <button
-                        onClick={() => {
-                            if (!isPlaying && currentIndex >= history.length - 1) {
-                                setCurrentIndex(0)
-                                performAnalysis(history[0])
+                    {/* Play Controls */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+                        <ControlButton
+                            onClick={handleJumpStart}
+                            disabled={currentIndex <= 0}
+                            title="Jump to first commit"
+                        >
+                            <ChevronFirst size={14} />
+                        </ControlButton>
+
+                        <ControlButton
+                            onClick={() => handleStep(-1)}
+                            disabled={currentIndex <= 0}
+                            title="Previous commit (←)"
+                        >
+                            <SkipBack size={13} />
+                        </ControlButton>
+
+                        {/* Play/Pause — primary action */}
+                        <button
+                            onClick={() => {
+                                if (!isPlaying && currentIndex >= history.length - 1) {
+                                    setCurrentIndex(0)
+                                    performAnalysis(history[0])
+                                }
+                                setIsPlaying(p => !p)
+                            }}
+                            style={{
+                                width: '36px',
+                                height: '36px',
+                                borderRadius: '10px',
+                                background: isPlaying
+                                    ? 'rgba(255, 255, 255, 0.1)'
+                                    : 'var(--color-accent, #fff)',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                flexShrink: 0,
+                                transition: 'all 0.2s ease',
+                                color: isPlaying ? '#fff' : '#000',
+                            }}
+                            title={isPlaying ? 'Pause (Space)' : 'Play (Space)'}
+                        >
+                            {isPlaying
+                                ? <Pause size={15} strokeWidth={2.5} />
+                                : <Play size={15} strokeWidth={2.5} style={{ marginLeft: '1px' }} />
                             }
-                            setIsPlaying(p => !p)
-                        }}
-                        style={{
-                            width: '44px',
-                            height: '44px',
-                            borderRadius: '12px',
-                            background: isPlaying
-                                ? 'rgba(255, 255, 255, 0.1)'
-                                : 'linear-gradient(135deg, #3b82f6, #2563eb)',
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            flexShrink: 0,
-                            boxShadow: isPlaying
-                                ? 'none'
-                                : '0 4px 16px rgba(59, 130, 246, 0.3)',
-                            transition: 'all 0.2s ease',
-                            color: 'white'
-                        }}
-                    >
-                        {isPlaying
-                            ? <Pause size={18} strokeWidth={2.5} />
-                            : <Play size={18} strokeWidth={2.5} style={{ marginLeft: '2px' }} />
-                        }
-                    </button>
+                        </button>
+
+                        <ControlButton
+                            onClick={() => handleStep(1)}
+                            disabled={currentIndex >= history.length - 1}
+                            title="Next commit (→)"
+                        >
+                            <SkipForward size={13} />
+                        </ControlButton>
+
+                        <ControlButton
+                            onClick={handleJumpEnd}
+                            disabled={currentIndex >= history.length - 1}
+                            title="Jump to latest"
+                        >
+                            <ChevronLast size={14} />
+                        </ControlButton>
+                    </div>
+
+                    {/* Divider */}
+                    <div style={{ width: '1px', height: '28px', background: 'var(--border-default, rgba(255,255,255,0.08))', flexShrink: 0 }} />
 
                     {/* Timeline Track */}
-                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px', marginRight: '8px' }}>
+                    <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
 
-                        {/* Meta Info */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingBottom: '2px' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <span style={{
-                                        fontSize: '0.85rem',
-                                        fontWeight: 700,
-                                        color: '#f4f4f5',
-                                        fontFamily: 'var(--font-mono, monospace)',
-                                        letterSpacing: '-0.02em'
-                                    }}>
-                                        {currentCommit.short_hash}
-                                    </span>
-                                    <span style={{ fontSize: '0.75rem', color: '#a1a1aa' }}>
-                                        {currentCommit.date}
-                                    </span>
-                                </div>
+                        {/* Top: Hash + Date + Author */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{
+                                    fontSize: '0.75rem',
+                                    fontWeight: 600,
+                                    color: 'var(--color-text-primary, #f0f0f4)',
+                                    fontFamily: 'var(--font-mono, monospace)',
+                                }}>
+                                    {currentCommit.short_hash}
+                                </span>
+                                <span style={{
+                                    fontSize: '0.65rem',
+                                    color: 'var(--color-text-tertiary, #7a7e95)',
+                                }}>
+                                    {currentCommit.date}
+                                </span>
                             </div>
 
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '8px',
-                                fontSize: '0.75rem',
-                                color: '#d4d4d8',
-                                background: 'rgba(255,255,255,0.05)',
-                                padding: '4px 8px 4px 4px', // Adjusted padding for avatar
-                                borderRadius: '20px',
-                                border: '1px solid rgba(255,255,255,0.05)'
+                                gap: '6px',
+                                fontSize: '0.65rem',
+                                color: 'var(--color-text-secondary, #b0b3c5)',
+                                background: 'rgba(255,255,255,0.04)',
+                                padding: '3px 8px',
+                                borderRadius: '100px',
+                                border: '1px solid rgba(255,255,255,0.04)',
                             }}>
-                                {/* Avatar Implementation */}
                                 <div style={{
-                                    width: '20px',
-                                    height: '20px',
+                                    width: '16px',
+                                    height: '16px',
                                     borderRadius: '50%',
                                     overflow: 'hidden',
-                                    background: '#3f3f46',
+                                    background: 'var(--gray-700, #3f3f46)',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    justifyContent: 'center'
+                                    justifyContent: 'center',
+                                    flexShrink: 0,
                                 }}>
-                                    {/* Unavatar for GitHub/Gravatar resolution */}
                                     <img
                                         src={`https://unavatar.io/${currentCommit.email || currentCommit.author}?fallback=false`}
-                                        alt={currentCommit.author}
+                                        alt=""
                                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                         onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex' }}
                                     />
-                                    <div style={{ display: 'none', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, color: 'white' }}>
+                                    <div style={{ display: 'none', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center', fontSize: '8px', fontWeight: 700, color: '#fff' }}>
                                         {currentCommit.author ? currentCommit.author.charAt(0).toUpperCase() : '?'}
                                     </div>
                                 </div>
-
-                                <span style={{ fontWeight: 500, maxWidth: '120px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                <span style={{ maxWidth: '80px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 500 }}>
                                     {currentCommit.author}
                                 </span>
                             </div>
                         </div>
 
                         {/* Slider Track */}
-                        <div style={{ position: 'relative', height: '24px', display: 'flex', alignItems: 'center' }}>
-                            {/* Background Track */}
+                        <div
+                            ref={trackRef}
+                            style={{ position: 'relative', height: '20px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+                            onMouseMove={(e) => {
+                                if (!trackRef.current || history.length <= 1) return
+                                const rect = trackRef.current.getBoundingClientRect()
+                                const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
+                                setHoveredIndex(Math.round(ratio * (history.length - 1)))
+                            }}
+                            onMouseLeave={() => setHoveredIndex(null)}
+                        >
+                            {/* Background */}
                             <div style={{
                                 position: 'absolute',
                                 left: 0,
                                 width: '100%',
-                                height: '6px', // Thicker track
-                                background: 'rgba(255, 255, 255, 0.1)',
-                                borderRadius: '4px',
-                                top: 0, bottom: 0, margin: 'auto'
+                                height: '4px',
+                                background: 'rgba(255, 255, 255, 0.06)',
+                                borderRadius: '2px',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
                             }} />
 
-                            {/* Progress Fill */}
+                            {/* Progress */}
                             <div style={{
                                 position: 'absolute',
                                 left: 0,
                                 width: `${progress}%`,
                                 height: '4px',
-                                background: '#3b82f6',
+                                background: isLoading
+                                    ? 'var(--color-warning, #f59e0b)'
+                                    : 'var(--color-accent, #fff)',
                                 borderRadius: '2px',
-                                transition: isScrubbing ? 'none' : 'width 0.2s linear',
-                                boxShadow: '0 0 8px rgba(59, 130, 246, 0.4)',
-                                top: 0, bottom: 0, margin: 'auto'
+                                transition: isScrubbing ? 'none' : 'width 0.3s ease',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                opacity: 0.9,
                             }} />
 
-                            {/* Native Slider */}
+                            {/* Commit dots */}
+                            {history.length > 2 && history.length <= 60 && history.map((_, i) => {
+                                if (history.length > 20 && i % Math.ceil(history.length / 20) !== 0) return null
+                                const pos = (i / (history.length - 1)) * 100
+                                return (
+                                    <div
+                                        key={i}
+                                        style={{
+                                            position: 'absolute',
+                                            left: `${pos}%`,
+                                            top: '50%',
+                                            transform: 'translate(-50%, -50%)',
+                                            width: '3px',
+                                            height: '3px',
+                                            borderRadius: '50%',
+                                            background: i <= currentIndex ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.12)',
+                                            pointerEvents: 'none',
+                                        }}
+                                    />
+                                )
+                            })}
+
+                            {/* Hidden native slider */}
                             <input
                                 type="range"
                                 min={0}
@@ -407,70 +468,102 @@ export default function TimelineController() {
                                     position: 'absolute',
                                     width: '100%',
                                     height: '100%',
-                                    top: 0, left: 0,
+                                    top: 0,
+                                    left: 0,
                                     margin: 0,
                                     opacity: 0,
                                     cursor: 'grab',
-                                    zIndex: 10
+                                    zIndex: 10,
                                 }}
                             />
 
-                            {/* Visual Handle */}
+                            {/* Handle */}
                             <motion.div
                                 style={{
                                     position: 'absolute',
                                     left: `${progress}%`,
-                                    top: 0, bottom: 0, margin: 'auto',
-                                    transform: 'translateX(-50%)',
-                                    width: '16px',
-                                    height: '16px',
+                                    top: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    width: '12px',
+                                    height: '12px',
                                     background: '#ffffff',
                                     borderRadius: '50%',
-                                    boxShadow: '0 0 0 4px rgba(59, 130, 246, 0.3), 0 2px 8px rgba(0,0,0,0.4)',
+                                    boxShadow: '0 0 0 3px rgba(255, 255, 255, 0.15), 0 2px 6px rgba(0,0,0,0.5)',
                                     pointerEvents: 'none',
-                                    zIndex: 5
+                                    zIndex: 5,
                                 }}
-                                whileHover={{ scale: 1.2 }}
-                                animate={isLoading ? { scale: [1, 1.1, 1], boxShadow: '0 0 0 8px rgba(59, 130, 246, 0.2)' } : {}}
+                                animate={isLoading ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+                                transition={isLoading ? { repeat: Infinity, duration: 0.8 } : {}}
                             />
+
+                            {/* Hover tooltip */}
+                            {hoveredIndex !== null && hoverCommit && hoveredIndex !== currentIndex && (
+                                <div style={{
+                                    position: 'absolute',
+                                    left: `${(hoveredIndex / (history.length - 1)) * 100}%`,
+                                    bottom: '22px',
+                                    transform: 'translateX(-50%)',
+                                    background: 'var(--color-bg-elevated, #161616)',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    borderRadius: '8px',
+                                    padding: '6px 10px',
+                                    fontSize: '0.6rem',
+                                    color: 'var(--color-text-secondary)',
+                                    fontFamily: 'var(--font-mono)',
+                                    whiteSpace: 'nowrap',
+                                    pointerEvents: 'none',
+                                    zIndex: 20,
+                                    boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+                                }}>
+                                    <span style={{ fontWeight: 600, color: '#fff' }}>{hoverCommit.short_hash}</span>
+                                    {' '}{hoverCommit.date}
+                                </div>
+                            )}
                         </div>
 
-                        {/* Commit Message (truncated) */}
+                        {/* Commit message */}
                         <div style={{
-                            fontSize: '0.7rem',
-                            color: '#71717a',
+                            fontSize: '0.6rem',
+                            color: 'var(--color-text-muted, #555870)',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap'
+                            whiteSpace: 'nowrap',
+                            maxWidth: '320px',
                         }}>
                             {currentCommit.message}
                         </div>
                     </div>
 
-                    {/* Step Buttons */}
-                    <div style={{ display: 'flex', gap: '4px' }}>
-                        <StepButton
-                            onClick={() => handleStep(-1)}
-                            disabled={currentIndex <= 0}
-                            icon={<SkipBack size={14} />}
-                            title="Previous commit"
-                        />
-                        <StepButton
-                            onClick={() => handleStep(1)}
-                            disabled={currentIndex >= history.length - 1}
-                            icon={<SkipForward size={14} />}
-                            title="Next commit"
-                        />
-                    </div>
+                    {/* Divider */}
+                    <div style={{ width: '1px', height: '28px', background: 'var(--border-default, rgba(255,255,255,0.08))', flexShrink: 0 }} />
 
-                    {/* Counter */}
-                    <div style={{
-                        fontSize: '0.7rem',
-                        color: '#52525b',
-                        fontFamily: 'var(--font-mono, monospace)',
-                        whiteSpace: 'nowrap'
-                    }}>
-                        {currentIndex + 1}/{history.length}
+                    {/* Speed + Counter */}
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+                        <button
+                            onClick={cycleSpeed}
+                            style={{
+                                fontSize: '0.6rem',
+                                fontWeight: 600,
+                                color: 'var(--color-text-tertiary, #7a7e95)',
+                                background: 'rgba(255,255,255,0.04)',
+                                border: '1px solid rgba(255,255,255,0.06)',
+                                borderRadius: '6px',
+                                padding: '3px 8px',
+                                cursor: 'pointer',
+                                fontFamily: 'var(--font-mono)',
+                                transition: 'all 0.15s',
+                            }}
+                            title="Change playback speed"
+                        >
+                            {playbackSpeed}x
+                        </button>
+                        <span style={{
+                            fontSize: '0.55rem',
+                            color: 'var(--color-text-muted, #555870)',
+                            fontFamily: 'var(--font-mono)',
+                        }}>
+                            {currentIndex + 1}/{history.length}
+                        </span>
                     </div>
                 </div>
             </motion.div>
@@ -479,7 +572,7 @@ export default function TimelineController() {
     )
 }
 
-function StepButton({ onClick, disabled, icon, title }) {
+function ControlButton({ onClick, disabled, title, children }) {
     return (
         <button
             onClick={onClick}
@@ -488,18 +581,18 @@ function StepButton({ onClick, disabled, icon, title }) {
             style={{
                 width: '28px',
                 height: '28px',
-                borderRadius: '6px',
+                borderRadius: '8px',
                 border: 'none',
-                background: 'rgba(255, 255, 255, 0.06)',
-                color: disabled ? '#3f3f46' : '#a1a1aa',
+                background: 'rgba(255, 255, 255, 0.04)',
+                color: disabled ? 'rgba(255,255,255,0.15)' : 'var(--color-text-secondary, #b0b3c5)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: disabled ? 'not-allowed' : 'pointer',
-                transition: 'all 0.15s ease'
+                transition: 'all 0.15s ease',
             }}
         >
-            {icon}
+            {children}
         </button>
     )
 }

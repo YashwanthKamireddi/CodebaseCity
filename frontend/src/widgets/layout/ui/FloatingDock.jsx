@@ -17,13 +17,12 @@ import {
     Github,
     Network,
     Download,
-    Move,
     Gamepad2
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
 
 export default function FloatingDock({ view, onViewChange, onAnalyze, onShowGraph, onShowExport }) {
-    const { setCommandPaletteOpen, loading, cityData, refactoringModeActive, toggleRefactoringMode, explorationMode, toggleExplorationMode } = useStore()
+    const { setCommandPaletteOpen, loading, cityData, explorationMode, toggleExplorationMode } = useStore()
 
     return (
         <div className="floating-dock-wrapper">
@@ -59,19 +58,6 @@ export default function FloatingDock({ view, onViewChange, onAnalyze, onShowGrap
                     label="Dependency Graph"
                     description="Interactive 2D graph view"
                     disabled={!cityData}
-                />
-
-                <div className="dock-divider" />
-
-                {/* Refactoring Simulator Engine */}
-                <DeckItem
-                    onClick={toggleRefactoringMode}
-                    active={refactoringModeActive}
-                    icon={<Move size={18} />}
-                    label="Refactoring Simulator"
-                    description="Drag & Drop Architecture Dry Run"
-                    disabled={!cityData}
-                    accent={refactoringModeActive}
                 />
 
                 <div className="dock-divider" />

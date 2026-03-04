@@ -270,10 +270,10 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.625rem 1.5rem;
-    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+    background: var(--color-accent, #fff);
     border: none;
     border-radius: var(--radius-lg);
-    color: white;
+    color: var(--color-text-inverse, #000);
     font-size: var(--text-base);
     font-weight: 600;
     cursor: pointer;

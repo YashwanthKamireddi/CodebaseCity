@@ -1,0 +1,13 @@
+node_modules
+.git
+.github
+*.md
+docs/
+vscode-extension/
+scripts/
+__pycache__
+*.pyc
+.env
+.venv
+venv
+.DS_Store

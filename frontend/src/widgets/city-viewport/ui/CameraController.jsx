@@ -97,6 +97,31 @@ export default function CameraController() {
         return () => window.removeEventListener('flyToBuilding', handleFlyTo)
     }, [camera, controls, layoutMode, cityData, cityMeshRef])
 
+    // Auto-fit camera when city data changes (new analysis or demo load)
+    useEffect(() => {
+        if (!cityData?.buildings?.length || !controls) return
+
+        // Delay slightly to let instances render
+        const timer = setTimeout(() => {
+            const fitDist = cityRadius * 1.2
+            gsap.to(camera.position, {
+                duration: 1.5,
+                x: fitDist,
+                y: cityRadius * 0.9,
+                z: fitDist,
+                ease: 'power2.inOut'
+            })
+            gsap.to(controls.target, {
+                duration: 1.5,
+                x: 0, y: 0, z: 0,
+                ease: 'power2.inOut',
+                onUpdate: () => controls.update()
+            })
+        }, 200)
+
+        return () => clearTimeout(timer)
+    }, [cityData, cityRadius, camera, controls])
+
     // Auto-fly to selected building logic
     const { selectedBuilding, cameraAction } = useStore()
 
@@ -135,7 +160,7 @@ export default function CameraController() {
         } else if (type === 'FIT' || type === 'RESET') {
             gsap.to(camera.position, {
                 duration: 1.0,
-                x: cityRadius * 1.2, y: cityRadius * 0.8, z: cityRadius * 1.2,
+                x: cityRadius * 1.2, y: cityRadius * 0.9, z: cityRadius * 1.2,
                 ease: 'power2.inOut'
             })
             gsap.to(controls.target, {

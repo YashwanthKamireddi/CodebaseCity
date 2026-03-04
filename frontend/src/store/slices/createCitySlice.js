@@ -1,4 +1,4 @@
-const API_BASE = '/api'
+const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
 /**
  * City Slice
@@ -51,7 +51,6 @@ export const createCitySlice = (set, get) => ({
             const path = data.path || ''
             cityId = path.replace(/\//g, '_').replace(/:/g, '').replace(/\\/g, '_').replace(/^_/, '')
         }
-        console.log('[CitySlice] Setting cityData with cityId:', cityId)
 
         set((state) => ({
             previousCityData: state.cityData,

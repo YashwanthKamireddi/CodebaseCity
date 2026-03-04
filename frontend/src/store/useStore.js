@@ -5,7 +5,7 @@ import { createInteractionSlice } from './slices/createInteractionSlice'
 import { createTimeSlice } from './slices/createTimeSlice'
 import { createIntelligenceSlice } from './slices/createIntelligenceSlice'
 
-const API_BASE = '/api'
+const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
 const useStore = create((set, get) => ({
     ...createCitySlice(set, get),

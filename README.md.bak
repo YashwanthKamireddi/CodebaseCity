@@ -1,0 +1,193 @@
+<div align="center">
+
+<img src="docs/hero-banner.png" width="100%" alt="Codebase City — 3D Software Architecture Visualization" />
+
+# Codebase City
+
+**Transform any codebase into a living, breathing 3D city.**
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)](https://react.dev)
+[![Three.js](https://img.shields.io/badge/Three.js-r160-black?logo=threedotjs)](https://threejs.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Tree-sitter](https://img.shields.io/badge/Tree--sitter-AST-yellow)](https://tree-sitter.github.io)
+
+*Navigate software architecture spatially. Spot tech debt instantly. Plan refactors visually.*
+
+[✨ Try Live Demo](#) · [📖 Documentation](docs/) · [🐛 Report Bug](https://github.com/YashwanthKamireddi/CodebaseCity/issues) · [💡 Request Feature](https://github.com/YashwanthKamireddi/CodebaseCity/issues)
+
+</div>
+
+---
+
+## What is Codebase City?
+
+Codebase City renders your software repository as an explorable **3D cityscape**. Each file becomes a building. Each directory becomes a district. Height = complexity. Color = health. Dependency flows become glowing trace lines between structures.
+
+Instead of reading static reports, you **fly through** your architecture and see problems the way a city planner sees urban blight — instantly, spatially, intuitively.
+
+### Who is this for?
+
+- **Tech Leads** — Spot god-objects and circular dependencies at a glance
+- **New Engineers** — Spatially explore unfamiliar codebases during onboarding
+- **Architecture Reviews** — Visualize blast radius before any refactoring
+
+---
+
+## Features
+
+### 🏙️ Spatial Code Intelligence
+- **Complexity Mapping** — Building height = Lines of Code × Cyclomatic Complexity
+- **Dependency Tracing** — Glowing trace lines between imports/exports
+- **Hotspot Detection** — High-churn files erupt with 3D flame plumes (Flamegraph)
+- **Debt Swamp Topography** — Heavily indebted files sink below ground into fog
+
+### 🔬 Deep Inspection
+- **Architectural X-Ray** — Click a building to reveal its internal AST structure
+- **Blast Radius Analysis** — See exactly which files break if you change one module
+- **Actionable Infractions HUD** — Get specific refactoring commands (e.g., "God-Class Detected: Extract into sub-modules")
+
+### 🔄 Refactoring Simulator
+- **Drag-and-Drop Dry Run** — Grab a building, move it to a different district, see if it fixes architectural drift *before writing code*
+- **Live Stability Score** — Real-time calculation of blast radius and encapsulation risks
+
+### ⏰ Time Travel
+- **Git Replay Timeline** — Scrub through commit history and watch the architecture grow
+- **Author Attribution** — See who modified which buildings recently
+
+### 🤖 AI Architect
+- **Natural Language Queries** — Ask "What are the most coupled modules?" and get instant visual answers
+- **MCP Server** — Connect to Claude, Cursor, or any MCP-compatible agent for AI-driven architecture analysis
+
+### 🔐 GitHub Integration
+- **OAuth Login** — Securely analyze private repositories
+- **1-Click Repo Select** — Browse and select from your GitHub repositories
+- **Ephemeral Parsing** — Source code is immediately deleted after analysis — zero persistence
+
+---
+
+## Quick Start
+
+### Option 1: Docker (Recommended)
+
+```bash
+git clone https://github.com/YashwanthKamireddi/CodebaseCity.git
+cd CodebaseCity
+cp backend/.env.example backend/.env  # Add your GEMINI_API_KEY
+docker compose up
+```
+
+Open [http://localhost:5173](http://localhost:5173) → Enter any repo path → Explore your city.
+
+### Option 2: Manual Setup
+
+**Prerequisites:** Node.js 18+, Python 3.11+, Git
+
+```bash
+# Backend
+cd backend
+python -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env  # Add your GEMINI_API_KEY
+uvicorn main:app --reload --port 8000 &
+
+# Frontends
+cd ../frontend
+npm install
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173)
+
+---
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Frontend ["Frontend (React + Three.js)"]
+        A[InstancedCity GPU Renderer] --> B[PulseMaterial Neon Shader]
+        C[Zustand Global Store] --> A
+        D[FloatingDock Controls] --> C
+        E[BuildingPanel Inspector] --> C
+        F[AI Architect Chat] --> C
+    end
+
+    subgraph Backend ["Backend (FastAPI + Python)"]
+        G[Analysis Engine] --> H[Tree-sitter AST Parser]
+        G --> I[NetworkX Graph Engine]
+        G --> J[Git History Analyzer]
+        K[Intelligence API] --> L[Impact Analyzer]
+        K --> M[Code Health Scanner]
+        K --> N[Refactoring Simulator]
+        O[MCP Server] --> K
+    end
+
+    C <-->|REST API| G
+    C <-->|WebSocket| K
+    F <-->|Gemini AI| P[Google Gemini API]
+```
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **3D Rendering** | Three.js, React Three Fiber, custom GLSL shaders |
+| **Frontend** | React 18, Zustand, Framer Motion, Lucide Icons |
+| **Backend** | FastAPI, Python 3.11, Uvicorn |
+| **Code Parsing** | Tree-sitter (Python, JS, TS grammars) |
+| **Graph Analysis** | NetworkX, Leiden Algorithm, KuzuDB |
+| **AI** | Google Gemini API |
+| **Deployment** | Vercel (frontend), Render (backend), Docker |
+
+---
+
+## Environment Variables
+
+### Backend (`backend/.env`)
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GEMINI_API_KEY` | ✅ | Google Gemini API key for AI features |
+| `GITHUB_CLIENT_ID` | Optional | GitHub OAuth app client ID |
+| `GITHUB_CLIENT_SECRET` | Optional | GitHub OAuth app client secret |
+| `JWT_SECRET` | Optional | JWT signing secret (auto-generated if unset) |
+
+---
+
+## Controls
+
+| Key | Action |
+|-----|--------|
+| **Click** | Select/inspect a building |
+| **Scroll** | Zoom in/out |
+| **Drag** | Orbit camera |
+| **Right-click drag** | Pan |
+| **⌘K** | Command palette (search files, commands) |
+| **L** | Toggle labels |
+| **D** | Toggle dependency roads |
+| **V** | Toggle table/3D view |
+| **Esc** | Clear selection |
+
+---
+
+## Contributing
+
+Contributions are welcome! See our [contributing guide](CONTRIBUTING.md).
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## License
+
+**Codebase City** and its core 3D architectural rendering concepts are the intellectual property of **Yashwanth Kamireddi**.
+
+Copyright © 2026 **Yashwanth Kamireddi**. All Rights Reserved.
+
+This project is open-source and distributed under the [MIT License](LICENSE).

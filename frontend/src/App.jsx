@@ -32,13 +32,10 @@ import ChatInterface from './features/ai-architect/ui/ChatInterface'
 import WelcomeOverlay from './widgets/layout/ui/WelcomeOverlay'
 import DependencyGraph from './features/architect/ui/DependencyGraph'
 import ExportReport from './features/analysis/ui/ExportReport'
-import IntelligenceDashboard from './components/IntelligenceDashboard'
-import ImpactVisualization from './components/ImpactVisualization'
 import './features/FloatingDock.css'
 import { useVSCodeSync } from './hooks/useVSCodeSync'
 import useStore from './store/useStore'
 import CodeViewer from './entities/building/ui/CodeViewer'
-import DragModeHUD from './widgets/layout/ui/DragModeHUD'
 import ExplorationMode from './widgets/city-viewport/ui/ExplorationMode'
 import ExplorationHUD from './widgets/layout/ui/ExplorationHUD'
 
@@ -70,9 +67,7 @@ function App() {
         layoutMode,
         vscodeConnected,
         selectBuilding,
-        activeIntelligencePanel,
         error,
-        refactoringModeActive,
         codeViewerOpen,
         setCodeViewerOpen,
         explorationMode,
@@ -90,9 +85,6 @@ function App() {
     const isMobile = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0
     const dprRange = isMobile ? [0.75, 1] : [1, 1.5]
     const { analyzeModalOpen, setAnalyzeModalOpen } = useStore()
-
-    // DEBUG: Trace loading state
-    console.log('[App] Render. Loading:', loading, 'CityData:', !!cityData)
 
     // VS Code integration
     const { notifyBuildingSelected } = useVSCodeSync()
@@ -205,7 +197,7 @@ function App() {
                                         far={3000}
                                     />
 
-                                    {/* Camera Controls: Orbit (default) or Exploration (first-person flight) */}
+                                    {/* Camera Controls */}
                                     {!explorationMode && (
                                         <OrbitControls
                                             makeDefault
@@ -218,7 +210,7 @@ function App() {
                                             minPolarAngle={0}
                                             dampingFactor={0.08}
                                             enableDamping={true}
-                                            autoRotate={!cityData || !selectedBuilding} // Auto-rotate on landing
+                                            autoRotate={!cityData || !selectedBuilding}
                                             autoRotateSpeed={0.5}
                                             target={[0, 0, 0]}
                                         />
@@ -286,11 +278,6 @@ function App() {
                                 />
                             )}
 
-                            {/* REFACTORING SIMULATOR HUD */}
-                            {refactoringModeActive && (
-                                <DragModeHUD />
-                            )}
-
                             {/* EXPLORATION MODE HUD */}
                             <ExplorationHUD />
                         </>
@@ -299,14 +286,6 @@ function App() {
             </div>
 
             {cityData && !isLandingOverlayActive && <Sidebar />}
-
-            {/* Intelligence Dashboard */}
-            {cityData && activeIntelligencePanel && (
-                <IntelligenceDashboard />
-            )}
-
-            {/* Impact Visualization */}
-            {cityData && <ImpactVisualization />}
 
             {/* Command Palette - ⌘K */}
             {cityData && <CommandPalette />}

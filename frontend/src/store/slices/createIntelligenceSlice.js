@@ -3,7 +3,7 @@
  * State management for developer intelligence tools.
  */
 
-const API_BASE = '/api'
+const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
 export const createIntelligenceSlice = (set, get) => ({
     // Intelligence State
@@ -38,6 +38,11 @@ export const createIntelligenceSlice = (set, get) => ({
             return
         }
 
+        if (cityId.startsWith('demo_')) {
+            set({ healthReport: { score: 92, status: 'Healthy', issues: { god_objects: [], cyclical_dependencies: [] } } })
+            return
+        }
+
         set(state => ({
             intelligenceLoading: { ...state.intelligenceLoading, health: true }
         }))
@@ -67,6 +72,11 @@ export const createIntelligenceSlice = (set, get) => ({
         const { cityId } = get()
         if (!cityId) return
 
+        if (cityId.startsWith('demo_')) {
+            set({ deadCodeReport: [] })
+            return
+        }
+
         set(state => ({
             intelligenceLoading: { ...state.intelligenceLoading, deadCode: true }
         }))
@@ -92,6 +102,11 @@ export const createIntelligenceSlice = (set, get) => ({
     fetchQualityReport: async () => {
         const { cityId } = get()
         if (!cityId) return
+
+        if (cityId.startsWith('demo_')) {
+            set({ qualityReport: { maintainability_index: 85, duplication_percentage: 2.1 } })
+            return
+        }
 
         set(state => ({
             intelligenceLoading: { ...state.intelligenceLoading, quality: true }
@@ -120,7 +135,15 @@ export const createIntelligenceSlice = (set, get) => ({
         if (!cityId || !fileId) return
 
         if (cityId.startsWith('demo_')) {
-            set({ impactAnalysis: { file_id: fileId, levels: { level_1: [], level_2: [], level_3: [] } } })
+            // Visually interesting mock impact for the Demo City
+            set({ impactAnalysis: {
+                file_id: fileId,
+                levels: {
+                    level_1: [{ id: 'b_1', name: 'Module_b_1.js' }],
+                    level_2: [{ id: 'b_2', name: 'Module_b_2.js' }],
+                    level_3: []
+                }
+            } })
             return
         }
 
@@ -152,6 +175,10 @@ export const createIntelligenceSlice = (set, get) => ({
         const { cityId } = get()
         if (!cityId || !fileId) return null
 
+        if (cityId.startsWith('demo_')) {
+            return { is_safe: true, dependents: [], score: 100 }
+        }
+
         try {
             const response = await fetch(
                 `${API_BASE}/intelligence/safe-delete/${cityId}/${fileId}`
@@ -170,6 +197,11 @@ export const createIntelligenceSlice = (set, get) => ({
     fetchCriticalPaths: async () => {
         const { cityId } = get()
         if (!cityId) return
+
+        if (cityId.startsWith('demo_')) {
+            set({ criticalPaths: [] })
+            return
+        }
 
         set(state => ({
             intelligenceLoading: { ...state.intelligenceLoading, critical: true }
@@ -196,6 +228,11 @@ export const createIntelligenceSlice = (set, get) => ({
     performSmartSearch: async (query, type = 'exact', fileFilter = null) => {
         const { cityId } = get()
         if (!cityId || !query) return
+
+        if (cityId.startsWith('demo_')) {
+            set({ searchResults: [] })
+            return
+        }
 
         set(state => ({
             intelligenceLoading: { ...state.intelligenceLoading, search: true }

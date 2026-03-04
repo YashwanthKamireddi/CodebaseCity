@@ -9,27 +9,29 @@
       "path": "api_server.py",
       "district_id": "district_0",
       "position": {
-        "x": -2.311604405334128,
+        "x": 0.7531130117973316,
         "y": 0.0,
-        "z": 0.13054485719455378
+        "z": 0.6684624037600069
       },
       "dimensions": {
         "width": 3.0,
-        "height": 61.199999999999996,
+        "height": 40.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 337,
         "complexity": 51,
         "churn": 0,
-        "age_days": 97,
+        "age_days": 98,
         "dependencies_in": 0,
         "dependencies_out": 3,
-        "size_bytes": 12007
+        "size_bytes": 12007,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.13287671232876713,
+      "decay_level": 0.13424657534246576,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -42,27 +44,29 @@
       "path": "ai_core/sample_data.py",
       "district_id": "district_5",
       "position": {
-        "x": 43.1755557051409,
+        "x": 50.39724491355311,
         "y": 0.0,
-        "z": -33.19977149927498
+        "z": -29.132898720263107
       },
       "dimensions": {
         "width": 3.0,
-        "height": 10.799999999999999,
+        "height": 29.575424759098897,
         "depth": 3.0
       },
       "metrics": {
         "loc": 109,
         "complexity": 9,
         "churn": 0,
-        "age_days": 99,
+        "age_days": 100,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 4202
+        "size_bytes": 4202,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.13561643835616438,
+      "decay_level": 0.136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -75,27 +79,29 @@
       "path": "ai_core/main_agent.py",
       "district_id": "district_0",
       "position": {
-        "x": -4.408601589262414,
+        "x": -13.531663365949655,
         "y": 0.0,
-        "z": 2.978554776455721
+        "z": 11.815151128130205
       },
       "dimensions": {
-        "width": 7.5,
-        "height": 109.2,
-        "depth": 7.5
+        "width": 9.0,
+        "height": 40.0,
+        "depth": 9.0
       },
       "metrics": {
         "loc": 572,
         "complexity": 91,
         "churn": 0,
-        "age_days": 97,
+        "age_days": 98,
         "dependencies_in": 3,
         "dependencies_out": 1,
-        "size_bytes": 20553
+        "size_bytes": 20553,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.13287671232876713,
+      "decay_level": 0.13424657534246576,
       "is_hotspot": true,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -108,27 +114,29 @@
       "path": "ai_core/knowledge_curator.py",
       "district_id": "district_6",
       "position": {
-        "x": -11.082128898908683,
+        "x": -11.31047717362136,
         "y": 0.0,
-        "z": 58.22479055795497
+        "z": 59.35344193578169
       },
       "dimensions": {
         "width": 3.0,
-        "height": 24.0,
+        "height": 38.138539382230086,
         "depth": 3.0
       },
       "metrics": {
         "loc": 69,
         "complexity": 20,
         "churn": 0,
-        "age_days": 147,
+        "age_days": 148,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2975
+        "size_bytes": 2975,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.20136986301369864,
+      "decay_level": 0.20273972602739726,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -141,27 +149,29 @@
       "path": "ai_core/data_access.py",
       "district_id": "district_0",
       "position": {
-        "x": -2.1392278707685883,
+        "x": 2.35876946279422,
         "y": 0.0,
-        "z": -5.060608955342749
+        "z": -25.309751501772013
       },
       "dimensions": {
-        "width": 4.5,
-        "height": 93.6,
-        "depth": 4.5
+        "width": 6.0,
+        "height": 40.0,
+        "depth": 6.0
       },
       "metrics": {
         "loc": 399,
         "complexity": 78,
         "churn": 0,
-        "age_days": 97,
+        "age_days": 98,
         "dependencies_in": 1,
         "dependencies_out": 1,
-        "size_bytes": 14244
+        "size_bytes": 14244,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.13287671232876713,
+      "decay_level": 0.13424657534246576,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -174,27 +184,29 @@
       "path": "ai_core/curated_knowledge.py",
       "district_id": "district_7",
       "position": {
-        "x": -28.30682909148878,
+        "x": -32.2982219302575,
         "y": 0.0,
-        "z": -56.310237025366064
+        "z": -56.181312832506066
       },
       "dimensions": {
         "width": 3.0,
-        "height": 14.399999999999999,
+        "height": 32.60351774512874,
         "depth": 3.0
       },
       "metrics": {
         "loc": 29,
         "complexity": 12,
         "churn": 0,
-        "age_days": 147,
+        "age_days": 148,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2754
+        "size_bytes": 2754,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.20136986301369864,
+      "decay_level": 0.20273972602739726,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -207,27 +219,29 @@
       "path": "ai_core/create_vector_db.py",
       "district_id": "district_8",
       "position": {
-        "x": 62.993797930276514,
+        "x": 63.66051904646619,
         "y": 0.0,
-        "z": 28.833064491937122
+        "z": 29.84716264241164
       },
       "dimensions": {
         "width": 3.0,
-        "height": 8.4,
+        "height": 27.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 46,
         "complexity": 7,
         "churn": 0,
-        "age_days": 147,
+        "age_days": 148,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2123
+        "size_bytes": 2123,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.20136986301369864,
+      "decay_level": 0.20273972602739726,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -240,27 +254,29 @@
       "path": "ai_core/config.py",
       "district_id": "district_0",
       "position": {
-        "x": 1.1057507690177364,
+        "x": 19.236686765705432,
         "y": 0.0,
-        "z": 4.670384337312055
+        "z": 24.924812587319956
       },
       "dimensions": {
-        "width": 6.0,
-        "height": 10.799999999999999,
-        "depth": 6.0
+        "width": 7.754887502163468,
+        "height": 29.575424759098897,
+        "depth": 7.754887502163468
       },
       "metrics": {
         "loc": 53,
         "complexity": 9,
         "churn": 0,
-        "age_days": 97,
+        "age_days": 98,
         "dependencies_in": 2,
         "dependencies_out": 0,
-        "size_bytes": 1881
+        "size_bytes": 1881,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.13287671232876713,
+      "decay_level": 0.13424657534246576,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -273,27 +289,29 @@
       "path": "data_pipeline/data_quality_checker.py",
       "district_id": "district_9",
       "position": {
-        "x": -70.72798712028009,
+        "x": -68.63786787535894,
         "y": 0.0,
-        "z": 24.179722919194393
+        "z": 31.197668023747177
       },
       "dimensions": {
         "width": 3.0,
-        "height": 40.8,
+        "height": 40.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 97,
         "complexity": 34,
         "churn": 0,
-        "age_days": 147,
+        "age_days": 148,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 3758
+        "size_bytes": 3758,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.20136986301369864,
+      "decay_level": 0.20273972602739726,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -306,27 +324,29 @@
       "path": "data_pipeline/check_and_download_from_index.py",
       "district_id": "district_10",
       "position": {
-        "x": 28.311712772391648,
+        "x": 32.50490706053806,
         "y": 0.0,
-        "z": -74.53966439345646
+        "z": -73.55883526197695
       },
       "dimensions": {
         "width": 3.0,
-        "height": 21.599999999999998,
+        "height": 36.98342010754868,
         "depth": 3.0
       },
       "metrics": {
         "loc": 82,
         "complexity": 18,
         "churn": 0,
-        "age_days": 161,
+        "age_days": 162,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2739
+        "size_bytes": 2739,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.22054794520547946,
+      "decay_level": 0.2219178082191781,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -339,27 +359,29 @@
       "path": "data_pipeline/build_database.py",
       "district_id": "district_1",
       "position": {
-        "x": -15.371017402524036,
+        "x": -19.029539524251803,
         "y": 0.0,
-        "z": 16.72761068439884
+        "z": 17.11054118232399
       },
       "dimensions": {
         "width": 3.0,
-        "height": 49.199999999999996,
+        "height": 40.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 323,
         "complexity": 41,
         "churn": 0,
-        "age_days": 100,
+        "age_days": 101,
         "dependencies_in": 0,
         "dependencies_out": 1,
-        "size_bytes": 10440
+        "size_bytes": 10440,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.136986301369863,
+      "decay_level": 0.13835616438356163,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -372,27 +394,29 @@
       "path": "data_pipeline/attribute_inspector.py",
       "district_id": "district_11",
       "position": {
-        "x": 18.570232700082503,
+        "x": 23.88897151193952,
         "y": 0.0,
-        "z": 82.81469264822304
+        "z": 81.8009153373218
       },
       "dimensions": {
         "width": 3.0,
-        "height": 34.8,
+        "height": 40.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 84,
         "complexity": 29,
         "churn": 0,
-        "age_days": 161,
+        "age_days": 162,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 3057
+        "size_bytes": 3057,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.22054794520547946,
+      "decay_level": 0.2219178082191781,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -405,27 +429,29 @@
       "path": "frontend/vite.config.ts",
       "district_id": "district_12",
       "position": {
-        "x": -75.20792651385581,
+        "x": -75.18775115434936,
         "y": 0.0,
-        "z": -38.16558295550326
+        "z": -46.85449880186097
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 46,
         "complexity": 1,
         "churn": 0,
-        "age_days": 97,
+        "age_days": 98,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 918
+        "size_bytes": 918,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.13287671232876713,
+      "decay_level": 0.13424657534246576,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -438,27 +464,29 @@
       "path": "frontend/tailwind.config.ts",
       "district_id": "district_13",
       "position": {
-        "x": 87.7847369667708,
+        "x": 87.53964119342827,
         "y": 0.0,
-        "z": -18.559844522741013
+        "z": -17.73700316579884
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 75,
         "complexity": 1,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2185
+        "size_bytes": 2185,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -471,27 +499,29 @@
       "path": "frontend/postcss.config.js",
       "district_id": "district_14",
       "position": {
-        "x": -59.64515001375134,
+        "x": -52.091068299658275,
         "y": 0.0,
-        "z": 73.13706022674441
+        "z": 78.35579554502156
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 7,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 81
+        "size_bytes": 81,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "javascript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -504,27 +534,29 @@
       "path": "frontend/eslint.config.js",
       "district_id": "district_15",
       "position": {
-        "x": -21.29471169284751,
+        "x": -8.274128796682133,
         "y": 0.0,
-        "z": -96.4978060129451
+        "z": -97.10196568083278
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 30,
         "complexity": 1,
         "churn": 0,
-        "age_days": 147,
+        "age_days": 148,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 926
+        "size_bytes": 926,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "javascript",
       "summary": null,
-      "decay_level": 0.20136986301369864,
+      "decay_level": 0.20273972602739726,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -537,27 +569,29 @@
       "path": "frontend/src/vite-env.d.ts",
       "district_id": "district_16",
       "position": {
-        "x": 73.61449951176071,
+        "x": 82.39873618027826,
         "y": 0.0,
-        "z": 68.35042068442569
+        "z": 57.624074100794736
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 2,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 38
+        "size_bytes": 38,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -570,27 +604,29 @@
       "path": "frontend/src/main.tsx",
       "district_id": "district_2",
       "position": {
-        "x": 1.3161285191403687,
+        "x": 2.9295991518661717,
         "y": 0.0,
-        "z": -32.60686975334384
+        "z": -37.285595398312765
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 11,
         "complexity": 1,
         "churn": 0,
-        "age_days": 100,
+        "age_days": 101,
         "dependencies_in": 0,
         "dependencies_out": 1,
-        "size_bytes": 241
+        "size_bytes": 241,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.136986301369863,
+      "decay_level": 0.13835616438356163,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -603,27 +639,29 @@
       "path": "frontend/src/App.tsx",
       "district_id": "district_2",
       "position": {
-        "x": -1.0099659919314237,
+        "x": -9.66870495815112,
         "y": 0.0,
-        "z": -29.987957161226177
+        "z": -24.452434406212873
       },
       "dimensions": {
-        "width": 4.5,
-        "height": 138.0,
-        "depth": 4.5
+        "width": 6.0,
+        "height": 40.0,
+        "depth": 6.0
       },
       "metrics": {
         "loc": 875,
         "complexity": 115,
         "churn": 0,
-        "age_days": 97,
+        "age_days": 98,
         "dependencies_in": 1,
         "dependencies_out": 0,
-        "size_bytes": 33239
+        "size_bytes": 33239,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.13287671232876713,
+      "decay_level": 0.13424657534246576,
       "is_hotspot": true,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -636,27 +674,29 @@
       "path": "frontend/src/components/ThemeToggle.tsx",
       "district_id": "district_17",
       "position": {
-        "x": -102.4577002592861,
+        "x": -103.31779433424973,
         "y": 0.0,
-        "z": 11.888099017978488
+        "z": 6.56530632027083
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.4,
+        "height": 15.679700005769249,
         "depth": 3.0
       },
       "metrics": {
         "loc": 33,
         "complexity": 2,
         "churn": 0,
-        "age_days": 100,
+        "age_days": 101,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1150
+        "size_bytes": 1150,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.136986301369863,
+      "decay_level": 0.13835616438356163,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -669,27 +709,29 @@
       "path": "frontend/src/components/ThemeProvider.tsx",
       "district_id": "district_18",
       "position": {
-        "x": 74.41264512205225,
+        "x": 74.44881755441008,
         "y": 0.0,
-        "z": -73.38124107278237
+        "z": -74.52796474513808
       },
       "dimensions": {
         "width": 3.0,
-        "height": 10.799999999999999,
+        "height": 29.575424759098897,
         "depth": 3.0
       },
       "metrics": {
         "loc": 86,
         "complexity": 9,
         "churn": 0,
-        "age_days": 147,
+        "age_days": 148,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2338
+        "size_bytes": 2338,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.20136986301369864,
+      "decay_level": 0.20273972602739726,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -702,27 +744,29 @@
       "path": "frontend/src/components/StreamingDataVisualization.tsx",
       "district_id": "district_19",
       "position": {
-        "x": 6.156771953728021,
+        "x": -4.016646799306823,
         "y": 0.0,
-        "z": 110.46092939905417
+        "z": 111.56696818079872
       },
       "dimensions": {
         "width": 3.0,
-        "height": 30.0,
+        "height": 40.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 352,
         "complexity": 25,
         "churn": 0,
-        "age_days": 147,
+        "age_days": 148,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 14747
+        "size_bytes": 14747,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.20136986301369864,
+      "decay_level": 0.20273972602739726,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -735,27 +779,29 @@
       "path": "frontend/src/components/RealTimeOceanMap.tsx",
       "district_id": "district_20",
       "position": {
-        "x": -66.17520962800538,
+        "x": -64.81666919346193,
         "y": 0.0,
-        "z": -89.43508835926731
+        "z": -86.30759497598534
       },
       "dimensions": {
         "width": 3.0,
-        "height": 19.2,
+        "height": 35.69970273000271,
         "depth": 3.0
       },
       "metrics": {
         "loc": 434,
         "complexity": 16,
         "churn": 0,
-        "age_days": 99,
+        "age_days": 100,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 18788
+        "size_bytes": 18788,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.13561643835616438,
+      "decay_level": 0.136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -768,27 +814,29 @@
       "path": "frontend/src/components/OceanMap.tsx",
       "district_id": "district_21",
       "position": {
-        "x": 109.66583529415202,
+        "x": 115.76132316636546,
         "y": 0.0,
-        "z": 25.689027790759518
+        "z": 13.350477512477056
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 148,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 6421
+        "size_bytes": 6421,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -801,27 +849,29 @@
       "path": "frontend/src/components/LandingPage.tsx",
       "district_id": "district_22",
       "position": {
-        "x": -91.04493926434678,
+        "x": -92.50675066356862,
         "y": 0.0,
-        "z": 69.32121292908154
+        "z": 71.09952353584625
       },
       "dimensions": {
         "width": 3.0,
-        "height": 7.199999999999999,
+        "height": 25.458839376460833,
         "depth": 3.0
       },
       "metrics": {
         "loc": 183,
         "complexity": 6,
         "churn": 0,
-        "age_days": 99,
+        "age_days": 100,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 11708
+        "size_bytes": 11708,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.13561643835616438,
+      "decay_level": 0.136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -834,27 +884,29 @@
       "path": "frontend/src/components/InteractiveOceanMap.tsx",
       "district_id": "district_23",
       "position": {
-        "x": 18.492843437785673,
+        "x": 23.17682519999038,
         "y": 0.0,
-        "z": -119.71861392564223
+        "z": -117.08201694823111
       },
       "dimensions": {
         "width": 3.0,
-        "height": 66.0,
+        "height": 40.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 885,
         "complexity": 55,
         "churn": 0,
-        "age_days": 99,
+        "age_days": 100,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 38659
+        "size_bytes": 38659,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.13561643835616438,
+      "decay_level": 0.136986301369863,
       "is_hotspot": true,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -867,27 +919,29 @@
       "path": "frontend/src/components/ErrorBoundary.tsx",
       "district_id": "district_24",
       "position": {
-        "x": 56.689485896724015,
+        "x": 66.5744509339266,
         "y": 0.0,
-        "z": 110.045999634198
+        "z": 103.97900660608312
       },
       "dimensions": {
         "width": 3.0,
-        "height": 4.8,
+        "height": 21.575424759098897,
         "depth": 3.0
       },
       "metrics": {
         "loc": 72,
         "complexity": 4,
         "churn": 0,
-        "age_days": 147,
+        "age_days": 148,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2334
+        "size_bytes": 2334,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.20136986301369864,
+      "decay_level": 0.20273972602739726,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -900,27 +954,29 @@
       "path": "frontend/src/components/EnhancedChatInterface.tsx",
       "district_id": "district_3",
       "position": {
-        "x": 31.195474650107606,
+        "x": 22.48218926174003,
         "y": 0.0,
-        "z": 33.835014329566185
+        "z": 34.390089651471094
       },
       "dimensions": {
         "width": 3.0,
-        "height": 19.2,
+        "height": 35.69970273000271,
         "depth": 3.0
       },
       "metrics": {
         "loc": 170,
         "complexity": 16,
         "churn": 0,
-        "age_days": 147,
+        "age_days": 148,
         "dependencies_in": 0,
         "dependencies_out": 1,
-        "size_bytes": 4233
+        "size_bytes": 4233,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.20136986301369864,
+      "decay_level": 0.20273972602739726,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -933,27 +989,29 @@
       "path": "frontend/src/components/DataVisualization.tsx",
       "district_id": "district_4",
       "position": {
-        "x": -48.38694693127754,
+        "x": -47.815012425372295,
         "y": 0.0,
-        "z": -11.108648591184386
+        "z": -8.782789261038932
       },
       "dimensions": {
         "width": 3.0,
-        "height": 104.39999999999999,
+        "height": 40.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 801,
         "complexity": 87,
         "churn": 0,
-        "age_days": 97,
+        "age_days": 98,
         "dependencies_in": 0,
         "dependencies_out": 1,
-        "size_bytes": 38633
+        "size_bytes": 38633,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.13287671232876713,
+      "decay_level": 0.13424657534246576,
       "is_hotspot": true,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -966,27 +1024,29 @@
       "path": "frontend/src/components/CommandPalette.tsx",
       "district_id": "district_25",
       "position": {
-        "x": -114.7536101866646,
+        "x": -113.87682880563054,
         "y": 0.0,
-        "z": -48.2997632018656
+        "z": -47.75159403851437
       },
       "dimensions": {
         "width": 3.0,
-        "height": 9.6,
+        "height": 28.359400011538497,
         "depth": 3.0
       },
       "metrics": {
         "loc": 194,
         "complexity": 8,
         "churn": 0,
-        "age_days": 99,
+        "age_days": 100,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 7537
+        "size_bytes": 7537,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.13561643835616438,
+      "decay_level": 0.136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -999,27 +1059,29 @@
       "path": "frontend/src/components/CodeSnippet.tsx",
       "district_id": "district_4",
       "position": {
-        "x": -51.00675093778011,
+        "x": -60.73410875926002,
         "y": 0.0,
-        "z": -8.783445494497501
+        "z": 3.7295795071905227
       },
       "dimensions": {
-        "width": 4.5,
-        "height": 2.0,
-        "depth": 4.5
+        "width": 6.0,
+        "height": 11.0,
+        "depth": 6.0
       },
       "metrics": {
         "loc": 30,
         "complexity": 1,
         "churn": 0,
-        "age_days": 147,
+        "age_days": 148,
         "dependencies_in": 1,
         "dependencies_out": 0,
-        "size_bytes": 705
+        "size_bytes": 705,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.20136986301369864,
+      "decay_level": 0.20273972602739726,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -1032,27 +1094,29 @@
       "path": "frontend/src/components/ChatInterface.tsx",
       "district_id": "district_3",
       "position": {
-        "x": 27.755839077615157,
+        "x": 7.962166113425492,
         "y": 0.0,
-        "z": 35.34038586026319
+        "z": 45.30153160527374
       },
       "dimensions": {
-        "width": 4.5,
-        "height": 120.0,
-        "depth": 4.5
+        "width": 6.0,
+        "height": 40.0,
+        "depth": 6.0
       },
       "metrics": {
         "loc": 756,
         "complexity": 100,
         "churn": 0,
-        "age_days": 97,
+        "age_days": 98,
         "dependencies_in": 1,
         "dependencies_out": 0,
-        "size_bytes": 30381
+        "size_bytes": 30381,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.13287671232876713,
+      "decay_level": 0.13424657534246576,
       "is_hotspot": true,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -1065,27 +1129,29 @@
       "path": "frontend/src/components/ui/use-toast.ts",
       "district_id": "district_26",
       "position": {
-        "x": 110.52121124571069,
+        "x": 116.31059020863079,
         "y": 0.0,
-        "z": -65.78511074814952
+        "z": -48.945116453095565
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 4,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 82
+        "size_bytes": 82,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1098,27 +1164,29 @@
       "path": "frontend/src/components/ui/tooltip.tsx",
       "district_id": "district_27",
       "position": {
-        "x": -48.21460158988575,
+        "x": -40.23354699738353,
         "y": 0.0,
-        "z": 117.74473715945844
+        "z": 125.5438920734482
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 29,
         "complexity": 1,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1149
+        "size_bytes": 1149,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -1131,27 +1199,29 @@
       "path": "frontend/src/components/ui/toggle.tsx",
       "district_id": "district_28",
       "position": {
-        "x": -35.907988513989935,
+        "x": -34.199339002370785,
         "y": 0.0,
-        "z": -124.68130947642615
+        "z": -129.09947560965918
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 38,
         "complexity": 1,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1408
+        "size_bytes": 1408,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -1164,27 +1234,29 @@
       "path": "frontend/src/components/ui/toggle-group.tsx",
       "district_id": "district_29",
       "position": {
-        "x": 123.7874084963881,
+        "x": 121.30665084047169,
         "y": 0.0,
-        "z": 57.119379353807155
+        "z": 55.143546569883334
       },
       "dimensions": {
         "width": 3.0,
-        "height": 3.5999999999999996,
+        "height": 19.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 50,
         "complexity": 3,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1714
+        "size_bytes": 1714,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1197,27 +1269,29 @@
       "path": "frontend/src/components/ui/toaster.tsx",
       "district_id": "district_30",
       "position": {
-        "x": -134.7990286265022,
+        "x": -132.9243824431059,
         "y": 0.0,
-        "z": 22.15631559667927
+        "z": 27.919318796235792
       },
       "dimensions": {
         "width": 3.0,
-        "height": 3.5999999999999996,
+        "height": 19.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 25,
         "complexity": 3,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 730
+        "size_bytes": 730,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1230,27 +1304,29 @@
       "path": "frontend/src/components/ui/toast.tsx",
       "district_id": "district_31",
       "position": {
-        "x": 79.07937968127216,
+        "x": 76.90554283611361,
         "y": 0.0,
-        "z": -114.7314924317796
+        "z": -117.03284863555001
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 112,
         "complexity": 1,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 4790
+        "size_bytes": 4790,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -1263,27 +1339,29 @@
       "path": "frontend/src/components/ui/textarea.tsx",
       "district_id": "district_32",
       "position": {
-        "x": 26.355234737800444,
+        "x": 32.0052781204536,
         "y": 0.0,
-        "z": 138.77980650621353
+        "z": 135.35652903723815
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 22,
         "complexity": 1,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 745
+        "size_bytes": 745,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -1296,27 +1374,29 @@
       "path": "frontend/src/components/ui/tabs.tsx",
       "district_id": "district_33",
       "position": {
-        "x": -108.08466690343015,
+        "x": -116.68476547157287,
         "y": 0.0,
-        "z": -90.47621602808387
+        "z": -85.72624411362422
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 54,
         "complexity": 1,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1887
+        "size_bytes": 1887,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -1329,27 +1409,29 @@
       "path": "frontend/src/components/ui/table.tsx",
       "district_id": "district_34",
       "position": {
-        "x": 143.4327519423964,
+        "x": 141.64830762206367,
         "y": 0.0,
-        "z": 0.7815881885264581
+        "z": -23.866236496485648
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 73,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2694
+        "size_bytes": 2694,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1362,27 +1444,29 @@
       "path": "frontend/src/components/ui/switch.tsx",
       "district_id": "district_35",
       "position": {
-        "x": -99.05899318253357,
+        "x": -102.37859867749755,
         "y": 0.0,
-        "z": 113.41298969380978
+        "z": 105.36790226803542
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 28,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1147
+        "size_bytes": 1147,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1395,27 +1479,29 @@
       "path": "frontend/src/components/ui/sonner.tsx",
       "district_id": "district_36",
       "position": {
-        "x": -14.322162551803803,
+        "x": -9.843643826048563,
         "y": 0.0,
-        "z": -151.6951771052768
+        "z": -148.48484048522317
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 28,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 877
+        "size_bytes": 877,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1428,27 +1514,29 @@
       "path": "frontend/src/components/ui/slider.tsx",
       "district_id": "district_37",
       "position": {
-        "x": 112.08112678492544,
+        "x": 95.08986881771013,
         "y": 0.0,
-        "z": 104.11863595095288
+        "z": 121.77823098449444
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 29,
         "complexity": 1,
         "churn": 0,
-        "age_days": 147,
+        "age_days": 148,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1823
+        "size_bytes": 1823,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.20136986301369864,
+      "decay_level": 0.20273972602739726,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -1461,27 +1549,29 @@
       "path": "frontend/src/components/ui/skeleton.tsx",
       "district_id": "district_38",
       "position": {
-        "x": -151.14637343864612,
+        "x": -156.69315405340416,
         "y": 0.0,
-        "z": 0.5468517213099875
+        "z": -13.705058852380185
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 8,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 234
+        "size_bytes": 234,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1494,27 +1584,29 @@
       "path": "frontend/src/components/ui/sidebar.tsx",
       "district_id": "district_39",
       "position": {
-        "x": 121.947294722283,
+        "x": 130.6212413128055,
         "y": 0.0,
-        "z": -97.95215472409096
+        "z": -81.65870788606203
       },
       "dimensions": {
         "width": 3.0,
-        "height": 22.8,
+        "height": 37.5754247590989,
         "depth": 3.0
       },
       "metrics": {
         "loc": 638,
         "complexity": 19,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 22810
+        "size_bytes": 22810,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": true,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -1527,27 +1619,29 @@
       "path": "frontend/src/components/ui/sheet.tsx",
       "district_id": "district_40",
       "position": {
-        "x": -17.4992985179791,
+        "x": -21.333142829351818,
         "y": 0.0,
-        "z": 158.9978223164458
+        "z": 157.96442734396365
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 108,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 4197
+        "size_bytes": 4197,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1560,27 +1654,29 @@
       "path": "frontend/src/components/ui/separator.tsx",
       "district_id": "district_41",
       "position": {
-        "x": -85.82683267808574,
+        "x": -79.6790374074093,
         "y": 0.0,
-        "z": -134.91373233327008
+        "z": -139.86351425005824
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 21,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 698
+        "size_bytes": 698,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1593,27 +1689,29 @@
       "path": "frontend/src/components/ui/select.tsx",
       "district_id": "district_42",
       "position": {
-        "x": 153.3922632313337,
+        "x": 160.66985396962377,
         "y": 0.0,
-        "z": 39.498482565535355
+        "z": 28.747799511495003
       },
       "dimensions": {
         "width": 3.0,
-        "height": 3.5999999999999996,
+        "height": 19.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 144,
         "complexity": 3,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 5547
+        "size_bytes": 5547,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -1626,27 +1724,29 @@
       "path": "frontend/src/components/ui/scroll-area.tsx",
       "district_id": "district_43",
       "position": {
-        "x": -146.40171373440197,
+        "x": -142.87561904934273,
         "y": 0.0,
-        "z": 78.78421031616183
+        "z": 83.2405249139457
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 46,
         "complexity": 1,
         "churn": 0,
-        "age_days": 154,
+        "age_days": 155,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2172
+        "size_bytes": 2172,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21095890410958903,
+      "decay_level": 0.21232876712328766,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -1659,27 +1759,29 @@
       "path": "frontend/src/components/ui/resizable.tsx",
       "district_id": "district_44",
       "position": {
-        "x": 60.812656048717045,
+        "x": 70.51393576457887,
         "y": 0.0,
-        "z": -153.136323395491
+        "z": -148.74300853882932
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.4,
+        "height": 15.679700005769249,
         "depth": 3.0
       },
       "metrics": {
         "loc": 38,
         "complexity": 2,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1696
+        "size_bytes": 1696,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1692,27 +1794,29 @@
       "path": "frontend/src/components/ui/radio-group.tsx",
       "district_id": "district_45",
       "position": {
-        "x": 60.928684660102725,
+        "x": 61.6300080787321,
         "y": 0.0,
-        "z": 156.32941198275074
+        "z": 154.53466213594157
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 37,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1447
+        "size_bytes": 1447,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1725,27 +1829,29 @@
       "path": "frontend/src/components/ui/progress.tsx",
       "district_id": "district_46",
       "position": {
-        "x": -150.32562598632316,
+        "x": -154.58700982654958,
         "y": 0.0,
-        "z": -79.45469531450152
+        "z": -65.233458026941
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.4,
+        "height": 15.679700005769249,
         "depth": 3.0
       },
       "metrics": {
         "loc": 24,
         "complexity": 2,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 765
+        "size_bytes": 765,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1758,27 +1864,29 @@
       "path": "frontend/src/components/ui/popover.tsx",
       "district_id": "district_47",
       "position": {
-        "x": 168.17248543395954,
+        "x": 167.95748812313315,
         "y": 0.0,
-        "z": -35.98087986689625
+        "z": -44.76633857702046
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 30,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1239
+        "size_bytes": 1239,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1791,27 +1899,29 @@
       "path": "frontend/src/components/ui/pagination.tsx",
       "district_id": "district_48",
       "position": {
-        "x": -102.33961383212956,
+        "x": -94.33776035164652,
         "y": 0.0,
-        "z": 142.37041277062303
+        "z": 147.15078705230593
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 82,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2683
+        "size_bytes": 2683,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1824,27 +1934,29 @@
       "path": "frontend/src/components/ui/navigation-menu.tsx",
       "district_id": "district_49",
       "position": {
-        "x": -22.15249462580603,
+        "x": -25.574653259976625,
         "y": 0.0,
-        "z": -172.53836153731382
+        "z": -172.24599563787922
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 121,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 5030
+        "size_bytes": 5030,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1857,27 +1969,29 @@
       "path": "frontend/src/components/ui/menubar.tsx",
       "district_id": "district_50",
       "position": {
-        "x": 147.3301988730615,
+        "x": 133.33938573946102,
         "y": 0.0,
-        "z": 94.2098625342591
+        "z": 113.62714733287937
       },
       "dimensions": {
         "width": 3.0,
-        "height": 4.8,
+        "height": 21.575424759098897,
         "depth": 3.0
       },
       "metrics": {
         "loc": 208,
         "complexity": 4,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 7805
+        "size_bytes": 7805,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -1890,27 +2004,29 @@
       "path": "frontend/src/components/ui/label.tsx",
       "district_id": "district_51",
       "position": {
-        "x": -178.87131147206594,
+        "x": -173.72143720682453,
         "y": 0.0,
-        "z": 28.054295931501443
+        "z": 26.349710834762295
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 18,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 696
+        "size_bytes": 696,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1923,27 +2039,29 @@
       "path": "frontend/src/components/ui/input.tsx",
       "district_id": "district_52",
       "position": {
-        "x": 114.9363690968493,
+        "x": 122.79862525792261,
         "y": 0.0,
-        "z": -140.10461498231865
+        "z": -129.79871054011303
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 23,
         "complexity": 1,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 799
+        "size_bytes": 799,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -1956,27 +2074,29 @@
       "path": "frontend/src/components/ui/input-otp.tsx",
       "district_id": "district_53",
       "position": {
-        "x": 9.709756254685246,
+        "x": 23.603475714026313,
         "y": 0.0,
-        "z": 179.28015215981588
+        "z": 179.5964214764606
       },
       "dimensions": {
         "width": 3.0,
-        "height": 3.5999999999999996,
+        "height": 19.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 62,
         "complexity": 3,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2166
+        "size_bytes": 2166,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -1989,27 +2109,29 @@
       "path": "frontend/src/components/ui/hover-card.tsx",
       "district_id": "district_54",
       "position": {
-        "x": -138.7835219363022,
+        "x": -115.63941539096598,
         "y": 0.0,
-        "z": -122.49664229237443
+        "z": -142.69393400314314
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 28,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1193
+        "size_bytes": 1193,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2022,27 +2144,29 @@
       "path": "frontend/src/components/ui/form.tsx",
       "district_id": "district_55",
       "position": {
-        "x": 185.18410701387583,
+        "x": 180.6265331949766,
         "y": 0.0,
-        "z": -1.6689497341124908
+        "z": 25.281188172669886
       },
       "dimensions": {
         "width": 3.0,
-        "height": 4.8,
+        "height": 21.575424759098897,
         "depth": 3.0
       },
       "metrics": {
         "loc": 130,
         "complexity": 4,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 4014
+        "size_bytes": 4014,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2055,27 +2179,29 @@
       "path": "frontend/src/components/ui/dropdown-menu.tsx",
       "district_id": "district_56",
       "position": {
-        "x": -142.05923516966374,
+        "x": -138.3055068013452,
         "y": 0.0,
-        "z": 123.56975926198415
+        "z": 127.87422882041851
       },
       "dimensions": {
         "width": 3.0,
-        "height": 4.8,
+        "height": 21.575424759098897,
         "depth": 3.0
       },
       "metrics": {
         "loc": 180,
         "complexity": 4,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 7210
+        "size_bytes": 7210,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -2088,27 +2214,29 @@
       "path": "frontend/src/components/ui/drawer.tsx",
       "district_id": "district_57",
       "position": {
-        "x": 19.78142738706211,
+        "x": 23.106653922137113,
         "y": 0.0,
-        "z": -189.48897381144465
+        "z": -185.26095388556183
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 88,
         "complexity": 1,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2934
+        "size_bytes": 2934,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -2121,27 +2249,29 @@
       "path": "frontend/src/components/ui/dialog.tsx",
       "district_id": "district_58",
       "position": {
-        "x": 104.55417034894019,
+        "x": 94.07191286081743,
         "y": 0.0,
-        "z": 159.44721589600627
+        "z": 164.63068698431886
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.4,
+        "height": 15.679700005769249,
         "depth": 3.0
       },
       "metrics": {
         "loc": 102,
         "complexity": 2,
         "churn": 0,
-        "age_days": 147,
+        "age_days": 148,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 3909
+        "size_bytes": 3909,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.20136986301369864,
+      "decay_level": 0.20273972602739726,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -2154,27 +2284,29 @@
       "path": "frontend/src/components/ui/context-menu.tsx",
       "district_id": "district_59",
       "position": {
-        "x": -185.97690811800007,
+        "x": -184.9395431605419,
         "y": 0.0,
-        "z": -38.54411894716225
+        "z": -39.626880816916824
       },
       "dimensions": {
         "width": 3.0,
-        "height": 4.8,
+        "height": 21.575424759098897,
         "depth": 3.0
       },
       "metrics": {
         "loc": 179,
         "complexity": 4,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 7141
+        "size_bytes": 7141,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -2187,27 +2319,29 @@
       "path": "frontend/src/components/ui/command.tsx",
       "district_id": "district_60",
       "position": {
-        "x": 161.60233796612516,
+        "x": 165.49567773614822,
         "y": 0.0,
-        "z": -109.94952873740314
+        "z": -94.94038946165817
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 172,
         "complexity": 1,
         "churn": 0,
-        "age_days": 99,
+        "age_days": 100,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 7474
+        "size_bytes": 7474,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.13561643835616438,
+      "decay_level": 0.136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -2220,27 +2354,29 @@
       "path": "frontend/src/components/ui/collapsible.tsx",
       "district_id": "district_61",
       "position": {
-        "x": -44.96590543365745,
+        "x": -74.13181949064438,
         "y": 0.0,
-        "z": 187.86374206343004
+        "z": 184.0085772516478
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 10,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 320
+        "size_bytes": 320,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2253,27 +2389,29 @@
       "path": "frontend/src/components/ui/checkbox.tsx",
       "district_id": "district_62",
       "position": {
-        "x": -64.25004533887801,
+        "x": -94.80866341537876,
         "y": 0.0,
-        "z": -183.4939319659052
+        "z": -175.66204184345747
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 27,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1053
+        "size_bytes": 1053,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2286,27 +2424,29 @@
       "path": "frontend/src/components/ui/chart.tsx",
       "district_id": "district_63",
       "position": {
-        "x": 182.85748683139164,
+        "x": 188.53562518617642,
         "y": 0.0,
-        "z": 71.15539358110675
+        "z": 70.89047205902352
       },
       "dimensions": {
         "width": 3.0,
-        "height": 54.0,
+        "height": 40.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 345,
         "complexity": 45,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 11202
+        "size_bytes": 11202,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -2319,27 +2459,29 @@
       "path": "frontend/src/components/ui/carousel.tsx",
       "district_id": "district_64",
       "position": {
-        "x": -189.41009040696665,
+        "x": -189.13865985815121,
         "y": 0.0,
-        "z": 56.81671885402742
+        "z": 57.198235788371875
       },
       "dimensions": {
         "width": 3.0,
-        "height": 12.0,
+        "height": 30.67545294909838,
         "depth": 3.0
       },
       "metrics": {
         "loc": 225,
         "complexity": 10,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 6249
+        "size_bytes": 6249,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2352,27 +2494,29 @@
       "path": "frontend/src/components/ui/card.tsx",
       "district_id": "district_65",
       "position": {
-        "x": 105.65927560093655,
+        "x": 102.21276207311413,
         "y": 0.0,
-        "z": -171.60655855365866
+        "z": -176.15851978104152
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 44,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1785
+        "size_bytes": 1785,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2385,27 +2529,29 @@
       "path": "frontend/src/components/ui/calendar.tsx",
       "district_id": "district_66",
       "position": {
-        "x": 44.78443548493439,
+        "x": 53.6629016382222,
         "y": 0.0,
-        "z": 197.47776095553385
+        "z": 198.6766716189491
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 55,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2563
+        "size_bytes": 2563,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2418,27 +2564,29 @@
       "path": "frontend/src/components/ui/button.tsx",
       "district_id": "district_67",
       "position": {
-        "x": -169.72498968385682,
+        "x": -176.46869419888336,
         "y": 0.0,
-        "z": -109.13708620302349
+        "z": -107.14298871929036
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 48,
         "complexity": 1,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1822
+        "size_bytes": 1822,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -2451,27 +2599,29 @@
       "path": "frontend/src/components/ui/breadcrumb.tsx",
       "district_id": "district_68",
       "position": {
-        "x": 201.61696166973468,
+        "x": 207.1297662175761,
         "y": 0.0,
-        "z": -39.84041536674085
+        "z": -27.19416742463816
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 91,
         "complexity": 1,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2671
+        "size_bytes": 2671,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -2484,27 +2634,29 @@
       "path": "frontend/src/components/ui/badge.tsx",
       "district_id": "district_69",
       "position": {
-        "x": -143.42641965019513,
+        "x": -130.11349874186578,
         "y": 0.0,
-        "z": 152.75552117610073
+        "z": 163.85458426634705
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 30,
         "complexity": 1,
         "churn": 0,
-        "age_days": 155,
+        "age_days": 156,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1085
+        "size_bytes": 1085,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.21232876712328766,
+      "decay_level": 0.2136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamiredddi@gmail.com",
@@ -2517,27 +2669,29 @@
       "path": "frontend/src/components/ui/avatar.tsx",
       "district_id": "district_70",
       "position": {
-        "x": -19.375142134518867,
+        "x": -22.828324039386246,
         "y": 0.0,
-        "z": -208.68964477087096
+        "z": -208.94290067099013
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 39,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1365
+        "size_bytes": 1365,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2550,27 +2704,29 @@
       "path": "frontend/src/components/ui/aspect-ratio.tsx",
       "district_id": "district_1",
       "position": {
-        "x": -17.86066019350937,
+        "x": -32.61518479537672,
         "y": 0.0,
-        "z": 19.182974996602958
+        "z": 28.95636101331625
       },
       "dimensions": {
-        "width": 4.5,
-        "height": 2.0,
-        "depth": 4.5
+        "width": 6.0,
+        "height": 11.0,
+        "depth": 6.0
       },
       "metrics": {
         "loc": 6,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 1,
         "dependencies_out": 0,
-        "size_bytes": 143
+        "size_bytes": 143,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2583,27 +2739,29 @@
       "path": "frontend/src/components/ui/alert.tsx",
       "district_id": "district_71",
       "position": {
-        "x": 148.6288852207919,
+        "x": 152.30561225284418,
         "y": 0.0,
-        "z": 150.74547865810413
+        "z": 147.3396001372193
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 44,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1546
+        "size_bytes": 1546,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2616,27 +2774,29 @@
       "path": "frontend/src/components/ui/alert-dialog.tsx",
       "district_id": "district_72",
       "position": {
-        "x": -208.6185994474645,
+        "x": -211.23692928591166,
         "y": 0.0,
-        "z": 13.918339862035374
+        "z": 15.091287590493051
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 105,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 4313
+        "size_bytes": 4313,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2649,27 +2809,29 @@
       "path": "frontend/src/components/ui/accordion.tsx",
       "district_id": "district_73",
       "position": {
-        "x": 148.18096012575893,
+        "x": 146.3630170465736,
         "y": 0.0,
-        "z": -152.7455321215846
+        "z": -154.55324045755168
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 53,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 1976
+        "size_bytes": 1976,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2682,27 +2844,29 @@
       "path": "frontend/src/hooks/use-toast.ts",
       "district_id": "district_74",
       "position": {
-        "x": -13.730623617027467,
+        "x": -39.479788940307365,
         "y": 0.0,
-        "z": 214.27550281781652
+        "z": 211.86356401265948
       },
       "dimensions": {
         "width": 3.0,
-        "height": 14.399999999999999,
+        "height": 32.60351774512874,
         "depth": 3.0
       },
       "metrics": {
         "loc": 187,
         "complexity": 12,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 3935
+        "size_bytes": 3935,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2715,27 +2879,29 @@
       "path": "frontend/src/hooks/use-mobile.tsx",
       "district_id": "district_75",
       "position": {
-        "x": -123.94151636665917,
+        "x": -133.62381188705706,
         "y": 0.0,
-        "z": -174.35038650176602
+        "z": -172.20659292054188
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 20,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 576
+        "size_bytes": 576,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2748,27 +2914,29 @@
       "path": "frontend/src/pages/NotFound.tsx",
       "district_id": "district_76",
       "position": {
-        "x": 213.74573237397155,
+        "x": 210.90552441754102,
         "y": 0.0,
-        "z": 38.33062033886014
+        "z": 42.42512406898946
       },
       "dimensions": {
         "width": 3.0,
-        "height": 2.0,
+        "height": 11.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 25,
         "complexity": 1,
         "churn": 0,
-        "age_days": 156,
+        "age_days": 157,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 721
+        "size_bytes": 721,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.2136986301369863,
+      "decay_level": 0.21506849315068494,
       "is_hotspot": false,
       "author": "Krishna Srinivas Madhira",
       "email": "krishnasrinivas2409@gmail.com",
@@ -2781,27 +2949,29 @@
       "path": "frontend/src/services/api.ts",
       "district_id": "district_77",
       "position": {
-        "x": -184.642557653784,
+        "x": -177.80535297582844,
         "y": 0.0,
-        "z": 120.43969321731322
+        "z": 131.67091215080097
       },
       "dimensions": {
         "width": 3.0,
-        "height": 36.0,
+        "height": 40.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 341,
         "complexity": 30,
         "churn": 0,
-        "age_days": 99,
+        "age_days": 100,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 10408
+        "size_bytes": 10408,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "typescript",
       "summary": null,
-      "decay_level": 0.13561643835616438,
+      "decay_level": 0.136986301369863,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -2814,27 +2984,29 @@
       "path": "nc files/script.py",
       "district_id": "district_78",
       "position": {
-        "x": 48.55637335031239,
+        "x": 77.10155023357478,
         "y": 0.0,
-        "z": -216.28690977430495
+        "z": -209.79558563141254
       },
       "dimensions": {
         "width": 3.0,
-        "height": 21.599999999999998,
+        "height": 36.98342010754868,
         "depth": 3.0
       },
       "metrics": {
         "loc": 73,
         "complexity": 18,
         "churn": 0,
-        "age_days": 162,
+        "age_days": 163,
         "dependencies_in": 0,
         "dependencies_out": 0,
-        "size_bytes": 2567
+        "size_bytes": 2567,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.2219178082191781,
+      "decay_level": 0.2232876712328767,
       "is_hotspot": false,
       "author": "Uma",
       "email": "136799062+Umasaisrimasina@users.noreply.github.com",
@@ -2847,27 +3019,29 @@
       "path": "tests/test_sql_validation.py",
       "district_id": "district_0",
       "position": {
-        "x": -9.374885310766542,
+        "x": -35.57381553870003,
         "y": 0.0,
-        "z": -1.259015303685041
+        "z": -6.479330889037147
       },
       "dimensions": {
         "width": 3.0,
-        "height": 3.5999999999999996,
+        "height": 19.0,
         "depth": 3.0
       },
       "metrics": {
         "loc": 29,
         "complexity": 3,
         "churn": 0,
-        "age_days": 97,
+        "age_days": 98,
         "dependencies_in": 0,
         "dependencies_out": 1,
-        "size_bytes": 733
+        "size_bytes": 733,
+        "coverage": 80.0,
+        "debt": 0.0
       },
       "language": "python",
       "summary": null,
-      "decay_level": 0.13287671232876713,
+      "decay_level": 0.13424657534246576,
       "is_hotspot": false,
       "author": "Yashwanth Kamireddi",
       "email": "yashwanthkamireddi@gmail.com",
@@ -2881,29 +3055,29 @@
       "name": "Ai Core",
       "color": "#FF6B6B",
       "center": {
-        "x": -2.700336828302039,
-        "y": -0.2581875657733572
+        "x": 0.08153818944242487,
+        "y": -0.0031124185948998443
       },
       "boundary": [
         {
-          "x": 21.950488289811062,
-          "y": -14.40806309319131
+          "x": -21.04557486113062,
+          "y": -20.396673710820593
         },
         {
-          "x": 31.215485064881392,
-          "y": -1.0364786769196712
+          "x": 24.166828852901162,
+          "y": -16.742972626131454
         },
         {
-          "x": 7.735596418734879,
-          "y": 22.303525066897553
+          "x": 34.5719369116984,
+          "y": 1.8754122023928588
         },
         {
-          "x": -25.116696876216533,
-          "y": -5.392625228048677
+          "x": 2.849529274013051,
+          "y": 22.454225512809213
         },
         {
-          "x": -22.09127317631499,
-          "y": -18.908809258755685
+          "x": -23.526136701715853,
+          "y": -7.284748808693975
         }
       ],
       "building_count": 5,
@@ -2914,37 +3088,37 @@
       "name": "Ai Core",
       "color": "#DDA0DD",
       "center": {
-        "x": 43.85768936596944,
-        "y": -32.51763783844644
+        "x": 51.04531321777258,
+        "y": -28.484830416043636
       },
       "boundary": [
         {
-          "x": 22.53360810505652,
-          "y": -48.71673707856423
+          "x": 40.256962256050926,
+          "y": 4.491577791136514
         },
         {
-          "x": 50.595323816499835,
-          "y": -59.27038300113824
+          "x": 62.7484298366142,
+          "y": -0.41325050211701253
         },
         {
-          "x": 71.86131814895273,
-          "y": -43.62195554133205
+          "x": 76.12274751480064,
+          "y": -44.04315291598778
         },
         {
-          "x": 59.04485631119713,
-          "y": -3.890203785266838
+          "x": 53.324253093917164,
+          "y": -56.38032416621961
         },
         {
-          "x": 42.23227665653063,
-          "y": 1.2586636429924063
+          "x": 29.50840806792366,
+          "y": -46.367290660576586
         },
         {
-          "x": 31.215485064881392,
-          "y": -1.0364786769196712
+          "x": 24.166828852901162,
+          "y": -16.742972626131454
         },
         {
-          "x": 21.950488289811062,
-          "y": -14.40806309319131
+          "x": 34.5719369116984,
+          "y": 1.8754122023928588
         }
       ],
       "building_count": 1,
@@ -2955,37 +3129,33 @@
       "name": "Ai Core",
       "color": "#98D8C8",
       "center": {
-        "x": -10.895209312357325,
-        "y": 58.41171014450633
+        "x": -11.935243326073618,
+        "y": 58.72867578332943
       },
       "boundary": [
         {
-          "x": -24.799254886753186,
-          "y": 91.05772845381986
+          "x": -22.582258527549605,
+          "y": 87.47291859978588
         },
         {
-          "x": -27.320029391359785,
-          "y": 89.45634239607023
+          "x": -41.75919613647357,
+          "y": 48.78655521469858
         },
         {
-          "x": -42.293732876014275,
-          "y": 43.25780344259266
+          "x": -38.406307816987976,
+          "y": 41.81595240308115
         },
         {
-          "x": -40.734322325051124,
-          "y": 40.5472540529596
+          "x": -2.613298162447851,
+          "y": 35.65276461813682
         },
         {
-          "x": 3.074773730095238,
-          "y": 35.02145431027546
+          "x": 13.447288304793073,
+          "y": 57.963631476319165
         },
         {
-          "x": 15.804783983563475,
-          "y": 55.52384111869482
-        },
-        {
-          "x": -9.504649822369505,
-          "y": 86.20000050368846
+          "x": -3.560551092966398,
+          "y": 84.57099958593773
         }
       ],
       "building_count": 1,
@@ -2996,33 +3166,29 @@
       "name": "Ai Core",
       "color": "#F7DC6F",
       "center": {
-        "x": -28.799654903944926,
-        "y": -56.80306283782221
+        "x": -32.59531120171102,
+        "y": -56.47840210395959
       },
       "boundary": [
         {
-          "x": -26.883428973150995,
-          "y": -28.985981938017847
+          "x": -25.076581830280098,
+          "y": -27.773239090001198
         },
         {
-          "x": 0.42139550082977095,
-          "y": -63.153806144555716
+          "x": -3.9801981572229224,
+          "y": -66.68007107538679
         },
         {
-          "x": -2.234703699007607,
-          "y": -71.4510404205225
+          "x": -35.859092588032844,
+          "y": -86.15213645067713
         },
         {
-          "x": -40.84578124027418,
-          "y": -79.71063787753774
+          "x": -56.61561828055176,
+          "y": -63.77858685420729
         },
         {
-          "x": -57.36565626813292,
-          "y": -60.71561039150437
-        },
-        {
-          "x": -47.68897914443721,
-          "y": -37.39044507089211
+          "x": -49.9630998876345,
+          "y": -35.955310458805556
         }
       ],
       "building_count": 1,
@@ -3033,29 +3199,33 @@
       "name": "Ai Core",
       "color": "#BB8FCE",
       "center": {
-        "x": 62.493038268631736,
-        "y": 28.332304830292344
+        "x": 63.79550316696826,
+        "y": 29.98214676291371
       },
       "boundary": [
         {
-          "x": 42.23227665653063,
-          "y": 1.2586636429924063
+          "x": 45.520204744238605,
+          "y": 57.16036950827849
         },
         {
-          "x": 59.04485631119713,
-          "y": -3.890203785266838
+          "x": 48.61571477452605,
+          "y": 59.59540851795384
         },
         {
-          "x": 85.22920259774494,
-          "y": 10.503321694465814
+          "x": 92.48860472684012,
+          "y": 30.39005033528384
         },
         {
-          "x": 86.9804761384106,
-          "y": 42.90420309226366
+          "x": 86.12779518516979,
+          "y": 11.690770469120551
         },
         {
-          "x": 49.502296863819424,
-          "y": 52.89475379695107
+          "x": 62.7484298366142,
+          "y": -0.41325050211701253
+        },
+        {
+          "x": 40.256962256050926,
+          "y": 4.491577791136514
         }
       ],
       "building_count": 1,
@@ -3066,33 +3236,37 @@
       "name": "Data Pipeline",
       "color": "#85C1E9",
       "center": {
-        "x": -71.17656283527373,
-        "y": 23.731147204200752
+        "x": -68.1430381799745,
+        "y": 31.69249771913162
       },
       "boundary": [
         {
-          "x": -71.92250911021749,
-          "y": 50.54050902557797
+          "x": -45.72191846398726,
+          "y": 17.36549716902487
         },
         {
-          "x": -42.293732876014275,
-          "y": 43.25780344259266
+          "x": -38.406307816987976,
+          "y": 41.81595240308115
         },
         {
-          "x": -40.734322325051124,
-          "y": 40.5472540529596
+          "x": -41.75919613647357,
+          "y": 48.78655521469858
         },
         {
-          "x": -44.07495616238489,
-          "y": 17.322615601668858
+          "x": -69.01425958434328,
+          "y": 58.233170565652586
         },
         {
-          "x": -77.70804056372597,
-          "y": -5.991984877496936
+          "x": -100.6754997711817,
+          "y": 39.44299995117863
         },
         {
-          "x": -94.75300671354842,
-          "y": 40.20737721592717
+          "x": -100.64969319772678,
+          "y": 38.91630543959423
+        },
+        {
+          "x": -74.85081426777809,
+          "y": 3.1082422357136235
         }
       ],
       "building_count": 1,
@@ -3103,37 +3277,33 @@
       "name": "Data Pipeline",
       "color": "#F8B500",
       "center": {
-        "x": 27.898256939045112,
-        "y": -74.953120226803
+        "x": 31.79692948786997,
+        "y": -74.26681283464504
       },
       "boundary": [
         {
-          "x": 0.42139550082977095,
-          "y": -63.153806144555716
+          "x": 29.50840806792366,
+          "y": -46.367290660576586
         },
         {
-          "x": 22.53360810505652,
-          "y": -48.71673707856423
+          "x": 1.8449244855196767,
+          "y": -67.75898020020409
         },
         {
-          "x": 50.595323816499835,
-          "y": -59.27038300113824
+          "x": 16.188216132676907,
+          "y": -93.07539224431859
         },
         {
-          "x": 51.65799737012697,
-          "y": -97.29746986767563
+          "x": 50.83842259725763,
+          "y": -99.4849612262364
         },
         {
-          "x": 47.55197562433946,
-          "y": -102.6715027769223
+          "x": 53.97942714751566,
+          "y": -96.07873029795198
         },
         {
-          "x": 7.4717372173387915,
-          "y": -94.10199899631216
-        },
-        {
-          "x": -2.234703699007607,
-          "y": -71.4510404205225
+          "x": 53.324253093917164,
+          "y": -56.38032416621961
         }
       ],
       "building_count": 1,
@@ -3144,29 +3314,29 @@
       "name": "Data Pipeline",
       "color": "#4ECDC4",
       "center": {
-        "x": -16.265843157458214,
-        "y": 15.832784929464662
+        "x": -19.116417079670654,
+        "y": 17.023663626905137
       },
       "boundary": [
         {
-          "x": 3.074773730095238,
-          "y": 35.02145431027546
+          "x": -23.526136701715853,
+          "y": -7.284748808693975
         },
         {
-          "x": -40.734322325051124,
-          "y": 40.5472540529596
+          "x": 2.849529274013051,
+          "y": 22.454225512809213
         },
         {
-          "x": -44.07495616238489,
-          "y": 17.322615601668858
+          "x": -2.613298162447851,
+          "y": 35.65276461813682
         },
         {
-          "x": -25.116696876216533,
-          "y": -5.392625228048677
+          "x": -38.406307816987976,
+          "y": 41.81595240308115
         },
         {
-          "x": 7.735596418734879,
-          "y": 22.303525066897553
+          "x": -45.72191846398726,
+          "y": 17.36549716902487
         }
       ],
       "building_count": 2,
@@ -3177,29 +3347,37 @@
       "name": "Data Pipeline",
       "color": "#00CED1",
       "center": {
-        "x": 18.041767710576043,
-        "y": 82.28622765871658
+        "x": 23.40987732422842,
+        "y": 81.3218211496107
       },
       "boundary": [
         {
-          "x": 30.750128717024218,
-          "y": 104.77370423124538
+          "x": -3.560551092966398,
+          "y": 84.57099958593773
         },
         {
-          "x": -9.504649822369505,
-          "y": 86.20000050368846
+          "x": 13.447288304793073,
+          "y": 57.963631476319165
         },
         {
-          "x": 15.804783983563475,
-          "y": 55.52384111869482
+          "x": 45.520204744238605,
+          "y": 57.16036950827849
         },
         {
-          "x": 42.074949473649575,
-          "y": 62.006182058064695
+          "x": 48.61571477452605,
+          "y": 59.59540851795384
         },
         {
-          "x": 47.274508341751385,
-          "y": 81.63820801457271
+          "x": 54.62024854580434,
+          "y": 74.01978796173714
+        },
+        {
+          "x": 37.34359202661855,
+          "y": 107.04243051291056
+        },
+        {
+          "x": 24.003407930988764,
+          "y": 109.27596607214426
         }
       ],
       "building_count": 1,
@@ -3210,33 +3388,33 @@
       "name": "Frontend",
       "color": "#FF7F50",
       "center": {
-        "x": -74.77293380557194,
-        "y": -37.73059024721939
+        "x": -74.73588430971554,
+        "y": -46.40263195722715
       },
       "boundary": [
         {
-          "x": -47.68897914443721,
-          "y": -37.39044507089211
+          "x": -49.9630998876345,
+          "y": -35.955310458805556
         },
         {
-          "x": -78.19102221560554,
-          "y": -7.150820712595017
+          "x": -56.61561828055176,
+          "y": -63.77858685420729
         },
         {
-          "x": -100.78248647939927,
-          "y": -19.419442352126456
+          "x": -90.98820951586397,
+          "y": -71.39946239821566
         },
         {
-          "x": -88.5448310561817,
-          "y": -66.3845959824424
+          "x": -93.58638110895407,
+          "y": -68.62910656914605
         },
         {
-          "x": -88.28677589509721,
-          "y": -66.54855120870366
+          "x": -94.36031005745578,
+          "y": -23.086508908316823
         },
         {
-          "x": -57.36565626813292,
-          "y": -60.71561039150437
+          "x": -79.63085960213814,
+          "y": -14.803583400929137
         }
       ],
       "building_count": 1,
@@ -3247,33 +3425,33 @@
       "name": "Frontend",
       "color": "#9ACD32",
       "center": {
-        "x": 88.09763532916746,
-        "y": -18.24694616034435
+        "x": 88.17291540962367,
+        "y": -17.10372894960344
       },
       "boundary": [
         {
-          "x": 122.72830036370291,
-          "y": -30.036805647455235
+          "x": 115.1044688158471,
+          "y": -20.887819588606654
         },
         {
-          "x": 87.68599536997569,
-          "y": -47.60990937310134
+          "x": 87.72510118286729,
+          "y": -46.66255545320345
         },
         {
-          "x": 71.86131814895273,
-          "y": -43.62195554133205
+          "x": 76.12274751480064,
+          "y": -44.04315291598778
         },
         {
-          "x": 59.04485631119713,
-          "y": -3.890203785266838
+          "x": 62.7484298366142,
+          "y": -0.41325050211701253
         },
         {
-          "x": 85.22920259774494,
-          "y": 10.503321694465814
+          "x": 86.12779518516979,
+          "y": 11.690770469120551
         },
         {
-          "x": 113.73373029262822,
-          "y": -3.518834762003711
+          "x": 115.77195425180497,
+          "y": -15.090501063772772
         }
       ],
       "building_count": 1,
@@ -3284,29 +3462,33 @@
       "name": "Frontend",
       "color": "#DA70D6",
       "center": {
-        "x": -58.833057868698205,
-        "y": 73.94915237179754
+        "x": -51.90504602535062,
+        "y": 78.54181781932921
       },
       "boundary": [
         {
-          "x": -78.74814829385276,
-          "y": 93.88867649568789
+          "x": -29.68760292895862,
+          "y": 97.75990378195394
         },
         {
-          "x": -72.57893105718844,
-          "y": 100.24988211141907
+          "x": -68.63403422133675,
+          "y": 107.04747449875471
         },
         {
-          "x": -27.320029391359785,
-          "y": 89.45634239607023
+          "x": -75.2947796513468,
+          "y": 95.00800617282097
         },
         {
-          "x": -42.293732876014275,
-          "y": 43.25780344259266
+          "x": -69.01425958434328,
+          "y": 58.233170565652586
         },
         {
-          "x": -71.92250911021749,
-          "y": 50.54050902557797
+          "x": -41.75919613647357,
+          "y": 48.78655521469858
+        },
+        {
+          "x": -22.582258527549605,
+          "y": 87.47291859978588
         }
       ],
       "building_count": 1,
@@ -3317,29 +3499,37 @@
       "name": "Frontend",
       "color": "#FF6B6B",
       "center": {
-        "x": -20.48207872946413,
-        "y": -95.68517304956173
+        "x": -7.968539972578286,
+        "y": -96.79637685672893
       },
       "boundary": [
         {
-          "x": -2.234703699007607,
-          "y": -71.4510404205225
+          "x": -35.859092588032844,
+          "y": -86.15213645067713
         },
         {
-          "x": 7.4717372173387915,
-          "y": -94.10199899631216
+          "x": -38.10661854308625,
+          "y": -99.65041540303086
         },
         {
-          "x": -8.886236743371338,
-          "y": -120.25652297668196
+          "x": -10.485459743430233,
+          "y": -122.18146828548761
         },
         {
-          "x": -44.36304515183546,
-          "y": -101.48925570710776
+          "x": -1.5892929965679912,
+          "y": -122.36313115611263
         },
         {
-          "x": -40.84578124027418,
-          "y": -79.71063787753774
+          "x": 16.188216132676907,
+          "y": -93.07539224431859
+        },
+        {
+          "x": 1.8449244855196767,
+          "y": -67.75898020020409
+        },
+        {
+          "x": -3.9801981572229224,
+          "y": -66.68007107538679
         }
       ],
       "building_count": 1,
@@ -3350,37 +3540,33 @@
       "name": "Frontend",
       "color": "#4ECDC4",
       "center": {
-        "x": 72.99570830991603,
-        "y": 67.731629482581
+        "x": 81.79296241223082,
+        "y": 57.018300332747295
       },
       "boundary": [
         {
-          "x": 47.274508341751385,
-          "y": 81.63820801457271
+          "x": 92.48860472684012,
+          "y": 30.39005033528384
         },
         {
-          "x": 42.074949473649575,
-          "y": 62.006182058064695
+          "x": 101.10723782294112,
+          "y": 36.8254557700461
         },
         {
-          "x": 49.502296863819424,
-          "y": 52.89475379695107
+          "x": 102.8319284133908,
+          "y": 86.1805438762846
         },
         {
-          "x": 86.9804761384106,
-          "y": 42.90420309226366
+          "x": 95.84366790891143,
+          "y": 87.5612620691492
         },
         {
-          "x": 95.40161197165526,
-          "y": 50.282595315318076
+          "x": 54.62024854580434,
+          "y": 74.01978796173714
         },
         {
-          "x": 101.38021168642108,
-          "y": 76.85540193307286
-        },
-        {
-          "x": 83.36016399039542,
-          "y": 96.1970586728367
+          "x": 48.61571477452605,
+          "y": 59.59540851795384
         }
       ],
       "building_count": 1,
@@ -3391,29 +3577,33 @@
       "name": "Frontend",
       "color": "#45B7D1",
       "center": {
-        "x": 0.6713533936003384,
-        "y": -33.251644878883866
+        "x": 3.0820845299890025,
+        "y": -37.13311002018993
       },
       "boundary": [
         {
-          "x": -26.883428973150995,
-          "y": -28.985981938017847
+          "x": -25.076581830280098,
+          "y": -27.773239090001198
         },
         {
-          "x": -22.09127317631499,
-          "y": -18.908809258755685
+          "x": -3.9801981572229224,
+          "y": -66.68007107538679
         },
         {
-          "x": 21.950488289811062,
-          "y": -14.40806309319131
+          "x": 1.8449244855196767,
+          "y": -67.75898020020409
         },
         {
-          "x": 22.53360810505652,
-          "y": -48.71673707856423
+          "x": 29.50840806792366,
+          "y": -46.367290660576586
         },
         {
-          "x": 0.42139550082977095,
-          "y": -63.153806144555716
+          "x": 24.166828852901162,
+          "y": -16.742972626131454
+        },
+        {
+          "x": -21.04557486113062,
+          "y": -20.396673710820593
         }
       ],
       "building_count": 2,
@@ -3424,37 +3614,33 @@
       "name": "Frontend",
       "color": "#45B7D1",
       "center": {
-        "x": -101.97902997738716,
-        "y": 12.366769299877427
+        "x": -104.08840834805001,
+        "y": 5.79469230647054
       },
       "boundary": [
         {
-          "x": -100.78248647939927,
-          "y": -19.419442352126456
+          "x": -74.85081426777809,
+          "y": 3.1082422357136235
         },
         {
-          "x": -121.5672637278541,
-          "y": -15.09836776822619
+          "x": -100.64969319772678,
+          "y": 38.91630543959423
         },
         {
-          "x": -124.59658516508244,
-          "y": -2.9813005911973494
+          "x": -131.82553381757754,
+          "y": 0.27144721738192246
         },
         {
-          "x": -110.19507296085676,
-          "y": 43.055365595124776
+          "x": -125.17098393846732,
+          "y": -17.785634011073416
         },
         {
-          "x": -94.75300671354842,
-          "y": 40.20737721592717
+          "x": -94.36031005745578,
+          "y": -23.086508908316823
         },
         {
-          "x": -77.70804056372597,
-          "y": -5.991984877496936
-        },
-        {
-          "x": -78.19102221560554,
-          "y": -7.150820712595017
+          "x": -79.63085960213814,
+          "y": -14.803583400929137
         }
       ],
       "building_count": 1,
@@ -3465,33 +3651,33 @@
       "name": "Frontend",
       "color": "#96CEB4",
       "center": {
-        "x": 74.13279826337642,
-        "y": -73.66108793145821
+        "x": 75.4300817316776,
+        "y": -73.54670056787056
       },
       "boundary": [
         {
-          "x": 51.65799737012697,
-          "y": -97.29746986767563
+          "x": 101.39025756323575,
+          "y": -93.774331614463
         },
         {
-          "x": 50.595323816499835,
-          "y": -59.27038300113824
+          "x": 53.97942714751566,
+          "y": -96.07873029795198
         },
         {
-          "x": 71.86131814895273,
-          "y": -43.62195554133205
+          "x": 53.324253093917164,
+          "y": -56.38032416621961
         },
         {
-          "x": 87.68599536997569,
-          "y": -47.60990937310134
+          "x": 76.12274751480064,
+          "y": -44.04315291598778
         },
         {
-          "x": 97.10004597898698,
-          "y": -87.4601187238255
+          "x": 87.72510118286729,
+          "y": -46.66255545320345
         },
         {
-          "x": 94.93648452297369,
-          "y": -91.62993086172797
+          "x": 103.99517615990052,
+          "y": -73.29971215603706
         }
       ],
       "building_count": 1,
@@ -3502,33 +3688,33 @@
       "name": "Frontend",
       "color": "#FFEAA7",
       "center": {
-        "x": 5.393864449160713,
-        "y": 109.69802189448686
+        "x": -3.8487029732366427,
+        "y": 111.73491200686891
       },
       "boundary": [
         {
-          "x": 30.783301374559596,
-          "y": 113.295773472458
+          "x": 3.157744837140079,
+          "y": 140.67416982051378
         },
         {
-          "x": -1.4623569346475307,
-          "y": 136.45126445697875
+          "x": 24.003407930988764,
+          "y": 109.27596607214426
         },
         {
-          "x": -19.4364287482695,
-          "y": 127.9858612532928
+          "x": -3.560551092966398,
+          "y": 84.57099958593773
         },
         {
-          "x": -24.799254886753186,
-          "y": 91.05772845381986
+          "x": -22.582258527549605,
+          "y": 87.47291859978588
         },
         {
-          "x": -9.504649822369505,
-          "y": 86.20000050368846
+          "x": -29.68760292895862,
+          "y": 97.75990378195394
         },
         {
-          "x": 30.750128717024218,
-          "y": 104.77370423124538
+          "x": -16.87234994479719,
+          "y": 133.67127980815738
         }
       ],
       "building_count": 1,
@@ -3539,33 +3725,33 @@
       "name": "Frontend",
       "color": "#DDA0DD",
       "center": {
-        "x": -65.2028539420076,
-        "y": -88.46273267326953
+        "x": -65.6939096938829,
+        "y": -87.1848354764063
       },
       "boundary": [
         {
-          "x": -57.36565626813292,
-          "y": -60.71561039150437
+          "x": -91.83709791447768,
+          "y": -108.66224181191005
         },
         {
-          "x": -88.28677589509721,
-          "y": -66.54855120870366
+          "x": -61.86145990693526,
+          "y": -116.86646319542227
         },
         {
-          "x": -85.9183515050749,
-          "y": -106.69101892904942
+          "x": -38.10661854308625,
+          "y": -99.65041540303086
         },
         {
-          "x": -62.962366510797274,
-          "y": -116.70535246601145
+          "x": -35.859092588032844,
+          "y": -86.15213645067713
         },
         {
-          "x": -44.36304515183546,
-          "y": -101.48925570710776
+          "x": -56.61561828055176,
+          "y": -63.77858685420729
         },
         {
-          "x": -40.84578124027418,
-          "y": -79.71063787753774
+          "x": -90.98820951586397,
+          "y": -71.39946239821566
         }
       ],
       "building_count": 1,
@@ -3576,33 +3762,33 @@
       "name": "Frontend",
       "color": "#98D8C8",
       "center": {
-        "x": 109.75461547785942,
-        "y": 25.77780797446692
+        "x": 114.98141989389741,
+        "y": 12.570574240009002
       },
       "boundary": [
         {
-          "x": 113.73373029262822,
-          "y": -3.518834762003711
+          "x": 142.83122993069756,
+          "y": 5.422218630485954
         },
         {
-          "x": 85.22920259774494,
-          "y": 10.503321694465814
+          "x": 133.6992824902746,
+          "y": 31.67547545273817
         },
         {
-          "x": 86.9804761384106,
-          "y": 42.90420309226366
+          "x": 101.10723782294112,
+          "y": 36.8254557700461
         },
         {
-          "x": 95.40161197165526,
-          "y": 50.282595315318076
+          "x": 92.48860472684012,
+          "y": 30.39005033528384
         },
         {
-          "x": 131.56823115773307,
-          "y": 34.52282277594577
+          "x": 86.12779518516979,
+          "y": 11.690770469120551
         },
         {
-          "x": 134.93548133705755,
-          "y": 24.277009924644773
+          "x": 115.77195425180497,
+          "y": -15.090501063772772
         }
       ],
       "building_count": 1,
@@ -3613,33 +3799,29 @@
       "name": "Frontend",
       "color": "#F7DC6F",
       "center": {
-        "x": -91.57212034221047,
-        "y": 68.79403185121785
+        "x": -91.8938715826868,
+        "y": 71.71240261672807
       },
       "boundary": [
         {
-          "x": -78.74814829385276,
-          "y": 93.88867649568789
+          "x": -75.2947796513468,
+          "y": 95.00800617282097
         },
         {
-          "x": -71.92250911021749,
-          "y": 50.54050902557797
+          "x": -69.01425958434328,
+          "y": 58.233170565652586
         },
         {
-          "x": -94.75300671354842,
-          "y": 40.20737721592717
+          "x": -100.6754997711817,
+          "y": 39.44299995117863
         },
         {
-          "x": -110.19507296085676,
-          "y": 43.055365595124776
+          "x": -121.55175921804933,
+          "y": 58.983115145085875
         },
         {
-          "x": -122.50852652250434,
-          "y": 54.46120833158972
-        },
-        {
-          "x": -116.52256497439643,
-          "y": 87.32227348232534
+          "x": -116.20339895786417,
+          "y": 83.36749278910922
         }
       ],
       "building_count": 1,
@@ -3650,37 +3832,33 @@
       "name": "Frontend",
       "color": "#BB8FCE",
       "center": {
-        "x": 18.281904145985937,
-        "y": -119.92955321744196
+        "x": 24.035920151201,
+        "y": -116.22292199702049
       },
       "boundary": [
         {
-          "x": 7.4717372173387915,
-          "y": -94.10199899631216
+          "x": -1.5892929965679912,
+          "y": -122.36313115611263
         },
         {
-          "x": 47.55197562433946,
-          "y": -102.6715027769223
+          "x": 25.884640284058918,
+          "y": -151.2513131219167
         },
         {
-          "x": 49.47470260756364,
-          "y": -123.75286332883189
+          "x": 34.37743729046907,
+          "y": -151.47067881846098
         },
         {
-          "x": 25.232930755242574,
-          "y": -155.00314725859053
+          "x": 50.7328527564071,
+          "y": -127.52710006227514
         },
         {
-          "x": 21.525766338577917,
-          "y": -155.04366324298178
+          "x": 50.83842259725763,
+          "y": -99.4849612262364
         },
         {
-          "x": -8.557382336373571,
-          "y": -124.14509430230088
-        },
-        {
-          "x": -8.886236743371338,
-          "y": -120.25652297668196
+          "x": 16.188216132676907,
+          "y": -93.07539224431859
         }
       ],
       "building_count": 1,
@@ -3691,37 +3869,29 @@
       "name": "Frontend",
       "color": "#85C1E9",
       "center": {
-        "x": 56.143960412956424,
-        "y": 109.5004741504304
+        "x": 66.41818098119907,
+        "y": 103.82273665335559
       },
       "boundary": [
         {
-          "x": 30.783301374559596,
-          "y": 113.295773472458
+          "x": 57.36236652021432,
+          "y": 128.18103934107643
         },
         {
-          "x": 50.22182616002325,
-          "y": 133.44585671804109
+          "x": 37.34359202661855,
+          "y": 107.04243051291056
         },
         {
-          "x": 85.48643473619201,
-          "y": 130.15006648537957
+          "x": 54.62024854580434,
+          "y": 74.01978796173714
         },
         {
-          "x": 86.29006362596789,
-          "y": 129.37083378826975
+          "x": 95.84366790891143,
+          "y": 87.5612620691492
         },
         {
-          "x": 83.36016399039542,
-          "y": 96.1970586728367
-        },
-        {
-          "x": 47.274508341751385,
-          "y": 81.63820801457271
-        },
-        {
-          "x": 30.750128717024218,
-          "y": 104.77370423124538
+          "x": 69.90685962251321,
+          "y": 129.53630212917955
         }
       ],
       "building_count": 1,
@@ -3732,37 +3902,33 @@
       "name": "Frontend",
       "color": "#96CEB4",
       "center": {
-        "x": 30.23454744743136,
-        "y": 32.87408712688994
+        "x": 22.22811503447424,
+        "y": 34.136015424205304
       },
       "boundary": [
         {
-          "x": 42.23227665653063,
-          "y": 1.2586636429924063
+          "x": 45.520204744238605,
+          "y": 57.16036950827849
         },
         {
-          "x": 49.502296863819424,
-          "y": 52.89475379695107
+          "x": 40.256962256050926,
+          "y": 4.491577791136514
         },
         {
-          "x": 42.074949473649575,
-          "y": 62.006182058064695
+          "x": 34.5719369116984,
+          "y": 1.8754122023928588
         },
         {
-          "x": 15.804783983563475,
-          "y": 55.52384111869482
+          "x": 2.849529274013051,
+          "y": 22.454225512809213
         },
         {
-          "x": 3.074773730095238,
-          "y": 35.02145431027546
+          "x": -2.613298162447851,
+          "y": 35.65276461813682
         },
         {
-          "x": 7.735596418734879,
-          "y": 22.303525066897553
-        },
-        {
-          "x": 31.215485064881392,
-          "y": -1.0364786769196712
+          "x": 13.447288304793073,
+          "y": 57.963631476319165
         }
       ],
       "building_count": 2,
@@ -3773,37 +3939,37 @@
       "name": "Frontend",
       "color": "#FFEAA7",
       "center": {
-        "x": -47.58286078329876,
-        "y": -10.30456244320561
+        "x": -48.162276676092624,
+        "y": -9.130053511759263
       },
       "boundary": [
         {
-          "x": -26.883428973150995,
-          "y": -28.985981938017847
+          "x": -25.076581830280098,
+          "y": -27.773239090001198
         },
         {
-          "x": -22.09127317631499,
-          "y": -18.908809258755685
+          "x": -49.9630998876345,
+          "y": -35.955310458805556
         },
         {
-          "x": -25.116696876216533,
-          "y": -5.392625228048677
+          "x": -79.63085960213814,
+          "y": -14.803583400929137
         },
         {
-          "x": -44.07495616238489,
-          "y": 17.322615601668858
+          "x": -74.85081426777809,
+          "y": 3.1082422357136235
         },
         {
-          "x": -77.70804056372597,
-          "y": -5.991984877496936
+          "x": -45.72191846398726,
+          "y": 17.36549716902487
         },
         {
-          "x": -78.19102221560554,
-          "y": -7.150820712595017
+          "x": -23.526136701715853,
+          "y": -7.284748808693975
         },
         {
-          "x": -47.68897914443721,
-          "y": -37.39044507089211
+          "x": -21.04557486113062,
+          "y": -20.396673710820593
         }
       ],
       "building_count": 2,
@@ -3814,33 +3980,29 @@
       "name": "Frontend",
       "color": "#F8B500",
       "center": {
-        "x": -114.54878430548722,
-        "y": -48.09493732068821
+        "x": -113.18118767520497,
+        "y": -47.0559529080888
       },
       "boundary": [
         {
-          "x": -88.5448310561817,
-          "y": -66.3845959824424
+          "x": -93.58638110895407,
+          "y": -68.62910656914605
         },
         {
-          "x": -126.19430050671865,
-          "y": -71.57214867739705
+          "x": -94.36031005745578,
+          "y": -23.086508908316823
         },
         {
-          "x": -150.67232182691663,
-          "y": -43.716169899592785
+          "x": -125.17098393846732,
+          "y": -17.785634011073416
         },
         {
-          "x": -149.86581184515236,
-          "y": -37.04012038709231
+          "x": -141.51619594204124,
+          "y": -38.909014955484416
         },
         {
-          "x": -121.5672637278541,
-          "y": -15.09836776822619
-        },
-        {
-          "x": -100.78248647939927,
-          "y": -19.419442352126456
+          "x": -130.00123372836916,
+          "y": -65.08308600458483
         }
       ],
       "building_count": 1,
@@ -3851,29 +4013,29 @@
       "name": "Frontend",
       "color": "#00CED1",
       "center": {
-        "x": 111.4642678923953,
-        "y": -64.84205410146491
+        "x": 117.25711374105815,
+        "y": -47.99859292066821
       },
       "boundary": [
         {
-          "x": 131.24440993038087,
-          "y": -34.159121717507794
+          "x": 143.26792431185748,
+          "y": -56.08409227869279
         },
         {
-          "x": 150.04122948397543,
-          "y": -71.40914055988293
+          "x": 103.99517615990052,
+          "y": -73.29971215603706
         },
         {
-          "x": 97.10004597898698,
-          "y": -87.4601187238255
+          "x": 87.72510118286729,
+          "y": -46.66255545320345
         },
         {
-          "x": 87.68599536997569,
-          "y": -47.60990937310134
+          "x": 115.1044688158471,
+          "y": -20.887819588606654
         },
         {
-          "x": 122.72830036370291,
-          "y": -30.036805647455235
+          "x": 142.8004091647252,
+          "y": -48.87428250213138
         }
       ],
       "building_count": 1,
@@ -3884,37 +4046,33 @@
       "name": "Frontend",
       "color": "#FF7F50",
       "center": {
-        "x": -48.442955054283914,
-        "y": 117.51638369506027
+        "x": -40.84139727047097,
+        "y": 124.93604180036077
       },
       "boundary": [
         {
-          "x": -24.799254886753186,
-          "y": 91.05772845381986
+          "x": -73.33343151954564,
+          "y": 122.20374451976947
         },
         {
-          "x": -27.320029391359785,
-          "y": 89.45634239607023
+          "x": -68.63403422133675,
+          "y": 107.04747449875471
         },
         {
-          "x": -72.57893105718844,
-          "y": 100.24988211141907
+          "x": -29.68760292895862,
+          "y": 97.75990378195394
         },
         {
-          "x": -75.17171098115469,
-          "y": 130.6759218978772
+          "x": -16.87234994479719,
+          "y": 133.67127980815738
         },
         {
-          "x": -64.64359479287744,
-          "y": 154.0540104500065
+          "x": -54.25022923926496,
+          "y": 156.18919245469243
         },
         {
-          "x": -53.58883977222247,
-          "y": 153.41572776236376
-        },
-        {
-          "x": -19.4364287482695,
-          "y": 127.9858612532928
+          "x": -60.871043852585906,
+          "y": 152.29828224925683
         }
       ],
       "building_count": 1,
@@ -3925,37 +4083,29 @@
       "name": "Frontend",
       "color": "#9ACD32",
       "center": {
-        "x": -35.72343504132184,
-        "y": -124.49675600375807
+        "x": -34.84721566336309,
+        "y": -129.74735227065148
       },
       "boundary": [
         {
-          "x": -8.886236743371338,
-          "y": -120.25652297668196
+          "x": -10.485459743430233,
+          "y": -122.18146828548761
         },
         {
-          "x": -8.557382336373571,
-          "y": -124.14509430230088
+          "x": -30.701919770589665,
+          "y": -151.3644548848178
         },
         {
-          "x": -41.74349663335556,
-          "y": -152.13159064089118
+          "x": -52.6938541835454,
+          "y": -155.74434778992523
         },
         {
-          "x": -49.16606646352894,
-          "y": -154.2928364866329
+          "x": -61.86145990693526,
+          "y": -116.86646319542227
         },
         {
-          "x": -56.20309997655737,
-          "y": -150.89844914697017
-        },
-        {
-          "x": -62.962366510797274,
-          "y": -116.70535246601145
-        },
-        {
-          "x": -44.36304515183546,
-          "y": -101.48925570710776
+          "x": -38.10661854308625,
+          "y": -99.65041540303086
         }
       ],
       "building_count": 1,
@@ -3966,29 +4116,33 @@
       "name": "Frontend",
       "color": "#DA70D6",
       "center": {
-        "x": 123.12181593873207,
-        "y": 56.45378679615113
+        "x": 121.78393854882832,
+        "y": 55.620834278239954
       },
       "boundary": [
         {
-          "x": 101.38021168642108,
-          "y": 76.85540193307286
+          "x": 133.6992824902746,
+          "y": 31.67547545273817
         },
         {
-          "x": 124.72244125984102,
-          "y": 82.01959640798229
+          "x": 155.39696489759248,
+          "y": 62.22311354395511
         },
         {
-          "x": 148.2349426099543,
-          "y": 66.95528697308758
+          "x": 151.4021129944001,
+          "y": 79.68534090765257
         },
         {
-          "x": 131.56823115773307,
-          "y": 34.52282277594577
+          "x": 107.26822525580775,
+          "y": 88.02998181330041
         },
         {
-          "x": 95.40161197165526,
-          "y": 50.282595315318076
+          "x": 102.8319284133908,
+          "y": 86.1805438762846
+        },
+        {
+          "x": 101.10723782294112,
+          "y": 36.8254557700461
         }
       ],
       "building_count": 1,
@@ -3999,29 +4153,33 @@
       "name": "Frontend",
       "color": "#FF6B6B",
       "center": {
-        "x": -134.43535889502124,
-        "y": 22.519985328160224
+        "x": -132.2944449128512,
+        "y": 28.5492563264905
       },
       "boundary": [
         {
-          "x": -124.59658516508244,
-          "y": -2.9813005911973494
+          "x": -100.64969319772678,
+          "y": 38.91630543959423
         },
         {
-          "x": -110.19507296085676,
-          "y": 43.055365595124776
+          "x": -131.82553381757754,
+          "y": 0.27144721738192246
         },
         {
-          "x": -122.50852652250434,
-          "y": 54.46120833158972
+          "x": -152.17395906082746,
+          "y": 11.984441289489261
         },
         {
-          "x": -153.2298292958003,
-          "y": 47.92599346545994
+          "x": -154.25307161909095,
+          "y": 52.45280144726697
         },
         {
-          "x": -156.88547462338755,
-          "y": 21.790420523141336
+          "x": -121.55175921804933,
+          "y": 58.983115145085875
+        },
+        {
+          "x": -100.6754997711817,
+          "y": 39.44299995117863
         }
       ],
       "building_count": 1,
@@ -4032,33 +4190,33 @@
       "name": "Frontend",
       "color": "#4ECDC4",
       "center": {
-        "x": 79.46117899405152,
-        "y": -114.34969311900024
+        "x": 77.51414077879596,
+        "y": -116.42425069286766
       },
       "boundary": [
         {
-          "x": 47.55197562433946,
-          "y": -102.6715027769223
+          "x": 101.39025756323575,
+          "y": -93.774331614463
         },
         {
-          "x": 51.65799737012697,
-          "y": -97.29746986767563
+          "x": 53.97942714751566,
+          "y": -96.07873029795198
         },
         {
-          "x": 94.93648452297369,
-          "y": -91.62993086172797
+          "x": 50.83842259725763,
+          "y": -99.4849612262364
         },
         {
-          "x": 104.60341403849687,
-          "y": -117.00374920971313
+          "x": 50.7328527564071,
+          "y": -127.52710006227514
         },
         {
-          "x": 86.78316869289146,
-          "y": -141.63019969005953
+          "x": 96.07200486701967,
+          "y": -136.83627638058383
         },
         {
-          "x": 49.47470260756364,
-          "y": -123.75286332883189
+          "x": 106.5332718908365,
+          "y": -101.55724906467705
         }
       ],
       "building_count": 1,
@@ -4069,29 +4227,33 @@
       "name": "Frontend",
       "color": "#45B7D1",
       "center": {
-        "x": 26.079092116881448,
-        "y": 138.50366388529454
+        "x": 32.54767508950453,
+        "y": 135.89892600628906
       },
       "boundary": [
         {
-          "x": 30.783301374559596,
-          "y": 113.295773472458
+          "x": 3.157744837140079,
+          "y": 140.67416982051378
         },
         {
-          "x": -1.4623569346475307,
-          "y": 136.45126445697875
+          "x": 24.003407930988764,
+          "y": 109.27596607214426
         },
         {
-          "x": 6.737074386202941,
-          "y": 154.166608821796
+          "x": 37.34359202661855,
+          "y": 107.04243051291056
         },
         {
-          "x": 34.04497846398291,
-          "y": 165.4721319632421
+          "x": 57.36236652021432,
+          "y": 128.18103934107643
         },
         {
-          "x": 50.22182616002325,
-          "y": 133.44585671804109
+          "x": 37.42822393957201,
+          "y": 159.67625965171038
+        },
+        {
+          "x": 8.928555119326322,
+          "y": 153.92156788826108
         }
       ],
       "building_count": 1,
@@ -4102,33 +4264,37 @@
       "name": "Frontend",
       "color": "#96CEB4",
       "center": {
-        "x": -108.63361902244976,
-        "y": -91.02516814710349
+        "x": -116.97511283594166,
+        "y": -86.016591477993
       },
       "boundary": [
         {
-          "x": -88.28677589509721,
-          "y": -66.54855120870366
+          "x": -93.58638110895407,
+          "y": -68.62910656914605
         },
         {
-          "x": -85.9183515050749,
-          "y": -106.69101892904942
+          "x": -90.98820951586397,
+          "y": -71.39946239821566
         },
         {
-          "x": -109.84050218197206,
-          "y": -119.65920927647497
+          "x": -91.83709791447768,
+          "y": -108.66224181191005
         },
         {
-          "x": -132.90276869676373,
-          "y": -97.57748976498026
+          "x": -99.93443599448682,
+          "y": -114.12068786977446
         },
         {
-          "x": -126.19430050671865,
-          "y": -71.57214867739705
+          "x": -139.76569254464061,
+          "y": -114.92116054717867
         },
         {
-          "x": -88.5448310561817,
-          "y": -66.3845959824424
+          "x": -146.5616111544097,
+          "y": -95.20725927448618
+        },
+        {
+          "x": -130.00123372836916,
+          "y": -65.08308600458483
         }
       ],
       "building_count": 1,
@@ -4139,33 +4305,33 @@
       "name": "Frontend",
       "color": "#FFEAA7",
       "center": {
-        "x": 143.03998936392782,
-        "y": 0.38882561005786564
+        "x": 142.19130394696708,
+        "y": -23.323240171582245
       },
       "boundary": [
         {
-          "x": 163.97153572042734,
-          "y": -12.287729702349267
+          "x": 142.8004091647252,
+          "y": -48.87428250213138
         },
         {
-          "x": 131.24440993038087,
-          "y": -34.159121717507794
+          "x": 115.1044688158471,
+          "y": -20.887819588606654
         },
         {
-          "x": 122.72830036370291,
-          "y": -30.036805647455235
+          "x": 115.77195425180497,
+          "y": -15.090501063772772
         },
         {
-          "x": 113.73373029262822,
-          "y": -3.518834762003711
+          "x": 142.83122993069756,
+          "y": 5.422218630485954
         },
         {
-          "x": 134.93548133705755,
-          "y": 24.277009924644773
+          "x": 167.32782262872882,
+          "y": -3.1372111519710693
         },
         {
-          "x": 164.95928048950438,
-          "y": 15.819927523030936
+          "x": 175.38047479898,
+          "y": -9.527205980401902
         }
       ],
       "building_count": 1,
@@ -4176,33 +4342,33 @@
       "name": "Frontend",
       "color": "#DDA0DD",
       "center": {
-        "x": -99.28843875878393,
-        "y": 113.18354411755942
+        "x": -101.67167140342099,
+        "y": 106.07482954211198
       },
       "boundary": [
         {
-          "x": -78.74814829385276,
-          "y": 93.88867649568789
+          "x": -112.16018593113557,
+          "y": 129.10228000569302
         },
         {
-          "x": -72.57893105718844,
-          "y": 100.24988211141907
+          "x": -127.86060741111852,
+          "y": 104.28752859714264
         },
         {
-          "x": -75.17171098115469,
-          "y": 130.6759218978772
+          "x": -116.20339895786417,
+          "y": 83.36749278910922
         },
         {
-          "x": -119.1029795656044,
-          "y": 125.40676280718547
+          "x": -75.2947796513468,
+          "y": 95.00800617282097
         },
         {
-          "x": -125.26716263030573,
-          "y": 99.29866742160317
+          "x": -68.63403422133675,
+          "y": 107.04747449875471
         },
         {
-          "x": -116.52256497439643,
-          "y": 87.32227348232534
+          "x": -73.33343151954564,
+          "y": 122.20374451976947
         }
       ],
       "building_count": 1,
@@ -4213,25 +4379,29 @@
       "name": "Frontend",
       "color": "#98D8C8",
       "center": {
-        "x": -13.489053794378082,
-        "y": -150.86206834785108
+        "x": -9.006951115739717,
+        "y": -147.64814777491432
       },
       "boundary": [
         {
-          "x": -8.557382336373571,
-          "y": -124.14509430230088
+          "x": -10.485459743430233,
+          "y": -122.18146828548761
         },
         {
-          "x": -41.74349663335556,
-          "y": -152.13159064089118
+          "x": -30.701919770589665,
+          "y": -151.3644548848178
         },
         {
-          "x": 3.6177816361634516,
-          "y": -169.8489845615172
+          "x": -0.035020899605150646,
+          "y": -172.287036310998
         },
         {
-          "x": 21.525766338577917,
-          "y": -155.04366324298178
+          "x": 25.884640284058918,
+          "y": -151.2513131219167
+        },
+        {
+          "x": -1.5892929965679912,
+          "y": -122.36313115611263
         }
       ],
       "building_count": 1,
@@ -4242,33 +4412,33 @@
       "name": "Frontend",
       "color": "#F7DC6F",
       "center": {
-        "x": 112.48678097026618,
-        "y": 104.52429013629362
+        "x": 94.4644555348912,
+        "y": 121.15281770167552
       },
       "boundary": [
         {
-          "x": 86.29006362596789,
-          "y": 129.37083378826975
+          "x": 69.90685962251321,
+          "y": 129.53630212917955
         },
         {
-          "x": 123.17856969930224,
-          "y": 134.1915895205449
+          "x": 82.48931090153177,
+          "y": 142.38726284895122
         },
         {
-          "x": 137.02396143077604,
-          "y": 123.31093243194586
+          "x": 119.19251275779074,
+          "y": 143.166707322411
         },
         {
-          "x": 124.72244125984102,
-          "y": 82.01959640798229
+          "x": 107.26822525580775,
+          "y": 88.02998181330041
         },
         {
-          "x": 101.38021168642108,
-          "y": 76.85540193307286
+          "x": 102.8319284133908,
+          "y": 86.1805438762846
         },
         {
-          "x": 83.36016399039542,
-          "y": 96.1970586728367
+          "x": 95.84366790891143,
+          "y": 87.5612620691492
         }
       ],
       "building_count": 1,
@@ -4279,33 +4449,37 @@
       "name": "Frontend",
       "color": "#BB8FCE",
       "center": {
-        "x": -151.77589723873,
-        "y": -0.08267207877389753
+        "x": -156.51357231202513,
+        "y": -13.525477111001164
       },
       "boundary": [
         {
-          "x": -182.3867627551229,
-          "y": -1.7260005485040664
+          "x": -125.17098393846732,
+          "y": -17.785634011073416
         },
         {
-          "x": -156.88547462338755,
-          "y": 21.790420523141336
+          "x": -131.82553381757754,
+          "y": 0.27144721738192246
         },
         {
-          "x": -124.59658516508244,
-          "y": -2.9813005911973494
+          "x": -152.17395906082746,
+          "y": 11.984441289489261
         },
         {
-          "x": -121.5672637278541,
-          "y": -15.09836776822619
+          "x": -185.37051187297303,
+          "y": -2.2520447460083446
         },
         {
-          "x": -149.86581184515236,
-          "y": -37.04012038709231
+          "x": -188.5728689940654,
+          "y": -8.172724908802252
         },
         {
-          "x": -183.6338444194302,
-          "y": -6.934312024892993
+          "x": -159.67004724873246,
+          "y": -39.56041338570384
+        },
+        {
+          "x": -141.51619594204124,
+          "y": -38.909014955484416
         }
       ],
       "building_count": 1,
@@ -4316,33 +4490,33 @@
       "name": "Frontend",
       "color": "#85C1E9",
       "center": {
-        "x": 121.60617850821185,
-        "y": -98.29327093816211
+        "x": 131.58840906400926,
+        "y": -80.69154013485829
       },
       "boundary": [
         {
-          "x": 94.93648452297369,
-          "y": -91.62993086172797
+          "x": 143.26792431185748,
+          "y": -56.08409227869279
         },
         {
-          "x": 97.10004597898698,
-          "y": -87.4601187238255
+          "x": 103.99517615990052,
+          "y": -73.29971215603706
         },
         {
-          "x": 150.04122948397543,
-          "y": -71.40914055988293
+          "x": 101.39025756323575,
+          "y": -93.774331614463
         },
         {
-          "x": 150.8298816513426,
-          "y": -71.9969058741766
+          "x": 106.5332718908365,
+          "y": -101.55724906467705
         },
         {
-          "x": 136.5624197841719,
-          "y": -122.07044586543341
+          "x": 140.7302546637702,
+          "y": -107.70189903063797
         },
         {
-          "x": 104.60341403849687,
-          "y": -117.00374920971313
+          "x": 156.16221389266966,
+          "y": -69.13743639961145
         }
       ],
       "building_count": 1,
@@ -4353,29 +4527,33 @@
       "name": "Frontend",
       "color": "#F8B500",
       "center": {
-        "x": -17.72091158771562,
-        "y": 158.77620924670927
+        "x": -20.353791991909745,
+        "y": 158.94377818140572
       },
       "boundary": [
         {
-          "x": -1.4623569346475307,
-          "y": 136.45126445697875
+          "x": 3.157744837140079,
+          "y": 140.67416982051378
         },
         {
-          "x": 6.737074386202941,
-          "y": 154.166608821796
+          "x": -16.87234994479719,
+          "y": 133.67127980815738
         },
         {
-          "x": -17.062474235680533,
-          "y": 186.1508137730003
+          "x": -54.25022923926496,
+          "y": 156.18919245469243
         },
         {
-          "x": -53.58883977222247,
-          "y": 153.41572776236376
+          "x": -43.78331408995484,
+          "y": 179.8695557763195
         },
         {
-          "x": -19.4364287482695,
-          "y": 127.9858612532928
+          "x": -9.465087810554024,
+          "y": 192.97029012672485
+        },
+        {
+          "x": 8.928555119326322,
+          "y": 153.92156788826108
         }
       ],
       "building_count": 1,
@@ -4386,33 +4564,33 @@
       "name": "Frontend",
       "color": "#00CED1",
       "center": {
-        "x": -85.18796964778204,
-        "y": -134.27486930296638
+        "x": -80.2749755240741,
+        "y": -140.45945236672304
       },
       "boundary": [
         {
-          "x": -85.9183515050749,
-          "y": -106.69101892904942
+          "x": -91.83709791447768,
+          "y": -108.66224181191005
         },
         {
-          "x": -109.84050218197206,
-          "y": -119.65920927647497
+          "x": -61.86145990693526,
+          "y": -116.86646319542227
         },
         {
-          "x": -115.34562707320134,
-          "y": -143.73427978331105
+          "x": -52.6938541835454,
+          "y": -155.74434778992523
         },
         {
-          "x": -92.03027335359143,
-          "y": -166.27750357854057
+          "x": -60.66528842513938,
+          "y": -169.0115706715293
         },
         {
-          "x": -56.20309997655737,
-          "y": -150.89844914697017
+          "x": -97.21211877208859,
+          "y": -153.99988559859878
         },
         {
-          "x": -62.962366510797274,
-          "y": -116.70535246601145
+          "x": -99.93443599448682,
+          "y": -114.12068786977446
         }
       ],
       "building_count": 1,
@@ -4423,37 +4601,29 @@
       "name": "Frontend",
       "color": "#FF7F50",
       "center": {
-        "x": 154.31678968733377,
-        "y": 40.423009021535435
+        "x": 160.23294397972967,
+        "y": 28.310889521600902
       },
       "boundary": [
         {
-          "x": 164.95928048950438,
-          "y": 15.819927523030936
+          "x": 167.32782262872882,
+          "y": -3.1372111519710693
         },
         {
-          "x": 134.93548133705755,
-          "y": 24.277009924644773
+          "x": 173.37484205129547,
+          "y": 50.27298178397247
         },
         {
-          "x": 131.56823115773307,
-          "y": 34.52282277594577
+          "x": 155.39696489759248,
+          "y": 62.22311354395511
         },
         {
-          "x": 148.2349426099543,
-          "y": 66.95528697308758
+          "x": 133.6992824902746,
+          "y": 31.67547545273817
         },
         {
-          "x": 155.77469413290189,
-          "y": 67.9427329565386
-        },
-        {
-          "x": 183.89776649512424,
-          "y": 41.80867535706876
-        },
-        {
-          "x": 183.3663953912555,
-          "y": 29.74643954058711
+          "x": 142.83122993069756,
+          "y": 5.422218630485954
         }
       ],
       "building_count": 1,
@@ -4464,37 +4634,37 @@
       "name": "Frontend",
       "color": "#9ACD32",
       "center": {
-        "x": -146.40377483577197,
-        "y": 78.78214921479181
+        "x": -143.1593916202901,
+        "y": 82.95675234299831
       },
       "boundary": [
         {
-          "x": -116.52256497439643,
-          "y": 87.32227348232534
+          "x": -127.86060741111852,
+          "y": 104.28752859714264
         },
         {
-          "x": -125.26716263030573,
-          "y": 99.29866742160317
+          "x": -159.3430736438461,
+          "y": 108.20786962301966
         },
         {
-          "x": -162.16521011709645,
-          "y": 102.7037029866132
+          "x": -179.2586898643159,
+          "y": 94.53597185366253
         },
         {
-          "x": -178.18635620776408,
-          "y": 87.93104788450268
+          "x": -156.6326633040495,
+          "y": 53.73608571452722
         },
         {
-          "x": -159.93080694447775,
-          "y": 52.18609606105271
+          "x": -154.25307161909095,
+          "y": 52.45280144726697
         },
         {
-          "x": -153.2298292958003,
-          "y": 47.92599346545994
+          "x": -121.55175921804933,
+          "y": 58.983115145085875
         },
         {
-          "x": -122.50852652250434,
-          "y": 54.46120833158972
+          "x": -116.20339895786417,
+          "y": 83.36749278910922
         }
       ],
       "building_count": 1,
@@ -4505,33 +4675,33 @@
       "name": "Frontend",
       "color": "#DA70D6",
       "center": {
-        "x": 60.93339787430211,
-        "y": -153.01558156990592
+        "x": 70.97250795079198,
+        "y": -148.2844363526162
       },
       "boundary": [
         {
-          "x": 49.47470260756364,
-          "y": -123.75286332883189
+          "x": 96.07200486701967,
+          "y": -136.83627638058383
         },
         {
-          "x": 86.78316869289146,
-          "y": -141.63019969005953
+          "x": 50.7328527564071,
+          "y": -127.52710006227514
         },
         {
-          "x": 88.61864444428195,
-          "y": -149.28543967621272
+          "x": 34.37743729046907,
+          "y": -151.47067881846098
         },
         {
-          "x": 73.7078845682966,
-          "y": -187.89257291492405
+          "x": 57.03225391324894,
+          "y": -180.64268410207865
         },
         {
-          "x": 50.576277666811805,
-          "y": -183.5334793881872
+          "x": 71.52884686545357,
+          "y": -179.02255603869193
         },
         {
-          "x": 25.232930755242574,
-          "y": -155.00314725859053
+          "x": 99.84599170748035,
+          "y": -147.4322215841414
         }
       ],
       "building_count": 1,
@@ -4542,29 +4712,33 @@
       "name": "Frontend",
       "color": "#FF6B6B",
       "center": {
-        "x": 60.478462457574345,
-        "y": 155.87918978022236
+        "x": 61.0067752939048,
+        "y": 153.9114293511143
       },
       "boundary": [
         {
-          "x": 85.48643473619201,
-          "y": 130.15006648537957
+          "x": 37.42822393957201,
+          "y": 159.67625965171038
         },
         {
-          "x": 80.11729606465013,
-          "y": 186.86525999350806
+          "x": 57.36236652021432,
+          "y": 128.18103934107643
         },
         {
-          "x": 36.46529240451874,
-          "y": 170.84365082783793
+          "x": 69.90685962251321,
+          "y": 129.53630212917955
         },
         {
-          "x": 34.04497846398291,
-          "y": 165.4721319632421
+          "x": 82.48931090153177,
+          "y": 142.38726284895122
         },
         {
-          "x": 50.22182616002325,
-          "y": 133.44585671804109
+          "x": 71.15536641107511,
+          "y": 178.5524618162745
+        },
+        {
+          "x": 47.754684678525535,
+          "y": 174.6151629169839
         }
       ],
       "building_count": 1,
@@ -4575,29 +4749,29 @@
       "name": "Frontend",
       "color": "#4ECDC4",
       "center": {
-        "x": -150.97381066821674,
-        "y": -80.1028799963951
+        "x": -154.65571570995925,
+        "y": -65.30216391035066
       },
       "boundary": [
         {
-          "x": -150.67232182691663,
-          "y": -43.716169899592785
+          "x": -130.00123372836916,
+          "y": -65.08308600458483
         },
         {
-          "x": -188.38481419340803,
-          "y": -76.88246904370249
+          "x": -146.5616111544097,
+          "y": -95.20725927448618
         },
         {
-          "x": -149.2830424367537,
-          "y": -102.48262750609754
+          "x": -187.2931351625528,
+          "y": -74.42170974652856
         },
         {
-          "x": -132.90276869676373,
-          "y": -97.57748976498026
+          "x": -159.67004724873246,
+          "y": -39.56041338570384
         },
         {
-          "x": -126.19430050671865,
-          "y": -71.57214867739705
+          "x": -141.51619594204124,
+          "y": -38.909014955484416
         }
       ],
       "building_count": 1,
@@ -4608,33 +4782,33 @@
       "name": "Frontend",
       "color": "#45B7D1",
       "center": {
-        "x": 167.67689919046492,
-        "y": -36.47646611039087
+        "x": 168.0167044647018,
+        "y": -44.70712223545181
       },
       "boundary": [
         {
-          "x": 186.08852545403712,
-          "y": -23.58515365337036
+          "x": 143.26792431185748,
+          "y": -56.08409227869279
         },
         {
-          "x": 181.33209999741845,
-          "y": -74.44143528924857
+          "x": 156.16221389266966,
+          "y": -69.13743639961145
         },
         {
-          "x": 150.8298816513426,
-          "y": -71.9969058741766
+          "x": 202.4978095270353,
+          "y": -71.03287818806787
         },
         {
-          "x": 150.04122948397543,
-          "y": -71.40914055988293
+          "x": 175.53712990838957,
+          "y": -9.556607836222717
         },
         {
-          "x": 131.24440993038087,
-          "y": -34.159121717507794
+          "x": 175.38047479898,
+          "y": -9.527205980401902
         },
         {
-          "x": 163.97153572042734,
-          "y": -12.287729702349267
+          "x": 142.8004091647252,
+          "y": -48.87428250213138
         }
       ],
       "building_count": 1,
@@ -4645,29 +4819,29 @@
       "name": "Frontend",
       "color": "#96CEB4",
       "center": {
-        "x": -102.74099779523621,
-        "y": 141.96902880751637
+        "x": -94.38123326770749,
+        "y": 147.10731413624498
       },
       "boundary": [
         {
-          "x": -64.64359479287744,
-          "y": 154.0540104500065
+          "x": -112.16018593113557,
+          "y": 129.10228000569302
         },
         {
-          "x": -108.55258518659487,
-          "y": 209.17772514623692
+          "x": -73.33343151954564,
+          "y": 122.20374451976947
         },
         {
-          "x": -125.43818531572975,
-          "y": 138.85470605360092
+          "x": -60.871043852585906,
+          "y": 152.29828224925683
         },
         {
-          "x": -119.1029795656044,
-          "y": 125.40676280718547
+          "x": -103.34990464628314,
+          "y": 175.13044052137158
         },
         {
-          "x": -75.17171098115469,
-          "y": 130.6759218978772
+          "x": -118.06130155359614,
+          "y": 142.92714375806239
         }
       ],
       "building_count": 1,
@@ -4678,29 +4852,33 @@
       "name": "Frontend",
       "color": "#FFEAA7",
       "center": {
-        "x": -21.829192551595902,
-        "y": -172.2150594631037
+        "x": -26.24893636671921,
+        "y": -172.9202787446218
       },
       "boundary": [
         {
-          "x": 3.6177816361634516,
-          "y": -169.8489845615172
+          "x": -30.701919770589665,
+          "y": -151.3644548848178
         },
         {
-          "x": -5.366648214781591,
-          "y": -190.24736046361008
+          "x": -52.6938541835454,
+          "y": -155.74434778992523
         },
         {
-          "x": -39.31646853196996,
-          "y": -191.66187985243974
+          "x": -60.66528842513938,
+          "y": -169.0115706715293
         },
         {
-          "x": -49.16606646352894,
-          "y": -154.2928364866329
+          "x": -59.69215251536596,
+          "y": -194.46932845353604
         },
         {
-          "x": -41.74349663335556,
-          "y": -152.13159064089118
+          "x": -4.507981948710626,
+          "y": -188.69318591522648
+        },
+        {
+          "x": -0.035020899605150646,
+          "y": -172.287036310998
         }
       ],
       "building_count": 1,
@@ -4711,29 +4889,29 @@
       "name": "Frontend",
       "color": "#DDA0DD",
       "center": {
-        "x": 147.2792496917905,
-        "y": 94.15891335298812
+        "x": 132.61444853974396,
+        "y": 112.9022101331623
       },
       "boundary": [
         {
-          "x": 148.2349426099543,
-          "y": 66.95528697308758
+          "x": 119.19251275779074,
+          "y": 143.166707322411
         },
         {
-          "x": 155.77469413290189,
-          "y": 67.9427329565386
+          "x": 107.26822525580775,
+          "y": 88.02998181330041
         },
         {
-          "x": 189.64324894523898,
-          "y": 121.29718383320031
+          "x": 151.4021129944001,
+          "y": 79.68534090765257
         },
         {
-          "x": 137.02396143077604,
-          "y": 123.31093243194586
+          "x": 175.3994208573853,
+          "y": 111.62988500616714
         },
         {
-          "x": 124.72244125984102,
-          "y": 82.01959640798229
+          "x": 120.08435368541258,
+          "y": 143.84700777789317
         }
       ],
       "building_count": 1,
@@ -4744,29 +4922,29 @@
       "name": "Frontend",
       "color": "#98D8C8",
       "center": {
-        "x": -178.27382989897865,
-        "y": 28.651777504588726
+        "x": -173.6464000703003,
+        "y": 26.424747971286536
       },
       "boundary": [
         {
-          "x": -182.3867627551229,
-          "y": -1.7260005485040664
+          "x": -152.17395906082746,
+          "y": 11.984441289489261
         },
         {
-          "x": -200.89999881314634,
-          "y": 35.99283178627369
+          "x": -185.37051187297303,
+          "y": -2.2520447460083446
         },
         {
-          "x": -159.93080694447775,
-          "y": 52.18609606105271
+          "x": -196.13980195536644,
+          "y": 34.95353835146883
         },
         {
-          "x": -153.2298292958003,
-          "y": 47.92599346545994
+          "x": -156.6326633040495,
+          "y": 53.73608571452722
         },
         {
-          "x": -156.88547462338755,
-          "y": 21.790420523141336
+          "x": -154.25307161909095,
+          "y": 52.45280144726697
         }
       ],
       "building_count": 1,
@@ -4777,33 +4955,33 @@
       "name": "Frontend",
       "color": "#F7DC6F",
       "center": {
-        "x": 114.98527082024526,
-        "y": -140.0557132589227
+        "x": 122.75719242691612,
+        "y": -129.84014337111952
       },
       "boundary": [
         {
-          "x": 86.78316869289146,
-          "y": -141.63019969005953
+          "x": 140.7302546637702,
+          "y": -107.70189903063797
         },
         {
-          "x": 88.61864444428195,
-          "y": -149.28543967621272
+          "x": 154.08028142363247,
+          "y": -124.00925147749511
         },
         {
-          "x": 126.07925359394125,
-          "y": -159.5389827420545
+          "x": 119.55840976782967,
+          "y": -156.19174556480107
         },
         {
-          "x": 139.4721228962294,
-          "y": -126.56523366176044
+          "x": 99.84599170748035,
+          "y": -147.4322215841414
         },
         {
-          "x": 136.5624197841719,
-          "y": -122.07044586543341
+          "x": 96.07200486701967,
+          "y": -136.83627638058383
         },
         {
-          "x": 104.60341403849687,
-          "y": -117.00374920971313
+          "x": 106.5332718908365,
+          "y": -101.55724906467705
         }
       ],
       "building_count": 1,
@@ -4814,33 +4992,29 @@
       "name": "Frontend",
       "color": "#BB8FCE",
       "center": {
-        "x": 9.347517539295447,
-        "y": 178.9179134444261
+        "x": 23.703933078845907,
+        "y": 179.69687884128018
       },
       "boundary": [
         {
-          "x": 34.04497846398291,
-          "y": 165.4721319632421
+          "x": 8.928555119326322,
+          "y": 153.92156788826108
         },
         {
-          "x": 36.46529240451874,
-          "y": 170.84365082783793
+          "x": 37.42822393957201,
+          "y": 159.67625965171038
         },
         {
-          "x": 16.458125975702497,
-          "y": 208.7434958601799
+          "x": 47.754684678525535,
+          "y": 174.6151629169839
         },
         {
-          "x": -16.906889447882172,
-          "y": 187.0240628248033
+          "x": 10.486197363880212,
+          "y": 233.62670954884854
         },
         {
-          "x": -17.062474235680533,
-          "y": 186.1508137730003
-        },
-        {
-          "x": 6.737074386202941,
-          "y": 154.166608821796
+          "x": -9.465087810554024,
+          "y": 192.97029012672485
         }
       ],
       "building_count": 1,
@@ -4851,29 +5025,29 @@
       "name": "Frontend",
       "color": "#85C1E9",
       "center": {
-        "x": -138.3951349401182,
-        "y": -122.10825529619042
+        "x": -115.8322165252981,
+        "y": -142.88673513747526
       },
       "boundary": [
         {
-          "x": -109.84050218197206,
-          "y": -119.65920927647497
+          "x": -139.76569254464061,
+          "y": -114.92116054717867
         },
         {
-          "x": -132.90276869676373,
-          "y": -97.57748976498026
+          "x": -154.8930778488399,
+          "y": -139.5360871516533
         },
         {
-          "x": -149.2830424367537,
-          "y": -102.48262750609754
+          "x": -113.88663880151681,
+          "y": -164.80116617303153
         },
         {
-          "x": -170.94957797942834,
-          "y": -159.33210526666716
+          "x": -97.21211877208859,
+          "y": -153.99988559859878
         },
         {
-          "x": -115.34562707320134,
-          "y": -143.73427978331105
+          "x": -99.93443599448682,
+          "y": -114.12068786977446
         }
       ],
       "building_count": 1,
@@ -4884,29 +5058,33 @@
       "name": "Frontend",
       "color": "#F8B500",
       "center": {
-        "x": 185.7412951313579,
-        "y": -1.1117616166304185
+        "x": 181.27399885939636,
+        "y": 25.92865383708966
       },
       "boundary": [
         {
-          "x": 186.08852545403712,
-          "y": -23.58515365337036
+          "x": 175.38047479898,
+          "y": -9.527205980401902
         },
         {
-          "x": 163.97153572042734,
-          "y": -12.287729702349267
+          "x": 167.32782262872882,
+          "y": -3.1372111519710693
         },
         {
-          "x": 164.95928048950438,
-          "y": 15.819927523030936
+          "x": 173.37484205129547,
+          "y": 50.27298178397247
         },
         {
-          "x": 183.3663953912555,
-          "y": 29.74643954058711
+          "x": 188.4836930491331,
+          "y": 47.832360134314456
         },
         {
-          "x": 231.88634950794412,
-          "y": -4.5212439265587125
+          "x": 211.13472115562868,
+          "y": 7.138582276463165
+        },
+        {
+          "x": 175.53712990838957,
+          "y": -9.556607836222717
         }
       ],
       "building_count": 1,
@@ -4917,29 +5095,29 @@
       "name": "Frontend",
       "color": "#00CED1",
       "center": {
-        "x": -142.2921681123336,
-        "y": 123.33682631931427
+        "x": -137.46088539684158,
+        "y": 128.71885022492214
       },
       "boundary": [
         {
-          "x": -125.43818531572975,
-          "y": 138.85470605360092
+          "x": -112.16018593113557,
+          "y": 129.10228000569302
         },
         {
-          "x": -164.52146794658816,
-          "y": 136.18350479467108
+          "x": -127.86060741111852,
+          "y": 104.28752859714264
         },
         {
-          "x": -162.16521011709645,
-          "y": 102.7037029866132
+          "x": -159.3430736438461,
+          "y": 108.20786962301966
         },
         {
-          "x": -125.26716263030573,
-          "y": 99.29866742160317
+          "x": -155.4312797629379,
+          "y": 150.4950329076236
         },
         {
-          "x": -119.1029795656044,
-          "y": 125.40676280718547
+          "x": -118.06130155359614,
+          "y": 142.92714375806239
         }
       ],
       "building_count": 1,
@@ -4950,33 +5128,33 @@
       "name": "Frontend",
       "color": "#FF7F50",
       "center": {
-        "x": 19.05011881511024,
-        "y": -190.22028238339652
+        "x": 22.2300519134546,
+        "y": -186.13755589424434
       },
       "boundary": [
         {
-          "x": 21.525766338577917,
-          "y": -155.04366324298178
+          "x": -0.035020899605150646,
+          "y": -172.287036310998
         },
         {
-          "x": 3.6177816361634516,
-          "y": -169.8489845615172
+          "x": -4.507981948710626,
+          "y": -188.69318591522648
         },
         {
-          "x": -5.366648214781591,
-          "y": -190.24736046361008
+          "x": 27.414635916145507,
+          "y": -252.20401467538147
         },
         {
-          "x": 13.088544278672675,
-          "y": -227.7195791917839
+          "x": 57.03225391324894,
+          "y": -180.64268410207865
         },
         {
-          "x": 50.576277666811805,
-          "y": -183.5334793881872
+          "x": 34.37743729046907,
+          "y": -151.47067881846098
         },
         {
-          "x": 25.232930755242574,
-          "y": -155.00314725859053
+          "x": 25.884640284058918,
+          "y": -151.2513131219167
         }
       ],
       "building_count": 1,
@@ -4987,29 +5165,29 @@
       "name": "Frontend",
       "color": "#9ACD32",
       "center": {
-        "x": 105.2219392013963,
-        "y": 160.11498474846238
+        "x": 93.55217869490309,
+        "y": 164.1109528184045
       },
       "boundary": [
         {
-          "x": 85.48643473619201,
-          "y": 130.15006648537957
+          "x": 82.48931090153177,
+          "y": 142.38726284895122
         },
         {
-          "x": 80.11729606465013,
-          "y": 186.86525999350806
+          "x": 119.19251275779074,
+          "y": 143.166707322411
         },
         {
-          "x": 156.92143410089938,
-          "y": 309.4392933799804
+          "x": 120.08435368541258,
+          "y": 143.84700777789317
         },
         {
-          "x": 123.17856969930224,
-          "y": 134.1915895205449
+          "x": 155.50898883113712,
+          "y": 276.7480942442139
         },
         {
-          "x": 86.29006362596789,
-          "y": 129.37083378826975
+          "x": 71.15536641107511,
+          "y": 178.5524618162745
         }
       ],
       "building_count": 1,
@@ -5020,29 +5198,25 @@
       "name": "Frontend",
       "color": "#DA70D6",
       "center": {
-        "x": -186.79938624434064,
-        "y": -39.366597073502824
+        "x": -185.8764304438757,
+        "y": -40.56376810025065
       },
       "boundary": [
         {
-          "x": -183.6338444194302,
-          "y": -6.934312024892993
+          "x": -159.67004724873246,
+          "y": -39.56041338570384
         },
         {
-          "x": -500.0,
-          "y": -161.34475572921062
+          "x": -188.5728689940654,
+          "y": -8.172724908802252
         },
         {
-          "x": -188.38481419340803,
-          "y": -76.88246904370249
+          "x": -424.6215460805923,
+          "y": -111.8443323470006
         },
         {
-          "x": -150.67232182691663,
-          "y": -43.716169899592785
-        },
-        {
-          "x": -149.86581184515236,
-          "y": -37.04012038709231
+          "x": -187.2931351625528,
+          "y": -74.42170974652856
         }
       ],
       "building_count": 1,
@@ -5053,29 +5227,29 @@
       "name": "Frontend",
       "color": "#FF6B6B",
       "center": {
-        "x": 161.8047969080655,
-        "y": -109.7470697954628
+        "x": 165.981703083435,
+        "y": -94.4543641143714
       },
       "boundary": [
         {
-          "x": 449.8612817036024,
-          "y": -227.65612427963742
+          "x": 156.16221389266966,
+          "y": -69.13743639961145
         },
         {
-          "x": 139.4721228962294,
-          "y": -126.56523366176044
+          "x": 140.7302546637702,
+          "y": -107.70189903063797
         },
         {
-          "x": 136.5624197841719,
-          "y": -122.07044586543341
+          "x": 154.08028142363247,
+          "y": -124.00925147749511
         },
         {
-          "x": 150.8298816513426,
-          "y": -71.9969058741766
+          "x": 450.1952126235302,
+          "y": -221.64287590986117
         },
         {
-          "x": 181.33209999741845,
-          "y": -74.44143528924857
+          "x": 202.4978095270353,
+          "y": -71.03287818806787
         }
       ],
       "building_count": 1,
@@ -5086,33 +5260,29 @@
       "name": "Frontend",
       "color": "#4ECDC4",
       "center": {
-        "x": -44.345391212469565,
-        "y": 188.4842562846179
+        "x": -75.02950443694195,
+        "y": 183.11089230535023
       },
       "boundary": [
         {
-          "x": -64.64359479287744,
-          "y": 154.0540104500065
+          "x": -103.34990464628314,
+          "y": 175.13044052137158
         },
         {
-          "x": -108.55258518659487,
-          "y": 209.17772514623692
+          "x": -152.89930993401583,
+          "y": 315.49812850968476
         },
         {
-          "x": -164.55100232883146,
-          "y": 362.24092127899064
+          "x": -43.78331408995484,
+          "y": 179.8695557763195
         },
         {
-          "x": -16.906889447882172,
-          "y": 187.0240628248033
+          "x": -54.25022923926496,
+          "y": 156.18919245469243
         },
         {
-          "x": -17.062474235680533,
-          "y": 186.1508137730003
-        },
-        {
-          "x": -53.58883977222247,
-          "y": 153.41572776236376
+          "x": -60.871043852585906,
+          "y": 152.29828224925683
         }
       ],
       "building_count": 1,
@@ -5123,29 +5293,29 @@
       "name": "Frontend",
       "color": "#45B7D1",
       "center": {
-        "x": -64.11732711914715,
-        "y": -183.36121374617434
+        "x": -94.68282081398729,
+        "y": -175.536199242066
       },
       "boundary": [
         {
-          "x": -56.20309997655737,
-          "y": -150.89844914697017
+          "x": -60.66528842513938,
+          "y": -169.0115706715293
         },
         {
-          "x": -49.16606646352894,
-          "y": -154.2928364866329
+          "x": -97.21211877208859,
+          "y": -153.99988559859878
         },
         {
-          "x": -39.31646853196996,
-          "y": -191.66187985243974
+          "x": -113.88663880151681,
+          "y": -164.80116617303153
         },
         {
-          "x": -115.50121589083861,
-          "y": -319.0321996559513
+          "x": -125.29292917023837,
+          "y": -337.5486046388784
         },
         {
-          "x": -92.03027335359143,
-          "y": -166.27750357854057
+          "x": -59.69215251536596,
+          "y": -194.46932845353604
         }
       ],
       "building_count": 1,
@@ -5156,25 +5326,33 @@
       "name": "Frontend",
       "color": "#96CEB4",
       "center": {
-        "x": 183.11380327902665,
-        "y": 71.41171002874177
+        "x": 188.53720052765445,
+        "y": 70.89204740050155
       },
       "boundary": [
         {
-          "x": 183.89776649512424,
-          "y": 41.80867535706876
+          "x": 173.37484205129547,
+          "y": 50.27298178397247
         },
         {
-          "x": 345.2864389247851,
-          "y": 186.58966470324742
+          "x": 188.4836930491331,
+          "y": 47.832360134314456
         },
         {
-          "x": 189.64324894523898,
-          "y": 121.29718383320031
+          "x": 401.14532301072666,
+          "y": 214.8464175113303
         },
         {
-          "x": 155.77469413290189,
-          "y": 67.9427329565386
+          "x": 175.3994208573853,
+          "y": 111.62988500616714
+        },
+        {
+          "x": 151.4021129944001,
+          "y": 79.68534090765257
+        },
+        {
+          "x": 155.39696489759248,
+          "y": 62.22311354395511
         }
       ],
       "building_count": 1,
@@ -5185,25 +5363,25 @@
       "name": "Frontend",
       "color": "#FFEAA7",
       "center": {
-        "x": -189.40726941383576,
-        "y": 56.81953984715829
+        "x": -188.55450225947166,
+        "y": 57.78239338705143
       },
       "boundary": [
         {
-          "x": -159.93080694447775,
-          "y": 52.18609606105271
+          "x": -179.2586898643159,
+          "y": 94.53597185366253
         },
         {
-          "x": -178.18635620776408,
-          "y": 87.93104788450268
+          "x": -363.93098797347943,
+          "y": 122.9119878986245
         },
         {
-          "x": -342.6329563980803,
-          "y": 100.0320767871028
+          "x": -196.13980195536644,
+          "y": 34.95353835146883
         },
         {
-          "x": -200.89999881314634,
-          "y": 35.99283178627369
+          "x": -156.6326633040495,
+          "y": 53.73608571452722
         }
       ],
       "building_count": 1,
@@ -5214,25 +5392,25 @@
       "name": "Frontend",
       "color": "#DDA0DD",
       "center": {
-        "x": 106.6093784444109,
-        "y": -170.6564557101843
+        "x": 102.14460392636077,
+        "y": -176.2266779277949
       },
       "boundary": [
         {
-          "x": 126.07925359394125,
-          "y": -159.5389827420545
+          "x": 119.55840976782967,
+          "y": -156.19174556480107
         },
         {
-          "x": 213.51346460434314,
-          "y": -366.2312783643362
+          "x": 164.02451084053874,
+          "y": -247.54734240662881
         },
         {
-          "x": 73.7078845682966,
-          "y": -187.89257291492405
+          "x": 71.52884686545357,
+          "y": -179.02255603869193
         },
         {
-          "x": 88.61864444428195,
-          "y": -149.28543967621272
+          "x": 99.84599170748035,
+          "y": -147.4322215841414
         }
       ],
       "building_count": 1,
@@ -5243,33 +5421,33 @@
       "name": "Frontend",
       "color": "#98D8C8",
       "center": {
-        "x": 45.096125572897115,
-        "y": 197.78945104349657
+        "x": 53.501862347638614,
+        "y": 198.51563232836548
       },
       "boundary": [
         {
-          "x": 80.11729606465013,
-          "y": 186.86525999350806
+          "x": 10.486197363880212,
+          "y": 233.62670954884854
         },
         {
-          "x": 156.92143410089938,
-          "y": 309.4392933799804
-        },
-        {
-          "x": 366.9790304630711,
+          "x": 123.3642072230925,
           "y": 500.0
         },
         {
-          "x": 225.4953325440468,
+          "x": 396.1019051404783,
           "y": 500.0
         },
         {
-          "x": 16.458125975702497,
-          "y": 208.7434958601799
+          "x": 155.50898883113712,
+          "y": 276.7480942442139
         },
         {
-          "x": 36.46529240451874,
-          "y": 170.84365082783793
+          "x": 71.15536641107511,
+          "y": 178.5524618162745
+        },
+        {
+          "x": 47.754684678525535,
+          "y": 174.6151629169839
         }
       ],
       "building_count": 1,
@@ -5280,33 +5458,37 @@
       "name": "Frontend",
       "color": "#F7DC6F",
       "center": {
-        "x": -170.47126773687296,
-        "y": -109.88336425603963
+        "x": -175.52658326454042,
+        "y": -106.20087778494742
       },
       "boundary": [
         {
-          "x": -149.2830424367537,
-          "y": -102.48262750609754
+          "x": -146.5616111544097,
+          "y": -95.20725927448618
         },
         {
-          "x": -188.38481419340803,
-          "y": -76.88246904370249
+          "x": -187.2931351625528,
+          "y": -74.42170974652856
         },
         {
-          "x": -500.0,
-          "y": -161.34475572921062
-        },
-        {
-          "x": -500.0,
-          "y": -267.4293687213693
+          "x": -424.6215460805923,
+          "y": -111.8443323470006
         },
         {
           "x": -500.0,
-          "y": -500.0
+          "y": -252.50850246670564
         },
         {
-          "x": -170.94957797942834,
-          "y": -159.33210526666716
+          "x": -500.0,
+          "y": -465.454478083399
+        },
+        {
+          "x": -154.8930778488399,
+          "y": -139.5360871516533
+        },
+        {
+          "x": -139.76569254464061,
+          "y": -114.92116054717867
         }
       ],
       "building_count": 1,
@@ -5317,33 +5499,33 @@
       "name": "Frontend",
       "color": "#BB8FCE",
       "center": {
-        "x": 201.79038558880538,
-        "y": -39.66699144767016
+        "x": 206.48900019515352,
+        "y": -27.83493344706073
       },
       "boundary": [
         {
-          "x": 186.08852545403712,
-          "y": -23.58515365337036
+          "x": 202.4978095270353,
+          "y": -71.03287818806787
         },
         {
-          "x": 181.33209999741845,
-          "y": -74.44143528924857
-        },
-        {
-          "x": 449.8612817036024,
-          "y": -227.65612427963742
+          "x": 450.1952126235302,
+          "y": -221.64287590986117
         },
         {
           "x": 500.0,
-          "y": -379.90579532409976
+          "y": -375.25888867898914
         },
         {
           "x": 500.0,
-          "y": -128.6093908698728
+          "y": -52.92686951508524
         },
         {
-          "x": 231.88634950794412,
-          "y": -4.5212439265587125
+          "x": 211.13472115562868,
+          "y": 7.138582276463165
+        },
+        {
+          "x": 175.53712990838957,
+          "y": -9.556607836222717
         }
       ],
       "building_count": 1,
@@ -5354,33 +5536,33 @@
       "name": "Frontend",
       "color": "#85C1E9",
       "center": {
-        "x": -144.2467622366154,
-        "y": 151.93517858968045
+        "x": -130.40436220317207,
+        "y": 163.56372080504076
       },
       "boundary": [
         {
-          "x": -125.43818531572975,
-          "y": 138.85470605360092
+          "x": -118.06130155359614,
+          "y": 142.92714375806239
         },
         {
-          "x": -164.52146794658816,
-          "y": 136.18350479467108
+          "x": -155.4312797629379,
+          "y": 150.4950329076236
         },
         {
-          "x": -500.0,
+          "x": -493.3459933415285,
           "y": 500.0
         },
         {
-          "x": -366.03078850129083,
+          "x": -389.5439994738164,
           "y": 500.0
         },
         {
-          "x": -164.55100232883146,
-          "y": 362.24092127899064
+          "x": -152.89930993401583,
+          "y": 315.49812850968476
         },
         {
-          "x": -108.55258518659487,
-          "y": 209.17772514623692
+          "x": -103.34990464628314,
+          "y": 175.13044052137158
         }
       ],
       "building_count": 1,
@@ -5391,33 +5573,37 @@
       "name": "Frontend",
       "color": "#F8B500",
       "center": {
-        "x": -20.272106784655694,
-        "y": -209.58660942100778
+        "x": -22.51159100845272,
+        "y": -208.6261676400566
       },
       "boundary": [
         {
-          "x": -5.366648214781591,
-          "y": -190.24736046361008
+          "x": -4.507981948710626,
+          "y": -188.69318591522648
         },
         {
-          "x": 13.088544278672675,
-          "y": -227.7195791917839
+          "x": -59.69215251536596,
+          "y": -194.46932845353604
         },
         {
-          "x": -68.71141024580261,
+          "x": -125.29292917023837,
+          "y": -337.5486046388784
+        },
+        {
+          "x": -295.5552691828784,
           "y": -500.0
         },
         {
-          "x": -301.5938602769485,
+          "x": -1.0302869668521453e-13,
           "y": -500.0
         },
         {
-          "x": -115.50121589083861,
-          "y": -319.0321996559513
+          "x": 22.666526123556466,
+          "y": -500.0
         },
         {
-          "x": -39.31646853196996,
-          "y": -191.66187985243974
+          "x": 27.414635916145507,
+          "y": -252.20401467538147
         }
       ],
       "building_count": 1,
@@ -5428,37 +5614,33 @@
       "name": "Frontend",
       "color": "#00CED1",
       "center": {
-        "x": 149.47729544565382,
-        "y": 151.59388888296607
+        "x": 153.1825551471152,
+        "y": 148.21654303149032
       },
       "boundary": [
         {
-          "x": 123.17856969930224,
-          "y": 134.1915895205449
+          "x": 120.08435368541258,
+          "y": 143.84700777789317
         },
         {
-          "x": 156.92143410089938,
-          "y": 309.4392933799804
+          "x": 175.3994208573853,
+          "y": 111.62988500616714
         },
         {
-          "x": 366.9790304630711,
-          "y": 500.0
+          "x": 401.14532301072666,
+          "y": 214.8464175113303
         },
         {
           "x": 500.0,
-          "y": 408.6474967808365
+          "y": 403.9367378774813
         },
         {
-          "x": 345.2864389247851,
-          "y": 186.58966470324742
+          "x": 396.1019051404783,
+          "y": 500.0
         },
         {
-          "x": 189.64324894523898,
-          "y": 121.29718383320031
-        },
-        {
-          "x": 137.02396143077604,
-          "y": 123.31093243194586
+          "x": 155.50898883113712,
+          "y": 276.7480942442139
         }
       ],
       "building_count": 1,
@@ -5469,41 +5651,41 @@
       "name": "Frontend",
       "color": "#FF7F50",
       "center": {
-        "x": -208.9337064368992,
-        "y": 13.603232872600678
+        "x": -210.5997488576132,
+        "y": 15.728468018791487
       },
       "boundary": [
         {
-          "x": -182.3867627551229,
-          "y": -1.7260005485040664
+          "x": -188.5728689940654,
+          "y": -8.172724908802252
         },
         {
-          "x": -200.89999881314634,
-          "y": 35.99283178627369
-        },
-        {
-          "x": -342.6329563980803,
-          "y": 100.0320767871028
+          "x": -424.6215460805923,
+          "y": -111.8443323470006
         },
         {
           "x": -500.0,
-          "y": 235.961022776118
+          "y": -252.50850246670564
         },
         {
           "x": -500.0,
-          "y": 1.5987211554602254e-14
+          "y": 6.927791673660977e-14
         },
         {
           "x": -500.0,
-          "y": -267.4293687213693
+          "y": 275.4731231896096
         },
         {
-          "x": -500.0,
-          "y": -161.34475572921062
+          "x": -363.93098797347943,
+          "y": 122.9119878986245
         },
         {
-          "x": -183.6338444194302,
-          "y": -6.934312024892993
+          "x": -196.13980195536644,
+          "y": 34.95353835146883
+        },
+        {
+          "x": -185.37051187297303,
+          "y": -2.2520447460083446
         }
       ],
       "building_count": 1,
@@ -5514,33 +5696,33 @@
       "name": "Frontend",
       "color": "#9ACD32",
       "center": {
-        "x": 147.61687703907563,
-        "y": -153.3096152082679
+        "x": 146.06936090026494,
+        "y": -154.84689660386033
       },
       "boundary": [
         {
-          "x": 449.8612817036024,
-          "y": -227.65612427963742
+          "x": 154.08028142363247,
+          "y": -124.00925147749511
         },
         {
-          "x": 139.4721228962294,
-          "y": -126.56523366176044
+          "x": 119.55840976782967,
+          "y": -156.19174556480107
         },
         {
-          "x": 126.07925359394125,
-          "y": -159.5389827420545
+          "x": 164.02451084053874,
+          "y": -247.54734240662881
         },
         {
-          "x": 213.51346460434314,
-          "y": -366.2312783643362
-        },
-        {
-          "x": 435.2476398308903,
+          "x": 491.5885400502335,
           "y": -500.0
         },
         {
           "x": 500.0,
-          "y": -379.90579532409976
+          "y": -375.25888867898914
+        },
+        {
+          "x": 450.1952126235302,
+          "y": -221.64287590986117
         }
       ],
       "building_count": 1,
@@ -5551,33 +5733,37 @@
       "name": "Frontend",
       "color": "#DA70D6",
       "center": {
-        "x": -13.693303810835467,
-        "y": 214.3128226240085
+        "x": -40.25833331308629,
+        "y": 211.08501963988056
       },
       "boundary": [
         {
-          "x": -16.906889447882172,
-          "y": 187.0240628248033
+          "x": -9.465087810554024,
+          "y": 192.97029012672485
         },
         {
-          "x": 16.458125975702497,
-          "y": 208.7434958601799
+          "x": 10.486197363880212,
+          "y": 233.62670954884854
         },
         {
-          "x": 225.4953325440468,
+          "x": 123.3642072230925,
           "y": 500.0
         },
         {
-          "x": 3.552713678800501e-15,
+          "x": 2.1316282072803006e-14,
           "y": 500.0
         },
         {
-          "x": -366.03078850129083,
+          "x": -389.5439994738164,
           "y": 500.0
         },
         {
-          "x": -164.55100232883146,
-          "y": 362.24092127899064
+          "x": -152.89930993401583,
+          "y": 315.49812850968476
+        },
+        {
+          "x": -43.78331408995484,
+          "y": 179.8695557763195
         }
       ],
       "building_count": 1,
@@ -5588,33 +5774,29 @@
       "name": "Frontend",
       "color": "#FF6B6B",
       "center": {
-        "x": -123.78442270391102,
-        "y": -174.19329283901786
+        "x": -134.33522138469175,
+        "y": -172.91800241817657
       },
       "boundary": [
         {
-          "x": -115.34562707320134,
-          "y": -143.73427978331105
+          "x": -113.88663880151681,
+          "y": -164.80116617303153
         },
         {
-          "x": -170.94957797942834,
-          "y": -159.33210526666716
+          "x": -125.29292917023837,
+          "y": -337.5486046388784
+        },
+        {
+          "x": -295.5552691828784,
+          "y": -500.0
         },
         {
           "x": -500.0,
-          "y": -500.0
+          "y": -465.454478083399
         },
         {
-          "x": -301.5938602769485,
-          "y": -500.0
-        },
-        {
-          "x": -115.50121589083861,
-          "y": -319.0321996559513
-        },
-        {
-          "x": -92.03027335359143,
-          "y": -166.27750357854057
+          "x": -154.8930778488399,
+          "y": -139.5360871516533
         }
       ],
       "building_count": 1,
@@ -5625,37 +5807,33 @@
       "name": "Frontend",
       "color": "#4ECDC4",
       "center": {
-        "x": 213.2423073260817,
-        "y": 37.82719529097027
+        "x": 210.89891917159167,
+        "y": 42.4185188230401
       },
       "boundary": [
         {
-          "x": 231.88634950794412,
-          "y": -4.5212439265587125
+          "x": 188.4836930491331,
+          "y": 47.832360134314456
+        },
+        {
+          "x": 211.13472115562868,
+          "y": 7.138582276463165
         },
         {
           "x": 500.0,
-          "y": -128.6093908698728
+          "y": -52.92686951508524
         },
         {
           "x": 500.0,
-          "y": -2.842170943040401e-14
+          "y": -9.947598300641403e-14
         },
         {
           "x": 500.0,
-          "y": 408.6474967808365
+          "y": 403.9367378774813
         },
         {
-          "x": 345.2864389247851,
-          "y": 186.58966470324742
-        },
-        {
-          "x": 183.89776649512424,
-          "y": 41.80867535706876
-        },
-        {
-          "x": 183.3663953912555,
-          "y": 29.74643954058711
+          "x": 401.14532301072666,
+          "y": 214.8464175113303
         }
       ],
       "building_count": 1,
@@ -5666,33 +5844,33 @@
       "name": "Frontend",
       "color": "#45B7D1",
       "center": {
-        "x": -184.73229662677596,
-        "y": 120.34995424432124
+        "x": -177.09137762352972,
+        "y": 132.3848875030997
       },
       "boundary": [
         {
-          "x": -178.18635620776408,
-          "y": 87.93104788450268
+          "x": -159.3430736438461,
+          "y": 108.20786962301966
         },
         {
-          "x": -162.16521011709645,
-          "y": 102.7037029866132
+          "x": -179.2586898643159,
+          "y": 94.53597185366253
         },
         {
-          "x": -164.52146794658816,
-          "y": 136.18350479467108
+          "x": -363.93098797347943,
+          "y": 122.9119878986245
         },
         {
           "x": -500.0,
+          "y": 275.4731231896096
+        },
+        {
+          "x": -493.3459933415285,
           "y": 500.0
         },
         {
-          "x": -500.0,
-          "y": 235.961022776118
-        },
-        {
-          "x": -342.6329563980803,
-          "y": 100.0320767871028
+          "x": -155.4312797629379,
+          "y": 150.4950329076236
         }
       ],
       "building_count": 1,
@@ -5703,37 +5881,33 @@
       "name": "Nc Files",
       "color": "#96CEB4",
       "center": {
-        "x": 49.115426285080694,
-        "y": -215.72785683953663
+        "x": 77.77201589386274,
+        "y": -209.12511997112458
       },
       "boundary": [
         {
-          "x": 50.576277666811805,
-          "y": -183.5334793881872
+          "x": 27.414635916145507,
+          "y": -252.20401467538147
         },
         {
-          "x": 73.7078845682966,
-          "y": -187.89257291492405
-        },
-        {
-          "x": 213.51346460434314,
-          "y": -366.2312783643362
-        },
-        {
-          "x": 435.2476398308903,
+          "x": 22.666526123556466,
           "y": -500.0
         },
         {
-          "x": -9.237055564881302e-14,
+          "x": 491.5885400502335,
           "y": -500.0
         },
         {
-          "x": -68.71141024580261,
-          "y": -500.0
+          "x": 164.02451084053874,
+          "y": -247.54734240662881
         },
         {
-          "x": 13.088544278672675,
-          "y": -227.7195791917839
+          "x": 71.52884686545357,
+          "y": -179.02255603869193
+        },
+        {
+          "x": 57.03225391324894,
+          "y": -180.64268410207865
         }
       ],
       "building_count": 1,
@@ -5741,6 +5915,13 @@
     }
   ],
   "roads": [
+    {
+      "source": "api_server.py",
+      "target": "ai_core/config.py",
+      "weight": 1.0,
+      "path": [],
+      "is_cross_district": false
+    },
     {
       "source": "api_server.py",
       "target": "ai_core/data_access.py",
@@ -5751,13 +5932,6 @@
     {
       "source": "api_server.py",
       "target": "ai_core/main_agent.py",
-      "weight": 1.0,
-      "path": [],
-      "is_cross_district": false
-    },
-    {
-      "source": "api_server.py",
-      "target": "ai_core/config.py",
       "weight": 1.0,
       "path": [],
       "is_cross_district": false
