@@ -16,8 +16,6 @@ import * as d3 from 'd3'
 import useStore from '../../../store/useStore'
 import './DependencyGraph.css'
 
-const API_BASE = '/api'
-
 export default function DependencyGraph({ isOpen, onClose }) {
     const { cityData, selectBuilding } = useStore()
     const svgRef = useRef(null)

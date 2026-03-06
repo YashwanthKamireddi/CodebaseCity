@@ -31,31 +31,6 @@ updates:
           - "*"
         dependency-type: "development"
 
-  # Backend (pip)
-  - package-ecosystem: "pip"
-    directory: "/backend"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "UTC"
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: "deps(backend)"
-    labels:
-      - "dependencies"
-      - "backend"
-    groups:
-      fastapi:
-        patterns:
-          - "fastapi*"
-          - "pydantic*"
-          - "uvicorn*"
-      ai:
-        patterns:
-          - "google-genai*"
-          - "openai*"
-
   # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"

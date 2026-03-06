@@ -1,9 +1,9 @@
 import logger from '../../utils/logger'
-const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
 /**
  * City Slice
  * Handles all domain data: City structure, Metadata, Analysis, and File Content.
+ * Fully client-side — no backend required.
  */
 export const createCitySlice = (set, get) => ({
     // State
@@ -29,22 +29,10 @@ export const createCitySlice = (set, get) => ({
     isLandingOverlayActive: true,
     setLandingOverlayActive: (active) => set({ isLandingOverlayActive: active }),
 
-    // Auth State
-    authToken: localStorage.getItem('codebase_city_token') || null,
-
     // Primitive Actions
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error, loading: false }),
     setProgress: (progress) => set({ analysisProgress: progress }),
-
-    setAuthToken: (token) => {
-        if (token) {
-            localStorage.setItem('codebase_city_token', token)
-        } else {
-            localStorage.removeItem('codebase_city_token')
-        }
-        set({ authToken: token })
-    },
 
     setCityData: (data) => {
         // Use city_id from API response, or generate from path as fallback
@@ -117,25 +105,14 @@ export const createCitySlice = (set, get) => ({
 
         try {
             setProgress(30)
-            const response = await fetch(`${API_BASE}/demo`)
+            const response = await fetch('/demo-city.json')
             setProgress(80)
-            if (!response.ok) throw new Error('Failed to load demo')
+            if (!response.ok) throw new Error('Demo data unavailable')
             const data = await response.json()
             setCityData(data)
         } catch (error) {
-            logger.warn('API unavailable, using built-in demo data')
-            // Fallback: load static demo-city.json (has real author data)
-            try {
-                const fallback = await fetch('/demo-city.json')
-                if (fallback.ok) {
-                    const data = await fallback.json()
-                    setCityData(data)
-                } else {
-                    setError('Demo data unavailable')
-                }
-            } catch {
-                setError('Demo data unavailable')
-            }
+            logger.error('Demo load failed:', error)
+            setError('Demo data unavailable')
         } finally {
             setLoading(false)
         }
@@ -150,14 +127,13 @@ export const createCitySlice = (set, get) => ({
         setLoading(true)
 
         try {
-            // Detect GitHub URLs and analyze entirely client-side
             const { analyzeGitHub, isGitHubUrl } = await import('../../engine/ClientAnalyzer.js')
 
             if (isGitHubUrl(path)) {
-                // ===== CLIENT-SIDE GITHUB ANALYSIS (no backend needed) =====
+                // Client-side GitHub analysis — downloads ZIP, parses in Web Worker
                 const cityData = await analyzeGitHub({
                     url: path,
-                    onProgress: (phase, current, total, detail) => {
+                    onProgress: (phase, current, total) => {
                         if (phase === 'cloning') {
                             setProgress(total > 0 ? Math.round((current / total) * 30) : 5)
                         } else if (phase === 'reading') {
@@ -170,37 +146,10 @@ export const createCitySlice = (set, get) => ({
                 })
 
                 setProgress(95)
-                await new Promise(r => setTimeout(r, 1500))
-
                 setCityData(cityData)
                 set({ currentRepoPath: cityData.name || path, commits: [], currentCommitIndex: -1 })
             } else {
-                // ===== LOCAL PATH: use backend API =====
-                setProgress(10)
-
-                const { authToken } = get()
-                const headers = { 'Content-Type': 'application/json' }
-                if (authToken) {
-                    headers['Authorization'] = `Bearer ${authToken}`
-                }
-
-                const response = await fetch(`${API_BASE}/analyze`, {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify({ path, max_files: 5000 })
-                })
-                setProgress(80)
-
-                await new Promise(r => setTimeout(r, 3000))
-
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}))
-                    throw new Error(errorData.detail || `Analysis failed (${response.status})`)
-                }
-
-                const data = await response.json()
-                setCityData(data)
-                set({ currentRepoPath: data.path || path, commits: [], currentCommitIndex: -1 })
+                setError('Please enter a valid GitHub URL (e.g. https://github.com/owner/repo) or use "Open Local Folder" for local projects.')
             }
 
         } catch (error) {
@@ -298,64 +247,82 @@ export const createCitySlice = (set, get) => ({
     fetchFileContent: async (path) => {
         set({ fileContent: { path, content: null, loading: true } })
 
-        const { currentRepoPath, cityData } = get()
+        const { cityData } = get()
+
+        // Demo mode
         if (cityData?.id?.startsWith('demo_')) {
             set({ fileContent: { path, content: '// Source code not available in demo mode.\n// Try analyzing a real GitHub repository!', loading: false } })
             return
         }
 
-        let fullPath = path
+        // Check in-memory file contents first (from client-side analysis)
+        if (cityData?.fileContents) {
+            // Try exact match
+            let content = cityData.fileContents.get?.(path) || cityData.fileContents[path]
 
-        // Path resolution logic
-        const repoRootPromise = currentRepoPath || cityData?.path
+            // Try matching by filename suffix (handles relative vs absolute paths)
+            if (!content) {
+                const cleanPath = path.replace(/^[./\\]+/, '')
+                const entries = cityData.fileContents instanceof Map
+                    ? [...cityData.fileContents.entries()]
+                    : Object.entries(cityData.fileContents)
 
-        if (path.startsWith('http')) {
-             try {
-                const url = new URL(path)
-                const parts = url.pathname.split('/').filter(Boolean)
-                const relativeParts = parts.slice(2)
-                if (relativeParts[0] === 'blob' || relativeParts[0] === 'tree') {
-                    relativeParts.splice(0, 2)
+                for (const [key, val] of entries) {
+                    if (key.endsWith(cleanPath) || cleanPath.endsWith(key)) {
+                        content = val
+                        break
+                    }
                 }
-
-                if (repoRootPromise && !repoRootPromise.startsWith('http')) {
-                   const cleanRepo = repoRootPromise.endsWith('/') ? repoRootPromise.slice(0, -1) : repoRootPromise
-                   fullPath = `${cleanRepo}/${relativeParts.join('/')}`
-                } else {
-                   fullPath = relativeParts.join('/')
-                }
-            } catch (e) {
-                logger.warn('Failed to parse URL path', e)
             }
-        } else if (repoRootPromise && !path.startsWith('/') && !path.includes(':')) {
-           const cleanRepo = repoRootPromise.endsWith('/') ? repoRootPromise.slice(0, -1) : repoRootPromise
-           const cleanPath = path.startsWith('/') ? path.slice(1) : path
-           fullPath = `${cleanRepo}/${cleanPath}`
+
+            if (content) {
+                set({ fileContent: { path, content, loading: false } })
+                return
+            }
         }
 
-        try {
-            const response = await fetch(`${API_BASE}/files/content?path=${encodeURIComponent(fullPath)}`)
-            if (!response.ok) throw new Error('Failed to load content')
-            const data = await response.json()
-            set({ fileContent: { path, content: data.content, loading: false } })
-        } catch (error) {
-            set({ fileContent: { path, content: `Error: ${error.message}`, loading: false, error: true } })
+        // Fallback: try fetching raw content from GitHub if it's a GitHub-sourced repo
+        if (cityData?.source === 'github-client' && cityData?.name) {
+            try {
+                const repoName = cityData.name
+                const cleanPath = path.replace(/^[./\\]+/, '')
+                const rawUrl = `https://raw.githubusercontent.com/${repoName}/HEAD/${cleanPath}`
+                const res = await fetch(rawUrl)
+                if (res.ok) {
+                    const content = await res.text()
+                    set({ fileContent: { path, content, loading: false } })
+                    return
+                }
+            } catch {
+                // Fall through to error
+            }
         }
+
+        set({ fileContent: { path, content: '// File content not available.\n// Re-analyze the repository to load source code.', loading: false } })
     },
 
-    searchCode: async (query) => {
-        try {
-            const response = await fetch(`${API_BASE}/search`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query })
+    searchCode: (query) => {
+        const { cityData } = get()
+        if (!query || !cityData?.buildings) return []
+
+        const q = query.toLowerCase()
+        return cityData.buildings
+            .filter(b => {
+                const name = (b.name || '').toLowerCase()
+                const path = (b.file_path || b.path || '').toLowerCase()
+                const funcs = (b.functions || []).map(f => (typeof f === 'string' ? f : f.name || '').toLowerCase())
+                const classes = (b.classes || []).map(c => (typeof c === 'string' ? c : c.name || '').toLowerCase())
+
+                return name.includes(q) || path.includes(q) ||
+                    funcs.some(f => f.includes(q)) ||
+                    classes.some(c => c.includes(q))
             })
-            if (!response.ok) return []
-            const data = await response.json()
-            return data.results || []
-        } catch (error) {
-            logger.error("Search failed:", error)
-            return []
-        }
+            .slice(0, 20)
+            .map(b => ({
+                id: b.id,
+                name: b.name,
+                path: b.file_path || b.path,
+                type: 'file'
+            }))
     }
 })

@@ -7,7 +7,7 @@ import logger from '../../../utils/logger'
 
 export default function CameraController() {
     const { camera, controls } = useThree()
-    const { cityData, cityMeshRef, layoutMode } = useStore()
+    const { cityData, cityMeshRef } = useStore()
 
     // Compute city bounding radius
     const cityRadius = React.useMemo(() => {
@@ -27,38 +27,10 @@ export default function CameraController() {
 
             let x, y, z
 
-            // DYNAMIC TARGETING (Galaxy Mode)
-            if (layoutMode === 'galaxy' && cityMeshRef.current && cityData?.buildings) {
-                // Find index to get current physics position
-                const index = cityData.buildings.findIndex(b => b.id === building.id)
-
-                if (index !== -1) {
-                    const mat = new THREE.Matrix4()
-                    cityMeshRef.current.getMatrixAt(index, mat)
-                    const pos = new THREE.Vector3().setFromMatrixPosition(mat)
-
-                    // Check if matrix is valid (non-zero)
-                    if (pos.lengthSq() > 0.1) {
-                        x = pos.x
-                        y = pos.y
-                        z = pos.z
-                    } else {
-                        // Fallback to static pos if physics hasn't run
-                        x = building.position.x
-                        y = building.position.y
-                        z = building.position.z
-                    }
-                } else {
-                    x = building.position.x
-                    y = building.position.y
-                    z = building.position.z
-                }
-            } else {
-                // STATIC TARGETING (City Mode)
-                x = building.position.x
-                z = building.position.z
-                y = building.dimensions.height // Aim at top
-            }
+            // STATIC TARGETING
+            x = building.position.x
+            z = building.position.z
+            y = building.dimensions.height // Aim at top
 
             // Calculate target position (offset from building)
             // Adjusted to frame both Building and Hologram (as requested)
@@ -96,7 +68,7 @@ export default function CameraController() {
 
         window.addEventListener('flyToBuilding', handleFlyTo)
         return () => window.removeEventListener('flyToBuilding', handleFlyTo)
-    }, [camera, controls, layoutMode, cityData, cityMeshRef])
+    }, [camera, controls, cityData, cityMeshRef])
 
     // Auto-fit camera when city data changes (new analysis or demo load)
     useEffect(() => {

@@ -3,14 +3,11 @@ import { ContactShadows, Environment } from '@react-three/drei'
 import { useFrame, invalidate } from '@react-three/fiber'
 import gsap from 'gsap'
 import useStore from '../../../store/useStore'
-import AvatarSprites from '../../../features/timeline/ui/AvatarSprites'
 import Roads from './Roads'
 import InstancedCity from './InstancedCity'
 import InstancedTrace from './InstancedTrace'
 import CameraController from './CameraController'
 import Ground from './Ground'
-import BlastRadius from './BlastRadius'
-import FaultLine from './FaultLine'
 import TrafficLayer from './layers/TrafficLayer'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
@@ -44,6 +41,10 @@ export default function CityScene() {
     const { cityData } = useStore()
     const groupRef = useRef()
 
+    // Performance tier
+    const isLowEnd = typeof navigator !== 'undefined' &&
+        (navigator.maxTouchPoints > 0 || navigator.hardwareConcurrency <= 4)
+
     // Dynamic fog: compute bounds from buildings
     const cityRadius = useMemo(() => {
         if (!cityData?.buildings?.length) return 100
@@ -75,15 +76,15 @@ export default function CityScene() {
             {/* KEY LIGHT - Main directional (moonlight/citylight feel) */}
             <directionalLight
                 position={[80, 120, 60]}
-                intensity={1.8}
+                intensity={1.2}
                 color="#e0f0ff"
-                castShadow
-                shadow-mapSize={[2048, 2048]}
-                shadow-camera-far={600}
-                shadow-camera-left={-250}
-                shadow-camera-right={250}
-                shadow-camera-top={250}
-                shadow-camera-bottom={-250}
+                castShadow={!isLowEnd}
+                shadow-mapSize={isLowEnd ? [512, 512] : [1024, 1024]}
+                shadow-camera-far={400}
+                shadow-camera-left={-200}
+                shadow-camera-right={200}
+                shadow-camera-top={200}
+                shadow-camera-bottom={-200}
                 shadow-bias={-0.0001}
                 shadow-normalBias={0.02}
             />
@@ -109,25 +110,25 @@ export default function CityScene() {
                 color="#ffffff"
             />
 
-            {/* POINT LIGHTS - City atmosphere (distant building glow) */}
+            {/* POINT LIGHTS - City atmosphere (subtle accent) */}
             <pointLight
                 position={[150, 30, 100]}
-                intensity={0.8}
-                color="#ff6b35"        // Orange (warm building interior)
+                intensity={0.3}
+                color="#ff6b35"
                 distance={200}
                 decay={2}
             />
             <pointLight
                 position={[-120, 25, -80]}
-                intensity={0.6}
-                color="#00ff88"        // Green (neon accent)
+                intensity={0.2}
+                color="#00ff88"
                 distance={150}
                 decay={2}
             />
             <pointLight
                 position={[80, 20, -120]}
-                intensity={0.5}
-                color="#ff00ff"        // Magenta (cyberpunk accent)
+                intensity={0.2}
+                color="#ff00ff"
                 distance={120}
                 decay={2}
             />
@@ -139,11 +140,6 @@ export default function CityScene() {
                 <InstancedCity />
                 <InstancedTrace />
 
-                {/* Gource Mode: Social Avatars */}
-                <AvatarSprites />
-
-                <BlastRadius />
-                <FaultLine />
                 <Roads />
                 <TrafficLayer />
                 <Ground />
@@ -153,16 +149,18 @@ export default function CityScene() {
                 SHADOWS & ATMOSPHERE
             ═══════════════════════════════════════════════════════════════ */}
 
-            {/* Soft contact shadows for grounding (512 is sufficient at city scale) */}
-            <ContactShadows
-                position={[0, 0.01, 0]}
-                resolution={512}
-                scale={400}
-                blur={3}
-                opacity={0.35}
-                far={15}
-                color="#000010"
-            />
+            {/* Soft contact shadows for grounding */}
+            {!isLowEnd && (
+                <ContactShadows
+                    position={[0, 0.01, 0]}
+                    resolution={256}
+                    scale={400}
+                    blur={3}
+                    opacity={0.35}
+                    far={15}
+                    color="#000010"
+                />
+            )}
 
             {/* Atmospheric fog - creates depth and mood */}
             <fog attach="fog" args={['#050810', cityRadius * 0.3, cityRadius * 3]} />
@@ -170,15 +168,17 @@ export default function CityScene() {
             {/* Background color - deep space blue */}
             <color attach="background" args={['#030508']} />
 
-            {/* Bloom Post Processing for Visually Stunning Atmosphere */}
-            <EffectComposer disableNormalPass>
-                <Bloom
-                    luminanceThreshold={0.5}
-                    mipmapBlur
-                    luminanceSmoothing={0.4}
-                    intensity={cityData ? 1.5 : 0.4} // Throttle bloom heavily on the landing screen demo city
-                />
-            </EffectComposer>
+            {/* Bloom Post Processing — skip on low-end for performance */}
+            {!isLowEnd && (
+                <EffectComposer disableNormalPass>
+                    <Bloom
+                        luminanceThreshold={0.7}
+                        mipmapBlur
+                        luminanceSmoothing={0.5}
+                        intensity={cityData ? 0.4 : 0.2}
+                    />
+                </EffectComposer>
+            )}
 
             <CameraController />
             <AutoInvalidate />

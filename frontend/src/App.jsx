@@ -30,8 +30,6 @@ import CanvasUI from './widgets/layout/ui/CanvasUI'
 import ChatInterface from './features/ai-architect/ui/ChatInterface'
 import DependencyGraph from './features/architect/ui/DependencyGraph'
 import ExportReport from './features/analysis/ui/ExportReport'
-import './features/FloatingDock.css'
-import { useVSCodeSync } from './hooks/useVSCodeSync'
 import useStore from './store/useStore'
 import CodeViewer from './entities/building/ui/CodeViewer'
 import ExplorationMode from './widgets/city-viewport/ui/ExplorationMode'
@@ -43,17 +41,11 @@ import './styles/ProfessionalUI.css'
 import './App.css'
 
 import CodePage from './features/explorer/ui/CodePage'
-import AuthCallback from './features/onboarding/ui/AuthCallback'
 
 function App() {
     // Simple Client-Side Routing for Standalone Code View
     if (window.location.pathname === '/code') {
         return <CodePage />
-    }
-
-    // Auth Callback Route
-    if (window.location.pathname === '/auth/callback') {
-        return <AuthCallback />
     }
 
     const {
@@ -62,8 +54,6 @@ function App() {
         loading,
         theme,
         isAnimating,
-        layoutMode,
-        vscodeConnected,
         selectBuilding,
         error,
         codeViewerOpen,
@@ -79,30 +69,16 @@ function App() {
     const [showDependencyGraph, setShowDependencyGraph] = useState(false)
     const [showExportReport, setShowExportReport] = useState(false)
 
-    // Mobile performance detection
+    // Performance tier detection
     const isMobile = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0
-    const dprRange = isMobile ? [0.75, 1] : [1, 1.5]
+    const isLowEnd = isMobile || (typeof navigator !== 'undefined' && navigator.hardwareConcurrency <= 4)
+    const dprRange = isLowEnd ? [0.75, 1] : [1, 1.5]
     const { analyzeModalOpen, setAnalyzeModalOpen } = useStore()
-
-    // VS Code integration
-    const { notifyBuildingSelected } = useVSCodeSync()
-
-    // Load data on mount - DISABLED (User wants to analyze directly)
-    // useEffect(() => {
-    //     fetchDemo()
-    // }, [fetchDemo])
 
     // Apply theme
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme)
     }, [theme])
-
-    // Sync with VS Code
-    useEffect(() => {
-        if (selectedBuilding) {
-            notifyBuildingSelected(selectedBuilding)
-        }
-    }, [selectedBuilding, notifyBuildingSelected])
 
     // Keyboard shortcuts - practical ones only
     const { toggleRoads, toggleLabels, clearSelection, stopTimeTravel } = useStore()
@@ -162,14 +138,6 @@ function App() {
 
     return (
         <div className="app-layout">
-            {/* VS Code indicator */}
-            {vscodeConnected && (
-                <div className="vscode-indicator">
-                    <span className="vscode-indicator-dot" />
-                    VS Code Connected
-                </div>
-            )}
-
             <div className="main-content">
                 <div className="canvas-wrapper">
                     {view === '3d' ? (
@@ -178,14 +146,15 @@ function App() {
                             <CanvasErrorBoundary>
                                 <Canvas
                                     frameloop="demand"
-                                    shadows={!isMobile}
+                                    shadows={!isLowEnd}
                                     dpr={dprRange}
                                     gl={{
-                                        antialias: !isMobile,
+                                        antialias: !isLowEnd,
                                         alpha: false,
-                                        powerPreference: 'high-performance',
+                                        powerPreference: isLowEnd ? 'low-power' : 'high-performance',
                                         stencil: false,
-                                        preserveDrawingBuffer: true // ENABLE SNAPSHOTS
+                                        depth: true,
+                                        failIfMajorPerformanceCaveat: false,
                                     }}
                                 >
                                     <PerspectiveCamera

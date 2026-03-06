@@ -124,31 +124,31 @@ const PulseMaterial = shaderMaterial(
       // ── Base Colors ──
       vec3 neonColor = vColor;
 
-      // Enhance brightness to trigger post-processing bloom
-      neonColor *= 1.8;
+      // Subtle brightness for grid visibility
+      neonColor *= 0.85;
 
       // Glass core - extremely dark, almost invisible to let background through
       vec3 finalColor = vec3(0.005, 0.008, 0.012);
 
       if (isSide) {
           // Add grid and edges
-          finalColor = mix(finalColor, neonColor * 0.4, innerGrid);
-          finalColor = mix(finalColor, neonColor * 1.5, outerEdge);
+          finalColor = mix(finalColor, neonColor * 0.25, innerGrid);
+          finalColor = mix(finalColor, neonColor * 0.7, outerEdge);
 
           // Add a holographic vertical gradient
           float heightGrad = (vLocalPosition.y + 0.5);
-          finalColor += neonColor * 0.1 * heightGrad;
+          finalColor += neonColor * 0.05 * heightGrad;
 
           // ── Sweeping Scanner Effect ──
           float sweep = fract(vWorldPosition.y * 0.03 - uTime * 0.5);
           // Sharp line with a trailing fade
           float scanner = smoothstep(0.95, 1.0, sweep) * (1.0 - smoothstep(0.99, 1.0, sweep));
           float scannerGlow = smoothstep(0.8, 1.0, sweep) * 0.2;
-          finalColor += neonColor * (scanner + scannerGlow) * 2.0;
+          finalColor += neonColor * (scanner + scannerGlow) * 0.5;
 
       } else if (isTop) {
           // Roof edge
-          finalColor = mix(finalColor, neonColor * 1.5, outerEdge);
+          finalColor = mix(finalColor, neonColor * 0.7, outerEdge);
 
           // Roof inner grid
           float roofGridSpacing = 3.0;
@@ -163,7 +163,7 @@ const PulseMaterial = shaderMaterial(
           float centerDist = length(faceUV);
           float beacon = smoothstep(0.15, 0.0, centerDist);
           float pulse = sin(uTime * 4.0 + vWorldPosition.x) * 0.5 + 0.5;
-          finalColor += neonColor * beacon * pulse * 3.0;
+          finalColor += neonColor * beacon * pulse * 0.8;
 
       } else {
           // Bottom face
@@ -183,12 +183,12 @@ const PulseMaterial = shaderMaterial(
           // Wild kinetic flicker effect
           float flicker = sin(uTime * 12.0 + vWorldPosition.x * 2.0) * 0.15 + 0.85;
 
-          finalColor = mix(finalColor, flameColor, intensity * 0.5); // Overpower base
-          finalColor += flameColor * intensity * flicker * 3.5;       // Intense bloom additive
+          finalColor = mix(finalColor, flameColor, intensity * 0.3);
+          finalColor += flameColor * intensity * flicker * 0.8;
 
           // Roof erupts with extreme heat
           if (isTop) {
-              finalColor += vec3(1.0, 0.95, 0.8) * vChurn * 5.0 * flicker;
+              finalColor += vec3(1.0, 0.95, 0.8) * vChurn * 1.0 * flicker;
           }
       }
 

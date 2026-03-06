@@ -26,7 +26,7 @@ export function detectPattern(building) {
         return { type: 'brain_class', label: 'Brain Class', color: '#8b5cf6', severity: 'warning' }
     }
 
-    // Blob: Massive Blast Radius (Coupling)
+    // Blob: High Coupling Impact
     if (attributes > 20) {
         return { type: 'blob', label: 'High Coupling', color: '#dc2626', severity: 'critical' }
     }

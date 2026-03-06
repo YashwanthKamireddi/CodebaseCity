@@ -24,7 +24,7 @@ function getHealthColor(health) {
 }
 
 export default function FileTable({ buildings = [], onSelectFile }) {
-    const { selectedBuilding, selectBuilding, cityMetadata } = useStore() // Need cityMetadata for global issues
+    const { selectedBuilding, selectBuilding, cityData } = useStore()
 
     // Sorting state
     const [sortColumn, setSortColumn] = useState('health')
@@ -96,7 +96,7 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                 <AuditStats buildings={buildings} />
 
                 {/* Risk & Pattern Section */}
-                {cityMetadata?.issues && (
+                {cityData?.issues && (
                     <div style={{ marginBottom: '24px' }}>
                         <button
                             onClick={() => setShowRisks(!showRisks)}
@@ -115,7 +115,7 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                                 animate={{ height: 'auto', opacity: 1 }}
                                 style={{ marginTop: '12px' }}
                             >
-                                <PatternList issues={cityMetadata.issues} buildings={buildings} />
+                                <PatternList issues={cityData.issues} buildings={buildings} />
                             </motion.div>
                         )}
                     </div>
@@ -206,7 +206,7 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                 )}
             </div>
 
-            <style jsx>{`
+            <style>{`
                 .mini-bar-bg { width: 40px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
                 .mini-bar-fill { height: 100%; border-radius: 2px; }
                 .icon-btn { background: transparent; border: none; color: #94a3b8; cursor: pointer; padding: 4px; border-radius: 4px; transition: all 0.2s; }

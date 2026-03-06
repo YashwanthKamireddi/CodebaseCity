@@ -15,11 +15,8 @@ export const createMockStore = (overrides = {}) => ({
   error: null,
   theme: 'dark',
   colorMode: 'default',
-  layoutMode: 'clustered',
   showRoads: true,
   showLabels: true,
-  sidebarOpen: true,
-  vscodeConnected: false,
   isAnimating: false,
 
   // Actions

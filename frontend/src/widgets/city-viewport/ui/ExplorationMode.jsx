@@ -15,10 +15,6 @@ const SPRINT_MULTIPLIER = 2.5
 const CAMERA_LERP = 0.06
 const CHARACTER_LERP = 0.12
 const GROUND_Y = 0.6
-const JUMP_FORCE = 0.4
-const GRAVITY = 0.015
-const BOB_SPEED = 8
-const BOB_AMOUNT = 0.08
 
 const ZOOM_SPEED = 0.03
 const MIN_DISTANCE = 0
@@ -162,80 +158,81 @@ export default function ExplorationMode({ active, onExit }) {
 
         const speed = MOVE_SPEED * (keys.current['ShiftLeft'] || keys.current['ShiftRight'] ? SPRINT_MULTIPLIER : 1)
 
-        // Movement direction relative to camera angle (Free Flight)
-        const { theta, phi } = cameraAngle.current
-        _forward.set(
-            -Math.sin(theta) * Math.cos(phi),
-            -Math.sin(phi),
-            -Math.cos(theta) * Math.cos(phi)
-        ).normalize()
-
-        _right.set(
-            Math.cos(theta),
-            0,
-            -Math.sin(theta)
-        ).normalize()
+        // Movement direction on XZ plane only (decoupled from camera pitch)
+        const { theta } = cameraAngle.current
+        _forward.set(-Math.sin(theta), 0, -Math.cos(theta))
+        _right.set(Math.cos(theta), 0, -Math.sin(theta))
 
         _moveDir.set(0, 0, 0)
         let moving = false
 
-        // WASD - forward/back/left/right relative to look direction
         if (keys.current['KeyW'] || keys.current['ArrowUp']) { _moveDir.add(_forward); moving = true }
         if (keys.current['KeyS'] || keys.current['ArrowDown']) { _moveDir.sub(_forward); moving = true }
         if (keys.current['KeyA'] || keys.current['ArrowLeft']) { _moveDir.sub(_right); moving = true }
         if (keys.current['KeyD'] || keys.current['ArrowRight']) { _moveDir.add(_right); moving = true }
 
-        // Absolute Up/Down Hover (Space to fly up, Control to fly down)
+        // Vertical flight (Space up, Ctrl/C down)
         if (keys.current['Space']) { _moveDir.y += 1; moving = true }
         if (keys.current['ControlLeft'] || keys.current['ControlRight'] || keys.current['KeyC']) { _moveDir.y -= 1; moving = true }
 
         if (moving) {
             _moveDir.normalize().multiplyScalar(speed)
-            characterTargetPos.current.add(_moveDir)
-
-            // Hard floor constraint
-            if (characterTargetPos.current.y < GROUND_Y) {
-                characterTargetPos.current.y = GROUND_Y
-            }
         }
 
-        // --- Collision & Proximity (with distance pre-filter) ---
+        // --- Collision & Proximity (slide collision instead of teleport) ---
         const cityData = useStore.getState().cityData
         let nearestDist = Infinity
         let nearestB = null
-        const cx = characterTargetPos.current.x
-        const cz = characterTargetPos.current.z
+        const nextX = characterTargetPos.current.x + (moving ? _moveDir.x : 0)
+        const nextZ = characterTargetPos.current.z + (moving ? _moveDir.z : 0)
+        const nextY = characterTargetPos.current.y + (moving ? _moveDir.y : 0)
+        let allowX = true
+        let allowZ = true
 
         if (cityData?.buildings) {
             for (let i = 0, len = cityData.buildings.length; i < len; i++) {
                 const b = cityData.buildings[i]
-                const dx = cx - b.position.x
-                const dz = cz - b.position.z
+                const dx = nextX - b.position.x
+                const dz = nextZ - b.position.z
                 const distSq = dx * dx + dz * dz
 
-                // Skip buildings too far away (saves 90%+ of AABB checks)
                 if (distSq > COLLISION_CHECK_RADIUS_SQ) continue
 
-                const w = (b.dimensions?.width || 2) / 2
-                const d = (b.dimensions?.depth || 2) / 2
+                const w = (b.dimensions?.width || 2) / 2 + 1.5
+                const d = (b.dimensions?.depth || 2) / 2 + 1.5
+                const h = (b.dimensions?.height || 0) + 1.5
 
-                // Hard Collision (AABB with buffer)
-                if (
-                    Math.abs(dx) < w + 2.0 &&
-                    Math.abs(dz) < d + 2.0 &&
-                    characterTargetPos.current.y <= (b.dimensions?.height || 0) + 2.0
-                ) {
-                    if (moving) {
-                        characterTargetPos.current.sub(_moveDir)
+                // Slide collision — test each axis independently
+                if (nextY <= h) {
+                    const curDx = characterTargetPos.current.x - b.position.x
+                    const curDz = characterTargetPos.current.z - b.position.z
+
+                    if (Math.abs(dx) < w && Math.abs(dz) < d) {
+                        // Full collision — check which axis to block
+                        if (Math.abs(curDx) < w) allowZ = false
+                        if (Math.abs(curDz) < d) allowX = false
+                        // Corner case: block both
+                        if (Math.abs(curDx) < w && Math.abs(curDz) < d) { allowX = false; allowZ = false }
                     }
                 }
 
-                // Proximity Detection (Terminal trigger)
-                const checkRadius = Math.max(w, d) + 10
-                if (distSq < checkRadius * checkRadius && distSq < nearestDist) {
-                    nearestDist = distSq
+                // Proximity detection
+                const checkRadius = Math.max((b.dimensions?.width || 2), (b.dimensions?.depth || 2)) / 2 + 10
+                const cDistSq = (characterTargetPos.current.x - b.position.x) ** 2 + (characterTargetPos.current.z - b.position.z) ** 2
+                if (cDistSq < checkRadius * checkRadius && cDistSq < nearestDist) {
+                    nearestDist = cDistSq
                     nearestB = b
                 }
+            }
+        }
+
+        if (moving) {
+            if (allowX) characterTargetPos.current.x += _moveDir.x
+            if (allowZ) characterTargetPos.current.z += _moveDir.z
+            characterTargetPos.current.y += _moveDir.y
+
+            if (characterTargetPos.current.y < GROUND_Y) {
+                characterTargetPos.current.y = GROUND_Y
             }
         }
 

@@ -10,25 +10,21 @@
  */
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, Terminal, Github, Gamepad2, Sparkles, Building2, Microscope, Bot, Clock, FolderOpen } from 'lucide-react'
+import { ArrowRight, Terminal, Gamepad2, Building2, Microscope, Bot, Clock, FolderOpen } from 'lucide-react'
 import useStore from '../../../store/useStore'
 import logger from '../../../utils/logger'
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api'
-
 const FEATURES = [
     { icon: <Building2 size={13} />, text: 'Architecture Viz' },
-    { icon: <Microscope size={13} />, text: 'Blast Radius' },
+    { icon: <Microscope size={13} />, text: 'Impact Analysis' },
     { icon: <Bot size={13} />, text: 'AI Architect' },
     { icon: <Clock size={13} />, text: 'Git Time Travel' },
 ]
 
 export default function EmptyCityHero() {
-    const { analyzeRepo, analyzeLocal, error, authToken, setCityData, cityData, isLandingOverlayActive, setLandingOverlayActive } = useStore()
+    const { analyzeRepo, analyzeLocal, error, setCityData, cityData, isLandingOverlayActive, setLandingOverlayActive } = useStore()
     const [path, setPath] = useState('')
     const [isFocused, setIsFocused] = useState(false)
-    const [repos, setRepos] = useState([])
-    const [loadingRepos, setLoadingRepos] = useState(false)
 
     // Auto-load demo city on mount so users see it behind this overlay
     useEffect(() => {
@@ -39,24 +35,6 @@ export default function EmptyCityHero() {
                 .catch(err => logger.error("Failed to load demo city", err))
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
-    useEffect(() => {
-        if (authToken) {
-            setLoadingRepos(true)
-            fetch(`${API_BASE}/auth/github/repos`, {
-                headers: { 'Authorization': `Bearer ${authToken}` }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (Array.isArray(data)) setRepos(data)
-                    setLoadingRepos(false)
-                })
-                .catch(err => {
-                    logger.error("Failed to fetch repos", err)
-                    setLoadingRepos(false)
-                })
-        }
-    }, [authToken])
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -109,19 +87,28 @@ export default function EmptyCityHero() {
                     transform: 'translateX(-50%)',
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '8px',
-                    padding: '6px 18px',
-                    background: 'rgba(255, 255, 255, 0.06)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    gap: '10px',
+                    padding: '8px 20px',
+                    background: 'rgba(0, 0, 0, 0.45)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
                     borderRadius: '100px',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
+                    backdropFilter: 'blur(24px)',
+                    WebkitBackdropFilter: 'blur(24px)',
                     pointerEvents: 'auto',
+                    boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
                 }}
             >
-                <Sparkles size={13} color="rgba(255,255,255,0.55)" />
-                <span style={{ fontSize: '0.7rem', letterSpacing: '0.06em', color: 'rgba(255,255,255,0.6)', fontWeight: 500, fontFamily: 'var(--font-sans)', textTransform: 'uppercase' }}>
-                    Codebase City Engine
+                <div style={{
+                    width: '6px', height: '6px', borderRadius: '50%',
+                    background: '#22c55e',
+                    boxShadow: '0 0 6px rgba(34,197,94,0.5)',
+                }} />
+                <span style={{
+                    fontSize: '0.72rem', letterSpacing: '0.12em',
+                    color: 'rgba(255,255,255,0.75)', fontWeight: 600,
+                    fontFamily: 'var(--font-sans)', textTransform: 'uppercase',
+                }}>
+                    Code City
                 </span>
             </motion.div>
 
@@ -234,63 +221,7 @@ export default function EmptyCityHero() {
                         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
                             <ActionButton onClick={handleExploreDemoCity} icon={<Gamepad2 size={15} />} label="Explore Demo City" />
                             <ActionButton onClick={analyzeLocal} icon={<FolderOpen size={15} />} label="Open Local Folder" variant="green" />
-                            {!authToken && (
-                                <ActionButton
-                                    onClick={() => { window.location.href = `${API_BASE}/auth/github/login` }}
-                                    icon={<Github size={15} />}
-                                    label="Connect GitHub"
-                                    variant="dim"
-                                />
-                            )}
                         </div>
-
-                        {/* GitHub session */}
-                        {authToken && (
-                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                                <div style={{
-                                    display: 'flex', alignItems: 'center', gap: '8px', padding: '5px 14px',
-                                    background: 'rgba(0, 242, 255, 0.05)', borderRadius: '100px',
-                                    border: '1px solid rgba(0, 242, 255, 0.15)',
-                                }}>
-                                    <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#00f2ff', boxShadow: '0 0 6px #00f2ff' }} />
-                                    <span style={{ fontSize: '0.7rem', color: '#00f2ff', fontFamily: 'var(--font-mono)' }}>GitHub Connected</span>
-                                </div>
-                                <div style={{
-                                    width: '100%', maxHeight: '160px', overflowY: 'auto', display: 'flex',
-                                    flexDirection: 'column', gap: '4px',
-                                    scrollbarWidth: 'thin', scrollbarColor: 'rgba(255,255,255,0.15) transparent',
-                                }}>
-                                    {loadingRepos ? (
-                                        <div style={{ color: 'rgba(255,255,255,0.35)', textAlign: 'center', fontSize: '0.8rem', padding: '12px' }}>Loading repositories...</div>
-                                    ) : repos.map((repo, i) => (
-                                        <motion.div
-                                            key={repo.id}
-                                            initial={{ opacity: 0, y: 6 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: i * 0.02 }}
-                                            onClick={() => setPath(repo.html_url)}
-                                            style={{
-                                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                                padding: '10px 14px', background: 'rgba(255,255,255,0.03)',
-                                                border: '1px solid rgba(255,255,255,0.04)',
-                                                borderRadius: '10px', cursor: 'pointer', transition: 'all 0.2s',
-                                            }}
-                                            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = 'rgba(0,242,255,0.2)' }}
-                                            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.04)' }}
-                                        >
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <Github size={13} color="rgba(255,255,255,0.4)" />
-                                                <span style={{ fontWeight: 500, color: '#fff', fontSize: '0.85rem' }}>{repo.name}</span>
-                                                {repo.private && (
-                                                    <span style={{ fontSize: '0.55rem', padding: '1px 5px', background: 'rgba(255,255,255,0.07)', borderRadius: '100px', color: '#888', textTransform: 'uppercase' }}>Private</span>
-                                                )}
-                                            </div>
-                                            <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.25)', fontFamily: 'var(--font-mono)' }}>Select</span>
-                                        </motion.div>
-                                    ))}
-                                </div>
-                            </motion.div>
-                        )}
 
                         <AnimatePresence>
                             {error && (
@@ -307,7 +238,7 @@ export default function EmptyCityHero() {
                     </form>
 
                     {/* Feature chips */}
-                    <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap' }}>
                         {FEATURES.map((feat, i) => (
                             <motion.div
                                 key={i}
@@ -315,12 +246,13 @@ export default function EmptyCityHero() {
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.6 + i * 0.08 }}
                                 style={{
-                                    display: 'flex', alignItems: 'center', gap: '5px',
-                                    fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)',
-                                    fontFamily: 'var(--font-sans)', fontWeight: 400,
+                                    display: 'flex', alignItems: 'center', gap: '6px',
+                                    fontSize: '0.75rem', color: 'rgba(255,255,255,0.55)',
+                                    fontFamily: 'var(--font-sans)', fontWeight: 500,
+                                    letterSpacing: '0.01em',
                                 }}
                             >
-                                <span style={{ display: 'flex', alignItems: 'center', opacity: 0.6 }}>{feat.icon}</span>
+                                <span style={{ display: 'flex', alignItems: 'center', color: 'rgba(255,255,255,0.4)' }}>{feat.icon}</span>
                                 {feat.text}
                             </motion.div>
                         ))}

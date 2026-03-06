@@ -1,9 +1,9 @@
 import logger from '../../utils/logger'
-const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
 /**
  * Interaction Slice
- * Handles user interactions with the 3D City: Selection, Hovering, and Graph Tracing.
+ * Handles user interactions: Selection, Hovering, and Graph Tracing.
+ * Fully client-side — BFS on in-memory road graph.
  */
 export const createInteractionSlice = (set, get) => ({
     // State
@@ -60,42 +60,55 @@ export const createInteractionSlice = (set, get) => ({
         set({ graphNeighbors: { dependencies, dependents } })
     },
 
-    traceDependency: async (sourceQuery, targetQuery) => {
+    traceDependency: (sourceQuery, targetQuery) => {
         const { cityData } = get()
         if (!cityData) return
 
-        // Simple fuzzy find for IDs
         const findId = (q) => cityData.buildings.find(b => b.name.toLowerCase().includes(q.toLowerCase()))?.id
 
         const sourceId = findId(sourceQuery)
         const targetId = findId(targetQuery)
 
         if (!sourceId || !targetId) {
-             logger.warn("Could not resolve trace IDs", { sourceQuery, targetQuery })
-             return
+            logger.warn("Could not resolve trace IDs", { sourceQuery, targetQuery })
+            return
         }
 
-        try {
-            const res = await fetch(`${API_BASE}/v2/graph/trace`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ city_id: cityData.name || 'default', source: sourceId, target: targetId })
-            })
+        // BFS shortest path through roads
+        const adj = new Map()
+        ;(cityData.roads || []).forEach(r => {
+            if (!adj.has(r.source)) adj.set(r.source, [])
+            adj.get(r.source).push(r.target)
+        })
 
-            if (!res.ok) throw new Error("Trace failed")
-            const data = await res.json()
+        const queue = [[sourceId]]
+        const visited = new Set([sourceId])
 
-            if (data.found) {
+        while (queue.length > 0) {
+            const path = queue.shift()
+            const current = path[path.length - 1]
+
+            if (current === targetId) {
+                const edges = []
+                for (let i = 0; i < path.length - 1; i++) {
+                    edges.push({ source: path[i], target: path[i + 1] })
+                }
                 set({
-                    activeTrace: { source: sourceId, target: targetId, path: data.path, edges: data.edges },
-                    highlightedIssue: { type: 'trace', paths: data.path } // Cross-slice UI update
+                    activeTrace: { source: sourceId, target: targetId, path, edges },
+                    highlightedIssue: { type: 'trace', paths: path }
                 })
-            } else {
-                set({ activeTrace: null, highlightedIssue: null })
+                return
             }
-        } catch (e) {
-            logger.error("Trace error", e)
-            set({ activeTrace: null })
+
+            for (const neighbor of (adj.get(current) || [])) {
+                if (!visited.has(neighbor)) {
+                    visited.add(neighbor)
+                    queue.push([...path, neighbor])
+                }
+            }
         }
+
+        // No path found
+        set({ activeTrace: null, highlightedIssue: null })
     }
 })

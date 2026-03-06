@@ -72,7 +72,7 @@ export default function CityBuilderLoader() {
             setFileCount(c => c < targetFiles ? c + 1 : c)
         }, 80)
         return () => clearInterval(timer)
-    })
+    }, [analysisProgress, simulatedProgress])
 
     function effectiveProgressCalc() {
         return Math.max(analysisProgress || 0, simulatedProgress)

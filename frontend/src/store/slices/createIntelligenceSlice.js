@@ -1,9 +1,9 @@
 /**
  * Intelligence Slice
- * State management for developer intelligence tools.
+ * Fully client-side developer intelligence tools.
+ * All analysis runs against in-memory cityData (buildings + roads).
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api'
 import logger from '../../utils/logger'
 
 export const createIntelligenceSlice = (set, get) => ({
@@ -27,16 +27,14 @@ export const createIntelligenceSlice = (set, get) => ({
     },
 
     // Active Intelligence Panel
-    activeIntelligencePanel: null, // 'health' | 'deadCode' | 'quality' | 'impact' | 'search'
-
+    activeIntelligencePanel: null,
     setActiveIntelligencePanel: (panel) => set({ activeIntelligencePanel: panel }),
 
-    // Client-side layer violation analysis (powers FaultLine visualization)
+    // Client-side layer violation analysis
     analyzeLayerViolations: () => {
         const { cityData } = get()
         if (!cityData?.buildings) return
 
-        // Define architectural layers by path patterns
         const getLayer = (path) => {
             if (!path) return 'unknown'
             const p = path.toLowerCase()
@@ -48,18 +46,13 @@ export const createIntelligenceSlice = (set, get) => ({
             return 'unknown'
         }
 
-        // Layer hierarchy: UI → API → Service → Data → Utility (lower layers shouldn't import upper)
         const layerRank = { ui: 4, api: 3, service: 2, data: 1, utility: 0, unknown: -1 }
-
         const violations = []
-        const buildingMap = new Map(cityData.buildings.map(b => [b.id, b]))
-
         cityData.buildings.forEach(building => {
             const srcLayer = getLayer(building.file_path || building.path)
             if (srcLayer === 'unknown') return
             const imports = building.imports || []
             imports.forEach(imp => {
-                // Find the target building
                 const impPath = typeof imp === 'string' ? imp : imp.text || imp.path || ''
                 const target = cityData.buildings.find(b =>
                     (b.file_path || b.path || '').endsWith(impPath.replace(/^[./]+/, ''))
@@ -67,7 +60,6 @@ export const createIntelligenceSlice = (set, get) => ({
                 if (!target) return
                 const tgtLayer = getLayer(target.file_path || target.path)
                 if (tgtLayer === 'unknown') return
-                // Violation: lower layer importing from higher layer
                 if (layerRank[srcLayer] < layerRank[tgtLayer]) {
                     violations.push({
                         source_id: building.id,
@@ -79,240 +71,255 @@ export const createIntelligenceSlice = (set, get) => ({
                 }
             })
         })
-
         set({ dependencyReport: { layer_violations: violations } })
-        logger.debug(`[Intelligence] Found ${violations.length} layer violations`)
     },
 
-    // Fetch Code Health Report
-    fetchHealthReport: async () => {
-        const { cityId } = get()
-        logger.debug('[Intelligence] Fetching health report for cityId:', cityId)
-        if (!cityId) {
-            logger.warn('[Intelligence] No cityId available')
+    // Client-side health report
+    fetchHealthReport: () => {
+        const { cityData } = get()
+        if (!cityData?.buildings) return
+
+        set(state => ({ intelligenceLoading: { ...state.intelligenceLoading, health: true } }))
+
+        const buildings = cityData.buildings
+        const total = buildings.length
+        if (total === 0) {
+            set(state => ({ healthReport: { score: 100, grade: 'A', issues: {} }, intelligenceLoading: { ...state.intelligenceLoading, health: false } }))
             return
         }
 
-        if (cityId.startsWith('demo_')) {
-            set({ healthReport: { score: 92, status: 'Healthy', issues: { god_objects: [], cyclical_dependencies: [] } } })
-            return
-        }
+        const avgComplexity = buildings.reduce((s, b) => s + (b.metrics?.complexity || 0), 0) / total
+        const avgLines = buildings.reduce((s, b) => s + (b.metrics?.lines || 0), 0) / total
+        const hotspots = buildings.filter(b => b.is_hotspot).length
+        const godObjects = buildings.filter(b => (b.metrics?.lines || 0) > 500 && (b.functions?.length || 0) > 15)
+        const deadFiles = buildings.filter(b => {
+            const incoming = (cityData.roads || []).filter(r => r.target === b.id)
+            return incoming.length === 0 && !b.name?.includes('index') && !b.name?.includes('main') && !b.name?.includes('app')
+        })
+
+        // Score: 100 - penalties
+        let score = 100
+        score -= Math.min(20, avgComplexity * 2)
+        score -= Math.min(15, (hotspots / total) * 100)
+        score -= Math.min(10, godObjects.length * 3)
+        score -= Math.min(10, (deadFiles.length / total) * 50)
+        score = Math.max(0, Math.round(score))
+
+        const grade = score >= 90 ? 'A' : score >= 80 ? 'B' : score >= 70 ? 'C' : score >= 60 ? 'D' : 'F'
 
         set(state => ({
-            intelligenceLoading: { ...state.intelligenceLoading, health: true }
+            healthReport: {
+                score,
+                grade,
+                total_files: total,
+                avg_complexity: Math.round(avgComplexity * 10) / 10,
+                avg_lines: Math.round(avgLines),
+                hotspots: hotspots,
+                god_objects: godObjects.map(b => ({ id: b.id, name: b.name, lines: b.metrics?.lines, functions: b.functions?.length })),
+                dead_files: deadFiles.length,
+            },
+            intelligenceLoading: { ...state.intelligenceLoading, health: false }
         }))
-
-        try {
-            const url = `${API_BASE}/intelligence/health/${cityId}`
-            logger.debug('[Intelligence] Fetching:', url)
-            const response = await fetch(url)
-            if (!response.ok) throw new Error('Health analysis failed')
-
-            const data = await response.json()
-            logger.debug('[Intelligence] Health report received:', data)
-            set(state => ({
-                healthReport: data.health,
-                intelligenceLoading: { ...state.intelligenceLoading, health: false }
-            }))
-        } catch (error) {
-            logger.error('Health report fetch failed:', error)
-            set(state => ({
-                intelligenceLoading: { ...state.intelligenceLoading, health: false }
-            }))
-        }
     },
 
-    // Fetch Dead Code Report
-    fetchDeadCodeReport: async () => {
-        const { cityId } = get()
-        if (!cityId) return
+    // Client-side dead code detection
+    fetchDeadCodeReport: () => {
+        const { cityData } = get()
+        if (!cityData?.buildings) return
 
-        if (cityId.startsWith('demo_')) {
-            set({ deadCodeReport: [] })
-            return
-        }
+        set(state => ({ intelligenceLoading: { ...state.intelligenceLoading, deadCode: true } }))
+
+        const importedIds = new Set()
+        ;(cityData.roads || []).forEach(r => importedIds.add(r.target))
+
+        const entryPatterns = /^(index|main|app|server|entry|boot)/i
+        const deadFiles = cityData.buildings.filter(b => {
+            if (importedIds.has(b.id)) return false
+            if (entryPatterns.test(b.name || '')) return false
+            return true
+        }).map(b => ({
+            id: b.id,
+            name: b.name,
+            path: b.file_path || b.path,
+            lines: b.metrics?.lines || 0
+        }))
 
         set(state => ({
-            intelligenceLoading: { ...state.intelligenceLoading, deadCode: true }
+            deadCodeReport: deadFiles,
+            intelligenceLoading: { ...state.intelligenceLoading, deadCode: false }
         }))
-
-        try {
-            const response = await fetch(`${API_BASE}/intelligence/dead-code/${cityId}`)
-            if (!response.ok) throw new Error('Dead code detection failed')
-
-            const data = await response.json()
-            set(state => ({
-                deadCodeReport: data.dead_code,
-                intelligenceLoading: { ...state.intelligenceLoading, deadCode: false }
-            }))
-        } catch (error) {
-            logger.error('Dead code fetch failed:', error)
-            set(state => ({
-                intelligenceLoading: { ...state.intelligenceLoading, deadCode: false }
-            }))
-        }
     },
 
-    // Fetch Code Quality Report
-    fetchQualityReport: async () => {
-        const { cityId } = get()
-        if (!cityId) return
+    // Client-side quality report
+    fetchQualityReport: () => {
+        const { cityData } = get()
+        if (!cityData?.buildings) return
 
-        if (cityId.startsWith('demo_')) {
-            set({ qualityReport: { maintainability_index: 85, duplication_percentage: 2.1 } })
-            return
-        }
+        set(state => ({ intelligenceLoading: { ...state.intelligenceLoading, quality: true } }))
+
+        const buildings = cityData.buildings
+        const complexFiles = [...buildings].sort((a, b) => (b.metrics?.complexity || 0) - (a.metrics?.complexity || 0)).slice(0, 10)
+        const largeFiles = [...buildings].sort((a, b) => (b.metrics?.lines || 0) - (a.metrics?.lines || 0)).slice(0, 10)
+
+        const totalComplexity = buildings.reduce((s, b) => s + (b.metrics?.complexity || 0), 0)
+        const totalLines = buildings.reduce((s, b) => s + (b.metrics?.lines || 0), 0)
+
+        // Simple maintainability index (0-100)
+        const avgComplexity = buildings.length > 0 ? totalComplexity / buildings.length : 0
+        const maintainability = Math.max(0, Math.min(100, Math.round(100 - avgComplexity * 3)))
 
         set(state => ({
-            intelligenceLoading: { ...state.intelligenceLoading, quality: true }
+            qualityReport: {
+                maintainability_index: maintainability,
+                total_lines: totalLines,
+                total_complexity: totalComplexity,
+                most_complex: complexFiles.map(b => ({ id: b.id, name: b.name, complexity: b.metrics?.complexity || 0 })),
+                largest_files: largeFiles.map(b => ({ id: b.id, name: b.name, lines: b.metrics?.lines || 0 })),
+            },
+            intelligenceLoading: { ...state.intelligenceLoading, quality: false }
         }))
-
-        try {
-            const response = await fetch(`${API_BASE}/intelligence/quality/${cityId}`)
-            if (!response.ok) throw new Error('Quality scan failed')
-
-            const data = await response.json()
-            set(state => ({
-                qualityReport: data.quality,
-                intelligenceLoading: { ...state.intelligenceLoading, quality: false }
-            }))
-        } catch (error) {
-            logger.error('Quality scan failed:', error)
-            set(state => ({
-                intelligenceLoading: { ...state.intelligenceLoading, quality: false }
-            }))
-        }
     },
 
-    // Fetch Impact Analysis for a specific file
-    fetchImpactAnalysis: async (fileId, depth = 3) => {
-        const { cityId } = get()
-        if (!cityId || !fileId) return
+    // Client-side impact analysis (BFS through roads graph)
+    fetchImpactAnalysis: (fileId, depth = 3) => {
+        const { cityData } = get()
+        if (!cityData?.buildings || !fileId) return
 
-        if (cityId.startsWith('demo_')) {
-            // Visually interesting mock impact for the Demo City
-            set({ impactAnalysis: {
-                file_id: fileId,
-                levels: {
-                    level_1: [{ id: 'b_1', name: 'Module_b_1.js' }],
-                    level_2: [{ id: 'b_2', name: 'Module_b_2.js' }],
-                    level_3: []
+        set(state => ({ intelligenceLoading: { ...state.intelligenceLoading, impact: true } }))
+
+        // Build adjacency list (who imports fileId → level 1, who imports those → level 2, etc.)
+        const adj = new Map()
+        ;(cityData.roads || []).forEach(r => {
+            if (!adj.has(r.target)) adj.set(r.target, [])
+            adj.get(r.target).push(r.source)
+        })
+
+        const levels = {}
+        const visited = new Set([fileId])
+        let frontier = [fileId]
+
+        for (let d = 1; d <= depth; d++) {
+            const nextFrontier = []
+            for (const id of frontier) {
+                for (const dep of (adj.get(id) || [])) {
+                    if (!visited.has(dep)) {
+                        visited.add(dep)
+                        nextFrontier.push(dep)
+                    }
                 }
-            } })
-            return
+            }
+            const levelBuildings = nextFrontier.map(id => {
+                const b = cityData.buildings.find(b => b.id === id)
+                return b ? { id: b.id, name: b.name, path: b.file_path || b.path } : null
+            }).filter(Boolean)
+            levels[`level_${d}`] = levelBuildings
+            frontier = nextFrontier
         }
 
         set(state => ({
-            intelligenceLoading: { ...state.intelligenceLoading, impact: true }
+            impactAnalysis: { file_id: fileId, levels },
+            intelligenceLoading: { ...state.intelligenceLoading, impact: false }
         }))
-
-        try {
-            const response = await fetch(
-                `${API_BASE}/intelligence/impact/${cityId}/${fileId}?depth=${depth}`
-            )
-            if (!response.ok) throw new Error('Impact analysis failed')
-
-            const data = await response.json()
-            set(state => ({
-                impactAnalysis: data.impact,
-                intelligenceLoading: { ...state.intelligenceLoading, impact: false }
-            }))
-        } catch (error) {
-            logger.error('Impact analysis failed:', error)
-            set(state => ({
-                intelligenceLoading: { ...state.intelligenceLoading, impact: false }
-            }))
-        }
     },
 
-    // Check Safe Delete
-    checkSafeDelete: async (fileId) => {
-        const { cityId } = get()
-        if (!cityId || !fileId) return null
+    // Client-side safe delete check
+    checkSafeDelete: (fileId) => {
+        const { cityData } = get()
+        if (!cityData || !fileId) return null
 
-        if (cityId.startsWith('demo_')) {
-            return { is_safe: true, dependents: [], score: 100 }
-        }
-
-        try {
-            const response = await fetch(
-                `${API_BASE}/intelligence/safe-delete/${cityId}/${fileId}`
-            )
-            if (!response.ok) throw new Error('Safe delete check failed')
-
-            const data = await response.json()
-            return data.deletion_analysis
-        } catch (error) {
-            logger.error('Safe delete check failed:', error)
-            return null
-        }
-    },
-
-    // Fetch Critical Paths
-    fetchCriticalPaths: async () => {
-        const { cityId } = get()
-        if (!cityId) return
-
-        if (cityId.startsWith('demo_')) {
-            set({ criticalPaths: [] })
-            return
-        }
-
-        set(state => ({
-            intelligenceLoading: { ...state.intelligenceLoading, critical: true }
-        }))
-
-        try {
-            const response = await fetch(`${API_BASE}/intelligence/critical-paths/${cityId}`)
-            if (!response.ok) throw new Error('Critical path analysis failed')
-
-            const data = await response.json()
-            set(state => ({
-                criticalPaths: data.critical_files,
-                intelligenceLoading: { ...state.intelligenceLoading, critical: false }
-            }))
-        } catch (error) {
-            logger.error('Critical paths fetch failed:', error)
-            set(state => ({
-                intelligenceLoading: { ...state.intelligenceLoading, critical: false }
-            }))
-        }
-    },
-
-    // Smart Search
-    performSmartSearch: async (query, type = 'exact', fileFilter = null) => {
-        const { cityId } = get()
-        if (!cityId || !query) return
-
-        if (cityId.startsWith('demo_')) {
-            set({ searchResults: [] })
-            return
-        }
-
-        set(state => ({
-            intelligenceLoading: { ...state.intelligenceLoading, search: true }
-        }))
-
-        try {
-            const response = await fetch(`${API_BASE}/intelligence/search/${cityId}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query, type, file_filter: fileFilter })
+        const dependents = (cityData.roads || [])
+            .filter(r => r.target === fileId)
+            .map(r => {
+                const b = cityData.buildings.find(b => b.id === r.source)
+                return b ? { id: b.id, name: b.name } : null
             })
+            .filter(Boolean)
 
-            if (!response.ok) throw new Error('Search failed')
-
-            const data = await response.json()
-            set(state => ({
-                searchResults: data.search_results,
-                intelligenceLoading: { ...state.intelligenceLoading, search: false }
-            }))
-        } catch (error) {
-            logger.error('Smart search failed:', error)
-            set(state => ({
-                intelligenceLoading: { ...state.intelligenceLoading, search: false }
-            }))
+        return {
+            is_safe: dependents.length === 0,
+            dependents,
+            score: dependents.length === 0 ? 100 : Math.max(0, 100 - dependents.length * 20)
         }
+    },
+
+    // Client-side critical paths (highest in-degree + out-degree nodes)
+    fetchCriticalPaths: () => {
+        const { cityData } = get()
+        if (!cityData?.buildings) return
+
+        set(state => ({ intelligenceLoading: { ...state.intelligenceLoading, critical: true } }))
+
+        const inDeg = new Map()
+        const outDeg = new Map()
+        ;(cityData.roads || []).forEach(r => {
+            inDeg.set(r.target, (inDeg.get(r.target) || 0) + 1)
+            outDeg.set(r.source, (outDeg.get(r.source) || 0) + 1)
+        })
+
+        const scored = cityData.buildings.map(b => ({
+            id: b.id,
+            name: b.name,
+            path: b.file_path || b.path,
+            in_degree: inDeg.get(b.id) || 0,
+            out_degree: outDeg.get(b.id) || 0,
+            centrality: (inDeg.get(b.id) || 0) + (outDeg.get(b.id) || 0)
+        })).sort((a, b) => b.centrality - a.centrality).slice(0, 15)
+
+        set(state => ({
+            criticalPaths: scored,
+            intelligenceLoading: { ...state.intelligenceLoading, critical: false }
+        }))
+    },
+
+    // Client-side text search
+    performSmartSearch: (query) => {
+        const { cityData } = get()
+        if (!query || !cityData?.buildings) return
+
+        set(state => ({ intelligenceLoading: { ...state.intelligenceLoading, search: true } }))
+
+        const q = query.toLowerCase()
+        const results = []
+
+        // Search in file contents if available
+        if (cityData.fileContents) {
+            const entries = cityData.fileContents instanceof Map
+                ? [...cityData.fileContents.entries()]
+                : Object.entries(cityData.fileContents)
+
+            for (const [filePath, content] of entries) {
+                if (results.length >= 50) break
+                const lines = content.split('\n')
+                for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].toLowerCase().includes(q)) {
+                        results.push({
+                            file: filePath,
+                            line: i + 1,
+                            text: lines[i].trim().slice(0, 200),
+                            building_id: cityData.buildings.find(b => (b.file_path || b.path || '').endsWith(filePath))?.id
+                        })
+                        if (results.length >= 50) break
+                    }
+                }
+            }
+        }
+
+        // Also search in building names/paths
+        if (results.length < 50) {
+            cityData.buildings.forEach(b => {
+                if (results.length >= 50) return
+                const name = (b.name || '').toLowerCase()
+                const path = (b.file_path || b.path || '').toLowerCase()
+                if (name.includes(q) || path.includes(q)) {
+                    results.push({ file: b.file_path || b.path, line: 0, text: b.name, building_id: b.id })
+                }
+            })
+        }
+
+        set(state => ({
+            searchResults: results,
+            intelligenceLoading: { ...state.intelligenceLoading, search: false }
+        }))
     },
 
     // Clear Intelligence Data (on city change)

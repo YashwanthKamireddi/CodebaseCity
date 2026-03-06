@@ -65,7 +65,7 @@ export default function BuildingPanel({ building }) {
         infractions.push({
             type: 'warning',
             title: 'Fragile Base Class Risk',
-            desc: `${depsIn} inbound dependencies detected. Massive blast radius on edits. Mandate Dependency Inversion (DIP) to decouple.`
+            desc: `${depsIn} inbound dependencies detected. High impact on edits. Mandate Dependency Inversion (DIP) to decouple.`
         })
     }
     if (commits > 50 || is_hotspot) {
@@ -377,7 +377,7 @@ export default function BuildingPanel({ building }) {
                             onClick={() => navigator.clipboard.writeText(path)}
                         />
                         <SwissButton
-                            label="Blast Radius"
+                            label="Impact Analysis"
                             icon={<Radius size={14} />}
                             onClick={() => {
                                 fetchImpactAnalysis(building.id)

@@ -23,7 +23,7 @@ export default function PatternList({ issues, buildings }) {
 
     // Helper to find building object by path/name
     const findBuilding = (name) => {
-        return cityData?.find(b => b.name === name || b.path === name)
+        return cityData?.buildings?.find(b => b.name === name || b.path === name)
     }
 
     return (
@@ -119,7 +119,7 @@ export default function PatternList({ issues, buildings }) {
                 </PatternCard>
             )}
 
-            <style jsx>{`
+            <style>{`
                 .pattern-item {
                     padding: 6px 8px;
                     background: rgba(255,255,255,0.05);

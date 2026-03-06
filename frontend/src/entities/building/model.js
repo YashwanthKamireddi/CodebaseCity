@@ -19,7 +19,7 @@ export const BuildingModel = {
         // Architectural Risk Penalties (ARM)
         health -= Math.min(40, complexity * 2.0)           // Severe Complexity penalty
         health -= Math.min(25, decay * 30)                 // Age/Decay penalty
-        health -= Math.min(25, dependencies_in * 3.0)      // Coupling / Blast Radius penalty
+        health -= Math.min(25, dependencies_in * 3.0)      // Coupling / Impact penalty
 
         return Math.max(0, Math.round(health))
     },

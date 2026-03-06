@@ -37,69 +37,50 @@ export default function TimelineController() {
         return () => setCommitIndex(-1)
     }, [currentIndex, setCommitIndex])
 
-    // Fetch history
+    // Fetch history via store (client-side — uses GitHub REST API)
     useEffect(() => {
         if (!cityData?.path || !showTimeline) return
-
-        const fetchHistory = async () => {
-            try {
-                const url = `/api/history?path=${encodeURIComponent(cityData.path)}&limit=100`
-                const res = await fetch(url)
-                const data = await res.json()
-
-                if (!data.commits || data.commits.length === 0) {
-                    setHistory([{
-                        date: new Date().toLocaleDateString(),
-                        short_hash: 'HEAD',
-                        message: 'Current State',
-                        author: 'You',
-                        timestamp: Date.now() / 1000
-                    }])
-                    setCurrentIndex(0)
-                } else {
-                    const chronological = [...data.commits].reverse()
-                    setHistory(chronological)
-                    setCurrentIndex(chronological.length - 1)
-                }
-            } catch (e) {
+        const store = useStore.getState()
+        store.fetchHistory(cityData.path).then(() => {
+            const { commits } = useStore.getState()
+            if (commits?.length > 0) {
+                const chronological = [...commits].reverse()
+                setHistory(chronological)
+                setCurrentIndex(chronological.length - 1)
+            } else {
                 setHistory([{
-                    date: "Now",
-                    short_hash: "LOCAL",
-                    message: "Current View",
-                    author: "Local",
+                    date: new Date().toLocaleDateString(),
+                    short_hash: 'HEAD',
+                    message: 'Current State',
+                    author: 'You',
                     timestamp: Date.now() / 1000
                 }])
+                setCurrentIndex(0)
             }
-        }
-
-        fetchHistory()
+        }).catch(() => {
+            setHistory([{
+                date: "Now",
+                short_hash: "LOCAL",
+                message: "Current View",
+                author: "Local",
+                timestamp: Date.now() / 1000
+            }])
+        })
     }, [cityData?.path, showTimeline])
 
-    // API call
+    // Analyze at commit — uses store's client-side analysis
     const performAnalysis = useCallback(async (commit) => {
+        if (!commit?.hash) return
         if (abortControllerRef.current) {
             abortControllerRef.current.abort()
         }
-
         const controller = new AbortController()
         abortControllerRef.current = controller
 
         setIsLoading(true)
         try {
-            const res = await fetch('/api/analyze-at-commit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    path: cityData.path,
-                    commit_hash: commit.hash
-                }),
-                signal: controller.signal
-            })
-
-            if (res.ok) {
-                const newCityData = await res.json()
-                setCityData(newCityData)
-            }
+            const store = useStore.getState()
+            await store.analyzeAtCommit(commit.hash)
         } catch (e) {
             if (e.name === 'AbortError') return
             logger.error("Time Travel Failed:", e)
@@ -110,7 +91,7 @@ export default function TimelineController() {
                 abortControllerRef.current = null
             }
         }
-    }, [cityData?.path, setCityData])
+    }, [])
 
     // Cleanup
     useEffect(() => {

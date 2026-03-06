@@ -36,7 +36,7 @@ export function getBuildingColor(data, mode, context = {}) {
         return '#0e0f14' // Nearly invisible
     }
 
-    // Blast Radius Mode
+    // Impact Analysis Mode
     if (activeIntelligencePanel === 'impact') {
         if (blastLevel === 0) return '#ffffff' // Pure White (Ground Zero / The File)
         if (blastLevel === 1) return '#ef4444' // Red (Direct Impact)

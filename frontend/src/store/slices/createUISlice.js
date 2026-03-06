@@ -14,7 +14,6 @@ export const createUISlice = (set, get) => ({
     renderMode: 'lod2', // 'instanced' (fast) | 'lod2' (realistic CityGML)
     showRoads: false,
     showLabels: true,
-    nightMode: false,
     theme: getInitialTheme(),
 
     // Modals & Panels
@@ -36,7 +35,6 @@ export const createUISlice = (set, get) => ({
 
     toggleRoads: () => set((state) => ({ showRoads: !state.showRoads })),
     toggleLabels: () => set((state) => ({ showLabels: !state.showLabels })),
-    toggleNightMode: () => set((state) => ({ nightMode: !state.nightMode })),
 
     setSidebarOpen: (open) => set({ sidebarOpen: open }),
 

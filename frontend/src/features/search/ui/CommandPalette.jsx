@@ -11,15 +11,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
     Search,
     FileCode,
-    Zap,
-    Eye,
-    EyeOff,
-    Moon,
-    Sun,
     RotateCcw,
     CornerDownLeft,
-    Box,
-    Keyboard as KeyboardIcon
+    Keyboard
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
 import './CommandPalette.css'
@@ -291,7 +285,7 @@ export default function CommandPalette() {
                                 <Command.Group heading="Help" className="command-group">
                                     <Command.Item className="command-item" value="keyboard-shortcuts">
                                         <div className="command-item-icon">
-                                            <KeyboardIcon size={16} />
+                                            <Keyboard size={16} />
                                         </div>
                                         <span className="command-item-title">Keyboard Shortcuts</span>
                                         <kbd className="command-item-shortcut">?</kbd>

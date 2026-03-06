@@ -5,7 +5,7 @@ import { useFrame } from '@react-three/fiber'
 import useStore from '../../../store/useStore'
 
 export default function InstancedTrace() {
-    const { activeTrace, cityData, layoutMode } = useStore()
+    const { activeTrace, cityData } = useStore()
     const groupRef = useRef()
 
     const segments = useMemo(() => {
@@ -35,7 +35,7 @@ export default function InstancedTrace() {
             }
         }
         return segs
-    }, [activeTrace, cityData, layoutMode])
+    }, [activeTrace, cityData])
 
     // Animate the Data-Flow Kinetics (Streams of light passing through the geometry)
     useFrame((state, delta) => {

@@ -23,7 +23,7 @@ const intersectPoint = new THREE.Vector3()
 export default function InstancedCity() {
     const {
         cityData, selectedBuilding, selectBuilding, hoveredBuilding, setHoveredBuilding,
-        layoutMode, colorMode, graphNeighbors, highlightedIssue, cityMeshRef,
+        colorMode, graphNeighbors, highlightedIssue, cityMeshRef,
         isAnimating,
         currentCommitIndex,
         activeIntelligencePanel,
@@ -165,7 +165,7 @@ export default function InstancedCity() {
 
             const isIssueHighlighted = highlightedIssue && highlightedIssue.paths.includes(b.path)
 
-            // Blast Radius logic
+            // Impact analysis logic
             let blastLevel = null
             if (activeIntelligencePanel === 'impact' && impactAnalysis) {
                 if (impactAnalysis.file_id === b.id) blastLevel = 0
