@@ -1,5 +1,4 @@
-# Codebase City CI/CD Pipeline
-# World-class automated testing, building, and deployment
+# Code City CI/CD Pipeline — Frontend Only
 
 name: CI/CD Pipeline
 
@@ -11,271 +10,59 @@ on:
 
 env:
   NODE_VERSION: '20'
-  PYTHON_VERSION: '3.11'
 
 jobs:
-  # ═══════════════════════════════════════════════════════════════════════════
-  # FRONTEND JOBS
-  # ═══════════════════════════════════════════════════════════════════════════
-
-  frontend-lint:
-    name: Frontend Lint
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: frontend
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run ESLint
-        run: npm run lint
-
-  frontend-test:
-    name: Frontend Tests
+  test:
+    name: Test
     runs-on: ubuntu-latest
-    needs: frontend-lint
+    needs: lint
     defaults:
       run:
         working-directory: frontend
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run test:run
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests with coverage
-        run: npm run test:coverage
-
-      - name: Upload coverage report
-        uses: codecov/codecov-action@v3
-        with:
-          files: frontend/coverage/coverage-final.json
-          flags: frontend
-          name: frontend-coverage
-
-  frontend-build:
-    name: Frontend Build
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    needs: frontend-test
+    needs: test
     defaults:
       run:
         working-directory: frontend
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build production bundle
-        run: npm run build
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
         with:
           name: frontend-dist
           path: frontend/dist
           retention-days: 7
-
-  # ═══════════════════════════════════════════════════════════════════════════
-  # BACKEND JOBS
-  # ═══════════════════════════════════════════════════════════════════════════
-
-  backend-lint:
-    name: Backend Lint
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'
-
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install ruff black isort
-
-      - name: Run Ruff linter
-        run: ruff check .
-        continue-on-error: true
-
-      - name: Check formatting with Black
-        run: black --check .
-        continue-on-error: true
-
-  backend-test:
-    name: Backend Tests
-    runs-on: ubuntu-latest
-    needs: backend-lint
-    defaults:
-      run:
-        working-directory: backend
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: 'pip'
-
-      - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install -r requirements-dev.txt
-
-      - name: Run tests with coverage
-        run: pytest --cov-report=xml
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-
-      - name: Upload coverage report
-        uses: codecov/codecov-action@v3
-        with:
-          files: backend/coverage.xml
-          flags: backend
-          name: backend-coverage
-
-  backend-security:
-    name: Security Scan
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install Bandit
-        run: pip install bandit
-
-      - name: Run security scan
-        run: bandit -r . -x ./tests,./venv -ll
-        continue-on-error: true
-
-  # ═══════════════════════════════════════════════════════════════════════════
-  # INTEGRATION & DEPLOYMENT
-  # ═══════════════════════════════════════════════════════════════════════════
-
-  integration:
-    name: Integration Tests
-    runs-on: ubuntu-latest
-    needs: [frontend-build, backend-test]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install backend
-        working-directory: backend
-        run: |
-          pip install -r requirements.txt
-
-      - name: Start backend server
-        working-directory: backend
-        run: |
-          python -m uvicorn main:app --host 0.0.0.0 --port 8000 &
-          sleep 5
-
-      - name: Health check
-        run: |
-          curl --fail http://localhost:8000/health || exit 1
-
-      - name: API smoke test
-        run: |
-          curl --fail http://localhost:8000/ || exit 1
-
-  deploy-preview:
-    name: Deploy Preview
-    runs-on: ubuntu-latest
-    needs: integration
-    if: github.event_name == 'pull_request'
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download frontend build
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-dist
-          path: frontend/dist
-
-      - name: Deploy to preview
-        run: echo "Deploy preview would happen here (Vercel/Netlify)"
-
-  deploy-production:
-    name: Deploy Production
-    runs-on: ubuntu-latest
-    needs: integration
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: production
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download frontend build
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-dist
-          path: frontend/dist
-
-      - name: Deploy to production
-        run: echo "Production deploy would happen here"
