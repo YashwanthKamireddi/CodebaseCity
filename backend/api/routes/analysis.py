@@ -4,8 +4,10 @@ Codebase analysis, city generation, and cache management endpoints.
 """
 
 from fastapi import APIRouter, HTTPException, Request, Depends, Header
+from fastapi.responses import ORJSONResponse, StreamingResponse
 import os
 import json
+import orjson
 from typing import Optional
 import jwt
 
@@ -31,7 +33,7 @@ analyzer = CodebaseAnalyzer()
 search_engine = CodeSearchEngine()
 
 
-@router.post("/analyze", response_model=CityData, tags=["Analysis"])
+@router.post("/analyze", response_class=ORJSONResponse, tags=["Analysis"])
 @limiter.limit("5/minute")
 async def analyze_codebase(
     request: Request,
@@ -70,13 +72,15 @@ async def analyze_codebase(
             cached_city = city_cache[cache_key]
             if not cached_city.city_id:
                 cached_city.city_id = cache_key
-            return cached_city
+            # Use model_dump() directly — avoids wasteful JSON roundtrip
+            return ORJSONResponse(content=cached_city.model_dump())
 
         # 2. Check Disk Cache
         if os.path.exists(cache_file):
             try:
-                with open(cache_file, "r", encoding="utf-8") as f:
-                    data_dict = json.load(f)
+                with open(cache_file, "rb") as f:
+                    # Load lightning fast via orjson
+                    data_dict = orjson.loads(f.read())
                     city = CityData(**data_dict)
 
                     # Validate cached path still exists
@@ -84,7 +88,7 @@ async def analyze_codebase(
                         logger.info(f"Cache hit (disk): {cache_key}")
                         city.city_id = cache_key
                         city_cache[cache_key] = city
-                        return city
+                        return ORJSONResponse(content=data_dict)
                     else:
                         logger.info(f"Cache invalid (path missing): {cache_key}")
             except Exception as e:
@@ -122,14 +126,32 @@ async def analyze_codebase(
         # 4. Save to Cache
         city_data.city_id = cache_key
         city_cache[cache_key] = city_data
+
+        # Fast JSON serialization to disk using orjson
+        city_dict = city_data.model_dump()
         try:
-            with open(cache_file, "w", encoding="utf-8") as f:
-                f.write(city_data.model_dump_json(indent=2))
+            with open(cache_file, "wb") as f:
+                f.write(orjson.dumps(city_dict, option=orjson.OPT_INDENT_2))
             logger.info(f"Cached to disk: {cache_file}")
         except Exception as e:
             logger.warning(f"Failed to cache: {e}")
 
-        return city_data
+        # Stream large payloads to prevent memory spikes on massive repos
+        building_count = len(city_data.buildings) if city_data.buildings else 0
+        if building_count > 1000:
+            logger.info(f"Streaming large response: {building_count} buildings")
+            payload_bytes = orjson.dumps(city_dict)
+            def stream_chunks():
+                CHUNK_SIZE = 64 * 1024  # 64KB chunks
+                for i in range(0, len(payload_bytes), CHUNK_SIZE):
+                    yield payload_bytes[i:i + CHUNK_SIZE]
+            return StreamingResponse(
+                stream_chunks(),
+                media_type="application/json",
+                headers={"X-Building-Count": str(building_count)}
+            )
+
+        return ORJSONResponse(content=city_dict)
 
     except HTTPException:
         raise
@@ -138,7 +160,7 @@ async def analyze_codebase(
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
 
 
-@router.get("/city/{city_id}", response_model=CityData, tags=["Analysis"])
+@router.get("/city/{city_id}", response_class=ORJSONResponse, tags=["Analysis"])
 async def get_city(city_id: str):
     """
     Get a previously analyzed city by ID.
@@ -150,16 +172,17 @@ async def get_city(city_id: str):
 
         if os.path.exists(cache_file):
             try:
-                with open(cache_file, "r", encoding="utf-8") as f:
-                    city = CityData(**json.load(f))
+                with open(cache_file, "rb") as f:
+                    data_dict = orjson.loads(f.read())
+                    city = CityData(**data_dict)
                     city_cache[city_id] = city
-                    return city
+                    return ORJSONResponse(content=data_dict)
             except Exception:
                 pass
 
         raise HTTPException(status_code=404, detail="City not found. Analyze first.")
 
-    return city_cache[city_id]
+    return ORJSONResponse(content=orjson.loads(city_cache[city_id].model_dump_json()))
 
 
 @router.get("/demo", tags=["Analysis"])
@@ -173,17 +196,35 @@ async def get_demo_city():
     demo = create_demo_city()
     demo.city_id = "demo_city"
     city_cache["demo_city"] = demo
-    return demo
+    return ORJSONResponse(content=orjson.loads(demo.model_dump_json()))
 
 
 @router.delete("/cache/{city_id}")
 async def clear_cache(city_id: str):
     """
-    Clear a city from cache.
+    Clear a city from memory and disk cache.
     """
+    cache_cleared = False
+
+    # Clear Memory
     if city_id in city_cache:
         del city_cache[city_id]
-        return {"status": "cleared"}
+        cache_cleared = True
+
+    # Clear Disk
+    cache_dir = get_cache_dir()
+    cache_file = os.path.join(cache_dir, f"{city_id}.json")
+    if os.path.exists(cache_file):
+        try:
+            os.remove(cache_file)
+            cache_cleared = True
+            logger.info(f"Deleted cache file: {cache_file}")
+        except Exception as e:
+            logger.warning(f"Failed to delete cache file {cache_file}: {e}")
+
+    if cache_cleared:
+        return {"status": "cleared", "city_id": city_id}
+
     raise HTTPException(status_code=404, detail="City not found in cache")
 
 

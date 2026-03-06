@@ -12,6 +12,8 @@ import useStore from '../../../store/useStore'
 export default function ExplorationHUD() {
     const explorationMode = useStore(s => s.explorationMode)
     const setExplorationMode = useStore(s => s.setExplorationMode)
+    const showTraffic = useStore(s => s.showTraffic)
+    const toggleShowTraffic = useStore(s => s.toggleShowTraffic)
 
     if (!explorationMode) return null
 
@@ -51,7 +53,11 @@ export default function ExplorationHUD() {
                 </span>
                 <Sep />
                 <span>
-                    <Kbd>Space</Kbd> Jump
+                    <Kbd>Space</Kbd> Elevate
+                </span>
+                <Sep />
+                <span>
+                    <Kbd>Ctrl</Kbd> Descend
                 </span>
                 <Sep />
                 <span>
@@ -59,8 +65,28 @@ export default function ExplorationHUD() {
                 </span>
                 <Sep />
                 <span>
+                    <Kbd>Scroll</Kbd> Zoom (1st Person)
+                </span>
+                <Sep />
+                <span>
                     <Kbd>RMB</Kbd> Orbit
                 </span>
+                <Sep />
+                <button
+                    onClick={toggleShowTraffic}
+                    style={{
+                        background: showTraffic ? 'rgba(34, 211, 238, 0.1)' : 'transparent',
+                        border: '1px solid ' + (showTraffic ? 'rgba(34, 211, 238, 0.4)' : 'rgba(255,255,255,0.1)'),
+                        borderRadius: '6px',
+                        padding: '2px 8px',
+                        fontSize: '0.6rem',
+                        color: showTraffic ? '#22d3ee' : '#71717a',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                    }}
+                >
+                    {showTraffic ? 'Data Flow: ON' : 'Data Flow: OFF'}
+                </button>
             </div>
 
             <button

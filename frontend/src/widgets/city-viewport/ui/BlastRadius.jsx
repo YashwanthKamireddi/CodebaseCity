@@ -66,14 +66,21 @@ export default function BlastRadius() {
     useFrame(({ clock }) => {
         if (groupRef.current) {
             const time = clock.elapsedTime
-            // Pulse between 0.3 and 1.0 based on sine wave
-            groupRef.current.children.forEach((mesh, i) => {
-                // Different offset per line for staggered effect
+            groupRef.current.children.forEach((lineGroup, i) => {
                 const offset = i * 0.2
                 const alpha = 0.5 + Math.sin(time * 3 + offset) * 0.5
-                if (mesh.material) {
-                    mesh.material.opacity = 0.3 + alpha * 0.6
-                }
+                // Each child is a <group> containing 2 <Line> elements
+                lineGroup.children?.forEach((lineChild) => {
+                    if (lineChild.material) {
+                        lineChild.material.opacity = 0.3 + alpha * 0.6
+                    }
+                    // Drei Line wraps in a group — check nested children too
+                    lineChild.children?.forEach((inner) => {
+                        if (inner.material) {
+                            inner.material.opacity = 0.3 + alpha * 0.6
+                        }
+                    })
+                })
             })
         }
     })

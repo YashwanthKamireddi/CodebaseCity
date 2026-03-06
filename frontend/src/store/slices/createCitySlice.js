@@ -1,3 +1,4 @@
+import logger from '../../utils/logger'
 const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
 /**
@@ -22,6 +23,7 @@ export const createCitySlice = (set, get) => ({
 
     // Exploration Mode State (First-Person Flight)
     explorationMode: false,
+    showTraffic: true, // Default to true for premium experience
 
     // Landing overlay state — true until user dismisses the hero
     isLandingOverlayActive: true,
@@ -52,6 +54,10 @@ export const createCitySlice = (set, get) => ({
             cityId = path.replace(/\//g, '_').replace(/:/g, '').replace(/\\/g, '_').replace(/^_/, '')
         }
 
+        // Check if this is the background demo city loaded by the Landing Page
+        // We do not want to dismiss the landing page if it's just loading the backdrop.
+        const isDemoBackdrop = data.id?.startsWith('demo_') || window.location.pathname === '/' && get().isLandingOverlayActive && !data.source
+
         set((state) => ({
             previousCityData: state.cityData,
             cityData: data,
@@ -62,7 +68,8 @@ export const createCitySlice = (set, get) => ({
             error: null,
             analysisProgress: 100,
             refactoringDrifts: [], // Reset drifts on new city
-            refactoringModeActive: false
+            refactoringModeActive: false,
+            isLandingOverlayActive: isDemoBackdrop ? state.isLandingOverlayActive : false, // Only dismiss for real analysis
         }))
     },
 
@@ -73,6 +80,7 @@ export const createCitySlice = (set, get) => ({
     // Exploration Mode Actions
     toggleExplorationMode: () => set((state) => ({ explorationMode: !state.explorationMode })),
     setExplorationMode: (active) => set({ explorationMode: active }),
+    toggleShowTraffic: () => set((state) => ({ showTraffic: !state.showTraffic })),
 
     applyRefactoringDrift: (buildingId, oldDistrictId, newDistrictId) => set((state) => {
         // Prevent no-op drags
@@ -115,8 +123,19 @@ export const createCitySlice = (set, get) => ({
             const data = await response.json()
             setCityData(data)
         } catch (error) {
-            console.warn('API unavailable, using built-in demo data')
-            setError("Demo API unavailable")
+            logger.warn('API unavailable, using built-in demo data')
+            // Fallback: load static demo-city.json (has real author data)
+            try {
+                const fallback = await fetch('/demo-city.json')
+                if (fallback.ok) {
+                    const data = await fallback.json()
+                    setCityData(data)
+                } else {
+                    setError('Demo data unavailable')
+                }
+            } catch {
+                setError('Demo data unavailable')
+            }
         } finally {
             setLoading(false)
         }
@@ -130,39 +149,105 @@ export const createCitySlice = (set, get) => ({
         setProgress(0)
         setLoading(true)
 
-
         try {
-            setProgress(10)
+            // Detect GitHub URLs and analyze entirely client-side
+            const { analyzeGitHub, isGitHubUrl } = await import('../../engine/ClientAnalyzer.js')
 
-            const { authToken } = get()
-            const headers = { 'Content-Type': 'application/json' }
-            if (authToken) {
-                headers['Authorization'] = `Bearer ${authToken}`
+            if (isGitHubUrl(path)) {
+                // ===== CLIENT-SIDE GITHUB ANALYSIS (no backend needed) =====
+                const cityData = await analyzeGitHub({
+                    url: path,
+                    onProgress: (phase, current, total, detail) => {
+                        if (phase === 'cloning') {
+                            setProgress(total > 0 ? Math.round((current / total) * 30) : 5)
+                        } else if (phase === 'reading') {
+                            setProgress(30 + (total > 0 ? Math.round((current / total) * 20) : 0))
+                        } else if (phase === 'analyzing') {
+                            setProgress(50 + (total > 0 ? Math.round((current / total) * 40) : 0))
+                        }
+                    },
+                    maxFiles: 5000,
+                })
+
+                setProgress(95)
+                await new Promise(r => setTimeout(r, 1500))
+
+                setCityData(cityData)
+                set({ currentRepoPath: cityData.name || path, commits: [], currentCommitIndex: -1 })
+            } else {
+                // ===== LOCAL PATH: use backend API =====
+                setProgress(10)
+
+                const { authToken } = get()
+                const headers = { 'Content-Type': 'application/json' }
+                if (authToken) {
+                    headers['Authorization'] = `Bearer ${authToken}`
+                }
+
+                const response = await fetch(`${API_BASE}/analyze`, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({ path, max_files: 5000 })
+                })
+                setProgress(80)
+
+                await new Promise(r => setTimeout(r, 3000))
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}))
+                    throw new Error(errorData.detail || `Analysis failed (${response.status})`)
+                }
+
+                const data = await response.json()
+                setCityData(data)
+                set({ currentRepoPath: data.path || path, commits: [], currentCommitIndex: -1 })
             }
-
-            const response = await fetch(`${API_BASE}/analyze`, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify({ path, max_files: 5000 })
-            })
-            setProgress(80)
-
-            // Artificial cinematic delay for the premium loader experience (user requested)
-            await new Promise(r => setTimeout(r, 3000))
-
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}))
-                throw new Error(errorData.detail || `Analysis failed (${response.status})`)
-            }
-
-            const data = await response.json()
-            setCityData(data)
-            // Reset Time Travel state (Cross-slice)
-            set({ currentRepoPath: data.path || path, commits: [], currentCommitIndex: -1 })
 
         } catch (error) {
-            console.error("Analysis Error:", error)
+            logger.error("Analysis Error:", error)
             setError(error.message)
+        } finally {
+            setLoading(false)
+        }
+    },
+
+    /**
+     * Analyze a local directory entirely client-side (no backend required).
+     * Uses File System Access API + tree-sitter WASM in a Web Worker.
+     */
+    analyzeLocal: async () => {
+        const { setLoading, setCityData, setError, setProgress } = get()
+
+        set({ error: null, selectedBuilding: null, highlightedIssue: null, highlightedCategory: null })
+        setProgress(0)
+        setLoading(true)
+
+        try {
+            // Dynamic import to avoid loading the engine unless needed
+            const { analyzeLocal: runAnalysis } = await import('../../engine/ClientAnalyzer.js')
+
+            const cityData = await runAnalysis({
+                onProgress: (phase, current, total, detail) => {
+                    if (total > 0) {
+                        const pct = phase === 'reading'
+                            ? Math.round((current / total) * 30)       // 0-30%: reading files
+                            : 30 + Math.round((current / total) * 60)  // 30-90%: analyzing
+                        setProgress(pct)
+                    }
+                },
+                maxFiles: 5000,
+            })
+
+            setProgress(95)
+            // Cinematic delay for premium loader
+            await new Promise(r => setTimeout(r, 1500))
+
+            setCityData(cityData)
+            set({ currentRepoPath: cityData.name, commits: [], currentCommitIndex: -1 })
+
+        } catch (error) {
+            logger.error("Client Analysis Error:", error)
+            setError(error.message || 'Local analysis failed')
         } finally {
             setLoading(false)
         }
@@ -240,7 +325,7 @@ export const createCitySlice = (set, get) => ({
                    fullPath = relativeParts.join('/')
                 }
             } catch (e) {
-                console.warn('Failed to parse URL path', e)
+                logger.warn('Failed to parse URL path', e)
             }
         } else if (repoRootPromise && !path.startsWith('/') && !path.includes(':')) {
            const cleanRepo = repoRootPromise.endsWith('/') ? repoRootPromise.slice(0, -1) : repoRootPromise
@@ -269,7 +354,7 @@ export const createCitySlice = (set, get) => ({
             const data = await response.json()
             return data.results || []
         } catch (error) {
-            console.error("Search failed:", error)
+            logger.error("Search failed:", error)
             return []
         }
     }

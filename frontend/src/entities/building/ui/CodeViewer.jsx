@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Copy, Download, FileCode2, Check } from 'lucide-react'
 import useStore from '../../../store/useStore'
+import logger from '../../../utils/logger'
 
 export default function CodeViewer({ building, onClose }) {
     const { fileContent } = useStore()
@@ -11,7 +12,7 @@ export default function CodeViewer({ building, onClose }) {
     if (!building) return null
 
     const handleCopy = () => {
-        console.log('[CodeViewer] Copying:', fileContent?.content?.length)
+        logger.debug('[CodeViewer] Copying:', fileContent?.content?.length)
         if (fileContent?.content) {
             navigator.clipboard.writeText(fileContent.content)
             setCopied(true)

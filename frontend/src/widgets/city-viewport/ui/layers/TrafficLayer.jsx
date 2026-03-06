@@ -1,13 +1,19 @@
-import React, { useMemo, useRef, useEffect } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '../../../../store/useStore'
 
-const PACKET_COUNT = 100
-const SPEED = 1.5
+const PACKET_COUNT = 250 // Increased density
+const BASE_SPEED = 2.0
+const COLORS = [
+    new THREE.Color('#22d3ee'), // Cyan
+    new THREE.Color('#34d399'), // Emerald
+    new THREE.Color('#f472b6'), // Pink
+    new THREE.Color('#818cf8'), // Indigo
+]
 
 export default function TrafficLayer() {
-    const { cityData, showTraffic } = useStore() // We will add showTraffic to store
+    const { cityData, showTraffic } = useStore()
     const meshRef = useRef()
 
     // Position Lookup Map
@@ -15,7 +21,7 @@ export default function TrafficLayer() {
         if (!cityData?.buildings) return new Map()
         const map = new Map()
         cityData.buildings.forEach(b => {
-            const h = b.dimensions?.height || 10
+            const h = (b.dimensions?.height || 10)
             map.set(b.id, new THREE.Vector3(b.position.x, h, b.position.z))
         })
         return map
@@ -27,6 +33,8 @@ export default function TrafficLayer() {
         packets.current = new Array(PACKET_COUNT).fill(0).map(() => ({
             active: false,
             progress: 0,
+            speed: 1,
+            colorIndex: 0,
             start: new THREE.Vector3(),
             end: new THREE.Vector3(),
             mid: new THREE.Vector3(),
@@ -34,52 +42,52 @@ export default function TrafficLayer() {
     }, [])
 
     const dummy = useMemo(() => new THREE.Object3D(), [])
-    const color = useMemo(() => new THREE.Color('#4ade80'), []) // Neon Green
 
     useFrame((state, delta) => {
-        if (!meshRef.current || !showTraffic || !cityData?.roads) return
+        if (!meshRef.current || !showTraffic || !cityData?.roads?.length) {
+            if (meshRef.current) {
+                meshRef.current.visible = false
+            }
+            return
+        }
+        meshRef.current.visible = true
 
-        // 1. Spawn Logic (Simulated Traffic)
-        // Try to spawn a few packets per frame
-        for (let i = 0; i < 2; i++) {
-            if (Math.random() > 0.8) { // Spawn rate
+        // 1. Spawn Logic
+        for (let i = 0; i < 3; i++) {
+            if (Math.random() > 0.85) {
                 const idlePacket = packets.current.find(p => !p.active)
                 if (idlePacket) {
-                    // Pick a random edge (road)
                     const road = cityData.roads[Math.floor(Math.random() * cityData.roads.length)]
-
                     const startPos = buildingMap.get(road.source)
                     const endPos = buildingMap.get(road.target)
 
                     if (startPos && endPos) {
                         idlePacket.active = true
                         idlePacket.progress = 0
+                        idlePacket.speed = BASE_SPEED * (0.8 + Math.random() * 0.4)
+                        idlePacket.colorIndex = Math.floor(Math.random() * COLORS.length)
                         idlePacket.start.copy(startPos)
                         idlePacket.end.copy(endPos)
 
-                        // Calculate mid point for arc
                         idlePacket.mid.copy(startPos).lerp(endPos, 0.5)
                         const dist = startPos.distanceTo(endPos)
-                        idlePacket.mid.y += Math.min(dist * 0.5, 50) // Arch height
+                        idlePacket.mid.y += Math.min(dist * 0.3, 30) // Arch
                     }
                 }
             }
         }
 
-        // 2. Update & Render
-        let activeCount = 0
+        // 2. Update Instanced Positions
         packets.current.forEach((packet, i) => {
             if (packet.active) {
-                packet.progress += SPEED * delta
+                packet.progress += packet.speed * delta
 
                 if (packet.progress >= 1) {
                     packet.active = false
-                    dummy.position.set(0, -10000, 0)
+                    dummy.position.set(0, -1000, 0)
                 } else {
-                    // Quadratic Bezier Calculation
                     const t = packet.progress
-
-                    // (1-t)^2 * P0 + 2(1-t)t * P1 + t^2 * P2
+                    // Quadratic Bezier
                     const pos = new THREE.Vector3()
                     pos.x = (1 - t) * (1 - t) * packet.start.x + 2 * (1 - t) * t * packet.mid.x + t * t * packet.end.x
                     pos.y = (1 - t) * (1 - t) * packet.start.y + 2 * (1 - t) * t * packet.mid.y + t * t * packet.end.y
@@ -87,34 +95,36 @@ export default function TrafficLayer() {
 
                     dummy.position.copy(pos)
 
-                    // Scale based on lifecycle (fade in/out)
-                    const scale = Math.sin(t * Math.PI) * 1.5
-                    dummy.scale.setScalar(Math.max(0.1, scale))
+                    // Look toward destination
+                    dummy.lookAt(packet.end)
+
+                    // Stretching effect "data slug"
+                    const scale = Math.sin(t * Math.PI)
+                    dummy.scale.set(0.15 * scale, 0.15 * scale, 1.2 * scale)
 
                     dummy.updateMatrix()
                     meshRef.current.setMatrixAt(i, dummy.matrix)
-                    activeCount++
+                    meshRef.current.setColorAt(i, COLORS[packet.colorIndex])
                 }
             } else {
-                // Keep hidden
-                dummy.position.set(0, -10000, 0)
+                dummy.position.set(0, -1000, 0)
                 dummy.updateMatrix()
                 meshRef.current.setMatrixAt(i, dummy.matrix)
             }
         })
 
         meshRef.current.instanceMatrix.needsUpdate = true
+        if (meshRef.current.instanceColor) meshRef.current.instanceColor.needsUpdate = true
     })
-
-    if (!showTraffic) return null
 
     return (
         <instancedMesh
             ref={meshRef}
             args={[null, null, PACKET_COUNT]}
+            frustumCulled={false}
         >
-            <sphereGeometry args={[1, 8, 8]} />
-            <meshBasicMaterial color="#4ade80" toneMapped={false} />
+            <boxGeometry args={[1, 1, 1]} />
+            <meshBasicMaterial toneMapped={false} />
         </instancedMesh>
     )
 }

@@ -12,6 +12,7 @@ import {
     CheckCircle2, BarChart3, GitBranch, AlertTriangle
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
+import logger from '../../../utils/logger'
 import './ExportReport.css'
 
 const API_BASE = '/api'
@@ -98,7 +99,7 @@ export default function ExportReport({ isOpen, onClose }) {
             }, 1500)
 
         } catch (err) {
-            console.error('Export failed:', err)
+            logger.error('Export failed:', err)
             setError(err.message)
         } finally {
             setExporting(false)

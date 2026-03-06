@@ -6,7 +6,7 @@
  */
 
 import React, { useState, useEffect, Suspense } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, invalidate } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, Preload } from '@react-three/drei'
 import CityScene from './widgets/city-viewport/ui/CityScene'
 import { CanvasErrorBoundary } from './widgets/layout/ui/CanvasErrorBoundary'
@@ -23,13 +23,11 @@ import CommandPalette from './features/search/ui/CommandPalette'
 import FileTable from './features/explorer/ui/FileTable'
 import FloatingDock from './widgets/layout/ui/FloatingDock'
 import AnalyzeModal from './features/analysis/ui/AnalyzeModal'
-import DiagnosticsHUD from './widgets/debug/ui/DiagnosticsHUD'
 import CityBuilderLoader from './features/onboarding/ui/CityBuilderLoader'
 import EmptyCityHero from './features/onboarding/ui/EmptyCityHero'
 import ViewControl from './widgets/layout/ui/ViewControl'
 import CanvasUI from './widgets/layout/ui/CanvasUI'
 import ChatInterface from './features/ai-architect/ui/ChatInterface'
-import WelcomeOverlay from './widgets/layout/ui/WelcomeOverlay'
 import DependencyGraph from './features/architect/ui/DependencyGraph'
 import ExportReport from './features/analysis/ui/ExportReport'
 import './features/FloatingDock.css'
@@ -179,6 +177,7 @@ function App() {
                             {/* 3D View — ALWAYS rendered (demo city loads for landing page) */}
                             <CanvasErrorBoundary>
                                 <Canvas
+                                    frameloop="demand"
                                     shadows={!isMobile}
                                     dpr={dprRange}
                                     gl={{
@@ -213,6 +212,7 @@ function App() {
                                             autoRotate={!cityData || !selectedBuilding}
                                             autoRotateSpeed={0.5}
                                             target={[0, 0, 0]}
+                                            onChange={() => invalidate()}
                                         />
                                     )}
                                     <ExplorationMode
@@ -266,7 +266,6 @@ function App() {
 
                             {view === '3d' && <TimelineController />}
 
-                            {view === '3d' && <DiagnosticsHUD />}
                             {view === '3d' && <ViewControl />}
                             {view === '3d' && <CanvasUI />}
                             <ChatInterface />
@@ -359,9 +358,6 @@ function App() {
                     >✕</button>
                 </div>
             )}
-
-            {/* Onboarding - Replaced by EmptyCityHero */}
-            {/* <WelcomeOverlay /> */}
 
             {/* Toast Notifications */}
             <ToastContainer />

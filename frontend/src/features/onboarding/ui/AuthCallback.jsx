@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import useStore from '../../../store/useStore'
+import logger from '../../../utils/logger'
 
 /**
  * Handles the redirect callback from the FastAPI GitHub OAuth flow.
@@ -19,7 +20,7 @@ export default function AuthCallback() {
             // Clean up the URL securely without reloading the page
             window.history.replaceState({}, document.title, '/')
         } else {
-            console.error("No token found in callback URL")
+            logger.error("No token found in callback URL")
             window.location.replace('/')
         }
     }, [setAuthToken])

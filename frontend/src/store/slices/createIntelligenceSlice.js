@@ -4,6 +4,7 @@
  */
 
 const API_BASE = import.meta.env.VITE_API_URL || '/api'
+import logger from '../../utils/logger'
 
 export const createIntelligenceSlice = (set, get) => ({
     // Intelligence State
@@ -11,6 +12,7 @@ export const createIntelligenceSlice = (set, get) => ({
     deadCodeReport: null,
     qualityReport: null,
     impactAnalysis: null,
+    dependencyReport: null,
     criticalPaths: null,
     searchResults: null,
 
@@ -29,12 +31,65 @@ export const createIntelligenceSlice = (set, get) => ({
 
     setActiveIntelligencePanel: (panel) => set({ activeIntelligencePanel: panel }),
 
+    // Client-side layer violation analysis (powers FaultLine visualization)
+    analyzeLayerViolations: () => {
+        const { cityData } = get()
+        if (!cityData?.buildings) return
+
+        // Define architectural layers by path patterns
+        const getLayer = (path) => {
+            if (!path) return 'unknown'
+            const p = path.toLowerCase()
+            if (p.includes('/ui/') || p.includes('/components/') || p.includes('/views/') || p.includes('/pages/')) return 'ui'
+            if (p.includes('/api/') || p.includes('/routes/') || p.includes('/controllers/')) return 'api'
+            if (p.includes('/service') || p.includes('/logic/') || p.includes('/core/')) return 'service'
+            if (p.includes('/model') || p.includes('/entities/') || p.includes('/schema')) return 'data'
+            if (p.includes('/util') || p.includes('/helpers/') || p.includes('/lib/')) return 'utility'
+            return 'unknown'
+        }
+
+        // Layer hierarchy: UI → API → Service → Data → Utility (lower layers shouldn't import upper)
+        const layerRank = { ui: 4, api: 3, service: 2, data: 1, utility: 0, unknown: -1 }
+
+        const violations = []
+        const buildingMap = new Map(cityData.buildings.map(b => [b.id, b]))
+
+        cityData.buildings.forEach(building => {
+            const srcLayer = getLayer(building.file_path || building.path)
+            if (srcLayer === 'unknown') return
+            const imports = building.imports || []
+            imports.forEach(imp => {
+                // Find the target building
+                const impPath = typeof imp === 'string' ? imp : imp.text || imp.path || ''
+                const target = cityData.buildings.find(b =>
+                    (b.file_path || b.path || '').endsWith(impPath.replace(/^[./]+/, ''))
+                )
+                if (!target) return
+                const tgtLayer = getLayer(target.file_path || target.path)
+                if (tgtLayer === 'unknown') return
+                // Violation: lower layer importing from higher layer
+                if (layerRank[srcLayer] < layerRank[tgtLayer]) {
+                    violations.push({
+                        source_id: building.id,
+                        target_id: target.id,
+                        violation_type: `${srcLayer} → ${tgtLayer}`,
+                        source_path: building.file_path || building.path,
+                        target_path: target.file_path || target.path
+                    })
+                }
+            })
+        })
+
+        set({ dependencyReport: { layer_violations: violations } })
+        logger.debug(`[Intelligence] Found ${violations.length} layer violations`)
+    },
+
     // Fetch Code Health Report
     fetchHealthReport: async () => {
         const { cityId } = get()
-        console.log('[Intelligence] Fetching health report for cityId:', cityId)
+        logger.debug('[Intelligence] Fetching health report for cityId:', cityId)
         if (!cityId) {
-            console.warn('[Intelligence] No cityId available')
+            logger.warn('[Intelligence] No cityId available')
             return
         }
 
@@ -49,18 +104,18 @@ export const createIntelligenceSlice = (set, get) => ({
 
         try {
             const url = `${API_BASE}/intelligence/health/${cityId}`
-            console.log('[Intelligence] Fetching:', url)
+            logger.debug('[Intelligence] Fetching:', url)
             const response = await fetch(url)
             if (!response.ok) throw new Error('Health analysis failed')
 
             const data = await response.json()
-            console.log('[Intelligence] Health report received:', data)
+            logger.debug('[Intelligence] Health report received:', data)
             set(state => ({
                 healthReport: data.health,
                 intelligenceLoading: { ...state.intelligenceLoading, health: false }
             }))
         } catch (error) {
-            console.error('Health report fetch failed:', error)
+            logger.error('Health report fetch failed:', error)
             set(state => ({
                 intelligenceLoading: { ...state.intelligenceLoading, health: false }
             }))
@@ -91,7 +146,7 @@ export const createIntelligenceSlice = (set, get) => ({
                 intelligenceLoading: { ...state.intelligenceLoading, deadCode: false }
             }))
         } catch (error) {
-            console.error('Dead code fetch failed:', error)
+            logger.error('Dead code fetch failed:', error)
             set(state => ({
                 intelligenceLoading: { ...state.intelligenceLoading, deadCode: false }
             }))
@@ -122,7 +177,7 @@ export const createIntelligenceSlice = (set, get) => ({
                 intelligenceLoading: { ...state.intelligenceLoading, quality: false }
             }))
         } catch (error) {
-            console.error('Quality scan failed:', error)
+            logger.error('Quality scan failed:', error)
             set(state => ({
                 intelligenceLoading: { ...state.intelligenceLoading, quality: false }
             }))
@@ -163,7 +218,7 @@ export const createIntelligenceSlice = (set, get) => ({
                 intelligenceLoading: { ...state.intelligenceLoading, impact: false }
             }))
         } catch (error) {
-            console.error('Impact analysis failed:', error)
+            logger.error('Impact analysis failed:', error)
             set(state => ({
                 intelligenceLoading: { ...state.intelligenceLoading, impact: false }
             }))
@@ -188,7 +243,7 @@ export const createIntelligenceSlice = (set, get) => ({
             const data = await response.json()
             return data.deletion_analysis
         } catch (error) {
-            console.error('Safe delete check failed:', error)
+            logger.error('Safe delete check failed:', error)
             return null
         }
     },
@@ -217,7 +272,7 @@ export const createIntelligenceSlice = (set, get) => ({
                 intelligenceLoading: { ...state.intelligenceLoading, critical: false }
             }))
         } catch (error) {
-            console.error('Critical paths fetch failed:', error)
+            logger.error('Critical paths fetch failed:', error)
             set(state => ({
                 intelligenceLoading: { ...state.intelligenceLoading, critical: false }
             }))
@@ -253,7 +308,7 @@ export const createIntelligenceSlice = (set, get) => ({
                 intelligenceLoading: { ...state.intelligenceLoading, search: false }
             }))
         } catch (error) {
-            console.error('Smart search failed:', error)
+            logger.error('Smart search failed:', error)
             set(state => ({
                 intelligenceLoading: { ...state.intelligenceLoading, search: false }
             }))

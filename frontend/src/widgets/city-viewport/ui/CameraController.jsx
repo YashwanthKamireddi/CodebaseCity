@@ -3,6 +3,7 @@ import { useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import gsap from 'gsap'
 import useStore from '../../../store/useStore'
+import logger from '../../../utils/logger'
 
 export default function CameraController() {
     const { camera, controls } = useThree()
@@ -135,7 +136,7 @@ export default function CameraController() {
     useEffect(() => {
         if (!cameraAction || !controls) return
 
-        console.log('[CameraController] Action:', cameraAction)
+        logger.debug('[CameraController] Action:', cameraAction)
 
         const { type } = cameraAction
         const currentPos = camera.position.clone()

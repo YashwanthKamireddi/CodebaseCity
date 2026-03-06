@@ -17,12 +17,15 @@ import {
     Github,
     Network,
     Download,
-    Gamepad2
+    Gamepad2,
+    Zap,
+    Radius,
+    Route
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
 
 export default function FloatingDock({ view, onViewChange, onAnalyze, onShowGraph, onShowExport }) {
-    const { setCommandPaletteOpen, loading, cityData, explorationMode, toggleExplorationMode } = useStore()
+    const { setCommandPaletteOpen, loading, cityData, explorationMode, toggleExplorationMode, activeIntelligencePanel, setActiveIntelligencePanel, analyzeLayerViolations, selectedBuilding, fetchImpactAnalysis } = useStore()
 
     return (
         <div className="floating-dock-wrapper">
@@ -114,6 +117,35 @@ export default function FloatingDock({ view, onViewChange, onAnalyze, onShowGrap
                     description="Fly through your city with WASD"
                     shortcut="F"
                     disabled={!cityData}
+                />
+
+                <DeckItem
+                    onClick={() => {
+                        const next = activeIntelligencePanel === 'architecture' ? null : 'architecture'
+                        setActiveIntelligencePanel(next)
+                        if (next) analyzeLayerViolations()
+                    }}
+                    active={activeIntelligencePanel === 'architecture'}
+                    icon={<Zap size={18} />}
+                    label="Fault Lines"
+                    description="Show architecture layer violations"
+                    disabled={!cityData}
+                />
+
+                <DeckItem
+                    onClick={() => {
+                        if (activeIntelligencePanel === 'impact') {
+                            setActiveIntelligencePanel(null)
+                        } else {
+                            setActiveIntelligencePanel('impact')
+                            if (selectedBuilding) fetchImpactAnalysis(selectedBuilding.id)
+                        }
+                    }}
+                    active={activeIntelligencePanel === 'impact'}
+                    icon={<Radius size={18} />}
+                    label="Blast Radius"
+                    description="Impact analysis of selected file"
+                    disabled={!cityData || !selectedBuilding}
                 />
 
                 <div className="dock-divider" />

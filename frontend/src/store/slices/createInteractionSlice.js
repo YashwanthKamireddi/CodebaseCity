@@ -1,3 +1,4 @@
+import logger from '../../utils/logger'
 const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
 /**
@@ -70,7 +71,7 @@ export const createInteractionSlice = (set, get) => ({
         const targetId = findId(targetQuery)
 
         if (!sourceId || !targetId) {
-             console.warn("Could not resolve trace IDs", { sourceQuery, targetQuery })
+             logger.warn("Could not resolve trace IDs", { sourceQuery, targetQuery })
              return
         }
 
@@ -93,7 +94,7 @@ export const createInteractionSlice = (set, get) => ({
                 set({ activeTrace: null, highlightedIssue: null })
             }
         } catch (e) {
-            console.error("Trace error", e)
+            logger.error("Trace error", e)
             set({ activeTrace: null })
         }
     }

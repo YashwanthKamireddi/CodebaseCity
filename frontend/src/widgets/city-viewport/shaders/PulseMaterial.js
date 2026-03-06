@@ -192,14 +192,8 @@ const PulseMaterial = shaderMaterial(
           }
       }
 
-      // ── X-Ray Semantic Ghosting ──
+      // Final opacity
       float finalOpacity = vOpacityOverride > 0.0 ? vOpacityOverride : 0.95;
-
-      // X-Ray targets become faint glass, retaining neon edges but losing solid core
-      if (finalOpacity < 0.5) {
-          finalColor = mix(finalColor, vec3(0.0), 0.8); // Drop the solid core
-          finalColor += neonColor * outerEdge * 0.3;    // Keep faint glowing edges for structure
-      }
 
       // Add solid opacity so depthWrite actually occludes background items
       gl_FragColor = vec4(finalColor, finalOpacity);

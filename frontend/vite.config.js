@@ -11,5 +11,28 @@ export default defineConfig({
         changeOrigin: true
       }
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'three': ['three'],
+          'r3f': ['@react-three/fiber', '@react-three/drei', '@react-three/postprocessing'],
+          'vendor': ['react', 'react-dom', 'zustand', 'framer-motion'],
+          'd3': ['d3'],
+          'git': ['isomorphic-git', '@isomorphic-git/lightning-fs'],
+        }
+      }
+    }
+  },
+  optimizeDeps: {
+    include: [
+      'isomorphic-git',
+      'isomorphic-git/http/web',
+      '@isomorphic-git/lightning-fs',
+    ]
+  },
+  worker: {
+    format: 'es'
   }
 })

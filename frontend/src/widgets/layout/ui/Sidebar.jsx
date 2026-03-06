@@ -126,7 +126,9 @@ function FileTree({ files, onSelect, selectedId }) {
     // Re-create tree structure from flat file list
     const tree = React.useMemo(() => {
         const root = {}
-        files.forEach(f => {
+        // Safety: filter out any buildings missing a path property
+        const safeFiles = (files || []).filter(f => f && f.path && typeof f.path === 'string')
+        safeFiles.forEach(f => {
             const parts = f.path.split('/')
             let current = root
             parts.forEach((part, i) => {

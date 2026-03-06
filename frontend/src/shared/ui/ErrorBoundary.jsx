@@ -1,5 +1,6 @@
 import React from 'react'
 import { AlertTriangle, RefreshCw, Home, Bug } from 'lucide-react'
+import logger from '../../utils/logger'
 
 /**
  * ErrorBoundary
@@ -28,8 +29,8 @@ export class ErrorBoundary extends React.Component {
     }
 
     componentDidCatch(error, errorInfo) {
-        console.error("[ErrorBoundary] Caught error:", error)
-        console.error("[ErrorBoundary] Component stack:", errorInfo?.componentStack)
+        logger.error("[ErrorBoundary] Caught error:", error)
+        logger.error("[ErrorBoundary] Component stack:", errorInfo?.componentStack)
 
         this.setState({ errorInfo })
 

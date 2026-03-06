@@ -1,3 +1,4 @@
+import logger from '../../../utils/logger'
 /**
  * TimelineController.jsx
  *
@@ -101,7 +102,7 @@ export default function TimelineController() {
             }
         } catch (e) {
             if (e.name === 'AbortError') return
-            console.error("Time Travel Failed:", e)
+            logger.error("Time Travel Failed:", e)
         } finally {
             if (abortControllerRef.current === controller) {
                 setIsLoading(false)

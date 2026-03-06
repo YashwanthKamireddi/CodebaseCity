@@ -1,16 +1,36 @@
 import React, { useMemo, useLayoutEffect, useRef } from 'react'
 import { ContactShadows, Environment } from '@react-three/drei'
+import { useFrame, invalidate } from '@react-three/fiber'
 import gsap from 'gsap'
 import useStore from '../../../store/useStore'
 import AvatarSprites from '../../../features/timeline/ui/AvatarSprites'
 import Roads from './Roads'
 import InstancedCity from './InstancedCity'
 import InstancedTrace from './InstancedTrace'
-import HolographicXRay from './HolographicXRay'
 import CameraController from './CameraController'
 import Ground from './Ground'
 import BlastRadius from './BlastRadius'
 import FaultLine from './FaultLine'
+import TrafficLayer from './layers/TrafficLayer'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
+
+/**
+ * AutoInvalidate — Keeps the render loop alive when autoRotate is active.
+ * Without this, frameloop="demand" causes the landing page to freeze
+ * because OrbitControls autoRotate mutates the camera but nothing calls invalidate().
+ */
+function AutoInvalidate() {
+    const { cityData, selectedBuilding } = useStore()
+    const shouldAutoRotate = !cityData || !selectedBuilding
+
+    useFrame(() => {
+        if (shouldAutoRotate) {
+            invalidate()
+        }
+    })
+
+    return null
+}
 
 /**
  * CityScene - Premium Cinematic City Environment
@@ -56,9 +76,9 @@ export default function CityScene() {
             <directionalLight
                 position={[80, 120, 60]}
                 intensity={1.8}
-                color="#e0f0ff"        // Cool white with blue tint
+                color="#e0f0ff"
                 castShadow
-                shadow-mapSize={[4096, 4096]}
+                shadow-mapSize={[2048, 2048]}
                 shadow-camera-far={600}
                 shadow-camera-left={-250}
                 shadow-camera-right={250}
@@ -118,7 +138,6 @@ export default function CityScene() {
             <group ref={groupRef} position={[0, 0, 0]}>
                 <InstancedCity />
                 <InstancedTrace />
-                <HolographicXRay />
 
                 {/* Gource Mode: Social Avatars */}
                 <AvatarSprites />
@@ -126,6 +145,7 @@ export default function CityScene() {
                 <BlastRadius />
                 <FaultLine />
                 <Roads />
+                <TrafficLayer />
                 <Ground />
             </group>
 
@@ -133,10 +153,10 @@ export default function CityScene() {
                 SHADOWS & ATMOSPHERE
             ═══════════════════════════════════════════════════════════════ */}
 
-            {/* Soft contact shadows for grounding */}
+            {/* Soft contact shadows for grounding (512 is sufficient at city scale) */}
             <ContactShadows
                 position={[0, 0.01, 0]}
-                resolution={2048}
+                resolution={512}
                 scale={400}
                 blur={3}
                 opacity={0.35}
@@ -150,7 +170,18 @@ export default function CityScene() {
             {/* Background color - deep space blue */}
             <color attach="background" args={['#030508']} />
 
+            {/* Bloom Post Processing for Visually Stunning Atmosphere */}
+            <EffectComposer disableNormalPass>
+                <Bloom
+                    luminanceThreshold={0.5}
+                    mipmapBlur
+                    luminanceSmoothing={0.4}
+                    intensity={cityData ? 1.5 : 0.4} // Throttle bloom heavily on the landing screen demo city
+                />
+            </EffectComposer>
+
             <CameraController />
+            <AutoInvalidate />
         </group>
     )
 }

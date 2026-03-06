@@ -94,25 +94,32 @@ class CodeParser:
         imports = set()
 
         if language == 'python':
-            captures = self.py_import_query.captures(tree.root_node)
-            for node, name in captures:
-                text = content[node.start_byte:node.end_byte]
-                # Filter out pure dots in relative imports
-                if text and not set(text).issubset({'.'}):
-                     imports.add(text)
+            import tree_sitter
+            cursor = tree_sitter.QueryCursor(self.py_import_query)
+            for match_id, captures in cursor.matches(tree.root_node):
+                if 'name' in captures: # Note: The query uses @module, but instruction specified @name
+                    for node in captures['name']:
+                        text = content[node.start_byte:node.end_byte]
+                        # Filter out pure dots in relative imports
+                        if text and not set(text).issubset({'.'}):
+                             imports.add(text)
 
         elif language == 'javascript':
-            captures = self.js_import_query.captures(tree.root_node)
-            for node, name in captures:
-                if name == 'source':
-                    text = content[node.start_byte:node.end_byte]
-                    imports.add(text.strip('"\''))
+            import tree_sitter
+            cursor = tree_sitter.QueryCursor(self.js_import_query)
+            for match_id, captures in cursor.matches(tree.root_node):
+                if 'source' in captures:
+                    for node in captures['source']:
+                        text = content[node.start_byte:node.end_byte]
+                        imports.add(text.strip('"\''))
         elif language == 'typescript':
-            captures = self.ts_import_query.captures(tree.root_node)
-            for node, name in captures:
-                if name == 'source':
-                    text = content[node.start_byte:node.end_byte]
-                    imports.add(text.strip('"\''))
+            import tree_sitter
+            cursor = tree_sitter.QueryCursor(self.ts_import_query)
+            for match_id, captures in cursor.matches(tree.root_node):
+                if 'source' in captures:
+                    for node in captures['source']:
+                        text = content[node.start_byte:node.end_byte]
+                        imports.add(text.strip('"\''))
 
         # Normalize
         normalized = []
@@ -145,10 +152,13 @@ class CodeParser:
                 tree = parser.parse(bytes(content, "utf8"))
                 query = getattr(self, f"{language[:2]}_class_query", getattr(self, f"{language}_class_query", None))
                 if query:
-                    captures = query.captures(tree.root_node)
-                    for node, name in captures:
-                        text = content[node.start_byte:node.end_byte]
-                        classes.append({'name': text, 'line': node.start_point[0] + 1})
+                    import tree_sitter
+                    cursor = tree_sitter.QueryCursor(query)
+                    for match_id, captures in cursor.matches(tree.root_node):
+                        for name, nodes in captures.items():
+                            for node in nodes:
+                                text = content[node.start_byte:node.end_byte]
+                                classes.append({'name': text, 'line': node.start_point[0] + 1})
                     if classes: return classes
             except Exception as e:
                 print(f"AST Class error {language}: {e}")
@@ -174,10 +184,13 @@ class CodeParser:
                 tree = parser.parse(bytes(content, "utf8"))
                 query = getattr(self, f"{language[:2]}_func_query", getattr(self, f"{language}_func_query", None))
                 if query:
-                    captures = query.captures(tree.root_node)
-                    for node, name in captures:
-                        text = content[node.start_byte:node.end_byte]
-                        functions.append({'name': text, 'line': node.start_point[0] + 1})
+                    import tree_sitter
+                    cursor = tree_sitter.QueryCursor(query)
+                    for match_id, captures in cursor.matches(tree.root_node):
+                        for name, nodes in captures.items():
+                            for node in nodes:
+                                text = content[node.start_byte:node.end_byte]
+                                functions.append({'name': text, 'line': node.start_point[0] + 1})
                     if functions: return functions
             except Exception as e:
                 print(f"AST Function error {language}: {e}")

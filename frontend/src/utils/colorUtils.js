@@ -45,12 +45,6 @@ export function getBuildingColor(data, mode, context = {}) {
         return '#0e0f14' // Unimpacted shadow
     }
 
-    // X-Ray Mode
-    if (activeIntelligencePanel === 'xray') {
-        if (isSelected) return '#050510' // Almost black, showing internal AST nodes brightly
-        return '#0e0f14' // Shadow for rest of the city
-    }
-
     if (isSelected) return '#34d399'   // Emerald — bright, clear selection
     if (isHovered) return '#60a5fa'    // Sky blue — obvious hover
     if (isDependency) return '#4ade80' // Green — "imports this"

@@ -57,6 +57,11 @@ export default function InstancedCity() {
 
     const [hoveredInstanceId, setHoveredInstanceId] = useState(null)
 
+    // Visibility and Frustum Culling State
+    const frustumRef = useRef(new THREE.Frustum())
+    const projScreenMatrixRef = useRef(new THREE.Matrix4())
+    const boundingSpheresRef = useRef([])
+
     // ═══════════════════════════════════════════════════════════════
     // BUILDING ANIMATION - Smooth "Digital Rise" effect
     // ═══════════════════════════════════════════════════════════════
@@ -74,8 +79,11 @@ export default function InstancedCity() {
 
         const startTime = performance.now()
         const duration = 2000 // 2 seconds for smooth rise
+        let animationFrameId;
 
         const animateGrowth = (now) => {
+            if (!meshRef.current) return; // Safety check if unmounted during animation
+
             const elapsed = now - startTime
             const isQuick = isAnimating || currentCommitIndex !== -1 || count > 500
             const progress = isQuick ? 1 : Math.min(elapsed / duration, 1)
@@ -106,6 +114,10 @@ export default function InstancedCity() {
                 tempObject.updateMatrix()
                 meshRef.current.setMatrixAt(i, tempObject.matrix)
 
+                // Store bounding sphere for custom culling
+                const localRadius = Math.max(width, Math.max(currentHeight, depth)) / 2
+                boundingSpheresRef.current[i] = new THREE.Sphere(new THREE.Vector3(x, y, z), localRadius + 2.0)
+
                 const distSq = x * x + z * z
                 if (distSq > maxRadiusSq) maxRadiusSq = distSq
             })
@@ -119,12 +131,17 @@ export default function InstancedCity() {
             }
 
             if (progress < 1 && !isQuick) {
-                requestAnimationFrame(animateGrowth)
+                animationFrameId = requestAnimationFrame(animateGrowth)
             }
         }
-        requestAnimationFrame(animateGrowth)
+        animationFrameId = requestAnimationFrame(animateGrowth)
 
-    }, [buildings, count])
+        return () => {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId)
+            }
+        }
+    }, [buildings, count, isAnimating, currentCommitIndex])
 
     // ═══════════════════════════════════════════════════════════════
     // COLOR UPDATES - Real-time interaction feedback
@@ -202,6 +219,71 @@ export default function InstancedCity() {
         buildings, selectedBuilding, hoveredInstanceId, colorMode,
         graphNeighbors, highlightedIssue, activeIntelligencePanel, impactAnalysis
     ])
+
+    // ═══════════════════════════════════════════════════════════════
+    // FRUSTUM CULLING — Zero-Allocation Production Engine
+    // Runs every 3rd frame to save CPU. Uses pre-allocated scratch
+    // vectors to eliminate GC pressure entirely.
+    // ═══════════════════════════════════════════════════════════════
+    const cullFrameCounter = useRef(0)
+    const cullScratchMatrix = useMemo(() => new THREE.Matrix4(), [])
+    const cullScratchPos = useMemo(() => new THREE.Vector3(), [])
+    const cullScratchScale = useMemo(() => new THREE.Vector3(), [])
+    const cullScratchQuat = useMemo(() => new THREE.Quaternion(), [])
+
+    useFrame(() => {
+        if (!meshRef.current || count === 0 || boundingSpheresRef.current.length === 0) return
+
+        // Only cull every 3rd frame — buildings don't pop in/out that fast
+        cullFrameCounter.current++
+        if (cullFrameCounter.current % 3 !== 0) return
+
+        // Update Frustum from current camera
+        projScreenMatrixRef.current.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse)
+        frustumRef.current.setFromProjectionMatrix(projScreenMatrixRef.current)
+
+        let dirty = false
+
+        for (let i = 0; i < count; i++) {
+            const sphere = boundingSpheresRef.current[i]
+            if (!sphere) continue
+
+            // Read current matrix for this instance
+            meshRef.current.getMatrixAt(i, cullScratchMatrix)
+            cullScratchMatrix.decompose(cullScratchPos, cullScratchQuat, cullScratchScale)
+
+            const isVisible = frustumRef.current.intersectsSphere(sphere)
+            const isCurrentlyHidden = cullScratchScale.x === 0 && cullScratchScale.y === 0 && cullScratchScale.z === 0
+
+            if (isVisible && isCurrentlyHidden) {
+                // RESTORE: Building just re-entered the view — restore its real scale
+                const b = buildings[i]
+                const width = b.dimensions?.width || 8
+                const depth = b.dimensions?.depth || 8
+                const height = b.dimensions?.height || 8
+                tempObject.position.copy(cullScratchPos)
+                tempObject.scale.set(width, height, depth)
+                tempObject.rotation.set(0, 0, 0)
+                tempObject.updateMatrix()
+                meshRef.current.setMatrixAt(i, tempObject.matrix)
+                dirty = true
+            } else if (!isVisible && !isCurrentlyHidden) {
+                // HIDE: Building just left the view — zero-scale it
+                tempObject.position.copy(cullScratchPos)
+                tempObject.scale.set(0, 0, 0)
+                tempObject.rotation.set(0, 0, 0)
+                tempObject.updateMatrix()
+                meshRef.current.setMatrixAt(i, tempObject.matrix)
+                dirty = true
+            }
+            // If already visible and shown, or already hidden and culled — skip (no work needed)
+        }
+
+        // Single GPU upload per frame instead of N uploads inside the loop
+        if (dirty) {
+            meshRef.current.instanceMatrix.needsUpdate = true
+        }
+    })
 
     // ═══════════════════════════════════════════════════════════════
     // EVENT HANDLERS — throttled for performance
@@ -310,29 +392,15 @@ export default function InstancedCity() {
         return new THREE.InstancedBufferAttribute(array, 1)
     }, [buildings, count])
 
-    // X-Ray Semantic Ghosting data
+    // Opacity data
     const opacityAttribute = useMemo(() => {
         if (count === 0) return null
         const array = new Float32Array(count)
         buildings.forEach((b, i) => {
-            let opacity = 0.95 // Default solid
-            if (activeIntelligencePanel === 'xray') {
-                const complexity = b.metrics?.complexity || 1
-                // High complexity stays solid (1.0). Boilerplate fades to faint glass (0.15)
-                if (b.id === selectedBuilding?.id) {
-                    opacity = 0.0 // Completely hide selected building to show internal AST nodes
-                } else if (complexity < 5) {
-                    opacity = 0.15 // Fades out simple files
-                } else if (complexity < 15) {
-                    opacity = 0.4  // Med complexity, semi-transparent
-                } else {
-                    opacity = 0.95 // High complexity blocks remain solid
-                }
-            }
-            array[i] = opacity
+            array[i] = 0.95
         })
         return new THREE.InstancedBufferAttribute(array, 1)
-    }, [buildings, count, activeIntelligencePanel, selectedBuilding])
+    }, [buildings, count])
 
     if (count === 0) return null
 

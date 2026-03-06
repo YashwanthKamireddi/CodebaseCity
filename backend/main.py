@@ -16,6 +16,7 @@ from typing import Dict, Any
 
 from fastapi import FastAPI, WebSocket, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.exceptions import RequestValidationError
 from dotenv import load_dotenv
 import os
@@ -98,6 +99,9 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["X-Correlation-ID", "X-Response-Time"],
 )
+
+# Enable GZip Compression for huge JSON payloads
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Setup custom middleware (correlation ID, timing, security headers)
 setup_middleware(app)

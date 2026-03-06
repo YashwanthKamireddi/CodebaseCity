@@ -5,8 +5,16 @@
 
 import { useEffect, useRef, useCallback } from 'react'
 import useStore from '../store/useStore'
+import logger from '../utils/logger'
 
-const WS_URL = 'ws://localhost:8000/ws/frontend'
+const WS_URL = (() => {
+    const apiUrl = import.meta.env.VITE_API_URL || ''
+    if (apiUrl.startsWith('http')) {
+        return apiUrl.replace(/^http/, 'ws') + '/ws/frontend'
+    }
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+    return `${protocol}://${window.location.host}/ws/frontend`
+})()
 
 export function useVSCodeSync() {
     const wsRef = useRef(null)
@@ -71,7 +79,7 @@ export function useVSCodeSync() {
             wsRef.current = new WebSocket(WS_URL)
 
             wsRef.current.onopen = () => {
-                console.log('Connected to Codebase City sync server')
+                logger.debug('Connected to Codebase City sync server')
                 // Request current state
                 send('request_sync', {})
                 // Notify that city is loaded
@@ -88,23 +96,22 @@ export function useVSCodeSync() {
                     const message = JSON.parse(event.data)
                     handleMessage(message)
                 } catch (e) {
-                    console.error('Failed to parse sync message:', e)
+                    logger.error('Failed to parse sync message:', e)
                 }
             }
 
             wsRef.current.onclose = () => {
-                console.log('Disconnected from sync server')
+                // console.log('Disconnected from sync server')
                 setVSCodeConnected?.(false)
-                scheduleReconnect()
+                // scheduleReconnect() // Disabled for client-only mode to prevent spam
             }
 
             wsRef.current.onerror = (error) => {
-                console.error('WebSocket error:', error)
+                // Silently handle connection errors in client-only mode
             }
 
         } catch (error) {
-            console.error('Failed to connect to sync server:', error)
-            scheduleReconnect()
+            // scheduleReconnect() // Disabled for client-only mode to prevent spam
         }
     }, [cityData, send])
 
@@ -114,12 +121,12 @@ export function useVSCodeSync() {
 
         switch (type) {
             case 'vscode_connected':
-                console.log('VS Code connected:', payload.workspace)
+                logger.debug('VS Code connected:', payload.workspace)
                 setVSCodeConnected?.(true)
                 break
 
             case 'vscode_disconnected':
-                console.log('VS Code disconnected')
+                logger.debug('VS Code disconnected')
                 setVSCodeConnected?.(false)
                 break
 
@@ -137,7 +144,7 @@ export function useVSCodeSync() {
 
             case 'cursor_position':
                 // VS Code cursor moved - could show line indicator
-                console.log('Cursor at:', payload.path, 'line', payload.line)
+                logger.debug('Cursor at:', payload.path, 'line', payload.line)
                 break
 
             case 'sync_state':
@@ -153,7 +160,7 @@ export function useVSCodeSync() {
 
             case 'mcp_blast_radius':
                 // MCP agent queried blast radius, sync UI
-                console.log('MCP queried blast radius for:', payload.file_id)
+                logger.debug('MCP queried blast radius for:', payload.file_id)
                 const targetBuilding = findBuildingByPath(payload.file_id)
                 if (targetBuilding) {
                     selectBuilding(targetBuilding)
@@ -168,7 +175,7 @@ export function useVSCodeSync() {
                 break
 
             default:
-                console.log('Unknown sync message:', type)
+                logger.debug('Unknown sync message:', type)
         }
     }, [findBuildingByPath, selectBuilding, setHoveredBuilding, setVSCodeConnected, fetchImpactAnalysis, setActiveIntelligencePanel])
 
@@ -181,9 +188,12 @@ export function useVSCodeSync() {
         }, 5000)
     }, [connect])
 
-    // Connect on mount
+    // Connect on mount — only if VS Code sync is enabled via env variable
     useEffect(() => {
-        connect()
+        const vsCodeEnabled = import.meta.env.VITE_ENABLE_VSCODE === 'true'
+        if (vsCodeEnabled) {
+            connect()
+        }
 
         return () => {
             if (reconnectTimer.current) {

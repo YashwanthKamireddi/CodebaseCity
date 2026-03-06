@@ -1,3 +1,4 @@
+import logger from '../../utils/logger'
 const API_BASE = import.meta.env.VITE_API_URL || '/api'
 
 /**
@@ -35,7 +36,7 @@ export const createTimeSlice = (set, get) => ({
                 currentCommitIndex: -1
             })
         } catch (error) {
-            console.error('History fetch error:', error)
+            logger.error('History fetch error:', error)
             set({ historyLoading: false, commits: [] })
         }
     },
@@ -66,7 +67,7 @@ export const createTimeSlice = (set, get) => ({
             const data = await response.json()
             setCityData(data) // Updates CitySlice
         } catch (error) {
-            console.error('analyzeAtCommit error:', error)
+            logger.error('analyzeAtCommit error:', error)
             setError(error.message)
         } finally {
             setLoading(false)

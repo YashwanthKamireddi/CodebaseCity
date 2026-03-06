@@ -1,6 +1,7 @@
 import React from 'react'
 import useStore from '../../../store/useStore'
 import { AlertTriangle } from 'lucide-react'
+import logger from '../../../utils/logger'
 
 export class CanvasErrorBoundary extends React.Component {
     constructor(props) {
@@ -13,7 +14,7 @@ export class CanvasErrorBoundary extends React.Component {
     }
 
     componentDidCatch(error, errorInfo) {
-        console.error("Canvas Crash:", error, errorInfo)
+        logger.error("Canvas Crash:", error, errorInfo)
     }
 
     componentDidMount() {
@@ -27,7 +28,7 @@ export class CanvasErrorBoundary extends React.Component {
 
     handleContextLost = (event) => {
         event.preventDefault()
-        console.warn("WebGL Context Lost!")
+        logger.warn("WebGL Context Lost!")
         this.setState({
             hasError: true,
             error: new Error("GPU Connection Lost (WebGL Context Lost)")

@@ -9,6 +9,8 @@ node_modules/
 __pycache__/
 *.pyc
 .pytest_cache/
+venv/
+.venv/
 
 # Build outputs
 dist/
@@ -33,6 +35,9 @@ npm-debug.log*
 tmp/
 temp/
 *.tmp
+
+# Analysis cache (runtime-generated)
+backend/data/cities/
 
 # KuzuDB Storage
 .kuzudb/

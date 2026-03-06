@@ -12,7 +12,7 @@ import { detectPattern } from '../utils'
 import { BuildingModel } from '../model'
 import CodeViewer from './CodeViewer'
 
-import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Activity, Maximize2, Minimize2, Eye, User, Mail, AlertTriangle } from 'lucide-react'
+import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Activity, Maximize2, Minimize2, Eye, User, Mail, AlertTriangle, Radius } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 // Styles imported from index.css mostly, inline for layout
 
@@ -26,7 +26,7 @@ function formatFileSize(bytes) {
 }
 
 export default function BuildingPanel({ building }) {
-    const { clearSelection, fetchFileContent, fileContent } = useStore()
+    const { clearSelection, fetchFileContent, fileContent, fetchImpactAnalysis, setActiveIntelligencePanel } = useStore()
     const [isMaximized, setIsMaximized] = React.useState(false)
     const [showCode, setShowCode] = React.useState(false)
 
@@ -364,7 +364,7 @@ export default function BuildingPanel({ building }) {
                     </div>
 
                     {/* Action Bar */}
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                         <SwissButton
                             label="Open in Editor"
                             icon={<ExternalLink size={14} />}
@@ -375,6 +375,14 @@ export default function BuildingPanel({ building }) {
                             label="Copy Path"
                             icon={<Copy size={14} />}
                             onClick={() => navigator.clipboard.writeText(path)}
+                        />
+                        <SwissButton
+                            label="Blast Radius"
+                            icon={<Radius size={14} />}
+                            onClick={() => {
+                                fetchImpactAnalysis(building.id)
+                                setActiveIntelligencePanel('impact')
+                            }}
                         />
                     </div>
                 </div>
