@@ -5,7 +5,8 @@ import {
     ChevronDown,
     FileCode,
     ArrowUpRight,
-    Search
+    Search,
+    Activity
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
 import './FileTable.css'

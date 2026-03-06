@@ -89,11 +89,11 @@ export default function CityScene() {
                 shadow-normalBias={0.02}
             />
 
-            {/* FILL LIGHT - Softer, warmer, from opposite side */}
+            {/* FILL LIGHT - Cool, from opposite side */}
             <directionalLight
                 position={[-100, 80, -80]}
-                intensity={0.6}
-                color="#ffd4a0"        // Warm amber (city glow bounce)
+                intensity={0.4}
+                color="#c0d8ff"
             />
 
             {/* RIM LIGHT - Back lighting for depth separation */}
@@ -110,25 +110,18 @@ export default function CityScene() {
                 color="#ffffff"
             />
 
-            {/* POINT LIGHTS - City atmosphere (subtle accent) */}
-            <pointLight
-                position={[150, 30, 100]}
-                intensity={0.3}
-                color="#ff6b35"
-                distance={200}
-                decay={2}
-            />
+            {/* POINT LIGHTS - Subtle cool accents only */}
             <pointLight
                 position={[-120, 25, -80]}
-                intensity={0.2}
-                color="#00ff88"
+                intensity={0.15}
+                color="#4488ff"
                 distance={150}
                 decay={2}
             />
             <pointLight
                 position={[80, 20, -120]}
-                intensity={0.2}
-                color="#ff00ff"
+                intensity={0.1}
+                color="#8844ff"
                 distance={120}
                 decay={2}
             />

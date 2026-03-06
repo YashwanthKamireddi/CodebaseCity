@@ -171,7 +171,7 @@ export default function TimelineController() {
         if (isPlaying) loop()
 
         return () => { isCancelled = true }
-    }, [isPlaying, history]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [isPlaying, history])
 
     // Keyboard shortcuts
     useEffect(() => {

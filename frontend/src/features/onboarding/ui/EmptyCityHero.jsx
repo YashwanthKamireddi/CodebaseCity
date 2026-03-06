@@ -34,7 +34,7 @@ export default function EmptyCityHero() {
                 .then(data => { setCityData(data) })
                 .catch(err => logger.error("Failed to load demo city", err))
         }
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault()

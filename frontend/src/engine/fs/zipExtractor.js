@@ -70,9 +70,9 @@ export async function downloadAndExtractZip(owner, repo, onProgress, maxFiles = 
   } catch (err) {
     clearTimeout(timeout)
     if (err.name === 'AbortError') {
-      throw new Error(`Download timed out after 60s. The repository might be too large or your connection is slow.`)
+      throw new Error(`Download timed out after 60s. The repository might be too large or your connection is slow.`, { cause: err })
     }
-    throw new Error(`Failed to download ${rootName}: ${err.message}`)
+    throw new Error(`Failed to download ${rootName}: ${err.message}`, { cause: err })
   }
   clearTimeout(timeout)
 
@@ -99,7 +99,7 @@ export async function downloadAndExtractZip(owner, repo, onProgress, maxFiles = 
   try {
     unzipped = unzipSync(zipData)
   } catch (err) {
-    throw new Error(`Failed to decompress ZIP: ${err.message}`)
+    throw new Error(`Failed to decompress ZIP: ${err.message}`, { cause: err })
   }
 
   onProgress?.('reading', 0, 0, 'Extracting source files...')

@@ -159,7 +159,7 @@ export default function ExplorationMode({ active, onExit }) {
         const speed = MOVE_SPEED * (keys.current['ShiftLeft'] || keys.current['ShiftRight'] ? SPRINT_MULTIPLIER : 1)
 
         // Movement direction on XZ plane only (decoupled from camera pitch)
-        const { theta } = cameraAngle.current
+        const { theta, phi } = cameraAngle.current
         _forward.set(-Math.sin(theta), 0, -Math.cos(theta))
         _right.set(Math.cos(theta), 0, -Math.sin(theta))
 

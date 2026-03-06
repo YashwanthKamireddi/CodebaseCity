@@ -124,16 +124,16 @@ const PulseMaterial = shaderMaterial(
       // ── Base Colors ──
       vec3 neonColor = vColor;
 
-      // Subtle brightness for grid visibility
-      neonColor *= 0.85;
+      // Keep neon color at natural level
+      // neonColor is already the instance color — no multiplier needed
 
       // Glass core - extremely dark, almost invisible to let background through
       vec3 finalColor = vec3(0.005, 0.008, 0.012);
 
       if (isSide) {
           // Add grid and edges
-          finalColor = mix(finalColor, neonColor * 0.25, innerGrid);
-          finalColor = mix(finalColor, neonColor * 0.7, outerEdge);
+          finalColor = mix(finalColor, neonColor * 0.35, innerGrid);
+          finalColor = mix(finalColor, neonColor * 0.9, outerEdge);
 
           // Add a holographic vertical gradient
           float heightGrad = (vLocalPosition.y + 0.5);
@@ -148,7 +148,7 @@ const PulseMaterial = shaderMaterial(
 
       } else if (isTop) {
           // Roof edge
-          finalColor = mix(finalColor, neonColor * 0.7, outerEdge);
+          finalColor = mix(finalColor, neonColor * 0.9, outerEdge);
 
           // Roof inner grid
           float roofGridSpacing = 3.0;

@@ -165,7 +165,7 @@ export async function cloneGitHubRepo(repoUrl, onProgress = null, maxFiles = 500
     })
   } catch (err) {
     try { await pfs.rmdir(dir, { recursive: true }) } catch {}
-    throw new Error(`Failed to clone ${rootName}: ${err.message}`)
+    throw new Error(`Failed to clone ${rootName}: ${err.message}`, { cause: err })
   }
 
   onProgress?.('reading', 0, 0, 'Reading cloned files...')

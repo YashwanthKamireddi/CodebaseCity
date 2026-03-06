@@ -198,12 +198,7 @@ export default function InstancedCity() {
             const depth = b.dimensions?.depth || 8
             const height = b.dimensions?.height || 8
 
-            // Swamp Topography Logic
-            // Files with extreme debt sink heavily into the ground (below y=0) into the foggy void.
-            const debt = b.metrics?.debt || 0
-            const swampOffset = (debt * debt) * -15.0 // Sink up to 15 units down
-
-            tempObject.position.set(b.position.x, (height / 2) + swampOffset, b.position.z)
+            tempObject.position.set(b.position.x, height / 2, b.position.z)
             tempObject.scale.set(width, height, depth)
             tempObject.updateMatrix()
             meshRef.current.setMatrixAt(i, tempObject.matrix)
