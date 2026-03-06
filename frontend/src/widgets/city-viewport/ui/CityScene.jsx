@@ -8,6 +8,7 @@ import InstancedCity from './InstancedCity'
 import InstancedTrace from './InstancedTrace'
 import CameraController from './CameraController'
 import Ground from './Ground'
+import BuildingLabels from './BuildingLabels'
 import TrafficLayer from './layers/TrafficLayer'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
@@ -132,6 +133,7 @@ export default function CityScene() {
             <group ref={groupRef} position={[0, 0, 0]}>
                 <InstancedCity />
                 <InstancedTrace />
+                <BuildingLabels />
 
                 <Roads />
                 <TrafficLayer />
