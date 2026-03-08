@@ -459,9 +459,10 @@ function generateBuildings(parsedFiles, communities, metrics) {
       return (db.width * db.height) - (da.width * da.height)
     })
 
-    // Compute adaptive grid: use average building width + spacing
-    const avgWidth = files.reduce((s, f) => s + fileDims.get(f.file_path).width, 0) / files.length
-    const cellSize = Math.max(avgWidth + BUILDING_SPACING, MIN_BUILDING_WIDTH + BUILDING_SPACING)
+    // Compute adaptive grid: use the MAX building width in this district + spacing
+    // This guarantees no overlap — the largest building defines the cell
+    const maxWidthInDistrict = Math.max(...files.map(f => fileDims.get(f.file_path).width))
+    const cellSize = maxWidthInDistrict + BUILDING_SPACING
     const cols = Math.ceil(Math.sqrt(files.length))
     const rows = Math.ceil(files.length / cols)
     const footprintW = cols * cellSize + DISTRICT_PADDING * 2
