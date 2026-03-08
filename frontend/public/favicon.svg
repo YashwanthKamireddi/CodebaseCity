@@ -6,7 +6,7 @@
       <stop offset="50%" stop-color="#0a0a12"/>
       <stop offset="100%" stop-color="#050508"/>
     </linearGradient>
-    
+
     <!-- Isometric building gradients -->
     <linearGradient id="building1" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#1a1a2e"/>
@@ -20,7 +20,7 @@
       <stop offset="0%" stop-color="#1a1a3e"/>
       <stop offset="100%" stop-color="#0d0d18"/>
     </linearGradient>
-    
+
     <!-- Glow effects -->
     <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="0.8" result="blur"/>
@@ -37,7 +37,7 @@
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-    
+
     <!-- Accent color gradient -->
     <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#00d9ff"/>
@@ -47,7 +47,7 @@
 
   <!-- Background with rounded corners -->
   <rect width="32" height="32" rx="7" fill="url(#bg)"/>
-  
+
   <!-- Subtle grid pattern (code representation) -->
   <g opacity="0.03">
     <line x1="8" y1="0" x2="8" y2="32" stroke="#fff" stroke-width="0.3"/>
@@ -59,7 +59,7 @@
   </g>
 
   <!-- ISOMETRIC 3D BUILDINGS -->
-  
+
   <!-- Building 1 (left, short) - Isometric -->
   <g transform="translate(4, 17)">
     <!-- Top face -->
@@ -72,7 +72,7 @@
     <rect x="5" y="5" width="1.5" height="1.5" fill="#00d9ff" opacity="0.4"/>
     <rect x="5" y="7.5" width="1.5" height="1.5" fill="#00d9ff" opacity="0.2"/>
   </g>
-  
+
   <!-- Building 2 (center, medium) - Isometric -->
   <g transform="translate(10, 10)">
     <!-- Top face -->
@@ -88,7 +88,7 @@
     <rect x="6" y="10.5" width="2" height="2" fill="#a855f7" opacity="0.3"/>
     <rect x="6" y="14" width="2" height="2" fill="#00d9ff" opacity="0.2"/>
   </g>
-  
+
   <!-- Building 3 (right, tallest) - Isometric Hero -->
   <g transform="translate(18, 4)">
     <!-- Top face -->
@@ -110,7 +110,7 @@
     <rect x="6" y="17" width="2" height="1.5" fill="#fff" opacity="0.2"/>
     <rect x="6" y="19.5" width="2" height="1.5" fill="#00d9ff" opacity="0.15"/>
   </g>
-  
+
   <!-- Ground reflection/glow -->
   <ellipse cx="16" cy="29" rx="10" ry="2" fill="url(#accent)" opacity="0.15" filter="url(#softGlow)"/>
 </svg>

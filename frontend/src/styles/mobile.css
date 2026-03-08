@@ -477,7 +477,7 @@
 
 @media (pointer: coarse) {
   /* Larger touch targets */
-  button, 
+  button,
   [role="button"],
   a,
   input,

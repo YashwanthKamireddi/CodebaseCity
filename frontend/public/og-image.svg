@@ -7,7 +7,7 @@
       <stop offset="60%" stop-color="#0a0a18"/>
       <stop offset="100%" stop-color="#0f0f22"/>
     </linearGradient>
-    
+
     <!-- Building face gradients -->
     <linearGradient id="bRight1" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#1e1e38"/>
@@ -25,7 +25,7 @@
       <stop offset="0%" stop-color="#2a2a65"/>
       <stop offset="100%" stop-color="#141440"/>
     </linearGradient>
-    
+
     <!-- Accent gradients -->
     <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#00d9ff"/>
@@ -41,7 +41,7 @@
       <stop offset="50%" stop-color="#e0e0ff"/>
       <stop offset="100%" stop-color="#ffffff"/>
     </linearGradient>
-    
+
     <!-- Glow filters -->
     <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
       <feGaussianBlur stdDeviation="4" result="blur"/>
@@ -58,7 +58,7 @@
     <filter id="softGlow">
       <feGaussianBlur stdDeviation="15"/>
     </filter>
-    
+
     <!-- Stars pattern -->
     <pattern id="stars" width="100" height="100" patternUnits="userSpaceOnUse">
       <circle cx="10" cy="20" r="0.5" fill="#fff" opacity="0.3"/>
@@ -72,16 +72,16 @@
 
   <!-- Background -->
   <rect width="1200" height="630" fill="url(#skyBg)"/>
-  
+
   <!-- Stars -->
   <rect width="1200" height="400" fill="url(#stars)" opacity="0.5"/>
-  
+
   <!-- Atmospheric glow behind city -->
   <ellipse cx="600" cy="520" rx="500" ry="150" fill="url(#accent)" opacity="0.06" filter="url(#softGlow)"/>
-  
+
   <!-- Ground reflection -->
   <ellipse cx="600" cy="550" rx="450" ry="40" fill="url(#accent)" opacity="0.15" filter="url(#bigGlow)"/>
-  
+
   <!-- Grid floor -->
   <g opacity="0.08" stroke="url(#accent)" stroke-width="0.5">
     <line x1="100" y1="580" x2="300" y2="530"/>
@@ -96,7 +96,7 @@
   </g>
 
   <!-- ISOMETRIC CITY SKYLINE -->
-  
+
   <!-- Building 1 (far left) -->
   <g transform="translate(60, 340)">
     <polygon points="40,0 80,20 40,40 0,20" fill="#252545"/>
@@ -106,7 +106,7 @@
     <rect x="48" y="80" width="18" height="14" fill="#a855f7" opacity="0.15"/>
     <rect x="48" y="105" width="18" height="14" fill="#fff" opacity="0.1"/>
   </g>
-  
+
   <!-- Building 2 -->
   <g transform="translate(160, 280)">
     <polygon points="45,0 90,22 45,45 0,22" fill="#2a2a50"/>
@@ -119,7 +119,7 @@
     <rect x="52" y="150" width="22" height="16" fill="#00d9ff" opacity="0.18"/>
     <rect x="52" y="180" width="22" height="16" fill="#a855f7" opacity="0.12"/>
   </g>
-  
+
   <!-- Building 3 -->
   <g transform="translate(280, 310)">
     <polygon points="35,0 70,17 35,35 0,17" fill="#222240"/>
@@ -129,7 +129,7 @@
     <rect x="42" y="75" width="16" height="12" fill="#00d9ff" opacity="0.2"/>
     <rect x="42" y="100" width="16" height="12" fill="#fff" opacity="0.12"/>
   </g>
-  
+
   <!-- Building 4 -->
   <g transform="translate(360, 250)">
     <polygon points="50,0 100,25 50,50 0,25" fill="#2d2d58"/>
@@ -142,21 +142,21 @@
     <rect x="58" y="175" width="25" height="18" fill="#6366f1" opacity="0.2"/>
     <rect x="58" y="210" width="25" height="18" fill="#00d9ff" opacity="0.15"/>
   </g>
-  
+
   <!-- HERO BUILDING (center) -->
   <g transform="translate(500, 100)">
     <polygon points="65,0 130,32 65,65 0,32" fill="#3a3a70"/>
     <polygon points="130,32 130,400 65,432 65,65" fill="url(#heroGrad)"/>
     <polygon points="0,32 65,65 65,432 0,400" fill="#0a0a22"/>
-    
+
     <!-- Beacon roof glow -->
     <polygon points="65,0 130,32 65,65 0,32" fill="url(#accent)" opacity="0.45" filter="url(#bigGlow)"/>
-    
+
     <!-- Antenna -->
     <line x1="65" y1="0" x2="65" y2="-50" stroke="url(#accentV)" stroke-width="4"/>
     <circle cx="65" cy="-60" r="10" fill="#00d9ff" filter="url(#bigGlow)"/>
     <circle cx="65" cy="-60" r="5" fill="#fff"/>
-    
+
     <!-- Windows grid - right side -->
     <g>
       <rect x="75" y="85" width="35" height="22" fill="#00d9ff" opacity="0.6"/>
@@ -177,7 +177,7 @@
       <rect x="20" y="250" width="28" height="18" fill="#00d9ff" opacity="0.2"/>
     </g>
   </g>
-  
+
   <!-- Building 6 -->
   <g transform="translate(680, 240)">
     <polygon points="50,0 100,25 50,50 0,25" fill="#2a2a55"/>
@@ -190,7 +190,7 @@
     <rect x="58" y="170" width="25" height="18" fill="#6366f1" opacity="0.22"/>
     <rect x="58" y="204" width="25" height="18" fill="#00d9ff" opacity="0.15"/>
   </g>
-  
+
   <!-- Building 7 -->
   <g transform="translate(800, 300)">
     <polygon points="40,0 80,20 40,40 0,20" fill="#252548"/>
@@ -201,7 +201,7 @@
     <rect x="48" y="118" width="18" height="14" fill="#fff" opacity="0.15"/>
     <rect x="48" y="148" width="18" height="14" fill="#6366f1" opacity="0.12"/>
   </g>
-  
+
   <!-- Building 8 -->
   <g transform="translate(900, 260)">
     <polygon points="45,0 90,22 45,45 0,22" fill="#282852"/>
@@ -214,7 +214,7 @@
     <rect x="52" y="161" width="22" height="16" fill="#6366f1" opacity="0.15"/>
     <rect x="52" y="194" width="22" height="16" fill="#00d9ff" opacity="0.1"/>
   </g>
-  
+
   <!-- Building 9 (far right) -->
   <g transform="translate(1020, 330)">
     <polygon points="35,0 70,17 35,35 0,17" fill="#222242"/>
@@ -224,7 +224,7 @@
     <rect x="42" y="78" width="16" height="12" fill="#00d9ff" opacity="0.15"/>
     <rect x="42" y="106" width="16" height="12" fill="#fff" opacity="0.1"/>
   </g>
-  
+
   <!-- Small building far right -->
   <g transform="translate(1100, 400)">
     <polygon points="25,0 50,12 25,25 0,12" fill="#1e1e3a"/>
@@ -243,10 +243,10 @@
     <circle cx="200" cy="450" r="2" fill="#a855f7" opacity="0.3"/>
     <circle cx="1000" cy="420" r="2.2" fill="#00d9ff" opacity="0.35"/>
   </g>
-  
+
   <!-- TITLE -->
   <text x="600" y="75" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="64" font-weight="700" fill="url(#textGrad)" filter="url(#textGlow)" letter-spacing="8">CODE CITY</text>
-  
+
   <!-- Tagline -->
   <text x="600" y="610" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" fill="#8888aa" letter-spacing="4" opacity="0.8">VISUALIZE YOUR CODEBASE IN 3D</text>
 </svg>

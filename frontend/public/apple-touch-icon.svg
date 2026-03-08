@@ -7,7 +7,7 @@
       <stop offset="70%" stop-color="#08080f"/>
       <stop offset="100%" stop-color="#050508"/>
     </linearGradient>
-    
+
     <!-- Isometric building gradients -->
     <linearGradient id="b1Right" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#1e1e35"/>
@@ -25,7 +25,7 @@
       <stop offset="0%" stop-color="#252560"/>
       <stop offset="100%" stop-color="#101030"/>
     </linearGradient>
-    
+
     <!-- Accent gradients -->
     <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#00d9ff"/>
@@ -36,7 +36,7 @@
       <stop offset="0%" stop-color="#00d9ff"/>
       <stop offset="100%" stop-color="#a855f7"/>
     </linearGradient>
-    
+
     <!-- Glow effects -->
     <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
       <feGaussianBlur stdDeviation="3" result="blur"/>
@@ -62,7 +62,7 @@
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-    
+
     <!-- Window glow -->
     <radialGradient id="windowGlow" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#00d9ff" stop-opacity="0.8"/>
@@ -72,7 +72,7 @@
 
   <!-- Background -->
   <rect width="180" height="180" rx="40" fill="url(#bg)"/>
-  
+
   <!-- Subtle circuit grid pattern -->
   <g opacity="0.025" stroke="#fff" stroke-width="0.5">
     <line x1="45" y1="0" x2="45" y2="180"/>
@@ -85,9 +85,9 @@
 
   <!-- Ground glow -->
   <ellipse cx="90" cy="160" rx="65" ry="15" fill="url(#accent)" opacity="0.12" filter="url(#softGlow)"/>
-  
+
   <!-- ISOMETRIC 3D CITY -->
-  
+
   <!-- Building 1 (far left, short) -->
   <g transform="translate(18, 105)">
     <polygon points="20,0 40,10 20,20 0,10" fill="#2a2a4a"/>
@@ -97,7 +97,7 @@
     <rect x="25" y="25" width="8" height="6" fill="#00d9ff" opacity="0.25"/>
     <rect x="25" y="36" width="8" height="6" fill="#6366f1" opacity="0.15"/>
   </g>
-  
+
   <!-- Building 2 (left-center, medium) -->
   <g transform="translate(48, 68)">
     <polygon points="22,0 44,11 22,22 0,11" fill="#2a2a55"/>
@@ -111,21 +111,21 @@
     <rect x="28" y="54" width="9" height="7" fill="#a855f7" opacity="0.25"/>
     <rect x="28" y="66" width="9" height="7" fill="#00d9ff" opacity="0.15"/>
   </g>
-  
+
   <!-- HERO BUILDING (center, tallest) -->
   <g transform="translate(82, 22)">
     <polygon points="25,0 50,12.5 25,25 0,12.5" fill="#3a3a6a"/>
     <polygon points="50,12.5 50,125 25,137.5 25,25" fill="url(#heroRight)"/>
     <polygon points="0,12.5 25,25 25,137.5 0,125" fill="#0a0a20"/>
-    
+
     <!-- Rooftop beacon effect -->
     <polygon points="25,0 50,12.5 25,25 0,12.5" fill="url(#accent)" opacity="0.4" filter="url(#strongGlow)"/>
-    
+
     <!-- Antenna spire -->
     <line x1="25" y1="0" x2="25" y2="-15" stroke="url(#accentVertical)" stroke-width="2.5"/>
     <circle cx="25" cy="-18" r="4" fill="#00d9ff" filter="url(#strongGlow)"/>
     <circle cx="25" cy="-18" r="2" fill="#fff"/>
-    
+
     <!-- Windows grid - right face -->
     <g>
       <rect x="30" y="35" width="12" height="8" fill="#00d9ff" opacity="0.6"/>
@@ -144,7 +144,7 @@
       <rect x="8" y="80" width="10" height="7" fill="#fff" opacity="0.15"/>
     </g>
   </g>
-  
+
   <!-- Building 4 (right-center, medium-tall) -->
   <g transform="translate(120, 55)">
     <polygon points="20,0 40,10 20,20 0,10" fill="#2a2a50"/>
@@ -158,7 +158,7 @@
     <rect x="25" y="58" width="9" height="7" fill="#fff" opacity="0.15"/>
     <rect x="25" y="72" width="9" height="7" fill="#6366f1" opacity="0.2"/>
   </g>
-  
+
   <!-- Building 5 (far right, short) -->
   <g transform="translate(145, 100)">
     <polygon points="15,0 30,7.5 15,15 0,7.5" fill="#252545"/>
@@ -168,7 +168,7 @@
     <rect x="18" y="22" width="7" height="5" fill="#00d9ff" opacity="0.2"/>
     <rect x="18" y="32" width="7" height="5" fill="#a855f7" opacity="0.15"/>
   </g>
-  
+
   <!-- Floating data particles -->
   <g filter="url(#glow)">
     <circle cx="35" cy="45" r="1.5" fill="#00d9ff" opacity="0.6"/>
