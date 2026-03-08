@@ -7,6 +7,9 @@ import Ground from './Ground'
 import HologramPanel from './HologramPanel'
 import NeonDistrictBorders from './NeonDistrictBorders'
 import DistrictLabels from './DistrictLabels'
+import MothershipCore from './MothershipCore'
+import HolographicCityName from './HolographicCityName'
+import EnergyCoreReactor from './EnergyCoreReactor'
 
 
 /**
@@ -40,6 +43,9 @@ export default function CityScene() {
                 <HologramPanel />
                 <NeonDistrictBorders />
                 <DistrictLabels />
+                <EnergyCoreReactor />
+                <MothershipCore />
+                <HolographicCityName />
             </group>
 
             <fog attach="fog" args={['#080c14', cityRadius * 0.8, cityRadius * 5.0]} />

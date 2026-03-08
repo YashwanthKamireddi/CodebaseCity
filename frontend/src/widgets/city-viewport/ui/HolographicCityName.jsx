@@ -1,17 +1,14 @@
-import React, { useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
+import React, { useMemo } from 'react'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 
 /**
- * HolographicCityName — Floating holographic repo name above the city.
- * Enhanced canvas with scanline effect and dual glow passes.
- * Single sprite, throttled to 30fps.
+ * HolographicCityName — Floating repo name above the city.
+ *
+ * Perf budget: 1 draw call (single sprite), 0 useFrame (fully static).
  */
 export default function HolographicCityName() {
     const cityData = useStore(s => s.cityData)
-    const spriteRef = useRef()
-    const lastT = useRef(0)
 
     const cityRadius = useMemo(() => {
         if (!cityData?.buildings?.length) return 200
@@ -38,30 +35,22 @@ export default function HolographicCityName() {
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
 
-        // Large soft glow pass
+        // Soft glow pass
         ctx.shadowColor = '#0088ff'
-        ctx.shadowBlur = 40
-        ctx.fillStyle = 'rgba(0, 140, 255, 0.35)'
+        ctx.shadowBlur = 30
+        ctx.fillStyle = 'rgba(0, 140, 255, 0.4)'
         ctx.fillText(displayName, 512, 125)
 
-        // Medium glow pass
+        // Medium glow
         ctx.shadowColor = '#00bbff'
-        ctx.shadowBlur = 15
-        ctx.fillStyle = 'rgba(0, 200, 255, 0.55)'
+        ctx.shadowBlur = 12
+        ctx.fillStyle = 'rgba(0, 200, 255, 0.6)'
         ctx.fillText(displayName, 512, 125)
 
         // Crisp main text
         ctx.shadowBlur = 0
         ctx.fillStyle = 'rgba(255, 255, 255, 0.92)'
         ctx.fillText(displayName, 512, 125)
-
-        // Scanlines overlay
-        ctx.globalCompositeOperation = 'destination-out'
-        for (let y = 0; y < 256; y += 4) {
-            ctx.fillStyle = 'rgba(0,0,0,0.06)'
-            ctx.fillRect(0, y, 1024, 1)
-        }
-        ctx.globalCompositeOperation = 'source-over'
 
         // Underline accent
         const textW = ctx.measureText(displayName).width
@@ -82,22 +71,12 @@ export default function HolographicCityName() {
         return tex
     }, [repoName])
 
-    useFrame(({ clock }) => {
-        if (!spriteRef.current) return
-        const t = clock.getElapsedTime()
-        if (t - lastT.current < 0.05) return // 20fps
-        lastT.current = t
-        spriteRef.current.position.y = cityRadius * 0.7 + Math.sin(t * 0.25) * 4
-        spriteRef.current.material.opacity = 0.75 + Math.sin(t * 0.6) * 0.08
-    })
-
     if (!texture || !repoName) return null
 
     const scale = Math.max(60, cityRadius * 0.4)
 
     return (
         <sprite
-            ref={spriteRef}
             position={[0, cityRadius * 0.7, 0]}
             scale={[scale, scale * 0.25, 1]}
         >
