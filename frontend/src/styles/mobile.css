@@ -232,26 +232,31 @@
     left: 0 !important;
     right: 0 !important;
     transform: none !important;
-    padding: 8px !important;
-    padding-bottom: calc(var(--safe-bottom) + 8px) !important;
-    background: linear-gradient(to top, rgba(5, 10, 20, 0.95) 0%, rgba(5, 10, 20, 0.8) 70%, transparent 100%) !important;
+    padding: 12px 8px !important;
+    padding-bottom: calc(var(--safe-bottom) + 12px) !important;
+    background: linear-gradient(to top, rgba(5, 10, 20, 0.98) 0%, rgba(5, 10, 20, 0.9) 60%, transparent 100%) !important;
     z-index: 100 !important;
   }
 
   .floating-dock {
     width: 100% !important;
     max-width: 100% !important;
-    justify-content: space-around !important;
-    padding: 8px 4px !important;
-    gap: 2px !important;
+    justify-content: space-evenly !important;
+    padding: 10px 8px !important;
+    gap: 4px !important;
     border-radius: 16px !important;
-    overflow-x: auto !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
     scrollbar-width: none !important;
-    -webkit-overflow-scrolling: touch !important;
+    -ms-overflow-style: none !important;
+    -webkit-overflow-scrolling: auto !important;
+    flex-wrap: wrap !important;
   }
 
   .floating-dock::-webkit-scrollbar {
     display: none !important;
+    width: 0 !important;
+    height: 0 !important;
   }
 
   .deck-btn {
@@ -280,16 +285,54 @@
   }
 
   .view-control-bar {
-    padding: 4px 8px !important;
+    padding: 4px 6px !important;
+    overflow: hidden !important;
+    gap: 2px !important;
+  }
+
+  .view-control-group {
+    gap: 2px !important;
   }
 
   .view-control-label {
     display: none !important;
   }
 
+  .view-control-separator {
+    display: none !important;
+  }
+
   .view-option-btn {
-    min-width: 36px !important;
-    min-height: 36px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    padding: 4px !important;
+  }
+
+  .view-option-btn svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  /* Legend chips compact on mobile */
+  .view-legend-inline {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    padding: 3px 4px !important;
+    margin-top: 4px !important;
+  }
+
+  .view-legend-chip {
+    padding: 2px 5px !important;
+  }
+
+  .view-legend-chip-label {
+    font-size: 0.6rem !important;
+  }
+
+  .view-legend-dot {
+    width: 6px !important;
+    height: 6px !important;
   }
 
   /* ── Canvas UI Controls → Left Side ── */

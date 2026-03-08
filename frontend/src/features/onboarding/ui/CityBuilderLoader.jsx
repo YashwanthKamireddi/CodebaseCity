@@ -94,15 +94,15 @@ export default function CityBuilderLoader() {
 
     return (
         <motion.div
-            initial={{ opacity: 0 }}
+            initial={{ opacity: 1 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             style={{
                 position: 'fixed',
                 inset: 0,
                 zIndex: 99999,
-                background: 'rgba(5, 5, 5, 0.65)',
+                background: '#050508',
                 backdropFilter: 'blur(24px)',
                 WebkitBackdropFilter: 'blur(24px)',
                 display: 'flex',
@@ -114,9 +114,9 @@ export default function CityBuilderLoader() {
             }}
         >
             <motion.div
-                initial={{ opacity: 0, scale: 0.96, y: 10 }}
+                initial={{ opacity: 0, scale: 0.98, y: 8 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
                 style={{
                     width: '100%',
                     maxWidth: '500px',

@@ -116,14 +116,15 @@ export default function InstancedCity() {
         }
 
         const startTime = performance.now()
-        const duration = 2000 // 2 seconds for smooth rise
+        const duration = 600 // Fast 0.6s rise - no glitchy feeling
         let animationFrameId;
 
         const animateGrowth = (now) => {
             if (!meshRef.current) return; // Safety check if unmounted during animation
 
             const elapsed = now - startTime
-            const isQuick = isAnimating || currentCommitIndex !== -1 || count > 500
+            // Skip animation entirely for large datasets or when time traveling
+            const isQuick = isAnimating || currentCommitIndex !== -1 || count > 200
             const progress = isQuick ? 1 : Math.min(elapsed / duration, 1)
 
             // Track max radius for bounding sphere
@@ -137,10 +138,11 @@ export default function InstancedCity() {
                 const depth = b.dimensions?.depth || 8
                 const targetHeight = (b.dimensions?.height || 8) * 3.0
 
-                // Use pre-computed stagger delay (O(1) lookup vs O(1) sqrt)
-                const staggerDelay = isQuick ? 0 : (staggerData?.delays[i] ?? 0)
+                // Minimal stagger - buildings rise together smoothly
+                const staggerDelay = isQuick ? 0 : Math.min((staggerData?.delays[i] ?? 0) * 0.3, 0.1)
                 const staggeredProgress = Math.max(0, (progress - staggerDelay) / (1 - staggerDelay))
-                const staggeredEase = isQuick ? 1 : 1 - Math.pow(1 - Math.min(staggeredProgress, 1), 4)
+                // Smooth ease-out for professional feel
+                const staggeredEase = isQuick ? 1 : 1 - Math.pow(1 - Math.min(staggeredProgress, 1), 2.5)
 
                 const currentHeight = Math.max(0.5, targetHeight * staggeredEase)
                 const y = currentHeight / 2

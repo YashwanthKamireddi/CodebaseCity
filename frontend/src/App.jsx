@@ -123,6 +123,14 @@ function App() {
     const isLowEnd = isMobileDevice || (typeof navigator !== 'undefined' && navigator.hardwareConcurrency <= 4)
     const dprRange = isLowEnd ? [0.75, 1] : [1, 1.5]
 
+    // Close sidebar by default on mobile
+    useEffect(() => {
+        if (isMobile) {
+            setSidebarOpen(false)
+            useStore.setState({ sidebarOpen: false })
+        }
+    }, []) // Run once on mount
+
     // Apply theme
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme)
