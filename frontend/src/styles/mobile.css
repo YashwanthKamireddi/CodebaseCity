@@ -1,0 +1,638 @@
+/**
+ * mobile.css — World-Class Mobile Experience
+ *
+ * Comprehensive mobile-first responsive system.
+ * Transforms Code City into a native app-like experience on mobile devices.
+ *
+ * Design Philosophy:
+ * - Touch-first interactions (44px+ tap targets)
+ * - No overlapping elements
+ * - Bottom-sheet patterns for panels
+ * - Swipe gestures where natural
+ * - Full viewport utilization
+ * - Safe area insets for notched devices
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES — Mobile Overrides
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Safe Areas */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* Mobile-specific sizing */
+  --mobile-header-height: 56px;
+  --mobile-dock-height: 64px;
+  --mobile-panel-radius: 24px;
+  --mobile-touch-target: 44px;
+
+  /* Dynamic viewport height (set by JS for iOS Safari fix) */
+  --vh: 1vh;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VIEWPORT & BODY — Prevent Scroll Issues
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari - use dynamic vh */
+  html, body {
+    height: calc(var(--vh, 1vh) * 100);
+    height: -webkit-fill-available;
+  }
+
+  .app-layout {
+    height: calc(var(--vh, 1vh) * 100);
+    min-height: calc(var(--vh, 1vh) * 100);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE BREAKPOINTS — Tablet (≤1024px)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1024px) {
+  /* Sidebar narrower */
+  .sidebar-panel {
+    width: 280px !important;
+  }
+
+  /* Chat interface smaller */
+  .ci-root {
+    width: 340px !important;
+    max-height: 60vh !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE BREAKPOINTS — Mobile (≤768px)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* ── Base Reset ── */
+  html, body {
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .app-layout {
+    position: fixed;
+    inset: 0;
+    padding-top: var(--safe-top);
+    padding-bottom: var(--safe-bottom);
+    padding-left: var(--safe-left);
+    padding-right: var(--safe-right);
+  }
+
+  /* ── Sidebar → Full Screen Bottom Sheet ── */
+  .sidebar-panel {
+    position: fixed !important;
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 85vh !important;
+    max-height: calc(100vh - var(--safe-top) - 20px) !important;
+    border-radius: var(--mobile-panel-radius) var(--mobile-panel-radius) 0 0 !important;
+    border-right: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1) !important;
+    z-index: 200 !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .sidebar-panel.open {
+    transform: translateY(0) !important;
+  }
+
+  /* Drag handle for bottom sheet */
+  .sidebar-panel::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 2px;
+    z-index: 10;
+  }
+
+  .sidebar-header {
+    padding: 24px 20px 16px !important;
+  }
+
+  .sidebar-resize-handle {
+    display: none !important;
+  }
+
+  /* ── Chat Interface → Bottom Sheet ── */
+  .ci-root {
+    position: fixed !important;
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 75vh !important;
+    max-height: calc(100vh - var(--safe-top) - 60px) !important;
+    border-radius: var(--mobile-panel-radius) var(--mobile-panel-radius) 0 0 !important;
+    z-index: 210 !important;
+    margin: 0 !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  /* Drag handle for chat */
+  .ci-root::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 2px;
+    z-index: 10;
+  }
+
+  .ci-header {
+    padding-top: 20px !important;
+  }
+
+  .ci-input-area {
+    padding-bottom: calc(var(--safe-bottom) + 12px) !important;
+  }
+
+  /* ── Command Palette → Full Width ── */
+  .command-dialog {
+    top: var(--safe-top) !important;
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    transform: none !important;
+    max-height: calc(100vh - var(--safe-top) - var(--safe-bottom) - 16px) !important;
+    border-radius: 16px !important;
+  }
+
+  .command-root {
+    max-height: 70vh !important;
+    overflow: hidden !important;
+  }
+
+  .command-results {
+    max-height: 50vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .command-input {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+  }
+
+  /* ── Timeline Controller → Bottom Position ── */
+  .timeline-wrapper {
+    position: fixed !important;
+    bottom: calc(var(--mobile-dock-height) + var(--safe-bottom) + 8px) !important;
+    left: 8px !important;
+    right: 8px !important;
+    max-width: none !important;
+    transform: none !important;
+    z-index: 150 !important;
+  }
+
+  .timeline-panel {
+    width: 100% !important;
+    padding: 12px 16px !important;
+  }
+
+  .timeline-controls {
+    gap: 8px !important;
+  }
+
+  .timeline-btn {
+    min-width: var(--mobile-touch-target) !important;
+    min-height: var(--mobile-touch-target) !important;
+  }
+
+  /* ── Floating Dock → Fixed Bottom Nav ── */
+  .floating-dock-wrapper {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    padding: 8px !important;
+    padding-bottom: calc(var(--safe-bottom) + 8px) !important;
+    background: linear-gradient(to top, rgba(5, 10, 20, 0.95) 0%, rgba(5, 10, 20, 0.8) 70%, transparent 100%) !important;
+    z-index: 100 !important;
+  }
+
+  .floating-dock {
+    width: 100% !important;
+    max-width: 100% !important;
+    justify-content: space-around !important;
+    padding: 8px 4px !important;
+    gap: 2px !important;
+    border-radius: 16px !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .floating-dock::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .deck-btn {
+    min-width: var(--mobile-touch-target) !important;
+    min-height: var(--mobile-touch-target) !important;
+    flex-shrink: 0 !important;
+  }
+
+  .dock-divider {
+    display: none !important;
+  }
+
+  .dock-tooltip {
+    display: none !important;
+  }
+
+  /* ── View Control → Top Bar ── */
+  .view-control-container {
+    position: fixed !important;
+    top: calc(var(--safe-top) + 8px) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 90 !important;
+    width: auto !important;
+    max-width: calc(100% - 16px) !important;
+  }
+
+  .view-control-bar {
+    padding: 4px 8px !important;
+  }
+
+  .view-control-label {
+    display: none !important;
+  }
+
+  .view-option-btn {
+    min-width: 36px !important;
+    min-height: 36px !important;
+  }
+
+  /* ── Canvas UI Controls → Left Side ── */
+  .canvas-ui-controls {
+    position: fixed !important;
+    bottom: calc(var(--mobile-dock-height) + var(--safe-bottom) + 12px) !important;
+    right: 12px !important;
+    z-index: 80 !important;
+  }
+
+  .canvas-ui-btn {
+    min-width: var(--mobile-touch-target) !important;
+    min-height: var(--mobile-touch-target) !important;
+  }
+
+  /* ── Building Panel → Bottom Sheet ── */
+  .p-panel-floating {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 70vh !important;
+    border-radius: var(--mobile-panel-radius) var(--mobile-panel-radius) 0 0 !important;
+    transform: none !important;
+    z-index: 180 !important;
+  }
+
+  .p-panel-floating:hover {
+    transform: none !important;
+  }
+
+  /* ── Export Report → Full Screen ── */
+  .export-modal {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    border-radius: 0 !important;
+    padding-top: var(--safe-top) !important;
+    padding-bottom: var(--safe-bottom) !important;
+  }
+
+  /* ── File Table → Full Width ── */
+  .file-table-container {
+    padding: 8px !important;
+  }
+
+  .file-table {
+    font-size: 0.8rem !important;
+  }
+
+  .file-table th,
+  .file-table td {
+    padding: 10px 8px !important;
+  }
+
+  /* Hide less important columns on mobile */
+  .file-table th:nth-child(n+4),
+  .file-table td:nth-child(n+4) {
+    display: none !important;
+  }
+
+  /* ── Landing Page (EmptyCityHero) ── */
+  .lp-root {
+    padding: var(--safe-top) 0 var(--safe-bottom) 0 !important;
+  }
+
+  .lp-topbar {
+    padding: calc(var(--safe-top) + 12px) 16px 12px !important;
+  }
+
+  .lp-center {
+    padding: 0 16px !important;
+    max-width: 100% !important;
+  }
+
+  .lp-heading {
+    font-size: clamp(1.8rem, 7vw, 2.8rem) !important;
+    line-height: 1.15 !important;
+  }
+
+  .lp-desc {
+    font-size: 0.8rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .lp-desc br {
+    display: none !important;
+  }
+
+  .lp-cta {
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 300px !important;
+    gap: 10px !important;
+  }
+
+  .lp-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 14px 20px !important;
+    font-size: 0.85rem !important;
+    min-height: var(--mobile-touch-target) !important;
+  }
+
+  .lp-gh-wrap {
+    max-width: 100% !important;
+  }
+
+  .lp-gh-input {
+    font-size: 16px !important; /* Prevents iOS zoom */
+  }
+
+  .lp-footer {
+    padding: 12px 16px calc(var(--safe-bottom) + 12px) !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .lp-footer span {
+    font-size: 0.55rem !important;
+  }
+
+  /* Hide keyboard hints on mobile */
+  .lp-footer kbd {
+    display: none !important;
+  }
+
+  .lp-footer span:has(kbd) {
+    display: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE BREAKPOINTS — Small Mobile (≤480px)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  /* Even more compact */
+  .sidebar-panel {
+    height: 90vh !important;
+  }
+
+  .ci-root {
+    height: 80vh !important;
+  }
+
+  .lp-heading {
+    font-size: clamp(1.5rem, 8vw, 2.2rem) !important;
+  }
+
+  .lp-kicker {
+    font-size: 0.6rem !important;
+  }
+
+  .floating-dock {
+    padding: 6px 2px !important;
+  }
+
+  .deck-btn {
+    min-width: 40px !important;
+    min-height: 40px !important;
+  }
+
+  .deck-btn svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  /* Stack timeline controls */
+  .timeline-controls {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOUCH INTERACTIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (pointer: coarse) {
+  /* Larger touch targets */
+  button, 
+  [role="button"],
+  a,
+  input,
+  select,
+  textarea {
+    min-height: var(--mobile-touch-target);
+  }
+
+  /* Remove hover effects that cause sticky states on touch */
+  .deck-btn:hover {
+    background: transparent;
+  }
+
+  .deck-btn:active {
+    background: rgba(255, 255, 255, 0.15) !important;
+  }
+
+  .canvas-ui-btn:hover {
+    background: transparent;
+  }
+
+  .canvas-ui-btn:active {
+    background: var(--color-bg-active) !important;
+  }
+
+  /* Disable resize handles */
+  .sidebar-resize-handle {
+    display: none !important;
+  }
+
+  /* Better scrolling */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Prevent text selection on UI elements */
+  .floating-dock,
+  .sidebar-header,
+  .ci-header,
+  .timeline-panel,
+  .view-control-bar {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LANDSCAPE MOBILE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 896px) and (max-height: 500px) and (orientation: landscape) {
+  /* Landscape phone adjustments */
+  .sidebar-panel {
+    height: 100vh !important;
+    width: 50vw !important;
+    border-radius: 0 !important;
+  }
+
+  .ci-root {
+    height: 100vh !important;
+    width: 50vw !important;
+    right: 0 !important;
+    left: auto !important;
+    border-radius: 0 !important;
+  }
+
+  .floating-dock-wrapper {
+    bottom: auto !important;
+    top: 50% !important;
+    left: 0 !important;
+    right: auto !important;
+    transform: translateY(-50%) !important;
+    padding: 8px !important;
+    padding-left: calc(var(--safe-left) + 8px) !important;
+    background: linear-gradient(to right, rgba(5, 10, 20, 0.95) 0%, transparent 100%) !important;
+  }
+
+  .floating-dock {
+    flex-direction: column !important;
+    width: auto !important;
+  }
+
+  .lp-heading {
+    font-size: 1.5rem !important;
+  }
+
+  .lp-cta {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+  }
+
+  .lp-btn {
+    width: auto !important;
+    flex: 1 1 auto !important;
+    min-width: 120px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   OVERLAY STATE MANAGEMENT — Prevent Multiple Overlays
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* When sidebar is open, hide other panels */
+  .sidebar-panel.open ~ .ci-root,
+  .sidebar-panel.open ~ .timeline-wrapper {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Backdrop for panels */
+  .mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 190;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .mobile-backdrop.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY — Focus States for Touch
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (pointer: coarse) {
+  :focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+  }
+
+  /* High contrast active states */
+  button:active,
+  [role="button"]:active {
+    transform: scale(0.96);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PRINT — Hide UI on print
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media print {
+  .floating-dock-wrapper,
+  .sidebar-panel,
+  .ci-root,
+  .canvas-ui-controls,
+  .view-control-container,
+  .timeline-wrapper {
+    display: none !important;
+  }
+}

@@ -226,37 +226,16 @@ export default function TimelineController() {
         <AnimatePresence>
             <motion.div
                 key="timeline-bar"
-                initial={{ y: 80, opacity: 0, x: '-50%' }}
-                animate={{ y: 0, opacity: 1, x: '-50%' }}
-                exit={{ y: 80, opacity: 0, x: '-50%' }}
+                className="timeline-wrapper"
+                initial={{ y: 80, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 80, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                style={{
-                    position: 'fixed',
-                    bottom: '100px',
-                    left: '50%',
-                    zIndex: 9000,
-                    pointerEvents: 'none',
-                }}
             >
-                <div style={{
-                    background: 'var(--color-bg-tertiary, #111)',
-                    backdropFilter: 'blur(24px) saturate(180%)',
-                    WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-                    borderRadius: '16px',
-                    padding: '14px 20px',
-                    border: '1px solid var(--border-default, rgba(255,255,255,0.08))',
-                    boxShadow: '0 20px 60px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.03) inset',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '16px',
-                    pointerEvents: 'auto',
-                    minWidth: '560px',
-                    maxWidth: '700px',
-                    fontFamily: 'var(--font-body, Inter, sans-serif)',
-                }}>
+                <div className="timeline-panel">
 
                     {/* Play Controls */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+                    <div className="timeline-controls">
                         <ControlButton
                             onClick={handleJumpStart}
                             disabled={currentIndex <= 0}
@@ -557,7 +536,78 @@ export default function TimelineController() {
                         </span>
                     </div>
                 </div>
-            </motion.div>
+                <style>{`
+                    .timeline-wrapper {
+                        position: fixed;
+                        bottom: 100px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        z-index: 9000;
+                        pointer-events: none;
+                    }
+                    .timeline-panel {
+                        background: var(--color-bg-tertiary, #111);
+                        backdrop-filter: blur(24px) saturate(180%);
+                        -webkit-backdrop-filter: blur(24px) saturate(180%);
+                        border-radius: 16px;
+                        padding: 14px 20px;
+                        border: 1px solid var(--border-default, rgba(255,255,255,0.08));
+                        box-shadow: 0 20px 60px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.03) inset;
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+                        pointer-events: auto;
+                        min-width: 560px;
+                        max-width: 700px;
+                        font-family: var(--font-body, Inter, sans-serif);
+                    }
+                    .timeline-controls {
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                        flex-shrink: 0;
+                    }
+
+                    /* Mobile responsive */
+                    @media (max-width: 768px) {
+                        .timeline-wrapper {
+                            bottom: calc(64px + env(safe-area-inset-bottom, 0) + 8px);
+                            left: 8px;
+                            right: 8px;
+                            transform: none;
+                        }
+                        .timeline-panel {
+                            min-width: auto;
+                            max-width: none;
+                            width: 100%;
+                            padding: 10px 14px;
+                            gap: 10px;
+                            flex-wrap: wrap;
+                        }
+                        .timeline-controls {
+                            order: 2;
+                            flex: 1;
+                            justify-content: center;
+                        }
+                        .timeline-track-container {
+                            order: 1;
+                            flex: 0 0 100%;
+                        }
+                        .timeline-divider {
+                            display: none !important;
+                        }
+                        .timeline-speed-container {
+                            display: none !important;
+                        }
+                    }
+
+                    @media (max-width: 480px) {
+                        .timeline-panel {
+                            padding: 8px 10px;
+                            gap: 8px;
+                        }
+                    }
+                `}</style>            </motion.div>
         </AnimatePresence>,
         document.body
     )

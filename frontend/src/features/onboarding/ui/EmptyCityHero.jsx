@@ -347,6 +347,79 @@ export default function EmptyCityHero() {
                     font-size: 0.58rem; font-family: var(--font-mono);
                     color: rgba(255,255,255,0.22);
                 }
+
+                /* ── Mobile Responsive ─── */
+                @media (max-width: 768px) {
+                    .lp-root {
+                        padding: env(safe-area-inset-top, 0) 0 env(safe-area-inset-bottom, 0) 0;
+                    }
+                    .lp-topbar {
+                        padding: calc(env(safe-area-inset-top, 0) + 12px) 16px 12px;
+                    }
+                    .lp-center {
+                        padding: 0 20px;
+                        max-width: 100%;
+                    }
+                    .lp-heading {
+                        font-size: clamp(1.6rem, 7vw, 2.4rem);
+                        line-height: 1.15;
+                    }
+                    .lp-heading br {
+                        display: none;
+                    }
+                    .lp-desc {
+                        font-size: 0.78rem;
+                        line-height: 1.6;
+                    }
+                    .lp-desc br {
+                        display: none;
+                    }
+                    .lp-cta {
+                        flex-direction: column;
+                        width: 100%;
+                        max-width: 280px;
+                        gap: 10px;
+                    }
+                    .lp-btn {
+                        width: 100%;
+                        justify-content: center;
+                        padding: 14px 20px;
+                        font-size: 0.85rem;
+                        min-height: 48px;
+                    }
+                    .lp-gh-wrap {
+                        max-width: 100%;
+                    }
+                    .lp-gh-input {
+                        font-size: 16px; /* Prevents iOS zoom */
+                    }
+                    .lp-footer {
+                        padding: 12px 16px calc(env(safe-area-inset-bottom, 0) + 12px);
+                        flex-wrap: wrap;
+                        gap: 8px;
+                    }
+                    /* Hide keyboard shortcuts on mobile */
+                    .lp-footer kbd,
+                    .lp-footer span:has(kbd) {
+                        display: none;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .lp-heading {
+                        font-size: clamp(1.4rem, 8vw, 2rem);
+                    }
+                    .lp-kicker {
+                        font-size: 0.58rem;
+                    }
+                    .lp-desc {
+                        font-size: 0.75rem;
+                    }
+                    .lp-btn {
+                        padding: 12px 18px;
+                        font-size: 0.8rem;
+                    }
+                }
             `}</style>
         </motion.div>
     )

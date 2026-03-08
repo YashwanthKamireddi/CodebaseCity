@@ -37,6 +37,7 @@ import useStore from './store/useStore'
 import './styles/design-tokens.css'
 import './styles/ProfessionalUI.css'
 import './App.css'
+import './styles/mobile.css'
 
 /**
  * useKeyboardShortcuts — Extracted hook for keyboard event handling.
@@ -116,14 +117,31 @@ function App() {
     const [showExportReport, setShowExportReport] = useState(false)
 
     // Performance tier detection
-    const isMobile = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0
-    const isLowEnd = isMobile || (typeof navigator !== 'undefined' && navigator.hardwareConcurrency <= 4)
+    const isMobileDevice = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0
+    const isNarrowScreen = typeof window !== 'undefined' && window.innerWidth <= 768
+    const isMobile = isMobileDevice && isNarrowScreen
+    const isLowEnd = isMobileDevice || (typeof navigator !== 'undefined' && navigator.hardwareConcurrency <= 4)
     const dprRange = isLowEnd ? [0.75, 1] : [1, 1.5]
 
     // Apply theme
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme)
     }, [theme])
+
+    // Mobile viewport height fix (100vh issue on iOS Safari)
+    useEffect(() => {
+        const setVH = () => {
+            const vh = window.innerHeight * 0.01
+            document.documentElement.style.setProperty('--vh', `${vh}px`)
+        }
+        setVH()
+        window.addEventListener('resize', setVH)
+        window.addEventListener('orientationchange', setVH)
+        return () => {
+            window.removeEventListener('resize', setVH)
+            window.removeEventListener('orientationchange', setVH)
+        }
+    }, [])
 
     // Extracted keyboard shortcuts — reads fresh state, no stale closures
     useKeyboardShortcuts(setView)

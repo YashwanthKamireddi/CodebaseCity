@@ -354,3 +354,126 @@
     margin: 0;
     font-size: var(--text-sm);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+    .file-table-container {
+        border-radius: 0;
+        border: none;
+    }
+
+    .file-table-toolbar {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .ft-head-row {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .ft-title {
+        font-size: var(--text-xl);
+        text-align: center;
+    }
+
+    .ft-search {
+        width: 100%;
+    }
+
+    .ft-search-input {
+        font-size: 16px; /* Prevents iOS zoom */
+    }
+
+    .file-table th,
+    .file-table td {
+        padding: 12px 10px;
+    }
+
+    .file-table th {
+        font-size: 0.65rem;
+    }
+
+    .file-table {
+        font-size: 0.8rem;
+    }
+
+    /* Hide less important columns */
+    .file-table th:nth-child(n+4),
+    .file-table td:nth-child(n+4) {
+        display: none;
+    }
+
+    .file-info .path {
+        max-width: 150px;
+        font-size: 0.65rem;
+    }
+
+    .file-info .name {
+        font-size: 0.85rem;
+    }
+
+    .file-table-footer {
+        padding: 12px 16px;
+    }
+
+    .ft-risks {
+        margin-bottom: var(--space-4);
+    }
+
+    .ft-risks-toggle {
+        font-size: var(--text-sm);
+    }
+
+    /* Virtualized scrolling */
+    .file-table-wrapper {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+@media (max-width: 480px) {
+    .file-table th,
+    .file-table td {
+        padding: 10px 8px;
+    }
+
+    /* Only show name and one metric on very small screens */
+    .file-table th:nth-child(n+3),
+    .file-table td:nth-child(n+3) {
+        display: none;
+    }
+
+    .file-info .path {
+        display: none;
+    }
+
+    .ft-title {
+        font-size: var(--text-lg);
+    }
+}
+
+/* Touch optimizations */
+@media (pointer: coarse) {
+    .file-table tbody tr {
+        min-height: 52px;
+    }
+
+    .file-table tbody tr:active {
+        background: var(--color-bg-active, rgba(255, 255, 255, 0.05));
+    }
+
+    .action-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .ft-icon-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+}

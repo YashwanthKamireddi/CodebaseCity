@@ -349,3 +349,110 @@
 .command-list::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .command-backdrop {
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  .command-dialog {
+    top: env(safe-area-inset-top, 8px);
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-width: none;
+    transform: none;
+    max-height: calc(100vh - env(safe-area-inset-top, 8px) - env(safe-area-inset-bottom, 8px) - 16px);
+    border-radius: 16px;
+  }
+
+  .command-root {
+    border-radius: 16px;
+  }
+
+  .command-input-wrapper {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .command-input {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
+
+  .command-esc-badge {
+    display: none;
+  }
+
+  .command-shortcut {
+    display: none;
+  }
+
+  .command-list {
+    max-height: 60vh;
+    padding: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .command-item {
+    padding: 14px 12px;
+    min-height: 48px;
+  }
+
+  .command-item-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .command-item-title {
+    font-size: 0.95rem;
+  }
+
+  .command-item-shortcut {
+    display: none;
+  }
+
+  .command-footer {
+    display: none; /* Hide keyboard hints on mobile */
+  }
+
+  [cmdk-group-heading] {
+    padding: 12px 12px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .command-dialog {
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    border-radius: 12px;
+  }
+
+  .command-input-wrapper {
+    padding: 12px 14px;
+  }
+
+  .command-item {
+    padding: 12px 10px;
+  }
+
+  .command-item-icon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Touch device optimizations */
+@media (pointer: coarse) {
+  .command-item {
+    min-height: 52px;
+  }
+
+  .command-item:active {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}

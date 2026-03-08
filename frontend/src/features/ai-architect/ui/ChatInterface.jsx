@@ -419,6 +419,63 @@ export default function ChatInterface() {
                     .ci-messages::-webkit-scrollbar-thumb {
                         background: var(--border-default); border-radius: 2px;
                     }
+
+                    /* ── Mobile Responsive ── */
+                    @media (max-width: 768px) {
+                        .ci-root {
+                            position: fixed !important;
+                            top: auto !important;
+                            bottom: 0 !important;
+                            left: 0 !important;
+                            right: 0 !important;
+                            width: 100% !important;
+                            max-width: 100% !important;
+                            height: 75vh !important;
+                            max-height: calc(100vh - env(safe-area-inset-top, 0) - 60px) !important;
+                            border-radius: 24px 24px 0 0 !important;
+                            z-index: 210 !important;
+                        }
+                        .ci-root::after {
+                            content: '';
+                            position: absolute;
+                            top: 8px;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            width: 36px;
+                            height: 4px;
+                            background: rgba(255, 255, 255, 0.25);
+                            border-radius: 2px;
+                            z-index: 10;
+                        }
+                        .ci-header {
+                            padding-top: 24px !important;
+                        }
+                        .ci-input {
+                            font-size: 16px !important; /* Prevents iOS zoom */
+                        }
+                        .ci-input-area {
+                            padding-bottom: calc(env(safe-area-inset-bottom, 0) + 12px) !important;
+                        }
+                        .ci-settings-input {
+                            font-size: 16px !important;
+                        }
+                        .ci-send-btn {
+                            min-width: 44px !important;
+                            min-height: 44px !important;
+                        }
+                    }
+
+                    @media (max-width: 480px) {
+                        .ci-root {
+                            height: 80vh !important;
+                        }
+                        .ci-messages {
+                            padding: var(--space-4) !important;
+                        }
+                        .ci-msg-bubble {
+                            max-width: 90% !important;
+                        }
+                    }
                 `}</style>
             </motion.div>
         </AnimatePresence>
