@@ -8,6 +8,7 @@
 import React, { useState, useEffect, Suspense, useCallback, lazy, startTransition } from 'react'
 import { Canvas, invalidate } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, Preload } from '@react-three/drei'
+import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import CityScene from './widgets/city-viewport/ui/CityScene'
 import { CanvasErrorBoundary } from './widgets/layout/ui/CanvasErrorBoundary'
 import Sidebar from './widgets/layout/ui/Sidebar'
@@ -170,7 +171,7 @@ function App() {
                                         enablePan={true}
                                         enableZoom={true}
                                         enableRotate={true}
-                                        minDistance={5}
+                                        minDistance={10}
                                         maxDistance={3500}
                                         maxPolarAngle={Math.PI / 2}
                                         minPolarAngle={0.05}
@@ -185,6 +186,18 @@ function App() {
                                     <Suspense fallback={null}>
                                         <CityScene data={cityData} />
                                         <Preload all />
+
+                                        {!isLowEnd && (
+                                            <EffectComposer disableNormalPass>
+                                                <Bloom
+                                                    luminanceThreshold={0.2}
+                                                    luminanceSmoothing={0.9}
+                                                    intensity={1.5}
+                                                    mipmapBlur
+                                                />
+                                                <Vignette eskil={false} offset={0.1} darkness={1.1} />
+                                            </EffectComposer>
+                                        )}
                                     </Suspense>
                                 </Canvas>
                             </CanvasErrorBoundary>

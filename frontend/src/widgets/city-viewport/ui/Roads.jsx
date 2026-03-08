@@ -69,7 +69,7 @@ void main() {
     float edgeR = smoothstep(1.0 - ew - eAA, 1.0 - ew * 0.3, v);
     float edges = max(edgeL, edgeR);
     float edgePulse = 0.65 + 0.35 * sin(u * 0.18 - uTime * 2.8);
-    vec3 edgeColor = vec3(0.0, 0.9, 1.0) * edgePulse * 1.8;
+    vec3 edgeColor = vec3(0.0, 0.9, 1.0) * edgePulse * 5.0; // CRANKED FOR BLOOM
 
     // Edge underglow (wider soft spread)
     float glowL = smoothstep(0.10, 0.0, v) * 0.12;
@@ -126,13 +126,13 @@ void main() {
     vec3 color = base;
     color += vec3(0.0, 0.25, 0.45) * circuits;
     color += edgeColor * edges;
-    color += vec3(0.0, 0.5, 0.8) * (glowL + glowR);
-    color += vec3(0.0, 0.55, 0.8) * (ig1 + ig2);
-    color += vec3(0.25, 0.8, 1.0) * centerLine * 0.55;
-    color += vec3(0.0, 0.7, 0.9) * arrow;
-    color += vec3(0.0, 0.45, 0.75) * lanes;
-    color += vec3(0.15, 0.55, 1.0) * (wave1 + wave2);
-    color += vec3(0.0, 1.0, 0.85) * (dot1 + dot2);
+    color += vec3(0.0, 0.5, 0.8) * (glowL + glowR) * 2.0;
+    color += vec3(0.0, 0.55, 0.8) * (ig1 + ig2) * 1.5;
+    color += vec3(0.25, 0.8, 1.0) * centerLine * 2.0;
+    color += vec3(0.0, 0.7, 0.9) * arrow * 2.0;
+    color += vec3(0.0, 0.45, 0.75) * lanes * 1.5;
+    color += vec3(0.15, 0.55, 1.0) * (wave1 + wave2) * 2.5;
+    color += vec3(0.0, 1.0, 0.85) * (dot1 + dot2) * 4.0;
 
     // Edge fade
     float edgeFade = smoothstep(0.0, 0.06, v) * smoothstep(1.0, 0.94, v);
@@ -187,8 +187,8 @@ void main() {
     float tick = smoothstep(0.008, 0.0, abs(tickAngle - 0.2618)) *
                  smoothstep(0.55, 0.60, r) * smoothstep(0.70, 0.65, r) * 0.3;
 
-    color += vec3(0.0, 0.8, 1.0) * (scanBeam + rings + innerRing + outerRing + ch + center);
-    color += vec3(0.1, 0.4, 0.9) * (diag + tick);
+    color += vec3(0.0, 0.8, 1.0) * (scanBeam + rings + innerRing + outerRing + ch + center) * 3.0; // BLOOM
+    color += vec3(0.1, 0.4, 0.9) * (diag + tick) * 2.0;
 
     float alpha = 0.75 * smoothstep(1.0, 0.65, r);
     gl_FragColor = vec4(color, alpha);
@@ -196,66 +196,119 @@ void main() {
 `
 
 /* ═══════════════════════════════════════════════════════════════
-   GLSL — Traffic Particle Shader (glowing data packets)
+   GLSL — Coruscant Hover Traffic Shader (3D Flying Cars)
    ═══════════════════════════════════════════════════════════════ */
 
 const TRAFFIC_VERT = /* glsl */ `
 attribute float aPhase;
+attribute vec3 aColor;
 varying float vPhase;
+varying vec3 vColor;
+varying vec2 vUv;
+varying vec3 vNormal;
+
 void main() {
     vPhase = aPhase;
-    vec4 mvPos = modelViewMatrix * vec4(position, 1.0);
-    gl_PointSize = (4.0 + 3.0 * sin(aPhase * 6.28)) * (180.0 / max(-mvPos.z, 1.0));
-    gl_Position = projectionMatrix * mvPos;
+    vColor = aColor;
+    vUv = uv;
+    vNormal = normalize((modelMatrix * instanceMatrix * vec4(normal, 0.0)).xyz);
+    vec4 worldPos = modelMatrix * instanceMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * viewMatrix * worldPos;
 }
 `
 
 const TRAFFIC_FRAG = /* glsl */ `
 uniform float uTime;
 varying float vPhase;
+varying vec3 vColor;
+varying vec2 vUv;
+varying vec3 vNormal;
+
 void main() {
-    vec2 c = gl_PointCoord - 0.5;
-    float r = length(c);
-    // Soft glow circle
-    float glow = exp(-r * r * 12.0);
-    // Pulsing brightness
-    float pulse = 0.7 + 0.3 * sin(uTime * 3.5 + vPhase * 6.28);
-    // Color — mostly cyan-white core with outer blue
-    vec3 inner = vec3(0.6, 0.95, 1.0);
-    vec3 outer = vec3(0.0, 0.5, 1.0);
-    vec3 color = mix(outer, inner, glow) * pulse * 1.6;
-    float alpha = glow * 0.85;
-    if (alpha < 0.02) discard;
-    gl_FragColor = vec4(color, alpha);
+    // Basic directional lighting from above
+    float light = max(dot(vNormal, vec3(0.0, 1.0, 0.0)), 0.2);
+
+    // Engine glow at the back (vUv.y approaching 0)
+    float engineGlow = smoothstep(0.2, 0.0, vUv.y);
+
+    // Cockpit/front highlight (vUv.y approaching 1)
+    float frontGlow = smoothstep(0.8, 1.0, vUv.y);
+
+    // Pulsing intensity
+    float pulse = 0.8 + 0.2 * sin(uTime * 15.0 + vPhase * 6.28);
+
+    // Combine base geometry lighting with intense emissive elements
+    vec3 baseCol = vColor * light * 0.5;
+    vec3 engineCol = vec3(1.0, 0.8, 0.4) * engineGlow * pulse * 25.0; // Huge bloom
+    vec3 frontCol = vec3(0.8, 0.9, 1.0) * frontGlow * 15.0; // Bright front
+
+    vec3 color = baseCol + engineCol + frontCol;
+    if (vUv.y > 0.05 && vUv.y < 0.95 && vUv.x > 0.1 && vUv.x < 0.9) {
+        color *= 2.0; // Boost middle slightly
+    }
+
+    gl_FragColor = vec4(color, 1.0);
 }
 `
 
 /* ═══════════════════════════════════════════════════════════════
    Building-Aware Road Grid Computation
+   OPTIMIZED: Pre-allocated arrays, reduced allocations in hot paths
    ═══════════════════════════════════════════════════════════════ */
+
+// Reusable interval array to avoid allocations
+let _intervalBuffer = []
 
 function mergeIntervals(intervals) {
     if (intervals.length === 0) return []
+
+    // Sort in-place to avoid allocation
     intervals.sort((a, b) => a[0] - b[0])
-    const merged = [intervals[0].slice()]
+
+    // Reuse buffer for merged results
+    _intervalBuffer.length = 0
+    _intervalBuffer.push([intervals[0][0], intervals[0][1]])
+
     for (let i = 1; i < intervals.length; i++) {
-        const last = merged[merged.length - 1]
+        const last = _intervalBuffer[_intervalBuffer.length - 1]
         if (intervals[i][0] <= last[1] + 0.1) {
             last[1] = Math.max(last[1], intervals[i][1])
         } else {
-            merged.push(intervals[i].slice())
+            _intervalBuffer.push([intervals[i][0], intervals[i][1]])
         }
     }
-    return merged
+
+    // Return a copy to avoid mutation issues
+    return _intervalBuffer.map(i => [i[0], i[1]])
+}
+
+// Cache for road grid computation - avoids recalculation when buildings haven't changed
+let _lastBuildingCount = -1
+let _lastBuildingHash = ''
+let _cachedRoadGrid = null
+
+function computeRoadGridHash(buildings) {
+    // Quick hash based on count and first/last building positions
+    if (!buildings || buildings.length === 0) return 'empty'
+    const first = buildings[0]
+    const last = buildings[buildings.length - 1]
+    return `${buildings.length}:${first?.position?.x?.toFixed(1)}:${last?.position?.x?.toFixed(1)}`
 }
 
 function computeRoadGrid(buildings) {
     if (!buildings || buildings.length === 0) return { segments: [], intersections: [] }
 
+    // Check cache
+    const hash = computeRoadGridHash(buildings)
+    if (hash === _lastBuildingHash && _cachedRoadGrid) {
+        return _cachedRoadGrid
+    }
+
     const footprints = []
     let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity
 
-    for (const b of buildings) {
+    for (let i = 0; i < buildings.length; i++) {
+        const b = buildings[i]
         if (!b.position || !b.dimensions) continue
         const hw = (b.dimensions.width || 4) / 2 + BUILDING_MARGIN
         const hd = (b.dimensions.depth || b.dimensions.width || 4) / 2 + BUILDING_MARGIN
@@ -268,13 +321,18 @@ function computeRoadGrid(buildings) {
         if (z + hd > maxZ) maxZ = z + hd
     }
 
-    if (footprints.length === 0) return { segments: [], intersections: [] }
+    if (footprints.length === 0) {
+        _lastBuildingHash = hash
+        _cachedRoadGrid = { segments: [], intersections: [] }
+        return _cachedRoadGrid
+    }
 
     const pad = 20
     minX -= pad; maxX += pad; minZ -= pad; maxZ += pad
 
     // Project footprints onto X-axis → find vertical road corridors
-    const mergedX = mergeIntervals(footprints.map(f => [f.xMin, f.xMax]))
+    const xIntervals = footprints.map(f => [f.xMin, f.xMax])
+    const mergedX = mergeIntervals(xIntervals)
 
     const vRoads = []
     if (mergedX[0][0] - minX > MIN_CORRIDOR)
@@ -288,7 +346,8 @@ function computeRoadGrid(buildings) {
         vRoads.push({ cx: (mergedX[mergedX.length - 1][1] + maxX) / 2, width: maxX - mergedX[mergedX.length - 1][1], isPerimeter: true })
 
     // Project footprints onto Z-axis → find horizontal road corridors
-    const mergedZ = mergeIntervals(footprints.map(f => [f.zMin, f.zMax]))
+    const zIntervals = footprints.map(f => [f.zMin, f.zMax])
+    const mergedZ = mergeIntervals(zIntervals)
 
     const hRoads = []
     if (mergedZ[0][0] - minZ > MIN_CORRIDOR)
@@ -310,17 +369,23 @@ function computeRoadGrid(buildings) {
         segments.push({ start: [minX, ROAD_Y, hr.cz], end: [maxX, ROAD_Y, hr.cz], axis: 'x', isMainAvenue: hr.width > 20 })
     }
 
-    // Intersections
+    // Intersections - limit to 200 max for performance
     const intersections = []
     const vSegs = segments.filter(s => s.axis === 'z')
     const hSegs = segments.filter(s => s.axis === 'x')
+    const maxIntersections = 200
+    outer:
     for (const vs of vSegs) {
         for (const hs of hSegs) {
+            if (intersections.length >= maxIntersections) break outer
             intersections.push([vs.start[0], ROAD_Y + 0.01, hs.start[2]])
         }
     }
 
-    return { segments, intersections }
+    // Cache the result
+    _lastBuildingHash = hash
+    _cachedRoadGrid = { segments, intersections }
+    return _cachedRoadGrid
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -423,87 +488,152 @@ function IntersectionNode({ position }) {
 }
 
 /**
- * TrafficFlow — Glowing data-stream particles
+ * TrafficFlow — Coruscant Hover Taxis
  *
- * Uses imperative geometry construction to avoid Three.js buffer resize crashes.
- * The parent passes key={segments.length} to force remount when road count changes.
+ * Fully 3D InstancedMesh rendering thousands of low-poly, neon-streaking
+ * hover cars that literally fly on quantized Z-axis elevations between
+ * the data-buildings with exactly 1 Draw Call.
  */
 function TrafficFlow({ segments }) {
-    const pointsRef = useRef()
+    const meshRef = useRef()
     const velocitiesRef = useRef([])
+    const dummy = useMemo(() => new THREE.Object3D(), [])
 
-    const count = useMemo(() => Math.min(segments.length * 4, 400), [segments])
+    const count = useMemo(() => Math.min(segments.length * 8, 2000), [segments])
 
-    // Build geometry imperatively — avoids buffer resize errors
     useEffect(() => {
-        if (!pointsRef.current || count === 0) return
+        if (!meshRef.current || count === 0) return
 
-        const positions = new Float32Array(count * 3)
         const phases = new Float32Array(count)
+        const colors = new Float32Array(count * 3)
         const vel = []
+
+        // Cyberpunk neon palettes for the cars
+        const palette = [
+            new THREE.Color('#00f0ff'), // Neon Cyan
+            new THREE.Color('#ff0055'), // Neon Pink
+            new THREE.Color('#ffa500'), // Amber Taxi
+            new THREE.Color('#ffffff'), // Pure White Corporate
+            new THREE.Color('#ff00ff'), // Magenta
+            new THREE.Color('#00ffaa'), // Seafoam
+        ]
 
         for (let i = 0; i < count; i++) {
             const seg = segments[i % segments.length]
             const t = Math.random()
 
-            positions[i * 3 + 0] = seg.start[0] + (seg.end[0] - seg.start[0]) * t
-            positions[i * 3 + 1] = ROAD_Y + 0.4
-            positions[i * 3 + 2] = seg.start[2] + (seg.end[2] - seg.start[2]) * t
+            // Safe horizontal boundaries
+            const minX = Math.min(seg.start[0], seg.end[0])
+            const maxX = Math.max(seg.start[0], seg.end[0])
+            const minZ = Math.min(seg.start[2], seg.end[2])
+            const maxZ = Math.max(seg.start[2], seg.end[2])
 
-            const speed = (0.6 + Math.random() * 1.4) * (Math.random() > 0.5 ? 1 : -1)
+            const speed = (0.5 + Math.random() * 1.5) * (Math.random() > 0.5 ? 1 : -1)
+
+            // Calculate x, y, z
+            const x = seg.start[0] + (seg.end[0] - seg.start[0]) * t
+            const z = seg.start[2] + (seg.end[2] - seg.start[2]) * t
+
+            // Multiple flight lanes above ground (Coruscant styling)
+            // Ground traffic = ROAD_Y + 1.2
+            // Then 0 to 6 distinct vertical flight levels up to 35 units high.
+            const baseY = ROAD_Y + 1.2
+            const randomLevel = Math.floor(Math.random() * 7) // 0 to 6
+            const heightSpacing = 5.0
+            const y = baseY + randomLevel * heightSpacing
+
             vel.push({
                 axis: seg.axis,
                 speed,
-                min: Math.min(seg.start[seg.axis === 'x' ? 0 : 2], seg.end[seg.axis === 'x' ? 0 : 2]),
-                max: Math.max(seg.start[seg.axis === 'x' ? 0 : 2], seg.end[seg.axis === 'x' ? 0 : 2]),
+                min: seg.axis === 'x' ? minX : minZ,
+                max: seg.axis === 'x' ? maxX : maxZ,
+                x, y, z
             })
 
             phases[i] = Math.random()
+
+            const c = palette[Math.floor(Math.random() * palette.length)]
+            colors[i * 3 + 0] = c.r
+            colors[i * 3 + 1] = c.g
+            colors[i * 3 + 2] = c.b
+
+            // Initial positioning
+            dummy.position.set(x, y, z)
+            // Initial rotation aligning to travel axis
+            if (seg.axis === 'x') {
+                dummy.rotation.set(0, speed > 0 ? Math.PI / 2 : -Math.PI / 2, 0)
+            } else {
+                dummy.rotation.set(0, speed > 0 ? 0 : Math.PI, 0)
+            }
+
+            // Scaled into a sleek hover-car shape
+            dummy.scale.set(0.15, 0.1, 0.4)
+            dummy.updateMatrix()
+            meshRef.current.setMatrixAt(i, dummy.matrix)
         }
 
+        meshRef.current.instanceMatrix.needsUpdate = true
         velocitiesRef.current = vel
 
-        const geo = new THREE.BufferGeometry()
-        geo.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-        geo.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1))
+        // Attach custom attributes for vertex shader
+        meshRef.current.geometry.setAttribute('aPhase', new THREE.InstancedBufferAttribute(phases, 1))
+        meshRef.current.geometry.setAttribute('aColor', new THREE.InstancedBufferAttribute(colors, 3))
+    }, [segments, count, dummy])
 
-        const old = pointsRef.current.geometry
-        pointsRef.current.geometry = geo
-        if (old) old.dispose()
-    }, [segments, count])
-
-    // Build material once
+    // Build optimized material
     const material = useMemo(() => new THREE.ShaderMaterial({
         uniforms: { uTime: { value: 0 } },
         vertexShader: TRAFFIC_VERT,
         fragmentShader: TRAFFIC_FRAG,
         transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
+        depthWrite: true,
     }), [])
 
     useFrame((state, delta) => {
-        if (!pointsRef.current?.geometry?.attributes?.position) return
+        if (!meshRef.current) return
         material.uniforms.uTime.value = state.clock.elapsedTime
 
-        const pos = pointsRef.current.geometry.attributes.position.array
         const vel = velocitiesRef.current
 
+        // Simple tick engine for 2000+ objects
         for (let i = 0; i < vel.length; i++) {
             const v = vel[i]
-            const idx = v.axis === 'x' ? i * 3 : i * 3 + 2
-            pos[idx] += v.speed * delta * 15
 
-            if (pos[idx] > v.max) pos[idx] = v.min
-            if (pos[idx] < v.min) pos[idx] = v.max
+            // Apply velocity
+            if (v.axis === 'x') {
+                v.x += v.speed * delta * 25 // 3D flight paths are faster
+                if (v.x > v.max) v.x = v.min
+                if (v.x < v.min) v.x = v.max
+            } else {
+                v.z += v.speed * delta * 25
+                if (v.z > v.max) v.z = v.min
+                if (v.z < v.min) v.z = v.max
+            }
+
+            // Sync dummy matrix
+            dummy.position.set(v.x, v.y, v.z)
+            if (v.axis === 'x') {
+                dummy.rotation.set(0, v.speed > 0 ? Math.PI / 2 : -Math.PI / 2, 0)
+            } else {
+                dummy.rotation.set(0, v.speed > 0 ? 0 : Math.PI, 0)
+            }
+            dummy.scale.set(0.15, 0.1, 0.4)
+            dummy.updateMatrix()
+            meshRef.current.setMatrixAt(i, dummy.matrix)
         }
 
-        pointsRef.current.geometry.attributes.position.needsUpdate = true
+        // Commit GPU draw call update
+        meshRef.current.instanceMatrix.needsUpdate = true
     })
 
     useEffect(() => () => material.dispose(), [material])
 
     if (count === 0) return null
 
-    return <points ref={pointsRef} material={material} raycast={() => null} />
+    return (
+        <instancedMesh ref={meshRef} args={[null, null, count]} frustumCulled={false} raycast={() => null}>
+            <boxGeometry args={[1, 1, 1]} />
+            <primitive object={material} attach="material" />
+        </instancedMesh>
+    )
 }

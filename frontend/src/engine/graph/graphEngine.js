@@ -4,6 +4,11 @@
  * 100% Native Zero-Dependency Implementation.
  * Uses a custom Louvain algorithm for community detection and
  * spiral treemap packing for beautiful city layouts.
+ *
+ * Performance Optimizations:
+ * - LRU cache for import resolution (avoids repeated path lookups)
+ * - Pre-computed suffix maps for O(1) file matching
+ * - Optimized community merging with edge-count tracking
  */
 
 import { resolveImport } from '../parser/regexParser.js'
@@ -17,6 +22,48 @@ const MIN_BUILDING_WIDTH = 2
 const MAX_BUILDING_WIDTH = 20
 const MIN_BUILDING_HEIGHT = 1
 const MAX_BUILDING_HEIGHT = 80
+
+/**
+ * Simple LRU Cache for import resolution
+ * Dramatically speeds up repeated path lookups in large codebases
+ */
+class LRUCache {
+  constructor(maxSize = 10000) {
+    this.cache = new Map()
+    this.maxSize = maxSize
+  }
+
+  get(key) {
+    if (!this.cache.has(key)) return undefined
+    // Move to end (most recently used)
+    const value = this.cache.get(key)
+    this.cache.delete(key)
+    this.cache.set(key, value)
+    return value
+  }
+
+  set(key, value) {
+    if (this.cache.has(key)) {
+      this.cache.delete(key)
+    } else if (this.cache.size >= this.maxSize) {
+      // Delete oldest entry (first key)
+      const firstKey = this.cache.keys().next().value
+      this.cache.delete(firstKey)
+    }
+    this.cache.set(key, value)
+  }
+
+  has(key) {
+    return this.cache.has(key)
+  }
+
+  clear() {
+    this.cache.clear()
+  }
+}
+
+// Global import resolution cache - persists across analysis runs for incremental updates
+const importResolutionCache = new LRUCache(10000)
 
 /**
  * A ultra-lightweight, zero-dependency directed graph.
@@ -138,10 +185,20 @@ function buildDependencyGraph(parsedFiles) {
 /**
  * Highly optimized O(1) matching for imports using suffix and exact maps.
  * Replaces the O(N^2) loop that was crashing the Web Worker on large repos.
+ * Now with LRU caching for repeated lookups.
  */
 function findMatchingFileOptimized(importSpec, currentFilePath, exactMap, suffixMap, language) {
-  const extensions = ['', '.js', '.jsx', '.ts', '.tsx', '.py', '/index.js', '/index.ts', '/index.jsx', '.mjs', '.cjs', '.cjs', '.mjs']
+  // Check cache first - key includes current file path for relative import context
+  const cacheKey = `${currentFilePath}::${importSpec}`
+  const cached = importResolutionCache.get(cacheKey)
+  if (cached !== undefined) {
+    return cached // null is a valid cached "not found" result
+  }
+
+  const extensions = ['', '.js', '.jsx', '.ts', '.tsx', '.py', '/index.js', '/index.ts', '/index.jsx', '.mjs', '.cjs']
   const normalizedSpec = normalizePath(importSpec)
+
+  let result = null
 
   // 1. Resolve relative paths against the current file's directory
   if (normalizedSpec.startsWith('.')) {
@@ -158,18 +215,27 @@ function findMatchingFileOptimized(importSpec, currentFilePath, exactMap, suffix
       const absoluteSpec = parts.join('/')
       for (const ext of extensions) {
           const cand = absoluteSpec + ext
-          if (exactMap.has(cand)) return exactMap.get(cand)
+          if (exactMap.has(cand)) {
+            result = exactMap.get(cand)
+            break
+          }
       }
   }
 
   // 2. Try fast suffix map lookup for absolute/module paths resolving into the project
-  // e.g., import "utils/foo" -> instantly hits "src/utils/foo.js"
-  for (const ext of extensions) {
-      const cand = normalizedSpec + ext
-      if (suffixMap.has(cand)) return suffixMap.get(cand)
+  if (result === null) {
+    for (const ext of extensions) {
+        const cand = normalizedSpec + ext
+        if (suffixMap.has(cand)) {
+          result = suffixMap.get(cand)
+          break
+        }
+    }
   }
 
-  return null
+  // Cache the result (including null for "not found")
+  importResolutionCache.set(cacheKey, result)
+  return result
 }
 
 function normalizePath(p) {

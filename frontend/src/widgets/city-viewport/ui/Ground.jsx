@@ -15,14 +15,14 @@ function Ground({ size = 3000 }) {
         canvas.height = 2048
         const ctx = canvas.getContext('2d')
 
-        // Base: pure deep void
-        ctx.fillStyle = '#050a10'
+        // Base: pure deep void (almost black)
+        ctx.fillStyle = '#010204'
         ctx.fillRect(0, 0, 2048, 2048)
 
         const blockSize = 128
 
-        // Minor grid - faint cyan lines
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)'
+        // Minor grid - glowing cyan lines
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.15)'
         ctx.lineWidth = 1
 
         for (let i = 0; i <= 2048; i += blockSize) {
@@ -37,17 +37,17 @@ function Ground({ size = 3000 }) {
             ctx.stroke()
         }
 
-        // Crosshairs at intersections - bright cyan
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)'
+        // Crosshairs at intersections - bright glowing cyan
+        ctx.strokeStyle = 'rgba(0, 255, 255, 0.8)'
         ctx.lineWidth = 2
         const crossSize = 4
 
         for (let x = 0; x <= 2048; x += blockSize) {
             for (let y = 0; y <= 2048; y += blockSize) {
                 // Glow behind crosshair
-                const glow = ctx.createRadialGradient(x, y, 0, x, y, 10)
-                glow.addColorStop(0, 'rgba(255, 255, 255, 0.15)')
-                glow.addColorStop(1, 'rgba(255, 255, 255, 0)')
+                const glow = ctx.createRadialGradient(x, y, 0, x, y, 15)
+                glow.addColorStop(0, 'rgba(0, 240, 255, 0.4)')
+                glow.addColorStop(1, 'rgba(0, 240, 255, 0)')
                 ctx.fillStyle = glow
                 ctx.beginPath()
                 ctx.arc(x, y, 10, 0, Math.PI * 2)

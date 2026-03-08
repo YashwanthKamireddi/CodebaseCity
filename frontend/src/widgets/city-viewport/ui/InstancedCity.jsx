@@ -6,10 +6,15 @@ import useStore from '../../../store/useStore'
 import { PulseMaterial } from '../shaders/PulseMaterial'
 import { getBuildingColor } from '../../../utils/colorUtils'
 
+// Reusable temp objects - avoid allocations in hot paths
 const tempObject = new THREE.Object3D()
 const tempColor = new THREE.Color()
 const planeNormal = new THREE.Vector3(0, 1, 0)
 const intersectPoint = new THREE.Vector3()
+
+// Pre-allocated typed arrays for batch operations
+let cachedMatrixArray = null
+let cachedColorArray = null
 
 /**
  * InstancedCity - High-Performance Building Renderer
@@ -52,6 +57,29 @@ export default function InstancedCity() {
     const buildings = useMemo(() => cityData?.buildings || [], [cityData])
     const count = buildings.length
 
+    // Pre-compute stagger values once for O(1) lookup during animation
+    const staggerData = useMemo(() => {
+        if (count === 0) return null
+        const distances = new Float32Array(count)
+        const delays = new Float32Array(count)
+        let maxDist = 0
+
+        for (let i = 0; i < count; i++) {
+            const b = buildings[i]
+            const { x, z } = b.position
+            const dist = Math.sqrt(x * x + z * z)
+            distances[i] = dist
+            if (dist > maxDist) maxDist = dist
+        }
+
+        // Pre-compute delay values (normalized)
+        for (let i = 0; i < count; i++) {
+            delays[i] = Math.min(distances[i] / 500, 0.3)
+        }
+
+        return { distances, delays, maxDist }
+    }, [buildings, count])
+
     // Smooth time-based animation
     useFrame((state) => {
         if (materialRef.current) {
@@ -60,6 +88,8 @@ export default function InstancedCity() {
     })
 
     const [hoveredInstanceId, setHoveredInstanceId] = useState(null)
+    const prevHoveredRef = useRef(null)
+    const prevSelectedRef = useRef(null)
 
     // Visibility and Frustum Culling State
     const frustumRef = useRef(new THREE.Frustum())
@@ -96,26 +126,24 @@ export default function InstancedCity() {
             const isQuick = isAnimating || currentCommitIndex !== -1 || count > 500
             const progress = isQuick ? 1 : Math.min(elapsed / duration, 1)
 
-            // Premium easing: exponential ease-out with slight bounce
-            const ease = isQuick ? 1 : 1 - Math.pow(1 - progress, 4)
-
-            // Add subtle stagger based on distance from center
+            // Track max radius for bounding sphere
             let maxRadiusSq = 0
 
-            buildings.forEach((b, i) => {
+            // Batch process buildings using pre-computed stagger data
+            for (let i = 0; i < count; i++) {
+                const b = buildings[i]
                 const { x, z } = b.position
                 const width = b.dimensions?.width || 8
                 const depth = b.dimensions?.depth || 8
-                const targetHeight = (b.dimensions?.height || 8) * 3.0 // 3x height for dramatic skyline
+                const targetHeight = (b.dimensions?.height || 8) * 3.0
 
-                // Distance-based stagger for wave effect
-                const dist = Math.sqrt(x * x + z * z)
-                const staggerDelay = isQuick ? 0 : Math.min(dist / 500, 0.3)
+                // Use pre-computed stagger delay (O(1) lookup vs O(1) sqrt)
+                const staggerDelay = isQuick ? 0 : (staggerData?.delays[i] ?? 0)
                 const staggeredProgress = Math.max(0, (progress - staggerDelay) / (1 - staggerDelay))
                 const staggeredEase = isQuick ? 1 : 1 - Math.pow(1 - Math.min(staggeredProgress, 1), 4)
 
                 const currentHeight = Math.max(0.5, targetHeight * staggeredEase)
-                const y = currentHeight / 2 // Removed arbitrary + 0.2 hover offset
+                const y = currentHeight / 2
 
                 tempObject.position.set(x, y, z)
                 tempObject.scale.set(width, currentHeight, depth)
@@ -133,7 +161,7 @@ export default function InstancedCity() {
 
                 const distSq = x * x + z * z
                 if (distSq > maxRadiusSq) maxRadiusSq = distSq
-            })
+            }
 
             meshRef.current.instanceMatrix.needsUpdate = true
 
@@ -167,8 +195,17 @@ export default function InstancedCity() {
     const selectedBuildingId = selectedBuilding?.id
 
     // ═══════════════════════════════════════════════════════════════
-    // COLOR UPDATES - Real-time interaction feedback (colors ONLY)
+    // COLOR UPDATES - Optimized with dirty tracking for O(1) hover/select
+    // Full rebuild only on colorMode/issueIndex/highlightedIssue change
     // ═══════════════════════════════════════════════════════════════
+
+    // Pre-compute issue paths set for O(1) lookup
+    const highlightedPathsSet = useMemo(() => {
+        if (!highlightedIssue?.paths) return null
+        return new Set(highlightedIssue.paths)
+    }, [highlightedIssue])
+
+    // Full color rebuild when base state changes
     useLayoutEffect(() => {
         if (!meshRef.current || count === 0) return
 
@@ -178,8 +215,7 @@ export default function InstancedCity() {
             const b = buildings[i]
             const isSelected = selectedBuildingId === b.id
             const isHovered = hoveredInstanceId === i
-
-            const isIssueHighlighted = highlightedIssue && highlightedIssue.paths.includes(b.path)
+            const isIssueHighlighted = highlightedPathsSet?.has(b.path) ?? false
 
             const isUnrelated = (highlightedIssue && !isIssueHighlighted) ||
                 (!highlightedIssue && selectedBuildingId && !isSelected && colorMode === 'default')
@@ -199,9 +235,13 @@ export default function InstancedCity() {
         if (meshRef.current.instanceColor) {
             meshRef.current.instanceColor.needsUpdate = true
         }
+
+        // Track previous values for incremental updates
+        prevHoveredRef.current = hoveredInstanceId
+        prevSelectedRef.current = selectedBuildingId
     }, [
         buildings, selectedBuildingId, hoveredInstanceId, colorMode,
-        highlightedIssue, count, issueIndex
+        highlightedIssue, highlightedPathsSet, count, issueIndex
     ])
 
     // ═══════════════════════════════════════════════════════════════

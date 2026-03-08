@@ -1,8 +1,6 @@
-import { useState, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import {
-    ChevronUp,
-    ChevronDown,
     FileCode,
     ArrowUpRight,
     Search,
@@ -15,6 +13,11 @@ import AuditStats from './AuditStats'
 import PatternList from './PatternList'
 import { slideUp } from '../../../shared/animations/variants'
 import { FolderSearch } from 'lucide-react'
+
+// Constants for virtualization
+const ROW_HEIGHT = 56 // Height of each table row in pixels
+const BUFFER_ROWS = 5 // Extra rows to render above/below viewport
+const MAX_VISIBLE_ROWS = 50 // Maximum rows to render at once
 
 function getHealthColor(health) {
     if (health >= 80) return 'var(--color-success)'
@@ -33,6 +36,32 @@ export default function FileTable({ buildings = [], onSelectFile }) {
     const [searchQuery, setSearchQuery] = useState('')
     const [showRisks, setShowRisks] = useState(false)
 
+    // Virtualization state
+    const [scrollTop, setScrollTop] = useState(0)
+    const containerRef = useRef(null)
+    const [containerHeight, setContainerHeight] = useState(600)
+
+    // Debounced search for better performance
+    const [debouncedSearch, setDebouncedSearch] = useState('')
+    useEffect(() => {
+        const timer = setTimeout(() => setDebouncedSearch(searchQuery), 150)
+        return () => clearTimeout(timer)
+    }, [searchQuery])
+
+    // Measure container height
+    useEffect(() => {
+        const container = containerRef.current
+        if (!container) return
+
+        const resizeObserver = new window.ResizeObserver((entries) => {
+            for (const entry of entries) {
+                setContainerHeight(entry.contentRect.height)
+            }
+        })
+        resizeObserver.observe(container)
+        return () => resizeObserver.disconnect()
+    }, [])
+
     const filesWithMetrics = useMemo(() => {
         return buildings.map(b => ({
             ...b,
@@ -45,8 +74,8 @@ export default function FileTable({ buildings = [], onSelectFile }) {
 
     const sortedFiles = useMemo(() => {
         let filtered = filesWithMetrics
-        if (searchQuery) {
-            const q = searchQuery.toLowerCase()
+        if (debouncedSearch) {
+            const q = debouncedSearch.toLowerCase()
             filtered = filtered.filter(f => f.name.toLowerCase().includes(q) || f.path.toLowerCase().includes(q))
         }
         return filtered.sort((a, b) => {
@@ -56,12 +85,35 @@ export default function FileTable({ buildings = [], onSelectFile }) {
             if (sortDirection === 'asc') return aVal > bVal ? 1 : -1
             return aVal < bVal ? 1 : -1
         })
-    }, [filesWithMetrics, sortColumn, sortDirection, searchQuery])
+    }, [filesWithMetrics, sortColumn, sortDirection, debouncedSearch])
+
+    // Calculate visible range for virtualization
+    const { startIndex, endIndex, visibleFiles, offsetY } = useMemo(() => {
+        const totalRows = sortedFiles.length
+        const visibleRowCount = Math.ceil(containerHeight / ROW_HEIGHT)
+        const actualMaxRows = Math.min(MAX_VISIBLE_ROWS, visibleRowCount + BUFFER_ROWS * 2)
+
+        const startIdx = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - BUFFER_ROWS)
+        const endIdx = Math.min(totalRows, startIdx + actualMaxRows)
+
+        return {
+            startIndex: startIdx,
+            endIndex: endIdx,
+            visibleFiles: sortedFiles.slice(startIdx, endIdx),
+            offsetY: startIdx * ROW_HEIGHT
+        }
+    }, [sortedFiles, scrollTop, containerHeight])
 
     const handleSort = (col) => {
         if (sortColumn === col) setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')
         else { setSortColumn(col); setSortDirection(col === 'name' ? 'asc' : 'desc') }
     }
+
+    const handleScroll = useCallback((e) => {
+        setScrollTop(e.target.scrollTop)
+    }, [])
+
+    const totalHeight = sortedFiles.length * ROW_HEIGHT
 
     return (
         <div className="file-table-container">
@@ -92,7 +144,12 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                 )}
             </div>
 
-            <div className="file-table-wrapper surface-glass ft-table-glass">
+            <div
+                className="file-table-wrapper surface-glass ft-table-glass"
+                ref={containerRef}
+                onScroll={handleScroll}
+                style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 280px)' }}
+            >
                 <table className="file-table">
                     <thead>
                         <tr>
@@ -104,47 +161,53 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <AnimatePresence>
-                            {sortedFiles.slice(0, 100).map((file, i) => (
-                                <motion.tr key={file.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                                    transition={{ delay: i * 0.02 }}
-                                    onClick={() => selectBuilding(file)}
-                                    className={selectedBuilding?.id === file.id ? 'selected' : ''}>
-                                    <td className="file-name">
-                                        <FileCode size={14} className="ft-file-icon" />
-                                        <div className="ft-file-info">
-                                            <span className="ft-file-name">{file.name}</span>
-                                            <span className="ft-file-path">{file.path}</span>
-                                        </div>
-                                    </td>
-                                    <td className="numeric">
-                                        <div className="ft-metric-cell">
-                                            <span className="ft-metric-val" style={{ color: getHealthColor(file.health) }}>{file.health}%</span>
-                                            <div className="ft-bar"><div className="ft-bar-fill" style={{ width: `${file.health}%`, background: getHealthColor(file.health) }} /></div>
-                                        </div>
-                                    </td>
-                                    <td className="numeric">
-                                        <div className="ft-metric-cell">
-                                            <span>{file.complexity}</span>
-                                            <div className="ft-bar"><div className="ft-bar-fill" style={{ width: `${Math.min(100, (file.complexity / 20) * 100)}%`, background: file.complexity > 20 ? '#db2777' : 'var(--color-info)' }} /></div>
-                                        </div>
-                                    </td>
-                                    <td className="numeric">
-                                        <div className="ft-metric-cell">
-                                            <span>{file.churn}</span>
-                                            {file.churn > 5 && <Activity size={12} style={{ color: 'var(--color-warning)' }} />}
-                                        </div>
-                                    </td>
-                                    <td className="numeric ft-mono">{file.coupling}</td>
-                                    <td className="actions">
-                                        <button onClick={(e) => { e.stopPropagation(); window.open(`vscode://file/${file.path}`) }} className="ft-icon-btn">
-                                            <ArrowUpRight size={14} />
-                                        </button>
-                                    </td>
-                                </motion.tr>
-                            ))}
-                        </AnimatePresence>
+                    <tbody style={{ height: totalHeight, position: 'relative' }}>
+                        {/* Spacer for virtualization offset */}
+                        {offsetY > 0 && (
+                            <tr style={{ height: offsetY, visibility: 'hidden' }}>
+                                <td colSpan={6}></td>
+                            </tr>
+                        )}
+                        {visibleFiles.map((file, i) => (
+                            <tr
+                                key={file.id}
+                                onClick={() => selectBuilding(file)}
+                                className={selectedBuilding?.id === file.id ? 'selected' : ''}
+                                style={{ height: ROW_HEIGHT }}
+                            >
+                                <td className="file-name">
+                                    <FileCode size={14} className="ft-file-icon" />
+                                    <div className="ft-file-info">
+                                        <span className="ft-file-name">{file.name}</span>
+                                        <span className="ft-file-path">{file.path}</span>
+                                    </div>
+                                </td>
+                                <td className="numeric">
+                                    <div className="ft-metric-cell">
+                                        <span className="ft-metric-val" style={{ color: getHealthColor(file.health) }}>{file.health}%</span>
+                                        <div className="ft-bar"><div className="ft-bar-fill" style={{ width: `${file.health}%`, background: getHealthColor(file.health) }} /></div>
+                                    </div>
+                                </td>
+                                <td className="numeric">
+                                    <div className="ft-metric-cell">
+                                        <span>{file.complexity}</span>
+                                        <div className="ft-bar"><div className="ft-bar-fill" style={{ width: `${Math.min(100, (file.complexity / 20) * 100)}%`, background: file.complexity > 20 ? '#db2777' : 'var(--color-info)' }} /></div>
+                                    </div>
+                                </td>
+                                <td className="numeric">
+                                    <div className="ft-metric-cell">
+                                        <span>{file.churn}</span>
+                                        {file.churn > 5 && <Activity size={12} style={{ color: 'var(--color-warning)' }} />}
+                                    </div>
+                                </td>
+                                <td className="numeric ft-mono">{file.coupling}</td>
+                                <td className="actions">
+                                    <button onClick={(e) => { e.stopPropagation(); window.open(`vscode://file/${file.path}`) }} className="ft-icon-btn">
+                                        <ArrowUpRight size={14} />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
                 {sortedFiles.length === 0 && (

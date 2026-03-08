@@ -9,6 +9,8 @@ import Ground from './Ground'
 import HologramPanel from './HologramPanel'
 import AtmosphericParticles from './AtmosphericParticles'
 import HeroLandmarks from './HeroLandmarks'
+import MothershipCore from './MothershipCore'
+import OrbitalSatellites from './OrbitalSatellites'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 /**
@@ -120,12 +122,13 @@ export default function CityScene() {
                 CITY CONTENT
             ═══════════════════════════════════════════════════════════════ */}
             <group ref={groupRef} position={[0, 0, 0]}>
+                <MothershipCore />
+                <OrbitalSatellites />
                 <InstancedCity />
                 <HologramPanel />
                 <Roads />
                 <Ground />
                 <HeroLandmarks buildings={cityData?.buildings} />
-                {!isLowEnd && <AtmosphericParticles count={200} spread={cityRadius * 1.5} />}
             </group>
 
             {/* ═══════════════════════════════════════════════════════════════
@@ -145,8 +148,8 @@ export default function CityScene() {
                 />
             )}
 
-            {/* Atmospheric fog - creates depth and mood */}
-            <fog attach="fog" args={['#030810', cityRadius * 0.6, cityRadius * 3.5]} />
+            {/* Atmospheric fog - thick dark volume for scale and mood */}
+            <fog attach="fog" args={['#010204', cityRadius * 0.4, cityRadius * 3.0]} />
 
             {/* Background color - deep space blue */}
             <color attach="background" args={['#020408']} />

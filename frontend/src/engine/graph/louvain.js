@@ -8,7 +8,22 @@
  * Algorithm: Blondel et al., "Fast unfolding of communities in large networks" (2008)
  *
  * Complexity: O(N·log(N)) amortized — fast enough for 10,000+ file repos in-browser.
+ *
+ * Performance Optimizations:
+ * - Early termination when modularity gain is negligible
+ * - Random node shuffling to avoid local optima
+ * - Cached sigma totals for O(1) community weight lookups
+ * - Pre-allocated Maps to reduce GC pressure
  */
+
+// Fisher-Yates shuffle for random node ordering (helps escape local optima)
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array[i], array[j]] = [array[j], array[i]]
+  }
+  return array
+}
 
 /**
  * Run Louvain community detection on a NativeGraph instance.
@@ -72,11 +87,22 @@ export function detectCommunities(graph, maxIterations = 20) {
     sigmaTot.set(i, degree.get(n) || 0)
   })
 
+  // Pre-allocate commWeights map for reuse
+  const commWeights = new Map()
+
+  // Early termination threshold - stop if modularity gain is negligible
+  const MIN_IMPROVEMENT = 0.0001
+  let totalMoved = 0
+
+  // Create shuffled node order for better convergence
+  const nodeOrder = shuffleArray([...nodes])
+
   // Phase 1: Local modularity optimization (greedy node moves)
   for (let iter = 0; iter < maxIterations; iter++) {
     let moved = false
+    let iterMoved = 0
 
-    for (const node of nodes) {
+    for (const node of nodeOrder) {
       const currentComm = community.get(node)
       const ki = degree.get(node)
       const neighbors = adj.get(node)
@@ -84,7 +110,7 @@ export function detectCommunities(graph, maxIterations = 20) {
       if (!neighbors || neighbors.size === 0) continue
 
       // Calculate weights to each neighboring community
-      const commWeights = new Map() // communityId → sum of edge weights to that community
+      commWeights.clear()
       for (const [neighbor, weight] of neighbors) {
         const neighborComm = community.get(neighbor)
         commWeights.set(neighborComm, (commWeights.get(neighborComm) || 0) + weight)
@@ -114,17 +140,23 @@ export function detectCommunities(graph, maxIterations = 20) {
         }
       }
 
-      if (bestComm !== currentComm) {
+      if (bestComm !== currentComm && bestDelta > MIN_IMPROVEMENT) {
         // Update σtot cache: remove ki from old community, add to new
         sigmaTot.set(currentComm, (sigmaTot.get(currentComm) || 0) - ki)
         sigmaTot.set(bestComm, (sigmaTot.get(bestComm) || 0) + ki)
         community.set(node, bestComm)
         moved = true
+        iterMoved++
       }
     }
 
+    totalMoved += iterMoved
+
     // Converged: no nodes moved this iteration
     if (!moved) break
+
+    // Early termination: if very few nodes moved, we're likely near optimal
+    if (iter > 3 && iterMoved < nodes.length * 0.01) break
   }
 
   // Renumber communities to be sequential 0, 1, 2, ...
