@@ -186,13 +186,15 @@ function detectCommunitiesSafe(graph) {
   if (graph.edges.length > 2) {
     try {
       const start = performance.now()
-      const result = detectCommunities(graph)
+      let result = detectCommunities(graph)
       const elapsed = performance.now() - start
 
       // Validate: Louvain should produce multiple communities, not just 1
       const uniqueComms = new Set(Object.values(result))
       if (uniqueComms.size > 1) {
         logger.debug(`[Louvain] Detected ${uniqueComms.size} communities in ${elapsed.toFixed(0)}ms`)
+        // Merge tiny communities to keep district count manageable
+        result = mergeTinyCommunities(result, graph, 80)
         return result
       }
     } catch (err) {
@@ -220,6 +222,105 @@ function assignCommunitiesByDirectory(graph) {
     communities[node] = dirMap.get(dir)
   })
 
+  return communities
+}
+
+/**
+ * Merge tiny communities into their nearest neighbor to keep district count reasonable.
+ * Without this, Louvain can produce thousands of 1-2 file communities for large repos,
+ * causing spiral placement O(N²) blowup and rendering lag.
+ *
+ * Strategy:
+ * 1. Communities with < MIN_SIZE files get merged into the community they share
+ *    the most edges with (preserving dependency coupling).
+ * 2. If still over maxCommunities, merge smallest communities into their
+ *    most-connected neighbor until we're under the cap.
+ */
+function mergeTinyCommunities(communities, graph, maxCommunities = 80) {
+  const MIN_SIZE = 3
+
+  // Build community → [nodes] map
+  const commNodes = new Map()
+  for (const [node, comm] of Object.entries(communities)) {
+    if (!commNodes.has(comm)) commNodes.set(comm, [])
+    commNodes.get(comm).push(node)
+  }
+
+  // Build inter-community edge counts: commA → Map<commB, edgeCount>
+  const interEdges = new Map()
+  for (const edge of graph.edges) {
+    const ca = communities[edge.source]
+    const cb = communities[edge.target]
+    if (ca === undefined || cb === undefined || ca === cb) continue
+    if (!interEdges.has(ca)) interEdges.set(ca, new Map())
+    if (!interEdges.has(cb)) interEdges.set(cb, new Map())
+    interEdges.get(ca).set(cb, (interEdges.get(ca).get(cb) || 0) + 1)
+    interEdges.get(cb).set(ca, (interEdges.get(cb).get(ca) || 0) + 1)
+  }
+
+  // Find best merge target for a community (most shared edges)
+  function bestTarget(comm) {
+    const neighbors = interEdges.get(comm)
+    if (!neighbors || neighbors.size === 0) return null
+    let best = null, bestCount = 0
+    for (const [neighbor, count] of neighbors) {
+      // Only merge into communities that still exist
+      if (commNodes.has(neighbor) && count > bestCount) {
+        bestCount = count
+        best = neighbor
+      }
+    }
+    return best
+  }
+
+  // Phase 1: merge communities smaller than MIN_SIZE
+  for (const [comm, nodes] of Array.from(commNodes.entries())) {
+    if (nodes.length >= MIN_SIZE) continue
+    const target = bestTarget(comm)
+    if (target === null) continue
+
+    // Move all nodes to target community
+    for (const node of nodes) {
+      communities[node] = target
+    }
+    commNodes.get(target).push(...nodes)
+    commNodes.delete(comm)
+  }
+
+  // Phase 2: if still too many, merge smallest into neighbors
+  while (commNodes.size > maxCommunities) {
+    // Find smallest community
+    let smallestComm = null, smallestSize = Infinity
+    for (const [comm, nodes] of commNodes) {
+      if (nodes.length < smallestSize) {
+        smallestSize = nodes.length
+        smallestComm = comm
+      }
+    }
+    if (smallestComm === null) break
+
+    const target = bestTarget(smallestComm)
+    if (target === null) break // No edges to merge along — stop
+
+    const nodes = commNodes.get(smallestComm)
+    for (const node of nodes) {
+      communities[node] = target
+    }
+    commNodes.get(target).push(...nodes)
+    commNodes.delete(smallestComm)
+  }
+
+  // Renumber sequentially
+  const renumber = new Map()
+  let idx = 0
+  for (const comm of commNodes.keys()) {
+    renumber.set(comm, idx++)
+  }
+  for (const node of Object.keys(communities)) {
+    communities[node] = renumber.get(communities[node]) ?? 0
+  }
+
+  logger.debug(`[Merge] Reduced to ${commNodes.size} communities`)
   return communities
 }
 

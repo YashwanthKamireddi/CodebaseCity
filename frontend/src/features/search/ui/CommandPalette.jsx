@@ -25,11 +25,9 @@ export default function CommandPalette() {
         cityData,
         selectBuilding,
         toggleRoads,
-        toggleLabels,
         toggleTheme,
         theme,
         showRoads,
-        showLabels,
         commandPaletteOpen,
         setCommandPaletteOpen,
         searchCode
@@ -160,24 +158,13 @@ export default function CommandPalette() {
                         animate={{ opacity: 1, scale: 1, y: 0, x: '-50%' }}
                         exit={{ opacity: 0, scale: 0.98, y: -10, x: '-50%' }}
                         transition={{ duration: 0.15, ease: [0.32, 0.72, 0, 1] }}
-                        style={{
-                            background: 'rgba(12, 12, 15, 0.85)',
-                            backdropFilter: 'blur(24px) saturate(150%)',
-                            border: '1px solid rgba(255,255,255,0.08)',
-                            boxShadow: '0 24px 48px -12px rgba(0,0,0,0.5)',
-                            borderRadius: '14px',
-                            overflow: 'hidden'
-                        }}
                     >
                         <Command
                             className="command-root"
                             shouldFilter={false}
                         >
                             {/* Search input */}
-                            <div className="command-input-wrapper" style={{
-                                borderBottom: '1px solid rgba(255,255,255,0.05)',
-                                padding: '16px'
-                            }}>
+                            <div className="command-input-wrapper">
                                 <Search color="rgba(255,255,255,0.4)" size={20} />
                                 <Command.Input
                                     className="command-input"
@@ -185,20 +172,8 @@ export default function CommandPalette() {
                                     value={search}
                                     onValueChange={setSearch}
                                     autoFocus
-                                    style={{
-                                        fontFamily: 'var(--font-mono)',
-                                        fontSize: '1rem',
-                                        color: 'white'
-                                    }}
                                 />
-                                <div style={{
-                                    background: 'rgba(255,255,255,0.05)',
-                                    padding: '2px 6px',
-                                    borderRadius: '4px',
-                                    fontSize: '0.7rem',
-                                    color: 'rgba(255,255,255,0.4)',
-                                    fontFamily: 'var(--font-mono)'
-                                }}>ESC</div>
+                                <kbd className="command-esc-badge">ESC</kbd>
                             </div>
 
                             <Command.List className="command-list">
@@ -208,22 +183,19 @@ export default function CommandPalette() {
 
                                 {/* Search Skeleton */}
                                 {isSearching && (
-                                    <div style={{ padding: '8px' }}>
+                                    <div className="command-skeleton-list">
                                         {[...Array(3)].map((_, i) => (
-                                            <div key={i} style={{ display: 'flex', alignItems: 'center', padding: '12px 16px', gap: '12px' }}>
-                                                <motion.div
-                                                    style={{ width: '16px', height: '16px', borderRadius: '4px', background: 'rgba(255,255,255,0.05)' }}
+                                            <div key={i} className="command-skeleton-row">
+                                                <motion.div className="command-skeleton-icon"
                                                     animate={{ opacity: [0.3, 0.7, 0.3] }}
                                                     transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
                                                 />
-                                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                                                    <motion.div
-                                                        style={{ width: '40%', height: '12px', borderRadius: '4px', background: 'rgba(255,255,255,0.05)' }}
+                                                <div className="command-skeleton-text">
+                                                    <motion.div className="command-skeleton-line" style={{ width: '40%' }}
                                                         animate={{ opacity: [0.3, 0.7, 0.3] }}
                                                         transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 + 0.1 }}
                                                     />
-                                                    <motion.div
-                                                        style={{ width: '60%', height: '10px', borderRadius: '4px', background: 'rgba(255,255,255,0.05)' }}
+                                                    <motion.div className="command-skeleton-line command-skeleton-line--sm" style={{ width: '60%' }}
                                                         animate={{ opacity: [0.3, 0.7, 0.3] }}
                                                         transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 + 0.2 }}
                                                     />
@@ -315,7 +287,7 @@ export default function CommandPalette() {
 
 // Trigger button for header
 export function CommandPaletteTrigger({ onClick }) {
-    const { setCommandPaletteOpen } = useStore()
+    const setCommandPaletteOpen = useStore(s => s.setCommandPaletteOpen)
     return (
         <button className="command-trigger" onClick={() => setCommandPaletteOpen(true)}>
             <Search size={16} />

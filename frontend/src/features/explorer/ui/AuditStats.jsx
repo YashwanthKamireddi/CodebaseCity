@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Activity, TrendingUp, AlertTriangle, ShieldCheck } from 'lucide-react'
-import { BuildingModel } from '../../../entities/building/model' // FIXED_PATH
+import { BuildingModel } from '../../../entities/building/model'
 
 export default function AuditStats({ buildings }) {
     const stats = useMemo(() => {
@@ -41,108 +41,105 @@ export default function AuditStats({ buildings }) {
     if (!stats) return null
 
     return (
-        <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '16px',
-            marginBottom: '24px'
-        }}>
-            {/* Health Grade Card */}
+        <div className="as-grid">
             <StatCard
-                label="Architecture Grade"
-                val={stats.grade}
+                label="Architecture Grade" val={stats.grade}
                 sub={`${stats.avgHealth}% Health Score`}
-                icon={<ShieldCheck size={20} />}
-                color={stats.grade === 'A' || stats.grade === 'B' ? '#10b981' : '#f59e0b'}
+                icon={<ShieldCheck size={18} />}
+                variant={stats.grade === 'A' || stats.grade === 'B' ? 'success' : 'warning'}
                 big
             />
-
-            {/* Critical Files */}
             <StatCard
-                label="Critical Hotspots"
-                val={stats.criticalFiles}
-                sub="Files requiring immediate attention"
-                icon={<AlertTriangle size={20} />}
-                color="#ef4444"
+                label="Critical Hotspots" val={stats.criticalFiles}
+                sub="Files requiring attention"
+                icon={<AlertTriangle size={18} />}
+                variant="danger"
             />
-
-            {/* Churn Risk */}
             <StatCard
-                label="High Churn Risk"
-                val={stats.highChurnFiles}
+                label="High Churn Risk" val={stats.highChurnFiles}
                 sub="Files changing frequently"
-                icon={<Activity size={20} />}
-                color="#fbbf24"
+                icon={<Activity size={18} />}
+                variant="warning"
+            />
+            <StatCard
+                label="Technical Debt" val={`${stats.debtRatio}%`}
+                sub="Of codebase is critical"
+                icon={<TrendingUp size={18} />}
+                variant={stats.debtRatio < 10 ? 'info' : 'danger'}
             />
 
-            {/* Debt Ratio */}
-            <StatCard
-                label="Technical Debt Ratio"
-                val={`${stats.debtRatio}%`}
-                sub="Of codebase is critical"
-                icon={<TrendingUp size={20} />}
-                color={stats.debtRatio < 10 ? '#3b82f6' : '#d946ef'}
-            />
+            <style>{`
+                .as-grid {
+                    display: grid; grid-template-columns: repeat(4, 1fr);
+                    gap: var(--space-4); margin-bottom: var(--space-6);
+                }
+                @media (max-width: 1200px) { .as-grid { grid-template-columns: repeat(2, 1fr); } }
+                .as-card {
+                    padding: var(--space-5); border-radius: var(--radius-xl);
+                    display: flex; flex-direction: column; justify-content: space-between;
+                    border: 1px solid var(--border-subtle); position: relative; overflow: hidden;
+                    background: var(--glass-bg);
+                    backdrop-filter: blur(12px);
+                    -webkit-backdrop-filter: blur(12px);
+                }
+                .as-card-top {
+                    display: flex; justify-content: space-between; align-items: flex-start;
+                    margin-bottom: var(--space-4);
+                }
+                .as-card-label {
+                    font-size: var(--text-xs); color: var(--color-text-tertiary);
+                    font-weight: var(--font-medium); text-transform: uppercase;
+                    letter-spacing: var(--tracking-wide);
+                }
+                .as-card-icon {
+                    width: 36px; height: 36px; border-radius: var(--radius-lg);
+                    display: flex; align-items: center; justify-content: center;
+                }
+                .as-card-icon--success { background: rgba(34,197,94,0.1); color: var(--color-success); }
+                .as-card-icon--warning { background: rgba(245,158,11,0.1); color: var(--color-warning); }
+                .as-card-icon--danger  { background: rgba(239,68,68,0.1); color: var(--color-error); }
+                .as-card-icon--info    { background: rgba(56,189,248,0.1); color: var(--color-info); }
+                .as-card-value {
+                    font-weight: var(--font-bold); color: var(--color-text-primary);
+                    line-height: 1; margin-bottom: var(--space-1);
+                    font-family: var(--font-display);
+                }
+                .as-card-value--big  { font-size: var(--text-4xl); }
+                .as-card-value--std  { font-size: var(--text-3xl); }
+                .as-card-sub { font-size: var(--text-xs); color: var(--color-text-muted); }
+                .as-glow {
+                    position: absolute; top: -50%; right: -50%;
+                    width: 100%; height: 100%; pointer-events: none;
+                }
+                .as-glow--success { background: radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%); }
+                .as-glow--warning { background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%); }
+                .as-glow--danger  { background: radial-gradient(circle, rgba(239,68,68,0.08) 0%, transparent 70%); }
+                .as-glow--info    { background: radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%); }
+                .as-card-accent {
+                    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+                }
+                .as-card-accent--success { background: linear-gradient(90deg, var(--color-success), transparent); }
+                .as-card-accent--warning { background: linear-gradient(90deg, var(--color-warning), transparent); }
+                .as-card-accent--danger  { background: linear-gradient(90deg, var(--color-error), transparent); }
+                .as-card-accent--info    { background: linear-gradient(90deg, var(--color-info), transparent); }
+            `}</style>
         </div>
     )
 }
 
-function StatCard({ label, val, sub, icon, color, big = false }) {
+function StatCard({ label, val, sub, icon, variant = 'info', big = false }) {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="surface-glass"
-            style={{
-                padding: '20px',
-                borderRadius: '16px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                border: '1px solid rgba(255,255,255,0.05)',
-                position: 'relative',
-                overflow: 'hidden'
-            }}
-        >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                <span style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: 500 }}>{label}</span>
-                <div style={{
-                    padding: '8px',
-                    borderRadius: '50%',
-                    background: `${color}20`,
-                    color: color,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center'
-                }}>
-                    {icon}
-                </div>
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="as-card">
+            <div className="as-card-top">
+                <span className="as-card-label">{label}</span>
+                <div className={`as-card-icon as-card-icon--${variant}`}>{icon}</div>
             </div>
-
             <div>
-                <div style={{
-                    fontSize: big ? '2.5rem' : '1.8rem',
-                    fontWeight: 700,
-                    color: '#f8fafc',
-                    lineHeight: 1,
-                    marginBottom: '4px',
-                    fontFamily: 'var(--font-mono)'
-                }}>
-                    {val}
-                </div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
-                    {sub}
-                </div>
+                <div className={`as-card-value ${big ? 'as-card-value--big' : 'as-card-value--std'}`}>{val}</div>
+                <div className="as-card-sub">{sub}</div>
             </div>
-
-            {/* Glow Effect */}
-            <div style={{
-                position: 'absolute',
-                top: '-50%',
-                right: '-50%',
-                width: '100%',
-                height: '100%',
-                background: `radial-gradient(circle, ${color}20 0%, transparent 70%)`,
-                pointerEvents: 'none'
-            }} />
+            <div className={`as-glow as-glow--${variant}`} />
+            <div className={`as-card-accent as-card-accent--${variant}`} />
         </motion.div>
     )
 }

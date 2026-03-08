@@ -5,96 +5,66 @@
  * Focus: Fast load, useful features, developer workflow
  */
 
-import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect, Suspense, useCallback, lazy, startTransition } from 'react'
 import { Canvas, invalidate } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, Preload } from '@react-three/drei'
 import CityScene from './widgets/city-viewport/ui/CityScene'
 import { CanvasErrorBoundary } from './widgets/layout/ui/CanvasErrorBoundary'
 import Sidebar from './widgets/layout/ui/Sidebar'
-import BuildingPanel from './entities/building/ui/BuildingPanel'
 import { motion, AnimatePresence } from 'framer-motion'
 import LoadingScreen from './shared/ui/LoadingScreen'
 import { ErrorBoundary } from './shared/ui/ErrorBoundary'
 import { ToastContainer } from './shared/ui/Toast'
 
+// Lazy-loaded heavy panels (only loaded when needed)
+const TimelineController = lazy(() => import('./features/timeline/ui/TimelineController'))
+const CommandPalette = lazy(() => import('./features/search/ui/CommandPalette'))
+const FileTable = lazy(() => import('./features/explorer/ui/FileTable'))
+const ChatInterface = lazy(() => import('./features/ai-architect/ui/ChatInterface'))
+const ExportReport = lazy(() => import('./features/analysis/ui/ExportReport'))
+const CodeViewer = lazy(() => import('./entities/building/ui/CodeViewer'))
+const CodePage = lazy(() => import('./features/explorer/ui/CodePage'))
 
-import TimelineController from './features/timeline/ui/TimelineController'
-import CommandPalette from './features/search/ui/CommandPalette'
-import FileTable from './features/explorer/ui/FileTable'
 import FloatingDock from './widgets/layout/ui/FloatingDock'
-import AnalyzeModal from './features/analysis/ui/AnalyzeModal'
 import CityBuilderLoader from './features/onboarding/ui/CityBuilderLoader'
 import EmptyCityHero from './features/onboarding/ui/EmptyCityHero'
 import ViewControl from './widgets/layout/ui/ViewControl'
 import CanvasUI from './widgets/layout/ui/CanvasUI'
-import ChatInterface from './features/ai-architect/ui/ChatInterface'
-import DependencyGraph from './features/architect/ui/DependencyGraph'
-import ExportReport from './features/analysis/ui/ExportReport'
 import useStore from './store/useStore'
-import CodeViewer from './entities/building/ui/CodeViewer'
-import ExplorationMode from './widgets/city-viewport/ui/ExplorationMode'
-import ExplorationHUD from './widgets/layout/ui/ExplorationHUD'
 
 // Design tokens
 import './styles/design-tokens.css'
 import './styles/ProfessionalUI.css'
 import './App.css'
 
-import CodePage from './features/explorer/ui/CodePage'
-
-function App() {
-    // Simple Client-Side Routing for Standalone Code View
-    if (window.location.pathname === '/code') {
-        return <CodePage />
-    }
-
-    const {
-        cityData,
-        selectedBuilding,
-        loading,
-        theme,
-        isAnimating,
-        selectBuilding,
-        error,
-        codeViewerOpen,
-        setCodeViewerOpen,
-        explorationMode,
-        setExplorationMode,
-        toggleExplorationMode,
-        isLandingOverlayActive
-    } = useStore()
-
-    const [sidebarOpen, setSidebarOpen] = useState(true)
-    const [view, setView] = useState('3d') // '3d' or 'table'
-    const [showDependencyGraph, setShowDependencyGraph] = useState(false)
-    const [showExportReport, setShowExportReport] = useState(false)
-
-    // Performance tier detection
-    const isMobile = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0
-    const isLowEnd = isMobile || (typeof navigator !== 'undefined' && navigator.hardwareConcurrency <= 4)
-    const dprRange = isLowEnd ? [0.75, 1] : [1, 1.5]
-    const { analyzeModalOpen, setAnalyzeModalOpen } = useStore()
-
-    // Apply theme
-    useEffect(() => {
-        document.documentElement.setAttribute('data-theme', theme)
-    }, [theme])
-
-    // Keyboard shortcuts - practical ones only
-    const { toggleRoads, toggleLabels, clearSelection, stopTimeTravel } = useStore()
-
+/**
+ * useKeyboardShortcuts — Extracted hook for keyboard event handling.
+ * Reads from store snapshot to avoid stale closures.
+ */
+function useKeyboardShortcuts(setView) {
     useEffect(() => {
         const handleKeyDown = (e) => {
-            // Block hotkeys on the landing page
+            // Read fresh state on every keypress — no stale closures
             const state = useStore.getState()
-            if (state.isLandingOverlayActive) return;
-            // Skip if in input
+
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
                 if (e.key === 'Escape') e.target.blur()
                 return
             }
 
-            // Ctrl+K / Cmd+K for command palette
+            // ESC always works for deselection, even on landing
+            if (e.key === 'Escape') {
+                if (state.isAnimating) {
+                    state.stopTimeTravel()
+                } else if (state.selectedBuilding) {
+                    state.clearSelection()
+                }
+                return
+            }
+
+            // Other shortcuts blocked on landing
+            if (state.isLandingOverlayActive) return
+
             if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
                 e.preventDefault()
                 document.querySelector('[data-command-palette-trigger]')?.click()
@@ -102,30 +72,17 @@ function App() {
             }
 
             switch (e.key.toLowerCase()) {
-                case 'escape':
-                    if (explorationMode) {
-                        setExplorationMode(false)
-                    } else if (isAnimating) {
-                        stopTimeTravel()
-                    } else {
-                        clearSelection()
-                    }
-                    break
                 case '/':
                     e.preventDefault()
                     document.querySelector('input[placeholder*="Search"]')?.focus()
                     break
-                case 'f':
-                    if (cityData) toggleExplorationMode()
-                    break
-                case 'l':
-                    toggleLabels()
-                    break
                 case 'd':
-                    toggleRoads()
+                    state.toggleRoads()
                     break
                 case 'v':
-                    setView(v => v === '3d' ? 'table' : '3d')
+                    startTransition(() => {
+                        setView(v => v === '3d' ? 'table' : '3d')
+                    })
                     break
                 default:
                     break
@@ -134,7 +91,49 @@ function App() {
 
         window.addEventListener('keydown', handleKeyDown)
         return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [clearSelection, toggleLabels, toggleRoads, isAnimating, stopTimeTravel, explorationMode, setExplorationMode, toggleExplorationMode, cityData])
+    }, [setView])
+}
+
+function App() {
+    // Simple Client-Side Routing for Standalone Code View
+    const isCodePage = window.location.pathname === '/code'
+
+    // Granular selectors — prevent full re-render on unrelated state changes
+    const cityData = useStore(s => s.cityData)
+    const selectedBuilding = useStore(s => s.selectedBuilding)
+    const loading = useStore(s => s.loading)
+    const theme = useStore(s => s.theme)
+    const isAnimating = useStore(s => s.isAnimating)
+    const selectBuilding = useStore(s => s.selectBuilding)
+    const error = useStore(s => s.error)
+    const codeViewerOpen = useStore(s => s.codeViewerOpen)
+    const setCodeViewerOpen = useStore(s => s.setCodeViewerOpen)
+    const isLandingOverlayActive = useStore(s => s.isLandingOverlayActive)
+
+    const [sidebarOpen, setSidebarOpen] = useState(true)
+    const [view, setView] = useState('3d') // '3d' or 'table'
+    const [showExportReport, setShowExportReport] = useState(false)
+
+    // Performance tier detection
+    const isMobile = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0
+    const isLowEnd = isMobile || (typeof navigator !== 'undefined' && navigator.hardwareConcurrency <= 4)
+    const dprRange = isLowEnd ? [0.75, 1] : [1, 1.5]
+
+    // Apply theme
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme)
+    }, [theme])
+
+    // Extracted keyboard shortcuts — reads fresh state, no stale closures
+    useKeyboardShortcuts(setView)
+
+    if (isCodePage) {
+        return (
+            <Suspense fallback={<LoadingScreen />}>
+                <CodePage />
+            </Suspense>
+        )
+    }
 
     return (
         <div className="app-layout">
@@ -159,34 +158,28 @@ function App() {
                                 >
                                     <PerspectiveCamera
                                         makeDefault
-                                        position={[80, 50, 80]}
+                                        position={[120, 80, 120]}
                                         fov={45}
-                                        near={0.1}
-                                        far={3000}
+                                        near={0.5}
+                                        far={5000}
                                     />
 
                                     {/* Camera Controls */}
-                                    {!explorationMode && (
-                                        <OrbitControls
-                                            makeDefault
-                                            enablePan={true}
-                                            enableZoom={true}
-                                            enableRotate={true}
-                                            minDistance={1}
-                                            maxDistance={2500}
-                                            maxPolarAngle={Math.PI / 2}
-                                            minPolarAngle={0}
-                                            dampingFactor={0.08}
-                                            enableDamping={true}
-                                            autoRotate={!cityData || !selectedBuilding}
-                                            autoRotateSpeed={0.5}
-                                            target={[0, 0, 0]}
-                                            onChange={() => invalidate()}
-                                        />
-                                    )}
-                                    <ExplorationMode
-                                        active={explorationMode}
-                                        onExit={() => setExplorationMode(false)}
+                                    <OrbitControls
+                                        makeDefault
+                                        enablePan={true}
+                                        enableZoom={true}
+                                        enableRotate={true}
+                                        minDistance={5}
+                                        maxDistance={3500}
+                                        maxPolarAngle={Math.PI / 2}
+                                        minPolarAngle={0.05}
+                                        dampingFactor={0.12}
+                                        enableDamping={true}
+                                        autoRotate={!cityData || !selectedBuilding}
+                                        autoRotateSpeed={0.3}
+                                        target={[0, 0, 0]}
+                                        onChange={() => invalidate()}
                                     />
 
                                     <Suspense fallback={null}>
@@ -205,12 +198,14 @@ function App() {
                             background: 'var(--color-bg-primary)',
                             overflow: 'hidden'
                         }}>
-                            <FileTable
-                                buildings={cityData?.buildings || []}
-                                onSelectFile={(file) => {
-                                    selectBuilding(file)
-                                }}
-                            />
+                            <Suspense fallback={null}>
+                                <FileTable
+                                    buildings={cityData?.buildings || []}
+                                    onSelectFile={(file) => {
+                                        selectBuilding(file)
+                                    }}
+                                />
+                            </Suspense>
                         </div>
                     )}
 
@@ -223,31 +218,42 @@ function App() {
                             {/* Floating Navigation Dock - World Class UX */}
                             <FloatingDock
                                 view={view}
-                                onViewChange={setView}
-                                onAnalyze={() => setAnalyzeModalOpen(true)}
-                                onShowGraph={() => setShowDependencyGraph(true)}
-                                onShowExport={() => setShowExportReport(true)}
+                                onViewChange={(nextView) => {
+                                    startTransition(() => {
+                                        setView(nextView)
+                                    })
+                                }}
+                                onShowExport={() => {
+                                    startTransition(() => {
+                                        setShowExportReport(true)
+                                    })
+                                }}
                             />
 
-                            {selectedBuilding && (
-                                <BuildingPanel building={selectedBuilding} />
+                            {view === '3d' && (
+                                <Suspense fallback={null}>
+                                    <TimelineController />
+                                </Suspense>
                             )}
-
-                            {view === '3d' && <TimelineController />}
 
                             {view === '3d' && <ViewControl />}
                             {view === '3d' && <CanvasUI />}
-                            <ChatInterface />
+                            <Suspense fallback={null}>
+                                <ChatInterface />
+                            </Suspense>
                             {/* ROOT LEVEL CODE VIEWER */}
                             {codeViewerOpen && selectedBuilding && (
-                                <CodeViewer
-                                    building={selectedBuilding}
-                                    onClose={() => setCodeViewerOpen(false)}
-                                />
+                                <Suspense fallback={null}>
+                                    <CodeViewer
+                                        building={selectedBuilding}
+                                        onClose={() => {
+                                            startTransition(() => {
+                                                setCodeViewerOpen(false)
+                                            })
+                                        }}
+                                    />
+                                </Suspense>
                             )}
-
-                            {/* EXPLORATION MODE HUD */}
-                            <ExplorationHUD />
                         </>
                     )}
                 </div>
@@ -255,23 +261,26 @@ function App() {
 
             {cityData && !isLandingOverlayActive && <Sidebar />}
 
+            {/* Building detail panel — now rendered as 3D hologram inside CityScene */}
+
             {/* Command Palette - ⌘K */}
-            {cityData && <CommandPalette />}
-
-            {/* Analyze Repo Modal */}
-            <AnalyzeModal open={analyzeModalOpen} onOpenChange={setAnalyzeModalOpen} />
-
-            {/* 2D Dependency Graph Modal */}
-            <DependencyGraph
-                isOpen={showDependencyGraph}
-                onClose={() => setShowDependencyGraph(false)}
-            />
+            {cityData && (
+                <Suspense fallback={null}>
+                    <CommandPalette />
+                </Suspense>
+            )}
 
             {/* Export Report Modal */}
-            <ExportReport
-                isOpen={showExportReport}
-                onClose={() => setShowExportReport(false)}
-            />
+            <Suspense fallback={null}>
+                <ExportReport
+                    isOpen={showExportReport}
+                    onClose={() => {
+                        startTransition(() => {
+                            setShowExportReport(false)
+                        })
+                    }}
+                />
+            </Suspense>
 
             {/* Loading - Clean minimal loader */}
             <AnimatePresence>

@@ -11,18 +11,17 @@ import {
     Table2,
     FolderTree,
     Search,
-    ScanLine,
     Sparkles,
     History,
     Github,
-    Network,
-    Download,
-    Gamepad2
+    Download
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
 
-export default function FloatingDock({ view, onViewChange, onAnalyze, onShowGraph, onShowExport }) {
-    const { setCommandPaletteOpen, loading, cityData, explorationMode, toggleExplorationMode } = useStore()
+export default function FloatingDock({ view, onViewChange, onShowExport }) {
+    const setCommandPaletteOpen = useStore(s => s.setCommandPaletteOpen)
+    const loading = useStore(s => s.loading)
+    const cityData = useStore(s => s.cityData)
 
     return (
         <div className="floating-dock-wrapper">
@@ -52,14 +51,6 @@ export default function FloatingDock({ view, onViewChange, onAnalyze, onShowGrap
                     description="Browse project structure"
                 />
 
-                <DeckItem
-                    onClick={onShowGraph}
-                    icon={<Network size={18} />}
-                    label="Dependency Graph"
-                    description="Interactive 2D graph view"
-                    disabled={!cityData}
-                />
-
                 <div className="dock-divider" />
 
                 {/* Actions */}
@@ -69,15 +60,6 @@ export default function FloatingDock({ view, onViewChange, onAnalyze, onShowGrap
                     label="Search"
                     description="Find files, commands, symbols"
                     shortcut="⌘K"
-                />
-
-                <DeckItem
-                    onClick={onAnalyze}
-                    icon={<ScanLine size={18} />}
-                    label="Analyze"
-                    description="Scan repository for metrics"
-                    loading={loading}
-                    accent
                 />
 
                 <DeckItem
@@ -103,16 +85,6 @@ export default function FloatingDock({ view, onViewChange, onAnalyze, onShowGrap
                     icon={<Download size={18} />}
                     label="Export Report"
                     description="Download analysis as PDF/HTML"
-                    disabled={!cityData}
-                />
-
-                <DeckItem
-                    onClick={toggleExplorationMode}
-                    active={explorationMode}
-                    icon={<Gamepad2 size={18} />}
-                    label="Explore Mode"
-                    description="Fly through your city with WASD"
-                    shortcut="F"
                     disabled={!cityData}
                 />
 

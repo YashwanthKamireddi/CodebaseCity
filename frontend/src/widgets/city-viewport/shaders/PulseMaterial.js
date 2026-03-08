@@ -112,7 +112,6 @@ const PulseMaterial = shaderMaterial(
       // ── Inner Sub-Grid lines ──
       float gridSpacingY = 4.0;
       float gridSpacingX = 4.0;
-      // Make tall buildings have tighter vertical grids
       vec2 gridUV = (faceUV + 0.5) * faceScale;
       vec2 gridFract = fract(vec2(gridUV.x / gridSpacingX, gridUV.y / gridSpacingY));
 
@@ -123,9 +122,6 @@ const PulseMaterial = shaderMaterial(
 
       // ── Base Colors ──
       vec3 neonColor = vColor;
-
-      // Keep neon color at natural level
-      // neonColor is already the instance color — no multiplier needed
 
       // Glass core - extremely dark, almost invisible to let background through
       vec3 finalColor = vec3(0.005, 0.008, 0.012);
@@ -141,7 +137,6 @@ const PulseMaterial = shaderMaterial(
 
           // ── Sweeping Scanner Effect ──
           float sweep = fract(vWorldPosition.y * 0.03 - uTime * 0.5);
-          // Sharp line with a trailing fade
           float scanner = smoothstep(0.95, 1.0, sweep) * (1.0 - smoothstep(0.99, 1.0, sweep));
           float scannerGlow = smoothstep(0.8, 1.0, sweep) * 0.2;
           finalColor += neonColor * (scanner + scannerGlow) * 0.5;
@@ -171,22 +166,17 @@ const PulseMaterial = shaderMaterial(
       }
 
       // ── Live Telemetry Flamegraph ──
-      // vChurn is normalized 0.0 to 1.0 (squared curve for extreme outliers)
       if (vChurn > 0.2) {
-          // Heat rises: intense at the top (+0.5), dissipating towards the bottom (-0.5)
           float heightHeat = smoothstep(-0.2, 0.5, vLocalPosition.y);
           float intensity = vChurn * heightHeat;
 
-          // Flame gradient: from dark plasma orange to white-hot core
           vec3 flameColor = mix(vec3(1.0, 0.2, 0.0), vec3(1.0, 0.9, 0.7), intensity);
 
-          // Wild kinetic flicker effect
           float flicker = sin(uTime * 12.0 + vWorldPosition.x * 2.0) * 0.15 + 0.85;
 
           finalColor = mix(finalColor, flameColor, intensity * 0.3);
           finalColor += flameColor * intensity * flicker * 0.8;
 
-          // Roof erupts with extreme heat
           if (isTop) {
               finalColor += vec3(1.0, 0.95, 0.8) * vChurn * 1.0 * flicker;
           }
@@ -195,7 +185,6 @@ const PulseMaterial = shaderMaterial(
       // Final opacity
       float finalOpacity = vOpacityOverride > 0.0 ? vOpacityOverride : 0.95;
 
-      // Add solid opacity so depthWrite actually occludes background items
       gl_FragColor = vec4(finalColor, finalOpacity);
     }
   `

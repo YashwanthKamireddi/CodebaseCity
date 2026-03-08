@@ -8,7 +8,7 @@ import useStore from '../../../store/useStore'
  * Communicates via store actions that CameraController listens to.
  */
 export default function CanvasUI() {
-    const { setCameraAction } = useStore()
+    const setCameraAction = useStore(s => s.setCameraAction)
 
     return (
         <div className="canvas-ui-controls">

@@ -25,6 +25,13 @@
   width: 100%;
   max-width: 640px;
   z-index: var(--z-modal, 2000);
+  background: var(--glass-bg-elevated, rgba(10, 10, 14, 0.85));
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid var(--border-default, rgba(255, 255, 255, 0.08));
+  box-shadow: var(--shadow-depth-3, 0 24px 48px -12px rgba(0,0,0,0.5));
+  border-radius: var(--radius-xl, 14px);
+  overflow: hidden;
 }
 
 /* Root - Premium Glass Material */
@@ -72,8 +79,8 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: var(--space-4, 1rem) var(--space-5, 1.25rem);
+  border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.05));
 }
 
 .command-input-icon {
@@ -87,14 +94,24 @@
   background: transparent;
   border: none;
   outline: none;
-  font-family: var(--font-body, 'Inter', sans-serif);
-  font-size: 1.125rem;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 1rem;
   color: white;
   font-weight: 500;
 }
 
 .command-input::placeholder {
   color: rgba(255, 255, 255, 0.3);
+}
+
+.command-esc-badge {
+  background: var(--color-bg-tertiary, rgba(255,255,255,0.05));
+  padding: 2px 6px;
+  border-radius: var(--radius-sm, 4px);
+  font-size: var(--text-xs, 0.7rem);
+  color: var(--color-text-muted, rgba(255,255,255,0.4));
+  font-family: var(--font-mono);
+  border: 1px solid var(--border-subtle, rgba(255,255,255,0.05));
 }
 
 .command-shortcut {
@@ -282,6 +299,37 @@
   min-width: 1.4rem;
   text-align: center;
   box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+/* Skeleton loading */
+.command-skeleton-list {
+  padding: var(--space-2, 8px);
+}
+.command-skeleton-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 12px;
+}
+.command-skeleton-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-sm, 4px);
+  background: var(--color-bg-tertiary, rgba(255, 255, 255, 0.05));
+}
+.command-skeleton-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.command-skeleton-line {
+  height: 12px;
+  border-radius: var(--radius-sm, 4px);
+  background: var(--color-bg-tertiary, rgba(255, 255, 255, 0.05));
+}
+.command-skeleton-line--sm {
+  height: 10px;
 }
 
 /* Scrollbar */

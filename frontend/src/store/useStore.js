@@ -3,7 +3,6 @@ import { createCitySlice } from './slices/createCitySlice'
 import { createUISlice } from './slices/createUISlice'
 import { createInteractionSlice } from './slices/createInteractionSlice'
 import { createTimeSlice } from './slices/createTimeSlice'
-import { createIntelligenceSlice } from './slices/createIntelligenceSlice'
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
 
@@ -12,7 +11,6 @@ const useStore = create((set, get) => ({
     ...createUISlice(set, get),
     ...createInteractionSlice(set, get),
     ...createTimeSlice(set, get),
-    ...createIntelligenceSlice(set, get),
 
     // Direct Ref for Performance (avoiding React re-renders)
     cityMeshRef: { current: null },
@@ -75,9 +73,16 @@ const useStore = create((set, get) => ({
                 parts: [{ text: m.content }]
             }))
 
-            const response = await fetch(`${GEMINI_API_URL}?key=${geminiApiKey}`, {
+            const controller = new AbortController()
+            const timeoutId = setTimeout(() => controller.abort(), 30000)
+
+            const response = await fetch(GEMINI_API_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-goog-api-key': geminiApiKey
+                },
+                signal: controller.signal,
                 body: JSON.stringify({
                     system_instruction: { parts: [{ text: systemPrompt }] },
                     contents: [
@@ -91,9 +96,13 @@ const useStore = create((set, get) => ({
                 })
             })
 
+            clearTimeout(timeoutId)
+
             if (!response.ok) {
-                const err = await response.json().catch(() => ({}))
-                throw new Error(err.error?.message || `API error (${response.status})`)
+                const status = response.status
+                if (status === 401 || status === 403) throw new Error('Invalid API key')
+                if (status === 429) throw new Error('Rate limit exceeded — try again in a minute')
+                throw new Error(`Request failed (${status})`)
             }
 
             const data = await response.json()
@@ -105,10 +114,13 @@ const useStore = create((set, get) => ({
                 agentStatus: 'idle'
             }))
         } catch (error) {
+            const msg = error.name === 'AbortError'
+                ? 'Request timed out — the API took too long to respond.'
+                : error.message
             set((state) => ({
                 messages: [...state.messages, {
                     role: 'assistant',
-                    content: `Error: ${error.message}\n\nCheck that your API key is valid. Get one free at [Google AI Studio](https://aistudio.google.com/apikey).`
+                    content: `${msg}\n\nCheck that your API key is valid. Get one free at [Google AI Studio](https://aistudio.google.com/apikey).`
                 }],
                 chatLoading: false,
                 agentStatus: 'idle'

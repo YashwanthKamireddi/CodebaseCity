@@ -4,7 +4,8 @@ import CodeViewer from '../../../entities/building/ui/CodeViewer'
 import { FileCode2 } from 'lucide-react'
 
 export default function CodePage() {
-    const { fetchFileContent, setCityData } = useStore()
+    const fetchFileContent = useStore(s => s.fetchFileContent)
+    const setCityData = useStore(s => s.setCityData)
 
     useEffect(() => {
         // Parse params

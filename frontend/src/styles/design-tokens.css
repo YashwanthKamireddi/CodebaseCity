@@ -8,7 +8,7 @@
    DESIGN TOKENS - The Foundation
    ═══════════════════════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Fonts loaded once in index.html — do NOT @import here */
 
 :root {
   /* ════════════════════════════════════════════════════════════════════════
@@ -239,6 +239,16 @@
   --z-tooltip: 70;
   --z-toast: 80;
   --z-max: 9999;
+
+  /* ════════════════════════════════════════════════════════════════════════
+     SHORTHAND ALIASES - Used by BuildingPanel and other inline-styled components
+     ════════════════════════════════════════════════════════════════════════ */
+  --text-secondary: var(--color-text-secondary);
+  --text-mono: var(--color-text-tertiary);
+  --font-sans: var(--font-body);
+  --signal-danger: var(--color-error);
+  --signal-warning: var(--color-warning);
+  --signal-active: var(--color-info);
 
   /* ════════════════════════════════════════════════════════════════════════
      3D CITY SPECIFIC

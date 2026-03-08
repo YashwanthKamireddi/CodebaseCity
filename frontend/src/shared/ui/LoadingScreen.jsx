@@ -17,7 +17,7 @@ const STAGES = [
 ]
 
 export default function LoadingScreen() {
-    const { analysisProgress } = useStore()
+    const analysisProgress = useStore(s => s.analysisProgress)
 
     // Calculate current stage from progress
     const currentStage = Math.min(

@@ -3,21 +3,17 @@
  *
  * This is the single entry point the UI calls. It handles:
  * 1. LOCAL: Reads files via File System Access API
- * 2. GITHUB: Clones repos in-browser via isomorphic-git
- * 3. Both use a Web Worker for AST parsing + graph analysis
+ * 2. Both local and fallback use a Web Worker for AST parsing + graph analysis
  *
  * Usage:
- *   import { analyzeLocal, analyzeGitHub } from './engine/ClientAnalyzer'
+ *   import { analyzeLocal } from './engine/ClientAnalyzer'
  *   const cityData = await analyzeLocal({ onProgress })
- *   const cityData = await analyzeGitHub({ url, onProgress })
  */
 
 import {
   readLocalDirectory,
   readDirectoryViaInput,
   isFileSystemAccessSupported,
-  cloneGitHubRepo,
-  parseGitHubUrl,
 } from './fs/fileSystemAdapter.js'
 
 /**
@@ -50,41 +46,6 @@ export async function analyzeLocal({ onProgress = null, maxFiles = 5000 } = {}) 
   onProgress?.('reading', files.length, files.length, `Read ${files.length} files from "${rootName}"`)
 
   return runWorkerAnalysis(files, rootName, onProgress, 'client')
-}
-
-/**
- * Analyze a GitHub repo entirely client-side.
- * Clones into an in-browser virtual filesystem, parses, and generates the city.
- *
- * @param {object} options
- * @param {string} options.url - GitHub URL (e.g. "https://github.com/owner/repo")
- * @param {function} options.onProgress - (phase, current, total, detail) => void
- * @param {number} options.maxFiles - Maximum files to read (default: 5000)
- * @returns {Promise<object>} CityData compatible with the store
- */
-export async function analyzeGitHub({ url, onProgress = null, maxFiles = 5000 } = {}) {
-  const parsed = parseGitHubUrl(url)
-  if (!parsed) {
-    throw new Error(`Invalid GitHub URL: "${url}". Expected format: github.com/owner/repo`)
-  }
-
-  onProgress?.('cloning', 0, 100, `Cloning ${parsed.owner}/${parsed.repo}...`)
-
-  const { files, rootName } = await cloneGitHubRepo(
-    url,
-    (phase, current, total, detail) => {
-      onProgress?.(phase, current, total, detail)
-    },
-    maxFiles
-  )
-
-  if (files.length === 0) {
-    throw new Error(`No source files found in ${rootName}.`)
-  }
-
-  onProgress?.('reading', files.length, files.length, `Read ${files.length} files from ${rootName}`)
-
-  return runWorkerAnalysis(files, rootName, onProgress, 'github-client')
 }
 
 /**
@@ -148,11 +109,4 @@ function runWorkerAnalysis(files, rootName, onProgress, source) {
  */
 export function isClientAnalysisSupported() {
   return typeof Worker !== 'undefined'
-}
-
-/**
- * Check if a URL looks like a GitHub repo.
- */
-export function isGitHubUrl(url) {
-  return parseGitHubUrl(url) !== null
 }

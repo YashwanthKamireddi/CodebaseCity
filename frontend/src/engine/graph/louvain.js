@@ -65,7 +65,12 @@ export function detectCommunities(graph, maxIterations = 20) {
 
   // Initialize: each node is its own community
   const community = new Map()
-  nodes.forEach((n, i) => community.set(n, i))
+  // Cache σtot per community so we don't rescan all nodes each lookup (O(1) vs O(N))
+  const sigmaTot = new Map()
+  nodes.forEach((n, i) => {
+    community.set(n, i)
+    sigmaTot.set(i, degree.get(n) || 0)
+  })
 
   // Phase 1: Local modularity optimization (greedy node moves)
   for (let iter = 0; iter < maxIterations; iter++) {
@@ -86,7 +91,7 @@ export function detectCommunities(graph, maxIterations = 20) {
       }
 
       // Calculate ΔQ for removing node from current community
-      const sigmaTotCurrent = getSigmaTot(currentComm, community, degree)
+      const stCurrent = sigmaTot.get(currentComm) || 0
       const kiIn = commWeights.get(currentComm) || 0
 
       let bestComm = currentComm
@@ -95,13 +100,13 @@ export function detectCommunities(graph, maxIterations = 20) {
       for (const [candidateComm, kiInCandidate] of commWeights) {
         if (candidateComm === currentComm) continue
 
-        const sigmaTotCandidate = getSigmaTot(candidateComm, community, degree)
+        const stCandidate = sigmaTot.get(candidateComm) || 0
 
         // Modularity gain formula (Louvain paper, Eq. 1)
         const deltaQ =
           (kiInCandidate / m) -
-          (sigmaTotCandidate * ki) / (2 * m * m) -
-          (-(kiIn / m) + ((sigmaTotCurrent - ki) * ki) / (2 * m * m))
+          (stCandidate * ki) / (2 * m * m) -
+          (-(kiIn / m) + ((stCurrent - ki) * ki) / (2 * m * m))
 
         if (deltaQ > bestDelta) {
           bestDelta = deltaQ
@@ -110,6 +115,9 @@ export function detectCommunities(graph, maxIterations = 20) {
       }
 
       if (bestComm !== currentComm) {
+        // Update σtot cache: remove ki from old community, add to new
+        sigmaTot.set(currentComm, (sigmaTot.get(currentComm) || 0) - ki)
+        sigmaTot.set(bestComm, (sigmaTot.get(bestComm) || 0) + ki)
         community.set(node, bestComm)
         moved = true
       }
@@ -133,18 +141,4 @@ export function detectCommunities(graph, maxIterations = 20) {
   }
 
   return result
-}
-
-/**
- * Calculate Σtot for a community (sum of degrees of all nodes in the community).
- * This is used in the modularity gain formula.
- */
-function getSigmaTot(commId, community, degree) {
-  let total = 0
-  for (const [node, comm] of community) {
-    if (comm === commId) {
-      total += degree.get(node) || 0
-    }
-  }
-  return total
 }

@@ -13,12 +13,10 @@ export const createUISlice = (set, get) => ({
     colorMode: 'default', // default | layer | churn | language | author
     renderMode: 'lod2', // 'instanced' (fast) | 'lod2' (realistic CityGML)
     showRoads: false,
-    showLabels: true,
     theme: getInitialTheme(),
 
     // Modals & Panels
     commandPaletteOpen: false,
-    analyzeModalOpen: false, // Open by default
     codeViewerOpen: false,
 
     // Highlights
@@ -34,7 +32,6 @@ export const createUISlice = (set, get) => ({
     setRenderMode: (mode) => set({ renderMode: mode }),
 
     toggleRoads: () => set((state) => ({ showRoads: !state.showRoads })),
-    toggleLabels: () => set((state) => ({ showLabels: !state.showLabels })),
 
     setSidebarOpen: (open) => set({ sidebarOpen: open }),
 
@@ -43,15 +40,9 @@ export const createUISlice = (set, get) => ({
     setSidebarWidth: (width) => set({ sidebarWidth: width }),
 
     // Mutually Exclusive Modals
-    setCommandPaletteOpen: (open) => set((state) => ({
+    setCommandPaletteOpen: (open) => set({
         commandPaletteOpen: open,
-        analyzeModalOpen: open ? false : state.analyzeModalOpen
-    })),
-
-    setAnalyzeModalOpen: (open) => set((state) => ({
-        analyzeModalOpen: open,
-        commandPaletteOpen: open ? false : state.commandPaletteOpen
-    })),
+    }),
 
     setCodeViewerOpen: (open) => set({ codeViewerOpen: open }),
 

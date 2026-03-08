@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import useStore from '../../../store/useStore'
 import {
@@ -28,13 +28,12 @@ const LEGENDS = {
         { color: '#84cc16', label: 'Low' },
         { color: '#f59e0b', label: 'Mid' },
         { color: '#e11d48', label: 'High' },
-        { color: '#dc2626', label: 'Extreme' }
     ],
     churn: [
         { color: '#38bdf8', label: 'Stable' },
         { color: '#84cc16', label: 'Active' },
         { color: '#eab308', label: 'Busy' },
-        { color: '#ef4444', label: '🔥 Hot' }
+        { color: '#ef4444', label: 'Hot' }
     ],
     layer: [
         { color: '#ffffff', label: 'UI' },
@@ -42,11 +41,43 @@ const LEGENDS = {
         { color: '#40c4ff', label: 'Data' },
         { color: '#00e676', label: 'Utils' },
         { color: '#ffc400', label: 'DB' }
-    ]
+    ],
+    default: [
+        { color: '#3b9eff', label: 'Small' },
+        { color: '#00e676', label: 'Mid' },
+        { color: '#ffc400', label: 'Large' },
+        { color: '#ff1744', label: 'Huge' }
+    ],
+    author: []  // populated dynamically
+}
+
+function stringToColor(str) {
+    let hash = 0
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash)
+    }
+    const h = Math.abs(hash % 360)
+    return `hsl(${h}, 65%, 55%)`
 }
 
 export default function ViewControl() {
-    const { colorMode, setColorMode } = useStore()
+    const colorMode = useStore(s => s.colorMode)
+    const setColorMode = useStore(s => s.setColorMode)
+    const cityData = useStore(s => s.cityData)
+
+    // Build dynamic author legend from actual data
+    const authorLegend = useMemo(() => {
+        if (!cityData?.buildings) return []
+        const authors = new Set()
+        for (const b of cityData.buildings) {
+            const name = typeof b.author === 'object' ? b.author?.author : b.author
+            if (name) authors.add(name)
+        }
+        return [...authors].slice(0, 8).map(name => ({
+            color: stringToColor(name),
+            label: name.split(' ')[0]
+        }))
+    }, [cityData])
 
     const colors = [
         { id: 'default', icon: <Building2 size={16} />, label: 'Structure', description: 'Default architectural view' },
@@ -67,7 +98,7 @@ export default function ViewControl() {
         }
     }
 
-    const activeLegend = LEGENDS[colorMode] || null
+    const activeLegend = colorMode === 'author' ? authorLegend : (LEGENDS[colorMode] || null)
 
     return (
         <div className="view-control-container">

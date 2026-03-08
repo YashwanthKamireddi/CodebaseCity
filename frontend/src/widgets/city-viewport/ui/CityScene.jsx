@@ -1,30 +1,24 @@
 import React, { useMemo, useLayoutEffect, useRef } from 'react'
 import { ContactShadows, Environment } from '@react-three/drei'
 import { useFrame, invalidate } from '@react-three/fiber'
-import gsap from 'gsap'
 import useStore from '../../../store/useStore'
 import Roads from './Roads'
 import InstancedCity from './InstancedCity'
-import InstancedTrace from './InstancedTrace'
 import CameraController from './CameraController'
 import Ground from './Ground'
-import BuildingLabels from './BuildingLabels'
-import TrafficLayer from './layers/TrafficLayer'
+import HologramPanel from './HologramPanel'
+import AtmosphericParticles from './AtmosphericParticles'
+import HeroLandmarks from './HeroLandmarks'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 /**
- * AutoInvalidate — Keeps the render loop alive when autoRotate is active.
- * Without this, frameloop="demand" causes the landing page to freeze
- * because OrbitControls autoRotate mutates the camera but nothing calls invalidate().
+ * AutoInvalidate — Keeps the render loop alive for continuous animations.
+ * With frameloop="demand", this ensures PulseMaterial, particles, and
+ * traffic all animate smoothly. Cost is negligible — just schedules frames.
  */
 function AutoInvalidate() {
-    const { cityData, selectedBuilding } = useStore()
-    const shouldAutoRotate = !cityData || !selectedBuilding
-
     useFrame(() => {
-        if (shouldAutoRotate) {
-            invalidate()
-        }
+        invalidate()
     })
 
     return null
@@ -32,14 +26,9 @@ function AutoInvalidate() {
 
 /**
  * CityScene - Premium Cinematic City Environment
- *
- * Lighting design inspired by:
- * - Roger Deakins cinematography (Blade Runner 2049)
- * - Apple product renders
- * - Unreal Engine 5 Lumen
  */
 export default function CityScene() {
-    const { cityData } = useStore()
+    const cityData = useStore(s => s.cityData)
     const groupRef = useRef()
 
     // Performance tier
@@ -132,12 +121,11 @@ export default function CityScene() {
             ═══════════════════════════════════════════════════════════════ */}
             <group ref={groupRef} position={[0, 0, 0]}>
                 <InstancedCity />
-                <InstancedTrace />
-                <BuildingLabels />
-
+                <HologramPanel />
                 <Roads />
-                <TrafficLayer />
                 <Ground />
+                <HeroLandmarks buildings={cityData?.buildings} />
+                {!isLowEnd && <AtmosphericParticles count={200} spread={cityRadius * 1.5} />}
             </group>
 
             {/* ═══════════════════════════════════════════════════════════════
@@ -158,19 +146,19 @@ export default function CityScene() {
             )}
 
             {/* Atmospheric fog - creates depth and mood */}
-            <fog attach="fog" args={['#050810', cityRadius * 0.3, cityRadius * 3]} />
+            <fog attach="fog" args={['#030810', cityRadius * 0.6, cityRadius * 3.5]} />
 
             {/* Background color - deep space blue */}
-            <color attach="background" args={['#030508']} />
+            <color attach="background" args={['#020408']} />
 
-            {/* Bloom Post Processing — skip on low-end for performance */}
+            {/* Bloom Post Processing — balanced, not explosive */}
             {!isLowEnd && (
                 <EffectComposer disableNormalPass>
                     <Bloom
-                        luminanceThreshold={0.7}
+                        luminanceThreshold={0.4}
                         mipmapBlur
-                        luminanceSmoothing={0.5}
-                        intensity={cityData ? 0.4 : 0.2}
+                        luminanceSmoothing={0.6}
+                        intensity={0.6}
                     />
                 </EffectComposer>
             )}

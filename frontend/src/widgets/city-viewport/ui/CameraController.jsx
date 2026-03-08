@@ -7,17 +7,18 @@ import logger from '../../../utils/logger'
 
 export default function CameraController() {
     const { camera, controls } = useThree()
-    const { cityData, cityMeshRef } = useStore()
+    const cityData = useStore(s => s.cityData)
+    const cityMeshRef = useStore(s => s.cityMeshRef)
 
     // Compute city bounding radius
     const cityRadius = React.useMemo(() => {
-        if (!cityData?.buildings?.length) return 80
+        if (!cityData?.buildings?.length) return 120
         let maxR = 0
         for (const b of cityData.buildings) {
             const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
             if (r > maxR) maxR = r
         }
-        return Math.max(40, maxR * 0.7)
+        return Math.max(60, maxR * 0.6)
     }, [cityData])
 
     useEffect(() => {
@@ -25,21 +26,26 @@ export default function CameraController() {
             const { building } = event.detail
             if (!building) return
 
-            let x, y, z
-
             // STATIC TARGETING
-            x = building.position.x
-            z = building.position.z
-            y = building.dimensions.height // Aim at top
+            const x = building.position.x
+            const z = building.position.z
+            const rawHeight = building.dimensions.height || 8
+            const buildingHeight = rawHeight * 3.0
+            const bWidth = building.dimensions.width || 8
+            const bDepth = building.dimensions.depth || 8
 
-            // Calculate target position (offset from building)
-            // Adjusted to frame both Building and Hologram (as requested)
-            // Closer zoom (40-60 range) and aiming higher (at y, not y*0.6)
-            const zoomDist = Math.max(40, y * 1.5)
-            const targetPos = new THREE.Vector3(x + zoomDist, y + zoomDist, z + zoomDist)
+            // Frame building + hologram — match reference framing
+            const panelTop = buildingHeight + 14
+            const zoomDist = Math.max(60, buildingHeight * 1.2 + 30)
+            const camAngle = Math.PI / 5 // ~36° diagonal
+            const targetPos = new THREE.Vector3(
+                x + Math.cos(camAngle) * zoomDist,
+                buildingHeight * 0.8 + 20,
+                z + Math.sin(camAngle) * zoomDist
+            )
 
-            // Look at the TOP of the building (where hologram is)
-            const lookAtPos = new THREE.Vector3(x, y, z)
+            // Look at upper-mid of building
+            const lookAtPos = new THREE.Vector3(x, buildingHeight * 0.4, z)
 
             // Animate Camera Position
             gsap.to(camera.position, {
@@ -96,7 +102,8 @@ export default function CameraController() {
     }, [cityData, cityRadius, camera, controls])
 
     // Auto-fly to selected building logic
-    const { selectedBuilding, cameraAction } = useStore()
+    const selectedBuilding = useStore(s => s.selectedBuilding)
+    const cameraAction = useStore(s => s.cameraAction)
 
     useEffect(() => {
         if (!selectedBuilding) return

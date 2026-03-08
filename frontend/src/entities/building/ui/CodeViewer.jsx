@@ -6,8 +6,17 @@ import useStore from '../../../store/useStore'
 import logger from '../../../utils/logger'
 
 export default function CodeViewer({ building, onClose }) {
-    const { fileContent } = useStore()
+    const fileContent = useStore(s => s.fileContent)
     const [copied, setCopied] = React.useState(false)
+
+    // Close on Escape key
+    React.useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') onClose()
+        }
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [onClose])
 
     if (!building) return null
 
@@ -146,8 +155,22 @@ export default function CodeViewer({ building, onClose }) {
                                 <div style={{ fontSize: '0.8rem', color: '#52525b', marginTop: '12px' }}>{fileContent.content}</div>
                             </div>
                         ) : (
-                            <pre style={{ margin: 0 }}>
-                                <code>{fileContent?.content}</code>
+                            <pre style={{ margin: 0, display: 'flex' }}>
+                                <div style={{
+                                    color: 'rgba(255,255,255,0.2)',
+                                    textAlign: 'right',
+                                    paddingRight: '16px',
+                                    marginRight: '16px',
+                                    borderRight: '1px solid rgba(255,255,255,0.06)',
+                                    userSelect: 'none',
+                                    minWidth: '3em',
+                                    flexShrink: 0,
+                                }}>
+                                    {(fileContent?.content || '').split('\n').map((_, i) => (
+                                        <div key={i}>{i + 1}</div>
+                                    ))}
+                                </div>
+                                <code style={{ flex: 1 }}>{fileContent?.content}</code>
                             </pre>
                         )}
                     </div>

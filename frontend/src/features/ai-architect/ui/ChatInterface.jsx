@@ -7,63 +7,17 @@ import ReactMarkdown from 'react-markdown'
 
 function ApiKeyBanner({ onOpenSettings }) {
     return (
-        <div style={{
-            margin: '16px',
-            padding: '16px',
-            borderRadius: '12px',
-            background: 'rgba(251, 191, 36, 0.06)',
-            border: '1px solid rgba(251, 191, 36, 0.15)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px'
-        }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <KeyRound size={14} color="#fbbf24" />
-                <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#fbbf24' }}>API Key Required</span>
+        <div className="ci-key-banner">
+            <div className="ci-key-banner-head">
+                <KeyRound size={14} />
+                <span>API Key Required</span>
             </div>
-            <p style={{ margin: 0, fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>
+            <p className="ci-key-banner-desc">
                 Add your Gemini API key to chat with the AI architect. Your key is stored locally and never sent to any server.
             </p>
-            <div style={{ display: 'flex', gap: '8px' }}>
-                <button
-                    onClick={onOpenSettings}
-                    style={{
-                        flex: 1,
-                        padding: '8px 12px',
-                        borderRadius: '8px',
-                        background: 'rgba(251, 191, 36, 0.15)',
-                        border: '1px solid rgba(251, 191, 36, 0.25)',
-                        color: '#fbbf24',
-                        fontSize: '0.8rem',
-                        fontWeight: 500,
-                        cursor: 'pointer',
-                        transition: 'background 0.2s'
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(251, 191, 36, 0.25)'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'rgba(251, 191, 36, 0.15)'}
-                >
-                    Add Key
-                </button>
-                <a
-                    href="https://aistudio.google.com/apikey"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                        padding: '8px 12px',
-                        borderRadius: '8px',
-                        background: 'rgba(255,255,255,0.05)',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        color: 'rgba(255,255,255,0.5)',
-                        fontSize: '0.8rem',
-                        textDecoration: 'none',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        transition: 'background 0.2s'
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                    onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-                >
+            <div className="ci-key-banner-actions">
+                <button onClick={onOpenSettings} className="ci-key-add-btn">Add Key</button>
+                <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="ci-key-get-link">
                     Get Key <ExternalLink size={10} />
                 </a>
             </div>
@@ -72,111 +26,48 @@ function ApiKeyBanner({ onOpenSettings }) {
 }
 
 function ApiKeySettings({ onClose }) {
-    const { geminiApiKey, setGeminiApiKey } = useStore()
+    const geminiApiKey = useStore(s => s.geminiApiKey)
+    const setGeminiApiKey = useStore(s => s.setGeminiApiKey)
     const [keyInput, setKeyInput] = useState(geminiApiKey)
 
-    const handleSave = () => {
-        setGeminiApiKey(keyInput.trim())
-        onClose()
-    }
-
-    const handleRemove = () => {
-        setGeminiApiKey('')
-        setKeyInput('')
-    }
+    const handleSave = () => { setGeminiApiKey(keyInput.trim()); onClose() }
+    const handleRemove = () => { setGeminiApiKey(''); setKeyInput('') }
 
     return (
-        <div style={{
-            padding: '20px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            borderBottom: '1px solid rgba(255,255,255,0.05)'
-        }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#fff' }}>API Key Settings</span>
-                <button
-                    onClick={onClose}
-                    style={{
-                        background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)',
-                        cursor: 'pointer', padding: '4px'
-                    }}
-                >
-                    <X size={14} />
-                </button>
+        <div className="ci-settings">
+            <div className="ci-settings-head">
+                <span>API Key Settings</span>
+                <button onClick={onClose} className="ci-icon-btn"><X size={14} /></button>
             </div>
-
-            <div style={{
-                display: 'flex',
-                gap: '8px',
-                background: 'rgba(0,0,0,0.2)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '10px',
-                padding: '4px 4px 4px 12px',
-                alignItems: 'center'
-            }}>
+            <div className="ci-settings-input-row">
                 <input
-                    type="password"
-                    value={keyInput}
+                    type="password" value={keyInput}
                     onChange={e => setKeyInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && handleSave()}
-                    placeholder="AIza..."
-                    autoFocus
-                    style={{
-                        flex: 1,
-                        background: 'transparent',
-                        border: 'none',
-                        color: '#fff',
-                        outline: 'none',
-                        fontSize: '0.85rem',
-                        fontFamily: 'var(--font-mono)'
-                    }}
+                    placeholder="AIza..." autoFocus className="ci-settings-input"
                 />
                 {geminiApiKey && (
-                    <button
-                        onClick={handleRemove}
-                        title="Remove key"
-                        style={{
-                            background: 'rgba(239, 68, 68, 0.1)',
-                            border: '1px solid rgba(239, 68, 68, 0.2)',
-                            borderRadius: '6px',
-                            color: '#ef4444',
-                            cursor: 'pointer',
-                            padding: '6px',
-                            display: 'flex',
-                            alignItems: 'center'
-                        }}
-                    >
+                    <button onClick={handleRemove} title="Remove key" className="ci-key-remove-btn">
                         <Trash2 size={12} />
                     </button>
                 )}
-                <button
-                    onClick={handleSave}
-                    disabled={!keyInput.trim()}
-                    style={{
-                        padding: '6px 14px',
-                        borderRadius: '6px',
-                        background: keyInput.trim() ? '#3b82f6' : 'rgba(255,255,255,0.05)',
-                        border: 'none',
-                        color: keyInput.trim() ? '#fff' : '#52525b',
-                        fontSize: '0.8rem',
-                        fontWeight: 500,
-                        cursor: keyInput.trim() ? 'pointer' : 'default'
-                    }}
-                >
+                <button onClick={handleSave} disabled={!keyInput.trim()}
+                    className={`ci-key-save-btn ${keyInput.trim() ? 'ci-key-save-btn--active' : ''}`}>
                     Save
                 </button>
             </div>
-
-            <p style={{ margin: 0, fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)', lineHeight: 1.5 }}>
-                Stored in your browser&apos;s localStorage. Never leaves your device.
-            </p>
+            <p className="ci-settings-hint">Stored in your browser&apos;s localStorage. Never leaves your device.</p>
         </div>
     )
 }
 
 export default function ChatInterface() {
-    const { chatOpen, messages, sendMessage, chatLoading, agentStatus, geminiApiKey } = useStore()
+    const chatOpen = useStore(s => s.chatOpen)
+    const messages = useStore(s => s.messages)
+    const sendMessage = useStore(s => s.sendMessage)
+    const chatLoading = useStore(s => s.chatLoading)
+    const agentStatus = useStore(s => s.agentStatus)
+    const geminiApiKey = useStore(s => s.geminiApiKey)
     const [input, setInput] = useState('')
     const [showSettings, setShowSettings] = useState(false)
     const messagesEndRef = useRef(null)
@@ -200,175 +91,80 @@ export default function ChatInterface() {
         <AnimatePresence>
             <motion.div
                 variants={getReducedMotionVariants(slideUp, shouldReduceMotion)}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                style={{
-                    position: 'fixed',
-                    top: '100px',
-                    right: '24px',
-                    width: '380px',
-                    height: 'calc(100vh - 140px)',
-                    maxHeight: '700px',
-                    background: 'rgba(5, 5, 10, 0.65)',
-                    backdropFilter: 'blur(30px) saturate(180%)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: '24px',
-                    boxShadow: '0 24px 64px -12px rgba(0,0,0,0.6)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    zIndex: 2500,
-                    overflow: 'hidden',
-                    fontFamily: 'var(--font-sans)'
-                }}
+                initial="initial" animate="animate" exit="exit"
+                className="ci-root"
             >
+                {/* Top accent line */}
+                <div className="ci-accent-line" />
+
                 {/* Header */}
-                <div style={{
-                    padding: '20px',
-                    borderBottom: '1px solid rgba(255,255,255,0.05)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    background: 'rgba(255,255,255,0.02)'
-                }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{
-                            width: '32px', height: '32px',
-                            borderRadius: '8px',
-                            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05))',
-                            border: '1px solid rgba(59, 130, 246, 0.2)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center'
-                        }}>
-                            <Sparkles size={16} color="#60a5fa" />
+                <div className="ci-header">
+                    <div className="ci-header-left">
+                        <div className="ci-logo">
+                            <Sparkles size={16} />
                         </div>
-                        <div>
-                            <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.95rem', display: 'block' }}>Architect</span>
-                            <span style={{ fontSize: '0.75rem', color: hasKey ? 'rgba(52, 211, 153, 0.7)' : 'rgba(255,255,255,0.4)' }}>
+                        <div className="ci-header-text">
+                            <span className="ci-header-title">Architect</span>
+                            <span className={`ci-header-status ${hasKey ? 'ci-header-status--ok' : ''}`}>
                                 {hasKey ? 'Connected' : 'No API key'}
                             </span>
                         </div>
                     </div>
-                    <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                        <button
-                            onClick={() => setShowSettings(s => !s)}
-                            title="API Key Settings"
-                            style={{
-                                background: showSettings ? 'rgba(255,255,255,0.1)' : 'transparent',
-                                border: 'none',
-                                color: hasKey ? 'rgba(52, 211, 153, 0.7)' : 'rgba(255,255,255,0.3)',
-                                cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                width: '28px', height: '28px', borderRadius: '6px',
-                                transition: 'background 0.2s'
-                            }}
-                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                            onMouseLeave={e => { if (!showSettings) e.currentTarget.style.background = 'transparent' }}
-                        >
+                    <div className="ci-header-actions">
+                        <button onClick={() => setShowSettings(s => !s)} title="API Key Settings"
+                            className={`ci-icon-btn ${showSettings ? 'ci-icon-btn--active' : ''} ${hasKey ? 'ci-icon-btn--green' : ''}`}>
                             <KeyRound size={14} />
                         </button>
-                        <button
-                            onClick={() => useStore.setState({ chatOpen: false })}
-                            style={{
-                                background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.3)', cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                width: '28px', height: '28px', borderRadius: '6px',
-                                transition: 'background 0.2s'
-                            }}
-                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                        >
+                        <button onClick={() => useStore.setState({ chatOpen: false })} className="ci-icon-btn">
                             <X size={16} />
                         </button>
                     </div>
                 </div>
 
-                {/* API Key Settings Panel */}
+                {/* API Key Settings */}
                 <AnimatePresence>
                     {showSettings && (
-                        <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
+                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: shouldReduceMotion ? 0.01 : 0.2 }}
-                            style={{ overflow: 'hidden' }}
-                        >
+                            style={{ overflow: 'hidden' }}>
                             <ApiKeySettings onClose={() => setShowSettings(false)} />
                         </motion.div>
                     )}
                 </AnimatePresence>
 
                 {/* Messages */}
-                <div style={{
-                    flex: 1,
-                    overflowY: 'auto',
-                    padding: '20px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '24px'
-                }}>
+                <div className="ci-messages">
                     {!hasKey && messages.length === 0 && (
                         <ApiKeyBanner onOpenSettings={() => setShowSettings(true)} />
                     )}
-
                     {hasKey && messages.length === 0 && (
-                        <div style={{
-                            flex: 1,
-                            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                            gap: '12px', opacity: 0.4
-                        }}>
+                        <div className="ci-empty">
                             <Box size={48} strokeWidth={1} />
-                            <p style={{ margin: 0, fontSize: '0.9rem' }}>Ask about your codebase architecture.</p>
+                            <p>Ask about your codebase architecture.</p>
                         </div>
                     )}
 
                     {messages.map((msg, i) => (
-                        <motion.div
+                        <motion.div key={i}
                             initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: shouldReduceMotion ? 0.01 : 0.2 }}
-                            key={i}
-                            style={{
-                                display: 'flex',
-                                gap: '12px',
-                                flexDirection: msg.role === 'user' ? 'row-reverse' : 'row'
-                            }}
-                        >
-                            <div style={{
-                                width: '28px', height: '28px', borderRadius: '8px',
-                                background: msg.role === 'user' ? '#fff' : 'rgba(255,255,255,0.05)',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                flexShrink: 0,
-                                color: msg.role === 'user' ? '#000' : '#a1a1aa'
-                            }}>
+                            className={`ci-msg ci-msg--${msg.role}`}>
+                            <div className={`ci-msg-avatar ci-msg-avatar--${msg.role}`}>
                                 {msg.role === 'user' ? <User size={14} /> : <Bot size={14} />}
                             </div>
-
-                            <div style={{
-                                maxWidth: '85%',
-                                padding: '12px 16px',
-                                borderRadius: '12px',
-                                background: msg.role === 'user' ? '#27272a' : 'transparent',
-                                border: msg.role === 'assistant' ? 'none' : '1px solid rgba(255,255,255,0.1)',
-                                color: '#e4e4e7',
-                                fontSize: '0.9rem',
-                                lineHeight: '1.6'
-                            }}>
+                            <div className={`ci-msg-bubble ci-msg-bubble--${msg.role}`}>
                                 <ReactMarkdown components={{
-                                    code: ({ inline, children, ...props }) => {
-                                        return !inline ? (
-                                            <div style={{ background: 'rgba(0,0,0,0.3)', padding: '12px', borderRadius: '8px', margin: '8px 0', border: '1px solid rgba(255,255,255,0.05)' }}>
-                                                <code style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }} {...props}>{children}</code>
-                                            </div>
-                                        ) : (
-                                            <code style={{ background: 'rgba(255,255,255,0.1)', padding: '2px 5px', borderRadius: '4px', fontFamily: 'var(--font-mono)', fontSize: '0.8em' }} {...props}>
-                                                {children}
-                                            </code>
-                                        )
-                                    },
+                                    code: ({ inline, children, ...props }) => !inline ? (
+                                        <div className="ci-code-block">
+                                            <code {...props}>{children}</code>
+                                        </div>
+                                    ) : (
+                                        <code className="ci-code-inline" {...props}>{children}</code>
+                                    ),
                                     a: ({ children, href, ...props }) => (
-                                        <a href={href} target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'none' }} {...props}>
-                                            {children}
-                                        </a>
+                                        <a href={href} target="_blank" rel="noopener noreferrer" className="ci-link" {...props}>{children}</a>
                                     )
                                 }}>
                                     {msg.content}
@@ -378,19 +174,14 @@ export default function ChatInterface() {
                     ))}
 
                     {chatLoading && (
-                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                            <div style={{
-                                width: '28px', height: '28px', borderRadius: '8px',
-                                background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center'
-                            }}>
-                                <Bot size={14} color="#a1a1aa" />
+                        <div className="ci-loading">
+                            <div className="ci-msg-avatar ci-msg-avatar--assistant"><Bot size={14} /></div>
+                            <div className="ci-typing-dots">
+                                <span style={{ animationDelay: '0s' }} />
+                                <span style={{ animationDelay: '0.2s' }} />
+                                <span style={{ animationDelay: '0.4s' }} />
                             </div>
-                            <div style={{ display: 'flex', gap: '4px', padding: '10px 0' }}>
-                                <span className="cc-typing-dot" style={{ animationDelay: '0s' }} />
-                                <span className="cc-typing-dot" style={{ animationDelay: '0.2s' }} />
-                                <span className="cc-typing-dot" style={{ animationDelay: '0.4s' }} />
-                            </div>
-                            <span style={{ fontSize: '0.75rem', color: '#a1a1aa' }}>
+                            <span className="ci-loading-label">
                                 {agentStatus === 'thinking' ? 'Thinking...' :
                                     agentStatus === 'analyzing' ? 'Analyzing context...' : 'Writing...'}
                             </span>
@@ -400,67 +191,234 @@ export default function ChatInterface() {
                 </div>
 
                 {/* Input */}
-                <div style={{
-                    padding: '16px',
-                    background: 'rgba(255,255,255,0.01)',
-                    borderTop: '1px solid rgba(255,255,255,0.05)'
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        background: 'rgba(0,0,0,0.2)',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        borderRadius: '24px',
-                        padding: '6px 6px 6px 16px',
-                        transition: 'border-color 0.2s'
-                    }}
-                        onFocus={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'}
-                        onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}
-                    >
-                        <input
-                            type="text"
-                            value={input}
+                <div className="ci-input-area">
+                    <div className="ci-input-row">
+                        <input type="text" value={input}
                             onChange={e => setInput(e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && handleSend()}
                             placeholder={hasKey ? 'Ask Architect...' : 'Add API key to start...'}
-                            style={{
-                                flex: 1,
-                                background: 'transparent',
-                                border: 'none',
-                                color: 'white',
-                                outline: 'none',
-                                fontSize: '0.9rem',
-                                fontFamily: 'var(--font-sans)',
-                                fontWeight: 400
-                            }}
+                            className="ci-input"
                         />
-                        <button
-                            onClick={handleSend}
-                            disabled={!input.trim() || chatLoading}
-                            style={{
-                                width: '32px',
-                                height: '32px',
-                                borderRadius: '50%',
-                                background: input.trim() ? '#fff' : 'rgba(255,255,255,0.05)',
-                                border: 'none',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                cursor: input.trim() ? 'pointer' : 'default',
-                                transition: shouldReduceMotion ? 'none' : 'all 0.2s',
-                                transform: input.trim() ? 'scale(1)' : (shouldReduceMotion ? 'scale(1)' : 'scale(0.9)')
-                            }}
-                        >
-                            <ArrowUp size={16} color={input.trim() ? '#000' : '#52525b'} strokeWidth={2.5} />
+                        <button onClick={handleSend} disabled={!input.trim() || chatLoading}
+                            className={`ci-send-btn ${input.trim() ? 'ci-send-btn--active' : ''}`}>
+                            <ArrowUp size={16} strokeWidth={2.5} />
                         </button>
                     </div>
                 </div>
 
                 <style>{`
-                    .cc-typing-dot {
-                        width: 4px; height: 4px; background: #71717a; border-radius: 50%;
-                        animation: cc-pulse 1s infinite;
+                    .ci-root {
+                        position: fixed; top: 100px; right: 24px;
+                        width: 400px; height: calc(100vh - 140px); max-height: 720px;
+                        background: var(--glass-bg-elevated);
+                        backdrop-filter: blur(32px) saturate(1.6);
+                        -webkit-backdrop-filter: blur(32px) saturate(1.6);
+                        border: 1px solid var(--border-default);
+                        border-radius: var(--radius-2xl);
+                        box-shadow: var(--shadow-depth-3), 0 0 0 1px rgba(255,255,255,0.02) inset;
+                        display: flex; flex-direction: column;
+                        z-index: 2500; overflow: hidden;
+                        font-family: var(--font-body);
+                        color: var(--color-text-primary);
                     }
-                    @keyframes cc-pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+                    .ci-accent-line {
+                        height: 1px; width: 100%;
+                        background: linear-gradient(90deg, transparent 10%, rgba(59,130,246,0.5) 50%, transparent 90%);
+                    }
+
+                    /* --- HEADER --- */
+                    .ci-header {
+                        padding: var(--space-5) var(--space-5);
+                        border-bottom: 1px solid var(--border-subtle);
+                        display: flex; align-items: center; justify-content: space-between;
+                    }
+                    .ci-header-left { display: flex; align-items: center; gap: var(--space-3); }
+                    .ci-logo {
+                        width: 36px; height: 36px; border-radius: var(--radius-lg);
+                        background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(59,130,246,0.05));
+                        border: 1px solid rgba(59,130,246,0.2);
+                        display: flex; align-items: center; justify-content: center;
+                        color: #60a5fa;
+                    }
+                    .ci-header-title {
+                        font-weight: var(--font-semibold); color: var(--color-text-primary);
+                        font-size: var(--text-base); display: block; font-family: var(--font-display);
+                    }
+                    .ci-header-status {
+                        font-size: var(--text-xs); color: var(--color-text-muted);
+                    }
+                    .ci-header-status--ok { color: rgba(52,211,153,0.8); }
+                    .ci-header-actions { display: flex; gap: var(--space-1); align-items: center; }
+
+                    .ci-icon-btn {
+                        background: transparent; border: none;
+                        color: var(--color-text-muted); cursor: pointer;
+                        display: flex; align-items: center; justify-content: center;
+                        width: 30px; height: 30px; border-radius: var(--radius-md);
+                        transition: background 0.2s, color 0.2s;
+                    }
+                    .ci-icon-btn:hover { background: var(--color-bg-hover); color: var(--color-text-secondary); }
+                    .ci-icon-btn--active { background: var(--color-bg-hover); }
+                    .ci-icon-btn--green { color: rgba(52,211,153,0.8); }
+
+                    /* --- SETTINGS --- */
+                    .ci-settings {
+                        padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-4);
+                        border-bottom: 1px solid var(--border-subtle);
+                    }
+                    .ci-settings-head {
+                        display: flex; align-items: center; justify-content: space-between;
+                        font-size: var(--text-sm); font-weight: var(--font-semibold); color: var(--color-text-primary);
+                    }
+                    .ci-settings-input-row {
+                        display: flex; gap: var(--space-2); align-items: center;
+                        background: var(--color-bg-secondary); border: 1px solid var(--border-default);
+                        border-radius: var(--radius-lg); padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3);
+                    }
+                    .ci-settings-input {
+                        flex: 1; background: transparent; border: none;
+                        color: var(--color-text-primary); outline: none;
+                        font-size: var(--text-sm); font-family: var(--font-mono);
+                    }
+                    .ci-key-remove-btn {
+                        background: var(--color-error-muted); border: 1px solid rgba(239,68,68,0.2);
+                        border-radius: var(--radius-md); color: var(--color-error);
+                        cursor: pointer; padding: 6px; display: flex; align-items: center;
+                        transition: background 0.2s;
+                    }
+                    .ci-key-remove-btn:hover { background: rgba(239,68,68,0.2); }
+                    .ci-key-save-btn {
+                        padding: 6px 14px; border-radius: var(--radius-md);
+                        background: var(--color-bg-tertiary); border: none;
+                        color: var(--color-text-muted); font-size: var(--text-sm);
+                        font-weight: var(--font-medium); cursor: default;
+                    }
+                    .ci-key-save-btn--active {
+                        background: #3b82f6; color: white; cursor: pointer;
+                    }
+                    .ci-settings-hint {
+                        margin: 0; font-size: var(--text-xs); color: var(--color-text-muted); line-height: var(--leading-normal);
+                    }
+
+                    /* --- KEY BANNER --- */
+                    .ci-key-banner {
+                        margin: var(--space-4); padding: var(--space-4); border-radius: var(--radius-xl);
+                        background: rgba(251,191,36,0.05); border: 1px solid rgba(251,191,36,0.12);
+                        display: flex; flex-direction: column; gap: var(--space-3);
+                    }
+                    .ci-key-banner-head {
+                        display: flex; align-items: center; gap: var(--space-2);
+                        font-size: var(--text-sm); font-weight: var(--font-semibold); color: #fbbf24;
+                    }
+                    .ci-key-banner-desc {
+                        margin: 0; font-size: var(--text-sm); color: var(--color-text-muted); line-height: var(--leading-normal);
+                    }
+                    .ci-key-banner-actions { display: flex; gap: var(--space-2); }
+                    .ci-key-add-btn {
+                        flex: 1; padding: var(--space-2) var(--space-3); border-radius: var(--radius-md);
+                        background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.2);
+                        color: #fbbf24; font-size: var(--text-sm); font-weight: var(--font-medium); cursor: pointer;
+                        transition: background 0.2s;
+                    }
+                    .ci-key-add-btn:hover { background: rgba(251,191,36,0.22); }
+                    .ci-key-get-link {
+                        padding: var(--space-2) var(--space-3); border-radius: var(--radius-md);
+                        background: var(--color-bg-tertiary); border: 1px solid var(--border-default);
+                        color: var(--color-text-muted); font-size: var(--text-sm);
+                        text-decoration: none; display: flex; align-items: center; gap: 4px;
+                        transition: background 0.2s;
+                    }
+                    .ci-key-get-link:hover { background: var(--color-bg-hover); }
+
+                    /* --- MESSAGES --- */
+                    .ci-messages {
+                        flex: 1; overflow-y: auto; padding: var(--space-5);
+                        display: flex; flex-direction: column; gap: var(--space-6);
+                    }
+                    .ci-empty {
+                        flex: 1; display: flex; flex-direction: column;
+                        align-items: center; justify-content: center;
+                        gap: var(--space-3); opacity: 0.35; color: var(--color-text-muted);
+                    }
+                    .ci-empty p { margin: 0; font-size: var(--text-base); }
+                    .ci-msg { display: flex; gap: var(--space-3); }
+                    .ci-msg--user { flex-direction: row-reverse; }
+                    .ci-msg-avatar {
+                        width: 28px; height: 28px; border-radius: var(--radius-lg);
+                        display: flex; align-items: center; justify-content: center;
+                        flex-shrink: 0;
+                    }
+                    .ci-msg-avatar--user { background: var(--color-text-primary); color: var(--color-bg-primary); }
+                    .ci-msg-avatar--assistant { background: var(--color-bg-tertiary); color: var(--color-text-muted); }
+                    .ci-msg-bubble {
+                        max-width: 85%; padding: var(--space-3) var(--space-4);
+                        border-radius: var(--radius-xl); font-size: var(--text-sm);
+                        line-height: var(--leading-relaxed); color: var(--color-text-primary);
+                    }
+                    .ci-msg-bubble--user {
+                        background: var(--color-bg-tertiary); border: 1px solid var(--border-default);
+                    }
+                    .ci-msg-bubble--assistant { background: transparent; }
+                    .ci-code-block {
+                        background: rgba(0,0,0,0.35); padding: var(--space-3); border-radius: var(--radius-lg);
+                        margin: var(--space-2) 0; border: 1px solid var(--border-subtle);
+                        overflow-x: auto;
+                    }
+                    .ci-code-block code { font-family: var(--font-mono); font-size: var(--text-xs); }
+                    .ci-code-inline {
+                        background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: var(--radius-sm);
+                        font-family: var(--font-mono); font-size: 0.8em;
+                    }
+                    .ci-link { color: #60a5fa; text-decoration: none; }
+                    .ci-link:hover { text-decoration: underline; }
+
+                    /* --- LOADING --- */
+                    .ci-loading { display: flex; gap: var(--space-3); align-items: center; }
+                    .ci-typing-dots { display: flex; gap: 4px; padding: 10px 0; }
+                    .ci-typing-dots span {
+                        width: 5px; height: 5px; background: var(--color-text-muted); border-radius: 50%;
+                        animation: ci-pulse 1s infinite;
+                    }
+                    @keyframes ci-pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+                    .ci-loading-label { font-size: var(--text-xs); color: var(--color-text-muted); }
+
+                    /* --- INPUT --- */
+                    .ci-input-area {
+                        padding: var(--space-4); border-top: 1px solid var(--border-subtle);
+                    }
+                    .ci-input-row {
+                        display: flex; align-items: center; gap: var(--space-2);
+                        background: var(--color-bg-secondary); border: 1px solid var(--border-default);
+                        border-radius: var(--radius-full);
+                        padding: 5px 5px 5px var(--space-4);
+                        transition: border-color 0.2s;
+                    }
+                    .ci-input-row:focus-within { border-color: var(--border-strong); }
+                    .ci-input {
+                        flex: 1; background: transparent; border: none;
+                        color: var(--color-text-primary); outline: none;
+                        font-size: var(--text-sm); font-family: var(--font-body); font-weight: 400;
+                    }
+                    .ci-input::placeholder { color: var(--color-text-muted); }
+                    .ci-send-btn {
+                        width: 34px; height: 34px; border-radius: 50%;
+                        background: var(--color-bg-tertiary); border: none;
+                        display: flex; align-items: center; justify-content: center;
+                        cursor: default; color: var(--color-text-muted);
+                        transition: all 0.2s; transform: scale(0.9);
+                    }
+                    .ci-send-btn--active {
+                        background: var(--color-text-primary); color: var(--color-bg-primary);
+                        cursor: pointer; transform: scale(1);
+                    }
+                    .ci-send-btn--active:hover { background: var(--gray-200); }
+
+                    /* Scrollbar */
+                    .ci-messages::-webkit-scrollbar { width: 4px; }
+                    .ci-messages::-webkit-scrollbar-track { background: transparent; }
+                    .ci-messages::-webkit-scrollbar-thumb {
+                        background: var(--border-default); border-radius: 2px;
+                    }
                 `}</style>
             </motion.div>
         </AnimatePresence>

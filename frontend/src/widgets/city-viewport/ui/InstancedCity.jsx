@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect, useMemo, useState } from 'react'
+import React, { useRef, useLayoutEffect, useMemo, useState, useCallback } from 'react'
 import * as THREE from 'three'
 import { useFrame, extend, useThree } from '@react-three/fiber'
 import { useDrag } from '@use-gesture/react'
@@ -21,15 +21,19 @@ const intersectPoint = new THREE.Vector3()
  * - Interactive hover/selection states
  */
 export default function InstancedCity() {
-    const {
-        cityData, selectedBuilding, selectBuilding, hoveredBuilding, setHoveredBuilding,
-        colorMode, graphNeighbors, highlightedIssue, cityMeshRef,
-        isAnimating,
-        currentCommitIndex,
-        activeIntelligencePanel,
-        impactAnalysis,
-        refactoringModeActive, applyRefactoringDrift, refactoringDrifts
-    } = useStore()
+    // Granular selectors — only re-render when specific state changes
+    const cityData = useStore(s => s.cityData)
+    const selectedBuilding = useStore(s => s.selectedBuilding)
+    const selectBuilding = useStore(s => s.selectBuilding)
+    const setHoveredBuilding = useStore(s => s.setHoveredBuilding)
+    const colorMode = useStore(s => s.colorMode)
+    const highlightedIssue = useStore(s => s.highlightedIssue)
+    const cityMeshRef = useStore(s => s.cityMeshRef)
+    const isAnimating = useStore(s => s.isAnimating)
+    const currentCommitIndex = useStore(s => s.currentCommitIndex)
+    const refactoringModeActive = useStore(s => s.refactoringModeActive)
+    const applyRefactoringDrift = useStore(s => s.applyRefactoringDrift)
+    const refactoringDrifts = useStore(s => s.refactoringDrifts)
     const meshRef = useRef()
     const materialRef = useRef()
     const { camera, raycaster, pointer } = useThree()
@@ -61,12 +65,16 @@ export default function InstancedCity() {
     const frustumRef = useRef(new THREE.Frustum())
     const projScreenMatrixRef = useRef(new THREE.Matrix4())
     const boundingSpheresRef = useRef([])
+    const visibleRef = useRef(null) // Uint8Array bitfield — 1=visible, 0=culled
 
     // ═══════════════════════════════════════════════════════════════
     // BUILDING ANIMATION - Smooth "Digital Rise" effect
     // ═══════════════════════════════════════════════════════════════
     useLayoutEffect(() => {
         if (!meshRef.current || count === 0) return
+
+        // Reset visibility bitfield when buildings change
+        visibleRef.current = new Uint8Array(count).fill(1)
 
         // Initialize bounding sphere for raycasting
         if (meshRef.current.geometry) {
@@ -98,7 +106,7 @@ export default function InstancedCity() {
                 const { x, z } = b.position
                 const width = b.dimensions?.width || 8
                 const depth = b.dimensions?.depth || 8
-                const targetHeight = b.dimensions?.height || 8
+                const targetHeight = (b.dimensions?.height || 8) * 3.0 // 3x height for dramatic skyline
 
                 // Distance-based stagger for wave effect
                 const dist = Math.sqrt(x * x + z * z)
@@ -114,9 +122,14 @@ export default function InstancedCity() {
                 tempObject.updateMatrix()
                 meshRef.current.setMatrixAt(i, tempObject.matrix)
 
-                // Store bounding sphere for custom culling
+                // Update bounding sphere for custom culling (reuse existing or create once)
                 const localRadius = Math.max(width, Math.max(currentHeight, depth)) / 2
-                boundingSpheresRef.current[i] = new THREE.Sphere(new THREE.Vector3(x, y, z), localRadius + 2.0)
+                if (!boundingSpheresRef.current[i]) {
+                    boundingSpheresRef.current[i] = new THREE.Sphere(new THREE.Vector3(x, y, z), localRadius + 2.0)
+                } else {
+                    boundingSpheresRef.current[i].center.set(x, y, z)
+                    boundingSpheresRef.current[i].radius = localRadius + 2.0
+                }
 
                 const distSq = x * x + z * z
                 if (distSq > maxRadiusSq) maxRadiusSq = distSq
@@ -143,88 +156,60 @@ export default function InstancedCity() {
         }
     }, [buildings, count, isAnimating, currentCommitIndex])
 
+    // Pre-compute issue sets once for O(1) lookup instead of O(n)
+    const issueIndex = useMemo(() => {
+        const issues = cityData?.metadata?.issues || {}
+        const circularSet = new Set(issues.circular_dependencies?.flat() || [])
+        const godSet = new Set(issues.god_objects || [])
+        return { circularSet, godSet }
+    }, [cityData?.metadata?.issues])
+
+    const selectedBuildingId = selectedBuilding?.id
+
     // ═══════════════════════════════════════════════════════════════
-    // COLOR UPDATES - Real-time interaction feedback
+    // COLOR UPDATES - Real-time interaction feedback (colors ONLY)
     // ═══════════════════════════════════════════════════════════════
     useLayoutEffect(() => {
         if (!meshRef.current || count === 0) return
 
-        buildings.forEach((b, i) => {
-            const isSelected = selectedBuilding?.id === b.id
+        const showWarnings = colorMode === 'default' || colorMode === 'churn'
+
+        for (let i = 0; i < count; i++) {
+            const b = buildings[i]
+            const isSelected = selectedBuildingId === b.id
             const isHovered = hoveredInstanceId === i
-
-            // Graph relationships
-            const isDependency = selectedBuilding && graphNeighbors.dependencies.includes(b.id)
-            const isDependent = selectedBuilding && graphNeighbors.dependents.includes(b.id)
-
-            // Code health issues
-            const issues = cityData?.metadata?.issues || {}
-            const isCircular = issues.circular_dependencies?.flat()?.includes(b.id) || false
-            const isGodObject = issues.god_objects?.includes(b.id) || false
-            const showWarnings = colorMode === 'default' || colorMode === 'churn'
 
             const isIssueHighlighted = highlightedIssue && highlightedIssue.paths.includes(b.path)
 
-            // Impact analysis logic
-            let blastLevel = null
-            if (activeIntelligencePanel === 'impact' && impactAnalysis) {
-                if (impactAnalysis.file_id === b.id) blastLevel = 0
-                else if (impactAnalysis.levels?.level_1?.find(f => f.id === b.id)) blastLevel = 1
-                else if (impactAnalysis.levels?.level_2?.find(f => f.id === b.id)) blastLevel = 2
-                else if (impactAnalysis.levels?.level_3?.find(f => f.id === b.id)) blastLevel = 3
-            }
-
-            // Focus mode dimming
-            let isUnrelated = (highlightedIssue && !isIssueHighlighted) ||
-                (!highlightedIssue && selectedBuilding && !isSelected && !isDependency && !isDependent)
-
-            // Override dimming if we are in impact mode
-            if (activeIntelligencePanel === 'impact') {
-                isUnrelated = blastLevel === null
-            }
+            const isUnrelated = (highlightedIssue && !isIssueHighlighted) ||
+                (!highlightedIssue && selectedBuildingId && !isSelected && colorMode === 'default')
 
             const colorHex = getBuildingColor(b, colorMode, {
-                isSelected, isHovered, isDependency, isDependent,
+                isSelected, isHovered,
                 isUnrelated, highlightedIssue, isIssueHighlighted,
-                isCircular, isGodObject, showWarnings,
-                activeIntelligencePanel, blastLevel
+                isCircular: issueIndex.circularSet.has(b.id),
+                isGodObject: issueIndex.godSet.has(b.id),
+                showWarnings
             })
 
             tempColor.set(colorHex)
             meshRef.current.setColorAt(i, tempColor)
-
-            // Structural transform calculations (size / vertical layout)
-            const width = b.dimensions?.width || 8
-            const depth = b.dimensions?.depth || 8
-            const height = b.dimensions?.height || 8
-
-            tempObject.position.set(b.position.x, height / 2, b.position.z)
-            tempObject.scale.set(width, height, depth)
-            tempObject.updateMatrix()
-            meshRef.current.setMatrixAt(i, tempObject.matrix)
-        })
+        }
 
         if (meshRef.current.instanceColor) {
             meshRef.current.instanceColor.needsUpdate = true
         }
-        if (meshRef.current.instanceMatrix) {
-            meshRef.current.instanceMatrix.needsUpdate = true
-        }
     }, [
-        buildings, selectedBuilding, hoveredInstanceId, colorMode,
-        graphNeighbors, highlightedIssue, activeIntelligencePanel, impactAnalysis
+        buildings, selectedBuildingId, hoveredInstanceId, colorMode,
+        highlightedIssue, count, issueIndex
     ])
 
     // ═══════════════════════════════════════════════════════════════
     // FRUSTUM CULLING — Zero-Allocation Production Engine
-    // Runs every 3rd frame to save CPU. Uses pre-allocated scratch
-    // vectors to eliminate GC pressure entirely.
+    // Uses a visibility bitfield to avoid decomposing matrices each frame.
+    // Runs every 3rd frame to save CPU.
     // ═══════════════════════════════════════════════════════════════
     const cullFrameCounter = useRef(0)
-    const cullScratchMatrix = useMemo(() => new THREE.Matrix4(), [])
-    const cullScratchPos = useMemo(() => new THREE.Vector3(), [])
-    const cullScratchScale = useMemo(() => new THREE.Vector3(), [])
-    const cullScratchQuat = useMemo(() => new THREE.Quaternion(), [])
 
     useFrame(() => {
         if (!meshRef.current || count === 0 || boundingSpheresRef.current.length === 0) return
@@ -233,82 +218,85 @@ export default function InstancedCity() {
         cullFrameCounter.current++
         if (cullFrameCounter.current % 3 !== 0) return
 
+        // Lazily initialize visibility array
+        if (!visibleRef.current || visibleRef.current.length !== count) {
+            visibleRef.current = new Uint8Array(count).fill(1)
+        }
+
         // Update Frustum from current camera
         projScreenMatrixRef.current.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse)
         frustumRef.current.setFromProjectionMatrix(projScreenMatrixRef.current)
 
         let dirty = false
+        const vis = visibleRef.current
 
         for (let i = 0; i < count; i++) {
             const sphere = boundingSpheresRef.current[i]
             if (!sphere) continue
 
-            // Read current matrix for this instance
-            meshRef.current.getMatrixAt(i, cullScratchMatrix)
-            cullScratchMatrix.decompose(cullScratchPos, cullScratchQuat, cullScratchScale)
+            const shouldBeVisible = frustumRef.current.intersectsSphere(sphere)
+            const wasVisible = vis[i] === 1
 
-            const isVisible = frustumRef.current.intersectsSphere(sphere)
-            const isCurrentlyHidden = cullScratchScale.x === 0 && cullScratchScale.y === 0 && cullScratchScale.z === 0
-
-            if (isVisible && isCurrentlyHidden) {
-                // RESTORE: Building just re-entered the view — restore its real scale
+            if (shouldBeVisible && !wasVisible) {
+                // RESTORE: Building re-entered view
                 const b = buildings[i]
                 const width = b.dimensions?.width || 8
                 const depth = b.dimensions?.depth || 8
-                const height = b.dimensions?.height || 8
-                tempObject.position.copy(cullScratchPos)
+                const height = (b.dimensions?.height || 8) * 3.0
+                tempObject.position.set(b.position.x, height / 2, b.position.z)
                 tempObject.scale.set(width, height, depth)
-                tempObject.rotation.set(0, 0, 0)
                 tempObject.updateMatrix()
                 meshRef.current.setMatrixAt(i, tempObject.matrix)
+                vis[i] = 1
                 dirty = true
-            } else if (!isVisible && !isCurrentlyHidden) {
-                // HIDE: Building just left the view — zero-scale it
-                tempObject.position.copy(cullScratchPos)
+            } else if (!shouldBeVisible && wasVisible) {
+                // HIDE: Building left view — zero-scale it
+                const b = buildings[i]
+                tempObject.position.set(b.position.x, 0, b.position.z)
                 tempObject.scale.set(0, 0, 0)
-                tempObject.rotation.set(0, 0, 0)
                 tempObject.updateMatrix()
                 meshRef.current.setMatrixAt(i, tempObject.matrix)
+                vis[i] = 0
                 dirty = true
             }
-            // If already visible and shown, or already hidden and culled — skip (no work needed)
         }
 
-        // Single GPU upload per frame instead of N uploads inside the loop
+        // Single GPU upload per frame
         if (dirty) {
             meshRef.current.instanceMatrix.needsUpdate = true
         }
     })
 
     // ═══════════════════════════════════════════════════════════════
-    // EVENT HANDLERS — throttled for performance
+    // EVENT HANDLERS — throttled & stable references
     // ═══════════════════════════════════════════════════════════════
     const lastPointerTime = useRef(0)
-    const handlePointerMove = (e) => {
+    const handlePointerMove = useCallback((e) => {
         e.stopPropagation()
-        // Throttle: only update hover every 50ms to prevent raycast spam during orbit
         const now = performance.now()
         if (now - lastPointerTime.current < 50) return
         lastPointerTime.current = now
         if (e.instanceId !== undefined) {
             setHoveredInstanceId(e.instanceId)
         }
-    }
+    }, [])
 
-    const handlePointerOut = () => {
+    const handlePointerOut = useCallback(() => {
         setHoveredInstanceId(null)
         setHoveredBuilding(null)
-    }
+    }, [setHoveredBuilding])
 
-    const handleClick = (e) => {
+    const handleClick = useCallback((e) => {
         e.stopPropagation()
-        // Do not select if we just finished a drag
         if (dragActive) return
-
         if (e.instanceId !== undefined) {
-            selectBuilding(buildings[e.instanceId])
+            const b = useStore.getState().cityData?.buildings?.[e.instanceId]
+            if (b) {
+                const screenY = e.nativeEvent?.clientY ?? null
+                selectBuilding(b, screenY)
+            }
         }
-    }
+    }, [dragActive, selectBuilding])
 
     // ═══════════════════════════════════════════════════════════════
     // DRAG-AND-DROP REFACTORING ENGINE
@@ -324,7 +312,7 @@ export default function InstancedCity() {
 
             // Set the invisible drag plane to the height of the clicked building
             const b = buildings[event.instanceId]
-            const height = b.dimensions?.height || 8
+            const height = (b.dimensions?.height || 8) * 3.0
             dragPlane.current.constant = -(height / 2) // Three.js uses -d for plane equation
         }
 
@@ -338,7 +326,7 @@ export default function InstancedCity() {
                 const b = buildings[draggedInstanceId]
                 const width = b.dimensions?.width || 8
                 const depth = b.dimensions?.depth || 8
-                const height = b.dimensions?.height || 8
+                const height = (b.dimensions?.height || 8) * 3.0
 
                 tempObject.position.copy(intersectPoint)
                 tempObject.scale.set(width, height, depth)
@@ -387,20 +375,14 @@ export default function InstancedCity() {
         return new THREE.InstancedBufferAttribute(array, 1)
     }, [buildings, count])
 
-    // Opacity data
-    const opacityAttribute = useMemo(() => {
-        if (count === 0) return null
-        const array = new Float32Array(count)
-        buildings.forEach((b, i) => {
-            array[i] = 0.95
-        })
-        return new THREE.InstancedBufferAttribute(array, 1)
-    }, [buildings, count])
+    // Opacity: uniform value for all buildings (saves per-instance attribute allocation)
+    // PulseMaterial fragment shader defaults to 0.95 when aOpacityOverride is 0
 
     if (count === 0) return null
 
     return (
         <instancedMesh
+            key={count}
             ref={meshRef}
             args={[null, null, count]}
             frustumCulled={false}
@@ -412,14 +394,8 @@ export default function InstancedCity() {
             <boxGeometry args={[1, 1, 1]}>
                 {churnAttribute && (
                     <instancedBufferAttribute
-                        attach="attributes-aChurn" // Attach to geometry.attributes.aChurn
+                        attach="attributes-aChurn"
                         args={[churnAttribute.array, 1]}
-                    />
-                )}
-                {opacityAttribute && (
-                    <instancedBufferAttribute
-                        attach="attributes-aOpacityOverride"
-                        args={[opacityAttribute.array, 1]}
                     />
                 )}
             </boxGeometry>

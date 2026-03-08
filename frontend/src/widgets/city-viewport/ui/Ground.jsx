@@ -8,7 +8,7 @@ import * as THREE from 'three'
  * Inspired by Cyberpunk 2077 / Star Citizen ground planes.
  * NOT pure black — visible but understated.
  */
-function Ground({ size = 2000 }) {
+function Ground({ size = 3000 }) {
     const gridTexture = useMemo(() => {
         const canvas = document.createElement('canvas')
         canvas.width = 2048
@@ -93,6 +93,21 @@ function Ground({ size = 2000 }) {
                     polygonOffset
                     polygonOffsetFactor={1}
                     polygonOffsetUnits={1}
+                />
+            </mesh>
+
+            {/* Central ambient glow — subtle radial light pooling */}
+            <mesh
+                rotation={[-Math.PI / 2, 0, 0]}
+                position={[0, 0.02, 0]}
+            >
+                <circleGeometry args={[size * 0.18, 64]} />
+                <meshBasicMaterial
+                    color="#0a1628"
+                    transparent
+                    opacity={0.35}
+                    depthWrite={false}
+                    blending={2}
                 />
             </mesh>
         </group>

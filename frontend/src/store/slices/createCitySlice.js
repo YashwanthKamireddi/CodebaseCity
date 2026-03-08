@@ -21,10 +21,6 @@ export const createCitySlice = (set, get) => ({
     refactoringDrifts: [], // Array of { buildingId, oldPath, newPath, oldDistrictId, newDistrictId }
     refactoringModeActive: false,
 
-    // Exploration Mode State (First-Person Flight)
-    explorationMode: false,
-    showTraffic: true, // Default to true for premium experience
-
     // Landing overlay state — true until user dismisses the hero
     isLandingOverlayActive: true,
     setLandingOverlayActive: (active) => set({ isLandingOverlayActive: active }),
@@ -64,11 +60,6 @@ export const createCitySlice = (set, get) => ({
     // Refactoring Actions
     toggleRefactoringMode: () => set((state) => ({ refactoringModeActive: !state.refactoringModeActive })),
     clearRefactoringDrifts: () => set({ refactoringDrifts: [], refactoringModeActive: false }),
-
-    // Exploration Mode Actions
-    toggleExplorationMode: () => set((state) => ({ explorationMode: !state.explorationMode })),
-    setExplorationMode: (active) => set({ explorationMode: active }),
-    toggleShowTraffic: () => set((state) => ({ showTraffic: !state.showTraffic })),
 
     applyRefactoringDrift: (buildingId, oldDistrictId, newDistrictId) => set((state) => {
         // Prevent no-op drags
@@ -118,43 +109,376 @@ export const createCitySlice = (set, get) => ({
         }
     },
 
-    analyzeRepo: async (path) => {
+
+
+    /**
+     * Analyze a public GitHub repository via the GitHub API.
+     * Fetches file tree, sizes, and languages — no backend required.
+     * Accepts: "owner/repo" or "https://github.com/owner/repo"
+     */
+    analyzeRepo: async (repoInput) => {
         const { setLoading, setCityData, setError, setProgress } = get()
 
-        // Reset UI state safely before loading
         set({ error: null, selectedBuilding: null, highlightedIssue: null, highlightedCategory: null })
         setProgress(0)
         setLoading(true)
 
         try {
-            const { analyzeGitHub, isGitHubUrl } = await import('../../engine/ClientAnalyzer.js')
-
-            if (isGitHubUrl(path)) {
-                // Client-side GitHub analysis — downloads ZIP, parses in Web Worker
-                const cityData = await analyzeGitHub({
-                    url: path,
-                    onProgress: (phase, current, total) => {
-                        if (phase === 'cloning') {
-                            setProgress(total > 0 ? Math.round((current / total) * 30) : 5)
-                        } else if (phase === 'reading') {
-                            setProgress(30 + (total > 0 ? Math.round((current / total) * 20) : 0))
-                        } else if (phase === 'analyzing') {
-                            setProgress(50 + (total > 0 ? Math.round((current / total) * 40) : 0))
-                        }
-                    },
-                    maxFiles: 5000,
-                })
-
-                setProgress(95)
-                setCityData(cityData)
-                set({ currentRepoPath: cityData.name || path, commits: [], currentCommitIndex: -1 })
+            // Parse GitHub URL or owner/repo string
+            let owner, repo
+            const urlMatch = repoInput.match(/github\.com\/([^/]+)\/([^/\s#?]+)/)
+            if (urlMatch) {
+                owner = urlMatch[1]
+                repo = urlMatch[2].replace(/\.git$/, '')
             } else {
-                setError('Please enter a valid GitHub URL (e.g. https://github.com/owner/repo) or use "Open Local Folder" for local projects.')
+                const parts = repoInput.trim().replace(/^\/|\/$/g, '').split('/')
+                if (parts.length === 2) {
+                    owner = parts[0]
+                    repo = parts[1]
+                } else {
+                    throw new Error('Invalid format. Use "owner/repo" or a GitHub URL.')
+                }
             }
 
+            setProgress(10)
+
+            // Fetch default branch
+            const repoRes = await fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`)
+            if (!repoRes.ok) {
+                if (repoRes.status === 404) throw new Error(`Repository "${owner}/${repo}" not found. Make sure it's public.`)
+                if (repoRes.status === 403) throw new Error('GitHub API rate limit exceeded. Try again in a minute.')
+                throw new Error(`GitHub API error: ${repoRes.status}`)
+            }
+            const repoData = await repoRes.json()
+            const branch = repoData.default_branch || 'main'
+
+            setProgress(25)
+
+            // Fetch full file tree
+            const treeRes = await fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/git/trees/${encodeURIComponent(branch)}?recursive=1`)
+            if (!treeRes.ok) throw new Error('Failed to fetch repository file tree.')
+            const treeData = await treeRes.json()
+
+            if (treeData.truncated) {
+                logger.warn('Repository tree was truncated (very large repo)')
+            }
+
+            if (!treeData.tree || !Array.isArray(treeData.tree)) {
+                throw new Error('Invalid repository tree response from GitHub API.')
+            }
+
+            setProgress(45)
+
+            // Fetch recent commits and their per-file change lists for accurate author attribution
+            let commitAuthors = {} // path → author name
+            let authorEmails = {} // authorName → email (for Gravatar)
+            let fileCommitCounts = {} // path → { author → count }
+            try {
+                const commitsRes = await fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/commits?per_page=100`)
+                if (commitsRes.ok) {
+                    const commitsData = await commitsRes.json()
+
+                    // Collect author emails for Gravatar
+                    for (const c of commitsData) {
+                        const name = c.commit?.author?.name
+                        const email = c.commit?.author?.email
+                        if (name && email) authorEmails[name] = email
+                    }
+
+                    // Fetch file lists from 15 most recent commits (parallel, rate-limit safe)
+                    const detailPromises = commitsData.slice(0, 15).map(c =>
+                        fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/commits/${c.sha}`)
+                            .then(r => r.ok ? r.json() : null)
+                            .catch(() => null)
+                    )
+                    const details = await Promise.all(detailPromises)
+
+                    // Build path → author mapping from real commit file lists
+                    // Most recent commit wins (first author to touch a file is the latest)
+                    for (const detail of details) {
+                        if (!detail?.files) continue
+                        const author = detail.commit?.author?.name || 'Unknown'
+                        for (const file of detail.files) {
+                            if (!commitAuthors[file.filename]) {
+                                commitAuthors[file.filename] = author
+                            }
+                            // Track per-file author frequency for fallback
+                            if (!fileCommitCounts[file.filename]) fileCommitCounts[file.filename] = {}
+                            fileCommitCounts[file.filename][author] = (fileCommitCounts[file.filename][author] || 0) + 1
+                        }
+                    }
+
+                    // Fallback: files not touched in recent commits get directory-level attribution
+                    // Build directory → most active author from the detailed commits
+                    const dirAuthorCounts = {}
+                    for (const [path, authors] of Object.entries(fileCommitCounts)) {
+                        const dir = path.includes('/') ? path.substring(0, path.lastIndexOf('/')) : '(root)'
+                        if (!dirAuthorCounts[dir]) dirAuthorCounts[dir] = {}
+                        for (const [author, count] of Object.entries(authors)) {
+                            dirAuthorCounts[dir][author] = (dirAuthorCounts[dir][author] || 0) + count
+                        }
+                    }
+
+                    // Assign remaining files using directory-level top author
+                    for (const item of treeData.tree) {
+                        if (item.type === 'blob' && !commitAuthors[item.path]) {
+                            const dir = item.path.includes('/') ? item.path.substring(0, item.path.lastIndexOf('/')) : '(root)'
+                            const dirAuthors = dirAuthorCounts[dir]
+                            if (dirAuthors) {
+                                const topAuthor = Object.entries(dirAuthors).sort((a, b) => b[1] - a[1])[0]
+                                if (topAuthor) commitAuthors[item.path] = topAuthor[0]
+                            } else {
+                                // Ultimate fallback: repo's top contributor
+                                const globalAuthors = Object.entries(authorEmails)
+                                if (globalAuthors.length > 0) {
+                                    commitAuthors[item.path] = commitsData[0]?.commit?.author?.name || 'Unknown'
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch {
+                // Non-critical — author data is optional
+            }
+
+            setProgress(50)
+
+            // Filter to source code files only
+            const EXT_TO_LANG = {
+                '.js': 'javascript', '.jsx': 'javascript', '.mjs': 'javascript', '.cjs': 'javascript',
+                '.ts': 'typescript', '.tsx': 'typescript',
+                '.py': 'python', '.pyw': 'python',
+                '.java': 'java',
+                '.go': 'go',
+                '.rs': 'rust',
+                '.rb': 'ruby',
+                '.php': 'php',
+                '.c': 'c', '.h': 'c',
+                '.cpp': 'cpp', '.hpp': 'cpp', '.cc': 'cpp', '.cxx': 'cpp',
+                '.cs': 'csharp',
+                '.swift': 'swift',
+                '.kt': 'kotlin', '.kts': 'kotlin',
+                '.scala': 'scala',
+                '.vue': 'vue',
+                '.svelte': 'svelte',
+                '.dart': 'dart',
+                '.lua': 'lua',
+                '.r': 'r', '.R': 'r',
+                '.sql': 'sql',
+                '.sh': 'shell', '.bash': 'shell', '.zsh': 'shell',
+                '.css': 'css', '.scss': 'scss', '.less': 'less',
+                '.html': 'html', '.htm': 'html',
+            }
+
+            const IGNORE_DIRS = new Set([
+                'node_modules', '.git', 'dist', 'build', 'vendor', '__pycache__',
+                '.next', '.nuxt', 'coverage', '.cache', 'target', '.venv', 'venv',
+            ])
+
+            const sourceFiles = treeData.tree.filter(item => {
+                if (item.type !== 'blob') return false
+                // Check for ignored directories
+                const parts = item.path.split('/')
+                if (parts.some(p => IGNORE_DIRS.has(p))) return false
+                // Check extension
+                const lastDot = item.path.lastIndexOf('.')
+                if (lastDot === -1) return false
+                const ext = item.path.substring(lastDot).toLowerCase()
+                return EXT_TO_LANG[ext] !== undefined
+            })
+
+            if (sourceFiles.length === 0) {
+                throw new Error('No source code files found in this repository.')
+            }
+
+            setProgress(65)
+
+            // Build city data from file tree
+            const DISTRICT_COLORS = [
+                '#FF6B6B', '#45B7D1', '#96CEB4', '#4ECDC4', '#DDA0DD',
+                '#FFEAA7', '#74B9FF', '#FD79A8', '#A29BFE', '#55E6C1',
+                '#FC427B', '#F8B500', '#6C5CE7', '#00B894', '#E17055',
+            ]
+
+            // Group files by top-level directory
+            const dirGroups = {}
+            for (const file of sourceFiles) {
+                const parts = file.path.split('/')
+                const dir = parts.length > 1 ? parts.slice(0, -1).join('/') : '(root)'
+                if (!dirGroups[dir]) dirGroups[dir] = []
+                dirGroups[dir].push(file)
+            }
+
+            // Create districts from directory groups
+            const dirNames = Object.keys(dirGroups).sort()
+            const districts = []
+            const districtMap = {}
+
+            // Merge tiny directories
+            const mergedGroups = {}
+            for (const dir of dirNames) {
+                if (dirGroups[dir].length < 2 && dir !== '(root)') {
+                    const parent = dir.includes('/') ? dir.split('/')[0] : '(misc)'
+                    if (!mergedGroups[parent]) mergedGroups[parent] = []
+                    mergedGroups[parent].push(...dirGroups[dir])
+                } else {
+                    if (!mergedGroups[dir]) mergedGroups[dir] = []
+                    mergedGroups[dir].push(...dirGroups[dir])
+                }
+            }
+
+            const finalDirNames = Object.keys(mergedGroups).sort()
+            const cols = Math.ceil(Math.sqrt(finalDirNames.length))
+
+            finalDirNames.forEach((dir, idx) => {
+                const districtId = `district_${idx}`
+                const col = idx % cols
+                const row = Math.floor(idx / cols)
+                const files = mergedGroups[dir]
+                const gridSize = Math.ceil(Math.sqrt(files.length)) * 25 + 20
+
+                const cx = col * (gridSize + 40) - (cols * (gridSize + 40)) / 2
+                const cy = row * (gridSize + 40) - (Math.ceil(finalDirNames.length / cols) * (gridSize + 40)) / 2
+
+                districts.push({
+                    id: districtId,
+                    name: dir,
+                    color: DISTRICT_COLORS[idx % DISTRICT_COLORS.length],
+                    center: { x: cx, y: cy },
+                    boundary: [
+                        { x: cx - gridSize / 2, y: cy - gridSize / 2 },
+                        { x: cx + gridSize / 2, y: cy - gridSize / 2 },
+                        { x: cx + gridSize / 2, y: cy + gridSize / 2 },
+                        { x: cx - gridSize / 2, y: cy + gridSize / 2 },
+                    ],
+                    building_count: files.length,
+                })
+
+                districtMap[dir] = districtId
+            })
+
+            setProgress(80)
+
+            // Create buildings
+            const maxSize = Math.max(...sourceFiles.map(f => f.size || 100))
+            const buildings = []
+            const languageCounts = {}
+
+            for (const dir of finalDirNames) {
+                const files = mergedGroups[dir]
+                const districtId = districtMap[dir]
+                const district = districts.find(d => d.id === districtId)
+                const bcols = Math.ceil(Math.sqrt(files.length))
+
+                files.forEach((file, fileIdx) => {
+                    const ext = file.path.substring(file.path.lastIndexOf('.')).toLowerCase()
+                    const lang = EXT_TO_LANG[ext] || 'unknown'
+                    languageCounts[lang] = (languageCounts[lang] || 0) + 1
+
+                    const size = file.size || 100
+                    // Log-scale sizing prevents one huge file from crushing everything else
+                    const logSize = Math.log2(size + 1)
+                    const logMax = Math.log2(maxSize + 1)
+                    const sizeNorm = logSize / Math.max(logMax, 1)
+
+                    const width = Math.max(4, 4 + 14 * sizeNorm)
+                    const height = Math.max(5, 5 + 55 * sizeNorm)
+                    const depth = width
+
+                    const fcol = fileIdx % bcols
+                    const frow = Math.floor(fileIdx / bcols)
+                    const spacing = 23
+                    const offsetX = district.center.x + (fcol - bcols / 2) * spacing
+                    const offsetZ = district.center.y + (frow - Math.ceil(files.length / bcols) / 2) * spacing
+
+                    const name = file.path.split('/').pop()
+                    const complexity = Math.ceil(1 + (size / 500))
+                    const fileAuthor = commitAuthors[file.path] || null
+                    const fileAuthorEmail = fileAuthor ? (authorEmails[fileAuthor] || null) : null
+
+                    buildings.push({
+                        id: file.path,
+                        name,
+                        path: file.path,
+                        file_path: file.path,
+                        language: lang,
+                        author: fileAuthor,
+                        email: fileAuthorEmail,
+                        district_id: districtId,
+                        directory: file.path.includes('/') ? file.path.substring(0, file.path.lastIndexOf('/')) : '(root)',
+                        position: { x: offsetX, y: 0, z: offsetZ },
+                        dimensions: { width, height, depth },
+                        color_metric: sizeNorm,
+                        coupling_score: 0,
+                        lines_of_code: Math.ceil(size / 40),
+                        complexity,
+                        in_degree: 0,
+                        functions: [],
+                        classes: [],
+                        imports: [],
+                        metrics: {
+                            size_bytes: size,
+                            loc: Math.ceil(size / 40),
+                            complexity,
+                            churn: 0,
+                            commits: 0,
+                            age_days: 0,
+                            dependencies_in: 0,
+                            debt: sizeNorm > 0.7 ? sizeNorm : 0,
+                        },
+                    })
+                })
+            }
+
+            setProgress(90)
+
+            // Build roads from co-directory proximity (files in same dir are connected)
+            const roads = []
+            for (const dir of finalDirNames) {
+                const files = mergedGroups[dir]
+                for (let i = 0; i < files.length - 1 && i < 5; i++) {
+                    const src = buildings.find(b => b.id === files[i].path)
+                    const tgt = buildings.find(b => b.id === files[i + 1].path)
+                    if (src && tgt) {
+                        roads.push({
+                            id: `${src.id}->${tgt.id}`,
+                            source: src.id,
+                            target: tgt.id,
+                            from_position: { ...src.position },
+                            to_position: { ...tgt.position },
+                        })
+                    }
+                }
+            }
+
+            const cityData = {
+                name: `${owner}/${repo}`,
+                path: `github:${owner}/${repo}`,
+                city_id: `github_${owner}_${repo}_${Date.now()}`,
+                analyzed_at: new Date().toISOString(),
+                source: 'github',
+                buildings,
+                districts,
+                roads,
+                metrics: {
+                    total_files: buildings.length,
+                    total_lines: buildings.reduce((s, b) => s + (b.metrics?.loc || 0), 0),
+                    languages: languageCounts,
+                    avg_complexity: buildings.reduce((s, b) => s + b.complexity, 0) / buildings.length,
+                },
+                dependency_graph: { nodes: buildings.map(b => ({ id: b.id })), edges: [] },
+                metadata: { issues: { god_objects: [], circular_dependencies: [] } },
+            }
+
+            setProgress(95)
+            await new Promise(r => setTimeout(r, 800))
+
+            setCityData(cityData)
+            set({ currentRepoPath: `${owner}/${repo}`, commits: [], currentCommitIndex: -1 })
+
         } catch (error) {
-            logger.error("Analysis Error:", error)
-            setError(error.message)
+            logger.error("GitHub Analysis Error:", error)
+            setError(error.message || 'GitHub analysis failed')
         } finally {
             setLoading(false)
         }
@@ -282,7 +606,7 @@ export const createCitySlice = (set, get) => ({
         }
 
         // Fallback: try fetching raw content from GitHub if it's a GitHub-sourced repo
-        if (cityData?.source === 'github-client' && cityData?.name) {
+        if ((cityData?.source === 'github' || cityData?.source === 'github-client') && cityData?.name) {
             try {
                 const repoName = cityData.name
                 const cleanPath = path.replace(/^[./\\]+/, '')

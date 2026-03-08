@@ -195,3 +195,162 @@
     color: var(--color-text-tertiary);
     background: var(--color-bg-secondary);
 }
+
+/* --- FileTable token-aware additions --- */
+.ft-head-area {
+    padding: 0 var(--space-1);
+}
+.ft-head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-6);
+}
+.ft-title {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    font-family: var(--font-display);
+    margin: 0;
+    color: var(--color-text-primary);
+}
+.ft-search {
+    width: 300px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--space-3);
+    height: 36px;
+    transition: border-color 0.2s;
+}
+.ft-search:focus-within {
+    border-color: var(--border-strong);
+}
+.ft-search-icon {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+}
+.ft-search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--color-text-primary);
+    outline: none;
+    margin-left: var(--space-2);
+    font-size: var(--text-sm);
+    font-family: var(--font-body);
+}
+.ft-search-input::placeholder {
+    color: var(--color-text-muted);
+}
+.ft-risks {
+    margin-bottom: var(--space-6);
+}
+.ft-risks-toggle {
+    background: transparent;
+    border: none;
+    color: var(--color-warning);
+    cursor: pointer;
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    display: flex;
+    align-items: center;
+    gap: var(--space-1-5);
+    padding: 0;
+    transition: opacity 0.2s;
+}
+.ft-risks-toggle:hover {
+    opacity: 0.8;
+}
+.ft-risks-body {
+    margin-top: var(--space-3);
+}
+.ft-table-glass {
+    border-radius: var(--radius-xl) !important;
+    border: 1px solid var(--border-subtle) !important;
+    overflow: hidden;
+}
+
+/* File row cells */
+.ft-file-icon {
+    opacity: 0.4;
+    margin-right: var(--space-2);
+    flex-shrink: 0;
+}
+.ft-file-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.ft-file-name {
+    font-weight: var(--font-medium);
+    color: var(--color-text-primary);
+}
+.ft-file-path {
+    font-size: 0.7em;
+    color: var(--color-text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 300px;
+}
+.ft-metric-cell {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+}
+.ft-metric-val {
+    font-weight: var(--font-semibold);
+}
+.ft-bar {
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.ft-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+.ft-mono {
+    font-family: var(--font-mono);
+    opacity: 0.7;
+}
+.ft-icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: var(--space-1);
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+}
+.ft-icon-btn:hover {
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+}
+.ft-empty {
+    padding: 60px 32px;
+    text-align: center;
+    color: var(--color-text-muted);
+}
+.ft-empty-icon {
+    margin: 0 auto var(--space-4);
+    opacity: 0.5;
+    display: block;
+}
+.ft-empty-title {
+    margin: 0 0 var(--space-2) 0;
+    color: var(--color-text-primary);
+    font-weight: var(--font-medium);
+}
+.ft-empty-desc {
+    margin: 0;
+    font-size: var(--text-sm);
+}

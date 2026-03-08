@@ -18,13 +18,9 @@ export function getBuildingColor(data, mode, context = {}) {
     const {
         isSelected,
         isHovered,
-        isDependency,
-        isDependent,
         isUnrelated,
         highlightedIssue,
-        isIssueHighlighted,
-        activeIntelligencePanel,
-        blastLevel
+        isIssueHighlighted
     } = context
 
     // ═══════════════════════════════════════════════════════════════
@@ -36,19 +32,8 @@ export function getBuildingColor(data, mode, context = {}) {
         return '#0e0f14' // Nearly invisible
     }
 
-    // Impact Analysis Mode
-    if (activeIntelligencePanel === 'impact') {
-        if (blastLevel === 0) return '#ffffff' // Pure White (Ground Zero / The File)
-        if (blastLevel === 1) return '#ef4444' // Red (Direct Impact)
-        if (blastLevel === 2) return '#f97316' // Orange (Secondary)
-        if (blastLevel === 3) return '#eab308' // Yellow (Tertiary)
-        return '#0e0f14' // Unimpacted shadow
-    }
-
     if (isSelected) return '#34d399'   // Emerald — bright, clear selection
     if (isHovered) return '#60a5fa'    // Sky blue — obvious hover
-    if (isDependency) return '#4ade80' // Green — "imports this"
-    if (isDependent) return '#fb7185'  // Rose — "imported by"
 
     if (isUnrelated) return '#0e0f14'  // Deep shadow
 

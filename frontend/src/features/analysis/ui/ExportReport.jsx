@@ -16,7 +16,7 @@ import logger from '../../../utils/logger'
 import './ExportReport.css'
 
 export default function ExportReport({ isOpen, onClose }) {
-    const { cityData } = useStore()
+    const cityData = useStore(s => s.cityData)
 
     const [format, setFormat] = useState('html')
     const [exporting, setExporting] = useState(false)

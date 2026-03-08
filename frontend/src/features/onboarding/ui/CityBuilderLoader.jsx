@@ -113,34 +113,6 @@ export default function CityBuilderLoader() {
                 overflow: 'hidden',
             }}
         >
-            {/* Ambient animated background dots */}
-            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
-                {Array.from({ length: 30 }).map((_, i) => (
-                    <motion.div
-                        key={i}
-                        animate={{
-                            y: [0, -20, 0],
-                            opacity: [0.03, 0.08, 0.03],
-                        }}
-                        transition={{
-                            duration: 4 + (i % 5),
-                            repeat: Infinity,
-                            delay: i * 0.3,
-                            ease: 'easeInOut',
-                        }}
-                        style={{
-                            position: 'absolute',
-                            width: 2,
-                            height: 2,
-                            borderRadius: '50%',
-                            background: '#fff',
-                            left: `${(i * 37) % 100}%`,
-                            top: `${(i * 23 + 10) % 90}%`,
-                        }}
-                    />
-                ))}
-            </div>
-
             <motion.div
                 initial={{ opacity: 0, scale: 0.96, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}

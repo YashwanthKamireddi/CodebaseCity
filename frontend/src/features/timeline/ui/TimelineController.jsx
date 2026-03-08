@@ -13,7 +13,11 @@ import useStore from '../../../store/useStore'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export default function TimelineController() {
-    const { cityData, showTimeline, setCityData, setAnimating, setCommitIndex } = useStore()
+    const cityData = useStore(s => s.cityData)
+    const showTimeline = useStore(s => s.showTimeline)
+    const setCityData = useStore(s => s.setCityData)
+    const setAnimating = useStore(s => s.setAnimating)
+    const setCommitIndex = useStore(s => s.setCommitIndex)
     const [history, setHistory] = useState([])
     const [currentIndex, setCurrentIndex] = useState(0)
     const [isPlaying, setIsPlaying] = useState(false)
@@ -146,14 +150,20 @@ export default function TimelineController() {
         if (history[last]?.hash) performAnalysis(history[last])
     }
 
-    // Playback loop
+    // Playback loop — uses refs to avoid stale closures
+    const currentIndexRef = useRef(currentIndex)
+    currentIndexRef.current = currentIndex
+
+    const isPlayingRef = useRef(isPlaying)
+    isPlayingRef.current = isPlaying
+
     useEffect(() => {
         let isCancelled = false
 
         const loop = async () => {
-            if (!isPlaying || isCancelled) return
+            if (!isPlayingRef.current || isCancelled) return
 
-            let nextIndex = currentIndex + 1
+            let nextIndex = currentIndexRef.current + 1
             if (nextIndex >= history.length) {
                 setIsPlaying(false)
                 return
@@ -162,7 +172,7 @@ export default function TimelineController() {
             setCurrentIndex(nextIndex)
             await performAnalysis(history[nextIndex])
 
-            if (!isPlaying || isCancelled) return
+            if (!isPlayingRef.current || isCancelled) return
 
             const delay = Math.max(300, 1200 / playbackSpeed)
             setTimeout(loop, delay)
@@ -171,7 +181,7 @@ export default function TimelineController() {
         if (isPlaying) loop()
 
         return () => { isCancelled = true }
-    }, [isPlaying, history])
+    }, [isPlaying, history, playbackSpeed, performAnalysis])
 
     // Keyboard shortcuts
     useEffect(() => {
@@ -216,15 +226,14 @@ export default function TimelineController() {
         <AnimatePresence>
             <motion.div
                 key="timeline-bar"
-                initial={{ y: 80, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 80, opacity: 0 }}
+                initial={{ y: 80, opacity: 0, x: '-50%' }}
+                animate={{ y: 0, opacity: 1, x: '-50%' }}
+                exit={{ y: 80, opacity: 0, x: '-50%' }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 style={{
                     position: 'fixed',
                     bottom: '100px',
                     left: '50%',
-                    transform: 'translateX(-50%)',
                     zIndex: 9000,
                     pointerEvents: 'none',
                 }}

@@ -6,38 +6,43 @@ import { slideUp, fadeIn } from '../../../shared/animations/variants'
 import './Sidebar.css'
 
 export default function Sidebar() {
-    const { cityData, selectBuilding, selectedBuilding, sidebarOpen, setSidebarOpen, sidebarWidth, setSidebarWidth, loading, setAnalyzeModalOpen } = useStore()
+    const cityData = useStore(s => s.cityData)
+    const selectBuilding = useStore(s => s.selectBuilding)
+    const selectedBuilding = useStore(s => s.selectedBuilding)
+    const sidebarOpen = useStore(s => s.sidebarOpen)
+    const setSidebarOpen = useStore(s => s.setSidebarOpen)
+    const sidebarWidth = useStore(s => s.sidebarWidth)
+    const setSidebarWidth = useStore(s => s.setSidebarWidth)
+    const loading = useStore(s => s.loading)
     const onClose = () => setSidebarOpen(false)
 
-    // Global State for layout coordination
+    // Sidebar resize — listeners only attached DURING resize to prevent leak
     const [isResizing, setIsResizing] = React.useState(false)
 
     const startResizing = React.useCallback((e) => {
         setIsResizing(true)
-        e.preventDefault() // Prevent selection
+        e.preventDefault()
     }, [])
 
-    const stopResizing = React.useCallback(() => {
-        setIsResizing(false)
-    }, [])
+    React.useEffect(() => {
+        if (!isResizing) return
 
-    const resize = React.useCallback((e) => {
-        if (isResizing) {
+        const resize = (e) => {
             const newWidth = e.clientX
             if (newWidth > 150 && newWidth < 800) {
                 setSidebarWidth(newWidth)
             }
         }
-    }, [isResizing])
 
-    React.useEffect(() => {
+        const stopResizing = () => setIsResizing(false)
+
         window.addEventListener('mousemove', resize)
         window.addEventListener('mouseup', stopResizing)
         return () => {
             window.removeEventListener('mousemove', resize)
             window.removeEventListener('mouseup', stopResizing)
         }
-    }, [resize, stopResizing])
+    }, [isResizing, setSidebarWidth])
 
     const displayTitle = cityData?.name || (loading ? 'Loading...' : 'Codebase Explorer')
 
@@ -85,23 +90,8 @@ export default function Sidebar() {
                         >
                             <FolderOpen size={48} strokeWidth={1} style={{ margin: '0 auto 16px', display: 'block' }} />
                             <p style={{ fontSize: '0.85rem', marginBottom: '16px', lineHeight: 1.5 }}>
-                                No project loaded. Analyze a repository to explore its files here.
+                                No project loaded. Open a local folder to explore its files here.
                             </p>
-                            <button
-                                onClick={() => setAnalyzeModalOpen(true)}
-                                style={{
-                                    background: 'rgba(59, 130, 246, 0.2)',
-                                    color: '#60a5fa',
-                                    border: '1px solid rgba(59, 130, 246, 0.4)',
-                                    padding: '6px 12px',
-                                    borderRadius: '6px',
-                                    cursor: 'pointer',
-                                    fontSize: '0.8rem',
-                                    fontWeight: 500
-                                }}
-                            >
-                                Analyze Repo
-                            </button>
                         </motion.div>
                     ) : (
                         <FileTree
@@ -173,8 +163,8 @@ function FileTree({ files, onSelect, selectedId }) {
     return <div className="file-tree-container">{renderNode(tree)}</div>
 }
 
-function CollapsibleFolder({ name, depth, children }) {
-    const [isOpen, setIsOpen] = React.useState(true) // Default open
+const CollapsibleFolder = React.memo(function CollapsibleFolder({ name, depth, children }) {
+    const [isOpen, setIsOpen] = React.useState(true)
 
     return (
         <div>
@@ -195,4 +185,4 @@ function CollapsibleFolder({ name, depth, children }) {
             {isOpen && children}
         </div>
     )
-}
+})
