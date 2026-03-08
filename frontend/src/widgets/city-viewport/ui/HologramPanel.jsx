@@ -65,8 +65,8 @@ export default function HologramPanel() {
     const { name, path, metrics, language, author, is_hotspot, classes, functions } = selectedBuilding
     const langColor = langColors[language] || '#71717a'
     const complexity = metrics?.complexity || 1
-    const loc = metrics?.loc || metrics?.lines || '—'
-    const commits = metrics?.commits || '—'
+    const loc = metrics?.loc ?? metrics?.lines ?? '—'
+    const commits = metrics?.commits ?? '—'
 
     return (
         <group>

@@ -278,8 +278,10 @@ export default function InstancedCity() {
         lastPointerTime.current = now
         if (e.instanceId !== undefined) {
             setHoveredInstanceId(e.instanceId)
+            const b = useStore.getState().cityData?.buildings?.[e.instanceId]
+            if (b) setHoveredBuilding(b)
         }
-    }, [])
+    }, [setHoveredBuilding])
 
     const handlePointerOut = useCallback(() => {
         setHoveredInstanceId(null)
