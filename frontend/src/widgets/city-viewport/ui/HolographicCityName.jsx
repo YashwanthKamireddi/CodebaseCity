@@ -6,18 +6,25 @@ import useStore from '../../../store/useStore'
  * HolographicCityName — Floating repo name above the city.
  *
  * Perf budget: 1 draw call (single sprite), 0 useFrame (fully static).
+ * Height auto-adjusts above tallest building to prevent overlap.
  */
 export default function HolographicCityName() {
     const cityData = useStore(s => s.cityData)
 
-    const cityRadius = useMemo(() => {
-        if (!cityData?.buildings?.length) return 200
+    const { cityRadius, maxBuildingTop } = useMemo(() => {
+        if (!cityData?.buildings?.length) return { cityRadius: 200, maxBuildingTop: 80 }
         let maxR = 0
+        let maxH = 0
         for (const b of cityData.buildings) {
             const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
             if (r > maxR) maxR = r
+            const h = (b.dimensions?.height || 8) * 3.0
+            if (h > maxH) maxH = h
         }
-        return Math.max(200, maxR * 0.8)
+        return {
+            cityRadius: Math.max(200, maxR * 0.8),
+            maxBuildingTop: maxH,
+        }
     }, [cityData])
 
     const repoName = cityData?.name || ''
@@ -74,10 +81,12 @@ export default function HolographicCityName() {
     if (!texture || !repoName) return null
 
     const scale = Math.max(60, cityRadius * 0.4)
+    // Position: always 40 units above tallest building, minimum at cityRadius*0.5
+    const titleY = Math.max(cityRadius * 0.5, maxBuildingTop + 40)
 
     return (
         <sprite
-            position={[0, cityRadius * 0.7, 0]}
+            position={[0, titleY, 0]}
             scale={[scale, scale * 0.25, 1]}
         >
             <spriteMaterial

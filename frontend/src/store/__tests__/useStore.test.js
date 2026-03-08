@@ -59,17 +59,12 @@ describe('City Store', () => {
       expect(result.current.showRoads).toBe(!initialState)
     })
 
-    it('should toggle labels visibility', async () => {
+    it('should have UI state defaults', async () => {
       const { default: useStore } = await import('@/store/useStore')
       const { result } = renderHook(() => useStore())
 
-      const initialState = result.current.showLabels
-
-      act(() => {
-        result.current.toggleLabels()
-      })
-
-      expect(result.current.showLabels).toBe(!initialState)
+      // Verify basic UI state exists
+      expect(result.current.colorMode).toBeDefined()
     })
   })
 

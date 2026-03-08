@@ -1,6 +1,5 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useMemo } from 'react'
 import { Html } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 import { FileCode2, Code, Layers, Activity, User, Eye, Copy, ExternalLink, X } from 'lucide-react'
@@ -25,23 +24,19 @@ export default function HologramPanel() {
     const clearSelection = useStore(s => s.clearSelection)
     const codeViewerOpen = useStore(s => s.codeViewerOpen)
 
-    const beamRef = useRef()
-    const dotRef = useRef()
-
     const layoutData = useMemo(() => {
         if (!selectedBuilding) return null
         const { position, dimensions } = selectedBuilding
         const height = (dimensions?.height || 8) * 3.0
         const bx = position.x
         const bz = position.z
-        // Building is at y = height/2 with scale height, so its roof is at y = height
         const buildingTop = height
-        const panelY = buildingTop + 12
+        const panelY = buildingTop + 16
 
         // Beam line from building roof to panel
         const beamGeo = new THREE.BufferGeometry()
         beamGeo.setAttribute('position', new THREE.BufferAttribute(
-            new Float32Array([bx, buildingTop, bz, bx, panelY, bz]), 3
+            new Float32Array([bx, buildingTop, bz, bx, panelY - 2, bz]), 3
         ))
 
         return {
@@ -51,14 +46,6 @@ export default function HologramPanel() {
             height,
         }
     }, [selectedBuilding])
-
-    // Animate the dot at the building top
-    useFrame(({ clock }) => {
-        if (dotRef.current) {
-            const t = clock.elapsedTime
-            dotRef.current.material.opacity = 0.5 + Math.sin(t * 4) * 0.3
-        }
-    })
 
     if (!selectedBuilding || !layoutData || codeViewerOpen) return null
 
@@ -75,32 +62,21 @@ export default function HologramPanel() {
                 <lineBasicMaterial
                     color="#00d9ff"
                     transparent
-                    opacity={0.4}
+                    opacity={0.35}
                     depthTest={false}
                     depthWrite={false}
                 />
             </lineSegments>
 
-            {/* Glowing dot at building roof */}
-            <mesh ref={dotRef} position={layoutData.dotPos} renderOrder={999}>
-                <sphereGeometry args={[0.6, 12, 12]} />
+            {/* Anchor dot at building roof */}
+            <mesh position={layoutData.dotPos} renderOrder={999}>
+                <sphereGeometry args={[0.8, 10, 10]} />
                 <meshBasicMaterial
                     color="#00d9ff"
-                    transparent
-                    opacity={0.8}
                     depthTest={false}
                     depthWrite={false}
                 />
             </mesh>
-
-            {/* Point light glow at anchor */}
-            <pointLight
-                position={layoutData.dotPos}
-                color="#00d9ff"
-                intensity={3}
-                distance={15}
-                decay={2}
-            />
 
             <group position={layoutData.panelPos}>
                 <Html
@@ -112,47 +88,47 @@ export default function HologramPanel() {
                     <div
                         onClick={e => e.stopPropagation()}
                         style={{
-                            width: '320px',
-                            background: 'rgba(9, 9, 11, 0.92)',
-                            backdropFilter: 'blur(20px)',
-                            border: '1px solid rgba(0, 217, 255, 0.2)',
-                            borderRadius: '16px',
-                            boxShadow: '0 0 40px rgba(0, 217, 255, 0.08), 0 20px 60px rgba(0,0,0,0.7)',
+                            width: '340px',
+                            background: 'linear-gradient(165deg, rgba(12, 14, 22, 0.96), rgba(6, 8, 16, 0.98))',
+                            backdropFilter: 'blur(24px)',
+                            border: '1px solid rgba(0, 180, 255, 0.15)',
+                            borderRadius: '14px',
+                            boxShadow: `
+                                0 0 0 1px rgba(0, 180, 255, 0.05),
+                                0 8px 32px rgba(0, 0, 0, 0.7),
+                                0 0 60px rgba(0, 120, 200, 0.06)
+                            `,
                             color: '#e4e4e7',
                             fontFamily: "'Inter', system-ui, sans-serif",
                             overflow: 'hidden',
                         }}
                     >
-                        {/* Top accent line */}
+                        {/* Top accent gradient line */}
                         <div style={{
                             height: '2px',
-                            background: 'linear-gradient(90deg, transparent, #00d9ff, transparent)',
+                            background: `linear-gradient(90deg, transparent 5%, ${langColor}88, transparent 95%)`,
                         }} />
 
                         {/* Header */}
                         <div style={{
-                            padding: '16px 18px 12px',
-                            borderBottom: '1px solid rgba(255,255,255,0.06)',
+                            padding: '14px 16px 10px',
+                            borderBottom: '1px solid rgba(255,255,255,0.05)',
                             display: 'flex',
                             alignItems: 'flex-start',
-                            gap: '12px',
+                            gap: '10px',
                         }}>
+                            <div style={{
+                                width: 32, height: 32, borderRadius: '8px',
+                                background: `${langColor}18`,
+                                border: `1px solid ${langColor}30`,
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                flexShrink: 0,
+                            }}>
+                                <FileCode2 size={15} color={langColor} />
+                            </div>
                             <div style={{ flex: 1, minWidth: 0 }}>
                                 <div style={{
-                                    fontSize: '9px',
-                                    textTransform: 'uppercase',
-                                    letterSpacing: '0.12em',
-                                    fontWeight: 600,
-                                    color: '#71717a',
-                                    marginBottom: '4px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '4px',
-                                }}>
-                                    <FileCode2 size={10} /> File Inspector
-                                </div>
-                                <div style={{
-                                    fontSize: '15px',
+                                    fontSize: '14px',
                                     fontWeight: 600,
                                     lineHeight: 1.2,
                                     color: '#fafafa',
@@ -164,8 +140,9 @@ export default function HologramPanel() {
                                     fontSize: '10px',
                                     color: '#52525b',
                                     fontFamily: "'JetBrains Mono', monospace",
-                                    marginTop: '4px',
+                                    marginTop: '3px',
                                     wordBreak: 'break-all',
+                                    lineHeight: 1.3,
                                 }}>
                                     {path}
                                 </div>
@@ -173,70 +150,71 @@ export default function HologramPanel() {
                             <button
                                 onClick={clearSelection}
                                 style={{
-                                    background: 'transparent',
-                                    border: 'none',
-                                    color: '#52525b',
+                                    background: 'rgba(255,255,255,0.06)',
+                                    border: '1px solid rgba(255,255,255,0.08)',
+                                    color: '#71717a',
                                     cursor: 'pointer',
-                                    padding: '2px',
-                                    borderRadius: '4px',
+                                    padding: '4px',
+                                    borderRadius: '6px',
                                     flexShrink: 0,
                                     lineHeight: 0,
+                                    transition: 'all 0.15s ease',
                                 }}
                             >
-                                <X size={14} />
+                                <X size={12} />
                             </button>
                         </div>
 
-                        {/* Meta row: Language + Author */}
+                        {/* Tags row: Language + Author + Hotspot */}
                         <div style={{
-                            padding: '10px 18px',
+                            padding: '8px 16px',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '10px',
+                            gap: '8px',
+                            flexWrap: 'wrap',
                             borderBottom: '1px solid rgba(255,255,255,0.04)',
                         }}>
-                            {/* Language badge */}
                             <span style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '5px',
+                                gap: '4px',
                                 fontSize: '10px',
                                 fontWeight: 600,
                                 color: langColor,
-                                padding: '3px 8px',
-                                background: `${langColor}15`,
-                                borderRadius: '4px',
+                                padding: '2px 8px',
+                                background: `${langColor}12`,
+                                border: `1px solid ${langColor}20`,
+                                borderRadius: '20px',
                                 textTransform: 'capitalize',
                             }}>
-                                <Code size={10} />
+                                <Code size={9} />
                                 {language || 'unknown'}
                             </span>
 
-                            {/* Author */}
                             {author && author !== 'Unknown' && (
                                 <span style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
-                                    gap: '5px',
+                                    gap: '4px',
                                     fontSize: '10px',
                                     color: '#a1a1aa',
                                 }}>
-                                    <User size={10} />
+                                    <User size={9} />
                                     {author}
                                 </span>
                             )}
 
-                            {/* Hotspot badge */}
                             {is_hotspot && (
                                 <span style={{
                                     fontSize: '9px',
                                     fontWeight: 700,
                                     color: '#ef4444',
-                                    padding: '2px 6px',
-                                    background: 'rgba(239,68,68,0.12)',
-                                    borderRadius: '4px',
+                                    padding: '2px 7px',
+                                    background: 'rgba(239,68,68,0.10)',
+                                    border: '1px solid rgba(239,68,68,0.18)',
+                                    borderRadius: '20px',
                                     textTransform: 'uppercase',
-                                    letterSpacing: '0.05em',
+                                    letterSpacing: '0.06em',
                                     marginLeft: 'auto',
                                 }}>
                                     Hotspot
@@ -244,18 +222,19 @@ export default function HologramPanel() {
                             )}
                         </div>
 
-                        {/* Metrics grid */}
+                        {/* Metrics grid — 2×3 */}
                         <div style={{
-                            padding: '14px 18px',
+                            padding: '12px 16px',
                             display: 'grid',
                             gridTemplateColumns: '1fr 1fr 1fr',
-                            gap: '2px 16px',
+                            gap: '8px',
                         }}>
-                            <MetricCell label="LOC" value={loc} />
+                            <MetricCell label="Lines" value={loc} icon={<Layers size={10} />} />
                             <MetricCell
                                 label="Complexity"
                                 value={complexity}
                                 warn={complexity > 15}
+                                icon={<Activity size={10} />}
                             />
                             <MetricCell label="Commits" value={commits} />
                             <MetricCell
@@ -274,7 +253,7 @@ export default function HologramPanel() {
 
                         {/* Actions */}
                         <div style={{
-                            padding: '0 18px 14px',
+                            padding: '0 16px 12px',
                             display: 'flex',
                             gap: '8px',
                         }}>
@@ -297,23 +276,33 @@ export default function HologramPanel() {
     )
 }
 
-function MetricCell({ label, value, warn }) {
+function MetricCell({ label, value, warn, icon }) {
     return (
-        <div style={{ padding: '4px 0' }}>
+        <div style={{
+            padding: '6px 8px',
+            background: 'rgba(255,255,255,0.025)',
+            borderRadius: '8px',
+            border: '1px solid rgba(255,255,255,0.04)',
+        }}>
             <div style={{
                 fontSize: '9px',
                 color: '#52525b',
                 textTransform: 'uppercase',
                 letterSpacing: '0.08em',
-                marginBottom: '2px',
+                marginBottom: '3px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '3px',
             }}>
+                {icon}
                 {label}
             </div>
             <div style={{
-                fontSize: '16px',
-                fontWeight: 300,
-                fontFamily: "'Outfit', sans-serif",
+                fontSize: '15px',
+                fontWeight: 500,
+                fontFamily: "'Outfit', 'Inter', sans-serif",
                 color: warn ? '#ef4444' : '#e4e4e7',
+                letterSpacing: '-0.01em',
             }}>
                 {value}
             </div>
@@ -331,14 +320,18 @@ function ActionBtn({ label, icon, onClick, primary }) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '6px',
-                padding: '8px',
-                borderRadius: '6px',
+                padding: '9px',
+                borderRadius: '8px',
                 border: primary ? 'none' : '1px solid rgba(255,255,255,0.08)',
-                background: primary ? '#3b82f6' : 'rgba(255,255,255,0.04)',
+                background: primary
+                    ? 'linear-gradient(135deg, #3b82f6, #2563eb)'
+                    : 'rgba(255,255,255,0.04)',
                 color: primary ? '#fff' : '#a1a1aa',
                 fontSize: '11px',
                 fontWeight: 600,
                 cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                boxShadow: primary ? '0 2px 8px rgba(59,130,246,0.3)' : 'none',
             }}
         >
             {icon} {label}

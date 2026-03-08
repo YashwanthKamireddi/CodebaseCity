@@ -353,10 +353,11 @@ export const createCitySlice = (set, get) => ({
             const districts = []
             const districtMap = {}
 
-            // Merge tiny directories
+            // Merge small directories (< 3 files) into parent or (misc)
+            // Threshold matches DistrictLabels' filter (building_count >= 3)
             const mergedGroups = {}
             for (const dir of dirNames) {
-                if (dirGroups[dir].length < 2 && dir !== '(root)') {
+                if (dirGroups[dir].length < 3 && dir !== '(root)') {
                     const parent = dir.includes('/') ? dir.split('/')[0] : '(misc)'
                     if (!mergedGroups[parent]) mergedGroups[parent] = []
                     mergedGroups[parent].push(...dirGroups[dir])
@@ -368,16 +369,28 @@ export const createCitySlice = (set, get) => ({
 
             const finalDirNames = Object.keys(mergedGroups).sort()
             const cols = Math.ceil(Math.sqrt(finalDirNames.length))
+            const rows = Math.ceil(finalDirNames.length / cols)
+
+            // Compute per-district grid sizes first
+            const districtSizes = finalDirNames.map(dir => {
+                const files = mergedGroups[dir]
+                return Math.ceil(Math.sqrt(files.length)) * 25 + 20
+            })
+
+            // Use uniform cell size (max across all districts) for consistent grid
+            const cellSize = Math.max(...districtSizes, 60)
+            const cellSpacing = cellSize + 40
+            const totalW = cols * cellSpacing
+            const totalH = rows * cellSpacing
 
             finalDirNames.forEach((dir, idx) => {
                 const districtId = `district_${idx}`
                 const col = idx % cols
                 const row = Math.floor(idx / cols)
                 const files = mergedGroups[dir]
-                const gridSize = Math.ceil(Math.sqrt(files.length)) * 25 + 20
 
-                const cx = col * (gridSize + 40) - (cols * (gridSize + 40)) / 2
-                const cy = row * (gridSize + 40) - (Math.ceil(finalDirNames.length / cols) * (gridSize + 40)) / 2
+                const cx = col * cellSpacing - totalW / 2 + cellSpacing / 2
+                const cy = row * cellSpacing - totalH / 2 + cellSpacing / 2
 
                 districts.push({
                     id: districtId,
@@ -385,10 +398,10 @@ export const createCitySlice = (set, get) => ({
                     color: DISTRICT_COLORS[idx % DISTRICT_COLORS.length],
                     center: { x: cx, y: cy },
                     boundary: [
-                        { x: cx - gridSize / 2, y: cy - gridSize / 2 },
-                        { x: cx + gridSize / 2, y: cy - gridSize / 2 },
-                        { x: cx + gridSize / 2, y: cy + gridSize / 2 },
-                        { x: cx - gridSize / 2, y: cy + gridSize / 2 },
+                        { x: cx - cellSize / 2, y: cy - cellSize / 2 },
+                        { x: cx + cellSize / 2, y: cy - cellSize / 2 },
+                        { x: cx + cellSize / 2, y: cy + cellSize / 2 },
+                        { x: cx - cellSize / 2, y: cy + cellSize / 2 },
                     ],
                     building_count: files.length,
                 })
@@ -408,6 +421,11 @@ export const createCitySlice = (set, get) => ({
                 const districtId = districtMap[dir]
                 const district = districts.find(d => d.id === districtId)
                 const bcols = Math.ceil(Math.sqrt(files.length))
+                const brows = Math.ceil(files.length / bcols)
+
+                // Compute spacing to fit buildings within the district boundary with padding
+                const usableSize = cellSize - 10 // 5px padding each side
+                const spacing = Math.min(23, usableSize / Math.max(bcols, brows))
 
                 files.forEach((file, fileIdx) => {
                     const ext = file.path.substring(file.path.lastIndexOf('.')).toLowerCase()
@@ -426,9 +444,8 @@ export const createCitySlice = (set, get) => ({
 
                     const fcol = fileIdx % bcols
                     const frow = Math.floor(fileIdx / bcols)
-                    const spacing = 23
-                    const offsetX = district.center.x + (fcol - bcols / 2) * spacing
-                    const offsetZ = district.center.y + (frow - Math.ceil(files.length / bcols) / 2) * spacing
+                    const offsetX = district.center.x + (fcol - (bcols - 1) / 2) * spacing
+                    const offsetZ = district.center.y + (frow - (brows - 1) / 2) * spacing
 
                     const name = file.path.split('/').pop()
                     const complexity = Math.ceil(1 + (size / 500))

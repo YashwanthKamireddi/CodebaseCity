@@ -1,27 +1,36 @@
-import React, { useMemo, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
+import React, { useMemo } from 'react'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 
 /**
  * DistrictLabels — Floating holographic district name tags.
- * Glass-morphism canvas sprites. Dynamic cap scales with repo size.
- * Hover animation throttled to 30fps; skipped on low-end.
+ * Glass-morphism canvas sprites. Fully static (0 useFrame).
+ * Label height adapts to tallest building in each district.
  */
+const CITY_HEIGHT_SCALE = 3.0
+
 export default function DistrictLabels() {
     const cityData = useStore(s => s.cityData)
-    const groupRef = useRef()
-    const lastT = useRef(0)
-
-    const isLowEnd = typeof navigator !== 'undefined' &&
-        (navigator.maxTouchPoints > 0 || navigator.hardwareConcurrency <= 4)
 
     const labels = useMemo(() => {
         if (!cityData?.districts?.length) return []
         const n = cityData.buildings?.length || 0
-        const maxLabels = n > 15000 ? 8 : n > 5000 ? 15 : n > 2000 ? 22 : 30
+        const maxLabels = n > 15000 ? 8 : n > 5000 ? 15 : n > 2000 ? 22 : 40
+
+        // Build a map of district_id → max building height
+        const districtMaxH = {}
+        if (cityData.buildings) {
+            for (const b of cityData.buildings) {
+                const did = b.district_id
+                const h = (b.dimensions?.height || 8) * CITY_HEIGHT_SCALE
+                if (!districtMaxH[did] || h > districtMaxH[did]) {
+                    districtMaxH[did] = h
+                }
+            }
+        }
+
         return cityData.districts
-            .filter(d => d.building_count >= 3)
+            .filter(d => d.building_count >= 2)
             .slice(0, maxLabels)
             .map(d => {
                 let cx = 0, cz = 0
@@ -34,27 +43,17 @@ export default function DistrictLabels() {
                 }
                 const name = d.name || d.id
                 const shortName = name.split('/').slice(-2).join('/')
-                return { id: d.id, text: shortName, x: cx, z: cz, count: d.building_count, color: d.color }
+                // Position label above tallest building in this district + 10 units clearance
+                const maxH = districtMaxH[d.id] || 30
+                const labelY = Math.max(20, maxH + 10)
+                return { id: d.id, text: shortName, x: cx, z: cz, y: labelY, count: d.building_count, color: d.color }
             })
     }, [cityData])
-
-    useFrame(({ clock }) => {
-        if (!groupRef.current || isLowEnd) return
-        const t = clock.getElapsedTime()
-        if (t - lastT.current < 0.05) return // 20fps for hover is plenty
-        lastT.current = t
-        const children = groupRef.current.children
-        for (let i = 0; i < children.length; i++) {
-            if (children[i].isSprite) {
-                children[i].position.y = 30 + Math.sin(t * 0.4 + i * 0.8) * 2.5
-            }
-        }
-    })
 
     if (!labels.length) return null
 
     return (
-        <group ref={groupRef}>
+        <group>
             {labels.map(label => (
                 <LabelSprite key={label.id} label={label} />
             ))}
@@ -116,7 +115,7 @@ function LabelSprite({ label }) {
     const scale = Math.max(18, Math.min(45, label.count * 0.7))
 
     return (
-        <sprite position={[label.x, 30, label.z]} scale={[scale, scale * 0.25, 1]}>
+        <sprite position={[label.x, label.y, label.z]} scale={[scale, scale * 0.25, 1]}>
             <spriteMaterial
                 map={texture}
                 transparent

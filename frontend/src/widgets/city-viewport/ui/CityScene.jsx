@@ -10,6 +10,7 @@ import DistrictLabels from './DistrictLabels'
 import MothershipCore from './MothershipCore'
 import HolographicCityName from './HolographicCityName'
 import EnergyCoreReactor from './EnergyCoreReactor'
+import HeroLandmarks from './HeroLandmarks'
 
 
 /**
@@ -30,11 +31,12 @@ export default function CityScene() {
 
     return (
         <group>
-            {/* Clean lighting — 2 directional + ambient + hemisphere */}
-            <ambientLight intensity={0.4} color="#b0c4e0" />
-            <hemisphereLight color="#c0d8ff" groundColor="#080810" intensity={0.5} />
-            <directionalLight position={[80, 120, 60]} intensity={1.0} color="#e8f0ff" />
-            <directionalLight position={[-60, 80, -40]} intensity={0.3} color="#c0d0ff" />
+            {/* Cinematic 5-light rig — key, fill, rim, ambient, hemisphere */}
+            <ambientLight intensity={0.35} color="#8090b0" />
+            <hemisphereLight color="#a0c0ff" groundColor="#060810" intensity={0.45} />
+            <directionalLight position={[100, 150, 80]} intensity={1.2} color="#e4ecff" />
+            <directionalLight position={[-80, 60, -50]} intensity={0.25} color="#90b0ff" />
+            <directionalLight position={[0, 40, -120]} intensity={0.2} color="#6080c0" />
 
             <group>
                 <InstancedCity />
@@ -46,10 +48,11 @@ export default function CityScene() {
                 <EnergyCoreReactor />
                 <MothershipCore />
                 <HolographicCityName />
+                <HeroLandmarks buildings={cityData?.buildings} />
             </group>
 
-            <fog attach="fog" args={['#080c14', cityRadius * 0.8, cityRadius * 5.0]} />
-            <color attach="background" args={['#0a0e18']} />
+            <fog attach="fog" args={['#060a12', cityRadius * 0.9, cityRadius * 4.5]} />
+            <color attach="background" args={['#080c16']} />
             <CameraController />
         </group>
     )

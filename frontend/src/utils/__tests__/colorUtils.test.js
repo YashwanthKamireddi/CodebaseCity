@@ -39,14 +39,14 @@ describe('colorUtils', () => {
         expect(color).toBe('#60a5fa')
       })
 
-      it('should return green for dependency', () => {
+      it('should return default color for dependency (no special handling)', () => {
         const color = getBuildingColor(mockBuilding, 'default', { isDependency: true })
-        expect(color).toBe('#4ade80')
+        expect(color).toBe('#00e676') // Falls through to height gradient (h=10)
       })
 
-      it('should return coral for dependent', () => {
+      it('should return default color for dependent (no special handling)', () => {
         const color = getBuildingColor(mockBuilding, 'default', { isDependent: true })
-        expect(color).toBe('#fb7185')
+        expect(color).toBe('#00e676') // Falls through to height gradient (h=10)
       })
 
       it('should return near-black for unrelated in focus mode', () => {

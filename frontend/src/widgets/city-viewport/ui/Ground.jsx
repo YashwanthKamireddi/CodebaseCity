@@ -1,116 +1,103 @@
 import React, { useMemo } from 'react'
 import * as THREE from 'three'
+import useStore from '../../../store/useStore'
 
 /**
- * Ground - Elevated Dark City Floor
+ * Ground — Dark city floor with structural grid aligned to actual city extents.
  *
- * Design: Dark blue-gray surface with subtle blue-tinted structural grid.
- * Inspired by Cyberpunk 2077 / Star Citizen ground planes.
- * NOT pure black — visible but understated.
+ * Perf budget: 1 draw call, 1 mesh, 1024×1024 canvas texture.
+ * Grid repeat is derived from city bounds so lines align with real district spacing.
  */
-function Ground({ size = 3000 }) {
+function Ground() {
+    const cityData = useStore(s => s.cityData)
+
+    const { size, gridRepeat } = useMemo(() => {
+        if (!cityData?.buildings?.length) return { size: 3000, gridRepeat: 15 }
+        let maxR = 0
+        for (const b of cityData.buildings) {
+            const r = Math.max(Math.abs(b.position.x), Math.abs(b.position.z || 0))
+            if (r > maxR) maxR = r
+        }
+        const s = Math.max(600, (maxR + 80) * 2)
+        // ~20 grid blocks across the city for clean spacing
+        const repeat = Math.round(s / 40)
+        return { size: s, gridRepeat: Math.max(8, repeat) }
+    }, [cityData])
+
     const gridTexture = useMemo(() => {
+        const res = 1024
         const canvas = document.createElement('canvas')
-        canvas.width = 2048
-        canvas.height = 2048
+        canvas.width = res
+        canvas.height = res
         const ctx = canvas.getContext('2d')
 
-        // Base: pure deep void (almost black)
-        ctx.fillStyle = '#010204'
-        ctx.fillRect(0, 0, 2048, 2048)
+        // Deep dark base
+        ctx.fillStyle = '#030508'
+        ctx.fillRect(0, 0, res, res)
 
-        const blockSize = 128
+        // One "tile" is the full canvas — it repeats gridRepeat times
+        // Major grid lines — subtle cyan
+        ctx.strokeStyle = 'rgba(0, 180, 240, 0.10)'
+        ctx.lineWidth = 1.5
 
-        // Minor grid - glowing cyan lines
-        ctx.strokeStyle = 'rgba(0, 240, 255, 0.15)'
-        ctx.lineWidth = 1
+        // Border of tile
+        ctx.strokeRect(0, 0, res, res)
 
-        for (let i = 0; i <= 2048; i += blockSize) {
+        // Subdivide tile into a 4×4 minor grid
+        const sub = res / 4
+        ctx.strokeStyle = 'rgba(0, 160, 220, 0.05)'
+        ctx.lineWidth = 0.8
+        for (let i = 1; i < 4; i++) {
             ctx.beginPath()
-            ctx.moveTo(i, 0)
-            ctx.lineTo(i, 2048)
+            ctx.moveTo(sub * i, 0)
+            ctx.lineTo(sub * i, res)
             ctx.stroke()
-
             ctx.beginPath()
-            ctx.moveTo(0, i)
-            ctx.lineTo(2048, i)
+            ctx.moveTo(0, sub * i)
+            ctx.lineTo(res, sub * i)
             ctx.stroke()
         }
 
-        // Crosshairs at intersections - bright glowing cyan
-        ctx.strokeStyle = 'rgba(0, 255, 255, 0.8)'
-        ctx.lineWidth = 2
-        const crossSize = 4
-
-        for (let x = 0; x <= 2048; x += blockSize) {
-            for (let y = 0; y <= 2048; y += blockSize) {
-                // Glow behind crosshair
-                const glow = ctx.createRadialGradient(x, y, 0, x, y, 15)
-                glow.addColorStop(0, 'rgba(0, 240, 255, 0.4)')
-                glow.addColorStop(1, 'rgba(0, 240, 255, 0)')
-                ctx.fillStyle = glow
+        // Corner intersections — brighter accent dots
+        ctx.fillStyle = 'rgba(0, 200, 255, 0.30)'
+        const dotR = 3
+        // 4 corners of the tile
+        const pts = [0, res]
+        for (const x of pts) {
+            for (const y of pts) {
                 ctx.beginPath()
-                ctx.arc(x, y, 10, 0, Math.PI * 2)
+                ctx.arc(x, y, dotR, 0, Math.PI * 2)
                 ctx.fill()
-
-                // Draw +
-                ctx.beginPath()
-                ctx.moveTo(x - crossSize, y)
-                ctx.lineTo(x + crossSize, y)
-                ctx.stroke()
-                ctx.beginPath()
-                ctx.moveTo(x, y - crossSize)
-                ctx.lineTo(x, y + crossSize)
-                ctx.stroke()
             }
         }
 
         const texture = new THREE.CanvasTexture(canvas)
         texture.wrapS = THREE.RepeatWrapping
         texture.wrapT = THREE.RepeatWrapping
-        texture.repeat.set(size / 300, size / 300) // Much sparser grid
-        texture.anisotropy = 16
+        texture.repeat.set(gridRepeat, gridRepeat)
+        texture.anisotropy = 8
         texture.minFilter = THREE.LinearMipmapLinearFilter
         texture.magFilter = THREE.LinearFilter
 
         return texture
-    }, [size])
+    }, [gridRepeat])
 
     return (
-        <group>
-            {/* Main ground circular plane (removes sharp square corners) */}
-            <mesh
-                rotation={[-Math.PI / 2, 0, 0]}
-                position={[0, -0.15, 0]}
-                receiveShadow
-            >
-                <circleGeometry args={[size / 2, 128]} />
-                <meshStandardMaterial
-                    map={gridTexture}
-                    roughness={0.92}
-                    metalness={0.08}
-                    envMapIntensity={0.05}
-                    polygonOffset
-                    polygonOffsetFactor={1}
-                    polygonOffsetUnits={1}
-                />
-            </mesh>
-
-            {/* Central ambient glow — subtle radial light pooling */}
-            <mesh
-                rotation={[-Math.PI / 2, 0, 0]}
-                position={[0, 0.02, 0]}
-            >
-                <circleGeometry args={[size * 0.18, 64]} />
-                <meshBasicMaterial
-                    color="#0a1628"
-                    transparent
-                    opacity={0.35}
-                    depthWrite={false}
-                    blending={2}
-                />
-            </mesh>
-        </group>
+        <mesh
+            rotation={[-Math.PI / 2, 0, 0]}
+            position={[0, -0.15, 0]}
+        >
+            <circleGeometry args={[size / 2, 64]} />
+            <meshStandardMaterial
+                map={gridTexture}
+                roughness={0.92}
+                metalness={0.08}
+                envMapIntensity={0.05}
+                polygonOffset
+                polygonOffsetFactor={1}
+                polygonOffsetUnits={1}
+            />
+        </mesh>
     )
 }
 
