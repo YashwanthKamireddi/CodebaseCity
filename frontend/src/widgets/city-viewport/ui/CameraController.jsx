@@ -34,18 +34,18 @@ export default function CameraController() {
             const bWidth = building.dimensions.width || 8
             const bDepth = building.dimensions.depth || 8
 
-            // Frame building + hologram — wide establishing shot
-            const panelTop = buildingHeight + 14
-            const zoomDist = Math.max(100, buildingHeight * 1.8 + 50)
-            const camAngle = Math.PI / 5 // ~36° diagonal
+            // Frame the hologram panel above the building
+            const panelY = buildingHeight + 12
+            const zoomDist = Math.max(60, panelY * 1.2 + 30)
+            const camAngle = Math.PI / 5
             const targetPos = new THREE.Vector3(
                 x + Math.cos(camAngle) * zoomDist,
-                buildingHeight * 0.5 + 35,
+                panelY + 15,
                 z + Math.sin(camAngle) * zoomDist
             )
 
-            // Look at mid-height of building
-            const lookAtPos = new THREE.Vector3(x, buildingHeight * 0.35, z)
+            // Look at the hologram panel
+            const lookAtPos = new THREE.Vector3(x, panelY, z)
 
             // Animate Camera Position
             gsap.to(camera.position, {

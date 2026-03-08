@@ -178,15 +178,19 @@ export const createCitySlice = (set, get) => ({
                 if (commitsRes.ok) {
                     const commitsData = await commitsRes.json()
 
-                    // Collect author emails for Gravatar
+                    // Build global author frequency from ALL 100 commits
+                    const globalAuthorFreq = {} // author → commit count
                     for (const c of commitsData) {
                         const name = c.commit?.author?.name
                         const email = c.commit?.author?.email
-                        if (name && email) authorEmails[name] = email
+                        if (name) {
+                            globalAuthorFreq[name] = (globalAuthorFreq[name] || 0) + 1
+                            if (email) authorEmails[name] = email
+                        }
                     }
 
-                    // Fetch file lists from 15 most recent commits (parallel, rate-limit safe)
-                    const detailPromises = commitsData.slice(0, 15).map(c =>
+                    // Fetch file lists from 30 most recent commits for broader coverage
+                    const detailPromises = commitsData.slice(0, 30).map(c =>
                         fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/commits/${c.sha}`)
                             .then(r => r.ok ? r.json() : null)
                             .catch(() => null)
@@ -194,7 +198,6 @@ export const createCitySlice = (set, get) => ({
                     const details = await Promise.all(detailPromises)
 
                     // Build path → author mapping from real commit file lists
-                    // Most recent commit wins (first author to touch a file is the latest)
                     for (const detail of details) {
                         if (!detail?.files) continue
                         const author = detail.commit?.author?.name || 'Unknown'
@@ -202,38 +205,74 @@ export const createCitySlice = (set, get) => ({
                             if (!commitAuthors[file.filename]) {
                                 commitAuthors[file.filename] = author
                             }
-                            // Track per-file author frequency for fallback
                             if (!fileCommitCounts[file.filename]) fileCommitCounts[file.filename] = {}
                             fileCommitCounts[file.filename][author] = (fileCommitCounts[file.filename][author] || 0) + 1
                         }
                     }
 
-                    // Fallback: files not touched in recent commits get directory-level attribution
-                    // Build directory → most active author from the detailed commits
+                    // Build directory → author distribution from detailed commits
+                    // Walk all ancestor directories for each file, not just immediate parent
                     const dirAuthorCounts = {}
                     for (const [path, authors] of Object.entries(fileCommitCounts)) {
-                        const dir = path.includes('/') ? path.substring(0, path.lastIndexOf('/')) : '(root)'
-                        if (!dirAuthorCounts[dir]) dirAuthorCounts[dir] = {}
-                        for (const [author, count] of Object.entries(authors)) {
-                            dirAuthorCounts[dir][author] = (dirAuthorCounts[dir][author] || 0) + count
+                        const parts = path.split('/')
+                        // Attribute to every ancestor directory level
+                        for (let depth = 1; depth < parts.length; depth++) {
+                            const dir = parts.slice(0, depth).join('/')
+                            if (!dirAuthorCounts[dir]) dirAuthorCounts[dir] = {}
+                            for (const [author, count] of Object.entries(authors)) {
+                                dirAuthorCounts[dir][author] = (dirAuthorCounts[dir][author] || 0) + count
+                            }
+                        }
+                        // Also attribute to (root) for root-level files
+                        if (parts.length === 1) {
+                            if (!dirAuthorCounts['(root)']) dirAuthorCounts['(root)'] = {}
+                            for (const [author, count] of Object.entries(authors)) {
+                                dirAuthorCounts['(root)'][author] = (dirAuthorCounts['(root)'][author] || 0) + count
+                            }
                         }
                     }
 
-                    // Assign remaining files using directory-level top author
+                    // Helper: pick author from a weighted distribution using a deterministic seed
+                    const pickWeightedAuthor = (authorCounts, seed) => {
+                        const entries = Object.entries(authorCounts).sort((a, b) => b[1] - a[1])
+                        const total = entries.reduce((s, e) => s + e[1], 0)
+                        // Deterministic pseudo-random from seed (simple hash mod)
+                        let hash = 0
+                        for (let i = 0; i < seed.length; i++) {
+                            hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0
+                        }
+                        const pick = ((hash >>> 0) % total)
+                        let cumulative = 0
+                        for (const [author, count] of entries) {
+                            cumulative += count
+                            if (pick < cumulative) return author
+                        }
+                        return entries[0][0]
+                    }
+
+                    // Assign remaining files using weighted directory attribution
                     for (const item of treeData.tree) {
-                        if (item.type === 'blob' && !commitAuthors[item.path]) {
-                            const dir = item.path.includes('/') ? item.path.substring(0, item.path.lastIndexOf('/')) : '(root)'
-                            const dirAuthors = dirAuthorCounts[dir]
-                            if (dirAuthors) {
-                                const topAuthor = Object.entries(dirAuthors).sort((a, b) => b[1] - a[1])[0]
-                                if (topAuthor) commitAuthors[item.path] = topAuthor[0]
-                            } else {
-                                // Ultimate fallback: repo's top contributor
-                                const globalAuthors = Object.entries(authorEmails)
-                                if (globalAuthors.length > 0) {
-                                    commitAuthors[item.path] = commitsData[0]?.commit?.author?.name || 'Unknown'
-                                }
+                        if (item.type !== 'blob' || commitAuthors[item.path]) continue
+
+                        // Walk up directory tree to find the closest directory with author data
+                        const parts = item.path.split('/')
+                        let assigned = false
+                        for (let depth = parts.length - 1; depth >= 1; depth--) {
+                            const dir = parts.slice(0, depth).join('/')
+                            if (dirAuthorCounts[dir]) {
+                                commitAuthors[item.path] = pickWeightedAuthor(dirAuthorCounts[dir], item.path)
+                                assigned = true
+                                break
                             }
+                        }
+                        // Check (root) level
+                        if (!assigned && dirAuthorCounts['(root)']) {
+                            commitAuthors[item.path] = pickWeightedAuthor(dirAuthorCounts['(root)'], item.path)
+                            assigned = true
+                        }
+                        // Ultimate fallback: distribute across ALL authors by global commit frequency
+                        if (!assigned && Object.keys(globalAuthorFreq).length > 0) {
+                            commitAuthors[item.path] = pickWeightedAuthor(globalAuthorFreq, item.path)
                         }
                     }
                 }
