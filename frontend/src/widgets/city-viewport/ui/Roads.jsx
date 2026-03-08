@@ -28,10 +28,13 @@ const BUILDING_MARGIN = 2
    ═══════════════════════════════════════════════════════════════ */
 
 const ROAD_VERT = /* glsl */ `
+#include <common>
+#include <logdepthbuf_pars_vertex>
 varying vec2 vUv;
 void main() {
     vUv = uv;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    #include <logdepthbuf_vertex>
 }
 `
 
@@ -40,6 +43,8 @@ void main() {
    ═══════════════════════════════════════════════════════════════ */
 
 const ROAD_FRAG = /* glsl */ `
+#include <common>
+#include <logdepthbuf_pars_fragment>
 uniform float uLength;
 uniform float uTime;
 uniform float uIsAvenue;
@@ -139,6 +144,7 @@ void main() {
     color *= 0.75 + 0.25 * edgeFade;
 
     gl_FragColor = vec4(color, 0.90);
+    #include <logdepthbuf_fragment>
 }
 `
 
@@ -407,10 +413,7 @@ export default function Roads() {
             {segments.map((seg, i) => (
                 <RoadSegment key={`${i}-${seg.start[0].toFixed(1)}`} segment={seg} />
             ))}
-            {intersections.slice(0, 200).map((pos, i) => (
-                <IntersectionNode key={`int-${i}-${pos[0].toFixed(1)}`} position={pos} />
-            ))}
-            <TrafficFlow key={segments.length} segments={segments} />
+
         </group>
     )
 }

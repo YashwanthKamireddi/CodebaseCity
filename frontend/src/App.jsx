@@ -6,9 +6,9 @@
  */
 
 import React, { useState, useEffect, Suspense, useCallback, lazy, startTransition } from 'react'
-import { Canvas, invalidate } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, Preload } from '@react-three/drei'
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
+
 import CityScene from './widgets/city-viewport/ui/CityScene'
 import { CanvasErrorBoundary } from './widgets/layout/ui/CanvasErrorBoundary'
 import Sidebar from './widgets/layout/ui/Sidebar'
@@ -171,8 +171,7 @@ function App() {
                             {/* 3D View — ALWAYS rendered (demo city loads for landing page) */}
                             <CanvasErrorBoundary>
                                 <Canvas
-                                    frameloop="demand"
-                                    shadows={!isLowEnd}
+                                    shadows={false}
                                     dpr={dprRange}
                                     gl={{
                                         antialias: !isLowEnd,
@@ -180,6 +179,7 @@ function App() {
                                         powerPreference: isLowEnd ? 'low-power' : 'high-performance',
                                         stencil: false,
                                         depth: true,
+                                        logarithmicDepthBuffer: true,
                                         failIfMajorPerformanceCaveat: false,
                                     }}
                                 >
@@ -187,7 +187,7 @@ function App() {
                                         makeDefault
                                         position={[120, 80, 120]}
                                         fov={45}
-                                        near={0.5}
+                                        near={1}
                                         far={20000}
                                     />
 
@@ -213,24 +213,13 @@ function App() {
                                         autoRotate={!cityData || !selectedBuilding}
                                         autoRotateSpeed={0.3}
                                         target={[0, 0, 0]}
-                                        onChange={() => invalidate()}
                                     />
 
                                     <Suspense fallback={null}>
                                         <CityScene data={cityData} />
                                         <Preload all />
 
-                                        {!isLowEnd && (
-                                            <EffectComposer disableNormalPass>
-                                                <Bloom
-                                                    luminanceThreshold={0.35}
-                                                    luminanceSmoothing={0.8}
-                                                    intensity={0.7}
-                                                    mipmapBlur
-                                                />
-                                                <Vignette eskil={false} offset={0.1} darkness={1.1} />
-                                            </EffectComposer>
-                                        )}
+
                                     </Suspense>
                                 </Canvas>
                             </CanvasErrorBoundary>
