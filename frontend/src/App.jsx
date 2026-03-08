@@ -191,7 +191,7 @@ function App() {
                                         far={5000}
                                     />
 
-                                    {/* Camera Controls */}
+                                    {/* Camera Controls - Optimized for touch */}
                                     <OrbitControls
                                         makeDefault
                                         enablePan={true}
@@ -201,8 +201,15 @@ function App() {
                                         maxDistance={3500}
                                         maxPolarAngle={Math.PI / 2}
                                         minPolarAngle={0.05}
-                                        dampingFactor={0.12}
+                                        dampingFactor={isMobile ? 0.08 : 0.12}
                                         enableDamping={true}
+                                        rotateSpeed={isMobile ? 0.5 : 0.8}
+                                        zoomSpeed={isMobile ? 0.6 : 1.0}
+                                        panSpeed={isMobile ? 0.5 : 0.8}
+                                        touches={{
+                                            ONE: 1,  // ROTATE
+                                            TWO: 2   // DOLLY_PAN
+                                        }}
                                         autoRotate={!cityData || !selectedBuilding}
                                         autoRotateSpeed={0.3}
                                         target={[0, 0, 0]}
