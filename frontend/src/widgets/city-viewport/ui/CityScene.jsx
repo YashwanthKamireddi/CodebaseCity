@@ -22,7 +22,7 @@ import SkyBridges from './SkyBridges'
 import EnergyCoreReactor from './EnergyCoreReactor'
 import DataStreams from './DataStreams'
 import HolographicCityName from './HolographicCityName'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
+// Bloom is in App.jsx — no duplicate here
 
 /**
  * AutoInvalidate — Keeps the render loop alive for continuous animations.
@@ -188,18 +188,6 @@ export default function CityScene() {
 
             {/* Background color - deep space blue */}
             <color attach="background" args={['#020408']} />
-
-            {/* Bloom Post Processing — balanced, not explosive */}
-            {!isLowEnd && (
-                <EffectComposer disableNormalPass>
-                    <Bloom
-                        luminanceThreshold={0.4}
-                        mipmapBlur
-                        luminanceSmoothing={0.6}
-                        intensity={0.6}
-                    />
-                </EffectComposer>
-            )}
 
             <CameraController />
             <AutoInvalidate />

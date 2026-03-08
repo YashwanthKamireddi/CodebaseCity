@@ -223,9 +223,9 @@ function App() {
                                         {!isLowEnd && (
                                             <EffectComposer disableNormalPass>
                                                 <Bloom
-                                                    luminanceThreshold={0.2}
-                                                    luminanceSmoothing={0.9}
-                                                    intensity={1.5}
+                                                    luminanceThreshold={0.35}
+                                                    luminanceSmoothing={0.8}
+                                                    intensity={0.7}
                                                     mipmapBlur
                                                 />
                                                 <Vignette eskil={false} offset={0.1} darkness={1.1} />

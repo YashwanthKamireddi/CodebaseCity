@@ -552,6 +552,23 @@ function generateBuildings(parsedFiles, communities, metrics) {
       b.position.x -= offsetX
       b.position.z -= offsetZ
     }
+
+    // Reactor exclusion zone — push buildings away from origin so the
+    // EnergyCoreReactor at (0,0,0) is clearly visible
+    const REACTOR_RADIUS = 28
+    for (const b of buildings) {
+      const dx = b.position.x
+      const dz = b.position.z
+      const dist = Math.sqrt(dx * dx + dz * dz)
+      const halfW = b.dimensions.width / 2
+      if (dist - halfW < REACTOR_RADIUS) {
+        // Push outward so building edge is at least REACTOR_RADIUS from center
+        const pushDist = REACTOR_RADIUS + halfW + BUILDING_SPACING
+        const angle = Math.atan2(dz, dx)
+        b.position.x = Math.cos(angle) * pushDist
+        b.position.z = Math.sin(angle) * pushDist
+      }
+    }
   }
 
   return buildings
