@@ -237,7 +237,7 @@ export default function EmptyCityHero() {
                     line-height: 1.08;
                     letter-spacing: -0.03em;
                     color: #ffffff;
-                    text-shadow: 
+                    text-shadow:
                         0 2px 20px rgba(0,0,0,0.8),
                         0 4px 40px rgba(0,0,0,0.6);
                 }
@@ -267,7 +267,7 @@ export default function EmptyCityHero() {
                     text-decoration: none;
                 }
                 .lp-btn--solid {
-                    background: #ffffff; 
+                    background: #ffffff;
                     color: #0a0a0a;
                     font-weight: 600;
                     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
@@ -275,19 +275,19 @@ export default function EmptyCityHero() {
                 .lp-btn--solid:hover {
                     background: #f4f4f5;
                     transform: translateY(-2px);
-                    box-shadow: 
+                    box-shadow:
                         0 4px 12px rgba(0,0,0,0.15),
                         0 8px 24px rgba(0,0,0,0.1);
                 }
                 .lp-btn--solid:active {
                     transform: translateY(0);
                 }
-                .lp-arrow { 
+                .lp-arrow {
                     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
                     opacity: 0.6;
                 }
-                .lp-btn--solid:hover .lp-arrow { 
-                    transform: translateX(4px); 
+                .lp-btn--solid:hover .lp-arrow {
+                    transform: translateX(4px);
                     opacity: 1;
                 }
 
@@ -315,7 +315,7 @@ export default function EmptyCityHero() {
                     backdrop-filter: blur(8px);
                     -webkit-backdrop-filter: blur(8px);
                 }
-                .lp-btn--text:hover { 
+                .lp-btn--text:hover {
                     color: rgba(255,255,255,0.95);
                     background: rgba(255,255,255,0.1);
                     border-color: rgba(255,255,255,0.15);
@@ -351,15 +351,15 @@ export default function EmptyCityHero() {
                     display: flex; align-items: center; justify-content: center;
                     background: #ffffff; border: none;
                     border-radius: 6px; color: #0a0a0a;
-                    cursor: pointer; 
+                    cursor: pointer;
                     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
                 }
-                .lp-gh-go:hover { 
+                .lp-gh-go:hover {
                     transform: scale(1.05);
                     box-shadow: 0 2px 8px rgba(255,255,255,0.2);
                 }
-                .lp-gh-go:disabled { 
-                    opacity: 0.3; 
+                .lp-gh-go:disabled {
+                    opacity: 0.3;
                     cursor: not-allowed;
                     transform: none;
                 }
@@ -373,7 +373,7 @@ export default function EmptyCityHero() {
                 .lp-err {
                     margin-top: 16px;
                     padding: 12px 20px;
-                    font-size: 0.8rem; 
+                    font-size: 0.8rem;
                     color: #fca5a5;
                     font-family: var(--font-mono);
                     background: rgba(239, 68, 68, 0.1);
