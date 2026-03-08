@@ -417,11 +417,11 @@ function calculateMetrics(parsedFiles, graph) {
 /**
  * Generate buildings with positions and dimensions.
  *
- * Layout: Spiral Treemap Packing Algorithm
- * - Districts are sorted by size (largest first) and placed in a clockwise spiral
- *   radiating from the origin (0, 0), creating a dense, visually stunning metropolis
- * - Buildings within each district use a tight grid layout
- * - This replaces the old linear X-axis strip layout
+ * Layout: Adaptive Spiral Treemap — World-Class City Architecture
+ * - Districts sorted by size, largest at center
+ * - Buildings use ACTUAL size for spacing (not MAX_WIDTH), creating dense realistic blocks
+ * - Post-layout centering ensures city is always at (0,0,0)
+ * - Tighter spiral with more angle samples for compact packing
  */
 function generateBuildings(parsedFiles, communities, metrics) {
   // Group files by community
@@ -438,13 +438,35 @@ function generateBuildings(parsedFiles, communities, metrics) {
   const sortedDistricts = Array.from(communityGroups.entries())
     .sort((a, b) => b[1].length - a[1].length)
 
-  // Pre-calculate district footprints for spiral placement
+  // Pre-compute building dimensions for each file for adaptive layout
+  const fileDims = new Map()
+  for (const [, files] of sortedDistricts) {
+    for (const file of files) {
+      const linesNorm = file.lines_of_code / metrics.maxLines
+      const complexityNorm = file.complexity / metrics.maxComplexity
+      const width = MIN_BUILDING_WIDTH + (MAX_BUILDING_WIDTH - MIN_BUILDING_WIDTH) * Math.sqrt(linesNorm)
+      const height = MIN_BUILDING_HEIGHT + (MAX_BUILDING_HEIGHT - MIN_BUILDING_HEIGHT) * complexityNorm
+      fileDims.set(file.file_path, { width, height, depth: width })
+    }
+  }
+
+  // For each district, compute adaptive footprint based on actual building sizes
   const districtFootprints = sortedDistricts.map(([communityId, files]) => {
+    // Sort files within district: largest first for better packing (downtown feel)
+    files.sort((a, b) => {
+      const da = fileDims.get(a.file_path)
+      const db = fileDims.get(b.file_path)
+      return (db.width * db.height) - (da.width * da.height)
+    })
+
+    // Compute adaptive grid: use average building width + spacing
+    const avgWidth = files.reduce((s, f) => s + fileDims.get(f.file_path).width, 0) / files.length
+    const cellSize = Math.max(avgWidth + BUILDING_SPACING, MIN_BUILDING_WIDTH + BUILDING_SPACING)
     const cols = Math.ceil(Math.sqrt(files.length))
     const rows = Math.ceil(files.length / cols)
-    const footprintW = cols * (MAX_BUILDING_WIDTH + BUILDING_SPACING) + DISTRICT_PADDING
-    const footprintD = rows * (MAX_BUILDING_WIDTH + BUILDING_SPACING) + DISTRICT_PADDING
-    return { communityId, files, cols, rows, footprintW, footprintD }
+    const footprintW = cols * cellSize + DISTRICT_PADDING * 2
+    const footprintD = rows * cellSize + DISTRICT_PADDING * 2
+    return { communityId, files, cols, rows, footprintW, footprintD, cellSize }
   })
 
   // Spiral placement: place districts in a clockwise spiral from center
@@ -453,26 +475,22 @@ function generateBuildings(parsedFiles, communities, metrics) {
   const buildings = []
 
   for (let di = 0; di < districtFootprints.length; di++) {
-    const { communityId, files, cols } = districtFootprints[di]
+    const { communityId, files, cols, cellSize } = districtFootprints[di]
     const { x: districtX, z: districtZ } = districtPositions[di]
 
     let row = 0
     let col = 0
 
     for (const file of files) {
-      const linesNorm = file.lines_of_code / metrics.maxLines
-      const complexityNorm = file.complexity / metrics.maxComplexity
+      const dims = fileDims.get(file.file_path)
+      const { width, height, depth } = dims
       const inDegree = metrics.inDegreeMap.get(file.file_path) || 0
       const inDegreeNorm = inDegree / metrics.maxInDegree
+      const complexityNorm = file.complexity / metrics.maxComplexity
 
-      // Building dimensions
-      const width = MIN_BUILDING_WIDTH + (MAX_BUILDING_WIDTH - MIN_BUILDING_WIDTH) * Math.sqrt(linesNorm)
-      const height = MIN_BUILDING_HEIGHT + (MAX_BUILDING_HEIGHT - MIN_BUILDING_HEIGHT) * complexityNorm
-      const depth = width // Square footprint
-
-      // Position within district grid, offset by district's spiral position
-      const x = districtX + col * (MAX_BUILDING_WIDTH + BUILDING_SPACING)
-      const z = districtZ + row * (MAX_BUILDING_WIDTH + BUILDING_SPACING)
+      // Position within district grid — center buildings in their cell
+      const cellCenterX = districtX + DISTRICT_PADDING + col * cellSize + cellSize / 2
+      const cellCenterZ = districtZ + DISTRICT_PADDING + row * cellSize + cellSize / 2
 
       // Extract directory (layer)
       const parts = file.file_path.split('/')
@@ -494,7 +512,7 @@ function generateBuildings(parsedFiles, communities, metrics) {
         imports: file.imports.map(i => typeof i === 'string' ? i : i.text),
         district_id: `district_${communityId}`,
         directory,
-        position: { x, y: 0, z },
+        position: { x: cellCenterX, y: 0, z: cellCenterZ },
         dimensions: { width, height, depth },
         color_metric: complexityNorm,
         coupling_score: inDegreeNorm,
@@ -518,13 +536,30 @@ function generateBuildings(parsedFiles, communities, metrics) {
     }
   }
 
+  // Post-layout centering — shift all buildings so the city center is at (0, 0, 0)
+  if (buildings.length > 0) {
+    let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity
+    for (const b of buildings) {
+      minX = Math.min(minX, b.position.x - b.dimensions.width / 2)
+      maxX = Math.max(maxX, b.position.x + b.dimensions.width / 2)
+      minZ = Math.min(minZ, b.position.z - b.dimensions.depth / 2)
+      maxZ = Math.max(maxZ, b.position.z + b.dimensions.depth / 2)
+    }
+    const offsetX = (minX + maxX) / 2
+    const offsetZ = (minZ + maxZ) / 2
+    for (const b of buildings) {
+      b.position.x -= offsetX
+      b.position.z -= offsetZ
+    }
+  }
+
   return buildings
 }
 
 /**
  * Spiral placement algorithm for districts.
  * Places rectangles in a clockwise spiral from the center, ensuring no overlaps.
- * Inspired by treemap packing used in city visualization research.
+ * Uses dense angle sampling and tighter step size for compact city layout.
  */
 function spiralPlace(footprints) {
   if (footprints.length === 0) return []
@@ -548,13 +583,15 @@ function spiralPlace(footprints) {
     let bestPos = null
     let bestDist = Infinity
 
-    // Spiral outward: try positions along expanding rings
-    const step = MAX_BUILDING_WIDTH + BUILDING_SPACING
-    const maxRadius = Math.max(300, Math.sqrt(footprints.length) * 80)
+    // Tighter step for more compact packing
+    const step = Math.max(fp.cellSize || 8, BUILDING_SPACING + 2)
+    const maxRadius = Math.max(500, Math.sqrt(footprints.length) * 120)
 
     for (let radius = step; radius < maxRadius; radius += step) {
-      // Try multiple angles per ring (more angles = tighter packing)
-      const numAngles = Math.max(8, Math.floor(radius / step) * 4)
+      // Dense angle sampling — more angles per ring for tighter packing
+      const numAngles = Math.max(16, Math.floor(radius / step) * 6)
+      let foundOnRing = false
+
       for (let a = 0; a < numAngles; a++) {
         const angle = (a / numAngles) * Math.PI * 2
         const cx = Math.cos(angle) * radius - fp.footprintW / 2
@@ -580,17 +617,18 @@ function spiralPlace(footprints) {
           if (dist < bestDist) {
             bestDist = dist
             bestPos = { x: cx, z: cz }
+            foundOnRing = true
           }
         }
       }
 
       // If we found a position on this ring, use it (greedy for compactness)
-      if (bestPos) break
+      if (foundOnRing) break
     }
 
-    // Fallback: place far away if spiral fails
+    // Fallback: place diagonally if spiral fails
     if (!bestPos) {
-      bestPos = { x: i * 100, z: i * 100 }
+      bestPos = { x: i * 80, z: i * 80 }
     }
 
     positions.push(bestPos)

@@ -11,6 +11,19 @@ import AtmosphericParticles from './AtmosphericParticles'
 import HeroLandmarks from './HeroLandmarks'
 import MothershipCore from './MothershipCore'
 import OrbitalSatellites from './OrbitalSatellites'
+import EnergyShieldDome from './EnergyShieldDome'
+import NeonDistrictBorders from './NeonDistrictBorders'
+import AuroraBorealis from './AuroraBorealis'
+import PulseWaves from './PulseWaves'
+import EmergencyBeacons from './EmergencyBeacons'
+import DistrictLabels from './DistrictLabels'
+import LandingPads from './LandingPads'
+import CommTowers from './CommTowers'
+import SkyBridges from './SkyBridges'
+import Starfield from './Starfield'
+import EnergyCoreReactor from './EnergyCoreReactor'
+import DataStreams from './DataStreams'
+import HolographicCityName from './HolographicCityName'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 /**
@@ -122,13 +135,39 @@ export default function CityScene() {
                 CITY CONTENT
             ═══════════════════════════════════════════════════════════════ */}
             <group ref={groupRef} position={[0, 0, 0]}>
-                <MothershipCore />
-                <OrbitalSatellites />
+                {/* Core city structure */}
                 <InstancedCity />
-                <HologramPanel />
                 <Roads />
                 <Ground />
+
+                {/* Atmospheric anchors */}
+                <MothershipCore />
+                <OrbitalSatellites />
+                <Starfield />
+                <AuroraBorealis />
+
+                {/* City features */}
+                <HologramPanel />
                 <HeroLandmarks buildings={cityData?.buildings} />
+                <NeonDistrictBorders />
+                <DistrictLabels />
+                <EnergyCoreReactor />
+                <PulseWaves />
+
+                {/* Building details */}
+                <LandingPads />
+                <CommTowers />
+                <EmergencyBeacons />
+                <SkyBridges />
+
+                {/* Connectivity visualization */}
+                <DataStreams />
+
+                {/* Branding */}
+                <HolographicCityName />
+
+                {/* Shield */}
+                {!isLowEnd && <EnergyShieldDome />}
             </group>
 
             {/* ═══════════════════════════════════════════════════════════════
@@ -149,7 +188,7 @@ export default function CityScene() {
             )}
 
             {/* Atmospheric fog - thick dark volume for scale and mood */}
-            <fog attach="fog" args={['#010204', cityRadius * 0.4, cityRadius * 3.0]} />
+            <fog attach="fog" args={['#010204', cityRadius * 0.5, cityRadius * 4.0]} />
 
             {/* Background color - deep space blue */}
             <color attach="background" args={['#020408']} />

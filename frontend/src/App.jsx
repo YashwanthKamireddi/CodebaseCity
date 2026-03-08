@@ -188,7 +188,7 @@ function App() {
                                         position={[120, 80, 120]}
                                         fov={45}
                                         near={0.5}
-                                        far={5000}
+                                        far={20000}
                                     />
 
                                     {/* Camera Controls - Optimized for touch */}
@@ -198,7 +198,7 @@ function App() {
                                         enableZoom={true}
                                         enableRotate={true}
                                         minDistance={10}
-                                        maxDistance={3500}
+                                        maxDistance={15000}
                                         maxPolarAngle={Math.PI / 2}
                                         minPolarAngle={0.05}
                                         dampingFactor={isMobile ? 0.08 : 0.12}

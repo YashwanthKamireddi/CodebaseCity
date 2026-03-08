@@ -10,16 +10,33 @@ export default function CameraController() {
     const cityData = useStore(s => s.cityData)
     const cityMeshRef = useStore(s => s.cityMeshRef)
 
-    // Compute city bounding radius
-    const cityRadius = React.useMemo(() => {
-        if (!cityData?.buildings?.length) return 120
-        let maxR = 0
+    // Compute actual bounding box of city — center + half-extents
+    const cityBounds = React.useMemo(() => {
+        if (!cityData?.buildings?.length) return { cx: 0, cz: 0, radius: 120, maxHeight: 40 }
+        let minX = Infinity, maxX = -Infinity
+        let minZ = Infinity, maxZ = -Infinity
+        let maxH = 0
         for (const b of cityData.buildings) {
-            const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
-            if (r > maxR) maxR = r
+            const x = b.position.x
+            const z = b.position.z || 0
+            const w = (b.dimensions?.width || 8) / 2
+            const d = (b.dimensions?.depth || 8) / 2
+            const h = (b.dimensions?.height || 8) * 3.0
+            if (x - w < minX) minX = x - w
+            if (x + w > maxX) maxX = x + w
+            if (z - d < minZ) minZ = z - d
+            if (z + d > maxZ) maxZ = z + d
+            if (h > maxH) maxH = h
         }
-        return Math.max(60, maxR * 0.6)
+        const cx = (minX + maxX) / 2
+        const cz = (minZ + maxZ) / 2
+        const extentX = (maxX - minX) / 2
+        const extentZ = (maxZ - minZ) / 2
+        const radius = Math.max(60, Math.sqrt(extentX ** 2 + extentZ ** 2))
+        return { cx, cz, radius, maxHeight: maxH }
     }, [cityData])
+
+    const { cx, cz, radius: cityRadius, maxHeight } = cityBounds
 
     useEffect(() => {
         const handleFlyTo = (event) => {
@@ -88,24 +105,35 @@ export default function CameraController() {
 
         // Delay slightly to let instances render
         const timer = setTimeout(() => {
-            const fitDist = cityRadius * 1.2
+            // Camera distance: enough to see the full city from a 45° angle
+            const fitDist = cityRadius * 1.4
+            // Elevation: high enough to see over the tallest buildings + perspective
+            const camY = Math.max(cityRadius * 0.8, maxHeight * 1.5)
             gsap.to(camera.position, {
                 duration: 1.5,
-                x: fitDist,
-                y: cityRadius * 0.9,
-                z: fitDist,
+                x: cx + fitDist,
+                y: camY,
+                z: cz + fitDist,
                 ease: 'power2.inOut'
             })
+            // Target actual city center, not (0,0,0)
             gsap.to(controls.target, {
                 duration: 1.5,
-                x: 0, y: 0, z: 0,
+                x: cx, y: 0, z: cz,
                 ease: 'power2.inOut',
                 onUpdate: () => controls.update()
             })
+            // Dynamically scale far plane and maxDistance
+            const neededFar = Math.max(5000, cityRadius * 6)
+            camera.far = neededFar
+            camera.updateProjectionMatrix()
+            if (controls.maxDistance < neededFar * 0.5) {
+                controls.maxDistance = neededFar * 0.5
+            }
         }, 200)
 
         return () => clearTimeout(timer)
-    }, [cityData, cityRadius, camera, controls])
+    }, [cityData, cityRadius, cx, cz, maxHeight, camera, controls])
 
     // Auto-fly to selected building logic
     const selectedBuilding = useStore(s => s.selectedBuilding)
@@ -144,21 +172,23 @@ export default function CameraController() {
                 ease: 'power2.out'
             })
         } else if (type === 'FIT' || type === 'RESET') {
+            const fitDist = cityRadius * 1.4
+            const camY = Math.max(cityRadius * 0.8, maxHeight * 1.5)
             gsap.to(camera.position, {
                 duration: 1.0,
-                x: cityRadius * 1.2, y: cityRadius * 0.9, z: cityRadius * 1.2,
+                x: cx + fitDist, y: camY, z: cz + fitDist,
                 ease: 'power2.inOut'
             })
             gsap.to(controls.target, {
                 duration: 1.0,
-                x: 0, y: 0, z: 0,
+                x: cx, y: 0, z: cz,
                 ease: 'power2.inOut',
                 onUpdate: () => controls.update()
             })
         } else if (type === 'CENTER') {
             gsap.to(controls.target, {
                 duration: 1.0,
-                x: 0, y: 0, z: 0,
+                x: cx, y: 0, z: cz,
                 ease: 'power2.inOut',
                 onUpdate: () => controls.update()
             })
