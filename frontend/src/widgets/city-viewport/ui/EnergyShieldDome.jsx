@@ -5,12 +5,13 @@ import useStore from '../../../store/useStore'
 
 /**
  * EnergyShieldDome — Translucent hexagonal force field surrounding the city.
- * Wakanda/Avengers-style protective dome with animated hex pattern.
- * Ultra-optimized: single icosahedron + custom shader, 1 draw call.
+ * Dual-layer hex grid with energy crawl and impact ripple effects.
+ * Single icosahedron + GLSL, 1 draw call. Throttled to 30fps.
  */
 export default function EnergyShieldDome() {
     const cityData = useStore(s => s.cityData)
     const meshRef = useRef()
+    const lastT = useRef(0)
 
     const radius = useMemo(() => {
         if (!cityData?.buildings?.length) return 200
@@ -46,7 +47,6 @@ export default function EnergyShieldDome() {
             varying vec3 vNormal;
             varying float vFresnel;
 
-            // Hex grid function
             vec4 hexGrid(vec2 p) {
                 vec2 q = vec2(p.x * 2.0 * 0.5773503, p.y + p.x * 0.5773503);
                 vec2 pi = floor(q);
@@ -60,36 +60,43 @@ export default function EnergyShieldDome() {
             }
 
             void main() {
-                // Hex pattern using spherical UV mapped from world position
                 float lat = asin(clamp(vWorldPos.y / uRadius, -1.0, 1.0));
                 float lon = atan(vWorldPos.z, vWorldPos.x);
-                vec2 hexUV = vec2(lon * 6.0, lat * 12.0);
-                vec4 hex = hexGrid(hexUV);
 
-                // Edge intensity of hex cells
-                float edge = smoothstep(0.0, 0.15, hex.z) * (1.0 - smoothstep(0.15, 0.25, hex.z));
+                // Dual-layer hex: large grid + fine detail
+                vec2 hexUV1 = vec2(lon * 5.0, lat * 10.0);
+                vec4 hex1 = hexGrid(hexUV1);
+                vec2 hexUV2 = vec2(lon * 12.0, lat * 24.0);
+                vec4 hex2 = hexGrid(hexUV2);
 
-                // Pulse wave traveling upward
-                float pulse = sin(vWorldPos.y * 0.02 - uTime * 0.8) * 0.5 + 0.5;
+                float edge1 = smoothstep(0.0, 0.12, hex1.z) * (1.0 - smoothstep(0.12, 0.22, hex1.z));
+                float edge2 = smoothstep(0.0, 0.1, hex2.z) * (1.0 - smoothstep(0.1, 0.18, hex2.z));
 
-                // Fresnel — stronger at edges (realistic shield look)
-                float fresnel = pow(vFresnel, 3.0);
+                // Dual pulse waves — upward + radial
+                float pulse1 = sin(vWorldPos.y * 0.015 - uTime * 0.6) * 0.5 + 0.5;
+                float radial = sin(length(vWorldPos.xz) * 0.02 - uTime * 1.2) * 0.5 + 0.5;
 
-                // Color: cyan base with blue accent
-                vec3 color = mix(
-                    vec3(0.0, 0.6, 1.0),
-                    vec3(0.0, 1.0, 0.9),
-                    fresnel
-                );
+                // Energy crawl along hex edges
+                float crawl = sin(hex1.x * 2.0 + hex1.y * 3.0 + uTime * 1.5) * 0.5 + 0.5;
 
-                // Combine: hex edges + fresnel glow + pulse
-                float alpha = edge * 0.3 + fresnel * 0.12 + pulse * edge * 0.15;
+                float fresnel = pow(vFresnel, 2.5);
 
-                // Fade at bottom (dome sits on ground)
-                float groundFade = smoothstep(-0.1, 0.2, vWorldPos.y / uRadius);
+                // Color: teal base → white-cyan at edges
+                vec3 baseColor = vec3(0.0, 0.55, 0.95);
+                vec3 edgeColor = vec3(0.3, 1.0, 0.95);
+                vec3 color = mix(baseColor, edgeColor, fresnel);
+
+                // Combine layers
+                float alpha = edge1 * 0.25 + edge2 * 0.08
+                    + fresnel * 0.1
+                    + pulse1 * edge1 * 0.15
+                    + radial * edge1 * 0.06
+                    + crawl * edge1 * 0.08;
+
+                float groundFade = smoothstep(-0.05, 0.25, vWorldPos.y / uRadius);
                 alpha *= groundFade;
 
-                gl_FragColor = vec4(color * 2.0, alpha);
+                gl_FragColor = vec4(color * 2.2, alpha);
             }
         `,
         transparent: true,
@@ -99,16 +106,18 @@ export default function EnergyShieldDome() {
     }), [radius])
 
     useFrame(({ clock }) => {
-        if (meshRef.current) {
-            shaderMaterial.uniforms.uTime.value = clock.getElapsedTime()
-        }
+        const t = clock.getElapsedTime()
+        if (t - lastT.current < 0.033) return
+        lastT.current = t
+        if (meshRef.current) shaderMaterial.uniforms.uTime.value = t
     })
 
     if (!cityData?.buildings?.length) return null
 
+    // Detail 3 = 1280 tris (vs 5 = 10240) — looks identical at dome scale
     return (
         <mesh ref={meshRef} material={shaderMaterial}>
-            <icosahedronGeometry args={[radius, 5]} />
+            <icosahedronGeometry args={[radius, 3]} />
         </mesh>
     )
 }

@@ -4,13 +4,17 @@ import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 
 /**
- * PulseWaves — Radial energy waves emanating from city center periodically.
- * Like a sonar/radar pulse expanding outward on the ground plane.
- * Single ring mesh with animated shader — 1 draw call.
+ * PulseWaves — Radial sonar rings expanding from city center.
+ * 5 staggered multi-color rings with fade. Skipped on low-end.
+ * Single circle mesh + GLSL, 1 draw call. Throttled to 30fps.
  */
 export default function PulseWaves() {
     const cityData = useStore(s => s.cityData)
     const meshRef = useRef()
+    const lastT = useRef(0)
+
+    const isLowEnd = typeof navigator !== 'undefined' &&
+        (navigator.maxTouchPoints > 0 || navigator.hardwareConcurrency <= 4)
 
     const cityRadius = useMemo(() => {
         if (!cityData?.buildings?.length) return 200
@@ -28,10 +32,8 @@ export default function PulseWaves() {
             uRadius: { value: cityRadius },
         },
         vertexShader: /* glsl */`
-            varying vec2 vUv;
             varying vec3 vWorldPos;
             void main() {
-                vUv = uv;
                 vWorldPos = (modelMatrix * vec4(position, 1.0)).xyz;
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
             }
@@ -39,25 +41,26 @@ export default function PulseWaves() {
         fragmentShader: /* glsl */`
             uniform float uTime;
             uniform float uRadius;
-            varying vec2 vUv;
             varying vec3 vWorldPos;
 
             void main() {
                 float dist = length(vWorldPos.xz);
                 float norm = dist / uRadius;
 
-                // 3 staggered pulse rings
                 float alpha = 0.0;
-                for (int i = 0; i < 3; i++) {
-                    float offset = float(i) * 2.5;
-                    float t = mod(uTime * 0.4 + offset, 8.0) / 8.0;
-                    float ring = smoothstep(t - 0.02, t, norm) * smoothstep(t + 0.02, t, norm);
-                    float fade = 1.0 - t; // Fade as it expands
-                    alpha += ring * fade * 0.6;
+                // 5 staggered rings with color shift
+                for (int i = 0; i < 5; i++) {
+                    float offset = float(i) * 1.6;
+                    float t = mod(uTime * 0.35 + offset, 8.0) / 8.0;
+                    float width = 0.015 + t * 0.01; // Thicken as they expand
+                    float ring = smoothstep(t - width, t, norm) * smoothstep(t + width, t, norm);
+                    float fade = (1.0 - t) * (1.0 - t); // Quadratic fade
+                    alpha += ring * fade * 0.5;
                 }
 
-                vec3 color = vec3(0.0, 0.8, 1.0);
-                gl_FragColor = vec4(color * 2.0, alpha);
+                // Color shifts from cyan center to blue at edge
+                vec3 color = mix(vec3(0.0, 0.9, 1.0), vec3(0.2, 0.4, 1.0), norm);
+                gl_FragColor = vec4(color * 2.2, alpha);
             }
         `,
         transparent: true,
@@ -67,12 +70,13 @@ export default function PulseWaves() {
     }), [cityRadius])
 
     useFrame(({ clock }) => {
-        if (meshRef.current) {
-            shaderMaterial.uniforms.uTime.value = clock.getElapsedTime()
-        }
+        const t = clock.getElapsedTime()
+        if (t - lastT.current < 0.033) return
+        lastT.current = t
+        if (meshRef.current) shaderMaterial.uniforms.uTime.value = t
     })
 
-    if (!cityData?.buildings?.length) return null
+    if (!cityData?.buildings?.length || isLowEnd) return null
 
     return (
         <mesh
@@ -81,7 +85,7 @@ export default function PulseWaves() {
             rotation={[-Math.PI / 2, 0, 0]}
             position={[0, 0.1, 0]}
         >
-            <circleGeometry args={[cityRadius, 128]} />
+            <circleGeometry args={[cityRadius, 64]} />
         </mesh>
     )
 }

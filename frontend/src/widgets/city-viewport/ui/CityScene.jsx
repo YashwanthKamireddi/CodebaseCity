@@ -13,14 +13,12 @@ import MothershipCore from './MothershipCore'
 import OrbitalSatellites from './OrbitalSatellites'
 import EnergyShieldDome from './EnergyShieldDome'
 import NeonDistrictBorders from './NeonDistrictBorders'
-import AuroraBorealis from './AuroraBorealis'
 import PulseWaves from './PulseWaves'
 import EmergencyBeacons from './EmergencyBeacons'
 import DistrictLabels from './DistrictLabels'
 import LandingPads from './LandingPads'
 import CommTowers from './CommTowers'
 import SkyBridges from './SkyBridges'
-import Starfield from './Starfield'
 import EnergyCoreReactor from './EnergyCoreReactor'
 import DataStreams from './DataStreams'
 import HolographicCityName from './HolographicCityName'
@@ -143,8 +141,6 @@ export default function CityScene() {
                 {/* Atmospheric anchors */}
                 <MothershipCore />
                 <OrbitalSatellites />
-                <Starfield />
-                <AuroraBorealis />
 
                 {/* City features */}
                 <HologramPanel />

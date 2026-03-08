@@ -5,21 +5,27 @@ import useStore from '../../../store/useStore'
 
 /**
  * DataStreams — Curved flowing light trails showing dependency flow between districts.
- * Like energy veins connecting different parts of the city.
- * Uses tube geometry with animated shader along spline paths.
+ * Dynamic cap scales with repo size. Reduced tube segments for perf.
+ * Skipped on low-end. Shared shader material, throttled to 30fps.
  */
 export default function DataStreams() {
     const cityData = useStore(s => s.cityData)
     const groupRef = useRef()
+    const lastT = useRef(0)
+
+    const isLowEnd = typeof navigator !== 'undefined' &&
+        (navigator.maxTouchPoints > 0 || navigator.hardwareConcurrency <= 4)
 
     const streams = useMemo(() => {
         if (!cityData?.districts?.length || cityData.districts.length < 2) return []
         if (!cityData?.roads?.length) return []
 
+        const n = cityData.buildings?.length || 0
+        const maxStreams = n > 15000 ? 3 : n > 5000 ? 6 : n > 2000 ? 8 : 12
+
         const buildingMap = new Map()
         for (const b of cityData.buildings) buildingMap.set(b.id, b)
 
-        // Find inter-district connections and group by district pairs
         const pairCounts = new Map()
         for (const r of cityData.roads) {
             const from = buildingMap.get(r.source)
@@ -29,12 +35,10 @@ export default function DataStreams() {
             pairCounts.set(key, (pairCounts.get(key) || 0) + 1)
         }
 
-        // Pick the strongest inter-district connections
         const sorted = [...pairCounts.entries()]
             .sort((a, b) => b[1] - a[1])
-            .slice(0, 12)
+            .slice(0, maxStreams)
 
-        // Compute district centers
         const districtCenters = new Map()
         for (const d of cityData.districts) {
             if (d.boundary?.length) {
@@ -58,11 +62,9 @@ export default function DataStreams() {
         uniforms: { uTime: { value: 0 } },
         vertexShader: /* glsl */`
             varying float vT;
-            varying vec3 vWorldPos;
             attribute float tubeT;
             void main() {
                 vT = tubeT;
-                vWorldPos = (modelMatrix * vec4(position, 1.0)).xyz;
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
             }
         `,
@@ -70,12 +72,11 @@ export default function DataStreams() {
             uniform float uTime;
             varying float vT;
             void main() {
-                // Flowing energy dots
-                float flow = fract(vT * 8.0 - uTime * 0.6);
-                float dot = smoothstep(0.0, 0.15, flow) * smoothstep(0.3, 0.15, flow);
-                float base = 0.05;
-                float alpha = base + dot * 0.5;
-                vec3 color = mix(vec3(0.0, 0.5, 1.0), vec3(0.0, 1.0, 0.8), vT);
+                float flow = fract(vT * 10.0 - uTime * 0.5);
+                float dot = smoothstep(0.0, 0.12, flow) * smoothstep(0.28, 0.12, flow);
+                float base = 0.04;
+                float alpha = base + dot * 0.55;
+                vec3 color = mix(vec3(0.05, 0.5, 1.0), vec3(0.0, 1.0, 0.7), vT);
                 gl_FragColor = vec4(color * 2.5, alpha);
             }
         `,
@@ -86,54 +87,50 @@ export default function DataStreams() {
     }), [])
 
     useFrame(({ clock }) => {
-        streamMaterial.uniforms.uTime.value = clock.getElapsedTime()
+        const t = clock.getElapsedTime()
+        if (t - lastT.current < 0.033) return
+        lastT.current = t
+        streamMaterial.uniforms.uTime.value = t
     })
 
-    if (!streams.length) return null
+    if (!streams.length || isLowEnd) return null
+
+    // Reduced segments for large repos
+    const n = cityData?.buildings?.length || 0
+    const tubeSeg = n > 5000 ? 16 : 24
+    const radSeg = n > 5000 ? 4 : 5
 
     return (
         <group ref={groupRef}>
             {streams.map((stream, i) => (
-                <StreamTube key={i} stream={stream} material={streamMaterial} />
+                <StreamTube key={i} stream={stream} material={streamMaterial} tubeSeg={tubeSeg} radSeg={radSeg} />
             ))}
         </group>
     )
 }
 
-function StreamTube({ stream, material }) {
-    const tubeRef = useRef()
-
-    const { geometry } = useMemo(() => {
+function StreamTube({ stream, material, tubeSeg, radSeg }) {
+    const geometry = useMemo(() => {
         const from = new THREE.Vector3(stream.from.x, 2, stream.from.z)
         const to = new THREE.Vector3(stream.to.x, 2, stream.to.z)
         const mid = new THREE.Vector3().lerpVectors(from, to, 0.5)
-
-        // Arc height proportional to distance
         const dist = from.distanceTo(to)
         mid.y = Math.min(dist * 0.3, 80)
 
         const curve = new THREE.QuadraticBezierCurve3(from, mid, to)
-        const geo = new THREE.TubeGeometry(curve, 32, 0.5, 6, false)
+        const geo = new THREE.TubeGeometry(curve, tubeSeg, 0.6, radSeg, false)
 
-        // Add tubeT attribute (0→1 along length) for flowing animation
         const count = geo.attributes.position.count
         const tArr = new Float32Array(count)
-        // TubeGeometry has (tubularSegments+1) * (radialSegments+1) vertices
-        // Each ring of radialSegments+1 vertices shares the same t
-        const tubularSegments = 32
-        const radialSegments = 6
-        for (let i = 0; i <= tubularSegments; i++) {
-            const t = i / tubularSegments
-            for (let j = 0; j <= radialSegments; j++) {
-                tArr[i * (radialSegments + 1) + j] = t
+        for (let i = 0; i <= tubeSeg; i++) {
+            const t = i / tubeSeg
+            for (let j = 0; j <= radSeg; j++) {
+                tArr[i * (radSeg + 1) + j] = t
             }
         }
         geo.setAttribute('tubeT', new THREE.BufferAttribute(tArr, 1))
+        return geo
+    }, [stream, tubeSeg, radSeg])
 
-        return { geometry: geo }
-    }, [stream])
-
-    return (
-        <mesh ref={tubeRef} geometry={geometry} material={material} />
-    )
+    return <mesh geometry={geometry} material={material} />
 }

@@ -4,36 +4,40 @@ import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 
 /**
- * EmergencyBeacons — Red pulsing warning lights on critical/high-complexity buildings.
- * Like emergency warning sirens on dangerous structures.
- * Instanced for maximum performance — 1 draw call.
+ * EmergencyBeacons — Red pulsing warning diamonds on critical-complexity buildings.
+ * Dynamic cap scales with repo size. Throttled to 30fps. Skipped on low-end for huge repos.
+ * Instanced — 1 draw call.
  */
 export default function EmergencyBeacons() {
     const cityData = useStore(s => s.cityData)
     const meshRef = useRef()
-    const lightRef = useRef()
+    const lastT = useRef(0)
+
+    const isLowEnd = typeof navigator !== 'undefined' &&
+        (navigator.maxTouchPoints > 0 || navigator.hardwareConcurrency <= 4)
 
     const criticalBuildings = useMemo(() => {
         if (!cityData?.buildings?.length) return []
-        // Find buildings in the top 8% complexity (critical/danger zone)
+        const n = cityData.buildings.length
+        // Dynamic cap: scales down for large repos
+        const maxBeacons = n > 15000 ? 10 : n > 5000 ? 20 : n > 2000 ? 30 : 40
         const sorted = [...cityData.buildings].sort((a, b) =>
             b.color_metric - a.color_metric
         )
-        const threshold = Math.max(3, Math.floor(sorted.length * 0.08))
-        return sorted.slice(0, Math.min(threshold, 40)) // Cap at 40 for perf
+        const threshold = Math.max(3, Math.floor(n * 0.06))
+        return sorted.slice(0, Math.min(threshold, maxBeacons))
     }, [cityData])
 
     const count = criticalBuildings.length
 
-    // Pre-compute matrices
     const matrices = useMemo(() => {
         if (!count) return null
         const arr = new Float32Array(count * 16)
         const tempObj = new THREE.Object3D()
         criticalBuildings.forEach((b, i) => {
             const h = (b.dimensions?.height || 8) * 3.0
-            tempObj.position.set(b.position.x, h + 3, b.position.z || 0)
-            tempObj.scale.set(1.5, 1.5, 1.5)
+            tempObj.position.set(b.position.x, h + 4, b.position.z || 0)
+            tempObj.scale.set(1.8, 2.2, 1.8)
             tempObj.updateMatrix()
             tempObj.matrix.toArray(arr, i * 16)
         })
@@ -43,13 +47,16 @@ export default function EmergencyBeacons() {
     useFrame(({ clock }) => {
         if (!meshRef.current || !count) return
         const t = clock.getElapsedTime()
-        // Pulse the beacon material
+        if (t - lastT.current < 0.033) return
+        lastT.current = t
         const mat = meshRef.current.material
-        mat.emissiveIntensity = 1.5 + Math.sin(t * 4.0) * 1.0
-        mat.opacity = 0.7 + Math.sin(t * 4.0) * 0.3
+        const pulse = Math.sin(t * 3.5)
+        mat.emissiveIntensity = 2.0 + pulse * 1.2
+        mat.opacity = 0.75 + pulse * 0.25
     })
 
     if (!count || !matrices) return null
+    if (isLowEnd && (cityData?.buildings?.length || 0) > 8000) return null
 
     return (
         <group>
@@ -60,20 +67,15 @@ export default function EmergencyBeacons() {
             >
                 <octahedronGeometry args={[1, 0]} />
                 <meshStandardMaterial
-                    color="#ff2020"
-                    emissive="#ff0000"
-                    emissiveIntensity={2}
+                    color="#ff3030"
+                    emissive="#ff0800"
+                    emissiveIntensity={2.5}
                     transparent
-                    opacity={0.8}
+                    opacity={0.85}
                     depthWrite={false}
                     toneMapped={false}
                 />
-                {matrices && (() => {
-                    const ref = React.createRef()
-                    return null
-                })()}
             </instancedMesh>
-            {/* Apply matrices after mount */}
             <InstanceMatrixSetter meshRef={meshRef} matrices={matrices} count={count} />
         </group>
     )

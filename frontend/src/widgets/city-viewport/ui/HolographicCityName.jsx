@@ -4,13 +4,14 @@ import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 
 /**
- * HolographicCityName — Floating 3D holographic text of the repository name above the city.
- * Uses a high-res canvas sprite for crisp text at any distance.
- * Premium look with glow, scan line, and subtle animation.
+ * HolographicCityName — Floating holographic repo name above the city.
+ * Enhanced canvas with scanline effect and dual glow passes.
+ * Single sprite, throttled to 30fps.
  */
 export default function HolographicCityName() {
     const cityData = useStore(s => s.cityData)
     const spriteRef = useRef()
+    const lastT = useRef(0)
 
     const cityRadius = useMemo(() => {
         if (!cityData?.buildings?.length) return 200
@@ -30,37 +31,50 @@ export default function HolographicCityName() {
         canvas.width = 1024
         canvas.height = 256
         const ctx = canvas.getContext('2d')
-
         ctx.clearRect(0, 0, 1024, 256)
 
-        // Glow behind text
-        ctx.shadowColor = '#00aaff'
-        ctx.shadowBlur = 30
-        ctx.shadowOffsetX = 0
-        ctx.shadowOffsetY = 0
-
-        // Main text
         const displayName = repoName.split('/').pop() || repoName
         ctx.font = 'bold 72px "Outfit", "Inter", "Segoe UI", sans-serif'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
 
-        // Outer glow pass
-        ctx.fillStyle = 'rgba(0, 170, 255, 0.5)'
-        ctx.fillText(displayName, 512, 128)
+        // Large soft glow pass
+        ctx.shadowColor = '#0088ff'
+        ctx.shadowBlur = 40
+        ctx.fillStyle = 'rgba(0, 140, 255, 0.35)'
+        ctx.fillText(displayName, 512, 125)
 
-        // Main text pass
+        // Medium glow pass
+        ctx.shadowColor = '#00bbff'
+        ctx.shadowBlur = 15
+        ctx.fillStyle = 'rgba(0, 200, 255, 0.55)'
+        ctx.fillText(displayName, 512, 125)
+
+        // Crisp main text
         ctx.shadowBlur = 0
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
-        ctx.fillText(displayName, 512, 128)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.92)'
+        ctx.fillText(displayName, 512, 125)
 
-        // Subtle underline
+        // Scanlines overlay
+        ctx.globalCompositeOperation = 'destination-out'
+        for (let y = 0; y < 256; y += 4) {
+            ctx.fillStyle = 'rgba(0,0,0,0.06)'
+            ctx.fillRect(0, y, 1024, 1)
+        }
+        ctx.globalCompositeOperation = 'source-over'
+
+        // Underline accent
         const textW = ctx.measureText(displayName).width
-        ctx.strokeStyle = 'rgba(0, 200, 255, 0.4)'
+        const grad = ctx.createLinearGradient(512 - textW / 2, 0, 512 + textW / 2, 0)
+        grad.addColorStop(0, 'rgba(0, 200, 255, 0)')
+        grad.addColorStop(0.3, 'rgba(0, 200, 255, 0.5)')
+        grad.addColorStop(0.7, 'rgba(0, 200, 255, 0.5)')
+        grad.addColorStop(1, 'rgba(0, 200, 255, 0)')
+        ctx.strokeStyle = grad
         ctx.lineWidth = 2
         ctx.beginPath()
-        ctx.moveTo(512 - textW / 2, 170)
-        ctx.lineTo(512 + textW / 2, 170)
+        ctx.moveTo(512 - textW / 2, 168)
+        ctx.lineTo(512 + textW / 2, 168)
         ctx.stroke()
 
         const tex = new THREE.CanvasTexture(canvas)
@@ -69,11 +83,12 @@ export default function HolographicCityName() {
     }, [repoName])
 
     useFrame(({ clock }) => {
-        if (spriteRef.current) {
-            const t = clock.getElapsedTime()
-            spriteRef.current.position.y = cityRadius * 0.7 + Math.sin(t * 0.3) * 5
-            spriteRef.current.material.opacity = 0.7 + Math.sin(t * 0.8) * 0.1
-        }
+        if (!spriteRef.current) return
+        const t = clock.getElapsedTime()
+        if (t - lastT.current < 0.05) return // 20fps
+        lastT.current = t
+        spriteRef.current.position.y = cityRadius * 0.7 + Math.sin(t * 0.25) * 4
+        spriteRef.current.material.opacity = 0.75 + Math.sin(t * 0.6) * 0.08
     })
 
     if (!texture || !repoName) return null
@@ -92,7 +107,7 @@ export default function HolographicCityName() {
                 opacity={0.8}
                 depthWrite={false}
                 depthTest={false}
-                sizeAttenuation={true}
+                sizeAttenuation
             />
         </sprite>
     )
