@@ -31,7 +31,7 @@ export default function HologramPanel() {
         const bx = position.x
         const bz = position.z
         const buildingTop = height
-        const panelY = buildingTop + 16
+        const panelY = buildingTop + 30
 
         // Beam line from building roof to panel
         const beamGeo = new THREE.BufferGeometry()
@@ -81,9 +81,10 @@ export default function HologramPanel() {
             <group position={layoutData.panelPos}>
                 <Html
                     center
-                    distanceFactor={40}
+                    distanceFactor={60}
                     style={{ pointerEvents: 'auto', userSelect: 'none' }}
                     zIndexRange={[50, 0]}
+                    occlude={false}
                 >
                     <div
                         onClick={e => e.stopPropagation()}

@@ -46,29 +46,32 @@ export default function CameraController() {
             // STATIC TARGETING
             const x = building.position.x
             const z = building.position.z
-            const rawHeight = building.dimensions.height || 8
+            const rawHeight = building.dimensions?.height || 8
             const buildingHeight = rawHeight * 3.0
-            const bWidth = building.dimensions.width || 8
-            const bDepth = building.dimensions.depth || 8
+            const bWidth = building.dimensions?.width || 8
+            const bDepth = building.dimensions?.depth || 8
 
-            // Frame the top of the building
+            // Frame: we want to see the building + the hologram panel above it
             const roofY = buildingHeight
-            // Use width/depth for distance scaling, ignore height so tall buildings don't push us away
+            const panelTopY = roofY + 50 // panel hovers ~30 above roof, panel itself ~20 tall
+            const frameCenterY = (roofY * 0.4 + panelTopY * 0.6) // bias toward panel
+            const frameHeight = panelTopY + 10
+
+            // Distance: far enough to see entire building + panel comfortably
             const footprintSize = Math.max(bWidth, bDepth)
+            const heightFactor = Math.max(buildingHeight * 0.6, 30)
+            const zoomDist = Math.max(80, footprintSize * 3.5, heightFactor * 1.2)
+            const camAngle = Math.PI / 4.5 // slight offset from 45°
 
-            // Calculate comfortable distance proportional to building footprint
-            const zoomDist = Math.max(45, footprintSize * 2.5)
-            const camAngle = Math.PI / 4 // 45-degree angle
-
-            // Position camera slightly above the roof and away from the center
+            // Camera position: elevated to see panel, pulled back enough
             const targetPos = new THREE.Vector3(
                 x + Math.cos(camAngle) * zoomDist,
-                roofY + 25, // hover 25 units above the roof line
+                frameCenterY + zoomDist * 0.5,
                 z + Math.sin(camAngle) * zoomDist
             )
 
-            // Look exactly at the glowing anchor dot on the roof
-            const lookAtPos = new THREE.Vector3(x, roofY, z)
+            // Look at the midpoint between building and panel
+            const lookAtPos = new THREE.Vector3(x, frameCenterY, z)
 
             // Animate Camera Position
             gsap.to(camera.position, {

@@ -147,10 +147,10 @@ export default function MothershipCore() {
         if (!cityData?.buildings?.length) return { altitude: 300, reactorY: 60 }
         let maxH = 0
         for (const b of cityData.buildings) {
-            const h = (b.dimensions?.height || b.metrics?.loc || 8) * 3.0
+            const h = (b.dimensions?.height || 8) * 3.0
             if (h > maxH) maxH = h
         }
-        const ry = Math.max(60, maxH + 35)
+        const ry = Math.max(60, maxH + 40)
         return { altitude: ry + 200, reactorY: ry }
     }, [cityData])
 

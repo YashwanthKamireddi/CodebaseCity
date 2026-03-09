@@ -112,10 +112,10 @@ export default function EnergyCoreReactor() {
         if (!cityData?.buildings?.length) return 60
         let maxH = 0
         for (const b of cityData.buildings) {
-            const h = (b.dimensions?.height || b.metrics?.loc || 8) * 3.0
+            const h = (b.dimensions?.height || 8) * 3.0
             if (h > maxH) maxH = h
         }
-        return Math.max(60, maxH + 35)
+        return Math.max(60, maxH + 40)
     }, [cityData])
 
     const coreMat = useMemo(() => new THREE.ShaderMaterial({
