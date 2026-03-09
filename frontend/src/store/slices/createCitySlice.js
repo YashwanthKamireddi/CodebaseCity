@@ -371,26 +371,58 @@ export const createCitySlice = (set, get) => ({
             const cols = Math.ceil(Math.sqrt(finalDirNames.length))
             const rows = Math.ceil(finalDirNames.length / cols)
 
-            // Compute per-district grid sizes first
-            const districtSizes = finalDirNames.map(dir => {
+            // Compute per-district cell sizes — each district sized to its own content
+            const districtCellSizes = finalDirNames.map(dir => {
                 const files = mergedGroups[dir]
-                return Math.ceil(Math.sqrt(files.length)) * 25 + 20
+                return Math.max(60, Math.ceil(Math.sqrt(files.length)) * 25 + 20)
             })
 
-            // Use uniform cell size (max across all districts) for consistent grid
-            const cellSize = Math.max(...districtSizes, 60)
-            const cellSpacing = cellSize + 40
-            const totalW = cols * cellSpacing
-            const totalH = rows * cellSpacing
+            // Grid layout with per-district sizes: use cumulative offsets
+            // Build rows of districts with adaptive widths
+            const districtGap = 40
+            const rowHeights = []
+            const colWidths = []
+
+            // Calculate max dimensions per grid row/column
+            for (let r = 0; r < rows; r++) {
+                let maxH = 0
+                for (let c = 0; c < cols; c++) {
+                    const idx = r * cols + c
+                    if (idx < finalDirNames.length) {
+                        maxH = Math.max(maxH, districtCellSizes[idx])
+                    }
+                }
+                rowHeights.push(maxH)
+            }
+            for (let c = 0; c < cols; c++) {
+                let maxW = 0
+                for (let r = 0; r < rows; r++) {
+                    const idx = r * cols + c
+                    if (idx < finalDirNames.length) {
+                        maxW = Math.max(maxW, districtCellSizes[idx])
+                    }
+                }
+                colWidths.push(maxW)
+            }
+
+            const totalW = colWidths.reduce((s, w) => s + w + districtGap, -districtGap)
+            const totalH = rowHeights.reduce((s, h) => s + h + districtGap, -districtGap)
 
             finalDirNames.forEach((dir, idx) => {
                 const districtId = `district_${idx}`
                 const col = idx % cols
                 const row = Math.floor(idx / cols)
                 const files = mergedGroups[dir]
+                const thisCellSize = districtCellSizes[idx]
 
-                const cx = col * cellSpacing - totalW / 2 + cellSpacing / 2
-                const cy = row * cellSpacing - totalH / 2 + cellSpacing / 2
+                // Compute center from cumulative offsets
+                let cx = -totalW / 2
+                for (let c = 0; c < col; c++) cx += colWidths[c] + districtGap
+                cx += colWidths[col] / 2
+
+                let cy = -totalH / 2
+                for (let r = 0; r < row; r++) cy += rowHeights[r] + districtGap
+                cy += rowHeights[row] / 2
 
                 districts.push({
                     id: districtId,
@@ -398,10 +430,10 @@ export const createCitySlice = (set, get) => ({
                     color: DISTRICT_COLORS[idx % DISTRICT_COLORS.length],
                     center: { x: cx, y: cy },
                     boundary: [
-                        { x: cx - cellSize / 2, y: cy - cellSize / 2 },
-                        { x: cx + cellSize / 2, y: cy - cellSize / 2 },
-                        { x: cx + cellSize / 2, y: cy + cellSize / 2 },
-                        { x: cx - cellSize / 2, y: cy + cellSize / 2 },
+                        { x: cx - thisCellSize / 2, y: cy - thisCellSize / 2 },
+                        { x: cx + thisCellSize / 2, y: cy - thisCellSize / 2 },
+                        { x: cx + thisCellSize / 2, y: cy + thisCellSize / 2 },
+                        { x: cx - thisCellSize / 2, y: cy + thisCellSize / 2 },
                     ],
                     building_count: files.length,
                 })
@@ -416,16 +448,18 @@ export const createCitySlice = (set, get) => ({
             const buildings = []
             const languageCounts = {}
 
-            for (const dir of finalDirNames) {
+            for (let di = 0; di < finalDirNames.length; di++) {
+                const dir = finalDirNames[di]
                 const files = mergedGroups[dir]
                 const districtId = districtMap[dir]
                 const district = districts.find(d => d.id === districtId)
+                const thisCellSize = districtCellSizes[di]
                 const bcols = Math.ceil(Math.sqrt(files.length))
                 const brows = Math.ceil(files.length / bcols)
 
-                // Compute spacing to fit buildings within the district boundary with padding
-                const usableSize = cellSize - 10 // 5px padding each side
-                const spacing = Math.min(23, usableSize / Math.max(bcols, brows))
+                // Spacing adapts to THIS district's size (no global cap)
+                const usableSize = thisCellSize - 10
+                const spacing = usableSize / Math.max(bcols, brows)
 
                 files.forEach((file, fileIdx) => {
                     const ext = file.path.substring(file.path.lastIndexOf('.')).toLowerCase()
@@ -438,8 +472,8 @@ export const createCitySlice = (set, get) => ({
                     const logMax = Math.log2(maxSize + 1)
                     const sizeNorm = logSize / Math.max(logMax, 1)
 
-                    const width = Math.max(4, 4 + 14 * sizeNorm)
-                    const height = Math.max(5, 5 + 55 * sizeNorm)
+                    const width = Math.max(5, 5 + 15 * sizeNorm)
+                    const height = Math.max(5, 5 + 75 * sizeNorm)
                     const depth = width
 
                     const fcol = fileIdx % bcols

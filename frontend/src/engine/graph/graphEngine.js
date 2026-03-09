@@ -16,11 +16,11 @@ import { detectCommunities } from './louvain.js'
 import logger from '../../utils/logger.js'
 
 // Layout constants matching backend's city_builder.py
-const BUILDING_SPACING = 3
+const BUILDING_SPACING = 4
 const DISTRICT_PADDING = 8
-const MIN_BUILDING_WIDTH = 2
+const MIN_BUILDING_WIDTH = 5
 const MAX_BUILDING_WIDTH = 20
-const MIN_BUILDING_HEIGHT = 1
+const MIN_BUILDING_HEIGHT = 4
 const MAX_BUILDING_HEIGHT = 80
 
 /**
@@ -439,12 +439,15 @@ function generateBuildings(parsedFiles, communities, metrics) {
     .sort((a, b) => b[1].length - a[1].length)
 
   // Pre-compute building dimensions for each file for adaptive layout
+  // Use log-scale normalization to prevent outlier files from crushing everything
   const fileDims = new Map()
+  const logMaxLines = Math.log2(metrics.maxLines + 1)
+  const logMaxComplexity = Math.log2(metrics.maxComplexity + 1)
   for (const [, files] of sortedDistricts) {
     for (const file of files) {
-      const linesNorm = file.lines_of_code / metrics.maxLines
-      const complexityNorm = file.complexity / metrics.maxComplexity
-      const width = MIN_BUILDING_WIDTH + (MAX_BUILDING_WIDTH - MIN_BUILDING_WIDTH) * Math.sqrt(linesNorm)
+      const linesNorm = Math.log2(file.lines_of_code + 1) / Math.max(logMaxLines, 1)
+      const complexityNorm = Math.log2(file.complexity + 1) / Math.max(logMaxComplexity, 1)
+      const width = MIN_BUILDING_WIDTH + (MAX_BUILDING_WIDTH - MIN_BUILDING_WIDTH) * linesNorm
       const height = MIN_BUILDING_HEIGHT + (MAX_BUILDING_HEIGHT - MIN_BUILDING_HEIGHT) * complexityNorm
       fileDims.set(file.file_path, { width, height, depth: width })
     }

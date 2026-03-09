@@ -142,16 +142,15 @@ export default function MothershipCore() {
     const ringMid = useRef()
     const lastT = useRef(0)
 
-    // Compute altitude based on city — always well above reactor
-    const { altitude, reactorY } = useMemo(() => {
-        if (!cityData?.buildings?.length) return { altitude: 300, reactorY: 60 }
+    // Compute altitude — well above tallest building
+    const altitude = useMemo(() => {
+        if (!cityData?.buildings?.length) return 300
         let maxH = 0
         for (const b of cityData.buildings) {
             const h = (b.dimensions?.height || 8) * 3.0
             if (h > maxH) maxH = h
         }
-        const ry = Math.max(60, maxH + 40)
-        return { altitude: ry + 200, reactorY: ry }
+        return Math.max(260, maxH + 200)
     }, [cityData])
 
     const hullMat = useMemo(() => new THREE.ShaderMaterial({
@@ -185,11 +184,10 @@ export default function MothershipCore() {
         roughness: 0.15,
     }), [])
 
-    // Beam connects ship belly to reactor position — tapers from wide (ship) to narrow (reactor)
-    const beamHeight = altitude - reactorY
+    // Beam connects ship belly to ground reactor chamber
     const beamGeo = useMemo(() => {
-        return new THREE.CylinderGeometry(4, 22, beamHeight, 20, 12, true)
-    }, [beamHeight])
+        return new THREE.CylinderGeometry(4, 22, altitude, 20, 12, true)
+    }, [altitude])
 
     useFrame(({ clock }) => {
         const t = clock.getElapsedTime()
@@ -243,8 +241,8 @@ export default function MothershipCore() {
                 </mesh>
             </group>
 
-            {/* ── Tractor beam — ship to reactor ── */}
-            <mesh position={[0, reactorY + beamHeight / 2, 0]} geometry={beamGeo}>
+            {/* ── Tractor beam — ship to ground chamber ── */}
+            <mesh position={[0, altitude / 2, 0]} geometry={beamGeo}>
                 <primitive object={beamMat} attach="material" />
             </mesh>
 

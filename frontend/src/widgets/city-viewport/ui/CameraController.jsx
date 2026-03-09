@@ -53,20 +53,19 @@ export default function CameraController() {
 
             // Frame: we want to see the building + the hologram panel above it
             const roofY = buildingHeight
-            const panelTopY = roofY + 50 // panel hovers ~30 above roof, panel itself ~20 tall
-            const frameCenterY = (roofY * 0.4 + panelTopY * 0.6) // bias toward panel
-            const frameHeight = panelTopY + 10
+            const panelTopY = roofY + 30 // panel hovers 30 above roof
+            const frameCenterY = (roofY * 0.5 + panelTopY * 0.5)
 
-            // Distance: far enough to see entire building + panel comfortably
+            // Distance: close enough to read detail but see full building + panel
             const footprintSize = Math.max(bWidth, bDepth)
-            const heightFactor = Math.max(buildingHeight * 0.6, 30)
-            const zoomDist = Math.max(80, footprintSize * 3.5, heightFactor * 1.2)
+            const heightFactor = Math.max(buildingHeight * 0.5, 20)
+            const zoomDist = Math.max(45, footprintSize * 2, heightFactor * 1.0)
             const camAngle = Math.PI / 4.5 // slight offset from 45°
 
-            // Camera position: elevated to see panel, pulled back enough
+            // Camera position: modest elevation, not too far
             const targetPos = new THREE.Vector3(
                 x + Math.cos(camAngle) * zoomDist,
-                frameCenterY + zoomDist * 0.5,
+                frameCenterY + zoomDist * 0.3,
                 z + Math.sin(camAngle) * zoomDist
             )
 
