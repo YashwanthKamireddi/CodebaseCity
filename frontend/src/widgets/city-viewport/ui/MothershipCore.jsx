@@ -1,28 +1,30 @@
 import React, { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import useStore from '../../../store/useStore'
 
 /**
- * MothershipCore — Massive hovering saucer with rotating ring + tractor beam.
+ * MothershipCore — Massive orbiting saucer that extracts energy from the reactor.
  *
- * Perf budget: 6 draw calls, ~3200 verts, 2 shared materials, 20fps useFrame.
- * - Disc hull (flattened sphere) — dark metallic body
- * - Bridge dome on top — glowing core
- * - Outer rotating ring (torus)
- * - Inner accent ring (torus)
- * - Tractor beam (cylinder, transparent, tapers down)
- * - Beam ground glow (flat ring on y=0.2)
+ * Design: A dramatic mother-ship hovering high above the city with a vivid
+ * tractor beam connecting down to the reactor core. The beam is bright,
+ * volumetric-looking, and pulsing with energy flow.
+ *
+ * Perf: 8 draw calls, ~3.5k verts, 20fps throttled useFrame.
  */
 
 const HULL_VERT = /* glsl */ `
 #include <common>
 #include <logdepthbuf_pars_vertex>
 varying vec3 vNormal;
+varying vec3 vViewDir;
 varying vec2 vUv;
 void main() {
     vUv = uv;
     vNormal = normalize(normalMatrix * normal);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    vec4 worldPos = modelMatrix * vec4(position, 1.0);
+    vViewDir = normalize(cameraPosition - worldPos.xyz);
+    gl_Position = projectionMatrix * viewMatrix * worldPos;
     #include <logdepthbuf_vertex>
 }
 `
@@ -32,19 +34,35 @@ const HULL_FRAG = /* glsl */ `
 #include <logdepthbuf_pars_fragment>
 uniform float uTime;
 varying vec3 vNormal;
+varying vec3 vViewDir;
 varying vec2 vUv;
 void main() {
     #include <logdepthbuf_fragment>
-    vec3 base = vec3(0.04, 0.06, 0.10);
-    float rim = 1.0 - max(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0);
-    rim = pow(smoothstep(0.35, 1.0, rim), 2.0);
-    base += vec3(0.08, 0.18, 0.35) * rim;
-    // Horizontal panel lines
-    float panel = step(0.92, fract(vUv.y * 20.0));
-    base += vec3(0.0, 0.4, 0.8) * panel * 0.5;
-    // Subtle vertical seams
-    float seam = step(0.96, fract(vUv.x * 12.0));
-    base += vec3(0.0, 0.25, 0.5) * seam * 0.3;
+    // Dark metallic hull with strong rim lighting
+    vec3 base = vec3(0.06, 0.08, 0.14);
+
+    // Fresnel rim — blue glow on silhouette edges
+    float fresnel = 1.0 - max(dot(vNormal, vViewDir), 0.0);
+    fresnel = pow(smoothstep(0.2, 1.0, fresnel), 2.5);
+    base += vec3(0.05, 0.2, 0.5) * fresnel;
+
+    // Hull panel lines — horizontal
+    float panel = step(0.93, fract(vUv.y * 24.0));
+    base += vec3(0.0, 0.35, 0.7) * panel * 0.4;
+
+    // Vertical seam accents
+    float seam = step(0.96, fract(vUv.x * 16.0));
+    base += vec3(0.0, 0.2, 0.45) * seam * 0.25;
+
+    // Running lights — subtle dots along equator
+    float equator = smoothstep(0.48, 0.5, vUv.y) * smoothstep(0.52, 0.5, vUv.y);
+    float lights = step(0.9, fract(vUv.x * 32.0 + uTime * 0.3));
+    base += vec3(0.1, 0.6, 1.0) * equator * lights * 0.6;
+
+    // Top vs bottom face shading
+    float topFace = max(vNormal.y, 0.0);
+    base += vec3(0.02, 0.04, 0.08) * topFace;
+
     gl_FragColor = vec4(base, 1.0);
 }
 `
@@ -53,8 +71,10 @@ const BEAM_VERT = /* glsl */ `
 #include <common>
 #include <logdepthbuf_pars_vertex>
 varying vec2 vUv;
+varying float vHeight;
 void main() {
     vUv = uv;
+    vHeight = position.y;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
     #include <logdepthbuf_vertex>
 }
@@ -65,28 +85,74 @@ const BEAM_FRAG = /* glsl */ `
 #include <logdepthbuf_pars_fragment>
 uniform float uTime;
 varying vec2 vUv;
+varying float vHeight;
 void main() {
     #include <logdepthbuf_fragment>
-    // Fade: strong at top (ship), fading toward ground
-    float fadeY = pow(1.0 - vUv.y, 1.5);
-    // Radial fade from center
+
+    // Radial fade — bright core, soft edges
     float dist = abs(vUv.x - 0.5) * 2.0;
-    float radial = 1.0 - smoothstep(0.0, 1.0, dist);
-    // Scrolling energy lines
-    float scroll = fract(vUv.y * 8.0 - uTime * 0.6);
-    float lines = smoothstep(0.4, 0.5, scroll) * smoothstep(0.6, 0.5, scroll);
-    float alpha = fadeY * radial * (0.12 + lines * 0.08);
-    vec3 col = mix(vec3(0.0, 0.5, 0.9), vec3(0.0, 0.8, 1.0), radial);
+    float innerCore = 1.0 - smoothstep(0.0, 0.15, dist);
+    float outerGlow = 1.0 - smoothstep(0.0, 1.0, dist);
+    outerGlow = pow(outerGlow, 2.0);
+
+    // Vertical fade — bright at both ends (ship + reactor), slight dip in middle
+    float midFade = 1.0 - 0.3 * smoothstep(0.0, 0.5, abs(vUv.y - 0.5) * 2.0);
+
+    // Multiple scrolling energy layers (downward toward reactor)
+    float s1 = fract(vUv.y * 20.0 - uTime * 1.2);
+    float line1 = smoothstep(0.42, 0.5, s1) * smoothstep(0.58, 0.5, s1);
+
+    float s2 = fract(vUv.y * 12.0 - uTime * 0.7 + 0.5);
+    float line2 = smoothstep(0.4, 0.5, s2) * smoothstep(0.6, 0.5, s2);
+
+    float s3 = fract(vUv.y * 30.0 - uTime * 2.0 + 0.2);
+    float line3 = smoothstep(0.44, 0.5, s3) * smoothstep(0.56, 0.5, s3);
+
+    float energy = line1 * 0.4 + line2 * 0.3 + line3 * 0.2;
+
+    // Swirling spiral effect
+    float angle = vUv.y * 6.2832 * 3.0 + uTime * 0.5;
+    float spiral = sin(angle + dist * 4.0) * 0.5 + 0.5;
+    energy += spiral * innerCore * 0.15;
+
+    // Combine
+    float coreAlpha = innerCore * 0.25 * midFade;
+    float glowAlpha = outerGlow * 0.08 * midFade;
+    float energyAlpha = energy * outerGlow * 0.2;
+
+    float alpha = coreAlpha + glowAlpha + energyAlpha;
+
+    // Color: white-cyan center, blue edges
+    vec3 coreColor = vec3(0.6, 0.9, 1.0);
+    vec3 edgeColor = vec3(0.0, 0.35, 0.8);
+    vec3 col = mix(edgeColor, coreColor, innerCore * 0.7 + energy * 0.3);
+
+    // Pulse
+    float pulse = 0.9 + 0.1 * sin(uTime * 3.0);
+    alpha *= pulse;
+
     gl_FragColor = vec4(col, alpha);
 }
 `
 
 export default function MothershipCore() {
+    const cityData = useStore(s => s.cityData)
     const ringOuter = useRef()
     const ringInner = useRef()
+    const ringMid = useRef()
     const lastT = useRef(0)
 
-    const altitude = 400
+    // Compute altitude based on city — always well above reactor
+    const { altitude, reactorY } = useMemo(() => {
+        if (!cityData?.buildings?.length) return { altitude: 300, reactorY: 60 }
+        let maxH = 0
+        for (const b of cityData.buildings) {
+            const h = (b.dimensions?.height || b.metrics?.loc || 8) * 3.0
+            if (h > maxH) maxH = h
+        }
+        const ry = Math.max(60, maxH + 35)
+        return { altitude: ry + 200, reactorY: ry }
+    }, [cityData])
 
     const hullMat = useMemo(() => new THREE.ShaderMaterial({
         uniforms: { uTime: { value: 0 } },
@@ -103,27 +169,27 @@ export default function MothershipCore() {
         side: THREE.DoubleSide,
     }), [])
 
-    const bridgeMat = useMemo(() => new THREE.MeshStandardMaterial({
-        color: '#004488',
-        emissive: '#003366',
-        emissiveIntensity: 0.6,
-        metalness: 0.9,
-        roughness: 0.2,
-    }), [])
-
     const accentMat = useMemo(() => new THREE.MeshStandardMaterial({
-        color: '#00aadd',
-        emissive: '#005577',
-        emissiveIntensity: 0.5,
-        metalness: 0.8,
-        roughness: 0.3,
+        color: '#00bbee',
+        emissive: '#0077aa',
+        emissiveIntensity: 0.7,
+        metalness: 0.9,
+        roughness: 0.1,
     }), [])
 
-    // Beam cylinder geometry — tapers from radius 18 (ship) to 35 (ground)
+    const bridgeMat = useMemo(() => new THREE.MeshStandardMaterial({
+        color: '#0066aa',
+        emissive: '#004488',
+        emissiveIntensity: 0.8,
+        metalness: 0.85,
+        roughness: 0.15,
+    }), [])
+
+    // Beam connects ship belly to reactor position — tapers from wide (ship) to narrow (reactor)
+    const beamHeight = altitude - reactorY
     const beamGeo = useMemo(() => {
-        const geo = new THREE.CylinderGeometry(35, 18, altitude, 16, 8, true)
-        return geo
-    }, [altitude])
+        return new THREE.CylinderGeometry(4, 22, beamHeight, 20, 12, true)
+    }, [beamHeight])
 
     useFrame(({ clock }) => {
         const t = clock.getElapsedTime()
@@ -131,53 +197,61 @@ export default function MothershipCore() {
         lastT.current = t
         hullMat.uniforms.uTime.value = t
         beamMat.uniforms.uTime.value = t
-        if (ringOuter.current) ringOuter.current.rotation.y = t * 0.06
-        if (ringInner.current) ringInner.current.rotation.y = t * -0.1
+        if (ringOuter.current) ringOuter.current.rotation.y = t * 0.05
+        if (ringMid.current) ringMid.current.rotation.y = t * -0.08
+        if (ringInner.current) ringInner.current.rotation.y = t * 0.12
     })
 
     return (
         <group>
-            {/* Ship body at altitude */}
+            {/* ── Ship body at altitude ── */}
             <group position={[0, altitude, 0]}>
-                {/* Main disc hull — flattened sphere */}
-                <mesh scale={[1, 0.18, 1]}>
-                    <sphereGeometry args={[50, 24, 16]} />
+                {/* Main disc hull — thick saucer */}
+                <mesh scale={[1, 0.22, 1]}>
+                    <sphereGeometry args={[55, 28, 18]} />
                     <primitive object={hullMat} attach="material" />
                 </mesh>
 
-                {/* Bridge dome on top */}
-                <mesh position={[0, 8, 0]}>
-                    <sphereGeometry args={[14, 16, 12, 0, Math.PI * 2, 0, Math.PI / 2]} />
+                {/* Bridge dome — top */}
+                <mesh position={[0, 10, 0]}>
+                    <sphereGeometry args={[16, 18, 14, 0, Math.PI * 2, 0, Math.PI / 2]} />
                     <primitive object={bridgeMat} attach="material" />
                 </mesh>
 
-                {/* Outer rotating ring */}
+                {/* Ventral dome — bottom (beam emitter) */}
+                <mesh position={[0, -10, 0]} rotation={[Math.PI, 0, 0]}>
+                    <sphereGeometry args={[12, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2]} />
+                    <primitive object={bridgeMat} attach="material" />
+                </mesh>
+
+                {/* Outer ring — slow majestic rotation */}
                 <mesh ref={ringOuter}>
-                    <torusGeometry args={[58, 3, 8, 36]} />
+                    <torusGeometry args={[62, 2.5, 8, 40]} />
                     <primitive object={accentMat} attach="material" />
                 </mesh>
 
-                {/* Inner accent ring */}
+                {/* Mid ring — counter-rotation */}
+                <mesh ref={ringMid} rotation={[0.15, 0, 0]}>
+                    <torusGeometry args={[52, 1.5, 6, 36]} />
+                    <primitive object={accentMat} attach="material" />
+                </mesh>
+
+                {/* Inner accent ring — vertical orientation */}
                 <mesh ref={ringInner} rotation={[Math.PI / 2, 0, 0]}>
-                    <torusGeometry args={[38, 1.5, 6, 28]} />
+                    <torusGeometry args={[35, 1.2, 6, 28]} />
                     <primitive object={accentMat} attach="material" />
                 </mesh>
             </group>
 
-            {/* Tractor beam — transparent cylinder from ship to ground */}
-            <mesh position={[0, altitude / 2, 0]} geometry={beamGeo}>
+            {/* ── Tractor beam — ship to reactor ── */}
+            <mesh position={[0, reactorY + beamHeight / 2, 0]} geometry={beamGeo}>
                 <primitive object={beamMat} attach="material" />
             </mesh>
 
-            {/* Ground glow ring under beam */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.2, 0]}>
-                <ringGeometry args={[8, 40, 32]} />
-                <meshBasicMaterial
-                    color="#004466"
-                    transparent
-                    opacity={0.15}
-                    depthWrite={false}
-                />
+            {/* ── Ship underside glow — wide halo beneath hull ── */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, altitude - 12, 0]}>
+                <ringGeometry args={[5, 45, 32]} />
+                <meshBasicMaterial color="#004488" transparent opacity={0.08} depthWrite={false} />
             </mesh>
         </group>
     )
