@@ -31,13 +31,13 @@ function Ground() {
         canvas.height = res
         const ctx = canvas.getContext('2d')
 
-        // Deep dark base
-        ctx.fillStyle = '#030508'
+        // Dark base — slightly brighter for visibility
+        ctx.fillStyle = '#070c14'
         ctx.fillRect(0, 0, res, res)
 
         // One "tile" is the full canvas — it repeats gridRepeat times
         // Major grid lines — subtle cyan
-        ctx.strokeStyle = 'rgba(0, 180, 240, 0.10)'
+        ctx.strokeStyle = 'rgba(0, 180, 240, 0.14)'
         ctx.lineWidth = 1.5
 
         // Border of tile
@@ -45,7 +45,7 @@ function Ground() {
 
         // Subdivide tile into a 4×4 minor grid
         const sub = res / 4
-        ctx.strokeStyle = 'rgba(0, 160, 220, 0.05)'
+        ctx.strokeStyle = 'rgba(0, 160, 220, 0.08)'
         ctx.lineWidth = 0.8
         for (let i = 1; i < 4; i++) {
             ctx.beginPath()
@@ -59,7 +59,7 @@ function Ground() {
         }
 
         // Corner intersections — brighter accent dots
-        ctx.fillStyle = 'rgba(0, 200, 255, 0.30)'
+        ctx.fillStyle = 'rgba(0, 200, 255, 0.40)'
         const dotR = 3
         // 4 corners of the tile
         const pts = [0, res]

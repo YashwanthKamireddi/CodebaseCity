@@ -32,11 +32,11 @@ export default function CityScene() {
     return (
         <group>
             {/* Cinematic 5-light rig — key, fill, rim, ambient, hemisphere */}
-            <ambientLight intensity={0.35} color="#8090b0" />
-            <hemisphereLight color="#a0c0ff" groundColor="#060810" intensity={0.45} />
-            <directionalLight position={[100, 150, 80]} intensity={1.2} color="#e4ecff" />
-            <directionalLight position={[-80, 60, -50]} intensity={0.25} color="#90b0ff" />
-            <directionalLight position={[0, 40, -120]} intensity={0.2} color="#6080c0" />
+            <ambientLight intensity={0.55} color="#90a0c0" />
+            <hemisphereLight color="#b0d0ff" groundColor="#101828" intensity={0.6} />
+            <directionalLight position={[100, 150, 80]} intensity={1.4} color="#e8f0ff" />
+            <directionalLight position={[-80, 60, -50]} intensity={0.5} color="#90b0ff" />
+            <directionalLight position={[0, 40, -120]} intensity={0.35} color="#7090d0" />
 
             <group>
                 <InstancedCity />
@@ -51,8 +51,8 @@ export default function CityScene() {
                 <HeroLandmarks buildings={cityData?.buildings} />
             </group>
 
-            <fog attach="fog" args={['#060a12', cityRadius * 0.9, cityRadius * 4.5]} />
-            <color attach="background" args={['#080c16']} />
+            <fog attach="fog" args={['#0a1020', cityRadius * 1.5, cityRadius * 6]} />
+            <color attach="background" args={['#0c1222']} />
             <CameraController />
         </group>
     )

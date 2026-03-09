@@ -114,21 +114,23 @@ const PulseMaterial = shaderMaterial(
           windows = step(0.15, windowGridX) * step(0.15, windowGridY);
       }
 
-      // Randomize lit windows
+      // Randomize lit windows — 70% lit for a lively city
       vec3 posFloor = floor(vWorldPosition.xyz * 0.4);
       float randomWindow = fract(sin(dot(posFloor, vec3(12.9898, 78.233, 37.719))) * 43758.5453);
-      windows *= step(0.4, randomWindow);
+      windows *= step(0.3, randomWindow);
 
       // Color palette
       vec3 buildingColor = vColor;
-      vec3 darkFace = buildingColor * 0.15;
-      vec3 edgeColor = buildingColor * 1.4;
-      vec3 windowColor = buildingColor * 1.0 + vec3(0.15, 0.2, 0.25);
+      vec3 darkFace = buildingColor * 0.35;
+      vec3 edgeColor = buildingColor * 1.6;
+      vec3 windowColor = buildingColor * 1.3 + vec3(0.18, 0.24, 0.30);
 
-      // Simple directional lighting
+      // Two-light directional setup for better coverage
       vec3 lightDir = normalize(vec3(0.5, 0.8, 0.3));
+      vec3 lightDir2 = normalize(vec3(-0.4, 0.5, -0.6));
       float NdotL = max(dot(vNormal, lightDir), 0.0);
-      float lighting = 0.35 + 0.65 * NdotL;
+      float NdotL2 = max(dot(vNormal, lightDir2), 0.0);
+      float lighting = 0.45 + 0.45 * NdotL + 0.15 * NdotL2;
 
       vec3 finalColor = darkFace * lighting;
 
@@ -136,15 +138,17 @@ const PulseMaterial = shaderMaterial(
           // Lit windows
           finalColor = mix(finalColor, windowColor * lighting, windows * (1.0 - outerEdge));
           // Edge glow
-          finalColor = mix(finalColor, edgeColor, outerEdge * 0.8);
-          // Subtle height gradient
+          finalColor = mix(finalColor, edgeColor, outerEdge * 0.85);
+          // Height gradient — brighter toward top
           float heightGrad = (vLocalPosition.y + 0.5);
-          finalColor += buildingColor * 0.03 * heightGrad;
+          finalColor += buildingColor * 0.08 * heightGrad;
+          // Ambient contribution so shadowed sides aren't pitch black
+          finalColor += buildingColor * 0.06;
 
       } else if (isTop) {
-          finalColor = darkFace * (lighting + 0.1);
+          finalColor = darkFace * (lighting + 0.2);
           // Roof edge
-          finalColor = mix(finalColor, edgeColor * 0.7, outerEdge);
+          finalColor = mix(finalColor, edgeColor * 0.8, outerEdge);
 
           // Roof grid
           float roofGridSpacing = 3.0;
@@ -155,7 +159,8 @@ const PulseMaterial = shaderMaterial(
           rGridLines = min(rGridLines, 1.0);
           finalColor = mix(finalColor, buildingColor * 0.3, rGridLines * (1.0 - outerEdge));
       } else {
-          finalColor = vec3(0.02, 0.02, 0.03);
+          // Bottom face
+          finalColor = buildingColor * 0.12;
       }
 
       // Churn / flamegraph
