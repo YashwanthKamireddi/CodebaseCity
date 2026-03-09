@@ -1,16 +1,18 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useRef, useMemo, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
+import { Html } from '@react-three/drei'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 
 /**
- * MothershipCore — Massive orbiting saucer that extracts energy from the reactor.
+ * MothershipCore — "Atlas" Orbital Command Hub
  *
- * Design: A dramatic mother-ship hovering high above the city with a vivid
- * tractor beam connecting down to the reactor core. The beam is bright,
- * volumetric-looking, and pulsing with energy flow.
+ * PURPOSE: Not just a floating saucer — this is the bird's-eye strategic
+ * overview of the entire codebase. Hovering reveals a command panel with
+ * repo identity, language distribution, structural overview, and key stats.
  *
- * Perf: 8 draw calls, ~3.5k verts, 20fps throttled useFrame.
+ * The tractor beam connects the orbital command to the ground-level reactor,
+ * visually representing the data pipeline from source → analysis.
  */
 
 const HULL_VERT = /* glsl */ `
@@ -135,12 +137,104 @@ void main() {
 }
 `
 
+/* ── Overview panel ─────────────────────────────────────────────────── */
+
+const overviewStyle = {
+    background: 'linear-gradient(135deg, rgba(8,12,24,0.95) 0%, rgba(12,18,35,0.92) 100%)',
+    border: '1px solid rgba(255,255,255,0.08)',
+    borderRadius: '14px',
+    padding: '16px 20px',
+    width: '250px',
+    fontFamily: "'Inter', -apple-system, sans-serif",
+    color: '#e4e4e7',
+    backdropFilter: 'blur(20px)',
+    boxShadow: '0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.06)',
+    pointerEvents: 'none',
+    userSelect: 'none',
+}
+
+const LANG_COLORS = {
+    javascript: '#f7df1e', typescript: '#3178c6', python: '#3572A5', java: '#b07219',
+    go: '#00ADD8', rust: '#dea584', ruby: '#CC342D', php: '#4F5D95', c: '#555555',
+    cpp: '#f34b7d', csharp: '#178600', swift: '#FA7343', kotlin: '#A97BFF', scala: '#DC322F',
+    vue: '#41b883', svelte: '#ff3e00', dart: '#00B4AB', shell: '#89e051', css: '#563d7c',
+    html: '#e34c26', scss: '#c6538c', sql: '#e38c00', lua: '#000080', r: '#198CE7',
+}
+
+function OverviewPanel({ cityData }) {
+    const repoName = cityData.name || cityData.path || 'Unknown'
+    const source = cityData.source === 'github' ? 'GitHub' : cityData.source === 'client' ? 'Local' : cityData.source || 'Unknown'
+    const totalFiles = cityData.buildings?.length || 0
+    const totalLoc = cityData.metrics?.total_lines || cityData.buildings?.reduce((s, b) => s + (b.metrics?.loc || 0), 0) || 0
+    const districts = cityData.districts?.length || 0
+    const connections = cityData.roads?.length || 0
+    const formatNum = n => n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(n)
+
+    // Language distribution
+    const langCounts = cityData.metrics?.languages || {}
+    const sortedLangs = Object.entries(langCounts).sort((a, b) => b[1] - a[1]).slice(0, 5)
+    const maxLang = sortedLangs[0]?.[1] || 1
+
+    return (
+        <div style={overviewStyle}>
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>Atlas Command</span>
+            </div>
+
+            {/* Repo name */}
+            <div style={{ fontSize: '15px', fontWeight: 700, marginBottom: '2px', color: '#f4f4f5', lineHeight: 1.3, wordBreak: 'break-word' }}>{repoName}</div>
+            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', marginBottom: '14px' }}>source: {source}{cityData.branch ? ` · ${cityData.branch}` : ''}</div>
+
+            {/* Stats row */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', marginBottom: '14px' }}>
+                {[
+                    ['Files', formatNum(totalFiles)],
+                    ['Districts', districts],
+                    ['Roads', connections],
+                ].map(([label, val]) => (
+                    <div key={label} style={{ textAlign: 'center' }}>
+                        <div style={{ fontSize: '16px', fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", color: '#a5b4fc' }}>{val}</div>
+                        <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.04em', marginTop: '2px' }}>{label}</div>
+                    </div>
+                ))}
+            </div>
+            <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)', marginBottom: '4px' }}>{formatNum(totalLoc)} lines of code</div>
+
+            {/* Language bars */}
+            {sortedLangs.length > 0 && (
+                <div style={{ marginTop: '10px' }}>
+                    <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)', marginBottom: '6px', letterSpacing: '0.04em' }}>Languages</div>
+                    {sortedLangs.map(([lang, count]) => {
+                        const pct = Math.round((count / totalFiles) * 100)
+                        const barWidth = Math.round((count / maxLang) * 100)
+                        const color = LANG_COLORS[lang] || '#6366f1'
+                        return (
+                            <div key={lang} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '5px' }}>
+                                <div style={{ width: '6px', height: '6px', borderRadius: '2px', background: color, flexShrink: 0 }} />
+                                <div style={{ flex: 1, height: '4px', background: 'rgba(255,255,255,0.06)', borderRadius: '2px', overflow: 'hidden' }}>
+                                    <div style={{ width: `${barWidth}%`, height: '100%', background: color, opacity: 0.65, borderRadius: '2px' }} />
+                                </div>
+                                <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', minWidth: '60px', textAlign: 'right' }}>{lang} {pct}%</span>
+                            </div>
+                        )
+                    })}
+                </div>
+            )}
+        </div>
+    )
+}
+
+/* ── Component ─────────────────────────────────────────────────────── */
+
 export default function MothershipCore() {
     const cityData = useStore(s => s.cityData)
     const ringOuter = useRef()
     const ringInner = useRef()
     const ringMid = useRef()
     const lastT = useRef(0)
+    const [hovered, setHovered] = useState(false)
 
     // Compute altitude — well above tallest building
     const altitude = useMemo(() => {
@@ -203,7 +297,11 @@ export default function MothershipCore() {
     return (
         <group>
             {/* ── Ship body at altitude ── */}
-            <group position={[0, altitude, 0]}>
+            <group
+                position={[0, altitude, 0]}
+                onPointerEnter={(e) => { e.stopPropagation(); setHovered(true) }}
+                onPointerLeave={() => setHovered(false)}
+            >
                 {/* Main disc hull — thick saucer */}
                 <mesh scale={[1, 0.22, 1]}>
                     <sphereGeometry args={[55, 28, 18]} />
@@ -222,23 +320,30 @@ export default function MothershipCore() {
                     <primitive object={bridgeMat} attach="material" />
                 </mesh>
 
-                {/* Outer ring — slow majestic rotation */}
+                {/* Outer ring */}
                 <mesh ref={ringOuter}>
                     <torusGeometry args={[62, 2.5, 8, 40]} />
                     <primitive object={accentMat} attach="material" />
                 </mesh>
 
-                {/* Mid ring — counter-rotation */}
+                {/* Mid ring */}
                 <mesh ref={ringMid} rotation={[0.15, 0, 0]}>
                     <torusGeometry args={[52, 1.5, 6, 36]} />
                     <primitive object={accentMat} attach="material" />
                 </mesh>
 
-                {/* Inner accent ring — vertical orientation */}
+                {/* Inner ring */}
                 <mesh ref={ringInner} rotation={[Math.PI / 2, 0, 0]}>
                     <torusGeometry args={[35, 1.2, 6, 28]} />
                     <primitive object={accentMat} attach="material" />
                 </mesh>
+
+                {/* Atlas overview — appears on hover */}
+                {hovered && cityData && (
+                    <Html position={[0, 40, 0]} center distanceFactor={120} occlude={false}>
+                        <OverviewPanel cityData={cityData} />
+                    </Html>
+                )}
             </group>
 
             {/* ── Tractor beam — ship to ground chamber ── */}

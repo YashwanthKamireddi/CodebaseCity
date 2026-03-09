@@ -547,6 +547,7 @@ export const createCitySlice = (set, get) => ({
                 city_id: `github_${owner}_${repo}_${Date.now()}`,
                 analyzed_at: new Date().toISOString(),
                 source: 'github',
+                branch,
                 buildings,
                 districts,
                 roads,
@@ -659,60 +660,78 @@ export const createCitySlice = (set, get) => ({
     },
 
     fetchFileContent: async (path) => {
-        set({ fileContent: { path, content: null, loading: true } })
+        set({ fileContent: { path, content: null, loading: true, error: null } })
 
-        const { cityData } = get()
+        try {
+            const { cityData } = get()
 
-        // Demo mode
-        if (cityData?.id?.startsWith('demo_')) {
-            set({ fileContent: { path, content: '// Source code not available in demo mode.\n// Try analyzing a real GitHub repository!', loading: false } })
-            return
-        }
-
-        // Check in-memory file contents first (from client-side analysis)
-        if (cityData?.fileContents) {
-            // Try exact match
-            let content = cityData.fileContents.get?.(path) || cityData.fileContents[path]
-
-            // Try matching by filename suffix (handles relative vs absolute paths)
-            if (!content) {
-                const cleanPath = path.replace(/^[./\\]+/, '')
-                const entries = cityData.fileContents instanceof Map
-                    ? [...cityData.fileContents.entries()]
-                    : Object.entries(cityData.fileContents)
-
-                for (const [key, val] of entries) {
-                    if (key.endsWith(cleanPath) || cleanPath.endsWith(key)) {
-                        content = val
-                        break
-                    }
-                }
-            }
-
-            if (content) {
-                set({ fileContent: { path, content, loading: false } })
+            // Demo mode
+            if (cityData?.id?.startsWith('demo_')) {
+                set({ fileContent: { path, content: '// Source code not available in demo mode.\n// Try analyzing a real GitHub repository!', loading: false } })
                 return
             }
-        }
 
-        // Fallback: try fetching raw content from GitHub if it's a GitHub-sourced repo
-        if ((cityData?.source === 'github' || cityData?.source === 'github-client') && cityData?.name) {
-            try {
-                const repoName = cityData.name
-                const cleanPath = path.replace(/^[./\\]+/, '')
-                const rawUrl = `https://raw.githubusercontent.com/${repoName}/HEAD/${cleanPath}`
-                const res = await fetch(rawUrl)
-                if (res.ok) {
-                    const content = await res.text()
+            // Check in-memory file contents first (from client-side analysis)
+            if (cityData?.fileContents) {
+                // Try exact match
+                let content = cityData.fileContents.get?.(path) || cityData.fileContents[path]
+
+                // Try matching by normalized path (handles relative vs absolute)
+                if (!content) {
+                    const cleanPath = path.replace(/^[./\\]+/, '').replace(/\\/g, '/')
+                    const entries = cityData.fileContents instanceof Map
+                        ? [...cityData.fileContents.entries()]
+                        : Object.entries(cityData.fileContents)
+
+                    for (const [key, val] of entries) {
+                        const cleanKey = key.replace(/^[./\\]+/, '').replace(/\\/g, '/')
+                        if (cleanKey === cleanPath || cleanKey.endsWith(cleanPath) || cleanPath.endsWith(cleanKey)) {
+                            content = val
+                            break
+                        }
+                    }
+                }
+
+                if (content) {
                     set({ fileContent: { path, content, loading: false } })
                     return
                 }
-            } catch {
-                // Fall through to error
             }
-        }
 
-        set({ fileContent: { path, content: '// File content not available.\n// Re-analyze the repository to load source code.', loading: false } })
+            // Fallback: try fetching raw content from GitHub if it's a GitHub-sourced repo
+            if ((cityData?.source === 'github' || cityData?.source === 'github-client') && cityData?.name) {
+                const repoName = cityData.name
+                const cleanPath = path.replace(/^[./\\]+/, '').replace(/\\/g, '/')
+                const ref = cityData.branch || 'main'
+                const rawUrl = `https://raw.githubusercontent.com/${repoName}/${ref}/${cleanPath}`
+                try {
+                    const res = await fetch(rawUrl)
+                    if (res.ok) {
+                        const content = await res.text()
+                        set({ fileContent: { path, content, loading: false } })
+                        return
+                    }
+                } catch {
+                    // Fall through
+                }
+                // Try HEAD as last resort
+                try {
+                    const res2 = await fetch(`https://raw.githubusercontent.com/${repoName}/HEAD/${cleanPath}`)
+                    if (res2.ok) {
+                        const content = await res2.text()
+                        set({ fileContent: { path, content, loading: false } })
+                        return
+                    }
+                } catch {
+                    // Fall through to error
+                }
+            }
+
+            set({ fileContent: { path, content: null, loading: false, error: 'File content not available. Re-analyze the repository to load source code.' } })
+        } catch (err) {
+            // Safety net — never leave loading stuck
+            set({ fileContent: { path, content: null, loading: false, error: err.message || 'Failed to load file content.' } })
+        }
     },
 
     searchCode: (query) => {

@@ -197,8 +197,18 @@ function LoadingSkeleton() {
 
 export default function CodeViewer({ building, onClose }) {
     const fileContent = useStore(s => s.fileContent)
+    const fetchFileContent = useStore(s => s.fetchFileContent)
     const [copied, setCopied] = React.useState(false)
     const scrollRef = React.useRef(null)
+
+    // Self-fetch: ensure content is loaded for this building (don't rely solely on BuildingPanel)
+    React.useEffect(() => {
+        if (!building?.path) return
+        const fc = useStore.getState().fileContent
+        if (!fc || fc.path !== building.path || (!fc.content && !fc.loading && !fc.error)) {
+            fetchFileContent(building.path)
+        }
+    }, [building?.path, fetchFileContent])
 
     React.useEffect(() => {
         const handleKeyDown = (e) => { if (e.key === 'Escape') onClose() }
