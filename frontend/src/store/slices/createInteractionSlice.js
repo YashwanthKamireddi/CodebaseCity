@@ -26,12 +26,4 @@ export const createInteractionSlice = (set) => ({
 
     setHoveredBuilding: (building) => set({ hoveredBuilding: building }),
     focusDistrict: (district) => set({ focusedDistrict: district }),
-
-    // File content for BuildingPanel code viewer
-    fileContent: null,
-    fetchFileContent: (path) => {
-        set({ fileContent: { path, loading: true } })
-        // In demo mode, just mark as loaded with no content
-        set({ fileContent: { path, loading: false, content: '' } })
-    },
 })
