@@ -16,6 +16,9 @@ const MAX_ROAD_SEGMENTS = 1200
 const ROUNDABOUT_RADIUS = 9
 const MAX_ROUNDABOUTS = 40
 const MIN_RENDERABLE_SEGMENT = 18
+const ROAD_CLEARANCE = ROAD_WIDTH * 0.55 + 2
+const MAX_LOCAL_LANES_PER_AXIS = 3
+const MAX_DISTRICT_CONNECTORS = 80
 
 /* ═══════════════════════════════════════════════════════════════
    GLSL — Road Vertex
@@ -277,15 +280,43 @@ function computeCityBounds(buildings) {
     let gx0 = Infinity, gx1 = -Infinity, gz0 = Infinity, gz1 = -Infinity
     for (const b of buildings) {
         if (!b?.position) continue
-        const x = b.position.x
+        const halfW = (b.dimensions?.width || 8) / 2
+        const halfD = (b.dimensions?.depth || b.dimensions?.width || 8) / 2
+        const x0 = b.position.x - halfW
+        const x1 = b.position.x + halfW
         const z = b.position.z || 0
-        if (x < gx0) gx0 = x
-        if (x > gx1) gx1 = x
-        if (z < gz0) gz0 = z
-        if (z > gz1) gz1 = z
+        const z0 = z - halfD
+        const z1 = z + halfD
+        if (x0 < gx0) gx0 = x0
+        if (x1 > gx1) gx1 = x1
+        if (z0 < gz0) gz0 = z0
+        if (z1 > gz1) gz1 = z1
     }
     if (!Number.isFinite(gx0)) return null
     return { gx0, gx1, gz0, gz1 }
+}
+
+function computeBuildingFootprints(buildings) {
+    return buildings
+        .filter(b => b?.position)
+        .map((b) => {
+            const halfW = (b.dimensions?.width || 8) / 2
+            const halfD = (b.dimensions?.depth || b.dimensions?.width || 8) / 2
+            const x = b.position.x
+            const z = b.position.z || 0
+            return {
+                id: b.id,
+                districtId: b.district_id,
+                x0: x - halfW,
+                x1: x + halfW,
+                z0: z - halfD,
+                z1: z + halfD,
+                cx: x,
+                cz: z,
+                width: halfW * 2,
+                depth: halfD * 2,
+            }
+        })
 }
 
 function computeRoadHash(buildings, districts, bounds) {
@@ -297,7 +328,9 @@ function computeRoadHash(buildings, districts, bounds) {
         const b = buildings[i]
         const x = b?.position?.x || 0
         const z = b?.position?.z || 0
-        accum += Math.round(x * 31 + z * 17)
+        const w = b?.dimensions?.width || 0
+        const d = b?.dimensions?.depth || 0
+        accum += Math.round(x * 31 + z * 17 + w * 13 + d * 11)
     }
     return [
         n,
@@ -321,11 +354,22 @@ function computeDistrictBoxes(districts) {
         }
         if (!Number.isFinite(x0) || !Number.isFinite(z0)) return null
         return {
+            id: d.id,
             x0, x1, z0, z1,
             cx: (x0 + x1) / 2,
             cz: (z0 + z1) / 2,
         }
     }).filter(Boolean)
+}
+
+function groupFootprintsByDistrict(footprints) {
+    const grouped = new Map()
+    for (const footprint of footprints) {
+        if (!footprint.districtId) continue
+        if (!grouped.has(footprint.districtId)) grouped.set(footprint.districtId, [])
+        grouped.get(footprint.districtId).push(footprint)
+    }
+    return grouped
 }
 
 function pickLocalMinima(values, minGap) {
@@ -342,6 +386,146 @@ function pickCenteredLines(lines, center, maxLines) {
         .sort((a, b) => Math.abs(a - center) - Math.abs(b - center))
         .slice(0, maxLines)
         .sort((a, b) => a - b)
+}
+
+function mergeIntervals(intervals, tol = 6) {
+    if (!intervals.length) return []
+    const sorted = [...intervals].sort((a, b) => a[0] - b[0])
+    const merged = [sorted[0].slice()]
+    for (let i = 1; i < sorted.length; i++) {
+        const curr = sorted[i]
+        const last = merged[merged.length - 1]
+        if (curr[0] <= last[1] + tol) {
+            last[1] = Math.max(last[1], curr[1])
+        } else {
+            merged.push(curr.slice())
+        }
+    }
+    return merged
+}
+
+function subtractBlockedIntervals(span0, span1, blocked) {
+    let free = [[Math.min(span0, span1), Math.max(span0, span1)]]
+    for (const [block0, block1] of mergeIntervals(blocked, 4)) {
+        const next = []
+        for (const [free0, free1] of free) {
+            if (block1 <= free0 || block0 >= free1) {
+                next.push([free0, free1])
+                continue
+            }
+            if (block0 > free0) next.push([free0, Math.min(block0, free1)])
+            if (block1 < free1) next.push([Math.max(block1, free0), free1])
+        }
+        free = next
+        if (!free.length) break
+    }
+    return free.filter(([a, b]) => b - a >= MIN_RENDERABLE_SEGMENT)
+}
+
+function corridorBlockedIntervals(axis, coord, footprints, clearance) {
+    const blocked = []
+    for (const fp of footprints) {
+        if (axis === 'z') {
+            if (coord >= fp.x0 - clearance && coord <= fp.x1 + clearance) {
+                blocked.push([fp.z0 - clearance, fp.z1 + clearance])
+            }
+        } else if (coord >= fp.z0 - clearance && coord <= fp.z1 + clearance) {
+            blocked.push([fp.x0 - clearance, fp.x1 + clearance])
+        }
+    }
+    return blocked
+}
+
+function clipCandidateByFootprints(candidate, footprints, clearance = ROAD_CLEARANCE) {
+    const blocked = corridorBlockedIntervals(candidate.axis, candidate.coord, footprints, clearance)
+    const freeIntervals = subtractBlockedIntervals(candidate.span0, candidate.span1, blocked)
+    return freeIntervals.map(([from, to]) => candidate.axis === 'z'
+        ? {
+            start: [candidate.coord, ROAD_Y, from],
+            end: [candidate.coord, ROAD_Y, to],
+            axis: 'z',
+            isMainAvenue: false,
+            kind: candidate.kind,
+        }
+        : {
+            start: [from, ROAD_Y, candidate.coord],
+            end: [to, ROAD_Y, candidate.coord],
+            axis: 'x',
+            isMainAvenue: false,
+            kind: candidate.kind,
+        })
+}
+
+function clusterBuildingLanes(footprints, axis) {
+    const lanes = []
+    const sorted = [...footprints].sort((a, b) => (axis === 'x' ? a.cx - b.cx : a.cz - b.cz))
+    for (const fp of sorted) {
+        const center = axis === 'x' ? fp.cx : fp.cz
+        const half = axis === 'x' ? fp.width / 2 : fp.depth / 2
+        const last = lanes[lanes.length - 1]
+        if (last && Math.abs(last.center - center) <= Math.max(6, Math.min(last.half, half) * 0.65)) {
+            last.center = (last.center * last.count + center) / (last.count + 1)
+            last.half = Math.max(last.half, half)
+            last.count += 1
+        } else {
+            lanes.push({ center, half, count: 1 })
+        }
+    }
+    return lanes
+}
+
+function buildInternalDistrictCandidates(boxes, footprintsByDistrict) {
+    const candidates = []
+    for (const box of boxes) {
+        const districtFootprints = footprintsByDistrict.get(box.id) || []
+        if (districtFootprints.length < 4) continue
+
+        const xLanes = clusterBuildingLanes(districtFootprints, 'x')
+        const zLanes = clusterBuildingLanes(districtFootprints, 'z')
+
+        const vertical = []
+        for (let i = 0; i < xLanes.length - 1; i++) {
+            const left = xLanes[i]
+            const right = xLanes[i + 1]
+            const gapStart = left.center + left.half
+            const gapEnd = right.center - right.half
+            if (gapEnd - gapStart >= ROAD_WIDTH + 4) {
+                vertical.push((gapStart + gapEnd) / 2)
+            }
+        }
+
+        const horizontal = []
+        for (let i = 0; i < zLanes.length - 1; i++) {
+            const bottom = zLanes[i]
+            const top = zLanes[i + 1]
+            const gapStart = bottom.center + bottom.half
+            const gapEnd = top.center - top.half
+            if (gapEnd - gapStart >= ROAD_WIDTH + 4) {
+                horizontal.push((gapStart + gapEnd) / 2)
+            }
+        }
+
+        for (const x of pickCenteredLines(pickLocalMinima(vertical, ROAD_WIDTH), box.cx, MAX_LOCAL_LANES_PER_AXIS)) {
+            candidates.push({
+                axis: 'z',
+                coord: x,
+                span0: box.z0 - 6,
+                span1: box.z1 + 6,
+                kind: 'grid',
+            })
+        }
+
+        for (const z of pickCenteredLines(pickLocalMinima(horizontal, ROAD_WIDTH), box.cz, MAX_LOCAL_LANES_PER_AXIS)) {
+            candidates.push({
+                axis: 'x',
+                coord: z,
+                span0: box.x0 - 6,
+                span1: box.x1 + 6,
+                kind: 'grid',
+            })
+        }
+    }
+    return candidates
 }
 
 function segmentLength(seg) {
@@ -419,7 +603,7 @@ function buildFallbackGrid(buildings, bounds, pad) {
 }
 
 function buildDistrictConnectors(boxes, bounds, pad) {
-    const segments = []
+    const candidates = []
     const cityW = Math.max(1, bounds.gx1 - bounds.gx0)
     const cityH = Math.max(1, bounds.gz1 - bounds.gz0)
     const maxGapX = cityW * 0.28
@@ -446,11 +630,11 @@ function buildDistrictConnectors(boxes, bounds, pad) {
             const roadZ0 = Math.max(a.z0, bestRight.b.z0) - 6
             const roadZ1 = Math.min(a.z1, bestRight.b.z1) + 6
             if (roadZ1 - roadZ0 >= MIN_RENDERABLE_SEGMENT) {
-                segments.push({
-                    start: [roadX, ROAD_Y, roadZ0],
-                    end: [roadX, ROAD_Y, roadZ1],
+                candidates.push({
                     axis: 'z',
-                    isMainAvenue: false,
+                    coord: roadX,
+                    span0: roadZ0,
+                    span1: roadZ1,
                     kind: 'connector',
                 })
             }
@@ -474,24 +658,60 @@ function buildDistrictConnectors(boxes, bounds, pad) {
             const roadX0 = Math.max(a.x0, bestUp.b.x0) - 6
             const roadX1 = Math.min(a.x1, bestUp.b.x1) + 6
             if (roadX1 - roadX0 >= MIN_RENDERABLE_SEGMENT) {
-                segments.push({
-                    start: [roadX0, ROAD_Y, roadZ],
-                    end: [roadX1, ROAD_Y, roadZ],
+                candidates.push({
                     axis: 'x',
-                    isMainAvenue: false,
+                    coord: roadZ,
+                    span0: roadX0,
+                    span1: roadX1,
                     kind: 'connector',
                 })
             }
         }
     }
 
-    // Perimeter boulevard
-    segments.push(
+    return candidates.slice(0, MAX_DISTRICT_CONNECTORS)
+}
+
+function buildPerimeterSegments(bounds, pad) {
+    return [
         { start: [bounds.gx0 - pad, ROAD_Y, bounds.gz0 - pad], end: [bounds.gx1 + pad, ROAD_Y, bounds.gz0 - pad], axis: 'x', isMainAvenue: false, kind: 'perimeter' },
         { start: [bounds.gx0 - pad, ROAD_Y, bounds.gz1 + pad], end: [bounds.gx1 + pad, ROAD_Y, bounds.gz1 + pad], axis: 'x', isMainAvenue: false, kind: 'perimeter' },
         { start: [bounds.gx0 - pad, ROAD_Y, bounds.gz0 - pad], end: [bounds.gx0 - pad, ROAD_Y, bounds.gz1 + pad], axis: 'z', isMainAvenue: false, kind: 'perimeter' },
         { start: [bounds.gx1 + pad, ROAD_Y, bounds.gz0 - pad], end: [bounds.gx1 + pad, ROAD_Y, bounds.gz1 + pad], axis: 'z', isMainAvenue: false, kind: 'perimeter' },
-    )
+    ]
+}
+
+function markPrimaryAvenues(segments, bounds) {
+    const centerX = (bounds.gx0 + bounds.gx1) / 2
+    const centerZ = (bounds.gz0 + bounds.gz1) / 2
+    const grouped = new Map()
+
+    for (const seg of segments) {
+        if (seg.kind === 'perimeter') continue
+        const coord = seg.axis === 'x' ? seg.start[2] : seg.start[0]
+        const key = `${seg.axis}:${Math.round(coord / 4) * 4}`
+        const entry = grouped.get(key) || { axis: seg.axis, coord, total: 0, segs: [] }
+        entry.total += segmentLength(seg)
+        entry.segs.push(seg)
+        grouped.set(key, entry)
+    }
+
+    const byAxis = { x: [], z: [] }
+    for (const entry of grouped.values()) {
+        const centerDist = Math.abs(entry.axis === 'x' ? entry.coord - centerZ : entry.coord - centerX)
+        entry.score = entry.total - centerDist * 0.35
+        byAxis[entry.axis].push(entry)
+    }
+
+    for (const axis of ['x', 'z']) {
+        byAxis[axis].sort((a, b) => b.score - a.score)
+        const winner = byAxis[axis][0]
+        if (!winner) continue
+        for (const seg of winner.segs) {
+            seg.isMainAvenue = true
+            seg.kind = 'main'
+        }
+    }
 
     return segments
 }
@@ -531,89 +751,6 @@ function computeIntersections(segments) {
     return out.slice(0, MAX_ROUNDABOUTS)
 }
 
-function clipSegmentsByIntersections(segments, intersections) {
-    const gap = ROUNDABOUT_RADIUS + 1
-    const clippedSegments = []
-
-    for (const seg of segments) {
-        if (seg.kind === 'perimeter' || !seg.isMainAvenue) {
-            clippedSegments.push(seg)
-            continue
-        }
-
-        const clips = []
-        for (const pt of intersections) {
-            if (seg.axis === 'x') {
-                if (Math.abs(seg.start[2] - pt.z) < 2) clips.push(pt.x)
-            } else if (Math.abs(seg.start[0] - pt.x) < 2) {
-                clips.push(pt.z)
-            }
-        }
-
-        if (!clips.length) {
-            clippedSegments.push(seg)
-            continue
-        }
-
-        clips.sort((a, b) => a - b)
-        const isX = seg.axis === 'x'
-        let prev = isX ? Math.min(seg.start[0], seg.end[0]) : Math.min(seg.start[2], seg.end[2])
-        const segEnd = isX ? Math.max(seg.start[0], seg.end[0]) : Math.max(seg.start[2], seg.end[2])
-
-        const uniqueClips = []
-        for (const c of clips) {
-            if (!uniqueClips.length || Math.abs(uniqueClips[uniqueClips.length - 1] - c) > 6) {
-                uniqueClips.push(c)
-            }
-        }
-
-        for (const c of uniqueClips) {
-            if (c - gap > prev + 5) {
-                if (isX) {
-                    clippedSegments.push({
-                        start: [prev, ROAD_Y, seg.start[2]],
-                        end: [c - gap, ROAD_Y, seg.start[2]],
-                        axis: 'x',
-                        isMainAvenue: seg.isMainAvenue,
-                        kind: seg.kind,
-                    })
-                } else {
-                    clippedSegments.push({
-                        start: [seg.start[0], ROAD_Y, prev],
-                        end: [seg.start[0], ROAD_Y, c - gap],
-                        axis: 'z',
-                        isMainAvenue: seg.isMainAvenue,
-                        kind: seg.kind,
-                    })
-                }
-            }
-            prev = c + gap
-        }
-
-        if (segEnd > prev + 5) {
-            if (isX) {
-                clippedSegments.push({
-                    start: [prev, ROAD_Y, seg.start[2]],
-                    end: [segEnd, ROAD_Y, seg.start[2]],
-                    axis: 'x',
-                    isMainAvenue: seg.isMainAvenue,
-                    kind: seg.kind,
-                })
-            } else {
-                clippedSegments.push({
-                    start: [seg.start[0], ROAD_Y, prev],
-                    end: [seg.start[0], ROAD_Y, segEnd],
-                    axis: 'z',
-                    isMainAvenue: seg.isMainAvenue,
-                    kind: seg.kind,
-                })
-            }
-        }
-    }
-
-    return clippedSegments.filter(seg => isRenderableSegment(seg, 10))
-}
-
 function computeRoadGrid(buildings, districts) {
     if (!buildings?.length) return { segments: [], intersections: [] }
 
@@ -626,29 +763,37 @@ function computeRoadGrid(buildings, districts) {
     const cityW = Math.max(1, bounds.gx1 - bounds.gx0)
     const cityH = Math.max(1, bounds.gz1 - bounds.gz0)
     const pad = Math.max(cityW, cityH) * 0.08
-    const cx = (bounds.gx0 + bounds.gx1) / 2
-    const cz = (bounds.gz0 + bounds.gz1) / 2
-
-    const segments = [
-        { start: [bounds.gx0 - pad, ROAD_Y, cz], end: [bounds.gx1 + pad, ROAD_Y, cz], axis: 'x', isMainAvenue: true, kind: 'main' },
-        { start: [cx, ROAD_Y, bounds.gz0 - pad], end: [cx, ROAD_Y, bounds.gz1 + pad], axis: 'z', isMainAvenue: true, kind: 'main' },
-    ]
-
+    const footprints = computeBuildingFootprints(buildings)
+    const groupedFootprints = groupFootprintsByDistrict(footprints)
     const boxes = computeDistrictBoxes(districts)
+
+    const rawCandidates = []
     if (boxes.length >= 2) {
-        segments.push(...buildDistrictConnectors(boxes, bounds, pad))
-    } else {
-        segments.push(...buildFallbackGrid(buildings, bounds, pad))
+        rawCandidates.push(...buildDistrictConnectors(boxes, bounds, pad))
+        rawCandidates.push(...buildInternalDistrictCandidates(boxes, groupedFootprints))
     }
 
+    if (rawCandidates.length < 4) {
+        rawCandidates.push(...buildFallbackGrid(buildings, bounds, pad).map((seg) => seg.axis === 'z'
+            ? { axis: 'z', coord: seg.start[0], span0: seg.start[2], span1: seg.end[2], kind: seg.kind }
+            : { axis: 'x', coord: seg.start[2], span0: seg.start[0], span1: seg.end[0], kind: seg.kind }
+        ))
+    }
+
+    const clippedCandidates = rawCandidates.flatMap((candidate) => clipCandidateByFootprints(candidate, footprints))
+    const segments = [...buildPerimeterSegments(bounds, pad), ...clippedCandidates]
+
     // Merge only true contiguous lanes, not distant parallel roads.
-    const mergedSegments = deduplicateSegments(segments, 10).filter(seg => isRenderableSegment(seg))
+    const mergedSegments = markPrimaryAvenues(
+        deduplicateSegments(segments, 8).filter(seg => seg.kind === 'perimeter' || isRenderableSegment(seg)),
+        bounds,
+    )
     const intersections = computeIntersections(mergedSegments)
-    const clippedSegments = prioritizeSegments(clipSegmentsByIntersections(mergedSegments, intersections))
+    const prioritizedSegments = prioritizeSegments(mergedSegments)
 
     _lastBuildingHash = hash
     _cachedRoadGrid = {
-        segments: clippedSegments.slice(0, MAX_ROAD_SEGMENTS),
+        segments: prioritizedSegments.slice(0, MAX_ROAD_SEGMENTS),
         intersections,
     }
     return _cachedRoadGrid
