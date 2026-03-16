@@ -68,7 +68,7 @@ export default function BuildingPanel({ building }) {
                     animation: 'anim-slide-right-enter 0.25s cubic-bezier(0.32, 0.72, 0, 1) both',
                 }}
             >
-                {/* HEADER: File Identity */}}
+                {/* HEADER: File Identity */}
                 <div style={{
                     padding: '24px',
                     borderBottom: '1px solid var(--glass-border)',

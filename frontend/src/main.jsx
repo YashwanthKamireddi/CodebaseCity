@@ -6,6 +6,18 @@ import './index.css'
 import './shared/animations/animations.css'
 import { ErrorBoundary } from './shared/ui/ErrorBoundary'
 
+function initAnalytics() {
+    const analyticsDomain = import.meta.env.VITE_ANALYTICS_DOMAIN
+    if (!analyticsDomain || document.querySelector('script[data-codebase-analytics="plausible"]')) return
+
+    const script = document.createElement('script')
+    script.defer = true
+    script.dataset.domain = analyticsDomain
+    script.dataset.codebaseAnalytics = 'plausible'
+    script.src = 'https://plausible.io/js/script.js'
+    document.head.appendChild(script)
+}
+
 // Initialize Sentry only when a DSN is provided via VITE_SENTRY_DSN env variable.
 // Set the variable in .env.production (never commit the DSN to source control).
 if (import.meta.env.VITE_SENTRY_DSN) {
@@ -24,6 +36,8 @@ if (import.meta.env.VITE_SENTRY_DSN) {
         ],
     })
 }
+
+initAnalytics()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>

@@ -193,9 +193,9 @@ export default function EmptyCityHero() {
                     position: absolute; inset: 0; pointer-events: none;
                     background:
                         radial-gradient(ellipse 80% 60% at 50% 50%,
-                            rgba(0,0,0,0.3) 0%,
-                            rgba(0,0,0,0.65) 45%,
-                            rgba(0,0,0,0.88) 100%
+                            rgba(3,5,10,0.56) 0%,
+                            rgba(4,6,12,0.78) 45%,
+                            rgba(0,0,0,0.93) 100%
                         );
                 }
 
@@ -226,17 +226,23 @@ export default function EmptyCityHero() {
                     pointer-events: auto;
                     display: flex; flex-direction: column;
                     align-items: center; text-align: center;
-                    max-width: 640px; padding: 0 32px;
+                    max-width: 680px; padding: 40px 32px;
+                    background: linear-gradient(180deg, rgba(8, 12, 22, 0.76), rgba(6, 8, 16, 0.68));
+                    border: 1px solid rgba(255,255,255,0.12);
+                    border-radius: 28px;
+                    box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+                    backdrop-filter: blur(14px);
+                    -webkit-backdrop-filter: blur(14px);
                 }
 
                 .lp-kicker {
                     margin: 0 0 20px;
                     font-size: 0.7rem; font-family: var(--font-mono);
                     text-transform: uppercase; letter-spacing: 0.2em;
-                    color: rgba(255,255,255,0.5); font-weight: 500;
+                    color: rgba(255,255,255,0.76); font-weight: 600;
                     padding: 6px 14px;
-                    background: rgba(255,255,255,0.06);
-                    border: 1px solid rgba(255,255,255,0.08);
+                    background: rgba(255,255,255,0.1);
+                    border: 1px solid rgba(255,255,255,0.14);
                     border-radius: 20px;
                 }
 
@@ -256,9 +262,9 @@ export default function EmptyCityHero() {
                 .lp-desc {
                     margin: 0 0 36px;
                     font-size: 1rem; line-height: 1.7;
-                    color: rgba(255,255,255,0.65);
+                    color: rgba(255,255,255,0.82);
                     font-weight: 400;
-                    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+                    text-shadow: 0 2px 14px rgba(0,0,0,0.55);
                     max-width: 480px;
                 }
 
@@ -338,25 +344,27 @@ export default function EmptyCityHero() {
 
                 /* ── GitHub input ─── */
                 .lp-gh-wrap {
-                    width: 100%; max-width: 400px; overflow: hidden;
+                    width: 100%; max-width: 420px; overflow: hidden;
+                    margin-top: 16px;
                 }
                 .lp-gh-row {
                     display: flex; align-items: center; gap: 10px;
                     padding: 6px 6px 6px 16px;
-                    background: rgba(255,255,255,0.06);
-                    border: 1px solid rgba(255,255,255,0.12);
+                    background: rgba(9, 14, 26, 0.82);
+                    border: 1px solid rgba(255,255,255,0.2);
                     border-radius: 10px;
                     backdrop-filter: blur(12px);
                     -webkit-backdrop-filter: blur(12px);
+                    box-shadow: 0 10px 24px rgba(0,0,0,0.28);
                 }
-                .lp-gh-icon { color: rgba(255,255,255,0.4); flex-shrink: 0; }
+                .lp-gh-icon { color: rgba(255,255,255,0.72); flex-shrink: 0; }
                 .lp-gh-input {
                     flex: 1; min-width: 0; border: none; outline: none;
                     background: transparent; padding: 10px 0;
-                    color: #fff; font-size: 0.875rem;
+                    color: rgba(255,255,255,0.98); font-size: 0.92rem;
                     font-family: var(--font-mono);
                 }
-                .lp-gh-input::placeholder { color: rgba(255,255,255,0.35); }
+                .lp-gh-input::placeholder { color: rgba(255,255,255,0.62); }
                 .lp-gh-go {
                     width: 36px; height: 36px; flex-shrink: 0;
                     display: flex; align-items: center; justify-content: center;
@@ -376,8 +384,9 @@ export default function EmptyCityHero() {
                 }
                 .lp-gh-hint {
                     margin: 8px 0 0; text-align: center;
-                    font-size: 0.7rem; color: rgba(255,255,255,0.35);
+                    font-size: 0.72rem; color: rgba(255,255,255,0.72);
                     font-family: var(--font-mono);
+                    line-height: 1.5;
                 }
                 .lp-token-toggle {
                     display: flex; align-items: center; gap: 6px;
@@ -385,17 +394,17 @@ export default function EmptyCityHero() {
                     margin: 6px auto 0; padding: 4px 10px;
                     background: none; border: none;
                     font-size: 0.65rem; font-family: var(--font-mono);
-                    color: rgba(255,255,255,0.35); cursor: pointer;
+                    color: rgba(255,255,255,0.7); cursor: pointer;
                     transition: color 0.2s;
                 }
-                .lp-token-toggle:hover { color: rgba(255,255,255,0.6); }
+                .lp-token-toggle:hover { color: rgba(255,255,255,0.92); }
                 .lp-token-wrap { overflow: hidden; margin-top: 8px; }
                 .lp-link {
-                    color: rgba(255,255,255,0.55);
+                    color: rgba(255,255,255,0.9);
                     text-decoration: underline;
                     text-underline-offset: 2px;
                 }
-                .lp-link:hover { color: rgba(255,255,255,0.8); }
+                .lp-link:hover { color: #ffffff; }
 
                 /* ── Error Message - Premium Styling ─── */
                 .lp-err {
@@ -419,7 +428,7 @@ export default function EmptyCityHero() {
                     padding: 20px 32px;
                     display: flex; align-items: center; justify-content: center;
                     gap: 16px; pointer-events: none;
-                    font-size: 0.7rem; color: rgba(255,255,255,0.35);
+                    font-size: 0.7rem; color: rgba(255,255,255,0.62);
                     font-family: var(--font-mono); letter-spacing: 0.02em;
                 }
                 .lp-dot {
@@ -428,11 +437,11 @@ export default function EmptyCityHero() {
                 }
                 .lp-footer kbd {
                     padding: 3px 7px;
-                    background: rgba(255,255,255,0.08);
-                    border: 1px solid rgba(255,255,255,0.1);
+                    background: rgba(255,255,255,0.14);
+                    border: 1px solid rgba(255,255,255,0.18);
                     border-radius: 4px;
                     font-size: 0.65rem; font-family: var(--font-mono);
-                    color: rgba(255,255,255,0.5);
+                    color: rgba(255,255,255,0.86);
                 }
 
                 /* ── Mobile Responsive ─── */
@@ -444,8 +453,10 @@ export default function EmptyCityHero() {
                         padding: calc(env(safe-area-inset-top, 0) + 16px) 20px 16px;
                     }
                     .lp-center {
-                        padding: 0 24px;
+                        padding: 28px 22px;
                         max-width: 100%;
+                        margin: 0 16px;
+                        border-radius: 24px;
                     }
                     .lp-heading {
                         font-size: clamp(1.8rem, 8vw, 2.8rem);
@@ -457,7 +468,7 @@ export default function EmptyCityHero() {
                     .lp-desc {
                         font-size: 0.9rem;
                         line-height: 1.6;
-                        color: rgba(255,255,255,0.6);
+                        color: rgba(255,255,255,0.8);
                     }
                     .lp-desc br {
                         display: none;

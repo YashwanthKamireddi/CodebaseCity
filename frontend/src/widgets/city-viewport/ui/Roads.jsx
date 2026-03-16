@@ -12,9 +12,10 @@ import useStore from '../../../store/useStore'
 
 const ROAD_Y = 0.02
 const ROAD_WIDTH = 14
-const MAX_ROAD_SEGMENTS = 300
+const MAX_ROAD_SEGMENTS = 1200
 const ROUNDABOUT_RADIUS = 9
 const MAX_ROUNDABOUTS = 40
+const MIN_RENDERABLE_SEGMENT = 18
 
 /* ═══════════════════════════════════════════════════════════════
    GLSL — Road Vertex
@@ -349,6 +350,26 @@ function segmentLength(seg) {
         : Math.abs(seg.end[2] - seg.start[2])
 }
 
+function isRenderableSegment(seg, minLength = MIN_RENDERABLE_SEGMENT) {
+    return segmentLength(seg) >= minLength
+}
+
+function prioritizeSegments(segments) {
+    const kindWeight = {
+        perimeter: 4,
+        main: 3,
+        connector: 2,
+        grid: 1,
+    }
+
+    return [...segments].sort((a, b) => {
+        const weightDiff = (kindWeight[b.kind] || 0) - (kindWeight[a.kind] || 0)
+        if (weightDiff !== 0) return weightDiff
+        if (a.isMainAvenue !== b.isMainAvenue) return Number(b.isMainAvenue) - Number(a.isMainAvenue)
+        return segmentLength(b) - segmentLength(a)
+    })
+}
+
 function buildFallbackGrid(buildings, bounds, pad) {
     const n = buildings.length
     const cityW = Math.max(1, bounds.gx1 - bounds.gx0)
@@ -424,13 +445,15 @@ function buildDistrictConnectors(boxes, bounds, pad) {
             const roadX = (a.x1 + bestRight.b.x0) / 2
             const roadZ0 = Math.max(a.z0, bestRight.b.z0) - 6
             const roadZ1 = Math.min(a.z1, bestRight.b.z1) + 6
-            segments.push({
-                start: [roadX, ROAD_Y, roadZ0],
-                end: [roadX, ROAD_Y, roadZ1],
-                axis: 'z',
-                isMainAvenue: false,
-                kind: 'connector',
-            })
+            if (roadZ1 - roadZ0 >= MIN_RENDERABLE_SEGMENT) {
+                segments.push({
+                    start: [roadX, ROAD_Y, roadZ0],
+                    end: [roadX, ROAD_Y, roadZ1],
+                    axis: 'z',
+                    isMainAvenue: false,
+                    kind: 'connector',
+                })
+            }
         }
 
         // nearest upper neighbor with overlap in X
@@ -450,13 +473,15 @@ function buildDistrictConnectors(boxes, bounds, pad) {
             const roadZ = (a.z1 + bestUp.b.z0) / 2
             const roadX0 = Math.max(a.x0, bestUp.b.x0) - 6
             const roadX1 = Math.min(a.x1, bestUp.b.x1) + 6
-            segments.push({
-                start: [roadX0, ROAD_Y, roadZ],
-                end: [roadX1, ROAD_Y, roadZ],
-                axis: 'x',
-                isMainAvenue: false,
-                kind: 'connector',
-            })
+            if (roadX1 - roadX0 >= MIN_RENDERABLE_SEGMENT) {
+                segments.push({
+                    start: [roadX0, ROAD_Y, roadZ],
+                    end: [roadX1, ROAD_Y, roadZ],
+                    axis: 'x',
+                    isMainAvenue: false,
+                    kind: 'connector',
+                })
+            }
         }
     }
 
@@ -511,7 +536,7 @@ function clipSegmentsByIntersections(segments, intersections) {
     const clippedSegments = []
 
     for (const seg of segments) {
-        if (seg.kind === 'perimeter') {
+        if (seg.kind === 'perimeter' || !seg.isMainAvenue) {
             clippedSegments.push(seg)
             continue
         }
@@ -586,7 +611,7 @@ function clipSegmentsByIntersections(segments, intersections) {
         }
     }
 
-    return clippedSegments
+    return clippedSegments.filter(seg => isRenderableSegment(seg, 10))
 }
 
 function computeRoadGrid(buildings, districts) {
@@ -617,9 +642,9 @@ function computeRoadGrid(buildings, districts) {
     }
 
     // Merge only true contiguous lanes, not distant parallel roads.
-    const mergedSegments = deduplicateSegments(segments, 10)
+    const mergedSegments = deduplicateSegments(segments, 10).filter(seg => isRenderableSegment(seg))
     const intersections = computeIntersections(mergedSegments)
-    const clippedSegments = clipSegmentsByIntersections(mergedSegments, intersections)
+    const clippedSegments = prioritizeSegments(clipSegmentsByIntersections(mergedSegments, intersections))
 
     _lastBuildingHash = hash
     _cachedRoadGrid = {
@@ -712,7 +737,8 @@ export default React.memo(function Roads() {
         const geos = []
         for (const pt of intersections) {
             const ring = new THREE.CircleGeometry(ROUNDABOUT_RADIUS, segs)
-            ring.translate(pt.x, pt.z, 0) // Will be rotated -90° on X
+            ring.rotateX(-Math.PI / 2)
+            ring.translate(pt.x, ROAD_Y + 0.01, pt.z)
             geos.push(ring)
         }
         const merged = mergeSimpleGeometries(geos)
@@ -755,10 +781,16 @@ export default React.memo(function Roads() {
 
     useEffect(() => () => {
         if (mergedGeometry) mergedGeometry.dispose()
+    }, [mergedGeometry])
+
+    useEffect(() => () => {
         if (roundaboutGeo) roundaboutGeo.dispose()
+    }, [roundaboutGeo])
+
+    useEffect(() => () => {
         roadMaterial.dispose()
         roundaboutMaterial.dispose()
-    }, [mergedGeometry, roundaboutGeo, roadMaterial, roundaboutMaterial])
+    }, [roadMaterial, roundaboutMaterial])
 
     if (!mergedGeometry) return null
 
@@ -769,8 +801,6 @@ export default React.memo(function Roads() {
                 <mesh
                     geometry={roundaboutGeo}
                     material={roundaboutMaterial}
-                    rotation={[-Math.PI / 2, 0, 0]}
-                    position={[0, ROAD_Y + 0.01, 0]}
                     raycast={() => null}
                 />
             )}

@@ -26,10 +26,10 @@ describe('createUISlice — initial state', () => {
     expect(result.current.colorMode).toBe('default')
   })
 
-  it('has showRoads=false', async () => {
+  it('has showRoads=true', async () => {
     const useStore = await freshStore()
     const { result } = renderHook(() => useStore())
-    expect(result.current.showRoads).toBe(false)
+    expect(result.current.showRoads).toBe(true)
   })
 
   it('has commandPaletteOpen=false', async () => {
@@ -53,10 +53,10 @@ describe('createUISlice — actions', () => {
     const { result } = renderHook(() => useStore())
 
     act(() => result.current.toggleRoads())
-    expect(result.current.showRoads).toBe(true)
+    expect(result.current.showRoads).toBe(false)
 
     act(() => result.current.toggleRoads())
-    expect(result.current.showRoads).toBe(false)
+    expect(result.current.showRoads).toBe(true)
   })
 
   it('setColorMode updates colorMode', async () => {

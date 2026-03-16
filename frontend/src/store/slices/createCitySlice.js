@@ -194,7 +194,9 @@ export const createCitySlice = (set, get) => ({
                 const res = await ghFetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`)
                 repoData = res.data
             } catch (err) {
-                if (err.message === 'not_found') throw new Error(`Repository "${owner}/${repo}" not found. Make sure it's public.`)
+                if (err.message === 'not_found') {
+                    throw new Error(`Repository "${owner}/${repo}" not found. Make sure it's public.`, { cause: err })
+                }
                 throw err
             }
             const branch = repoData.default_branch || 'main'

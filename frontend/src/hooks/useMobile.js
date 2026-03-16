@@ -149,7 +149,7 @@ export function useSafeAreaInsets() {
 
     useEffect(() => {
         const computeInsets = () => {
-            const style = getComputedStyle(document.documentElement)
+            const style = window.getComputedStyle(document.documentElement)
             setInsets({
                 top: parseInt(style.getPropertyValue('--safe-top') || '0', 10),
                 bottom: parseInt(style.getPropertyValue('--safe-bottom') || '0', 10),

@@ -147,10 +147,10 @@ describe('colorUtils', () => {
         const building = { ...mockBuilding, color_metric: 0.5 }
         const color = getBuildingColor(building, 'default', {})
         expect(color).toMatch(/^#[0-9a-f]{6}$/)
-        // metric=0.5 is mid-range → should be in violet area
+        // metric=0.5 is mid-range → should sit near the legend middle, not the blue edge
         const midBuilding = { ...mockBuilding, color_metric: 0.0 }
-        const cyanColor = getBuildingColor(midBuilding, 'default', {})
-        expect(cyanColor).toBe('#00e5ff') // metric=0 → cyan
+        const smallColor = getBuildingColor(midBuilding, 'default', {})
+        expect(smallColor).toBe('#3b9eff')
       })
     })
   })

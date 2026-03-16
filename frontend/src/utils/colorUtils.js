@@ -152,13 +152,13 @@ export function getBuildingColor(data, mode, context = {}) {
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // DEFAULT MODE — Multi-stop cyberpunk gradient
-    // Cyan (tiny) → Blue → Violet → Magenta → Orange → Rose (massive)
-    // Uses color_metric (log-normalized 0-1) for even distribution.
+    // DEFAULT MODE — Legend-aligned size gradient
+    // Blue (small) → Green → Gold → Red (huge)
+    // Uses color_metric (rank-normalized 0-1) for even distribution.
     // ═══════════════════════════════════════════════════════════════
 
     // color_metric is rank-normalized (0-1) computed at city load time.
-    // Smallest file = 0 (cyan), largest file = 1 (rose), evenly distributed.
+    // Smallest file = 0 (blue), largest file = 1 (red), evenly distributed.
     // Fallback: simple height-based ratio for edge cases.
     if (data.color_metric != null) return metricToHex(data.color_metric)
     const h = data.dimensions?.height || 8

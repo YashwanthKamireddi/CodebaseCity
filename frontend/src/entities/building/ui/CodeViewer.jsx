@@ -225,7 +225,7 @@ function VirtualizedCode({ lines, gutterWidth }) {
         if (!el) return
         const measure = () => setContainerHeight(el.clientHeight)
         measure()
-        const ro = new ResizeObserver(measure)
+        const ro = new window.ResizeObserver(measure)
         ro.observe(el)
         return () => ro.disconnect()
     }, [])
