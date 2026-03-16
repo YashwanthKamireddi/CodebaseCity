@@ -1,12 +1,27 @@
-import React, { useEffect } from 'react'
-import { useThree } from '@react-three/fiber'
+import React, { useEffect, useRef, useCallback } from 'react'
+import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import gsap from 'gsap'
 import useStore from '../../../store/useStore'
 import logger from '../../../utils/logger'
 
-export default function CameraController() {
-    const { camera, controls } = useThree()
+// Module-level animation state — mutated by effects, consumed by useFrame
+const _anim = {
+    active: false,
+    startPos: new THREE.Vector3(),
+    endPos: new THREE.Vector3(),
+    startTarget: new THREE.Vector3(),
+    endTarget: new THREE.Vector3(),
+    duration: 1.0,
+    startTime: 0,
+}
+
+/** power3.inOut easing equivalent */
+function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+}
+
+export default React.memo(function CameraController() {
+    const { camera, controls, invalidate, clock } = useThree()
     const cityData = useStore(s => s.cityData)
     const cityMeshRef = useStore(s => s.cityMeshRef)
 
@@ -38,12 +53,38 @@ export default function CameraController() {
 
     const { cx, cz, radius: cityRadius, maxHeight } = cityBounds
 
+    /** Start a smooth camera animation — cancels any in-flight animation */
+    const animateTo = useCallback((targetPos, lookAtPos, duration) => {
+        _anim.startPos.copy(camera.position)
+        _anim.endPos.copy(targetPos)
+        _anim.startTarget.copy(controls?.target || new THREE.Vector3())
+        _anim.endTarget.copy(lookAtPos)
+        _anim.duration = duration
+        _anim.startTime = clock.elapsedTime
+        _anim.active = true
+    }, [camera, controls, clock])
+
+    // useFrame drives all camera animations — replaces GSAP
+    useFrame(() => {
+        if (!_anim.active || !controls) return
+
+        const elapsed = clock.elapsedTime - _anim.startTime
+        const raw = Math.min(1, elapsed / _anim.duration)
+        const t = easeInOutCubic(raw)
+
+        camera.position.lerpVectors(_anim.startPos, _anim.endPos, t)
+        controls.target.lerpVectors(_anim.startTarget, _anim.endTarget, t)
+        controls.update()
+        invalidate()
+
+        if (raw >= 1) _anim.active = false
+    })
+
     useEffect(() => {
         const handleFlyTo = (event) => {
             const { building } = event.detail
             if (!building) return
 
-            // STATIC TARGETING
             const x = building.position.x
             const z = building.position.z
             const rawHeight = building.dimensions?.height || 8
@@ -51,80 +92,48 @@ export default function CameraController() {
             const bWidth = building.dimensions?.width || 8
             const bDepth = building.dimensions?.depth || 8
 
-            // Frame: we want to see the building + the hologram panel above it
             const roofY = buildingHeight
-            const panelTopY = roofY + 30 // panel hovers 30 above roof
-            const frameCenterY = (roofY * 0.5 + panelTopY * 0.5)
+            const panelTopY = roofY + 30
+            const frameCenterY = roofY * 0.6 + panelTopY * 0.4
 
-            // Distance: close enough to read detail but see full building + panel
+            const totalVerticalExtent = panelTopY
             const footprintSize = Math.max(bWidth, bDepth)
-            const heightFactor = Math.max(buildingHeight * 0.5, 20)
-            const zoomDist = Math.max(45, footprintSize * 2, heightFactor * 1.0)
-            const camAngle = Math.PI / 4.5 // slight offset from 45°
+            const zoomDist = Math.max(65, totalVerticalExtent * 0.85, footprintSize * 2.5)
 
-            // Camera position: modest elevation, not too far
+            const camAngle = Math.PI / 4
+            const elevationFactor = 0.55
+
             const targetPos = new THREE.Vector3(
                 x + Math.cos(camAngle) * zoomDist,
-                frameCenterY + zoomDist * 0.3,
+                frameCenterY + zoomDist * elevationFactor,
                 z + Math.sin(camAngle) * zoomDist
             )
-
-            // Look at the midpoint between building and panel
             const lookAtPos = new THREE.Vector3(x, frameCenterY, z)
 
-            // Animate Camera Position
-            gsap.to(camera.position, {
-                duration: 1.5,
-                x: targetPos.x,
-                y: targetPos.y,
-                z: targetPos.z,
-                ease: "power2.inOut",
-                onUpdate: () => {
-                    // Controls update handled by lookAt tween if needed
-                }
-            })
+            const travelDist = camera.position.distanceTo(targetPos)
+            const flyDuration = Math.min(2.0, Math.max(0.8, travelDist / 400))
 
-            // Animate Controls Target (LookAt)
-            if (controls) {
-                gsap.to(controls.target, {
-                    duration: 1.5,
-                    x: lookAtPos.x,
-                    y: lookAtPos.y,
-                    z: lookAtPos.z,
-                    ease: "power2.inOut",
-                    onUpdate: () => controls.update()
-                })
-            }
+            animateTo(targetPos, lookAtPos, flyDuration)
         }
 
         window.addEventListener('flyToBuilding', handleFlyTo)
         return () => window.removeEventListener('flyToBuilding', handleFlyTo)
-    }, [camera, controls, cityData, cityMeshRef])
+    }, [camera, controls, animateTo])
 
     // Auto-fit camera when city data changes (new analysis or demo load)
     useEffect(() => {
         if (!cityData?.buildings?.length || !controls) return
 
-        // Delay slightly to let instances render
         const timer = setTimeout(() => {
-            // Camera distance: enough to see the full city from a 45° angle
-            const fitDist = cityRadius * 1.4
-            // Elevation: high enough to see over the tallest buildings + perspective
-            const camY = Math.max(cityRadius * 0.8, maxHeight * 1.5)
-            gsap.to(camera.position, {
-                duration: 1.5,
-                x: cx + fitDist,
-                y: camY,
-                z: cz + fitDist,
-                ease: 'power2.inOut'
-            })
-            // Target actual city center, not (0,0,0)
-            gsap.to(controls.target, {
-                duration: 1.5,
-                x: cx, y: 0, z: cz,
-                ease: 'power2.inOut',
-                onUpdate: () => controls.update()
-            })
+            const fitDist = cityRadius * 0.55
+            const camY = Math.max(cityRadius * 0.30, maxHeight * 0.9)
+
+            animateTo(
+                new THREE.Vector3(cx + fitDist, camY, cz + fitDist),
+                new THREE.Vector3(cx, 0, cz),
+                1.8
+            )
+
             // Dynamically scale far plane and maxDistance
             const neededFar = Math.max(5000, cityRadius * 6)
             camera.far = neededFar
@@ -135,10 +144,11 @@ export default function CameraController() {
         }, 200)
 
         return () => clearTimeout(timer)
-    }, [cityData, cityRadius, cx, cz, maxHeight, camera, controls])
+    }, [cityData, cityRadius, cx, cz, maxHeight, camera, controls, animateTo])
 
     // Auto-fly to selected building logic
     const selectedBuilding = useStore(s => s.selectedBuilding)
+    const selectedLandmark = useStore(s => s.selectedLandmark)
     const cameraAction = useStore(s => s.cameraAction)
 
     useEffect(() => {
@@ -146,6 +156,60 @@ export default function CameraController() {
         const event = new CustomEvent('flyToBuilding', { detail: { building: selectedBuilding } })
         window.dispatchEvent(event)
     }, [selectedBuilding])
+
+    // Fly to landmark (reactor / mothership)
+    useEffect(() => {
+        if (!selectedLandmark || !controls) return
+
+        let targetPos, lookAtPos
+
+        if (selectedLandmark === 'reactor') {
+            let crownY = 74
+            if (cityData?.buildings?.length) {
+                const heights = cityData.buildings.map(b => (b.dimensions?.height || 8) * 3.0).sort((a, b) => a - b)
+                const p90 = heights[Math.floor(heights.length * 0.9)] || 50
+                const spireHeight = Math.max(60, p90 * 1.4)
+                crownY = 8 + spireHeight + 6
+            }
+            const roofY = crownY
+            const panelTopY = roofY + 30
+            const frameCenterY = roofY * 0.6 + panelTopY * 0.4
+            const zoomDist = Math.max(65, panelTopY * 0.85)
+            const angle = Math.PI / 4
+            const elevationFactor = 0.55
+            lookAtPos = new THREE.Vector3(0, frameCenterY, 0)
+            targetPos = new THREE.Vector3(
+                Math.cos(angle) * zoomDist,
+                frameCenterY + zoomDist * elevationFactor,
+                Math.sin(angle) * zoomDist
+            )
+        } else if (selectedLandmark === 'mothership') {
+            let alt = 300
+            if (cityData?.buildings?.length) {
+                let maxH = 0
+                for (const b of cityData.buildings) {
+                    const h = (b.dimensions?.height || 8) * 3.0
+                    if (h > maxH) maxH = h
+                }
+                alt = Math.max(260, maxH + 200)
+            }
+            const dist = 200
+            const angle = Math.PI / 4
+            const viewCenterY = alt + 20
+            lookAtPos = new THREE.Vector3(0, viewCenterY, 0)
+            targetPos = new THREE.Vector3(
+                Math.cos(angle) * dist,
+                alt - 15,
+                Math.sin(angle) * dist
+            )
+        }
+
+        if (targetPos && lookAtPos) {
+            const travelDist = camera.position.distanceTo(targetPos)
+            const flyDuration = Math.min(2.2, Math.max(1.0, travelDist / 300))
+            animateTo(targetPos, lookAtPos, flyDuration)
+        }
+    }, [selectedLandmark, camera, controls, animateTo, cityData])
 
     // Manual Camera Actions (HUD)
     useEffect(() => {
@@ -160,43 +224,24 @@ export default function CameraController() {
         const distance = currentPos.distanceTo(currentTarget)
 
         if (type === 'ZOOM_IN') {
-            const newPos = currentPos.add(direction.multiplyScalar(distance * 0.3))
-            gsap.to(camera.position, {
-                duration: 0.5,
-                x: newPos.x, y: newPos.y, z: newPos.z,
-                ease: 'power2.out'
-            })
+            const newPos = currentPos.clone().add(direction.clone().multiplyScalar(distance * 0.3))
+            animateTo(newPos, currentTarget.clone(), 0.45)
         } else if (type === 'ZOOM_OUT') {
-            const newPos = currentPos.sub(direction.multiplyScalar(distance * 0.3))
-            gsap.to(camera.position, {
-                duration: 0.5,
-                x: newPos.x, y: newPos.y, z: newPos.z,
-                ease: 'power2.out'
-            })
+            const newPos = currentPos.clone().sub(direction.clone().multiplyScalar(distance * 0.3))
+            animateTo(newPos, currentTarget.clone(), 0.45)
         } else if (type === 'FIT' || type === 'RESET') {
-            const fitDist = cityRadius * 1.4
-            const camY = Math.max(cityRadius * 0.8, maxHeight * 1.5)
-            gsap.to(camera.position, {
-                duration: 1.0,
-                x: cx + fitDist, y: camY, z: cz + fitDist,
-                ease: 'power2.inOut'
-            })
-            gsap.to(controls.target, {
-                duration: 1.0,
-                x: cx, y: 0, z: cz,
-                ease: 'power2.inOut',
-                onUpdate: () => controls.update()
-            })
+            const fitDist = cityRadius * 0.55
+            const camY = Math.max(cityRadius * 0.30, maxHeight * 0.9)
+            animateTo(
+                new THREE.Vector3(cx + fitDist, camY, cz + fitDist),
+                new THREE.Vector3(cx, 0, cz),
+                1.2
+            )
         } else if (type === 'CENTER') {
-            gsap.to(controls.target, {
-                duration: 1.0,
-                x: cx, y: 0, z: cz,
-                ease: 'power2.inOut',
-                onUpdate: () => controls.update()
-            })
+            animateTo(currentPos.clone(), new THREE.Vector3(cx, 0, cz), 0.8)
         }
 
-    }, [cameraAction, camera, controls])
+    }, [cameraAction, camera, controls, animateTo, cx, cz, cityRadius, maxHeight])
 
     return null
-}
+})

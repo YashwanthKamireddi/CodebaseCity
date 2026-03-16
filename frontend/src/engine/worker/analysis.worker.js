@@ -20,9 +20,6 @@
 import { parseFile } from '../parser/regexParser.js'
 import { buildCityData } from '../graph/graphEngine.js'
 
-// Progress reporting interval - reduced IPC overhead
-const PROGRESS_INTERVAL = 25
-
 self.onmessage = async (event) => {
   const { type, files, rootName } = event.data
 
@@ -32,9 +29,10 @@ self.onmessage = async (event) => {
     const totalFiles = files.length
     self.postMessage({ type: 'PROGRESS', current: 0, total: totalFiles, file: 'Starting blazingly fast regex analysis...' })
 
-    // Parse all files with batched progress updates
+    // Parse all files with time-based progress updates
     const parsedFiles = []
-    let lastProgressUpdate = 0
+    const parseErrors = []
+    let lastReportTime = performance.now()
 
     for (let i = 0; i < totalFiles; i++) {
       const file = files[i]
@@ -43,14 +41,18 @@ self.onmessage = async (event) => {
         const parsed = parseFile(file.path, file.content)
         parsedFiles.push(parsed)
       } catch (err) {
-        // Skip unparseable files silently
-        console.warn(`[Worker] Failed to parse ${file.path}:`, err.message)
+        parseErrors.push({
+          file: file.path,
+          stage: 'parse',
+          error: err.message,
+        })
       }
 
-      // Batched progress reporting - reduces IPC overhead significantly
-      const shouldReport = (i - lastProgressUpdate >= PROGRESS_INTERVAL) || i === totalFiles - 1
+      // Time-based progress reporting — fire every ~100ms to keep UI responsive
+      const now = performance.now()
+      const shouldReport = (now - lastReportTime > 100) || i === totalFiles - 1
       if (shouldReport) {
-        lastProgressUpdate = i
+        lastReportTime = now
         self.postMessage({
           type: 'PROGRESS',
           current: i + 1,
@@ -62,12 +64,33 @@ self.onmessage = async (event) => {
 
     // Build city data from parsed files
     self.postMessage({ type: 'PROGRESS', current: totalFiles, total: totalFiles, file: 'Building city layout...' })
-    const cityData = buildCityData(parsedFiles, rootName)
 
-    // Send the result back
+    let cityData
+    try {
+      cityData = buildCityData(parsedFiles, rootName)
+    } catch (err) {
+      self.postMessage({
+        type: 'ERROR',
+        stage: 'graph',
+        message: `City layout failed: ${err.message}`,
+        details: { parsedCount: parsedFiles.length, errorCount: parseErrors.length },
+      })
+      return
+    }
+
+    // Attach diagnostics so the UI can surface warnings
+    if (parseErrors.length > 0) {
+      cityData.metadata = cityData.metadata || {}
+      cityData.metadata.parseErrors = parseErrors
+    }
+
     self.postMessage({ type: 'RESULT', cityData })
 
   } catch (err) {
-    self.postMessage({ type: 'ERROR', message: err.message || 'Analysis failed' })
+    self.postMessage({
+      type: 'ERROR',
+      stage: 'unknown',
+      message: err.message || 'Analysis failed',
+    })
   }
 }

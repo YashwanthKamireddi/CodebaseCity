@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import { motion } from 'framer-motion'
 import { Activity, TrendingUp, AlertTriangle, ShieldCheck } from 'lucide-react'
 import { BuildingModel } from '../../../entities/building/model'
 
@@ -129,7 +128,7 @@ export default function AuditStats({ buildings }) {
 
 function StatCard({ label, val, sub, icon, variant = 'info', big = false }) {
     return (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="as-card">
+        <div className="as-card anim-slide-up">
             <div className="as-card-top">
                 <span className="as-card-label">{label}</span>
                 <div className={`as-card-icon as-card-icon--${variant}`}>{icon}</div>
@@ -140,6 +139,6 @@ function StatCard({ label, val, sub, icon, variant = 'info', big = false }) {
             </div>
             <div className={`as-glow as-glow--${variant}`} />
             <div className={`as-card-accent as-card-accent--${variant}`} />
-        </motion.div>
+        </div>
     )
 }

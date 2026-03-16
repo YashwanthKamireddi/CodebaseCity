@@ -8,7 +8,7 @@ import useStore from '../../../store/useStore'
  * Dynamic cap scales with repo size. Throttled glow at 30fps.
  * Skipped on low-end for massive repos. Instanced — 1 draw call.
  */
-export default function SkyBridges() {
+export default React.memo(function SkyBridges() {
     const cityData = useStore(s => s.cityData)
     const meshRef = useRef()
     const lastT = useRef(0)
@@ -95,4 +95,4 @@ export default function SkyBridges() {
             />
         </instancedMesh>
     )
-}
+})

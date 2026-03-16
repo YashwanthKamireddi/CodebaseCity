@@ -1,0 +1,98 @@
+/* ── Shared CSS animations (replaces framer-motion) ── */
+
+/* Keyframes */
+@keyframes anim-fade-in   { from { opacity: 0 } to { opacity: 1 } }
+@keyframes anim-fade-out  { from { opacity: 1 } to { opacity: 0 } }
+
+@keyframes anim-slide-up {
+  from { opacity: 0; transform: translateY(16px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+@keyframes anim-slide-up-exit {
+  from { opacity: 1; transform: translateY(0) }
+  to   { opacity: 0; transform: translateY(16px) }
+}
+
+@keyframes anim-slide-down {
+  from { opacity: 0; transform: translateY(-16px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+
+@keyframes anim-slide-right-enter {
+  from { opacity: 0.8; transform: translateX(100%) }
+  to   { opacity: 1;   transform: translateX(0) }
+}
+@keyframes anim-slide-right-exit {
+  from { opacity: 1;   transform: translateX(0) }
+  to   { opacity: 0.8; transform: translateX(100%) }
+}
+
+@keyframes anim-scale-in {
+  from { opacity: 0; transform: scale(0.95) translateY(10px) }
+  to   { opacity: 1; transform: scale(1) translateY(0) }
+}
+@keyframes anim-scale-in-exit {
+  from { opacity: 1; transform: scale(1) translateY(0) }
+  to   { opacity: 0; transform: scale(0.95) translateY(10px) }
+}
+
+@keyframes anim-slide-from-bottom {
+  from { opacity: 0; transform: translateY(80px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+@keyframes anim-slide-to-bottom {
+  from { opacity: 1; transform: translateY(0) }
+  to   { opacity: 0; transform: translateY(80px) }
+}
+
+@keyframes anim-toast-enter {
+  from { opacity: 0; transform: translateX(100px) scale(0.9) }
+  to   { opacity: 1; transform: translateX(0) scale(1) }
+}
+@keyframes anim-toast-exit {
+  from { opacity: 1; transform: translateX(0) scale(1) }
+  to   { opacity: 0; transform: translateX(100px) scale(0.9) }
+}
+
+@keyframes anim-shimmer {
+  0%, 100% { opacity: 0.3 }
+  50%      { opacity: 0.7 }
+}
+
+@keyframes anim-spin {
+  from { transform: rotate(0deg) }
+  to   { transform: rotate(360deg) }
+}
+
+@keyframes anim-pulse-scale {
+  0%, 100% { transform: translate(-50%, -50%) scale(1) }
+  50%      { transform: translate(-50%, -50%) scale(1.15) }
+}
+
+@keyframes anim-blur-enter {
+  from { opacity: 0; transform: translateY(12px); filter: blur(4px) }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0)   }
+}
+
+@keyframes shimmer-slide {
+  0%   { transform: translateX(-100%) }
+  100% { transform: translateX(300%) }
+}
+@keyframes anim-blur-exit {
+  from { opacity: 1; transform: translateY(0);     filter: blur(0)   }
+  to   { opacity: 0; transform: translateY(-10px); filter: blur(4px) }
+}
+
+/* Utility classes */
+.anim-fade-in    { animation: anim-fade-in 0.25s cubic-bezier(0.32, 0.72, 0, 1) both }
+.anim-fade-out   { animation: anim-fade-out 0.25s cubic-bezier(0.32, 0.72, 0, 1) both }
+.anim-slide-up   { animation: anim-slide-up 0.3s cubic-bezier(0.32, 0.72, 0, 1) both }
+.anim-scale-in   { animation: anim-scale-in 0.2s cubic-bezier(0.32, 0.72, 0, 1) both }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade-in, .anim-fade-out,
+  .anim-slide-up, .anim-scale-in {
+    animation-duration: 0.01s !important;
+  }
+}

@@ -5,7 +5,6 @@
  * Uses CSS classes from App.css — no inline styles.
  */
 import React, { useState } from 'react'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import {
     Building2,
     Table2,
@@ -14,7 +13,8 @@ import {
     Sparkles,
     History,
     Github,
-    Download
+    Download,
+    KeyRound
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
 
@@ -22,6 +22,10 @@ export default function FloatingDock({ view, onViewChange, onShowExport }) {
     const setCommandPaletteOpen = useStore(s => s.setCommandPaletteOpen)
     const loading = useStore(s => s.loading)
     const cityData = useStore(s => s.cityData)
+    const githubToken = useStore(s => s.githubToken)
+    const setGithubToken = useStore(s => s.setGithubToken)
+    const [showTokenPanel, setShowTokenPanel] = useState(false)
+    const [tokenDraft, setTokenDraft] = useState(githubToken || '')
 
     return (
         <div className="floating-dock-wrapper">
@@ -91,19 +95,70 @@ export default function FloatingDock({ view, onViewChange, onShowExport }) {
                 <div className="dock-divider" />
 
                 <DeckItem
+                    onClick={() => setShowTokenPanel(v => !v)}
+                    active={showTokenPanel}
+                    icon={<KeyRound size={18} />}
+                    label="GitHub Token"
+                    description={githubToken ? 'Token set — 5,000 req/hr' : 'Add token for 5,000 req/hr'}
+                />
+
+                <DeckItem
                     onClick={() => window.open('https://github.com/YashwanthKamireddi/CodebaseCity', '_blank')}
                     icon={<Github size={18} />}
                     label="GitHub"
                     description="Star us on GitHub!"
                 />
             </nav>
+
+            {/* GitHub Token Panel */}
+            {showTokenPanel && (
+                <div className="dock-token-panel anim-scale-in">
+                        <div className="dock-token-header">
+                            <KeyRound size={14} />
+                            <span>GitHub Personal Access Token</span>
+                        </div>
+                        <div className="dock-token-row">
+                            <input
+                                type="password"
+                                value={tokenDraft}
+                                onChange={e => setTokenDraft(e.target.value)}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter') {
+                                        setGithubToken(tokenDraft.trim())
+                                        setShowTokenPanel(false)
+                                    }
+                                }}
+                                placeholder="ghp_... (personal access token)"
+                                className="dock-token-input"
+                                autoFocus
+                            />
+                            <button
+                                onClick={() => {
+                                    setGithubToken(tokenDraft.trim())
+                                    setShowTokenPanel(false)
+                                }}
+                                className="dock-token-save"
+                            >
+                                {tokenDraft.trim() ? 'Save' : 'Clear'}
+                            </button>
+                        </div>
+                        <p className="dock-token-hint">
+                            {githubToken
+                                ? 'Token active — 5,000 requests/hour. Clear by saving empty.'
+                                : <>No scopes needed for public repos. Create at{' '}
+                                    <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer">
+                                        github.com/settings/tokens
+                                    </a>. Stored locally only.</>
+                            }
+                        </p>
+                </div>
+            )}
         </div>
     )
 }
 
 function DeckItem({ icon, label, description, onClick, active, loading: isLoading, accent, shortcut, disabled }) {
     const [hovered, setHovered] = useState(false)
-    const shouldReduceMotion = useReducedMotion()
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -123,40 +178,29 @@ function DeckItem({ icon, label, description, onClick, active, loading: isLoadin
         <div className="deck-item"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}>
-            <motion.button
+            <button
                 onClick={() => !disabled && onClick?.()}
                 onKeyDown={handleKeyDown}
                 className={btnClass}
                 aria-label={label}
                 disabled={disabled}
                 title={!hovered ? label : undefined}
-                whileTap={shouldReduceMotion ? {} : { scale: 0.92 }}
-                whileHover={shouldReduceMotion ? {} : { scale: 1.05 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
             >
                 {isLoading ? (
-                    <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-                    >
+                    <span style={{ display: 'inline-flex', animation: 'anim-spin 1s linear infinite' }}>
                         {icon}
-                    </motion.div>
+                    </span>
                 ) : icon}
 
                 {active && !accent && (
                     <span className="deck-btn-indicator" />
                 )}
-            </motion.button>
+            </button>
 
             {/* Tooltip */}
-            <AnimatePresence>
-                {hovered && (
-                    <motion.div
-                        className="dock-tooltip"
-                        initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10, scale: shouldReduceMotion ? 1 : 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: shouldReduceMotion ? 0 : 5, scale: shouldReduceMotion ? 1 : 0.95 }}
-                        transition={{ duration: shouldReduceMotion ? 0.01 : 0.15 }}
+            {hovered && (
+                    <div
+                        className="dock-tooltip anim-fade-in"
                     >
                         <div className="dock-tooltip-header">
                             <span className="dock-tooltip-label">{label}</span>
@@ -168,9 +212,8 @@ function DeckItem({ icon, label, description, onClick, active, loading: isLoadin
                             <div className="dock-tooltip-desc">{description}</div>
                         )}
                         <div className="dock-tooltip-arrow" />
-                    </motion.div>
+                    </div>
                 )}
-            </AnimatePresence>
         </div>
     )
 }

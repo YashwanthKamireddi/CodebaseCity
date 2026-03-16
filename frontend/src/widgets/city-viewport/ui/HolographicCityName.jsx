@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 
@@ -8,7 +8,7 @@ import useStore from '../../../store/useStore'
  * Perf budget: 1 draw call (single sprite), 0 useFrame (fully static).
  * Height auto-adjusts above tallest building to prevent overlap.
  */
-export default function HolographicCityName() {
+export default React.memo(function HolographicCityName() {
     const cityData = useStore(s => s.cityData)
 
     const { cityRadius, maxBuildingTop } = useMemo(() => {
@@ -32,51 +32,56 @@ export default function HolographicCityName() {
     const texture = useMemo(() => {
         if (!repoName) return null
         const canvas = document.createElement('canvas')
-        canvas.width = 1024
-        canvas.height = 256
+        canvas.width = 512
+        canvas.height = 128
         const ctx = canvas.getContext('2d')
-        ctx.clearRect(0, 0, 1024, 256)
+        ctx.clearRect(0, 0, 512, 128)
 
         const displayName = repoName.split('/').pop() || repoName
-        ctx.font = 'bold 72px "Outfit", "Inter", "Segoe UI", sans-serif'
+        ctx.font = 'bold 36px "Outfit", "Inter", "Segoe UI", sans-serif'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
 
         // Soft glow pass
         ctx.shadowColor = '#0088ff'
-        ctx.shadowBlur = 30
+        ctx.shadowBlur = 15
         ctx.fillStyle = 'rgba(0, 140, 255, 0.4)'
-        ctx.fillText(displayName, 512, 125)
+        ctx.fillText(displayName, 256, 62)
 
         // Medium glow
         ctx.shadowColor = '#00bbff'
-        ctx.shadowBlur = 12
+        ctx.shadowBlur = 6
         ctx.fillStyle = 'rgba(0, 200, 255, 0.6)'
-        ctx.fillText(displayName, 512, 125)
+        ctx.fillText(displayName, 256, 62)
 
         // Crisp main text
         ctx.shadowBlur = 0
         ctx.fillStyle = 'rgba(255, 255, 255, 0.92)'
-        ctx.fillText(displayName, 512, 125)
+        ctx.fillText(displayName, 256, 62)
 
         // Underline accent
         const textW = ctx.measureText(displayName).width
-        const grad = ctx.createLinearGradient(512 - textW / 2, 0, 512 + textW / 2, 0)
+        const grad = ctx.createLinearGradient(256 - textW / 2, 0, 256 + textW / 2, 0)
         grad.addColorStop(0, 'rgba(0, 200, 255, 0)')
         grad.addColorStop(0.3, 'rgba(0, 200, 255, 0.5)')
         grad.addColorStop(0.7, 'rgba(0, 200, 255, 0.5)')
         grad.addColorStop(1, 'rgba(0, 200, 255, 0)')
         ctx.strokeStyle = grad
-        ctx.lineWidth = 2
+        ctx.lineWidth = 1.5
         ctx.beginPath()
-        ctx.moveTo(512 - textW / 2, 168)
-        ctx.lineTo(512 + textW / 2, 168)
+        ctx.moveTo(256 - textW / 2, 84)
+        ctx.lineTo(256 + textW / 2, 84)
         ctx.stroke()
 
         const tex = new THREE.CanvasTexture(canvas)
+        tex.generateMipmaps = false
+        tex.minFilter = THREE.LinearFilter
+        tex.magFilter = THREE.LinearFilter
         tex.needsUpdate = true
         return tex
     }, [repoName])
+
+    useEffect(() => () => { if (texture) texture.dispose() }, [texture])
 
     if (!texture || !repoName) return null
 
@@ -94,9 +99,9 @@ export default function HolographicCityName() {
                 transparent
                 opacity={0.8}
                 depthWrite={false}
-                depthTest={false}
+                depthTest={true}
                 sizeAttenuation
             />
         </sprite>
     )
-}
+})

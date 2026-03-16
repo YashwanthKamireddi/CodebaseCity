@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect, useRef } from 'react'
 import { Html } from '@react-three/drei'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
@@ -19,10 +19,13 @@ const langColors = {
     rust: '#dea584',
 }
 
-export default function HologramPanel() {
+const HologramPanel = React.memo(function HologramPanel() {
     const selectedBuilding = useStore(s => s.selectedBuilding)
     const clearSelection = useStore(s => s.clearSelection)
     const codeViewerOpen = useStore(s => s.codeViewerOpen)
+    const selectedLandmark = useStore(s => s.selectedLandmark)
+
+    const prevBeamGeoRef = useRef(null)
 
     const layoutData = useMemo(() => {
         if (!selectedBuilding) return null
@@ -33,11 +36,17 @@ export default function HologramPanel() {
         const buildingTop = height
         const panelY = buildingTop + 30
 
+        // Dispose previous geometry to prevent memory leak
+        if (prevBeamGeoRef.current) {
+            prevBeamGeoRef.current.dispose()
+        }
+
         // Beam line from building roof to panel
         const beamGeo = new THREE.BufferGeometry()
         beamGeo.setAttribute('position', new THREE.BufferAttribute(
             new Float32Array([bx, buildingTop, bz, bx, panelY - 2, bz]), 3
         ))
+        prevBeamGeoRef.current = beamGeo
 
         return {
             panelPos: [bx, panelY, bz],
@@ -47,7 +56,17 @@ export default function HologramPanel() {
         }
     }, [selectedBuilding])
 
-    if (!selectedBuilding || !layoutData || codeViewerOpen) return null
+    // Cleanup on unmount
+    useEffect(() => {
+        return () => {
+            if (prevBeamGeoRef.current) {
+                prevBeamGeoRef.current.dispose()
+                prevBeamGeoRef.current = null
+            }
+        }
+    }, [])
+
+    if (!selectedBuilding || !layoutData || codeViewerOpen || selectedLandmark) return null
 
     const { name, path, metrics, language, author, is_hotspot, classes, functions } = selectedBuilding
     const langColor = langColors[language] || '#71717a'
@@ -62,7 +81,7 @@ export default function HologramPanel() {
                 <lineBasicMaterial
                     color="#00d9ff"
                     transparent
-                    opacity={0.35}
+                    opacity={0.55}
                     depthTest={false}
                     depthWrite={false}
                 />
@@ -90,8 +109,7 @@ export default function HologramPanel() {
                         onClick={e => e.stopPropagation()}
                         style={{
                             width: '340px',
-                            background: 'linear-gradient(165deg, rgba(12, 14, 22, 0.96), rgba(6, 8, 16, 0.98))',
-                            backdropFilter: 'blur(24px)',
+                            background: 'linear-gradient(165deg, rgba(12, 14, 22, 0.98), rgba(6, 8, 16, 0.99))',
                             border: '1px solid rgba(0, 180, 255, 0.15)',
                             borderRadius: '14px',
                             boxShadow: `
@@ -275,7 +293,9 @@ export default function HologramPanel() {
             </group>
         </group>
     )
-}
+})
+
+export default HologramPanel
 
 function MetricCell({ label, value, warn, icon }) {
     return (

@@ -245,7 +245,7 @@
   </g>
 
   <!-- TITLE -->
-  <text x="600" y="75" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="64" font-weight="700" fill="url(#textGrad)" filter="url(#textGlow)" letter-spacing="8">CODE CITY</text>
+  <text x="600" y="75" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="64" font-weight="700" fill="url(#textGrad)" filter="url(#textGlow)" letter-spacing="8">CODEBASE CITY</text>
 
   <!-- Tagline -->
   <text x="600" y="610" text-anchor="middle" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="22" fill="#8888aa" letter-spacing="4" opacity="0.8">VISUALIZE YOUR CODEBASE IN 3D</text>

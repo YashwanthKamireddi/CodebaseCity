@@ -32,7 +32,7 @@ function shuffleArray(array) {
  * @param {number} maxIterations - Safety limit to prevent infinite loops
  * @returns {Object} Map of nodeId → communityId
  */
-export function detectCommunities(graph, maxIterations = 20) {
+export function detectCommunities(graph, maxIterations) {
   const nodes = graph.nodes
   const edges = graph.edges
 
@@ -89,6 +89,11 @@ export function detectCommunities(graph, maxIterations = 20) {
 
   // Pre-allocate commWeights map for reuse
   const commWeights = new Map()
+
+  // Scale max iterations based on graph size — avoids excessive work on large repos
+  if (maxIterations === undefined) {
+    maxIterations = Math.min(20, Math.max(5, Math.ceil(Math.log2(nodes.length))))
+  }
 
   // Early termination threshold - stop if modularity gain is negligible
   const MIN_IMPROVEMENT = 0.0001

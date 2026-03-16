@@ -13,8 +13,7 @@ import { BuildingModel } from '../model'
 import CodeViewer from './CodeViewer'
 
 import { X, FileCode2, Code, Layers, GitCommit, Copy, ExternalLink, Activity, Maximize2, Minimize2, Eye, User, Mail } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
-// Styles imported from index.css mostly, inline for layout
+
 
 // Helper to format file size
 function formatFileSize(bytes) {
@@ -26,7 +25,9 @@ function formatFileSize(bytes) {
 }
 
 export default function BuildingPanel({ building }) {
-    const { clearSelection, fetchFileContent, fileContent } = useStore()
+    const clearSelection = useStore(s => s.clearSelection)
+    const fetchFileContent = useStore(s => s.fetchFileContent)
+    const fileContent = useStore(s => s.fileContent)
     const [isMaximized, setIsMaximized] = React.useState(false)
     const [showCode, setShowCode] = React.useState(false)
 
@@ -49,33 +50,25 @@ export default function BuildingPanel({ building }) {
     const isContentReady = fileContent?.path === path && !fileContent?.loading
 
     return (
-        <AnimatePresence>
-            <motion.div
-                initial={{ x: '100%', opacity: 0.8 }}
-                animate={{
-                    x: 0,
-                    opacity: 1,
-                    width: '380px',
-                    height: '100vh',
-                    top: 0,
-                    right: 0
-                }}
-                exit={{ x: '100%', opacity: 0.8 }}
-                transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
+        <div
                 style={{
                     position: 'fixed',
                     zIndex: 1000,
-                    // THE VOID THEME: Premium Solid Dark
+                    width: '380px',
+                    height: '100vh',
+                    top: 0,
+                    right: 0,
                     background: '#09090b',
                     borderLeft: '1px solid #27272a',
                     boxShadow: '-30px 0 100px rgba(0,0,0,0.8)',
                     display: 'flex',
                     flexDirection: 'column',
                     color: '#e4e4e7',
-                    overflow: 'hidden' // FIX: CONTAIN EVERYTHING
+                    overflow: 'hidden',
+                    animation: 'anim-slide-right-enter 0.25s cubic-bezier(0.32, 0.72, 0, 1) both',
                 }}
             >
-                {/* HEADER: File Identity */}
+                {/* HEADER: File Identity */}}
                 <div style={{
                     padding: '24px',
                     borderBottom: '1px solid var(--glass-border)',
@@ -298,7 +291,7 @@ export default function BuildingPanel({ building }) {
                         <SwissButton
                             label="Open in Editor"
                             icon={<ExternalLink size={14} />}
-                            onClick={() => window.open(`vscode://file/${path}`, '_blank')}
+                            onClick={() => window.open(`vscode://file/${encodeURIComponent(path)}`, '_blank')}
                             primary
                         />
                         <SwissButton
@@ -308,8 +301,7 @@ export default function BuildingPanel({ building }) {
                         />
                     </div>
                 </div>
-            </motion.div>
-        </AnimatePresence>
+            </div>
     )
 }
 

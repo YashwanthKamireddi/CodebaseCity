@@ -1,16 +1,26 @@
 import logger from '../../utils/logger'
+import { ghFetch, ghFetchBatch, ghFetchRaw } from '../../engine/api/githubApi'
+import { getCachedCity, cacheCity } from '../../utils/cityCache'
 
 /**
  * City Slice
  * Handles all domain data: City structure, Metadata, Analysis, and File Content.
  * Fully client-side — no backend required.
  */
+
+// Module-level file content cache — kept outside Zustand to avoid state bloat.
+// For large repos, fileContents can be 50MB+. Storing in Zustand would cause
+// every subscriber to re-render when any state changes.
+let _fileContentCache = null // Map or Object of path → content
+
+export function getFileContentCache() { return _fileContentCache }
+export function clearFileContentCache() { _fileContentCache = null }
+
 export const createCitySlice = (set, get) => ({
     // State
     cityData: null,
     masterCityData: null, // Ground-truth robust AST map for timeline projection
     cityId: null, // Cache key for API calls
-    previousCityData: null, // For morphing
     currentRepoPath: null,
     loading: false,
     error: null,
@@ -31,6 +41,14 @@ export const createCitySlice = (set, get) => ({
     setProgress: (progress) => set({ analysisProgress: progress }),
 
     setCityData: (data) => {
+        // Extract fileContents from data before storing in Zustand.
+        // This prevents 50MB+ of source code from bloating reactive state.
+        if (data.fileContents) {
+            _fileContentCache = data.fileContents
+            data = { ...data }
+            delete data.fileContents
+        }
+
         // Use city_id from API response, or generate from path as fallback
         let cityId = data.city_id
         if (!cityId) {
@@ -38,12 +56,30 @@ export const createCitySlice = (set, get) => ({
             cityId = path.replace(/\//g, '_').replace(/:/g, '').replace(/\\/g, '_').replace(/^_/, '')
         }
 
+        // Pre-compute rank-based color_metric for buildings that don't have one.
+        // This ensures the default color gradient distributes evenly across the full
+        // cyan→blue→violet→magenta→orange→rose range regardless of LOC distribution.
+        if (data.buildings?.length) {
+            const needsMetric = data.buildings.some(b => b.color_metric == null)
+            if (needsMetric) {
+                const sorted = data.buildings
+                    .map((b, i) => ({ i, loc: b.metrics?.loc || b.lines_of_code || 0 }))
+                    .sort((a, b) => a.loc - b.loc)
+                const n = sorted.length
+                for (let rank = 0; rank < n; rank++) {
+                    const b = data.buildings[sorted[rank].i]
+                    if (b.color_metric == null) {
+                        b.color_metric = n > 1 ? rank / (n - 1) : 0.5
+                    }
+                }
+            }
+        }
+
         // Check if this is the background demo city loaded by the Landing Page
         // We do not want to dismiss the landing page if it's just loading the backdrop.
         const isDemoBackdrop = data.id?.startsWith('demo_') || window.location.pathname === '/' && get().isLandingOverlayActive && !data.source
 
         set((state) => ({
-            previousCityData: state.cityData,
             cityData: data,
             masterCityData: data, // Store the present-day ground truth
             cityId: cityId,
@@ -69,8 +105,8 @@ export const createCitySlice = (set, get) => ({
         const existingDriftIndex = newDrifts.findIndex(d => d.buildingId === buildingId);
 
         if (existingDriftIndex >= 0) {
-            // Update existing drift
-            newDrifts[existingDriftIndex].newDistrictId = newDistrictId;
+            // Update existing drift (immutable replace to avoid stale refs)
+            newDrifts[existingDriftIndex] = { ...newDrifts[existingDriftIndex], newDistrictId };
             // If dragging back to origin, remove the drift
             if (newDrifts[existingDriftIndex].originalDistrictId === newDistrictId) {
                 newDrifts.splice(existingDriftIndex, 1);
@@ -140,24 +176,34 @@ export const createCitySlice = (set, get) => ({
                 }
             }
 
+            // Check IndexedDB before doing any expensive network work
+            const cacheKey = `github:${owner}/${repo}`
+            const cachedData = await getCachedCity(cacheKey)
+            if (cachedData) {
+                setProgress(100)
+                setCityData(cachedData)
+                set({ currentRepoPath: `${owner}/${repo}`, commits: [], currentCommitIndex: -1 })
+                return
+            }
+
             setProgress(10)
 
             // Fetch default branch
-            const repoRes = await fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`)
-            if (!repoRes.ok) {
-                if (repoRes.status === 404) throw new Error(`Repository "${owner}/${repo}" not found. Make sure it's public.`)
-                if (repoRes.status === 403) throw new Error('GitHub API rate limit exceeded. Try again in a minute.')
-                throw new Error(`GitHub API error: ${repoRes.status}`)
+            let repoData
+            try {
+                const res = await ghFetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`)
+                repoData = res.data
+            } catch (err) {
+                if (err.message === 'not_found') throw new Error(`Repository "${owner}/${repo}" not found. Make sure it's public.`)
+                throw err
             }
-            const repoData = await repoRes.json()
             const branch = repoData.default_branch || 'main'
 
             setProgress(25)
 
             // Fetch full file tree
-            const treeRes = await fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/git/trees/${encodeURIComponent(branch)}?recursive=1`)
-            if (!treeRes.ok) throw new Error('Failed to fetch repository file tree.')
-            const treeData = await treeRes.json()
+            const treeResult = await ghFetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/git/trees/${encodeURIComponent(branch)}?recursive=1`)
+            const treeData = treeResult.data
 
             if (treeData.truncated) {
                 logger.warn('Repository tree was truncated (very large repo)')
@@ -174,9 +220,9 @@ export const createCitySlice = (set, get) => ({
             let authorEmails = {} // authorName → email (for Gravatar)
             let fileCommitCounts = {} // path → { author → count }
             try {
-                const commitsRes = await fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/commits?per_page=100`)
-                if (commitsRes.ok) {
-                    const commitsData = await commitsRes.json()
+                const commitsResult = await ghFetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/commits?per_page=100`)
+                if (commitsResult.data) {
+                    const commitsData = commitsResult.data
 
                     // Build global author frequency from ALL 100 commits
                     const globalAuthorFreq = {} // author → commit count
@@ -189,13 +235,11 @@ export const createCitySlice = (set, get) => ({
                         }
                     }
 
-                    // Fetch file lists from 30 most recent commits for broader coverage
-                    const detailPromises = commitsData.slice(0, 30).map(c =>
-                        fetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/commits/${c.sha}`)
-                            .then(r => r.ok ? r.json() : null)
-                            .catch(() => null)
+                    // Fetch file lists from 10 most recent commits (reduced from 30 to conserve rate limit)
+                    const commitUrls = commitsData.slice(0, 10).map(c =>
+                        `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/commits/${c.sha}`
                     )
-                    const details = await Promise.all(detailPromises)
+                    const details = await ghFetchBatch(commitUrls)
 
                     // Build path → author mapping from real commit file lists
                     for (const detail of details) {
@@ -372,9 +416,13 @@ export const createCitySlice = (set, get) => ({
             const rows = Math.ceil(finalDirNames.length / cols)
 
             // Compute per-district cell sizes — each district sized to its own content
+            // Ensure cells are large enough so buildings never overlap (min 24-unit spacing)
             const districtCellSizes = finalDirNames.map(dir => {
                 const files = mergedGroups[dir]
-                return Math.max(60, Math.ceil(Math.sqrt(files.length)) * 25 + 20)
+                const gridSide = Math.ceil(Math.sqrt(files.length))
+                const contentBased = gridSide * 25 + 20
+                const overlapSafe = gridSide * 24 + 10 // 24 min spacing + 10 margin
+                return Math.max(60, contentBased, overlapSafe)
             })
 
             // Grid layout with per-district sizes: use cumulative offsets
@@ -457,9 +505,11 @@ export const createCitySlice = (set, get) => ({
                 const bcols = Math.ceil(Math.sqrt(files.length))
                 const brows = Math.ceil(files.length / bcols)
 
-                // Spacing adapts to THIS district's size (no global cap)
+                // Spacing adapts to THIS district's size with overlap guard
                 const usableSize = thisCellSize - 10
-                const spacing = usableSize / Math.max(bcols, brows)
+                const rawSpacing = usableSize / Math.max(bcols, brows)
+                // Prevent overlap: minimum gap = max possible building width (20) + 4
+                const spacing = Math.max(24, rawSpacing)
 
                 files.forEach((file, fileIdx) => {
                     const ext = file.path.substring(file.path.lastIndexOf('.')).toLowerCase()
@@ -472,8 +522,8 @@ export const createCitySlice = (set, get) => ({
                     const logMax = Math.log2(maxSize + 1)
                     const sizeNorm = logSize / Math.max(logMax, 1)
 
-                    const width = Math.max(5, 5 + 15 * sizeNorm)
-                    const height = Math.max(5, 5 + 75 * sizeNorm)
+                    const width = Math.max(8, 8 + 12 * sizeNorm)
+                    const height = Math.max(8, 8 + 72 * sizeNorm)
                     const depth = width
 
                     const fcol = fileIdx % bcols
@@ -523,12 +573,13 @@ export const createCitySlice = (set, get) => ({
             setProgress(90)
 
             // Build roads from co-directory proximity (files in same dir are connected)
+            const buildingById = new Map(buildings.map(b => [b.id, b]))
             const roads = []
             for (const dir of finalDirNames) {
                 const files = mergedGroups[dir]
                 for (let i = 0; i < files.length - 1 && i < 5; i++) {
-                    const src = buildings.find(b => b.id === files[i].path)
-                    const tgt = buildings.find(b => b.id === files[i + 1].path)
+                    const src = buildingById.get(files[i].path)
+                    const tgt = buildingById.get(files[i + 1].path)
                     if (src && tgt) {
                         roads.push({
                             id: `${src.id}->${tgt.id}`,
@@ -562,8 +613,7 @@ export const createCitySlice = (set, get) => ({
             }
 
             setProgress(95)
-            await new Promise(r => setTimeout(r, 800))
-
+            cacheCity(cacheKey, cityData).catch(() => {}) // Persist for next visit (24h TTL)
             setCityData(cityData)
             set({ currentRepoPath: `${owner}/${repo}`, commits: [], currentCommitIndex: -1 })
 
@@ -672,16 +722,16 @@ export const createCitySlice = (set, get) => ({
             }
 
             // Check in-memory file contents first (from client-side analysis)
-            if (cityData?.fileContents) {
+            if (_fileContentCache) {
                 // Try exact match
-                let content = cityData.fileContents.get?.(path) || cityData.fileContents[path]
+                let content = _fileContentCache.get?.(path) || _fileContentCache[path]
 
                 // Try matching by normalized path (handles relative vs absolute)
                 if (!content) {
                     const cleanPath = path.replace(/^[./\\]+/, '').replace(/\\/g, '/')
-                    const entries = cityData.fileContents instanceof Map
-                        ? [...cityData.fileContents.entries()]
-                        : Object.entries(cityData.fileContents)
+                    const entries = _fileContentCache instanceof Map
+                        ? [..._fileContentCache.entries()]
+                        : Object.entries(_fileContentCache)
 
                     for (const [key, val] of entries) {
                         const cleanKey = key.replace(/^[./\\]+/, '').replace(/\\/g, '/')
@@ -702,23 +752,26 @@ export const createCitySlice = (set, get) => ({
             if ((cityData?.source === 'github' || cityData?.source === 'github-client') && cityData?.name) {
                 const repoName = cityData.name
                 const cleanPath = path.replace(/^[./\\]+/, '').replace(/\\/g, '/')
-                const ref = cityData.branch || 'main'
-                const rawUrl = `https://raw.githubusercontent.com/${repoName}/${ref}/${cleanPath}`
-                try {
-                    const res = await fetch(rawUrl)
-                    if (res.ok) {
-                        const content = await res.text()
-                        set({ fileContent: { path, content, loading: false } })
-                        return
-                    }
-                } catch {
-                    // Fall through
+                // Guard against path traversal attempts
+                if (cleanPath.includes('..') || cleanPath.startsWith('http') || /[<>"'|?*]/.test(cleanPath)) {
+                    set({ fileContent: { path, content: '', loading: false }, error: 'Invalid file path' })
+                    return
                 }
-                // Try HEAD as last resort
+                const ref = cityData.branch || 'main'
+                const mainUrl = `https://raw.githubusercontent.com/${repoName}/${ref}/${cleanPath}`
+                const headUrl = `https://raw.githubusercontent.com/${repoName}/HEAD/${cleanPath}`
                 try {
-                    const res2 = await fetch(`https://raw.githubusercontent.com/${repoName}/HEAD/${cleanPath}`)
-                    if (res2.ok) {
-                        const content = await res2.text()
+                    // Race both branch and HEAD fetches in parallel
+                    const controller = new AbortController()
+                    const timeout = setTimeout(() => controller.abort(), 8000)
+                    const results = await Promise.allSettled([
+                        ghFetchRaw(mainUrl, { signal: controller.signal }),
+                        ghFetchRaw(headUrl, { signal: controller.signal })
+                    ])
+                    clearTimeout(timeout)
+                    const success = results.find(r => r.status === 'fulfilled' && r.value.ok)
+                    if (success) {
+                        const content = await success.value.text()
                         set({ fileContent: { path, content, loading: false } })
                         return
                     }

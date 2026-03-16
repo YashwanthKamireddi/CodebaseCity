@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useRef, useMemo, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
@@ -8,7 +8,7 @@ import useStore from '../../../store/useStore'
  * Dynamic cap scales with repo size. Reduced tube segments for perf.
  * Skipped on low-end. Shared shader material, throttled to 30fps.
  */
-export default function DataStreams() {
+export default React.memo(function DataStreams() {
     const cityData = useStore(s => s.cityData)
     const groupRef = useRef()
     const lastT = useRef(0)
@@ -86,6 +86,8 @@ export default function DataStreams() {
         side: THREE.DoubleSide,
     }), [])
 
+    useEffect(() => () => streamMaterial.dispose(), [streamMaterial])
+
     useFrame(({ clock }) => {
         const t = clock.getElapsedTime()
         if (t - lastT.current < 0.033) return
@@ -107,7 +109,7 @@ export default function DataStreams() {
             ))}
         </group>
     )
-}
+})
 
 function StreamTube({ stream, material, tubeSeg, radSeg }) {
     const geometry = useMemo(() => {
@@ -131,6 +133,8 @@ function StreamTube({ stream, material, tubeSeg, radSeg }) {
         geo.setAttribute('tubeT', new THREE.BufferAttribute(tArr, 1))
         return geo
     }, [stream, tubeSeg, radSeg])
+
+    useEffect(() => () => geometry.dispose(), [geometry])
 
     return <mesh geometry={geometry} material={material} />
 }

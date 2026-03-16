@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useRef, useState, useCallback, useMemo } from 'react'
 import { createPortal } from 'react-dom'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Copy, FileCode2, Check } from 'lucide-react'
 import useStore from '../../../store/useStore'
 
@@ -36,7 +35,15 @@ const KW_SET = new Set([
 
 const TYPE_RE = /^[A-Z][A-Za-z0-9_]*$/
 
+// LRU-ish cache for tokenized lines — avoids re-tokenizing on every render/scroll
+const _tokenCache = new Map()
+const TOKEN_CACHE_MAX = 500
+const MAX_DISPLAY_LINES = 10000
+
 function tokenizeLine(line) {
+    const cached = _tokenCache.get(line)
+    if (cached) return cached
+
     const tokens = []
     let i = 0
     const len = line.length
@@ -137,6 +144,14 @@ function tokenizeLine(line) {
         tokens.push({ type: T.PLAIN, text: line[i] })
         i++
     }
+
+    // Store in cache (evict oldest if full)
+    if (_tokenCache.size >= TOKEN_CACHE_MAX) {
+        const firstKey = _tokenCache.keys().next().value
+        _tokenCache.delete(firstKey)
+    }
+    _tokenCache.set(line, tokens)
+
     return tokens
 }
 
@@ -165,11 +180,8 @@ function LoadingSkeleton() {
     return (
         <div style={{ padding: '0 24px' }}>
             {SKELETON_WIDTHS.map((w, i) => (
-                <motion.div
+                <div
                     key={i}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.03, duration: 0.3 }}
                     style={{
                         height: '18px', marginBottom: '4px',
                         display: 'flex', alignItems: 'center', gap: '16px',
@@ -179,27 +191,105 @@ function LoadingSkeleton() {
                         width: '3em', textAlign: 'right', color: 'rgba(255,255,255,0.08)',
                         fontSize: '12px', fontFamily: 'var(--font-mono)', flexShrink: 0,
                     }}>{i + 1}</div>
-                    <motion.div
-                        animate={{ opacity: [0.06, 0.12, 0.06] }}
-                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.05 }}
+                    <div
                         style={{
                             width: `${w}%`, height: '10px', borderRadius: '4px',
                             background: 'rgba(255,255,255,0.08)',
+                            animation: 'pulse 1.5s ease-in-out infinite',
+                            animationDelay: `${i * 50}ms`,
                         }}
                     />
-                </motion.div>
+                </div>
             ))}
+        </div>
+    )
+}
+
+/* ── Virtualized line renderer ────────────────────────────────────────── */
+
+const LINE_HEIGHT = 20  // px per line — must match lineHeight in code body
+const OVERSCAN = 20     // extra lines rendered above/below viewport
+
+function VirtualizedCode({ lines, gutterWidth }) {
+    const containerRef = useRef(null)
+    const [scrollTop, setScrollTop] = useState(0)
+    const [containerHeight, setContainerHeight] = useState(0)
+
+    const handleScroll = useCallback((e) => {
+        setScrollTop(e.currentTarget.scrollTop)
+    }, [])
+
+    // Measure container on mount and resize
+    React.useEffect(() => {
+        const el = containerRef.current
+        if (!el) return
+        const measure = () => setContainerHeight(el.clientHeight)
+        measure()
+        const ro = new ResizeObserver(measure)
+        ro.observe(el)
+        return () => ro.disconnect()
+    }, [])
+
+    const totalHeight = lines.length * LINE_HEIGHT
+    const startIdx = Math.max(0, Math.floor(scrollTop / LINE_HEIGHT) - OVERSCAN)
+    const visibleCount = Math.ceil(containerHeight / LINE_HEIGHT) + OVERSCAN * 2
+    const endIdx = Math.min(lines.length, startIdx + visibleCount)
+
+    return (
+        <div
+            ref={containerRef}
+            onScroll={handleScroll}
+            style={{
+                flex: 1, overflow: 'auto',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '13px', lineHeight: `${LINE_HEIGHT}px`,
+                background: '#0a0c10',
+            }}
+        >
+            <div style={{ height: totalHeight, position: 'relative' }}>
+                <table style={{
+                    borderCollapse: 'collapse', width: '100%',
+                    fontFamily: 'inherit', fontSize: 'inherit', lineHeight: 'inherit',
+                    position: 'absolute',
+                    top: startIdx * LINE_HEIGHT,
+                    left: 0, right: 0,
+                }}>
+                    <tbody>
+                        {lines.slice(startIdx, endIdx).map((line, offset) => {
+                            const i = startIdx + offset
+                            return (
+                                <tr key={i}>
+                                    <td style={{
+                                        width: `${gutterWidth + 1}em`, minWidth: `${gutterWidth + 1}em`,
+                                        textAlign: 'right', paddingRight: '16px', paddingLeft: '16px',
+                                        color: 'rgba(255,255,255,0.15)', userSelect: 'none',
+                                        verticalAlign: 'top', whiteSpace: 'nowrap',
+                                        borderRight: '1px solid rgba(255,255,255,0.04)',
+                                        height: LINE_HEIGHT,
+                                    }}>{i + 1}</td>
+                                    <td style={{
+                                        paddingLeft: '16px', paddingRight: '24px',
+                                        whiteSpace: 'pre', color: '#abb2bf',
+                                        height: LINE_HEIGHT,
+                                    }}>
+                                        <HighlightedLine text={line} />
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            </div>
         </div>
     )
 }
 
 /* ── Main CodeViewer ─────────────────────────────────────────────────── */
 
-export default function CodeViewer({ building, onClose }) {
+export default React.memo(function CodeViewer({ building, onClose }) {
     const fileContent = useStore(s => s.fileContent)
     const fetchFileContent = useStore(s => s.fetchFileContent)
     const [copied, setCopied] = React.useState(false)
-    const scrollRef = React.useRef(null)
 
     // Self-fetch: ensure content is loaded for this building (don't rely solely on BuildingPanel)
     React.useEffect(() => {
@@ -216,12 +306,16 @@ export default function CodeViewer({ building, onClose }) {
         return () => window.removeEventListener('keydown', handleKeyDown)
     }, [onClose])
 
-    // Scroll to top when content loads
-    React.useEffect(() => {
-        if (fileContent?.content && scrollRef.current) {
-            scrollRef.current.scrollTop = 0
+    const { lines, truncated, lineCount } = useMemo(() => {
+        const content = fileContent?.content || ''
+        const allLines = content.split('\n')
+        const total = allLines.length
+        if (total > MAX_DISPLAY_LINES) {
+            return { lines: allLines.slice(0, MAX_DISPLAY_LINES), truncated: true, lineCount: total }
         }
+        return { lines: allLines, truncated: false, lineCount: total }
     }, [fileContent?.content])
+    const gutterWidth = Math.max(3, String(lineCount).length)
 
     if (!building) return null
 
@@ -244,52 +338,37 @@ export default function CodeViewer({ building, onClose }) {
         URL.revokeObjectURL(url)
     }
 
-    const lines = (fileContent?.content || '').split('\n')
-    const lineCount = fileContent?.content ? lines.length : 0
-    const gutterWidth = Math.max(3, String(lineCount).length)
-
     return createPortal(
-        <AnimatePresence>
-            <motion.div
-                key="code-viewer-backdrop"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+        <div
+            style={{
+                position: 'fixed',
+                top: 0, left: 0, right: 0, bottom: 0,
+                background: 'rgba(0, 0, 0, 0.88)',
+                backdropFilter: 'blur(16px)',
+                WebkitBackdropFilter: 'blur(16px)',
+                zIndex: 2147483647,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '32px',
+            }}
+            onClick={onClose}
+        >
+            <div
                 style={{
-                    position: 'fixed',
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    background: 'rgba(0, 0, 0, 0.88)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                    zIndex: 2147483647,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '32px',
+                    width: '100%',
+                    maxWidth: '1100px',
+                    height: '88vh',
+                    background: '#0a0c10',
+                    color: '#e4e4e7',
+                    borderRadius: '16px',
+                    boxShadow: '0 50px 100px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.06), 0 0 60px rgba(99,102,241,0.06)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    display: 'flex', flexDirection: 'column',
+                    overflow: 'hidden',
                 }}
-                onClick={onClose}
+                onClick={e => e.stopPropagation()}
             >
-                <motion.div
-                    key="code-viewer-panel"
-                    initial={{ scale: 0.92, y: 30, opacity: 0 }}
-                    animate={{ scale: 1, y: 0, opacity: 1 }}
-                    exit={{ scale: 0.95, y: 20, opacity: 0 }}
-                    transition={{ type: 'spring', damping: 28, stiffness: 320, mass: 0.8 }}
-                    style={{
-                        width: '100%',
-                        maxWidth: '1100px',
-                        height: '88vh',
-                        background: '#0a0c10',
-                        color: '#e4e4e7',
-                        borderRadius: '16px',
-                        boxShadow: '0 50px 100px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.06), 0 0 60px rgba(99,102,241,0.06)',
-                        border: '1px solid rgba(255,255,255,0.08)',
-                        display: 'flex', flexDirection: 'column',
-                        overflow: 'hidden',
-                    }}
-                    onClick={e => e.stopPropagation()}
-                >
                     {/* ── Header ── */}
                     <div style={{
                         height: '46px', flexShrink: 0,
@@ -309,10 +388,7 @@ export default function CodeViewer({ building, onClose }) {
                         </div>
 
                         {/* File tab */}
-                        <motion.div
-                            initial={{ opacity: 0, y: -6 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 }}
+                        <div
                             style={{
                                 position: 'absolute', left: '50%', transform: 'translateX(-50%)',
                                 display: 'flex', alignItems: 'center', gap: '8px',
@@ -327,7 +403,7 @@ export default function CodeViewer({ building, onClose }) {
                             }}>
                                 {building.path.split('/').pop()}
                             </span>
-                        </motion.div>
+                        </div>
 
                         {/* Actions */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -344,10 +420,7 @@ export default function CodeViewer({ building, onClose }) {
                     </div>
 
                     {/* ── Breadcrumb path ── */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.15 }}
+                    <div
                         style={{
                             padding: '6px 20px', flexShrink: 0,
                             borderBottom: '1px solid rgba(255,255,255,0.04)',
@@ -362,95 +435,62 @@ export default function CodeViewer({ building, onClose }) {
                                 {i < arr.length - 1 && <span style={{ margin: '0 4px', opacity: 0.4 }}>/</span>}
                             </React.Fragment>
                         ))}
-                    </motion.div>
+                    </div>
 
                     {/* ── Code body ── */}
-                    <div
-                        ref={scrollRef}
-                        style={{
-                            flex: 1, overflow: 'auto',
+                    {fileContent?.loading ? (
+                        <div style={{
+                            flex: 1, overflow: 'hidden',
                             fontFamily: 'var(--font-mono)',
                             fontSize: '13px', lineHeight: '20px',
                             background: '#0a0c10',
-                        }}
-                    >
-                        {fileContent?.loading ? (
-                            <div style={{ paddingTop: '24px' }}>
-                                <LoadingSkeleton />
+                            paddingTop: '24px',
+                        }}>
+                            <LoadingSkeleton />
+                        </div>
+                    ) : fileContent?.error ? (
+                        <div style={{
+                            flex: 1, display: 'flex', flexDirection: 'column',
+                            alignItems: 'center', justifyContent: 'center',
+                            gap: '16px', padding: '40px',
+                            background: '#0a0c10',
+                        }}>
+                            <FileCode2 size={48} style={{ opacity: 0.4 }} />
+                            <div style={{ fontWeight: 600, color: '#ef4444', fontSize: '1rem' }}>
+                                Unable to load source
                             </div>
-                        ) : fileContent?.error ? (
-                            <div style={{
-                                display: 'flex', flexDirection: 'column',
-                                alignItems: 'center', justifyContent: 'center',
-                                height: '100%', gap: '16px', padding: '40px',
-                            }}>
-                                <motion.div
-                                    initial={{ scale: 0.8, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 0.4 }}
-                                    transition={{ type: 'spring', damping: 15 }}
-                                >
-                                    <FileCode2 size={48} />
-                                </motion.div>
-                                <div style={{ fontWeight: 600, color: '#ef4444', fontSize: '1rem' }}>
-                                    Unable to load source
-                                </div>
-                                <div style={{ fontSize: '0.85rem', color: '#71717a', textAlign: 'center', maxWidth: '360px', lineHeight: 1.6 }}>
-                                    Re-analyze the repository to refresh the connection, or check that the file exists in the repo.
-                                </div>
+                            <div style={{ fontSize: '0.85rem', color: '#71717a', textAlign: 'center', maxWidth: '360px', lineHeight: 1.6 }}>
+                                Re-analyze the repository to refresh the connection, or check that the file exists in the repo.
                             </div>
-                        ) : !fileContent?.content ? (
-                            <div style={{
-                                display: 'flex', flexDirection: 'column',
-                                alignItems: 'center', justifyContent: 'center',
-                                height: '100%', gap: '12px', color: '#3f3f46',
-                            }}>
-                                <FileCode2 size={40} />
-                                <div style={{ fontSize: '0.85rem' }}>No content available</div>
-                            </div>
-                        ) : (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3 }}
-                            >
-                                <table style={{
-                                    borderCollapse: 'collapse', width: '100%',
-                                    fontFamily: 'inherit', fontSize: 'inherit', lineHeight: 'inherit',
+                        </div>
+                    ) : !fileContent?.content ? (
+                        <div style={{
+                            flex: 1, display: 'flex', flexDirection: 'column',
+                            alignItems: 'center', justifyContent: 'center',
+                            gap: '12px', color: '#3f3f46',
+                            background: '#0a0c10',
+                        }}>
+                            <FileCode2 size={40} />
+                            <div style={{ fontSize: '0.85rem' }}>No content available</div>
+                        </div>
+                    ) : (
+                        <>
+                            <VirtualizedCode lines={lines} gutterWidth={gutterWidth} />
+                            {truncated && (
+                                <div style={{
+                                    padding: '8px 16px', textAlign: 'center',
+                                    fontSize: '0.75rem', color: '#f59e0b',
+                                    background: 'rgba(245,158,11,0.06)',
+                                    borderTop: '1px solid rgba(245,158,11,0.12)',
                                 }}>
-                                    <tbody>
-                                        {lines.map((line, i) => (
-                                            <tr
-                                                key={i}
-                                                style={{ transition: 'background 0.1s' }}
-                                                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
-                                                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                                            >
-                                                <td style={{
-                                                    width: `${gutterWidth + 1}em`, minWidth: `${gutterWidth + 1}em`,
-                                                    textAlign: 'right', paddingRight: '16px', paddingLeft: '16px',
-                                                    color: 'rgba(255,255,255,0.15)', userSelect: 'none',
-                                                    verticalAlign: 'top', whiteSpace: 'nowrap',
-                                                    borderRight: '1px solid rgba(255,255,255,0.04)',
-                                                }}>{i + 1}</td>
-                                                <td style={{
-                                                    paddingLeft: '16px', paddingRight: '24px',
-                                                    whiteSpace: 'pre', color: '#abb2bf',
-                                                }}>
-                                                    <HighlightedLine text={line} />
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </motion.div>
-                        )}
-                    </div>
+                                    Showing first {MAX_DISPLAY_LINES.toLocaleString()} of {lineCount.toLocaleString()} lines
+                                </div>
+                            )}
+                        </>
+                    )}
 
                     {/* ── Footer ── */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
+                    <div
                         style={{
                             height: '30px', flexShrink: 0,
                             background: 'rgba(255,255,255,0.02)',
@@ -472,21 +512,19 @@ export default function CodeViewer({ building, onClose }) {
                             <span>Complexity: {building.metrics?.complexity || 1}</span>
                             <span>UTF-8</span>
                         </div>
-                    </motion.div>
-                </motion.div>
-            </motion.div>
-        </AnimatePresence>,
+                    </div>
+                </div>
+            </div>,
         document.body
     )
-}
+})
 
 /* ── Header button sub-component ─────────────────────────────────────── */
 
 function HeaderButton({ onClick, label, active, children }) {
     return (
-        <motion.button
+        <button
             onClick={onClick}
-            whileTap={{ scale: 0.92 }}
             title={label}
             style={{
                 display: 'flex', alignItems: 'center', gap: '6px',
@@ -509,6 +547,6 @@ function HeaderButton({ onClick, label, active, children }) {
         >
             {children}
             <span>{label}</span>
-        </motion.button>
+        </button>
     )
 }

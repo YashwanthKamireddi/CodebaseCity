@@ -7,7 +7,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Command } from 'cmdk'
-import { motion, AnimatePresence } from 'framer-motion'
+
 import {
     Search,
     FileCode,
@@ -21,17 +21,15 @@ import './CommandPalette.css'
 export default function CommandPalette() {
     const [search, setSearch] = useState('')
 
-    const {
-        cityData,
-        selectBuilding,
-        toggleRoads,
-        toggleTheme,
-        theme,
-        showRoads,
-        commandPaletteOpen,
-        setCommandPaletteOpen,
-        searchCode
-    } = useStore()
+    const cityData = useStore(s => s.cityData)
+    const selectBuilding = useStore(s => s.selectBuilding)
+    const toggleRoads = useStore(s => s.toggleRoads)
+    const toggleTheme = useStore(s => s.toggleTheme)
+    const theme = useStore(s => s.theme)
+    const showRoads = useStore(s => s.showRoads)
+    const commandPaletteOpen = useStore(s => s.commandPaletteOpen)
+    const setCommandPaletteOpen = useStore(s => s.setCommandPaletteOpen)
+    const searchCode = useStore(s => s.searchCode)
 
     // Search State
     const [searchResults, setSearchResults] = useState([])
@@ -139,25 +137,18 @@ export default function CommandPalette() {
     }
 
     return (
-        <AnimatePresence>
+        <>
             {commandPaletteOpen && (
                 <>
                     {/* Backdrop */}
-                    <motion.div
-                        className="command-backdrop"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                    <div
+                        className="command-backdrop anim-fade-in"
                         onClick={() => setCommandPaletteOpen(false)}
                     />
 
                     {/* Command dialog */}
-                    <motion.div
-                        className="command-dialog"
-                        initial={{ opacity: 0, scale: 0.98, y: -10, x: '-50%' }}
-                        animate={{ opacity: 1, scale: 1, y: 0, x: '-50%' }}
-                        exit={{ opacity: 0, scale: 0.98, y: -10, x: '-50%' }}
-                        transition={{ duration: 0.15, ease: [0.32, 0.72, 0, 1] }}
+                    <div
+                        className="command-dialog anim-scale-in"
                     >
                         <Command
                             className="command-root"
@@ -186,18 +177,13 @@ export default function CommandPalette() {
                                     <div className="command-skeleton-list">
                                         {[...Array(3)].map((_, i) => (
                                             <div key={i} className="command-skeleton-row">
-                                                <motion.div className="command-skeleton-icon"
-                                                    animate={{ opacity: [0.3, 0.7, 0.3] }}
-                                                    transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
+                                                <div className="command-skeleton-icon"
+                                                    style={{ animation: `anim-shimmer 1.5s ease-in-out infinite ${i * 0.1}s` }}
                                                 />
                                                 <div className="command-skeleton-text">
-                                                    <motion.div className="command-skeleton-line" style={{ width: '40%' }}
-                                                        animate={{ opacity: [0.3, 0.7, 0.3] }}
-                                                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 + 0.1 }}
+                                                    <div className="command-skeleton-line" style={{ width: '40%', animation: `anim-shimmer 1.5s ease-in-out infinite ${i * 0.1 + 0.1}s` }}
                                                     />
-                                                    <motion.div className="command-skeleton-line command-skeleton-line--sm" style={{ width: '60%' }}
-                                                        animate={{ opacity: [0.3, 0.7, 0.3] }}
-                                                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 + 0.2 }}
+                                                    <div className="command-skeleton-line command-skeleton-line--sm" style={{ width: '60%', animation: `anim-shimmer 1.5s ease-in-out infinite ${i * 0.1 + 0.2}s` }}
                                                     />
                                                 </div>
                                             </div>
@@ -278,10 +264,10 @@ export default function CommandPalette() {
                                 </span>
                             </div>
                         </Command>
-                    </motion.div>
+                    </div>
                 </>
             )}
-        </AnimatePresence>
+        </>
     )
 }
 

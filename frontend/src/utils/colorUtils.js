@@ -1,6 +1,31 @@
 export const BUILDING_COLOR = '#1a1a2e'
 
 /**
+ * 4-stop gradient anchored to the legend colours shown in ViewControl:
+ *   Small → Mid → Large → Huge
+ *   Blue  → Green → Gold → Red
+ * color_metric is rank-normalised 0→1 so distribution is always even.
+ */
+const PALETTE = [
+    [59,  158, 255],  // #3b9eff — Small  (blue)
+    [0,   230, 118],  // #00e676 — Mid    (green)
+    [255, 196,   0],  // #ffc400 — Large  (gold)
+    [255,  23,  68],  // #ff1744 — Huge   (red)
+]
+
+export function metricToHex(t) {
+    const clamped = Math.min(1, Math.max(0, t))
+    const scaled = clamped * (PALETTE.length - 1)
+    const idx = Math.min(Math.floor(scaled), PALETTE.length - 2)
+    const frac = scaled - idx
+    const a = PALETTE[idx], b = PALETTE[idx + 1]
+    const r = Math.round(a[0] + (b[0] - a[0]) * frac)
+    const g = Math.round(a[1] + (b[1] - a[1]) * frac)
+    const bl = Math.round(a[2] + (b[2] - a[2]) * frac)
+    return '#' + ((1 << 24) | (r << 16) | (g << 8) | bl).toString(16).slice(1)
+}
+
+/**
  * Premium Building Color System — "Elevated Dark" 2026
  *
  * Design Philosophy:
@@ -33,9 +58,9 @@ export function getBuildingColor(data, mode, context = {}) {
     }
 
     if (isSelected) return '#34d399'   // Emerald — bright, clear selection
-    if (isHovered) return '#60a5fa'    // Sky blue — obvious hover
+    if (isHovered) return '#7dd3fc'    // Light sky — obvious hover
 
-    if (isUnrelated) return '#0e0f14'  // Deep shadow
+    if (isUnrelated) return '#111318'  // Deep shadow — visible but clearly dimmed
 
     // ═══════════════════════════════════════════════════════════════
     // COLOR MODES
@@ -127,20 +152,17 @@ export function getBuildingColor(data, mode, context = {}) {
     }
 
     // ═══════════════════════════════════════════════════════════════
-    // DEFAULT MODE — Vibrant height gradient
-    // Cool blue (tiny) → warm coral (massive)
+    // DEFAULT MODE — Multi-stop cyberpunk gradient
+    // Cyan (tiny) → Blue → Violet → Magenta → Orange → Rose (massive)
+    // Uses color_metric (log-normalized 0-1) for even distribution.
     // ═══════════════════════════════════════════════════════════════
 
-    const height = data.dimensions?.height || 5
-
-    if (height < 3) return '#3b9eff'   // Bright blue (tiny files)
-    if (height < 8) return '#00d4aa'   // Vivid teal
-    if (height < 15) return '#00e676'  // Neon green
-    if (height < 25) return '#c6ff00'  // Electric lime
-    if (height < 40) return '#ffc400'  // Vivid gold
-    if (height < 60) return '#ff6d00'  // Bright orange
-    if (height < 80) return '#ff3d00'  // Fire red
-    return '#ff1744'                   // Hot red (massive files)
+    // color_metric is rank-normalized (0-1) computed at city load time.
+    // Smallest file = 0 (cyan), largest file = 1 (rose), evenly distributed.
+    // Fallback: simple height-based ratio for edge cases.
+    if (data.color_metric != null) return metricToHex(data.color_metric)
+    const h = data.dimensions?.height || 8
+    return metricToHex(Math.min(1, Math.max(0, h / 80)))
 }
 
 /**

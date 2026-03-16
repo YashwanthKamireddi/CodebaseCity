@@ -171,6 +171,12 @@ export function parseFile(filePath, content) {
   _seenFunctions.clear()
   _seenClasses.clear()
 
+  // Pre-compute line offsets for O(log n) offset→line lookup
+  const _lineOffsets = [0]
+  for (let i = 0; i < content.length; i++) {
+    if (content.charCodeAt(i) === 10) _lineOffsets.push(i + 1)
+  }
+
   // ═══════════════════════════════════════════════════════════════
   // 1. IMPORT EXTRACTION - Use language-specific patterns
   // ═══════════════════════════════════════════════════════════════
@@ -204,12 +210,14 @@ export function parseFile(filePath, content) {
       if (_falsePositives.has(name)) continue
       _seenFunctions.add(name)
 
-      // Estimate line number without expensive slice+match
-      let lineNum = 1
+      // O(log n) line-number lookup via binary search on pre-computed offsets
+      let lo = 0, hi = _lineOffsets.length - 1
       const idx = match.index
-      for (let i = 0; i < idx && i < content.length; i++) {
-        if (content.charCodeAt(i) === 10) lineNum++ // 10 = '\n'
+      while (lo < hi) {
+        const mid = (lo + hi + 1) >> 1
+        if (_lineOffsets[mid] <= idx) lo = mid; else hi = mid - 1
       }
+      const lineNum = lo + 1
 
       result.functions.push({
         name,
@@ -236,11 +244,13 @@ export function parseFile(filePath, content) {
       if (!name || _seenClasses.has(name)) continue
       _seenClasses.add(name)
 
-      let lineNum = 1
+      let lo = 0, hi = _lineOffsets.length - 1
       const idx = match.index
-      for (let i = 0; i < idx && i < content.length; i++) {
-        if (content.charCodeAt(i) === 10) lineNum++
+      while (lo < hi) {
+        const mid = (lo + hi + 1) >> 1
+        if (_lineOffsets[mid] <= idx) lo = mid; else hi = mid - 1
       }
+      const lineNum = lo + 1
 
       result.classes.push({
         name,

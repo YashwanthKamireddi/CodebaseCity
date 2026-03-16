@@ -6,8 +6,7 @@
  * No scanlines, no cyan, no gimmicks — just typography and clarity.
  */
 import React, { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { FolderOpen, ArrowRight, Github } from 'lucide-react'
+import { FolderOpen, ArrowRight, Github, KeyRound } from 'lucide-react'
 import useStore from '../../../store/useStore'
 import logger from '../../../utils/logger'
 
@@ -19,8 +18,12 @@ export default function EmptyCityHero() {
     const cityData = useStore(s => s.cityData)
     const isLandingOverlayActive = useStore(s => s.isLandingOverlayActive)
     const setLandingOverlayActive = useStore(s => s.setLandingOverlayActive)
+    const githubToken = useStore(s => s.githubToken)
+    const setGithubToken = useStore(s => s.setGithubToken)
     const [repoUrl, setRepoUrl] = useState('')
     const [showGithubInput, setShowGithubInput] = useState(false)
+    const [showTokenInput, setShowTokenInput] = useState(false)
+    const [tokenDraft, setTokenDraft] = useState(githubToken || '')
 
     useEffect(() => {
         if (!cityData) {
@@ -38,62 +41,43 @@ export default function EmptyCityHero() {
     if (!isLandingOverlayActive) return null
 
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-            className="lp-root"
+        <div
+            className="lp-root anim-fade-in"
         >
             {/* Vignette — clean radial, dark edges */}
             <div className="lp-vignette" />
 
             {/* Top bar */}
-            <motion.header
-                className="lp-topbar"
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
+            <header
+                className="lp-topbar anim-slide-down"
             >
-                <span className="lp-wordmark">Code City</span>
+                <span className="lp-wordmark">Codebase City</span>
                 <span className="lp-ver">v2.0</span>
-            </motion.header>
+            </header>
 
             {/* Center content */}
             <div className="lp-center">
-                <motion.p
-                    className="lp-kicker"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.6 }}
+                <p
+                    className="lp-kicker anim-slide-up"
                 >
                     3D Codebase Visualization
-                </motion.p>
+                </p>
 
-                <motion.h1
-                    className="lp-heading"
-                    initial={{ opacity: 0, y: 18 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5, duration: 0.7 }}
+                <h1
+                    className="lp-heading anim-slide-up"
                 >
                     See your codebase<br />as a living city
-                </motion.h1>
+                </h1>
 
-                <motion.p
-                    className="lp-desc"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.65, duration: 0.6 }}
+                <p
+                    className="lp-desc anim-slide-up"
                 >
                     Architecture maps, complexity heat, git history —<br />
                     everything in one interactive 3D view.
-                </motion.p>
+                </p>
 
-                <motion.div
-                    className="lp-cta"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8, duration: 0.6 }}
+                <div
+                    className="lp-cta anim-slide-up"
                 >
                     <button onClick={analyzeLocal} className="lp-btn lp-btn--solid">
                         <FolderOpen size={14} />
@@ -107,16 +91,11 @@ export default function EmptyCityHero() {
                     <button onClick={handleExploreDemoCity} className="lp-btn lp-btn--text">
                         Explore Demo
                     </button>
-                </motion.div>
+                </div>
 
-                <AnimatePresence>
-                    {showGithubInput && (
-                        <motion.div
-                            initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                            animate={{ opacity: 1, height: 'auto', marginTop: 14 }}
-                            exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                            transition={{ duration: 0.25 }}
-                            className="lp-gh-wrap"
+                {showGithubInput && (
+                        <div
+                            className="lp-gh-wrap anim-slide-up"
                         >
                             <div className="lp-gh-row">
                                 <Github size={13} className="lp-gh-icon" />
@@ -138,37 +117,69 @@ export default function EmptyCityHero() {
                                 </button>
                             </div>
                             <p className="lp-gh-hint">Any public repository</p>
-                        </motion.div>
+                            <button
+                                onClick={() => setShowTokenInput(v => !v)}
+                                className="lp-token-toggle"
+                            >
+                                <KeyRound size={11} />
+                                {githubToken ? 'Token set — 5 000 req/hr' : 'Add token for 5 000 req/hr'}
+                            </button>
+                            {showTokenInput && (
+                                    <div
+                                        className="lp-token-wrap anim-fade-in"
+                                    >
+                                        <div className="lp-gh-row">
+                                            <KeyRound size={13} className="lp-gh-icon" />
+                                            <input
+                                                type="password"
+                                                value={tokenDraft}
+                                                onChange={e => setTokenDraft(e.target.value)}
+                                                onKeyDown={e => {
+                                                    if (e.key === 'Enter') {
+                                                        setGithubToken(tokenDraft.trim())
+                                                        setShowTokenInput(false)
+                                                    }
+                                                }}
+                                                placeholder="ghp_... (personal access token)"
+                                                className="lp-gh-input"
+                                            />
+                                            <button
+                                                onClick={() => {
+                                                    setGithubToken(tokenDraft.trim())
+                                                    setShowTokenInput(false)
+                                                }}
+                                                className="lp-gh-go"
+                                            >
+                                                {tokenDraft.trim() ? '✓' : '✕'}
+                                            </button>
+                                        </div>
+                                        <p className="lp-gh-hint">
+                                            Optional. Create at{' '}
+                                            <a href="https://github.com/settings/tokens" target="_blank" rel="noopener noreferrer" className="lp-link">
+                                                github.com/settings/tokens
+                                            </a>
+                                            {' '}— no scopes needed for public repos. Stored locally only.
+                                        </p>
+                                    </div>
+                                )}
+                        </div>
                     )}
-                </AnimatePresence>
 
-                <AnimatePresence>
-                    {error && (
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="lp-err"
-                        >
-                            {error}
-                        </motion.p>
+                {error && (
+                        <p className="lp-err anim-fade-in">{error}</p>
                     )}
-                </AnimatePresence>
             </div>
 
             {/* Footer hints */}
-            <motion.footer
-                className="lp-footer"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.1, duration: 0.6 }}
+            <footer
+                className="lp-footer anim-fade-in"
             >
                 <span><kbd>⌘K</kbd> command palette</span>
                 <span className="lp-dot" />
                 <span><kbd>D</kbd> toggle roads</span>
                 <span className="lp-dot" />
                 <span>scroll to orbit</span>
-            </motion.footer>
+            </footer>
 
             <style>{`
                 .lp-root {
@@ -368,6 +379,23 @@ export default function EmptyCityHero() {
                     font-size: 0.7rem; color: rgba(255,255,255,0.35);
                     font-family: var(--font-mono);
                 }
+                .lp-token-toggle {
+                    display: flex; align-items: center; gap: 6px;
+                    justify-content: center;
+                    margin: 6px auto 0; padding: 4px 10px;
+                    background: none; border: none;
+                    font-size: 0.65rem; font-family: var(--font-mono);
+                    color: rgba(255,255,255,0.35); cursor: pointer;
+                    transition: color 0.2s;
+                }
+                .lp-token-toggle:hover { color: rgba(255,255,255,0.6); }
+                .lp-token-wrap { overflow: hidden; margin-top: 8px; }
+                .lp-link {
+                    color: rgba(255,255,255,0.55);
+                    text-decoration: underline;
+                    text-underline-offset: 2px;
+                }
+                .lp-link:hover { color: rgba(255,255,255,0.8); }
 
                 /* ── Error Message - Premium Styling ─── */
                 .lp-err {
@@ -482,6 +510,6 @@ export default function EmptyCityHero() {
                     }
                 }
             `}</style>
-        </motion.div>
+        </div>
     )
 }

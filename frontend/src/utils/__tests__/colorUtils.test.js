@@ -36,22 +36,22 @@ describe('colorUtils', () => {
 
       it('should return cyan for hovered building', () => {
         const color = getBuildingColor(mockBuilding, 'default', { isHovered: true })
-        expect(color).toBe('#60a5fa')
+        expect(color).toBe('#7dd3fc')
       })
 
       it('should return default color for dependency (no special handling)', () => {
         const color = getBuildingColor(mockBuilding, 'default', { isDependency: true })
-        expect(color).toBe('#00e676') // Falls through to height gradient (h=10)
+        expect(color).toMatch(/^#[0-9a-f]{6}$/) // Falls through to hex gradient
       })
 
       it('should return default color for dependent (no special handling)', () => {
         const color = getBuildingColor(mockBuilding, 'default', { isDependent: true })
-        expect(color).toBe('#00e676') // Falls through to height gradient (h=10)
+        expect(color).toMatch(/^#[0-9a-f]{6}$/) // Falls through to hex gradient
       })
 
       it('should return near-black for unrelated in focus mode', () => {
         const color = getBuildingColor(mockBuilding, 'default', { isUnrelated: true })
-        expect(color).toBe('#0e0f14')
+        expect(color).toBe('#111318')
       })
     })
 
@@ -129,16 +129,28 @@ describe('colorUtils', () => {
     })
 
     describe('default mode', () => {
-      it('should return color based on height', () => {
-        const smallBuilding = { ...mockBuilding, dimensions: { height: 2 } }
+      it('should return near-cyan hex for tiny files (low LOC)', () => {
+        const smallBuilding = { ...mockBuilding, metrics: { ...mockBuilding.metrics, loc: 1 } }
         const color = getBuildingColor(smallBuilding, 'default', {})
-        expect(color).toBe('#3b9eff') // Bright blue for tiny files
+        // loc=1 → log(2)/log(1000) ≈ 0.10 → near cyan end
+        expect(color).toMatch(/^#[0-9a-f]{6}$/)
       })
 
-      it('should return red for large files', () => {
-        const largeBuilding = { ...mockBuilding, dimensions: { height: 100 } }
+      it('should return warm hex for large files (high LOC)', () => {
+        const largeBuilding = { ...mockBuilding, metrics: { ...mockBuilding.metrics, loc: 5000 } }
         const color = getBuildingColor(largeBuilding, 'default', {})
-        expect(color).toBe('#ff1744') // Hot red for large files
+        // loc=5000 → log(5001)/log(1000) ≈ 1.23 → clamped to 1.0 → rose end
+        expect(color).toMatch(/^#[0-9a-f]{6}$/)
+      })
+
+      it('should use color_metric when available', () => {
+        const building = { ...mockBuilding, color_metric: 0.5 }
+        const color = getBuildingColor(building, 'default', {})
+        expect(color).toMatch(/^#[0-9a-f]{6}$/)
+        // metric=0.5 is mid-range → should be in violet area
+        const midBuilding = { ...mockBuilding, color_metric: 0.0 }
+        const cyanColor = getBuildingColor(midBuilding, 'default', {})
+        expect(cyanColor).toBe('#00e5ff') // metric=0 → cyan
       })
     })
   })

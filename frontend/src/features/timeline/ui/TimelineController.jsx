@@ -10,7 +10,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { Play, Pause, SkipBack, SkipForward, ChevronFirst, ChevronLast } from 'lucide-react'
 import useStore from '../../../store/useStore'
-import { motion, AnimatePresence } from 'framer-motion'
+
 
 export default function TimelineController() {
     const cityData = useStore(s => s.cityData)
@@ -223,14 +223,9 @@ export default function TimelineController() {
     const hoverCommit = hoveredIndex !== null ? history[hoveredIndex] : null
 
     return createPortal(
-        <AnimatePresence>
-            <motion.div
-                key="timeline-bar"
+        <div
                 className="timeline-wrapper"
-                initial={{ y: 80, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 80, opacity: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                style={{ animation: 'anim-slide-from-bottom 0.4s cubic-bezier(0.32, 0.72, 0, 1) both' }}
             >
                 <div className="timeline-panel">
 
@@ -448,7 +443,7 @@ export default function TimelineController() {
                             />
 
                             {/* Handle */}
-                            <motion.div
+                            <div
                                 style={{
                                     position: 'absolute',
                                     left: `${progress}%`,
@@ -461,9 +456,8 @@ export default function TimelineController() {
                                     boxShadow: '0 0 0 3px rgba(255, 255, 255, 0.15), 0 2px 6px rgba(0,0,0,0.5)',
                                     pointerEvents: 'none',
                                     zIndex: 5,
+                                    animation: isLoading ? 'anim-pulse-scale 0.8s ease-in-out infinite' : undefined,
                                 }}
-                                animate={isLoading ? { scale: [1, 1.15, 1] } : { scale: 1 }}
-                                transition={isLoading ? { repeat: Infinity, duration: 0.8 } : {}}
                             />
 
                             {/* Hover tooltip */}
@@ -607,8 +601,7 @@ export default function TimelineController() {
                             gap: 8px;
                         }
                     }
-                `}</style>            </motion.div>
-        </AnimatePresence>,
+                `}</style>            </div>,
         document.body
     )
 }

@@ -20,7 +20,18 @@ export default function PatternList({ issues, buildings }) {
 
     if (!issues) return null
 
-    const findBuilding = (name) => cityData?.buildings?.find(b => b.name === name || b.path === name)
+    // O(1) lookup map instead of O(N) .find() per click
+    const buildingMap = React.useMemo(() => {
+        const map = new Map()
+        if (!cityData?.buildings) return map
+        for (const b of cityData.buildings) {
+            map.set(b.name, b)
+            map.set(b.path, b)
+        }
+        return map
+    }, [cityData])
+
+    const findBuilding = (name) => buildingMap.get(name) || null
 
     return (
         <div className="pl-root">

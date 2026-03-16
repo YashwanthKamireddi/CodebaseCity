@@ -21,7 +21,7 @@ const PulseMaterial = shaderMaterial(
     #include <logdepthbuf_pars_vertex>
 
     attribute float aChurn;
-    attribute float aOpacityOverride;
+    // (aOpacityOverride removed — unused in fragment shader)
 
     varying vec3 vWorldPosition;
     varying vec3 vLocalPosition;
@@ -31,7 +31,7 @@ const PulseMaterial = shaderMaterial(
     varying vec3 vColor;
     varying float vChurn;
     varying vec3 vScale;
-    varying float vOpacityOverride;
+    varying float vFresnel;
 
     void main() {
       vLocalPosition = position;
@@ -39,7 +39,6 @@ const PulseMaterial = shaderMaterial(
       vNormal = normalize(normalMatrix * normal);
       vColor = instanceColor;
       vChurn = aChurn;
-      vOpacityOverride = aOpacityOverride;
 
       vScale = vec3(
         length(instanceMatrix[0].xyz),
@@ -50,6 +49,9 @@ const PulseMaterial = shaderMaterial(
       vec4 worldPos = modelMatrix * instanceMatrix * vec4(position, 1.0);
       vWorldPosition = worldPos.xyz;
       vViewDir = normalize(cameraPosition - worldPos.xyz);
+
+      // Fresnel computed per-vertex — identical on box geometry, ~10x cheaper
+      vFresnel = pow(1.0 - max(dot(vNormal, vViewDir), 0.0), 3.0);
 
       gl_Position = projectionMatrix * viewMatrix * worldPos;
 
@@ -71,7 +73,7 @@ const PulseMaterial = shaderMaterial(
     varying vec3 vColor;
     varying float vChurn;
     varying vec3 vScale;
-    varying float vOpacityOverride;
+    varying float vFresnel;
 
     void main() {
       #include <logdepthbuf_fragment>
@@ -96,71 +98,89 @@ const PulseMaterial = shaderMaterial(
       vec2 distFromCenter = abs(faceUV) * faceScale;
       vec2 distFromOuter = (faceScale * 0.5) - distFromCenter;
 
-      // Edge highlight
+      // Edge highlight — clean architectural line
       float edgeThickness = 0.12;
-      float edgeX = smoothstep(edgeThickness + 0.05, edgeThickness - 0.05, distFromOuter.x);
-      float edgeY = smoothstep(edgeThickness + 0.05, edgeThickness - 0.05, distFromOuter.y);
+      float edgeX = smoothstep(edgeThickness + 0.05, edgeThickness - 0.02, distFromOuter.x);
+      float edgeY = smoothstep(edgeThickness + 0.05, edgeThickness - 0.02, distFromOuter.y);
       float outerEdge = max(edgeX, edgeY);
 
-      // Procedural windows
-      float windowGridX = fract(vWorldPosition.x * 0.4);
-      float windowGridY = fract(vWorldPosition.y * 0.4);
-      float windowGridZ = fract(vWorldPosition.z * 0.4);
+      // Procedural windows — larger, cleaner grid for readability at all zooms
+      float wFreq = 0.28; // Larger windows, fewer per face
+      float windowGridX = fract(vWorldPosition.x * wFreq);
+      float windowGridY = fract(vWorldPosition.y * wFreq);
+      float windowGridZ = fract(vWorldPosition.z * wFreq);
 
+      // Window panes: smoothstep for clean antialiased rectangles
       float windows = 0.0;
       if (abs(vLocalNormal.x) > 0.5) {
-          windows = step(0.15, windowGridZ) * step(0.15, windowGridY);
+          windows = smoothstep(0.10, 0.16, windowGridZ) * smoothstep(0.90, 0.84, windowGridZ)
+                  * smoothstep(0.15, 0.22, windowGridY) * smoothstep(0.88, 0.80, windowGridY);
       } else if (abs(vLocalNormal.z) > 0.5) {
-          windows = step(0.15, windowGridX) * step(0.15, windowGridY);
+          windows = smoothstep(0.10, 0.16, windowGridX) * smoothstep(0.90, 0.84, windowGridX)
+                  * smoothstep(0.15, 0.22, windowGridY) * smoothstep(0.88, 0.80, windowGridY);
       }
 
-      // Randomize lit windows — 70% lit for a lively city
-      vec3 posFloor = floor(vWorldPosition.xyz * 0.4);
+      // Randomize lit windows — 60% lit for night-city feel
+      vec3 posFloor = floor(vWorldPosition.xyz * wFreq);
       float randomWindow = fract(sin(dot(posFloor, vec3(12.9898, 78.233, 37.719))) * 43758.5453);
-      windows *= step(0.3, randomWindow);
+      windows *= step(0.4, randomWindow);
 
-      // Color palette
+      // Window warmth variation — some windows warmer, some cooler
+      float warmth = fract(sin(dot(posFloor.xy, vec2(45.233, 97.113))) * 12345.6789);
+
+      // Color palette — deep walls for maximum contrast with glowing windows
       vec3 buildingColor = vColor;
-      vec3 darkFace = buildingColor * 0.35;
-      vec3 edgeColor = buildingColor * 1.6;
-      vec3 windowColor = buildingColor * 1.3 + vec3(0.18, 0.24, 0.30);
+      vec3 darkFace = buildingColor * 0.12;
+      vec3 edgeColor = buildingColor * 1.5;
+      // Windows have warm white-blue glow tinted by building color
+      vec3 windowColor = mix(
+          vec3(1.0, 0.92, 0.75),  // Warm white
+          vec3(0.7, 0.85, 1.0),   // Cool blue-white
+          warmth
+      ) * 0.7 + buildingColor * 0.4;
 
-      // Two-light directional setup for better coverage
+      // Directional lighting — high contrast for depth
       vec3 lightDir = normalize(vec3(0.5, 0.8, 0.3));
-      vec3 lightDir2 = normalize(vec3(-0.4, 0.5, -0.6));
       float NdotL = max(dot(vNormal, lightDir), 0.0);
-      float NdotL2 = max(dot(vNormal, lightDir2), 0.0);
-      float lighting = 0.45 + 0.45 * NdotL + 0.15 * NdotL2;
+      float lighting = 0.30 + 0.70 * NdotL;
+
+      // Fresnel rim light — from vertex shader
+      float fresnel = vFresnel;
 
       vec3 finalColor = darkFace * lighting;
 
       if (isSide) {
-          // Lit windows
-          finalColor = mix(finalColor, windowColor * lighting, windows * (1.0 - outerEdge));
-          // Edge glow
-          finalColor = mix(finalColor, edgeColor, outerEdge * 0.85);
-          // Height gradient — brighter toward top
+          // Lit windows — emissive glow against dark facades
+          finalColor = mix(finalColor, windowColor, windows * (1.0 - outerEdge));
+          // Edge glow — bright structural highlight
+          finalColor = mix(finalColor, edgeColor, outerEdge * 0.8);
+          // Height gradient — slightly brighter toward top
           float heightGrad = (vLocalPosition.y + 0.5);
-          finalColor += buildingColor * 0.08 * heightGrad;
-          // Ambient contribution so shadowed sides aren't pitch black
-          finalColor += buildingColor * 0.06;
+          finalColor += buildingColor * 0.04 * heightGrad;
+          // Fresnel rim glow — neon edge light
+          finalColor += edgeColor * fresnel * 0.15;
+          // Ground-level ambient occlusion
+          float ao = smoothstep(-0.5, 0.0, vLocalPosition.y);
+          finalColor *= mix(0.70, 1.0, ao);
 
       } else if (isTop) {
-          finalColor = darkFace * (lighting + 0.2);
+          finalColor = darkFace * (lighting + 0.1);
           // Roof edge
-          finalColor = mix(finalColor, edgeColor * 0.8, outerEdge);
+          finalColor = mix(finalColor, edgeColor * 0.7, outerEdge);
+          // Fresnel on roof
+          finalColor += edgeColor * fresnel * 0.06;
 
-          // Roof grid
+          // Roof grid — refined
           float roofGridSpacing = 3.0;
           vec2 roofGridFract = fract(vec2(faceUV.x * faceScale.x / roofGridSpacing, faceUV.y * faceScale.y / roofGridSpacing));
-          float rLineThickness = 0.08;
+          float rLineThickness = 0.06;
           float rGridLines = step(1.0 - rLineThickness, roofGridFract.x) + step(roofGridFract.x, rLineThickness) +
                              step(1.0 - rLineThickness, roofGridFract.y) + step(roofGridFract.y, rLineThickness);
           rGridLines = min(rGridLines, 1.0);
           finalColor = mix(finalColor, buildingColor * 0.3, rGridLines * (1.0 - outerEdge));
       } else {
           // Bottom face
-          finalColor = buildingColor * 0.12;
+          finalColor = vec3(0.02, 0.02, 0.03);
       }
 
       // Churn / flamegraph

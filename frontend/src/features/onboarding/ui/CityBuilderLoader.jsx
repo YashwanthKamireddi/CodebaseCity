@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Hexagon, Cpu, Network, Layers, Activity, Box, Sparkles, FileCode, GitBranch } from 'lucide-react'
 import useStore from '../../../store/useStore'
 
@@ -29,7 +28,7 @@ const FACTS = [
 ]
 
 export default function CityBuilderLoader() {
-    const { analysisProgress } = useStore()
+    const analysisProgress = useStore(s => s.analysisProgress)
     const [simulatedProgress, setSimulatedProgress] = useState(0)
     const [elapsedSec, setElapsedSec] = useState(0)
     const [factIndex, setFactIndex] = useState(0)
@@ -93,11 +92,7 @@ export default function CityBuilderLoader() {
     const seconds = elapsedSec % 60
 
     return (
-        <motion.div
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        <div
             style={{
                 position: 'fixed',
                 inset: 0,
@@ -113,10 +108,8 @@ export default function CityBuilderLoader() {
                 overflow: 'hidden',
             }}
         >
-            <motion.div
-                initial={{ opacity: 0, scale: 0.98, y: 8 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
+            <div
+                className="anim-scale-in"
                 style={{
                     width: '100%',
                     maxWidth: '500px',
@@ -149,19 +142,13 @@ export default function CityBuilderLoader() {
 
                 {/* Active stage — animated transition */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', minHeight: '90px', justifyContent: 'center' }}>
-                    <AnimatePresence mode="wait">
-                        <motion.div
+                    <div
                             key={stage.code}
-                            initial={{ opacity: 0, y: 12, filter: 'blur(4px)' }}
-                            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                            exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
-                            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                            className="anim-blur-enter"
                             style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
                         >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <motion.div
-                                    animate={{ rotate: [0, 5, -5, 0] }}
-                                    transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                                <div
                                     style={{
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                                         width: '34px', height: '34px', borderRadius: '10px',
@@ -169,7 +156,7 @@ export default function CityBuilderLoader() {
                                     }}
                                 >
                                     {React.cloneElement(stage.icon, { size: 16 })}
-                                </motion.div>
+                                </div>
                                 <div>
                                     <span style={{ fontSize: '0.65rem', fontFamily: 'var(--font-mono)', color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em' }}>
                                         {stage.code}
@@ -182,8 +169,7 @@ export default function CityBuilderLoader() {
                             <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)', lineHeight: 1.4, fontWeight: 300, paddingLeft: '46px' }}>
                                 {stage.detail}
                             </span>
-                        </motion.div>
-                    </AnimatePresence>
+                        </div>
                 </div>
 
                 {/* Progress bar */}
@@ -198,25 +184,22 @@ export default function CityBuilderLoader() {
                         background: 'rgba(255, 255, 255, 0.04)',
                         borderRadius: '4px', position: 'relative', overflow: 'hidden',
                     }}>
-                        <motion.div
-                            initial={{ width: '0%' }}
-                            animate={{ width: `${effectiveProgress}%` }}
-                            transition={{ ease: 'easeOut', duration: 0.4 }}
-                            style={{
-                                position: 'absolute', top: 0, left: 0, height: '100%',
-                                background: 'linear-gradient(90deg, rgba(255,255,255,0.4), #ffffff)',
-                                borderRadius: '4px',
-                                boxShadow: '0 0 12px rgba(255,255,255,0.15)',
-                            }}
+                        <div style={{
+                            position: 'absolute', top: 0, left: 0, height: '100%',
+                            background: 'linear-gradient(90deg, rgba(255,255,255,0.4), #ffffff)',
+                            borderRadius: '4px',
+                            boxShadow: '0 0 12px rgba(255,255,255,0.15)',
+                            width: `${effectiveProgress}%`,
+                            transition: 'width 0.4s ease-out',
+                        }}
                         />
                         {/* Shimmer pulse on the bar */}
-                        <motion.div
-                            animate={{ x: ['-100%', '200%'] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1 }}
+                        <div
                             style={{
                                 position: 'absolute', top: 0, left: 0, width: '30%', height: '100%',
                                 background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
                                 borderRadius: '4px',
+                                animation: 'shimmer-slide 3s ease-in-out infinite',
                             }}
                         />
                     </div>
@@ -224,16 +207,13 @@ export default function CityBuilderLoader() {
                     {/* Stage dots */}
                     <div style={{ display: 'flex', gap: '4px', justifyContent: 'center', paddingTop: '4px' }}>
                         {SEQUENCE.map((s, i) => (
-                            <motion.div
+                            <div
                                 key={i}
-                                animate={{
-                                    background: i <= currentStageIndex ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.08)',
-                                    scale: i === currentStageIndex ? 1.4 : 1,
-                                }}
-                                transition={{ duration: 0.3 }}
                                 style={{
                                     width: 4, height: 4, borderRadius: '50%',
-                                    background: 'rgba(255,255,255,0.08)',
+                                    background: i <= currentStageIndex ? 'rgba(255,255,255,0.5)' : 'rgba(255,255,255,0.08)',
+                                    transform: i === currentStageIndex ? 'scale(1.4)' : 'scale(1)',
+                                    transition: 'background 0.3s, transform 0.3s',
                                 }}
                             />
                         ))}
@@ -241,13 +221,9 @@ export default function CityBuilderLoader() {
                 </div>
 
                 {/* Fun fact — rotates to keep users engaged during long waits */}
-                <AnimatePresence mode="wait">
-                    <motion.div
+                <div
                         key={factIndex}
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -6 }}
-                        transition={{ duration: 0.4 }}
+                        className="anim-blur-enter"
                         style={{
                             fontSize: '0.72rem',
                             color: 'rgba(255,255,255,0.25)',
@@ -260,9 +236,8 @@ export default function CityBuilderLoader() {
                         }}
                     >
                         {FACTS[factIndex]}
-                    </motion.div>
-                </AnimatePresence>
-            </motion.div>
-        </motion.div>
+                    </div>
+            </div>
+        </div>
     )
 }

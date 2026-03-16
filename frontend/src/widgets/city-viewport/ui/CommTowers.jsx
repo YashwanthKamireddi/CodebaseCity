@@ -10,7 +10,7 @@ import useStore from '../../../store/useStore'
  * Instanced antennas (1 draw call) + shader rings (1 draw call).
  * Dynamic cap scales with repo size.
  */
-export default function CommTowers() {
+export default React.memo(function CommTowers() {
     const cityData = useStore(s => s.cityData)
     const antennaRef = useRef()
     const ringRef = useRef()
@@ -111,4 +111,4 @@ export default function CommTowers() {
             )}
         </group>
     )
-}
+})

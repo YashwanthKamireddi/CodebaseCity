@@ -1,4 +1,5 @@
 import logger from '../../utils/logger'
+import { ghFetch } from '../../engine/api/githubApi'
 
 /**
  * Time Slice
@@ -15,8 +16,8 @@ import logger from '../../utils/logger'
  */
 
 // Debounce utility for API calls
-let pendingAnalysis = null
 let debounceTimer = null
+let _abortController = null
 const DEBOUNCE_DELAY = 150 // ms - prevents API flooding during rapid scrubbing
 
 export const createTimeSlice = (set, get) => ({
@@ -63,9 +64,9 @@ export const createTimeSlice = (set, get) => ({
 
             if (repoSlug) {
                 try {
-                    const response = await fetch(`https://api.github.com/repos/${repoSlug}/commits?per_page=30`)
-                    if (response.ok) {
-                        const data = await response.json()
+                    const result = await ghFetch(`https://api.github.com/repos/${repoSlug}/commits?per_page=30`)
+                    if (result.data) {
+                        const data = result.data
                         const commits = data.map(c => ({
                             hash: c.sha,
                             short_hash: c.sha.slice(0, 7),
@@ -111,6 +112,11 @@ export const createTimeSlice = (set, get) => ({
         if (debounceTimer) {
             clearTimeout(debounceTimer)
         }
+        if (_abortController) {
+            _abortController.abort()
+        }
+        _abortController = new AbortController()
+        const signal = _abortController.signal
 
         // Immediately update the index for UI responsiveness
         set({ currentCommitIndex: idx })
@@ -118,6 +124,7 @@ export const createTimeSlice = (set, get) => ({
         // Debounce the actual API call
         return new Promise((resolve) => {
             debounceTimer = setTimeout(async () => {
+                if (signal.aborted) { resolve(); return }
                 // Detect GitHub repo slug
                 const repoName = cityData?.name || cityData?.path || ''
                 let repoSlug = null
@@ -132,17 +139,18 @@ export const createTimeSlice = (set, get) => ({
                 if (repoSlug) {
                     // Check cache first
                     if (_treeCache[hash]) {
-                        applyTimelineSnapshot({ files: _treeCache[hash] })
+                        if (!signal.aborted) applyTimelineSnapshot({ files: _treeCache[hash] })
                         resolve()
                         return
                     }
 
                     try {
-                        const treeRes = await fetch(
-                            `https://api.github.com/repos/${encodeURIComponent(repoSlug.split('/')[0])}/${encodeURIComponent(repoSlug.split('/')[1])}/git/trees/${hash}?recursive=1`
+                        const treeResult = await ghFetch(
+                            `https://api.github.com/repos/${encodeURIComponent(repoSlug.split('/')[0])}/${encodeURIComponent(repoSlug.split('/')[1])}/git/trees/${hash}?recursive=1`,
+                            { ttl: 10 * 60_000 } // 10 min TTL for tree snapshots
                         )
-                        if (treeRes.ok) {
-                            const treeData = await treeRes.json()
+                        if (treeResult.data) {
+                            const treeData = treeResult.data
                             const files = {}
                             for (const item of treeData.tree || []) {
                                 if (item.type === 'blob' && item.size !== undefined) {
@@ -166,7 +174,7 @@ export const createTimeSlice = (set, get) => ({
                                 _treeCacheOrder: newCacheOrder.slice(-_maxCacheSize)
                             })
 
-                            applyTimelineSnapshot({ files })
+                            if (!signal.aborted) applyTimelineSnapshot({ files })
                             resolve()
                             return
                         }
@@ -187,7 +195,7 @@ export const createTimeSlice = (set, get) => ({
                     const variance = 1 - churnFactor * (1 - scale)
                     snapshot.files[key] = currentSize * variance
                 })
-                applyTimelineSnapshot(snapshot)
+                if (!signal.aborted) applyTimelineSnapshot(snapshot)
                 resolve()
             }, DEBOUNCE_DELAY)
         })

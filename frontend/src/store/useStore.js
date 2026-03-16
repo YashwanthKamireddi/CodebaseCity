@@ -3,6 +3,7 @@ import { createCitySlice } from './slices/createCitySlice'
 import { createUISlice } from './slices/createUISlice'
 import { createInteractionSlice } from './slices/createInteractionSlice'
 import { createTimeSlice } from './slices/createTimeSlice'
+import { getGitHubToken, setGitHubToken as _setGitHubToken, clearCache as clearGhCache } from '../engine/api/githubApi'
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
 
@@ -30,6 +31,14 @@ const useStore = create((set, get) => ({
             localStorage.removeItem('codebase_city_gemini_key')
         }
         set({ geminiApiKey: key })
+    },
+
+    // GitHub personal access token (stored in sessionStorage, sent only to api.github.com)
+    githubToken: getGitHubToken(),
+    setGithubToken: (token) => {
+        _setGitHubToken(token)
+        clearGhCache() // purge cache so new token is used on next fetch
+        set({ githubToken: token })
     },
 
     sendMessage: async (content) => {
@@ -66,7 +75,7 @@ const useStore = create((set, get) => ({
                 context.push(`Currently selected file: ${selectedBuilding.name} (${selectedBuilding.file_path || selectedBuilding.path}), ${selectedBuilding.metrics?.lines || 0} lines, complexity: ${selectedBuilding.metrics?.complexity || 0}, functions: ${selectedBuilding.functions?.length || 0}`)
             }
 
-            const systemPrompt = `You are an expert code architecture assistant integrated into Code City, a 3D codebase visualization tool. ${context.join(' ')} Help the user understand their codebase architecture, identify issues, and suggest improvements. Be concise and actionable.`
+            const systemPrompt = `You are an expert code architecture assistant integrated into Codebase City, a 3D codebase visualization tool. ${context.join(' ')} Help the user understand their codebase architecture, identify issues, and suggest improvements. Be concise and actionable.`
 
             const conversationHistory = messages.slice(-8).map(m => ({
                 role: m.role === 'assistant' ? 'model' : 'user',

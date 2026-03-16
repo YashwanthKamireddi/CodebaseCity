@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect, useRef } from 'react'
+import { useThree } from '@react-three/fiber'
 import useStore from '../../../store/useStore'
 import Roads from './Roads'
 import InstancedCity from './InstancedCity'
@@ -11,49 +12,91 @@ import MothershipCore from './MothershipCore'
 import HolographicCityName from './HolographicCityName'
 import EnergyCoreReactor from './EnergyCoreReactor'
 import HeroLandmarks from './HeroLandmarks'
+import LandmarkPanel from './LandmarkPanel'
+import DistrictFloors from './DistrictFloors'
+import StreetLamps from './StreetLamps'
+import DataStreams from './DataStreams'
+import AtmosphericParticles from './AtmosphericParticles'
 
+import EnergyShieldDome from './EnergyShieldDome'
+
+/**
+ * AnimationPump — In frameloop="demand" mode, periodically invalidates
+ * to drive shader-time uniforms and subtle rotations. Runs at a low 10fps
+ * idle rate since decorative animations are slow/subtle. Camera controls
+ * handle high-fps invalidation during user interaction independently.
+ */
+function AnimationPump() {
+    const invalidate = useThree(s => s.invalidate)
+    const lastRef = useRef(0)
+    useEffect(() => {
+        let raf
+        const tick = (t) => {
+            if (t - lastRef.current >= 200) {
+                lastRef.current = t
+                invalidate()
+            }
+            raf = requestAnimationFrame(tick)
+        }
+        raf = requestAnimationFrame(tick)
+        return () => cancelAnimationFrame(raf)
+    }, [invalidate])
+    return null
+}
 
 /**
  * CityScene - Premium Cinematic City Environment
  */
-export default function CityScene() {
+const CityScene = React.memo(function CityScene() {
     const cityData = useStore(s => s.cityData)
+    const clearSelection = useStore(s => s.clearSelection)
+    const showRoads = useStore(s => s.showRoads)
+
+    const buildingCount = cityData?.buildings?.length || 0
 
     const cityRadius = useMemo(() => {
-        if (!cityData?.buildings?.length) return 100
+        if (!buildingCount) return 100
         let maxR = 0
         for (const b of cityData.buildings) {
             const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
             if (r > maxR) maxR = r
         }
         return Math.max(100, maxR + 50)
-    }, [cityData])
+    }, [cityData, buildingCount])
 
     return (
         <group>
-            {/* Cinematic 5-light rig — key, fill, rim, ambient, hemisphere */}
-            <ambientLight intensity={0.55} color="#90a0c0" />
-            <hemisphereLight color="#b0d0ff" groundColor="#101828" intensity={0.6} />
-            <directionalLight position={[100, 150, 80]} intensity={1.4} color="#e8f0ff" />
-            <directionalLight position={[-80, 60, -50]} intensity={0.5} color="#90b0ff" />
-            <directionalLight position={[0, 40, -120]} intensity={0.35} color="#7090d0" />
+            <AnimationPump />
 
-            <group>
+            {/* All materials are MeshBasicMaterial or custom ShaderMaterial — no lit materials exist.
+                Lights removed: they had zero visual effect but cost renderer overhead. */}
+
+            <group onPointerMissed={clearSelection}>
                 <InstancedCity />
-                <Roads />
+                {showRoads && <Roads />}
                 <Ground />
                 <HologramPanel />
+                <LandmarkPanel />
+                <DistrictFloors />
                 <NeonDistrictBorders />
                 <DistrictLabels />
+                <StreetLamps />
+                <DataStreams />
+                <AtmosphericParticles count={100} spread={cityRadius * 1.5} />
                 <EnergyCoreReactor />
                 <MothershipCore />
                 <HolographicCityName />
                 <HeroLandmarks buildings={cityData?.buildings} />
+
+                {/* ── EnergyShieldDome ── */}
+                <EnergyShieldDome />
             </group>
 
-            <fog attach="fog" args={['#0a1020', cityRadius * 1.5, cityRadius * 6]} />
-            <color attach="background" args={['#0c1222']} />
+            <fog attach="fog" args={['#0a0e1a', cityRadius * 2, cityRadius * 8]} />
+            <color attach="background" args={['#070b14']} />
             <CameraController />
         </group>
     )
-}
+})
+
+export default CityScene

@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useRef, useMemo, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
@@ -8,7 +8,7 @@ import useStore from '../../../store/useStore'
  * Dual-layer hex grid with energy crawl and impact ripple effects.
  * Single icosahedron + GLSL, 1 draw call. Throttled to 30fps.
  */
-export default function EnergyShieldDome() {
+export default React.memo(function EnergyShieldDome() {
     const cityData = useStore(s => s.cityData)
     const meshRef = useRef()
     const lastT = useRef(0)
@@ -105,6 +105,8 @@ export default function EnergyShieldDome() {
         blending: THREE.AdditiveBlending,
     }), [radius])
 
+    useEffect(() => () => shaderMaterial.dispose(), [shaderMaterial])
+
     useFrame(({ clock }) => {
         const t = clock.getElapsedTime()
         if (t - lastT.current < 0.033) return
@@ -120,4 +122,4 @@ export default function EnergyShieldDome() {
             <icosahedronGeometry args={[radius, 3]} />
         </mesh>
     )
-}
+})

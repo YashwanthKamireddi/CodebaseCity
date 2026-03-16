@@ -78,9 +78,10 @@ function runWorkerAnalysis(files, rootName, onProgress, source) {
           let totalSize = 0
           const MAX_CONTENT_SIZE = 50 * 1024 * 1024 // 50MB
           for (const f of files) {
-            if (totalSize > MAX_CONTENT_SIZE) break
+            const len = f.content?.length || 0
+            if (totalSize + len > MAX_CONTENT_SIZE) continue
             fileContents[f.path] = f.content
-            totalSize += f.content.length
+            totalSize += len
           }
           cityData.fileContents = fileContents
 

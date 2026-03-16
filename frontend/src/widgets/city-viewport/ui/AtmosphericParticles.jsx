@@ -7,7 +7,7 @@ import { useFrame } from '@react-three/fiber'
  * Lightweight: uses Points with a small buffer. Moves subtly to create
  * a living, breathing cityscape without noticeable performance cost.
  */
-export default function AtmosphericParticles({ count = 300, spread = 400 }) {
+export default React.memo(function AtmosphericParticles({ count = 300, spread = 400 }) {
     const pointsRef = useRef()
     const frameCounter = useRef(0)
 
@@ -75,4 +75,4 @@ export default function AtmosphericParticles({ count = 300, spread = 400 }) {
             />
         </points>
     )
-}
+})

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useMemo, useRef, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
@@ -8,7 +8,7 @@ import useStore from '../../../store/useStore'
  * Dynamic cap scales with repo size. Throttled pulse at 30fps.
  * Instanced — 1 draw call.
  */
-export default function LandingPads() {
+export default React.memo(function LandingPads() {
     const cityData = useStore(s => s.cityData)
     const meshRef = useRef()
     const lastT = useRef(0)
@@ -107,6 +107,8 @@ export default function LandingPads() {
         return tex
     }, [])
 
+    useEffect(() => () => texture.dispose(), [texture])
+
     React.useEffect(() => {
         if (!meshRef.current || !count) return
         const tempObj = new THREE.Object3D()
@@ -145,4 +147,4 @@ export default function LandingPads() {
             />
         </instancedMesh>
     )
-}
+})

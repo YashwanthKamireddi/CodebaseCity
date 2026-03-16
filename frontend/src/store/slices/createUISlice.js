@@ -12,7 +12,7 @@ export const createUISlice = (set, get) => ({
     viewMode: 'orbit', // orbit | street | overview
     colorMode: 'default', // default | layer | churn | language | author
     renderMode: 'lod2', // 'instanced' (fast) | 'lod2' (realistic CityGML)
-    showRoads: false,
+    showRoads: true,
     theme: getInitialTheme(),
 
     // Modals & Panels

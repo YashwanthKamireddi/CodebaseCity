@@ -1,23 +1,76 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 
 /**
  * DistrictLabels — Floating holographic district name tags.
- * Glass-morphism canvas sprites. Fully static (0 useFrame).
- * Label height adapts to tallest building in each district.
+ * Each label gets its own 256×64 CanvasTexture (~64KB each, ~2MB for 30 labels).
  */
 const CITY_HEIGHT_SCALE = 3.0
 
-export default function DistrictLabels() {
+function createLabelTexture(text, color) {
+    const W = 512, H = 128
+    const canvas = document.createElement('canvas')
+    canvas.width = W
+    canvas.height = H
+    const ctx = canvas.getContext('2d')
+    ctx.clearRect(0, 0, W, H)
+
+    const textWidth = Math.min(W - 32, text.length * 24 + 60)
+    const x = (W - textWidth) / 2
+    const borderColor = color || 'rgba(0, 180, 255, 0.7)'
+
+    // Glass backdrop with stronger opacity
+    const grad = ctx.createLinearGradient(x, 12, x + textWidth, H - 12)
+    grad.addColorStop(0, 'rgba(6, 12, 28, 0.92)')
+    grad.addColorStop(1, 'rgba(4, 8, 22, 0.85)')
+    ctx.fillStyle = grad
+    ctx.beginPath()
+    ctx.roundRect(x, 12, textWidth, H - 24, 10)
+    ctx.fill()
+
+    // Neon border — brighter
+    ctx.strokeStyle = borderColor
+    ctx.lineWidth = 2.5
+    ctx.beginPath()
+    ctx.roundRect(x, 12, textWidth, H - 24, 10)
+    ctx.stroke()
+
+    // Top highlight line
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(x + 10, 13)
+    ctx.lineTo(x + textWidth - 10, 13)
+    ctx.stroke()
+
+    // Text with glow — larger, bolder, more visible
+    ctx.shadowColor = borderColor
+    ctx.shadowBlur = 12
+    ctx.font = 'bold 36px "Inter", "Segoe UI", sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.98)'
+    ctx.fillText(text, W / 2, H / 2 + 1)
+    // Double-draw for stronger text presence
+    ctx.shadowBlur = 4
+    ctx.fillText(text, W / 2, H / 2 + 1)
+    ctx.shadowBlur = 0
+
+    const tex = new THREE.CanvasTexture(canvas)
+    tex.generateMipmaps = false
+    tex.minFilter = THREE.LinearFilter
+    tex.magFilter = THREE.LinearFilter
+    tex.needsUpdate = true
+    return tex
+}
+
+const DistrictLabels = React.memo(function DistrictLabels() {
     const cityData = useStore(s => s.cityData)
 
     const labels = useMemo(() => {
         if (!cityData?.districts?.length) return []
-        const n = cityData.buildings?.length || 0
-        const maxLabels = n > 15000 ? 8 : n > 5000 ? 15 : n > 2000 ? 22 : 40
 
-        // Build a map of district_id → max building height
         const districtMaxH = {}
         if (cityData.buildings) {
             for (const b of cityData.buildings) {
@@ -30,8 +83,7 @@ export default function DistrictLabels() {
         }
 
         return cityData.districts
-            .filter(d => d.building_count >= 2)
-            .slice(0, maxLabels)
+            .filter(d => d.building_count >= 1)
             .map(d => {
                 let cx = 0, cz = 0
                 if (d.boundary?.length) {
@@ -43,7 +95,6 @@ export default function DistrictLabels() {
                 }
                 const name = d.name || d.id
                 const shortName = name.split('/').slice(-2).join('/')
-                // Position label above tallest building in this district + 10 units clearance
                 const maxH = districtMaxH[d.id] || 30
                 const labelY = Math.max(20, maxH + 10)
                 return { id: d.id, text: shortName, x: cx, z: cz, y: labelY, count: d.building_count, color: d.color }
@@ -59,71 +110,30 @@ export default function DistrictLabels() {
             ))}
         </group>
     )
-}
+})
 
-function LabelSprite({ label }) {
-    const texture = useMemo(() => {
-        const canvas = document.createElement('canvas')
-        canvas.width = 512
-        canvas.height = 128
-        const ctx = canvas.getContext('2d')
-        ctx.clearRect(0, 0, 512, 128)
+export default DistrictLabels
 
-        const textWidth = Math.min(460, label.text.length * 20 + 50)
-        const x = (512 - textWidth) / 2
+const LabelSprite = React.memo(function LabelSprite({ label }) {
+    const texture = useMemo(
+        () => createLabelTexture(label.text, label.color),
+        [label.text, label.color]
+    )
 
-        // Glass backdrop with gradient
-        const grad = ctx.createLinearGradient(x, 20, x + textWidth, 100)
-        grad.addColorStop(0, 'rgba(8, 15, 30, 0.7)')
-        grad.addColorStop(1, 'rgba(5, 10, 25, 0.55)')
-        ctx.fillStyle = grad
-        ctx.beginPath()
-        ctx.roundRect(x, 22, textWidth, 76, 10)
-        ctx.fill()
+    useEffect(() => () => texture.dispose(), [texture])
 
-        // Neon border with district color
-        const borderColor = label.color || 'rgba(0, 180, 255, 0.5)'
-        ctx.strokeStyle = borderColor
-        ctx.lineWidth = 1.5
-        ctx.beginPath()
-        ctx.roundRect(x, 22, textWidth, 76, 10)
-        ctx.stroke()
-
-        // Top highlight line
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)'
-        ctx.lineWidth = 1
-        ctx.beginPath()
-        ctx.moveTo(x + 10, 23)
-        ctx.lineTo(x + textWidth - 10, 23)
-        ctx.stroke()
-
-        // Text with subtle shadow
-        ctx.shadowColor = borderColor
-        ctx.shadowBlur = 8
-        ctx.font = 'bold 30px "Inter", "Segoe UI", sans-serif'
-        ctx.textAlign = 'center'
-        ctx.textBaseline = 'middle'
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
-        ctx.fillText(label.text, 256, 58)
-        ctx.shadowBlur = 0
-
-        const tex = new THREE.CanvasTexture(canvas)
-        tex.needsUpdate = true
-        return tex
-    }, [label])
-
-    const scale = Math.max(18, Math.min(45, label.count * 0.7))
+    const scale = Math.max(25, Math.min(55, label.count * 0.8))
 
     return (
-        <sprite position={[label.x, label.y, label.z]} scale={[scale, scale * 0.25, 1]}>
+        <sprite position={[label.x, label.y + 5, label.z]} scale={[scale, scale * 0.25, 1]}>
             <spriteMaterial
                 map={texture}
                 transparent
-                opacity={0.75}
+                opacity={0.95}
                 depthWrite={false}
                 depthTest={false}
                 sizeAttenuation
             />
         </sprite>
     )
-}
+})

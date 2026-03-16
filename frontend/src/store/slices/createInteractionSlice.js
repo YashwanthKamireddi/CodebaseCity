@@ -8,12 +8,14 @@ export const createInteractionSlice = (set) => ({
     selectedBuildingScreenY: null, // viewport Y of click, for panel placement
     hoveredBuilding: null,
     focusedDistrict: null,
+    selectedLandmark: null, // 'reactor' | 'mothership' | null
 
     // Actions
     selectBuilding: (building, screenY = null) => {
         set({
             selectedBuilding: building,
             selectedBuildingScreenY: screenY,
+            selectedLandmark: null,
             codeViewerOpen: false
         })
     },
@@ -21,7 +23,15 @@ export const createInteractionSlice = (set) => ({
     clearSelection: () => set({
         selectedBuilding: null,
         selectedBuildingScreenY: null,
-        highlightedIssue: null
+        highlightedIssue: null,
+        selectedLandmark: null,
+    }),
+
+    selectLandmark: (landmark) => set({
+        selectedLandmark: landmark,
+        selectedBuilding: null,
+        selectedBuildingScreenY: null,
+        codeViewerOpen: false,
     }),
 
     setHoveredBuilding: (building) => set({ hoveredBuilding: building }),

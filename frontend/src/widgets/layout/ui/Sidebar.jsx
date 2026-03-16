@@ -1,8 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import useStore from '../../../store/useStore'
 import { Folder, File, Code, Hash, Link as LinkIcon, ChevronRight, ChevronDown, FolderOpen } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { slideUp, fadeIn } from '../../../shared/animations/variants'
 import './Sidebar.css'
 
 export default function Sidebar() {
@@ -27,7 +25,11 @@ export default function Sidebar() {
     React.useEffect(() => {
         if (!isResizing) return
 
+        let lastResize = 0
         const resize = (e) => {
+            const now = performance.now()
+            if (now - lastResize < 16) return
+            lastResize = now
             const newWidth = e.clientX
             if (newWidth > 150 && newWidth < 800) {
                 setSidebarWidth(newWidth)
@@ -69,30 +71,28 @@ export default function Sidebar() {
                     {loading && !cityData ? (
                         <div style={{ padding: '20px 0', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                             {[...Array(6)].map((_, i) => (
-                                <motion.div
+                                <div
                                     key={i}
                                     style={{
                                         width: `${100 - (i * 10)}%`,
                                         height: '24px',
                                         background: 'rgba(255,255,255,0.05)',
                                         borderRadius: '4px',
-                                        marginLeft: `${(i % 3) * 12}px`
+                                        marginLeft: `${(i % 3) * 12}px`,
+                                        animation: `anim-shimmer 1.5s ease-in-out infinite ${i * 0.1}s`,
                                     }}
-                                    animate={{ opacity: [0.3, 0.7, 0.3] }}
-                                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut', delay: i * 0.1 }}
                                 />
                             ))}
                         </div>
                     ) : !cityData ? (
-                        <motion.div
-                            variants={slideUp} initial="initial" animate="animate"
+                        <div className="anim-slide-up"
                             style={{ padding: '40px 20px', textAlign: 'center', opacity: 0.6 }}
                         >
                             <FolderOpen size={48} strokeWidth={1} style={{ margin: '0 auto 16px', display: 'block' }} />
                             <p style={{ fontSize: '0.85rem', marginBottom: '16px', lineHeight: 1.5 }}>
                                 No project loaded. Open a local folder to explore its files here.
                             </p>
-                        </motion.div>
+                        </div>
                     ) : (
                         <FileTree
                             files={cityData.buildings}

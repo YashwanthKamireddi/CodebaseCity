@@ -25,7 +25,7 @@ let cachedColorArray = null
  * - Premium glass tower shader
  * - Interactive hover/selection states
  */
-export default function InstancedCity() {
+const InstancedCity = React.memo(function InstancedCity() {
     // Granular selectors — only re-render when specific state changes
     const cityData = useStore(s => s.cityData)
     const selectedBuilding = useStore(s => s.selectedBuilding)
@@ -41,7 +41,7 @@ export default function InstancedCity() {
     const refactoringDrifts = useStore(s => s.refactoringDrifts)
     const meshRef = useRef()
     const materialRef = useRef()
-    const { camera, raycaster, pointer } = useThree()
+    const { camera, raycaster, pointer, invalidate } = useThree()
 
     // Drag State
     const [draggedInstanceId, setDraggedInstanceId] = useState(null)
@@ -80,11 +80,14 @@ export default function InstancedCity() {
         return { distances, delays, maxDist }
     }, [buildings, count])
 
-    // Smooth time-based animation
+    // Smooth time-based animation — drives shader pulse (throttled 30fps)
+    const lastTimeUpdate = useRef(0)
     useFrame((state) => {
-        if (materialRef.current) {
-            materialRef.current.uniforms.uTime.value = state.clock.elapsedTime
-        }
+        if (!materialRef.current) return
+        const t = state.clock.elapsedTime
+        if (t - lastTimeUpdate.current < 0.033) return
+        lastTimeUpdate.current = t
+        materialRef.current.uniforms.uTime.value = t
     })
 
     const [hoveredInstanceId, setHoveredInstanceId] = useState(null)
@@ -150,6 +153,7 @@ export default function InstancedCity() {
             }
 
             meshRef.current.instanceMatrix.needsUpdate = true
+            invalidate()
 
             // Update bounding sphere
             if (meshRef.current.geometry) {
@@ -181,8 +185,9 @@ export default function InstancedCity() {
     const selectedBuildingId = selectedBuilding?.id
 
     // ═══════════════════════════════════════════════════════════════
-    // COLOR UPDATES - Optimized with dirty tracking for O(1) hover/select
-    // Full rebuild only on colorMode/issueIndex/highlightedIssue change
+    // COLOR UPDATES - Split into full rebuild vs incremental hover/select
+    // Full rebuild: colorMode, issueIndex, highlightedIssue, buildings change
+    // Incremental: hover/select only re-color the 1-2 affected buildings
     // ═══════════════════════════════════════════════════════════════
 
     // Pre-compute issue paths set for O(1) lookup
@@ -191,44 +196,136 @@ export default function InstancedCity() {
         return new Set(highlightedIssue.paths)
     }, [highlightedIssue])
 
-    // Full color rebuild when base state changes
+    // Helper to compute color for one building index
+    const computeColor = useCallback((i, hovered, selected) => {
+        const b = buildings[i]
+        if (!b) return
+        const showWarnings = colorMode === 'default' || colorMode === 'churn'
+        const isSelected = selected === b.id
+        const isHovered = hovered === i
+        const isIssueHighlighted = highlightedPathsSet?.has(b.path) ?? false
+        const isUnrelated = (highlightedIssue && !isIssueHighlighted) ||
+            (!highlightedIssue && selected && !isSelected)
+
+        return getBuildingColor(b, colorMode, {
+            isSelected, isHovered,
+            isUnrelated, highlightedIssue, isIssueHighlighted,
+            isCircular: issueIndex.circularSet.has(b.id),
+            isGodObject: issueIndex.godSet.has(b.id),
+            showWarnings
+        })
+    }, [buildings, colorMode, highlightedIssue, highlightedPathsSet, issueIndex])
+
+    // Full color rebuild when base visual state changes
+    // Single-pass with color cache: ~30 unique hex values per mode are parsed once,
+    // then written directly to the Float32Array — one GPU upload instead of 9 chunked ones.
+    const colorRGBCache = useRef(new Map())
     useLayoutEffect(() => {
         if (!meshRef.current || count === 0) return
+        const mesh = meshRef.current
 
-        const showWarnings = colorMode === 'default' || colorMode === 'churn'
+        // Ensure instanceColor buffer exists (Three.js lazy-creates it on first setColorAt)
+        if (!mesh.instanceColor) {
+            mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(count * 3), 3)
+        }
+
+        const colorArray = mesh.instanceColor.array
+        const rgbCache = colorRGBCache.current
+        rgbCache.clear()
 
         for (let i = 0; i < count; i++) {
-            const b = buildings[i]
-            const isSelected = selectedBuildingId === b.id
-            const isHovered = hoveredInstanceId === i
-            const isIssueHighlighted = highlightedPathsSet?.has(b.path) ?? false
-
-            const isUnrelated = (highlightedIssue && !isIssueHighlighted) ||
-                (!highlightedIssue && selectedBuildingId && !isSelected && colorMode === 'default')
-
-            const colorHex = getBuildingColor(b, colorMode, {
-                isSelected, isHovered,
-                isUnrelated, highlightedIssue, isIssueHighlighted,
-                isCircular: issueIndex.circularSet.has(b.id),
-                isGodObject: issueIndex.godSet.has(b.id),
-                showWarnings
-            })
-
-            tempColor.set(colorHex)
-            meshRef.current.setColorAt(i, tempColor)
+            const hex = computeColor(i, hoveredInstanceId, selectedBuildingId)
+            if (!hex) continue
+            let rgb = rgbCache.get(hex)
+            if (!rgb) {
+                tempColor.set(hex)
+                rgb = [tempColor.r, tempColor.g, tempColor.b]
+                rgbCache.set(hex, rgb)
+            }
+            const idx = i * 3
+            colorArray[idx] = rgb[0]
+            colorArray[idx + 1] = rgb[1]
+            colorArray[idx + 2] = rgb[2]
         }
 
-        if (meshRef.current.instanceColor) {
-            meshRef.current.instanceColor.needsUpdate = true
-        }
+        mesh.instanceColor.needsUpdate = true
+        invalidate()
 
-        // Track previous values for incremental updates
         prevHoveredRef.current = hoveredInstanceId
         prevSelectedRef.current = selectedBuildingId
-    }, [
-        buildings, selectedBuildingId, hoveredInstanceId, colorMode,
-        highlightedIssue, highlightedPathsSet, count, issueIndex
-    ])
+    }, [buildings, colorMode, highlightedIssue, highlightedPathsSet, count, issueIndex, computeColor])
+
+    // Incremental hover/select update — only re-color the 1-4 dirty instances
+    // EXCEPTION: when selection toggles (null ↔ non-null), ALL buildings must
+    // recolor because the "isUnrelated" dimming flag applies to every building.
+    // Single-pass with cache for toggle case — one GPU upload, no stutter.
+    useLayoutEffect(() => {
+        if (!meshRef.current || count === 0) return
+        const oldHover = prevHoveredRef.current
+        const oldSelect = prevSelectedRef.current
+        if (oldHover === hoveredInstanceId && oldSelect === selectedBuildingId) return
+
+        // Detect selection toggle (null → selected OR selected → null)
+        const selectionToggled = !oldSelect !== !selectedBuildingId
+
+        if (selectionToggled) {
+            // All buildings need recolor (isUnrelated flag flips for every building)
+            // Use cached RGB parse — same as full rebuild path
+            if (!meshRef.current.instanceColor) return
+            const colorArray = meshRef.current.instanceColor.array
+            const rgbCache = colorRGBCache.current
+            rgbCache.clear()
+
+            for (let i = 0; i < count; i++) {
+                const hex = computeColor(i, hoveredInstanceId, selectedBuildingId)
+                if (!hex) continue
+                let rgb = rgbCache.get(hex)
+                if (!rgb) {
+                    tempColor.set(hex)
+                    rgb = [tempColor.r, tempColor.g, tempColor.b]
+                    rgbCache.set(hex, rgb)
+                }
+                const idx = i * 3
+                colorArray[idx] = rgb[0]
+                colorArray[idx + 1] = rgb[1]
+                colorArray[idx + 2] = rgb[2]
+            }
+
+            meshRef.current.instanceColor.needsUpdate = true
+            invalidate()
+        } else {
+            // Non-toggle: only 1-4 dirty instances (hover change or select swap)
+            const dirty = new Set()
+            if (oldHover !== null && oldHover !== undefined) dirty.add(oldHover)
+            if (hoveredInstanceId !== null && hoveredInstanceId !== undefined) dirty.add(hoveredInstanceId)
+
+            if (oldSelect !== selectedBuildingId) {
+                for (let i = 0; i < count; i++) {
+                    const bid = buildings[i]?.id
+                    if (bid === oldSelect || bid === selectedBuildingId) dirty.add(i)
+                }
+            }
+
+            for (const i of dirty) {
+                if (i >= 0 && i < count) {
+                    const hex = computeColor(i, hoveredInstanceId, selectedBuildingId)
+                    if (hex) {
+                        tempColor.set(hex)
+                        meshRef.current.setColorAt(i, tempColor)
+                    }
+                }
+            }
+
+            if (dirty.size > 0 && meshRef.current.instanceColor) {
+                meshRef.current.instanceColor.needsUpdate = true
+                invalidate()
+            }
+        }
+
+        prevHoveredRef.current = hoveredInstanceId
+        prevSelectedRef.current = selectedBuildingId
+
+    }, [hoveredInstanceId, selectedBuildingId, count, buildings, computeColor])
 
 
     // ═══════════════════════════════════════════════════════════════
@@ -238,18 +335,20 @@ export default function InstancedCity() {
     const handlePointerMove = useCallback((e) => {
         e.stopPropagation()
         const now = performance.now()
-        if (now - lastPointerTime.current < 50) return
+        if (now - lastPointerTime.current < 32) return // ~30fps throttle for smooth response
         lastPointerTime.current = now
         if (e.instanceId !== undefined) {
             setHoveredInstanceId(e.instanceId)
             const b = useStore.getState().cityData?.buildings?.[e.instanceId]
             if (b) setHoveredBuilding(b)
+            document.body.style.cursor = 'pointer'
         }
     }, [setHoveredBuilding])
 
     const handlePointerOut = useCallback(() => {
         setHoveredInstanceId(null)
         setHoveredBuilding(null)
+        document.body.style.cursor = 'auto'
     }, [setHoveredBuilding])
 
     const handleClick = useCallback((e) => {
@@ -341,9 +440,6 @@ export default function InstancedCity() {
         return new THREE.InstancedBufferAttribute(array, 1)
     }, [buildings, count])
 
-    // Opacity: uniform value for all buildings (saves per-instance attribute allocation)
-    // PulseMaterial fragment shader defaults to 0.95 when aOpacityOverride is 0
-
     if (count === 0) return null
 
     return (
@@ -375,4 +471,6 @@ export default function InstancedCity() {
             />
         </instancedMesh>
     )
-}
+})
+
+export default InstancedCity

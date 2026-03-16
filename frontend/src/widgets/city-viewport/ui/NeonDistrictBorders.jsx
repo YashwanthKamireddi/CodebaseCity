@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 
 const FALLBACK_COLORS = [
@@ -13,10 +12,19 @@ const FALLBACK_COLORS = [
 // Parse hex color string to [r, g, b] in 0-1 range
 function hexToRgb(hex) {
     if (!hex || typeof hex !== 'string') return null
-    const m = hex.match(/^#?([0-9A-Fa-f]{6})$/)
-    if (!m) return null
-    const n = parseInt(m[1], 16)
-    return [(n >> 16) / 255, ((n >> 8) & 0xff) / 255, (n & 0xff) / 255]
+    let m = hex.match(/^#?([0-9A-Fa-f]{6})$/)
+    if (m) {
+        const n = parseInt(m[1], 16)
+        return [(n >> 16) / 255, ((n >> 8) & 0xff) / 255, (n & 0xff) / 255]
+    }
+    m = hex.match(/^#?([0-9A-Fa-f]{3})$/)
+    if (m) {
+        const r = parseInt(m[1][0] + m[1][0], 16)
+        const g = parseInt(m[1][1] + m[1][1], 16)
+        const b = parseInt(m[1][2] + m[1][2], 16)
+        return [r / 255, g / 255, b / 255]
+    }
+    return null
 }
 
 /**
@@ -24,7 +32,7 @@ function hexToRgb(hex) {
  * Uses district's own color from data when available.
  * 1 draw call total, 0 useFrame (static).
  */
-export default function NeonDistrictBorders() {
+const NeonDistrictBorders = React.memo(function NeonDistrictBorders() {
     const cityData = useStore(s => s.cityData)
 
     const { positions, colors } = useMemo(() => {
@@ -36,7 +44,7 @@ export default function NeonDistrictBorders() {
         cityData.districts.forEach((district, di) => {
             if (!district.boundary || district.boundary.length < 3) return
             const c = hexToRgb(district.color) || FALLBACK_COLORS[di % FALLBACK_COLORS.length]
-            const dimC = [c[0] * 0.3, c[1] * 0.3, c[2] * 0.3]
+            const dimC = [c[0] * 0.5, c[1] * 0.5, c[2] * 0.5]
             const pts = district.boundary
 
             for (let i = 0; i < pts.length; i++) {
@@ -45,8 +53,11 @@ export default function NeonDistrictBorders() {
                 // Ground glow layer
                 posArr.push(a.x, 0.06, a.y, b.x, 0.06, b.y)
                 colArr.push(...dimC, ...dimC)
-                // Bright neon layer
-                posArr.push(a.x, 0.3, a.y, b.x, 0.3, b.y)
+                // Mid neon layer
+                posArr.push(a.x, 0.8, a.y, b.x, 0.8, b.y)
+                colArr.push(...c, ...c)
+                // Bright neon layer — raised for visibility
+                posArr.push(a.x, 2.0, a.y, b.x, 2.0, b.y)
                 colArr.push(...c, ...c)
             }
         })
@@ -78,10 +89,13 @@ export default function NeonDistrictBorders() {
             <lineBasicMaterial
                 vertexColors
                 transparent
-                opacity={0.65}
+                opacity={0.85}
                 depthWrite={false}
                 linewidth={1}
             />
         </lineSegments>
     )
 }
+)
+
+export default NeonDistrictBorders

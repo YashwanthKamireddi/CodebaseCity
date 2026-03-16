@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import useStore from '../../../store/useStore'
 import {
     Building2,
@@ -128,14 +127,9 @@ export default function ViewControl() {
             </div>
 
             {/* Inline Legend — slides out below the bar */}
-            <AnimatePresence>
-                {activeLegend && (
-                    <motion.div
-                        className="view-legend-inline"
-                        initial={{ opacity: 0, y: -6, scaleY: 0.8 }}
-                        animate={{ opacity: 1, y: 0, scaleY: 1 }}
-                        exit={{ opacity: 0, y: -6, scaleY: 0.8 }}
-                        transition={{ duration: 0.18, ease: 'easeOut' }}
+            {activeLegend && (
+                    <div
+                        className="view-legend-inline anim-fade-in"
                     >
                         {activeLegend.map((item, i) => (
                             <div key={i} className="view-legend-chip">
@@ -149,9 +143,8 @@ export default function ViewControl() {
                                 <span className="view-legend-chip-label">{item.label}</span>
                             </div>
                         ))}
-                    </motion.div>
+                    </div>
                 )}
-            </AnimatePresence>
         </div>
     )
 }
@@ -171,23 +164,17 @@ function ViewOption({ active, onClick, icon, label, description }) {
                 {icon}
             </button>
 
-            <AnimatePresence>
-                {isHovered && (
-                    <motion.div
-                        className="view-option-tooltip"
-                        initial={{ opacity: 0, y: 4, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 4, scale: 0.95 }}
-                        transition={{ duration: 0.15 }}
+            {isHovered && (
+                    <div
+                        className="view-option-tooltip anim-fade-in"
                     >
                         <div className="view-option-tooltip-label">{label}</div>
                         {description && (
                             <div className="view-option-tooltip-desc">{description}</div>
                         )}
                         <div className="view-option-tooltip-arrow" />
-                    </motion.div>
+                    </div>
                 )}
-            </AnimatePresence>
         </div>
     )
 }

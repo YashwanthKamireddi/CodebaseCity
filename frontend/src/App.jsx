@@ -5,17 +5,19 @@
  * Focus: Fast load, useful features, developer workflow
  */
 
-import React, { useState, useEffect, Suspense, useCallback, lazy, startTransition } from 'react'
+import React, { useState, useEffect, useMemo, Suspense, useCallback, lazy, startTransition } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, Preload } from '@react-three/drei'
+import * as THREE from 'three'
 
 import CityScene from './widgets/city-viewport/ui/CityScene'
 import { CanvasErrorBoundary } from './widgets/layout/ui/CanvasErrorBoundary'
 import Sidebar from './widgets/layout/ui/Sidebar'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useExitAnimation } from './shared/animations/useExitAnimation'
 import LoadingScreen from './shared/ui/LoadingScreen'
 import { ErrorBoundary } from './shared/ui/ErrorBoundary'
 import { ToastContainer } from './shared/ui/Toast'
+
 
 // Lazy-loaded heavy panels (only loaded when needed)
 const TimelineController = lazy(() => import('./features/timeline/ui/TimelineController'))
@@ -104,29 +106,31 @@ function App() {
     const cityData = useStore(s => s.cityData)
     const selectedBuilding = useStore(s => s.selectedBuilding)
     const loading = useStore(s => s.loading)
+    const [renderLoader, loaderExiting] = useExitAnimation(loading, 300)
     const theme = useStore(s => s.theme)
-    const isAnimating = useStore(s => s.isAnimating)
     const selectBuilding = useStore(s => s.selectBuilding)
     const error = useStore(s => s.error)
     const codeViewerOpen = useStore(s => s.codeViewerOpen)
     const setCodeViewerOpen = useStore(s => s.setCodeViewerOpen)
     const isLandingOverlayActive = useStore(s => s.isLandingOverlayActive)
 
-    const [sidebarOpen, setSidebarOpen] = useState(true)
     const [view, setView] = useState('3d') // '3d' or 'table'
     const [showExportReport, setShowExportReport] = useState(false)
 
-    // Performance tier detection
-    const isMobileDevice = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0
-    const isNarrowScreen = typeof window !== 'undefined' && window.innerWidth <= 768
-    const isMobile = isMobileDevice && isNarrowScreen
-    const isLowEnd = isMobileDevice || (typeof navigator !== 'undefined' && navigator.hardwareConcurrency <= 4)
+    // Performance tier detection — computed once, not on every render
+    const { isMobile, isLowEnd } = useMemo(() => {
+        const isMobileDevice = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0
+        const isNarrowScreen = typeof window !== 'undefined' && window.innerWidth <= 768
+        return {
+            isMobile: isMobileDevice && isNarrowScreen,
+            isLowEnd: isMobileDevice || (typeof navigator !== 'undefined' && navigator.hardwareConcurrency <= 4),
+        }
+    }, [])
     const dprRange = isLowEnd ? [0.75, 1] : [1, 1.5]
 
     // Close sidebar by default on mobile
     useEffect(() => {
         if (isMobile) {
-            setSidebarOpen(false)
             useStore.setState({ sidebarOpen: false })
         }
     }, []) // Run once on mount
@@ -171,7 +175,9 @@ function App() {
                             {/* 3D View — ALWAYS rendered (demo city loads for landing page) */}
                             <CanvasErrorBoundary>
                                 <Canvas
+                                    style={isLandingOverlayActive ? { pointerEvents: 'none' } : undefined}
                                     shadows={false}
+                                    frameloop="demand"
                                     dpr={dprRange}
                                     gl={{
                                         antialias: !isLowEnd,
@@ -191,36 +197,43 @@ function App() {
                                         far={20000}
                                     />
 
-                                    {/* Camera Controls - Optimized for touch */}
+                                    {/* Camera Controls - World-class trackpad/touch/mouse */}
                                     <OrbitControls
                                         makeDefault
                                         enablePan={true}
                                         enableZoom={true}
                                         enableRotate={true}
+                                        screenSpacePanning={true}
                                         minDistance={10}
                                         maxDistance={15000}
-                                        maxPolarAngle={Math.PI / 2}
+                                        maxPolarAngle={Math.PI / 2.05}
                                         minPolarAngle={0.05}
-                                        dampingFactor={isMobile ? 0.08 : 0.12}
                                         enableDamping={true}
+                                        dampingFactor={isMobile ? 0.08 : 0.12}
                                         rotateSpeed={isMobile ? 0.5 : 0.8}
                                         zoomSpeed={isMobile ? 0.6 : 1.0}
                                         panSpeed={isMobile ? 0.5 : 0.8}
-                                        touches={{
-                                            ONE: 1,  // ROTATE
-                                            TWO: 2   // DOLLY_PAN
+                                        zoomToCursor={true}
+                                        mouseButtons={{
+                                            LEFT: THREE.MOUSE.ROTATE,
+                                            MIDDLE: THREE.MOUSE.DOLLY,
+                                            RIGHT: THREE.MOUSE.PAN,
                                         }}
-                                        autoRotate={!cityData || !selectedBuilding}
-                                        autoRotateSpeed={0.3}
+                                        touches={{
+                                            ONE: THREE.TOUCH.ROTATE,
+                                            TWO: THREE.TOUCH.DOLLY_PAN,
+                                        }}
+                                        autoRotate={false}
+                                        autoRotateSpeed={0}
                                         target={[0, 0, 0]}
                                     />
 
                                     <Suspense fallback={null}>
                                         <CityScene data={cityData} />
                                         <Preload all />
-
-
                                     </Suspense>
+
+
                                 </Canvas>
                             </CanvasErrorBoundary>
                         </>
@@ -318,19 +331,16 @@ function App() {
             </Suspense>
 
             {/* Loading - Clean minimal loader */}
-            <AnimatePresence>
-                {loading && (
-                    <motion.div
-                        key="loader"
-                        initial={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        style={{ position: 'fixed', inset: 0, zIndex: 99999 }}
-                    >
-                        <CityBuilderLoader />
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {renderLoader && (
+                <div
+                    style={{
+                        position: 'fixed', inset: 0, zIndex: 99999,
+                        animation: loaderExiting ? 'anim-fade-out 0.3s ease forwards' : undefined,
+                    }}
+                >
+                    <CityBuilderLoader />
+                </div>
+            )}
 
             {/* Error Toast - Moved to Top Center to avoid overlap */}
             {error && (

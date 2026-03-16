@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
-import { motion } from 'framer-motion'
+
 import {
     FileCode,
     ArrowUpRight,
@@ -11,7 +11,7 @@ import './FileTable.css'
 import { BuildingModel } from '../../../entities/building/model'
 import AuditStats from './AuditStats'
 import PatternList from './PatternList'
-import { slideUp } from '../../../shared/animations/variants'
+
 import { FolderSearch } from 'lucide-react'
 
 // Constants for virtualization
@@ -135,10 +135,9 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                             {showRisks ? 'Hide' : 'Show'} Intelligence Report
                         </button>
                         {showRisks && (
-                            <motion.div initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }} className="ft-risks-body">
+                            <div className="ft-risks-body anim-fade-in">
                                 <PatternList issues={cityData.issues} buildings={buildings} />
-                            </motion.div>
+                            </div>
                         )}
                     </div>
                 )}
@@ -202,7 +201,7 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                                 </td>
                                 <td className="numeric ft-mono">{file.coupling}</td>
                                 <td className="actions">
-                                    <button onClick={(e) => { e.stopPropagation(); window.open(`vscode://file/${file.path}`) }} className="ft-icon-btn">
+                                    <button onClick={(e) => { e.stopPropagation(); window.open(`vscode://file/${encodeURIComponent(file.path)}`) }} className="ft-icon-btn">
                                         <ArrowUpRight size={14} />
                                     </button>
                                 </td>
@@ -211,11 +210,11 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                     </tbody>
                 </table>
                 {sortedFiles.length === 0 && (
-                    <motion.div variants={slideUp} initial="initial" animate="animate" className="ft-empty">
+                    <div className="ft-empty anim-slide-up">
                         <FolderSearch size={48} strokeWidth={1} className="ft-empty-icon" />
                         <h3 className="ft-empty-title">No files found</h3>
                         <p className="ft-empty-desc">Adjust your filters or analyze a new repository to see metrics.</p>
-                    </motion.div>
+                    </div>
                 )}
             </div>
         </div>

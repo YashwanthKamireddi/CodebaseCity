@@ -8,7 +8,7 @@ import useStore from '../../../store/useStore'
  * Dynamic cap scales with repo size. Throttled to 30fps. Skipped on low-end for huge repos.
  * Instanced — 1 draw call.
  */
-export default function EmergencyBeacons() {
+export default React.memo(function EmergencyBeacons() {
     const cityData = useStore(s => s.cityData)
     const meshRef = useRef()
     const lastT = useRef(0)
@@ -79,7 +79,7 @@ export default function EmergencyBeacons() {
             <InstanceMatrixSetter meshRef={meshRef} matrices={matrices} count={count} />
         </group>
     )
-}
+})
 
 function InstanceMatrixSetter({ meshRef, matrices, count }) {
     React.useEffect(() => {

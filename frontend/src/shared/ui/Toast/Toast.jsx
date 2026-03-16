@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
 import './Toast.css'
 
 const ICONS = {
@@ -44,12 +43,8 @@ export function Toast({
     }
 
     return (
-        <motion.div
-            className={`toast toast--${type} ${isExiting ? 'toast--exiting' : ''}`}
-            initial={{ opacity: 0, x: 100, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 100, scale: 0.9 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+        <div
+            className={`toast toast--${type} ${isExiting ? 'toast--exiting' : 'toast--entering'}`}
             role="alert"
             aria-live="polite"
         >
@@ -76,6 +71,6 @@ export function Toast({
                     style={{ animationDuration: `${duration}ms` }}
                 />
             )}
-        </motion.div>
+        </div>
     )
 }

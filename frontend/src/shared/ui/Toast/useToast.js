@@ -9,9 +9,11 @@ export const useToastStore = create((set, get) => ({
         const id = ++toastId
         const newToast = { id, ...toast }
 
-        set((state) => ({
-            toasts: [...state.toasts, newToast]
-        }))
+        set((state) => {
+            const updated = [...state.toasts, newToast]
+            // Cap at 5 toasts — evict oldest if over limit
+            return { toasts: updated.length > 5 ? updated.slice(-5) : updated }
+        })
 
         return id
     },

@@ -2,7 +2,7 @@
  * mobile.css — World-Class Mobile Experience
  *
  * Comprehensive mobile-first responsive system.
- * Transforms Code City into a native app-like experience on mobile devices.
+ * Transforms Codebase City into a native app-like experience on mobile devices.
  *
  * Design Philosophy:
  * - Touch-first interactions (44px+ tap targets)
@@ -104,6 +104,7 @@
     border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
     transform: translateY(100%) !important;
     transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1) !important;
+    will-change: transform !important;
     z-index: 200 !important;
     box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5) !important;
   }

@@ -31,26 +31,70 @@ export default function LoadingScreen() {
         <div style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(9, 9, 11, 0.92)',
-            backdropFilter: 'blur(8px)',
+            background: 'radial-gradient(ellipse at 50% 120%, #0a1628 0%, #060b14 50%, #030508 100%)',
             zIndex: 999999,
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            overflow: 'hidden'
         }}>
+            {/* Animated grid floor effect */}
+            <div style={{
+                position: 'absolute',
+                bottom: 0,
+                left: '-50%',
+                right: '-50%',
+                height: '55%',
+                background: `
+                    linear-gradient(rgba(0, 200, 255, 0.06) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(0, 200, 255, 0.06) 1px, transparent 1px)
+                `,
+                backgroundSize: '60px 60px',
+                transform: 'perspective(500px) rotateX(60deg)',
+                transformOrigin: 'center top',
+                maskImage: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent 80%)',
+                WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent 80%)',
+                animation: 'gridScroll 8s linear infinite'
+            }} />
+
+            {/* Skyline silhouette */}
+            <div style={{
+                position: 'absolute',
+                bottom: '25%',
+                left: 0,
+                right: 0,
+                height: '120px',
+                background: 'linear-gradient(to top, #0a1628 0%, transparent 100%)',
+                opacity: 0.6,
+                display: 'flex',
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+                gap: '3px'
+            }}>
+                {Array.from({length: 50}, (_, i) => {
+                    const h = 15 + Math.sin(i * 0.7) * 30 + Math.random() * 40
+                    return <div key={i} style={{
+                        width: '8px', height: `${h}px`,
+                        background: `rgba(0, 180, 255, ${0.04 + Math.random() * 0.06})`,
+                        borderTop: '1px solid rgba(0, 200, 255, 0.12)'
+                    }}/>
+                })}
+            </div>
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: '20px',
-                maxWidth: '280px',
+                maxWidth: '320px',
                 width: '100%',
-                padding: '0 24px'
+                padding: '0 24px',
+                position: 'relative',
+                zIndex: 1
             }}>
                 {/* Simple Spinner */}
                 <Loader2
                     size={28}
-                    color="#3b82f6"
+                    color="#00c8ff"
                     style={{ animation: 'spin 1s linear infinite' }}
                 />
 
@@ -60,15 +104,15 @@ export default function LoadingScreen() {
                         margin: 0,
                         fontSize: '0.9375rem',
                         fontWeight: 500,
-                        color: '#e4e4e7',
+                        color: '#d0e8f7',
                         marginBottom: '4px'
                     }}>
-                        Analyzing repository
+                        Building your city
                     </h3>
                     <p style={{
                         margin: 0,
                         fontSize: '0.8125rem',
-                        color: '#71717a'
+                        color: '#5a8aaa'
                     }}>
                         {STAGES[currentStage]}
                     </p>
@@ -78,25 +122,26 @@ export default function LoadingScreen() {
                 <div style={{
                     width: '100%',
                     height: '3px',
-                    background: 'rgba(255, 255, 255, 0.08)',
+                    background: 'rgba(0, 200, 255, 0.1)',
                     borderRadius: '2px',
                     overflow: 'hidden'
                 }}>
                     <div style={{
                         height: '100%',
                         width: `${progressWidth}%`,
-                        background: '#3b82f6',
+                        background: 'linear-gradient(90deg, #0088cc, #00c8ff)',
                         borderRadius: '2px',
-                        transition: 'width 0.4s ease'
+                        transition: 'width 0.4s ease',
+                        boxShadow: '0 0 8px rgba(0, 200, 255, 0.3)'
                     }} />
                 </div>
 
                 {/* Percentage */}
                 <span style={{
                     fontSize: '0.6875rem',
-                    color: '#52525b',
+                    color: '#3a6a88',
                     fontFamily: 'ui-monospace, monospace',
-                    letterSpacing: '0.02em'
+                    letterSpacing: '0.05em'
                 }}>
                     {Math.round(analysisProgress || 0)}%
                 </span>
@@ -104,6 +149,8 @@ export default function LoadingScreen() {
 
             <style>{`
                 @keyframes spin { 100% { transform: rotate(360deg); } }
+                @keyframes gridScroll { 100% { background-position: 0 60px; } }
+                @keyframes progressPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
             `}</style>
         </div>,
         document.body

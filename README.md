@@ -1,104 +1,31 @@
+<a id="top"></a>
+
 <div align="center">
 
 # Codebase City
 
-### See your code. Like never before.
+### Your codebase as a living 3D city.
 
-**The open-source 3D architecture visualization engine that transforms any codebase into an explorable city.**
+Visualize any repository as an interactive city where files become buildings, folders become districts, and complexity becomes skyline height.
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Try_Now-blue?style=for-the-badge)](https://codebasecity.vercel.app)
-[![GitHub Stars](https://img.shields.io/github/stars/YashwanthKamireddi/CodebaseCity?style=for-the-badge&logo=github&color=yellow)](https://github.com/YashwanthKamireddi/CodebaseCity)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-codebasecity.vercel.app-00d9ff?style=for-the-badge&labelColor=0a1222)](https://codebasecity.vercel.app)
+[![License: MIT](https://img.shields.io/badge/License-MIT-96CEB4?style=for-the-badge&labelColor=0a1222)](LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-ff6b6b?style=for-the-badge&labelColor=0a1222)](https://github.com/YashwanthKamireddi/CodebaseCity/pulls)
 
-[![React](https://img.shields.io/badge/React_18-61DAFB?logo=react&logoColor=black)](https://react.dev)
-[![Three.js](https://img.shields.io/badge/Three.js-black?logo=threedotjs)](https://threejs.org)
-
-<br />
-
-**Files become buildings. Folders become districts. Dependencies become roads.**<br />
-Height = complexity. Color = health. You don't read the architecture — you *walk through it*.
-
-<br />
-
-[Try Live Demo](https://codebasecity.vercel.app) · [Report Bug](https://github.com/YashwanthKamireddi/CodebaseCity/issues) · [Request Feature](https://github.com/YashwanthKamireddi/CodebaseCity/issues)
+![Codebase City](frontend/public/og-image.svg)
 
 </div>
 
-<br />
+## Why Codebase City
 
----
+Codebase City gives you spatial intuition for architecture:
 
-## Why Codebase City?
-
-Static analysis tools give you numbers. Code review gives you diffs. **Codebase City gives you spatial understanding.**
-
-Instead of reading a report that says *"auth.py has cyclomatic complexity 47"*, you see a towering red skyscraper in the center of the city and immediately understand:
-- It's coupled to everything (roads everywhere)
-- It's the oldest building (dark color)
-- Changing it affects half the city
-
-> **"The best way to understand a codebase is to see it."**
-
-### Who is this for?
-
-| Role | Use Case |
-|------|----------|
-| **Tech Leads** | Spot god-objects, circular dependencies, and tech debt at a glance |
-| **New Engineers** | Spatially explore unfamiliar codebases during onboarding |
-| **Architects** | Visualize impact before refactoring |
-| **Open Source Maintainers** | Understand contribution patterns and codebase evolution |
-
----
-
-## Features
-
-### 🏙️ 3D Code Visualization
-- **Complexity Mapping** — Building height = cyclomatic complexity, width = dependency count
-- **Health Coloring** — Green (healthy) → Yellow (warning) → Red (critical) gradient
-- **District Clustering** — Louvain algorithm groups related files into organic neighborhoods
-- **GPU Instanced Rendering** — Handles 10,000+ files at 60 FPS
-
-### 🔬 Building Inspection
-- **Click any building** → See classes, functions, imports, exports, LOC, complexity
-- **Impact Analysis** → Select a file and see which modules are affected by changes
-- **Dependency Tracing** → Glowing neon roads between imports/exports
-- **Inline Code Viewer** → Read source code without leaving the city
-
-### ⏰ Git Time Travel
-- **Timeline scrubber** — Slide through commit history and watch the architecture evolve
-- **Churn Detection** — High-churn files glow as hotspots
-
-### 🤖 AI Architect (Gemini)
-- Ask *"What are the most coupled modules?"* → Get an instant visual answer
-- Ask *"Is this codebase well-structured?"* → Get AI-powered architecture review
-- Context-aware — knows which building you're looking at
-- **Bring your own API key** — runs directly in your browser, no server needed
-
-### 🎮 Exploration Mode
-- **WASD fly-through** — Navigate the city with a robot character
-- **Slide collision** — Smooth building avoidance
-- **First-person zoom** — Scroll in for FPS view
-- Press **F** to enter, **Esc** to exit
-
-### 🔍 Command Palette
-- **⌘K / Ctrl+K** → Search files, symbols, and commands instantly
-
-### 📊 Developer Intelligence
-- **Health Reports** — Aggregate code health scoring by district and project
-- **Dead Code Detection** — Find unreferenced files
-- **Quality Analysis** — Maintainability index, complexity hotspots
-- **Critical Path Analysis** — Identify the most central files by dependency graph centrality
-
-### 📥 Input Methods
-- **GitHub URL** — Paste any public repo URL, analyzed via ZIP download
-- **Local Folder** — Use the File System Access API to analyze local projects (Chrome/Edge)
-- **Demo City** — Built-in demo to explore immediately
-
----
+- See hotspots instantly: tall and red buildings signal complexity and churn.
+- Understand modular boundaries using district clustering.
+- Explore dependency roads to locate coupling and critical paths.
+- Inspect any building for metrics, symbols, imports, and source.
 
 ## Quick Start
-
-**Prerequisites:** Node.js 18+
 
 ```bash
 git clone https://github.com/YashwanthKamireddi/CodebaseCity.git
@@ -107,173 +34,149 @@ npm install
 npm run dev
 ```
 
-Open **http://localhost:5173** → Paste any GitHub URL or pick a local folder → Explore.
+Open http://localhost:5173 and analyze:
 
-**No backend required.** Everything runs in your browser.
+- A public GitHub repo URL
+- A local folder (Chrome/Edge File System Access API)
+- The built-in demo city
 
----
+## Requirements
 
-## How It Works
+- Node.js 20+
+- npm 10+
+- Modern browser (Chrome/Edge recommended for local folder analysis)
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│  YOUR CODEBASE                                                │
-│  (GitHub URL or local folder via File System Access API)      │
-└─────────────────────────┬────────────────────────────────────┘
-                          │
-          ┌───────────────┼───────────────┐
-          │               │               │
-    ┌─────▼─────┐  ┌──────▼──────┐ ┌──────▼──────┐
-    │   Regex    │  │   Graph     │ │  GitHub     │
-    │  Parser    │  │   Engine    │ │  REST API   │
-    │ (14+ langs)│  │ (deps/layout│ │ (git history│
-    └─────┬─────┘  └──────┬──────┘ └──────┬──────┘
-          │               │               │
-          └───────────────┼───────────────┘
-                          │
-                    ┌─────▼─────┐
-                    │  Louvain   │
-                    │ Clustering │ → Districts
-                    │ + Treemap  │ → Building positions
-                    │ + Layout   │ → Road network
-                    └─────┬─────┘
-                          │
-                    ┌─────▼─────┐
-                    │ Three.js   │
-                    │ + R3F      │ → 3D City in your browser
-                    └───────────┘
+## Project Structure
+
+```text
+CodebaseCity/
+├── README.md
+├── vercel.json
+└── frontend/
+    ├── public/
+    │   ├── demo-city.json
+    │   └── tree-sitter-grammars/
+    ├── src/
+    │   ├── engine/           # Parsing, graph, layout, worker analysis
+    │   ├── entities/         # Building model + UI panels
+    │   ├── features/         # AI architect, search, timeline, explorer, reports
+    │   ├── shared/           # Shared UI, animations, toasts
+    │   ├── store/            # Zustand slices and tests
+    │   ├── styles/           # Design tokens + UI systems
+    │   └── widgets/          # 3D viewport, city scene, roads, camera, effects
+    ├── package.json
+    └── vite.config.js
 ```
 
-**Pipeline:** File Discovery → Regex Parsing → Graph Building → Louvain Clustering → Treemap Layout → GPU Rendering
+## Scripts
 
-All computation happens in a **Web Worker** to keep the UI responsive.
+Run from frontend/:
 
----
-
-## Architecture
-
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **3D Engine** | Three.js, React Three Fiber, Drei, Postprocessing | GPU-instanced city rendering at 60 FPS |
-| **Frontend** | React 18, Zustand, Framer Motion, D3.js | Reactive UI with smooth animations |
-| **Parsing** | Client-side regex parser (14+ languages) | Extract functions, classes, imports, metrics |
-| **Graph** | Custom graph engine, Louvain clustering | Dependency analysis + community detection |
-| **AI** | Google Gemini API (direct from browser) | User-supplied API key, no proxy |
-| **Git** | GitHub REST API, isomorphic-git | Commit history and time travel |
-| **Build** | Vite 5, Rollup | Fast HMR + optimized production builds |
-
----
-
-## Keyboard Shortcuts
-
-| Key | Action |
-|-----|--------|
-| **Click** | Select / inspect a building |
-| **Scroll** | Zoom in / out |
-| **Drag** | Orbit camera |
-| **Right-drag** | Pan |
-| **⌘K** | Command palette |
-| **F** | Toggle exploration mode (WASD flight) |
-| **L** | Toggle labels |
-| **D** | Toggle dependency roads |
-| **V** | Toggle 3D / table view |
-| **Esc** | Deselect / exit mode |
-
----
-
-## Supported Languages
-
-The client-side regex parser supports 14+ languages:
-
-| Language | Language | Language |
-|----------|----------|----------|
-| JavaScript | TypeScript | Python |
-| Java | Go | Rust |
-| C | C++ | C# |
-| PHP | Ruby | Swift |
-| Kotlin | Scala | |
-
----
+```bash
+npm run dev           # Start local dev server
+npm run build         # Production build
+npm run preview       # Preview production build
+npm run lint          # Lint with ESLint
+npm run test          # Vitest watch mode
+npm run test:run      # Vitest single run
+npm run test:coverage # Vitest coverage
+```
 
 ## Deployment
 
-### Vercel (Recommended)
+### Deploy to Vercel
+
+This repo already includes root-level vercel.json configured to build frontend/.
+
+```bash
+# from repo root
+npm install
+npx vercel login
+npx vercel link
+npx vercel --prod
+```
+
+If you prefer dashboard-based setup:
+
+1. Import the GitHub repository in Vercel.
+2. Keep root directory as repository root.
+3. Vercel will use vercel.json automatically.
+
+### Deploy to Any Static Host
 
 ```bash
 cd frontend
-npm i -g vercel
-vercel --prod
+npm install
+npm run build
 ```
 
-### Any Static Host
+Upload frontend/dist to Netlify, Cloudflare Pages, GitHub Pages, or any static host.
+
+## Environment Variables
+
+Create frontend/.env.local for local development:
+
+```bash
+VITE_GEMINI_API_KEY=your_key_here
+VITE_ANALYTICS_DOMAIN=your-domain.example
+```
+
+Notes:
+
+- AI Architect requires a Gemini API key.
+- Analytics is optional.
+
+## Keyboard Shortcuts
+
+- Click: Select and inspect a building
+- Scroll: Zoom camera
+- Drag: Orbit camera
+- Right-drag: Pan camera
+- Ctrl+K or Cmd+K: Open command palette
+- L: Toggle district labels
+- D: Toggle dependency roads
+- V: Toggle 3D/table view
+- Esc: Deselect/close modes
+
+## Troubleshooting
+
+### Blank Screen or Stale Bundles
+
+```bash
+cd frontend
+rm -rf node_modules/.vite
+npm install
+npm run dev
+```
+
+### Build Verification
 
 ```bash
 cd frontend
 npm run build
-# Deploy the dist/ folder to Netlify, Cloudflare Pages, GitHub Pages, etc.
 ```
-
----
-
-## Project Structure
-
-```
-CodebaseCity/
-└── frontend/                  # Entire app — pure client-side
-    ├── src/
-    │   ├── app/               # Client-side analysis engine
-    │   │   └── engine/        # ClientAnalyzer, graphEngine, regexParser, louvain
-    │   ├── widgets/           # 3D city viewport, layout, HUD, exploration
-    │   ├── features/          # Analysis, search, timeline, AI chat, explorer
-    │   ├── entities/          # Building panel, code viewer
-    │   ├── store/             # Zustand state (5 slices)
-    │   ├── hooks/             # Camera, virtual list
-    │   └── shared/            # Animations, utilities
-    └── public/
-        └── demo-city.json     # Pre-generated demo city data
-```
-
----
 
 ## Contributing
 
-Contributions welcome! Bug fixes, new language support, UI improvements — all help.
-
 ```bash
-git checkout -b feature/your-feature
-git commit -m "feat: add your feature"
-git push origin feature/your-feature
-# Open a Pull Request
+git clone https://github.com/YOUR_USERNAME/CodebaseCity.git
+cd CodebaseCity/frontend
+npm install
+npm run dev
 ```
 
----
+Then create a branch, commit, push, and open a pull request.
 
 ## Roadmap
 
-- [ ] Java, Go, Rust full AST parsing (WASM Tree-sitter)
-- [ ] Test coverage overlay — green/red buildings based on coverage
-- [ ] PR diff visualization — see what changed between commits
-- [ ] Multiplayer — share a city link and explore together
-- [ ] Mobile / touch controls
-
----
-
-## Star History
-
-If this project is useful to you, please consider giving it a ⭐
-
-[![Star History Chart](https://api.star-history.com/svg?repos=YashwanthKamireddi/CodebaseCity&type=Date)](https://star-history.com/#YashwanthKamireddi/CodebaseCity&Date)
-
----
+- Tree-sitter AST parsers for deeper language analysis
+- Coverage overlays and PR diff visualization
+- Multiplayer walkthrough mode
+- Mobile touch-first navigation refinements
+- VS Code extension integration
 
 ## License
 
-MIT © 2026 [Yashwanth Kamireddi](https://github.com/YashwanthKamireddi)
+MIT © 2026 Yashwanth Kamireddi
 
----
-
-<div align="center">
-
-**[⬆ Back to top](#codebase-city)**
-
-</div>
+[Back to top](#top)

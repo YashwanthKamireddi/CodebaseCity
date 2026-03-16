@@ -1,7 +1,7 @@
-import React, { useRef, useMemo, useState } from 'react'
+import React, { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Html } from '@react-three/drei'
 import * as THREE from 'three'
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import useStore from '../../../store/useStore'
 
 /**
@@ -93,44 +93,47 @@ void main() {
 
     // Radial fade — bright core, soft edges
     float dist = abs(vUv.x - 0.5) * 2.0;
-    float innerCore = 1.0 - smoothstep(0.0, 0.15, dist);
+    float innerCore = 1.0 - smoothstep(0.0, 0.12, dist);
     float outerGlow = 1.0 - smoothstep(0.0, 1.0, dist);
-    outerGlow = pow(outerGlow, 2.0);
+    outerGlow = pow(outerGlow, 1.5);
 
-    // Vertical fade — bright at both ends (ship + reactor), slight dip in middle
-    float midFade = 1.0 - 0.3 * smoothstep(0.0, 0.5, abs(vUv.y - 0.5) * 2.0);
+    // Vertical fade — bright at ship, gradual falloff toward ground
+    float topBright = smoothstep(1.0, 0.85, vUv.y) * 0.3;
+    float botBright = smoothstep(0.0, 0.08, vUv.y) * 0.15;
+    float midFade = 0.7 + topBright + botBright;
 
     // Multiple scrolling energy layers (downward toward reactor)
-    float s1 = fract(vUv.y * 20.0 - uTime * 1.2);
+    float s1 = fract(vUv.y * 20.0 - uTime * 1.5);
     float line1 = smoothstep(0.42, 0.5, s1) * smoothstep(0.58, 0.5, s1);
 
-    float s2 = fract(vUv.y * 12.0 - uTime * 0.7 + 0.5);
+    float s2 = fract(vUv.y * 12.0 - uTime * 0.8 + 0.5);
     float line2 = smoothstep(0.4, 0.5, s2) * smoothstep(0.6, 0.5, s2);
 
-    float s3 = fract(vUv.y * 30.0 - uTime * 2.0 + 0.2);
+    float s3 = fract(vUv.y * 30.0 - uTime * 2.5 + 0.2);
     float line3 = smoothstep(0.44, 0.5, s3) * smoothstep(0.56, 0.5, s3);
 
-    float energy = line1 * 0.4 + line2 * 0.3 + line3 * 0.2;
+    float energy = line1 * 0.45 + line2 * 0.35 + line3 * 0.25;
 
-    // Swirling spiral effect
-    float angle = vUv.y * 6.2832 * 3.0 + uTime * 0.5;
-    float spiral = sin(angle + dist * 4.0) * 0.5 + 0.5;
-    energy += spiral * innerCore * 0.15;
+    // Swirling double-helix effect
+    float angle = vUv.y * 6.2832 * 4.0 + uTime * 0.8;
+    float spiral1 = sin(angle + dist * 5.0) * 0.5 + 0.5;
+    float spiral2 = sin(angle * 0.7 - dist * 3.0 + 3.14) * 0.5 + 0.5;
+    energy += (spiral1 + spiral2) * innerCore * 0.12;
 
     // Combine
-    float coreAlpha = innerCore * 0.25 * midFade;
-    float glowAlpha = outerGlow * 0.08 * midFade;
-    float energyAlpha = energy * outerGlow * 0.2;
+    float coreAlpha = innerCore * 0.35 * midFade;
+    float glowAlpha = outerGlow * 0.12 * midFade;
+    float energyAlpha = energy * outerGlow * 0.25;
 
     float alpha = coreAlpha + glowAlpha + energyAlpha;
 
     // Color: white-cyan center, blue edges
-    vec3 coreColor = vec3(0.6, 0.9, 1.0);
+    vec3 coreColor = vec3(0.7, 0.95, 1.0);
     vec3 edgeColor = vec3(0.0, 0.35, 0.8);
     vec3 col = mix(edgeColor, coreColor, innerCore * 0.7 + energy * 0.3);
 
     // Pulse
-    float pulse = 0.9 + 0.1 * sin(uTime * 3.0);
+    float pulse = 0.88 + 0.12 * sin(uTime * 3.5);
     alpha *= pulse;
 
     gl_FragColor = vec4(col, alpha);
@@ -147,7 +150,6 @@ const overviewStyle = {
     width: '250px',
     fontFamily: "'Inter', -apple-system, sans-serif",
     color: '#e4e4e7',
-    backdropFilter: 'blur(20px)',
     boxShadow: '0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.06)',
     pointerEvents: 'none',
     userSelect: 'none',
@@ -228,13 +230,23 @@ function OverviewPanel({ cityData }) {
 
 /* ── Component ─────────────────────────────────────────────────────── */
 
-export default function MothershipCore() {
+const MothershipCore = React.memo(function MothershipCore() {
     const cityData = useStore(s => s.cityData)
+    const selectLandmark = useStore(s => s.selectLandmark)
+    const selectedLandmark = useStore(s => s.selectedLandmark)
     const ringOuter = useRef()
     const ringInner = useRef()
     const ringMid = useRef()
     const lastT = useRef(0)
-    const [hovered, setHovered] = useState(false)
+
+    // Nexus Spire crown Y = baseTop(8) + spireHeight + 6 (must match EnergyCoreReactor)
+    const hallTop = useMemo(() => {
+        if (!cityData?.buildings?.length) return 74
+        const heights = cityData.buildings.map(b => (b.dimensions?.height || 8) * 3.0).sort((a, b) => a - b)
+        const p90 = heights[Math.floor(heights.length * 0.9)] || 50
+        const spireHeight = Math.max(60, p90 * 1.4)
+        return 8 + spireHeight + 6 // baseTop(8) + tower + crown(6)
+    }, [cityData])
 
     // Compute altitude — well above tallest building
     const altitude = useMemo(() => {
@@ -259,29 +271,48 @@ export default function MothershipCore() {
         fragmentShader: BEAM_FRAG,
         transparent: true,
         depthWrite: false,
-        side: THREE.DoubleSide,
+        side: THREE.FrontSide,
     }), [])
 
-    const accentMat = useMemo(() => new THREE.MeshStandardMaterial({
+    const accentMat = useMemo(() => new THREE.MeshBasicMaterial({
         color: '#00bbee',
-        emissive: '#0077aa',
-        emissiveIntensity: 0.7,
-        metalness: 0.9,
-        roughness: 0.1,
     }), [])
 
-    const bridgeMat = useMemo(() => new THREE.MeshStandardMaterial({
+    const bridgeMat = useMemo(() => new THREE.MeshBasicMaterial({
         color: '#0066aa',
-        emissive: '#004488',
-        emissiveIntensity: 0.8,
-        metalness: 0.85,
-        roughness: 0.15,
     }), [])
 
-    // Beam connects ship belly to ground reactor chamber
+    // Merged bridge domes (2 → 1 draw call)
+    const mergedBridgeGeo = useMemo(() => {
+        const topDome = new THREE.SphereGeometry(16, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2)
+        topDome.translate(0, 10, 0)
+        const botDome = new THREE.SphereGeometry(12, 10, 8, 0, Math.PI * 2, 0, Math.PI / 2)
+        botDome.rotateX(Math.PI)
+        botDome.translate(0, -10, 0)
+        const merged = mergeGeometries([topDome, botDome])
+        topDome.dispose(); botDome.dispose()
+        return merged
+    }, [])
+
+    // Beam connects ship belly to nexus spire crown — wider at ship, narrow at reactor
+    const beamHeight = altitude - hallTop
     const beamGeo = useMemo(() => {
-        return new THREE.CylinderGeometry(4, 22, altitude, 20, 12, true)
-    }, [altitude])
+        return new THREE.CylinderGeometry(14, 3, beamHeight, 16, 6, true)
+    }, [beamHeight])
+
+    // Dispose GPU resources on unmount or deps change
+    React.useEffect(() => {
+        return () => {
+            hullMat.dispose()
+            beamMat.dispose()
+            accentMat.dispose()
+            bridgeMat.dispose()
+            beamGeo.dispose()
+            mergedBridgeGeo.dispose()
+        }
+    }, [hullMat, beamMat, accentMat, bridgeMat, beamGeo, mergedBridgeGeo])
+
+    const isSelected = selectedLandmark === 'mothership'
 
     useFrame(({ clock }) => {
         const t = clock.getElapsedTime()
@@ -294,68 +325,75 @@ export default function MothershipCore() {
         if (ringInner.current) ringInner.current.rotation.y = t * 0.12
     })
 
+    const handleClick = (e) => {
+        e.stopPropagation()
+        selectLandmark(isSelected ? null : 'mothership')
+    }
+
     return (
         <group>
             {/* ── Ship body at altitude ── */}
             <group
                 position={[0, altitude, 0]}
-                onPointerEnter={(e) => { e.stopPropagation(); setHovered(true) }}
-                onPointerLeave={() => setHovered(false)}
+                onClick={handleClick}
+                onPointerEnter={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer' }}
+                onPointerLeave={() => { document.body.style.cursor = 'auto' }}
             >
                 {/* Main disc hull — thick saucer */}
                 <mesh scale={[1, 0.22, 1]}>
-                    <sphereGeometry args={[55, 28, 18]} />
+                    <sphereGeometry args={[55, 16, 10]} />
                     <primitive object={hullMat} attach="material" />
                 </mesh>
 
-                {/* Bridge dome — top */}
-                <mesh position={[0, 10, 0]}>
-                    <sphereGeometry args={[16, 18, 14, 0, Math.PI * 2, 0, Math.PI / 2]} />
-                    <primitive object={bridgeMat} attach="material" />
-                </mesh>
-
-                {/* Ventral dome — bottom (beam emitter) */}
-                <mesh position={[0, -10, 0]} rotation={[Math.PI, 0, 0]}>
-                    <sphereGeometry args={[12, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2]} />
+                {/* Bridge + ventral domes — merged (2 → 1 draw call) */}
+                <mesh geometry={mergedBridgeGeo}>
                     <primitive object={bridgeMat} attach="material" />
                 </mesh>
 
                 {/* Outer ring */}
                 <mesh ref={ringOuter}>
-                    <torusGeometry args={[62, 2.5, 8, 40]} />
+                    <torusGeometry args={[62, 2.5, 6, 24]} />
                     <primitive object={accentMat} attach="material" />
                 </mesh>
 
                 {/* Mid ring */}
                 <mesh ref={ringMid} rotation={[0.15, 0, 0]}>
-                    <torusGeometry args={[52, 1.5, 6, 36]} />
+                    <torusGeometry args={[52, 1.5, 4, 20]} />
                     <primitive object={accentMat} attach="material" />
                 </mesh>
 
                 {/* Inner ring */}
                 <mesh ref={ringInner} rotation={[Math.PI / 2, 0, 0]}>
-                    <torusGeometry args={[35, 1.2, 6, 28]} />
+                    <torusGeometry args={[35, 1.2, 4, 16]} />
                     <primitive object={accentMat} attach="material" />
                 </mesh>
 
-                {/* Atlas overview — appears on hover */}
-                {hovered && cityData && (
-                    <Html position={[0, 40, 0]} center distanceFactor={120} occlude={false}>
-                        <OverviewPanel cityData={cityData} />
-                    </Html>
+                {/* Selection highlight ring */}
+                {isSelected && (
+                    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -12, 0]}>
+                        <ringGeometry args={[56, 60, 36]} />
+                        <meshBasicMaterial color="#00bbee" transparent opacity={0.5} depthWrite={false} />
+                    </mesh>
                 )}
             </group>
 
-            {/* ── Tractor beam — ship to ground chamber ── */}
-            <mesh position={[0, altitude / 2, 0]} geometry={beamGeo}>
+            {/* ── Tractor beam — ship to town hall orb ── */}
+            <mesh position={[0, hallTop + beamHeight / 2, 0]} geometry={beamGeo}>
                 <primitive object={beamMat} attach="material" />
             </mesh>
 
             {/* ── Ship underside glow — wide halo beneath hull ── */}
             <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, altitude - 12, 0]}>
                 <ringGeometry args={[5, 45, 32]} />
-                <meshBasicMaterial color="#004488" transparent opacity={0.08} depthWrite={false} />
+                <meshBasicMaterial color="#004488" transparent opacity={0.15} depthWrite={false} />
+            </mesh>
+            {/* Beam emission glow — bright ring directly under ventral dome */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, altitude - 14, 0]}>
+                <ringGeometry args={[2, 16, 24]} />
+                <meshBasicMaterial color="#00aaff" transparent opacity={0.25} depthWrite={false} />
             </mesh>
         </group>
     )
-}
+})
+
+export default MothershipCore

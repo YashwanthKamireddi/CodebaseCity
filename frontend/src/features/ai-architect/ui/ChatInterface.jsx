@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import useStore from '../../../store/useStore'
 import { X, Bot, User, Sparkles, Box, ArrowUp, KeyRound, Trash2, ExternalLink } from 'lucide-react'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
-import { slideUp, getReducedMotionVariants } from '../../../shared/animations/variants'
 import ReactMarkdown from 'react-markdown'
 
 function ApiKeyBanner({ onOpenSettings }) {
@@ -71,7 +69,6 @@ export default function ChatInterface() {
     const [input, setInput] = useState('')
     const [showSettings, setShowSettings] = useState(false)
     const messagesEndRef = useRef(null)
-    const shouldReduceMotion = useReducedMotion()
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -88,12 +85,7 @@ export default function ChatInterface() {
     const hasKey = !!geminiApiKey
 
     return (
-        <AnimatePresence>
-            <motion.div
-                variants={getReducedMotionVariants(slideUp, shouldReduceMotion)}
-                initial="initial" animate="animate" exit="exit"
-                className="ci-root"
-            >
+        <div className="ci-root anim-slide-up">
                 {/* Top accent line */}
                 <div className="ci-accent-line" />
 
@@ -122,16 +114,11 @@ export default function ChatInterface() {
                 </div>
 
                 {/* API Key Settings */}
-                <AnimatePresence>
-                    {showSettings && (
-                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: shouldReduceMotion ? 0.01 : 0.2 }}
-                            style={{ overflow: 'hidden' }}>
+                {showSettings && (
+                        <div style={{ overflow: 'hidden' }} className="anim-fade-in">
                             <ApiKeySettings onClose={() => setShowSettings(false)} />
-                        </motion.div>
+                        </div>
                     )}
-                </AnimatePresence>
 
                 {/* Messages */}
                 <div className="ci-messages">
@@ -146,11 +133,8 @@ export default function ChatInterface() {
                     )}
 
                     {messages.map((msg, i) => (
-                        <motion.div key={i}
-                            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: shouldReduceMotion ? 0.01 : 0.2 }}
-                            className={`ci-msg ci-msg--${msg.role}`}>
+                        <div key={i}
+                            className={`ci-msg ci-msg--${msg.role} anim-slide-up`}>
                             <div className={`ci-msg-avatar ci-msg-avatar--${msg.role}`}>
                                 {msg.role === 'user' ? <User size={14} /> : <Bot size={14} />}
                             </div>
@@ -170,7 +154,7 @@ export default function ChatInterface() {
                                     {msg.content}
                                 </ReactMarkdown>
                             </div>
-                        </motion.div>
+                        </div>
                     ))}
 
                     {chatLoading && (
@@ -477,7 +461,6 @@ export default function ChatInterface() {
                         }
                     }
                 `}</style>
-            </motion.div>
-        </AnimatePresence>
+            </div>
     )
 }
