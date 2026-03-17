@@ -399,11 +399,11 @@ export const createCitySlice = (set, get) => ({
             const districts = []
             const districtMap = {}
 
-            // Merge small directories (< 3 files) into parent or (misc)
-            // Threshold matches DistrictLabels' filter (building_count >= 3)
+            // Merge only tiny directories (< 2 files) into parent or (misc).
+            // Keeping 2-file directories separate preserves expected grouping.
             const mergedGroups = {}
             for (const dir of dirNames) {
-                if (dirGroups[dir].length < 3 && dir !== '(root)') {
+                if (dirGroups[dir].length < 2 && dir !== '(root)') {
                     const parent = dir.includes('/') ? dir.split('/')[0] : '(misc)'
                     if (!mergedGroups[parent]) mergedGroups[parent] = []
                     mergedGroups[parent].push(...dirGroups[dir])
@@ -458,6 +458,8 @@ export const createCitySlice = (set, get) => ({
             const totalW = colWidths.reduce((s, w) => s + w + districtGap, -districtGap)
             const totalH = rowHeights.reduce((s, h) => s + h + districtGap, -districtGap)
 
+            const CORE_SAFE_RADIUS = 48
+
             finalDirNames.forEach((dir, idx) => {
                 const districtId = `district_${idx}`
                 const col = idx % cols
@@ -473,6 +475,18 @@ export const createCitySlice = (set, get) => ({
                 let cy = -totalH / 2
                 for (let r = 0; r < row; r++) cy += rowHeights[r] + districtGap
                 cy += rowHeights[row] / 2
+
+                // Keep district footprints out of the Town Hall / Mothership core zone.
+                const halfDiag = Math.sqrt(2) * (thisCellSize / 2)
+                const centerDist = Math.hypot(cx, cy)
+                const minAllowedCenterDist = CORE_SAFE_RADIUS + halfDiag
+                if (centerDist < minAllowedCenterDist) {
+                    const angle = centerDist > 0.001
+                        ? Math.atan2(cy, cx)
+                        : ((idx * 2.3999632297) % (Math.PI * 2))
+                    cx = Math.cos(angle) * minAllowedCenterDist
+                    cy = Math.sin(angle) * minAllowedCenterDist
+                }
 
                 districts.push({
                     id: districtId,

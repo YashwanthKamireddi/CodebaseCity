@@ -16,9 +16,9 @@ const MAX_ROAD_SEGMENTS = 1200
 const ROUNDABOUT_RADIUS = 9
 const MAX_ROUNDABOUTS = 40
 const MIN_RENDERABLE_SEGMENT = 18
-const ROAD_CLEARANCE = ROAD_WIDTH * 0.55 + 2
+const ROAD_CLEARANCE = ROAD_WIDTH * 0.45 + 2
 const MAX_LOCAL_LANES_PER_AXIS = 3
-const MAX_DISTRICT_CONNECTORS = 80
+const MAX_DISTRICT_CONNECTORS = 160
 
 /* ═══════════════════════════════════════════════════════════════
    GLSL — Road Vertex
@@ -528,6 +528,32 @@ function buildInternalDistrictCandidates(boxes, footprintsByDistrict) {
     return candidates
 }
 
+function buildDistrictSpineCandidates(boxes) {
+    const candidates = []
+    for (const box of boxes) {
+        const w = box.x1 - box.x0
+        const h = box.z1 - box.z0
+        if (w < 16 || h < 16) continue
+
+        candidates.push({
+            axis: 'z',
+            coord: box.cx,
+            span0: box.z0 - 4,
+            span1: box.z1 + 4,
+            kind: 'main',
+        })
+
+        candidates.push({
+            axis: 'x',
+            coord: box.cz,
+            span0: box.x0 - 4,
+            span1: box.x1 + 4,
+            kind: 'main',
+        })
+    }
+    return candidates
+}
+
 function segmentLength(seg) {
     return seg.axis === 'x'
         ? Math.abs(seg.end[0] - seg.start[0])
@@ -770,6 +796,7 @@ function computeRoadGrid(buildings, districts) {
     const rawCandidates = []
     if (boxes.length >= 2) {
         rawCandidates.push(...buildDistrictConnectors(boxes, bounds, pad))
+        rawCandidates.push(...buildDistrictSpineCandidates(boxes))
         rawCandidates.push(...buildInternalDistrictCandidates(boxes, groupedFootprints))
     }
 
@@ -780,7 +807,15 @@ function computeRoadGrid(buildings, districts) {
         ))
     }
 
-    const clippedCandidates = rawCandidates.flatMap((candidate) => clipCandidateByFootprints(candidate, footprints))
+    let clippedCandidates = rawCandidates.flatMap((candidate) => clipCandidateByFootprints(candidate, footprints))
+    if (clippedCandidates.length < 6) {
+        const fallbackCandidates = buildFallbackGrid(buildings, bounds, pad).map((seg) => seg.axis === 'z'
+            ? { axis: 'z', coord: seg.start[0], span0: seg.start[2], span1: seg.end[2], kind: seg.kind }
+            : { axis: 'x', coord: seg.start[2], span0: seg.start[0], span1: seg.end[0], kind: seg.kind }
+        )
+        clippedCandidates = [...clippedCandidates, ...fallbackCandidates.flatMap((candidate) => clipCandidateByFootprints(candidate, footprints))]
+    }
+
     const segments = [...buildPerimeterSegments(bounds, pad), ...clippedCandidates]
 
     // Merge only true contiguous lanes, not distant parallel roads.
