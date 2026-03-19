@@ -209,11 +209,12 @@ function App() {
                                         maxPolarAngle={Math.PI / 2.05}
                                         minPolarAngle={0.05}
                                         enableDamping={true}
-                                        dampingFactor={isMobile ? 0.08 : 0.12}
-                                        rotateSpeed={isMobile ? 0.5 : 0.8}
-                                        zoomSpeed={isMobile ? 0.6 : 1.0}
-                                        panSpeed={isMobile ? 0.5 : 0.8}
+                                        dampingFactor={isMobile ? 0.12 : 0.18}
+                                        rotateSpeed={isMobile ? 0.7 : 1.0}
+                                        zoomSpeed={isMobile ? 1.0 : 1.5}
+                                        panSpeed={isMobile ? 0.8 : 1.2}
                                         zoomToCursor={true}
+                                        enableKeys={true}
                                         mouseButtons={{
                                             LEFT: THREE.MOUSE.ROTATE,
                                             MIDDLE: THREE.MOUSE.DOLLY,

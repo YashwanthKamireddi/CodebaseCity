@@ -291,13 +291,15 @@ export default React.memo(function CodeViewer({ building, onClose }) {
     const fetchFileContent = useStore(s => s.fetchFileContent)
     const [copied, setCopied] = React.useState(false)
 
-    // Self-fetch: ensure content is loaded for this building (don't rely solely on BuildingPanel)
+    // Self-fetch: ensure content is loaded for this building
+    // Use a ref to track the last-fetched path and prevent infinite re-fetch loops
+    const lastFetchedPath = useRef(null)
     React.useEffect(() => {
         if (!building?.path) return
-        const fc = useStore.getState().fileContent
-        if (!fc || fc.path !== building.path || (!fc.content && !fc.loading && !fc.error)) {
-            fetchFileContent(building.path)
-        }
+        // Only fetch if path actually changed (prevents re-fetch on state updates)
+        if (lastFetchedPath.current === building.path) return
+        lastFetchedPath.current = building.path
+        fetchFileContent(building.path)
     }, [building?.path, fetchFileContent])
 
     React.useEffect(() => {

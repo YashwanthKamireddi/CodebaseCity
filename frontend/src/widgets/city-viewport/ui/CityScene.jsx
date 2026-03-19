@@ -6,14 +6,13 @@ import InstancedCity from './InstancedCity'
 import CameraController from './CameraController'
 import Ground from './Ground'
 import HologramPanel from './HologramPanel'
-import NeonDistrictBorders from './NeonDistrictBorders'
-import DistrictLabels from './DistrictLabels'
+import HeroLandmarks from './HeroLandmarks'
 import MothershipCore from './MothershipCore'
 import HolographicCityName from './HolographicCityName'
 import EnergyCoreReactor from './EnergyCoreReactor'
 import HeroLandmarks from './HeroLandmarks'
 import LandmarkPanel from './LandmarkPanel'
-import DistrictFloors from './DistrictFloors'
+import DistrictLabels from './DistrictLabels'
 import StreetLamps from './StreetLamps'
 import DataStreams from './DataStreams'
 import AtmosphericParticles from './AtmosphericParticles'
@@ -77,8 +76,6 @@ const CityScene = React.memo(function CityScene() {
                 <Ground />
                 <HologramPanel />
                 <LandmarkPanel />
-                <DistrictFloors />
-                <NeonDistrictBorders />
                 <DistrictLabels />
                 <StreetLamps />
                 <DataStreams />
