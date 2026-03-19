@@ -15,9 +15,9 @@ const ROAD_WIDTH = 14
 const MAX_ROAD_SEGMENTS = 1200
 const ROUNDABOUT_RADIUS = 9
 const MAX_ROUNDABOUTS = 40
-const MIN_RENDERABLE_SEGMENT = 18
+const MIN_RENDERABLE_SEGMENT = 12
 const ROAD_CLEARANCE = ROAD_WIDTH * 0.45 + 2
-const MAX_LOCAL_LANES_PER_AXIS = 3
+const MAX_LOCAL_LANES_PER_AXIS = 4
 const MAX_DISTRICT_CONNECTORS = 160
 
 /* ═══════════════════════════════════════════════════════════════
@@ -554,6 +554,51 @@ function buildDistrictSpineCandidates(boxes) {
     return candidates
 }
 
+function buildUniformDistrictGridCandidates(boxes, footprintsByDistrict) {
+    const candidates = []
+    for (const box of boxes) {
+        const districtFootprints = footprintsByDistrict.get(box.id) || []
+        const w = box.x1 - box.x0
+        const h = box.z1 - box.z0
+        if (w < 36 || h < 36) continue
+
+        const area = w * h
+        const density = districtFootprints.length / Math.max(area, 1)
+        // Lower spacing for denser districts, but clamp for visual stability.
+        const spacing = Math.max(28, Math.min(72, 56 - density * 520))
+
+        const usableW = Math.max(0, w - 20)
+        const usableH = Math.max(0, h - 20)
+        const xCount = Math.max(1, Math.min(4, Math.floor(usableW / spacing)))
+        const zCount = Math.max(1, Math.min(4, Math.floor(usableH / spacing)))
+
+        for (let i = 1; i <= xCount; i++) {
+            const t = i / (xCount + 1)
+            const x = box.x0 + 10 + t * usableW
+            candidates.push({
+                axis: 'z',
+                coord: x,
+                span0: box.z0 - 4,
+                span1: box.z1 + 4,
+                kind: 'grid',
+            })
+        }
+
+        for (let i = 1; i <= zCount; i++) {
+            const t = i / (zCount + 1)
+            const z = box.z0 + 10 + t * usableH
+            candidates.push({
+                axis: 'x',
+                coord: z,
+                span0: box.x0 - 4,
+                span1: box.x1 + 4,
+                kind: 'grid',
+            })
+        }
+    }
+    return candidates
+}
+
 function segmentLength(seg) {
     return seg.axis === 'x'
         ? Math.abs(seg.end[0] - seg.start[0])
@@ -797,6 +842,7 @@ function computeRoadGrid(buildings, districts) {
     if (boxes.length >= 2) {
         rawCandidates.push(...buildDistrictConnectors(boxes, bounds, pad))
         rawCandidates.push(...buildDistrictSpineCandidates(boxes))
+        rawCandidates.push(...buildUniformDistrictGridCandidates(boxes, groupedFootprints))
         rawCandidates.push(...buildInternalDistrictCandidates(boxes, groupedFootprints))
     }
 

@@ -6,7 +6,7 @@ let v = fs.readFileSync(p, 'utf8');
 const oldStr = 'if (faceScale.x > 30.0) winX = 3.0;\n          if (faceScale.y > 50.0) winY = 3.5;';
 
 const replacements = `
-          bool isFinancial = faceScale.y > 15.0; 
+          bool isFinancial = faceScale.y > 15.0;
           bool isIndustrial = faceScale.y < 8.0 && faceScale.x > 8.0;
 
           if (isFinancial) { winX = 4.0; winY = 8.0; }
@@ -26,4 +26,3 @@ v = v.replace('float frameThickness = 0.15;', `float frameThickness = 0.15;
 
 fs.writeFileSync(p, v);
 console.log('Shader patched successfully.');
-

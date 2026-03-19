@@ -227,12 +227,6 @@ export default function EmptyCityHero() {
                     display: flex; flex-direction: column;
                     align-items: center; text-align: center;
                     max-width: 680px; padding: 40px 32px;
-                    background: linear-gradient(180deg, rgba(8, 12, 22, 0.76), rgba(6, 8, 16, 0.68));
-                    border: 1px solid rgba(255,255,255,0.12);
-                    border-radius: 28px;
-                    box-shadow: 0 24px 80px rgba(0,0,0,0.45);
-                    backdrop-filter: blur(14px);
-                    -webkit-backdrop-filter: blur(14px);
                 }
 
                 .lp-kicker {

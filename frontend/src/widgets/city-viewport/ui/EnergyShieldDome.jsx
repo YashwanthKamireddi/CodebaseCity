@@ -16,11 +16,21 @@ export default React.memo(function EnergyShieldDome() {
     const radius = useMemo(() => {
         if (!cityData?.buildings?.length) return 200
         let maxR = 0
+        let maxH = 0
         for (const b of cityData.buildings) {
-            const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
-            if (r > maxR) maxR = r
+            const x = b.position.x
+            const z = b.position.z || 0
+            const halfW = (b.dimensions?.width || 8) / 2
+            const halfD = (b.dimensions?.depth || 8) / 2
+            const h = (b.dimensions?.height || 8) * 3.0
+            // Account for building footprint edges, not just center
+            const cornerR = Math.sqrt((Math.abs(x) + halfW) ** 2 + (Math.abs(z) + halfD) ** 2)
+            if (cornerR > maxR) maxR = cornerR
+            if (h > maxH) maxH = h
         }
-        return Math.max(200, maxR * 1.3)
+        // Dome must be large enough for both the horizontal spread AND the tallest structures
+        // Use max of horizontal spread * 1.6 or tallest building * 2.5
+        return Math.max(200, maxR * 1.6, maxH * 2.5)
     }, [cityData])
 
     const shaderMaterial = useMemo(() => new THREE.ShaderMaterial({
