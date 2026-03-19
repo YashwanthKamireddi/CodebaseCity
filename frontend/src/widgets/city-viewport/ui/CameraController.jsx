@@ -125,8 +125,15 @@ export default React.memo(function CameraController() {
         if (!cityData?.buildings?.length || !controls) return
 
         const timer = setTimeout(() => {
-            const fitDist = cityRadius * 0.55
-            const camY = Math.max(cityRadius * 0.30, maxHeight * 0.9)
+            // For large repos, cap the viewing distance so buildings remain clearly visible
+            // Instead of showing the entire city from orbit, start near the buildings
+            const isLargeCity = cityRadius > 300
+            const fitDist = isLargeCity
+                ? Math.min(cityRadius * 0.35, 250)   // Cap distance for large cities
+                : cityRadius * 0.55                    // Small/medium: show full city
+            const camY = isLargeCity
+                ? Math.min(maxHeight * 1.2, 180)      // Stay at building-level height
+                : Math.max(cityRadius * 0.30, maxHeight * 0.9)
 
             animateTo(
                 new THREE.Vector3(cx + fitDist, camY, cz + fitDist),
