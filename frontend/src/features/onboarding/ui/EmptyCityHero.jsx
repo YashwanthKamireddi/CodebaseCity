@@ -170,16 +170,7 @@ export default function EmptyCityHero() {
                     )}
             </div>
 
-            {/* Footer hints */}
-            <footer
-                className="lp-footer anim-fade-in"
-            >
-                <span><kbd>⌘K</kbd> command palette</span>
-                <span className="lp-dot" />
-                <span><kbd>D</kbd> toggle roads</span>
-                <span className="lp-dot" />
-                <span>scroll to orbit</span>
-            </footer>
+
 
             <style>{`
                 .lp-root {

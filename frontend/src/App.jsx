@@ -177,7 +177,7 @@ function App() {
                                 <Canvas
                                     style={isLandingOverlayActive ? { pointerEvents: 'none' } : undefined}
                                     shadows={false}
-                                    frameloop="demand"
+                                    frameloop={isLandingOverlayActive ? "always" : "demand"}
                                     dpr={dprRange}
                                     gl={{
                                         antialias: !isLowEnd,
@@ -186,6 +186,7 @@ function App() {
                                         stencil: false,
                                         depth: true,
                                         logarithmicDepthBuffer: true,
+                                        preserveDrawingBuffer: true,
                                         failIfMajorPerformanceCaveat: false,
                                     }}
                                 >
@@ -224,8 +225,8 @@ function App() {
                                             ONE: THREE.TOUCH.ROTATE,
                                             TWO: THREE.TOUCH.DOLLY_PAN,
                                         }}
-                                        autoRotate={false}
-                                        autoRotateSpeed={0}
+                                        autoRotate={isLandingOverlayActive}
+                                        autoRotateSpeed={0.4}
                                         target={[0, 0, 0]}
                                     />
 
