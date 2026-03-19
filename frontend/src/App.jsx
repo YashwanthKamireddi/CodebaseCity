@@ -112,10 +112,11 @@ function App() {
     const error = useStore(s => s.error)
     const codeViewerOpen = useStore(s => s.codeViewerOpen)
     const setCodeViewerOpen = useStore(s => s.setCodeViewerOpen)
+    const exportReportOpen = useStore(s => s.exportReportOpen)
+    const setExportReportOpen = useStore(s => s.setExportReportOpen)
     const isLandingOverlayActive = useStore(s => s.isLandingOverlayActive)
 
     const [view, setView] = useState('3d') // '3d' or 'table'
-    const [showExportReport, setShowExportReport] = useState(false)
 
     // Performance tier detection — computed once, not on every render
     const { isMobile, isLowEnd } = useMemo(() => {
@@ -126,7 +127,7 @@ function App() {
             isLowEnd: isMobileDevice || (typeof navigator !== 'undefined' && navigator.hardwareConcurrency <= 4),
         }
     }, [])
-    const dprRange = isLowEnd ? [0.75, 1] : [1, 1.5]
+    const dprRange = isLowEnd ? [0.75, 1] : [1, 1.25]
 
     // Close sidebar by default on mobile
     useEffect(() => {
@@ -186,13 +187,13 @@ function App() {
                                         stencil: false,
                                         depth: true,
                                         logarithmicDepthBuffer: true,
-                                        preserveDrawingBuffer: true,
+                                        preserveDrawingBuffer: false,
                                         failIfMajorPerformanceCaveat: false,
                                     }}
                                 >
                                     <PerspectiveCamera
                                         makeDefault
-                                        position={[120, 80, 120]}
+                                        position={[250, 150, 250]}
                                         fov={45}
                                         near={1}
                                         far={20000}
@@ -207,7 +208,7 @@ function App() {
                                         screenSpacePanning={true}
                                         minDistance={10}
                                         maxDistance={15000}
-                                        maxPolarAngle={Math.PI / 2.05}
+                                        maxPolarAngle={Math.PI / 2 - 0.05}
                                         minPolarAngle={0.05}
                                         enableDamping={true}
                                         dampingFactor={isMobile ? 0.12 : 0.18}
@@ -275,7 +276,7 @@ function App() {
                                 }}
                                 onShowExport={() => {
                                     startTransition(() => {
-                                        setShowExportReport(true)
+                                        setExportReportOpen(true)
                                     })
                                 }}
                             />
@@ -309,7 +310,7 @@ function App() {
                 </div>
             </div>
 
-            {cityData && !isLandingOverlayActive && <Sidebar />}
+            {cityData && !isLandingOverlayActive && view === '3d' && <Sidebar />}
 
             {/* Building detail panel — now rendered as 3D hologram inside CityScene */}
 
@@ -323,10 +324,10 @@ function App() {
             {/* Export Report Modal */}
             <Suspense fallback={null}>
                 <ExportReport
-                    isOpen={showExportReport}
+                    isOpen={exportReportOpen}
                     onClose={() => {
                         startTransition(() => {
-                            setShowExportReport(false)
+                            setExportReportOpen(false)
                         })
                     }}
                 />

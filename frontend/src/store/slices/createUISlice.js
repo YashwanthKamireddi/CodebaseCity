@@ -18,6 +18,7 @@ export const createUISlice = (set, get) => ({
     // Modals & Panels
     commandPaletteOpen: false,
     codeViewerOpen: false,
+    exportReportOpen: false,
 
     // Highlights
     highlightedCategory: null, // { type: 'language' | 'health' | 'district', value: string }
@@ -45,6 +46,7 @@ export const createUISlice = (set, get) => ({
     }),
 
     setCodeViewerOpen: (open) => set({ codeViewerOpen: open }),
+    setExportReportOpen: (open) => set({ exportReportOpen: open }),
 
     // Highlighting
     setHighlightedCategory: (category) => set({ highlightedCategory: category }),

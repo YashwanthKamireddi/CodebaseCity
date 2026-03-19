@@ -8,12 +8,19 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Command } from 'cmdk'
 
+import { createPortal } from 'react-dom'
 import {
     Search,
     FileCode,
     RotateCcw,
-    CornerDownLeft,
-    Keyboard
+    Keyboard,
+    Map,
+    Moon,
+    Sun,
+    Camera,
+    Download,
+    Terminal,
+    History
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
 import './CommandPalette.css'
@@ -107,16 +114,97 @@ export default function CommandPalette() {
         setCommandPaletteOpen(false)
     }, [selectBuilding, setCommandPaletteOpen])
 
-    // Actions list
-    const actions = [
+    const actions = useMemo(() => [
+        {
+            id: 'toggle-roads',
+            label: showRoads ? 'Hide Roads & Traffic' : 'Show Roads & Traffic',
+            icon: Map,
+            shortcut: 'D',
+            action: () => { toggleRoads(); setCommandPaletteOpen(false) }
+        },
+        {
+            id: 'toggle-theme',
+            label: theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+            icon: theme === 'dark' ? Sun : Moon,
+            shortcut: 'T',
+            action: () => { toggleTheme(); setCommandPaletteOpen(false) }
+        },
+        {
+            id: 'open-ai',
+            label: 'Open AI Architect',
+            icon: Terminal,
+            shortcut: 'A',
+            action: () => { 
+                useStore.setState({ chatOpen: true })
+                setCommandPaletteOpen(false) 
+            }
+        },
+        {
+            id: 'open-timeline',
+            label: 'Time Travel (Commit History)',
+            icon: History,
+            shortcut: 'H',
+            action: () => { 
+                useStore.setState({ showTimeline: true })
+                setCommandPaletteOpen(false) 
+            }
+        },
+        {
+            id: 'export-report',
+            label: 'Export Analysis Report',
+            icon: Download,
+            shortcut: 'E',
+            action: () => { 
+                useStore.setState({ exportReportOpen: true })
+                setCommandPaletteOpen(false) 
+            }
+        },
+        {
+            id: 'take-screenshot',
+            label: 'Take City Screenshot',
+            icon: Camera,
+            shortcut: 'P',
+            action: () => { 
+                const canvas = document.querySelector('canvas')
+                if (canvas) {
+                    const link = document.createElement('a')
+                    link.download = `code-city-${Date.now()}.png`
+                    link.href = canvas.toDataURL('image/png')
+                    link.click()
+                }
+                setCommandPaletteOpen(false) 
+            }
+        },
         {
             id: 'reset-view',
-            label: 'Reset Camera View',
+            label: 'Reload Application',
             icon: RotateCcw,
             shortcut: 'R',
             action: () => { window.location.reload() }
         }
-    ]
+    ], [showRoads, theme, toggleRoads, toggleTheme, setCommandPaletteOpen])
+
+    // Global Keybindings Listener
+    useEffect(() => {
+        const handleGlobalKeyDown = (e) => {
+            // Ignore if typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+                return
+            }
+            
+            // Prevent shortcuts from triggering when the command palette is actively open
+            if (!e.key || commandPaletteOpen) return
+
+            // Find matching action
+            const action = actions.find(a => a.shortcut && a.shortcut.toLowerCase() === e.key.toLowerCase())
+            if (action) {
+                e.preventDefault()
+                action.action()
+            }
+        }
+        document.addEventListener('keydown', handleGlobalKeyDown)
+        return () => document.removeEventListener('keydown', handleGlobalKeyDown)
+    }, [actions])
 
     // Get file icon based on extension
     const getFileIcon = (filename) => {
@@ -138,7 +226,7 @@ export default function CommandPalette() {
 
     return (
         <>
-            {commandPaletteOpen && (
+            {commandPaletteOpen && createPortal(
                 <>
                     {/* Backdrop */}
                     <div
@@ -265,7 +353,8 @@ export default function CommandPalette() {
                             </div>
                         </Command>
                     </div>
-                </>
+                </>,
+                document.body
             )}
         </>
     )

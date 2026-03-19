@@ -44,6 +44,11 @@ function tokenizeLine(line) {
     const cached = _tokenCache.get(line)
     if (cached) return cached
 
+    // Prevent tokenization crashes on massive minified lines
+    if (line.length > 1500) {
+        return [{ type: T.PLAIN, text: line.slice(0, 1500) + '... [Line Truncated]' }]
+    }
+
     const tokens = []
     let i = 0
     const len = line.length

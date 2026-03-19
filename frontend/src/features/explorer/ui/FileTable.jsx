@@ -114,6 +114,7 @@ export default function FileTable({ buildings = [], onSelectFile }) {
     }, [])
 
     const totalHeight = sortedFiles.length * ROW_HEIGHT
+    const bottomSpace = Math.max(0, totalHeight - offsetY - (visibleFiles.length * ROW_HEIGHT))
 
     return (
         <div className="file-table-container">
@@ -160,11 +161,11 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                             <th></th>
                         </tr>
                     </thead>
-                    <tbody style={{ height: totalHeight, position: 'relative' }}>
+                    <tbody>
                         {/* Spacer for virtualization offset */}
                         {offsetY > 0 && (
-                            <tr style={{ height: offsetY, visibility: 'hidden' }}>
-                                <td colSpan={6}></td>
+                            <tr style={{ height: offsetY }}>
+                                <td colSpan={6} style={{ padding: 0, border: 'none' }}></td>
                             </tr>
                         )}
                         {visibleFiles.map((file, i) => (
@@ -207,6 +208,12 @@ export default function FileTable({ buildings = [], onSelectFile }) {
                                 </td>
                             </tr>
                         ))}
+                        {/* Bottom Spacer */}
+                        {bottomSpace > 0 && (
+                            <tr style={{ height: bottomSpace }}>
+                                <td colSpan={6} style={{ padding: 0, border: 'none' }}></td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
                 {sortedFiles.length === 0 && (

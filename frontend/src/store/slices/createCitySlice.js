@@ -476,17 +476,11 @@ export const createCitySlice = (set, get) => ({
                 for (let r = 0; r < row; r++) cy += rowHeights[r] + districtGap
                 cy += rowHeights[row] / 2
 
-                // Keep district footprints out of the Town Hall / Mothership core zone.
-                const halfDiag = Math.sqrt(2) * (thisCellSize / 2)
-                const centerDist = Math.hypot(cx, cy)
-                const minAllowedCenterDist = CORE_SAFE_RADIUS + halfDiag
-                if (centerDist < minAllowedCenterDist) {
-                    const angle = centerDist > 0.001
-                        ? Math.atan2(cy, cx)
-                        : ((idx * 2.3999632297) % (Math.PI * 2))
-                    cx = Math.cos(angle) * minAllowedCenterDist
-                    cy = Math.sin(angle) * minAllowedCenterDist
-                }
+                // Expand grid outward from the center to leave a clean, non-colliding hole
+                // for the Mothership Core without squishing districts into a circle.
+                const CORE_OFFSET = 180; // Total 360 diameter hole
+                cx = cx < 0 ? cx - CORE_OFFSET : cx + CORE_OFFSET;
+                cy = cy < 0 ? cy - CORE_OFFSET : cy + CORE_OFFSET;
 
                 districts.push({
                     id: districtId,

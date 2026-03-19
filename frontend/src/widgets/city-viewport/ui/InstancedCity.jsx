@@ -39,6 +39,7 @@ const InstancedCity = React.memo(function InstancedCity() {
     const refactoringModeActive = useStore(s => s.refactoringModeActive)
     const applyRefactoringDrift = useStore(s => s.applyRefactoringDrift)
     const refactoringDrifts = useStore(s => s.refactoringDrifts)
+    const selectedLandmark = useStore(s => s.selectedLandmark)
     const meshRef = useRef()
     const materialRef = useRef()
     const { camera, raycaster, pointer, invalidate } = useThree()
@@ -129,7 +130,11 @@ const InstancedCity = React.memo(function InstancedCity() {
             // Batch process buildings using pre-computed stagger data
             for (let i = 0; i < count; i++) {
                 const b = buildings[i]
-                const { x, z } = b.position
+                let { x, z } = b.position
+                
+                // Clearance is now handled natively during the spiral layout algorithm
+                // so we no longer artificially push instances around the origin here.
+
                 const width = b.dimensions?.width || 8
                 const depth = b.dimensions?.depth || 8
                 const targetHeight = (b.dimensions?.height || 8) * 3.0
@@ -205,7 +210,8 @@ const InstancedCity = React.memo(function InstancedCity() {
         const isHovered = hovered === i
         const isIssueHighlighted = highlightedPathsSet?.has(b.path) ?? false
         const isUnrelated = (highlightedIssue && !isIssueHighlighted) ||
-            (!highlightedIssue && selected && !isSelected)
+            (!highlightedIssue && selected && !isSelected) ||
+            (!highlightedIssue && !selected && !!selectedLandmark)
 
         return getBuildingColor(b, colorMode, {
             isSelected, isHovered,
@@ -214,7 +220,7 @@ const InstancedCity = React.memo(function InstancedCity() {
             isGodObject: issueIndex.godSet.has(b.id),
             showWarnings
         })
-    }, [buildings, colorMode, highlightedIssue, highlightedPathsSet, issueIndex])
+    }, [buildings, colorMode, highlightedIssue, highlightedPathsSet, issueIndex, selectedLandmark])
 
     // Full color rebuild when base visual state changes
     // Single-pass with color cache: ~30 unique hex values per mode are parsed once,
@@ -253,7 +259,7 @@ const InstancedCity = React.memo(function InstancedCity() {
 
         prevHoveredRef.current = hoveredInstanceId
         prevSelectedRef.current = selectedBuildingId
-    }, [buildings, colorMode, highlightedIssue, highlightedPathsSet, count, issueIndex, computeColor])
+    }, [buildings, colorMode, highlightedIssue, highlightedPathsSet, count, issueIndex, computeColor, selectedLandmark])
 
     // Incremental hover/select update — only re-color the 1-4 dirty instances
     // EXCEPTION: when selection toggles (null ↔ non-null), ALL buildings must
@@ -333,6 +339,9 @@ const InstancedCity = React.memo(function InstancedCity() {
     // ═══════════════════════════════════════════════════════════════
     const lastPointerTime = useRef(0)
     const handlePointerMove = useCallback((e) => {
+        // PERF FIX: Skip expensive raycasting hover events while dragging/panning the camera
+        if (e.buttons > 0 || dragActive) return
+        
         e.stopPropagation()
         const now = performance.now()
         if (now - lastPointerTime.current < 32) return // ~30fps throttle for smooth response

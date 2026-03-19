@@ -129,11 +129,12 @@ export default React.memo(function CameraController() {
             // Instead of showing the entire city from orbit, start near the buildings
             const isLargeCity = cityRadius > 300
             const fitDist = isLargeCity
-                ? Math.min(cityRadius * 0.35, 250)   // Cap distance for large cities
-                : cityRadius * 0.55                    // Small/medium: show full city
+                ? Math.min(cityRadius * 1.5, 1200)   // Back way out
+                : Math.max(cityRadius * 1.2, 200)      // Small/medium: view whole city clearly
+
             const camY = isLargeCity
-                ? Math.min(maxHeight * 1.2, 180)      // Stay at building-level height
-                : Math.max(cityRadius * 0.30, maxHeight * 0.9)
+                ? Math.min(maxHeight * 1.8 + cityRadius * 0.6, 900)      // Push height up significantly
+                : Math.max(cityRadius * 1.0, maxHeight * 1.2, 160) // Higher baseline
 
             animateTo(
                 new THREE.Vector3(cx + fitDist, camY, cz + fitDist),

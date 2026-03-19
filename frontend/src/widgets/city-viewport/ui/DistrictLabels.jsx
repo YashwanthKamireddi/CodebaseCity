@@ -96,7 +96,7 @@ const DistrictLabels = React.memo(function DistrictLabels() {
                 const name = d.name || d.id
                 const shortName = name.split('/').slice(-2).join('/')
                 const maxH = districtMaxH[d.id] || 30
-                const labelY = Math.max(20, maxH + 10)
+                const labelY = Math.max(60, maxH + 40)
                 return { id: d.id, text: shortName, x: cx, z: cz, y: labelY, count: d.building_count, color: d.color }
             })
     }, [cityData])
@@ -131,7 +131,7 @@ const LabelSprite = React.memo(function LabelSprite({ label }) {
                 transparent
                 opacity={0.95}
                 depthWrite={false}
-                depthTest={false}
+                depthTest={true}
                 sizeAttenuation
             />
         </sprite>

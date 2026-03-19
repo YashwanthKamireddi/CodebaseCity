@@ -72,7 +72,7 @@ export default function ViewControl() {
             const name = typeof b.author === 'object' ? b.author?.author : b.author
             if (name) authors.add(name)
         }
-        return [...authors].slice(0, 8).map(name => ({
+        return [...authors].map(name => ({
             color: stringToColor(name),
             label: name.split(' ')[0]
         }))
@@ -97,7 +97,7 @@ export default function ViewControl() {
         }
     }
 
-    const activeLegend = colorMode === 'author' ? authorLegend : (LEGENDS[colorMode] || null)
+    const activeLegend = LEGENDS[colorMode] || null
 
     return (
         <div className="view-control-container">

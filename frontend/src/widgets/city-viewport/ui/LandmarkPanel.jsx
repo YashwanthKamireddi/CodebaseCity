@@ -165,6 +165,17 @@ const LandmarkPanel = React.memo(function LandmarkPanel() {
     const clearSelection = useStore(s => s.clearSelection)
     const cityData = useStore(s => s.cityData)
 
+    useEffect(() => {
+        if (!selectedLandmark) return
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') {
+                useStore.getState().clearSelection()
+            }
+        }
+        window.addEventListener('keydown', handleEscape)
+        return () => window.removeEventListener('keydown', handleEscape)
+    }, [selectedLandmark])
+
     const health = useMemo(
         () => computeHealth(cityData?.buildings),
         [cityData]

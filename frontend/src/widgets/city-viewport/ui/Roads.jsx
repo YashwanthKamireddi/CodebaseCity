@@ -12,9 +12,9 @@ import useStore from '../../../store/useStore'
 
 const ROAD_Y = 0.02
 const ROAD_WIDTH = 14
-const MAX_ROAD_SEGMENTS = 1200
+const MAX_ROAD_SEGMENTS = 24000
 const ROUNDABOUT_RADIUS = 9
-const MAX_ROUNDABOUTS = 40
+const MAX_ROUNDABOUTS = 300
 const MIN_RENDERABLE_SEGMENT = 12
 const ROAD_CLEARANCE = ROAD_WIDTH * 0.45 + 2
 const MAX_LOCAL_LANES_PER_AXIS = 4
@@ -645,7 +645,7 @@ function buildFallbackGrid(buildings, bounds, pad) {
     const xLines = pickLocalMinima(xLinesRaw, spacing * 0.7)
     const zLines = pickLocalMinima(zLinesRaw, spacing * 0.7)
 
-    const maxLines = n > 8000 ? 12 : n > 3000 ? 10 : 8
+    const maxLines = Math.max(12, Math.floor(Math.sqrt(n) * 0.5))
     const centerX = (bounds.gx0 + bounds.gx1) / 2
     const centerZ = (bounds.gz0 + bounds.gz1) / 2
     const limitedX = pickCenteredLines(xLines, centerX, maxLines)
@@ -902,7 +902,7 @@ export default React.memo(function Roads() {
         const uvs = new Float32Array(count * 4 * 2)
         const lengths = new Float32Array(count * 4)
         const avenues = new Float32Array(count * 4)
-        const indices = new Uint16Array(count * 6)
+        const indices = new Uint32Array(count * 6) // Upgraded to handle > 65k vertices in huge repos
 
         for (let s = 0; s < count; s++) {
             const seg = segments[s]

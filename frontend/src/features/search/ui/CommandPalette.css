@@ -19,9 +19,9 @@
 /* Dialog container */
 .command-dialog {
   position: fixed;
-  top: 15%;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  translate: -50% -50%;
   width: 100%;
   max-width: 640px;
   z-index: var(--z-modal, 2000);

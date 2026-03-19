@@ -76,10 +76,15 @@ export default function AuditStats({ buildings }) {
                 .as-card {
                     padding: var(--space-5); border-radius: var(--radius-xl);
                     display: flex; flex-direction: column; justify-content: space-between;
-                    border: 1px solid var(--border-subtle); position: relative; overflow: hidden;
-                    background: var(--glass-bg);
-                    backdrop-filter: blur(12px);
-                    -webkit-backdrop-filter: blur(12px);
+                    border: 1px solid var(--glass-border-strong); position: relative; overflow: hidden;
+                    background: var(--glass-bg-elevated);
+                    backdrop-filter: blur(var(--glass-blur));
+                    -webkit-backdrop-filter: blur(var(--glass-blur));
+                    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+                }
+                .as-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: var(--shadow-xl), 0 0 0 1px var(--color-text-secondary) inset;
                 }
                 .as-card-top {
                     display: flex; justify-content: space-between; align-items: flex-start;
@@ -93,11 +98,13 @@ export default function AuditStats({ buildings }) {
                 .as-card-icon {
                     width: 36px; height: 36px; border-radius: var(--radius-lg);
                     display: flex; align-items: center; justify-content: center;
+                    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
                 }
-                .as-card-icon--success { background: rgba(34,197,94,0.1); color: var(--color-success); }
-                .as-card-icon--warning { background: rgba(245,158,11,0.1); color: var(--color-warning); }
-                .as-card-icon--danger  { background: rgba(239,68,68,0.1); color: var(--color-error); }
-                .as-card-icon--info    { background: rgba(56,189,248,0.1); color: var(--color-info); }
+                .as-card:hover .as-card-icon { transform: scale(1.1) rotate(-5deg); }
+                .as-card-icon--success { background: var(--color-success-muted); color: var(--color-success); }
+                .as-card-icon--warning { background: var(--color-warning-muted); color: var(--color-warning); }
+                .as-card-icon--danger  { background: var(--color-error-muted); color: var(--color-error); }
+                .as-card-icon--info    { background: var(--color-info-muted); color: var(--color-info); }
                 .as-card-value {
                     font-weight: var(--font-bold); color: var(--color-text-primary);
                     line-height: 1; margin-bottom: var(--space-1);

@@ -99,18 +99,18 @@
     gap: 8px;
     padding: 8px;
     border-radius: 8px; /* Sharper corners */
-    background: rgba(5, 10, 20, 0.7);
+    background: var(--glass-bg-elevated);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05) inset, 0 20px 40px rgba(0,0,0,0.8);
+    border: 1px solid var(--glass-border-strong);
+    box-shadow: var(--shadow-xl);
     align-items: center;
 }
 
 .dock-divider {
     width: 1px;
     height: 24px;
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--border-default);
     margin: 0 4px;
 }
 
@@ -123,7 +123,7 @@
     height: 36px;
     border-radius: 4px;
     background: transparent;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-secondary);
     border: 1px solid transparent;
     display: flex;
     align-items: center;
@@ -136,9 +136,9 @@
 }
 
 .deck-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.3);
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
+    border-color: var(--border-default);
     transform: scale(1.05);
 }
 
@@ -147,25 +147,25 @@
 }
 
 .deck-btn:focus-visible {
-    box-shadow: 0 0 0 1px #ffffff;
-    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 1px var(--color-text-primary);
+    background: var(--color-bg-hover);
 }
 
 .deck-btn.active {
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-    border-color: #ffffff;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    background: var(--color-bg-active);
+    color: var(--color-text-primary);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-glow-accent);
 }
 
 .deck-btn.accent {
     background: transparent;
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-primary);
+    border-color: var(--border-strong);
 }
 .deck-btn.accent:hover {
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    background: var(--color-bg-hover);
+    box-shadow: var(--shadow-glow-accent);
 }
 
 .deck-btn.disabled {
@@ -341,13 +341,13 @@
     display: flex;
     gap: 8px;
     align-items: center;
-    background: rgba(5, 10, 20, 0.8);
+    background: var(--glass-bg-elevated);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     padding: 6px 12px;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05) inset, 0 10px 30px rgba(0,0,0,0.8);
+    border: 1px solid var(--glass-border-strong);
+    box-shadow: var(--shadow-xl);
     position: relative;
     z-index: 2;
 }
@@ -357,7 +357,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-secondary);
     padding: 0 8px 0 4px;
     font-family: var(--font-mono);
 }
@@ -373,7 +373,7 @@
 .view-control-separator {
     width: 1px;
     height: 16px;
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--border-default);
     margin: 0 6px;
 }
 
@@ -390,26 +390,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-secondary);
     cursor: pointer;
     transition: all 0.2s ease-out;
     outline: none;
 }
 
 .view-option-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
 }
 
 .view-option-btn:focus-visible {
-    box-shadow: 0 0 0 1px #ffffff;
+    box-shadow: 0 0 0 1px var(--color-text-primary);
 }
 
 .view-option-btn.active {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: #ffffff;
-    color: #fff;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3) inset;
+    background: var(--color-bg-active);
+    border-color: var(--border-strong);
+    color: var(--color-text-primary);
+    box-shadow: var(--shadow-glow-accent);
 }
 
 .view-option-tooltip {

@@ -11,16 +11,16 @@
     max-width: 80vw;
     height: 100vh;
     z-index: var(--z-modal-backdrop);
-    background: rgba(5, 10, 20, 0.85); /* Deep Void Background */
+    background: var(--glass-bg-elevated); /* Responsive Glass Background */
     backdrop-filter: blur(24px) saturate(150%);
     -webkit-backdrop-filter: blur(24px) saturate(150%);
-    border-right: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 20px 0 60px rgba(0, 0, 0, 0.8), 5px 0 30px rgba(255, 255, 255, 0.05) inset;
+    border-right: 1px solid var(--glass-border-strong);
+    box-shadow: var(--shadow-2xl);
     display: flex;
     flex-direction: column;
     transform: translateX(-100%);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    color: white;
+    color: var(--color-text-primary);
 }
 
 .sidebar-panel.open {
@@ -36,7 +36,7 @@
 /* ── Header ──────────────────────────────────────────────────── */
 .sidebar-header {
     padding: 24px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid var(--border-default);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -48,16 +48,15 @@
     margin: 0;
     font-weight: 700;
     letter-spacing: 0.05em;
-    color: #fff;
+    color: var(--color-text-primary);
     font-family: var(--font-display);
     text-transform: uppercase;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 .sidebar-close-btn {
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-secondary);
     font-size: 1.5rem;
     cursor: pointer;
     width: 32px;
@@ -70,8 +69,8 @@
 }
 
 .sidebar-close-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
 }
 
 /* ── Content ─────────────────────────────────────────────────── */
@@ -86,7 +85,7 @@
 }
 
 .sidebar-content::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--border-default);
     border-radius: 2px;
 }
 
@@ -97,7 +96,7 @@
 .sidebar-section-label {
     font-size: 0.70rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-secondary);
     margin-bottom: 16px;
     padding-left: 8px;
     text-transform: uppercase;
@@ -155,55 +154,54 @@
 
 .file-row {
     padding: 6px 10px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--color-text-secondary);
 }
 
 .folder-row {
     padding: 6px 10px;
     margin-bottom: 2px;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--color-text-primary);
     font-weight: 500;
 }
 
 /* Hover States */
 .file-row:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
 }
 
 .folder-row:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
 }
 
 /* Selected State */
 .file-row.selected {
-    background: rgba(255, 255, 255, 0.15) !important;
-    color: #ffffff !important;
-    border-color: rgba(255, 255, 255, 0.4);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1) inset;
+    background: var(--color-bg-active) !important;
+    color: var(--color-text-primary) !important;
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-glow-accent) inset;
 }
 
 /* File/Folder icons */
 .file-icon {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-tertiary);
     flex-shrink: 0;
 }
 
 .file-icon.active {
-    color: #ffffff;
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+    color: var(--color-text-primary);
 }
 
 .folder-chevron,
 .folder-icon-wrap {
     display: flex;
     flex-shrink: 0;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-tertiary);
 }
 
 .folder-row.open .folder-icon-wrap {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-text-primary);
 }
 
 /* Text Label */

@@ -31,7 +31,9 @@ export default function LoadingScreen() {
         <div style={{
             position: 'fixed',
             inset: 0,
-            background: 'radial-gradient(ellipse at 50% 120%, #0a1628 0%, #060b14 50%, #030508 100%)',
+            background: 'radial-gradient(ellipse at 50% 120%, rgba(10, 22, 40, 0.7) 0%, rgba(6, 11, 20, 0.85) 50%, rgba(3, 5, 8, 0.95) 100%)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
             zIndex: 999999,
             display: 'flex',
             alignItems: 'center',

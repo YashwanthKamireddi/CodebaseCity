@@ -109,9 +109,9 @@ export default function ExportReport({ isOpen, onClose }) {
                             <div className="export-project">
                                 <h3>{cityData.name}</h3>
                                 <div className="export-project-stats">
-                                    <span><BarChart3 size={14} /> {cityData.stats?.total_files || 0} files</span>
-                                    <span><GitBranch size={14} /> {cityData.stats?.total_dependencies || 0} deps</span>
-                                    <span><AlertTriangle size={14} /> {cityData.stats?.hotspots || 0} hotspots</span>
+                                    <span><BarChart3 size={14} /> {cityData.metrics?.total_files || cityData.buildings?.length || 0} files</span>
+                                    <span><GitBranch size={14} /> {cityData.roads?.length || 0} deps</span>
+                                    <span><AlertTriangle size={14} /> {cityData.buildings?.filter(b => b.is_hotspot)?.length || 0} hotspots</span>
                                 </div>
                             </div>
                         )}
@@ -213,11 +213,11 @@ function generateMarkdown(city) {
 
 | Metric | Value |
 |--------|-------|
-| Total Files | ${city.stats?.total_files || 0} |
-| Lines of Code | ${(city.stats?.total_loc || 0).toLocaleString()} |
-| Districts | ${city.stats?.total_districts || 0} |
-| Dependencies | ${city.stats?.total_dependencies || 0} |
-| Hotspots | ${city.stats?.hotspots || 0} |
+| Total Files | ${city.metrics?.total_files || city.buildings?.length || 0} |
+| Lines of Code | ${(city.metrics?.total_lines || 0).toLocaleString()} |
+| Districts | ${city.districts?.length || 0} |
+| Dependencies | ${city.roads?.length || 0} |
+| Hotspots | ${city.buildings?.filter(b => b.is_hotspot)?.length || 0} |
 
 ## Districts
 
@@ -315,23 +315,23 @@ function generateHTML(city) {
 
         <div class="stats">
             <div class="stat">
-                <div class="stat-value">${city.stats?.total_files || 0}</div>
+                <div class="stat-value">${city.metrics?.total_files || city.buildings?.length || 0}</div>
                 <div class="stat-label">Files</div>
             </div>
             <div class="stat">
-                <div class="stat-value">${(city.stats?.total_loc || 0).toLocaleString()}</div>
+                <div class="stat-value">${(city.metrics?.total_lines || 0).toLocaleString()}</div>
                 <div class="stat-label">Lines of Code</div>
             </div>
             <div class="stat">
-                <div class="stat-value">${city.stats?.total_districts || 0}</div>
+                <div class="stat-value">${city.districts?.length || 0}</div>
                 <div class="stat-label">Districts</div>
             </div>
             <div class="stat">
-                <div class="stat-value">${city.stats?.total_dependencies || 0}</div>
+                <div class="stat-value">${city.roads?.length || 0}</div>
                 <div class="stat-label">Dependencies</div>
             </div>
             <div class="stat">
-                <div class="stat-value">${city.stats?.hotspots || 0}</div>
+                <div class="stat-value">${city.buildings?.filter(b => b.is_hotspot)?.length || 0}</div>
                 <div class="stat-label">Hotspots</div>
             </div>
         </div>

@@ -149,87 +149,55 @@ export function generateBuildings(parsedFiles, communities, metrics) {
     }
   }
 
-  // Post-layout centering
-  if (buildings.length > 0) {
-    let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity
-    for (const b of buildings) {
-      minX = Math.min(minX, b.position.x - b.dimensions.width / 2)
-      maxX = Math.max(maxX, b.position.x + b.dimensions.width / 2)
-      minZ = Math.min(minZ, b.position.z - b.dimensions.depth / 2)
-      maxZ = Math.max(maxZ, b.position.z + b.dimensions.depth / 2)
-    }
-    const offsetX = (minX + maxX) / 2
-    const offsetZ = (minZ + maxZ) / 2
-    for (const b of buildings) {
-      b.position.x -= offsetX
-      b.position.z -= offsetZ
+  // Post-layout collision resolution — spatial grid hashing for O(N) average
+  const CELL_SIZE = BUILDING_SPACING * 4
+  for (let pass = 0; pass < 3; pass++) {
+    const grid = new Map()
+    for (let i = 0; i < buildings.length; i++) {
+      const a = buildings[i]
+      const cx = Math.floor(a.position.x / CELL_SIZE)
+      const cz = Math.floor(a.position.z / CELL_SIZE)
+      const key = `${cx},${cz}`
+      if (!grid.has(key)) grid.set(key, [])
+      grid.get(key).push(i)
     }
 
-    // Reactor exclusion zone — push buildings away from origin
-    const REACTOR_RADIUS = 22
-    for (const b of buildings) {
-      const dx = b.position.x
-      const dz = b.position.z
-      const dist = Math.sqrt(dx * dx + dz * dz)
-      const halfW = b.dimensions.width / 2
-      if (dist - halfW < REACTOR_RADIUS) {
-        const pushDist = REACTOR_RADIUS + halfW + BUILDING_SPACING
-        const angle = Math.atan2(dz, dx) || (Math.random() * Math.PI * 2)
-        b.position.x = Math.cos(angle) * pushDist
-        b.position.z = Math.sin(angle) * pushDist
-      }
-    }
-
-    // Post-push collision resolution — spatial grid hashing for O(N) average
-    const CELL_SIZE = BUILDING_SPACING * 4
-    for (let pass = 0; pass < 3; pass++) {
-      const grid = new Map()
-      for (let i = 0; i < buildings.length; i++) {
-        const a = buildings[i]
-        const cx = Math.floor(a.position.x / CELL_SIZE)
-        const cz = Math.floor(a.position.z / CELL_SIZE)
-        const key = `${cx},${cz}`
-        if (!grid.has(key)) grid.set(key, [])
-        grid.get(key).push(i)
-      }
-
-      for (const [key, indices] of grid) {
-        const [cx, cz] = key.split(',').map(Number)
-        const neighbors = []
-        for (let dx = -1; dx <= 1; dx++) {
-          for (let dz = -1; dz <= 1; dz++) {
-            const nk = `${cx + dx},${cz + dz}`
-            if (grid.has(nk)) neighbors.push(...grid.get(nk))
-          }
+    for (const [key, indices] of grid) {
+      const [cx, cz] = key.split(',').map(Number)
+      const neighbors = []
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dz = -1; dz <= 1; dz++) {
+          const nk = `${cx + dx},${cz + dz}`
+          if (grid.has(nk)) neighbors.push(...grid.get(nk))
         }
-        for (const i of indices) {
-          const a = buildings[i]
-          const ahw = a.dimensions.width / 2 + BUILDING_SPACING / 2
-          const ahd = a.dimensions.depth / 2 + BUILDING_SPACING / 2
-          for (const j of neighbors) {
-            if (j <= i) continue
-            const b = buildings[j]
-            const bhw = b.dimensions.width / 2 + BUILDING_SPACING / 2
-            const bhd = b.dimensions.depth / 2 + BUILDING_SPACING / 2
+      }
+      for (const i of indices) {
+        const a = buildings[i]
+        const ahw = a.dimensions.width / 2 + BUILDING_SPACING / 2
+        const ahd = a.dimensions.depth / 2 + BUILDING_SPACING / 2
+        for (const j of neighbors) {
+          if (j <= i) continue
+          const b = buildings[j]
+          const bhw = b.dimensions.width / 2 + BUILDING_SPACING / 2
+          const bhd = b.dimensions.depth / 2 + BUILDING_SPACING / 2
 
-            const overlapX = (ahw + bhw) - Math.abs(a.position.x - b.position.x)
-            const overlapZ = (ahd + bhd) - Math.abs(a.position.z - b.position.z)
+          const overlapX = (ahw + bhw) - Math.abs(a.position.x - b.position.x)
+          const overlapZ = (ahd + bhd) - Math.abs(a.position.z - b.position.z)
 
-            if (overlapX > 0 && overlapZ > 0) {
-              if (overlapX < overlapZ) {
-                const push = overlapX / 2 + 0.5
-                if (a.position.x < b.position.x) {
-                  a.position.x -= push; b.position.x += push
-                } else {
-                  a.position.x += push; b.position.x -= push
-                }
+          if (overlapX > 0 && overlapZ > 0) {
+            if (overlapX < overlapZ) {
+              const push = overlapX / 2 + 0.5
+              if (a.position.x < b.position.x) {
+                a.position.x -= push; b.position.x += push
               } else {
-                const push = overlapZ / 2 + 0.5
-                if (a.position.z < b.position.z) {
-                  a.position.z -= push; b.position.z += push
-                } else {
-                  a.position.z += push; b.position.z -= push
-                }
+                a.position.x += push; b.position.x -= push
+              }
+            } else {
+              const push = overlapZ / 2 + 0.5
+              if (a.position.z < b.position.z) {
+                a.position.z -= push; b.position.z += push
+              } else {
+                a.position.z += push; b.position.z -= push
               }
             }
           }
@@ -253,12 +221,9 @@ function spiralPlace(footprints) {
   const positions = []
   const placed = []
 
-  const first = footprints[0]
-  positions.push({ x: -first.footprintW / 2, z: -first.footprintD / 2 })
-  placed.push({
-    x: -first.footprintW / 2, z: -first.footprintD / 2,
-    w: first.footprintW, d: first.footprintD
-  })
+  // Create an exclusion zone at the center for the Mothership / Reactor
+  const CORE_DIAMETER = 80
+  placed.push({ x: -CORE_DIAMETER / 2, z: -CORE_DIAMETER / 2, w: CORE_DIAMETER, d: CORE_DIAMETER })
 
   const avgFootprint = footprints.reduce((s, f) => s + (f.footprintW + f.footprintD) / 2, 0) / footprints.length
   const baseStep = Math.max(10, avgFootprint * 0.3)
@@ -274,7 +239,7 @@ function spiralPlace(footprints) {
     return false
   }
 
-  for (let i = 1; i < footprints.length; i++) {
+  for (let i = 0; i < footprints.length; i++) {
     const fp = footprints[i]
     let bestPos = null
     let bestDist = Infinity

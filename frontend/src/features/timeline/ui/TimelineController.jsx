@@ -533,9 +533,9 @@ export default function TimelineController() {
                 <style>{`
                     .timeline-wrapper {
                         position: fixed;
-                        bottom: 100px;
+                        bottom: 110px;
                         left: 50%;
-                        transform: translateX(-50%);
+                        translate: -50% 0;
                         z-index: 9000;
                         pointer-events: none;
                     }
@@ -549,10 +549,11 @@ export default function TimelineController() {
                         box-shadow: 0 20px 60px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.03) inset;
                         display: flex;
                         align-items: center;
+                        justify-content: center;
                         gap: 16px;
                         pointer-events: auto;
-                        min-width: 560px;
-                        max-width: 700px;
+                        width: max-content;
+                        max-width: 90vw;
                         font-family: var(--font-body, Inter, sans-serif);
                     }
                     .timeline-controls {
