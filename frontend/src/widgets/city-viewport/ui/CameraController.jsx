@@ -72,16 +72,33 @@ export default React.memo(function CameraController() {
 
     // Interaction tracking for IDLE drone mode
     useEffect(() => {
-        const reset = () => { _anim.lastInteraction = Date.now() }
-        window.addEventListener('mousedown', reset)
-        window.addEventListener('mousemove', reset)
-        window.addEventListener('keydown', reset)
-        window.addEventListener('touchstart', reset)
+        const reset = (e) => { 
+            _anim.lastInteraction = Date.now()
+            
+            // If cinematicMode was explicitly on, turn it off on user interaction
+            const { cinematicMode, setCinematicMode } = useStore.getState()
+            if (cinematicMode) {
+                setCinematicMode(false)
+            }
+        }
+        
+        // Listen globally to capture any interaction
+        window.addEventListener('mousedown', reset, { passive: true })
+        window.addEventListener('mousemove', reset, { passive: true })
+        window.addEventListener('pointermove', reset, { passive: true })
+        window.addEventListener('pointerdown', reset, { passive: true })
+        window.addEventListener('keydown', reset, { passive: true })
+        window.addEventListener('touchstart', reset, { passive: true })
+        window.addEventListener('wheel', reset, { passive: true })
+        
         return () => {
             window.removeEventListener('mousedown', reset)
             window.removeEventListener('mousemove', reset)
+            window.removeEventListener('pointermove', reset)
+            window.removeEventListener('pointerdown', reset)
             window.removeEventListener('keydown', reset)
             window.removeEventListener('touchstart', reset)
+            window.removeEventListener('wheel', reset)
         }
     }, [])
 
