@@ -20,8 +20,7 @@ import {
     Camera,
     Download,
     Terminal,
-    History,
-    Play
+    History
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
 import './CommandPalette.css'
@@ -38,8 +37,6 @@ export default function CommandPalette() {
     const commandPaletteOpen = useStore(s => s.commandPaletteOpen)
     const setCommandPaletteOpen = useStore(s => s.setCommandPaletteOpen)
     const searchCode = useStore(s => s.searchCode)
-    const cinematicMode = useStore(s => s.cinematicMode)
-    const setCinematicMode = useStore(s => s.setCinematicMode)
 
     // Search State
     const [searchResults, setSearchResults] = useState([])
@@ -118,13 +115,6 @@ export default function CommandPalette() {
     }, [selectBuilding, setCommandPaletteOpen])
 
     const actions = useMemo(() => [
-        {
-            id: 'toggle-cinematic',
-            label: cinematicMode ? 'Stop Cinematic Drone' : 'Start Cinematic Drone',
-            icon: Play,
-            shortcut: 'C',
-            action: () => { setCinematicMode(!cinematicMode); setCommandPaletteOpen(false) }
-        },
         {
             id: 'toggle-roads',
             label: showRoads ? 'Hide Roads & Traffic' : 'Show Roads & Traffic',

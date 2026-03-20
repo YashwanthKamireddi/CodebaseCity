@@ -26,7 +26,6 @@ export const createUISlice = (set, get) => ({
 
     // Camera
     cameraAction: null, // { type: 'ZOOM_IN' | 'ZOOM_OUT' | 'FIT' | 'RESET' | 'CENTER', timestamp: number }
-    cinematicMode: false,
 
     // Actions
     setViewMode: (mode) => set({ viewMode: mode }),
@@ -55,7 +54,6 @@ export const createUISlice = (set, get) => ({
 
     // Camera
     setCameraAction: (type) => set({ cameraAction: { type, timestamp: Date.now() } }),
-    setCinematicMode: (enabled) => set({ cinematicMode: enabled }),
 
     // Theme Logic
     toggleTheme: () => set((state) => {
