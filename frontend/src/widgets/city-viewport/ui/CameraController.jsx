@@ -13,6 +13,7 @@ const _anim = {
     endTarget: new THREE.Vector3(),
     duration: 1.0,
     startTime: 0,
+    lastInteraction: Date.now()
 }
 
 /** power3.inOut easing equivalent */
@@ -23,7 +24,12 @@ function easeInOutCubic(t) {
 export default React.memo(function CameraController() {
     const { camera, controls, invalidate, clock } = useThree()
     const cityData = useStore(s => s.cityData)
-    const cityMeshRef = useStore(s => s.cityMeshRef)
+    const cinematicMode = useStore(s => s.cinematicMode)
+    const setCinematicMode = useStore(s => s.setCinematicMode)
+    const selectedBuilding = useStore(s => s.selectedBuilding)
+    const selectedLandmark = useStore(s => s.selectedLandmark)
+    const cameraAction = useStore(s => s.cameraAction)
+    const cinematicAngleRef = useRef(0)
 
     // Compute actual bounding box of city — center + half-extents
     const cityBounds = React.useMemo(() => {
@@ -64,6 +70,21 @@ export default React.memo(function CameraController() {
         _anim.active = true
     }, [camera, controls, clock])
 
+    // Interaction tracking for IDLE drone mode
+    useEffect(() => {
+        const reset = () => { _anim.lastInteraction = Date.now() }
+        window.addEventListener('mousedown', reset)
+        window.addEventListener('mousemove', reset)
+        window.addEventListener('keydown', reset)
+        window.addEventListener('touchstart', reset)
+        return () => {
+            window.removeEventListener('mousedown', reset)
+            window.removeEventListener('mousemove', reset)
+            window.removeEventListener('keydown', reset)
+            window.removeEventListener('touchstart', reset)
+        }
+    }, [])
+
     // useFrame drives all camera animations — replaces GSAP
     useFrame(() => {
         if (!_anim.active || !controls) return
@@ -78,6 +99,33 @@ export default React.memo(function CameraController() {
         invalidate()
 
         if (raw >= 1) _anim.active = false
+    })
+
+    // Cinematic Drone Pass — Runs when cinematicMode is on OR after 15s of inactivity
+    useFrame((state, delta) => {
+        if (_anim.active || !controls) return
+
+        const isIdle = Date.now() - _anim.lastInteraction > 15000
+        const isDragging = state.mouse.x !== 0 || state.mouse.y !== 0 // Rough check
+
+        if ((cinematicMode || isIdle) && !selectedBuilding && !selectedLandmark) {
+            cinematicAngleRef.current += delta * 0.05
+            const angle = cinematicAngleRef.current
+            
+            // Dynamic orbital path
+            const orbitRadius = cityRadius * 1.6 + Math.sin(angle * 0.4) * 80
+            const orbitHeight = Math.max(120, maxHeight * 1.3 + Math.cos(angle * 0.2) * 50)
+            
+            camera.position.set(
+                cx + Math.cos(angle) * orbitRadius,
+                orbitHeight,
+                cz + Math.sin(angle) * orbitRadius
+            )
+            
+            controls.target.lerp(new THREE.Vector3(cx, 0, cz), 0.05)
+            controls.update()
+            invalidate()
+        }
     })
 
     useEffect(() => {
@@ -98,7 +146,7 @@ export default React.memo(function CameraController() {
 
             const totalVerticalExtent = panelTopY
             const footprintSize = Math.max(bWidth, bDepth)
-            const zoomDist = Math.max(65, totalVerticalExtent * 0.85, footprintSize * 2.5)
+            const zoomDist = Math.max(45, totalVerticalExtent * 0.6, footprintSize * 1.5)
 
             const camAngle = Math.PI / 4
             const elevationFactor = 0.55
@@ -155,10 +203,6 @@ export default React.memo(function CameraController() {
     }, [cityData, cityRadius, cx, cz, maxHeight, camera, controls, animateTo])
 
     // Auto-fly to selected building logic
-    const selectedBuilding = useStore(s => s.selectedBuilding)
-    const selectedLandmark = useStore(s => s.selectedLandmark)
-    const cameraAction = useStore(s => s.cameraAction)
-
     useEffect(() => {
         if (!selectedBuilding) return
         const event = new CustomEvent('flyToBuilding', { detail: { building: selectedBuilding } })
