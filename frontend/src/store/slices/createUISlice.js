@@ -26,6 +26,7 @@ export const createUISlice = (set, get) => ({
 
     // Camera
     cameraAction: null, // { type: 'ZOOM_IN' | 'ZOOM_OUT' | 'FIT' | 'RESET' | 'CENTER', timestamp: number }
+    screenshotRequest: 0,
 
     // Actions
     setViewMode: (mode) => set({ viewMode: mode }),
@@ -54,6 +55,7 @@ export const createUISlice = (set, get) => ({
 
     // Camera
     setCameraAction: (type) => set({ cameraAction: { type, timestamp: Date.now() } }),
+    setScreenshotRequest: (timestamp) => set({ screenshotRequest: timestamp }),
 
     // Theme Logic
     toggleTheme: () => set((state) => {

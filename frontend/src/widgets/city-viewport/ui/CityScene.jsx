@@ -42,6 +42,27 @@ function AnimationPump() {
     return null
 }
 
+function ScreenshotHandler() {
+    const { gl, scene, camera } = useThree()
+    const screenshotRequest = useStore(s => s.screenshotRequest)
+
+    useEffect(() => {
+        if (!screenshotRequest) return
+        
+        // Force synchronous render to ensure buffer is full even with preserveDrawingBuffer=false
+        gl.render(scene, camera)
+        
+        const dataUrl = gl.domElement.toDataURL('image/png')
+        const link = document.createElement('a')
+        link.download = `codebase-city-snapshot-${Date.now()}.png`
+        link.href = dataUrl
+        link.click()
+    }, [screenshotRequest, gl, scene, camera])
+    
+    return null
+}
+
+
 /**
  * CityScene - Premium Cinematic City Environment
  */
@@ -65,6 +86,7 @@ const CityScene = React.memo(function CityScene() {
     return (
         <group>
             <AnimationPump />
+            <ScreenshotHandler />
 
             {/* All materials are MeshBasicMaterial or custom ShaderMaterial — no lit materials exist.
                 Lights removed: they had zero visual effect but cost renderer overhead. */}

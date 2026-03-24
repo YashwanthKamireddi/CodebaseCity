@@ -87,14 +87,11 @@ export default function ViewControl() {
         { id: 'author', icon: <Users size={16} />, label: 'Authors', description: 'Primary code owners' }
     ]
 
+    const screenshotRequest = useStore(s => s.screenshotRequest)
+    const setScreenshotRequest = useStore(s => s.setScreenshotRequest)
+
     const handleSnapshot = () => {
-        const canvas = document.querySelector('canvas')
-        if (canvas) {
-            const link = document.createElement('a')
-            link.download = `code-city-${Date.now()}.png`
-            link.href = canvas.toDataURL('image/png')
-            link.click()
-        }
+        setScreenshotRequest(Date.now())
     }
 
     const activeLegend = LEGENDS[colorMode] || null

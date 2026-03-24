@@ -11,6 +11,9 @@ import { NativeGraph, LRUCache } from './NativeGraph.js'
 // Global import resolution cache — persists across analysis runs
 const importResolutionCache = new LRUCache(50000)
 
+// Pre-allocate extensions to avoid GC overhead in tight loops
+const RESOLVE_EXTENSIONS = ['', '.js', '.jsx', '.ts', '.tsx', '.py', '/index.js', '/index.ts', '/index.jsx', '.mjs', '.cjs']
+
 /**
  * Build a directed dependency graph from parsed files.
  */
@@ -58,32 +61,33 @@ export function buildDependencyGraph(parsedFiles) {
 
 /**
  * O(1) import matching using suffix and exact maps with LRU caching.
+ * Highly optimized for Web Worker execution without Garbage Collection spikes.
  */
 function findMatchingFile(importSpec, currentFilePath, exactMap, suffixMap, language) {
   const cacheKey = `${currentFilePath}::${importSpec}`
-  const cached = importResolutionCache.get(cacheKey)
-  if (cached !== undefined) return cached
+  let result = importResolutionCache.get(cacheKey)
+  if (result !== undefined) return result
 
-  const extensions = ['', '.js', '.jsx', '.ts', '.tsx', '.py', '/index.js', '/index.ts', '/index.jsx', '.mjs', '.cjs']
+  result = null
+
   const normalizedSpec = normalizePath(importSpec)
 
-  let result = null
-
-  // Resolve relative paths
-  if (normalizedSpec.startsWith('.')) {
+  // Resolve relative paths (starts with '.')
+  if (normalizedSpec.charCodeAt(0) === 46) {
       const currentDir = currentFilePath.split('/').slice(0, -1).join('/')
       const parts = currentDir.split('/')
       const specParts = normalizedSpec.split('/')
 
-      for (const p of specParts) {
+      for (let i = 0; i < specParts.length; i++) {
+          const p = specParts[i]
           if (p === '.') continue
           if (p === '..') parts.pop()
           else parts.push(p)
       }
 
       const absoluteSpec = parts.join('/')
-      for (const ext of extensions) {
-          const cand = absoluteSpec + ext
+      for (let i = 0; i < RESOLVE_EXTENSIONS.length; i++) {
+          const cand = absoluteSpec + RESOLVE_EXTENSIONS[i]
           if (exactMap.has(cand)) {
             result = exactMap.get(cand)
             break
@@ -93,8 +97,8 @@ function findMatchingFile(importSpec, currentFilePath, exactMap, suffixMap, lang
 
   // Suffix map lookup for absolute/module paths
   if (result === null) {
-    for (const ext of extensions) {
-        const cand = normalizedSpec + ext
+    for (let i = 0; i < RESOLVE_EXTENSIONS.length; i++) {
+        const cand = normalizedSpec + RESOLVE_EXTENSIONS[i]
         if (suffixMap.has(cand)) {
           result = suffixMap.get(cand)
           break

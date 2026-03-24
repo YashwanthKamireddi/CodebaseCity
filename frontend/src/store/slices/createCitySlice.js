@@ -26,6 +26,8 @@ export const createCitySlice = (set, get) => ({
     error: null,
     analysisProgress: 0,
     fileContent: null, // { path: string, content: string, loading: boolean }
+    excludePatterns: ['*.test.*', '*.spec.*', 'node_modules/**', 'dist/**', '.git/**'], // Default ignore patterns
+    setExcludePatterns: (patterns) => set({ excludePatterns: patterns }),
 
     // Refactoring Simulator State (Workstream 12B)
     refactoringDrifts: [], // Array of { buildingId, oldPath, newPath, oldDistrictId, newDistrictId }
@@ -153,7 +155,7 @@ export const createCitySlice = (set, get) => ({
      * Accepts: "owner/repo" or "https://github.com/owner/repo"
      */
     analyzeRepo: async (repoInput) => {
-        const { setLoading, setCityData, setError, setProgress } = get()
+        const { setLoading, setCityData, setError, setProgress, excludePatterns } = get()
 
         set({ error: null, selectedBuilding: null, highlightedIssue: null, highlightedCategory: null })
         setProgress(0)
@@ -360,12 +362,27 @@ export const createCitySlice = (set, get) => ({
                 '.next', '.nuxt', 'coverage', '.cache', 'target', '.venv', 'venv',
             ])
 
+            // Helper to match simple glob patterns (e.g. *.test.js)
+            const matchPattern = (path, pattern) => {
+                const regex = new RegExp('^' + pattern.replace(/\./g, '\\.').replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*') + '$')
+                return regex.test(path)
+            }
+
             const sourceFiles = treeData.tree.filter(item => {
                 if (item.type !== 'blob') return false
-                // Check for ignored directories
+                
+                // Fast directory exclusion
                 const parts = item.path.split('/')
                 if (parts.some(p => IGNORE_DIRS.has(p))) return false
-                // Check extension
+                
+                // Custom pattern exclusion from user settings
+                if (excludePatterns && excludePatterns.length > 0) {
+                    if (excludePatterns.some(pattern => matchPattern(item.path, pattern))) {
+                        return false
+                    }
+                }
+
+                // Check language extension
                 const lastDot = item.path.lastIndexOf('.')
                 if (lastDot === -1) return false
                 const ext = item.path.substring(lastDot).toLowerCase()

@@ -47,24 +47,28 @@ export default function AuditStats({ buildings }) {
                 icon={<ShieldCheck size={18} />}
                 variant={stats.grade === 'A' || stats.grade === 'B' ? 'success' : 'warning'}
                 big
+                info="Based on the average health of all files. Health decays due to extreme file size, high complexity, and excessive churn."
             />
             <StatCard
                 label="Critical Hotspots" val={stats.criticalFiles}
                 sub="Files requiring attention"
                 icon={<AlertTriangle size={18} />}
                 variant="danger"
+                info="Files with <30% health. These are typically large 'God Objects' with high cyclomatic complexity."
             />
             <StatCard
                 label="High Churn Risk" val={stats.highChurnFiles}
                 sub="Files changing frequently"
                 icon={<Activity size={18} />}
                 variant="warning"
+                info="Files modified frequently in the git history relative to their size, indicating instability."
             />
             <StatCard
                 label="Technical Debt" val={`${stats.debtRatio}%`}
                 sub="Of codebase is critical"
                 icon={<TrendingUp size={18} />}
                 variant={stats.debtRatio < 10 ? 'info' : 'danger'}
+                info="Percentage of the codebase marked as critical hotspots. Represents structural risk."
             />
 
             <style>{`
@@ -133,16 +137,18 @@ export default function AuditStats({ buildings }) {
     )
 }
 
-function StatCard({ label, val, sub, icon, variant = 'info', big = false }) {
+function StatCard({ label, val, sub, icon, variant = 'info', big = false, info }) {
     return (
-        <div className="as-card anim-slide-up">
+        <div className="as-card anim-slide-up" title={info}>
             <div className="as-card-top">
                 <span className="as-card-label">{label}</span>
                 <div className={`as-card-icon as-card-icon--${variant}`}>{icon}</div>
             </div>
             <div>
                 <div className={`as-card-value ${big ? 'as-card-value--big' : 'as-card-value--std'}`}>{val}</div>
-                <div className="as-card-sub">{sub}</div>
+                <div className="as-card-sub" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    {sub}
+                </div>
             </div>
             <div className={`as-glow as-glow--${variant}`} />
             <div className={`as-card-accent as-card-accent--${variant}`} />
