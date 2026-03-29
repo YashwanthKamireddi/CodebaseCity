@@ -799,6 +799,10 @@ export const createCitySlice = (set, get) => ({
                     const success = results.find(r => r.status === 'fulfilled' && r.value.ok)
                     if (success) {
                         const content = await success.value.text()
+                        
+                        // Prevent race conditions: Check if user already clicked another file
+                        if (get().fileContent?.path !== path) return
+                        
                         set({ fileContent: { path, content, loading: false } })
                         return
                     }
@@ -807,10 +811,14 @@ export const createCitySlice = (set, get) => ({
                 }
             }
 
-            set({ fileContent: { path, content: null, loading: false, error: 'File content not available. Re-analyze the repository to load source code.' } })
+            if (get().fileContent?.path === path) {
+                set({ fileContent: { path, content: null, loading: false, error: 'File content not available. Re-analyze the repository to load source code.' } })
+            }
         } catch (err) {
             // Safety net — never leave loading stuck
-            set({ fileContent: { path, content: null, loading: false, error: err.message || 'Failed to load file content.' } })
+            if (get().fileContent?.path === path) {
+                set({ fileContent: { path, content: null, loading: false, error: err.message || 'Failed to load file content.' } })
+            }
         }
     },
 

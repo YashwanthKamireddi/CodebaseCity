@@ -62,7 +62,7 @@ const IMPORT_PATTERNS = {
     /#include\s*[<"]([^>"]+)[>"]/g,
   ],
   go: [
-    /import\s+(?:\([\s\S]*?\)|"[^"]+"|`[^`]+`)/g,
+    /import\s+(?:\([^)]*\)|"[^"]+"|`[^`]+`)/g,
   ],
   rust: [
     /use\s+([\w:]+)/g,

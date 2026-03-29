@@ -280,7 +280,11 @@ const HologramPanel = React.memo(function HologramPanel() {
                                 label="View Source"
                                 icon={<Eye size={12} />}
                                 primary
-                                onClick={() => useStore.getState().setCodeViewerOpen(true)}
+                                onClick={() => {
+                                    React.startTransition(() => {
+                                        useStore.getState().setCodeViewerOpen(true)
+                                    })
+                                }}
                             />
                             <ActionBtn
                                 label="Copy Path"

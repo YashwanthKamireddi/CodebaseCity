@@ -264,7 +264,11 @@ export default function BuildingPanel({ building }) {
                                 <FileCode2 size={32} color="#71717a" />
                             </div>
                             <button
-                                onClick={() => useStore.getState().setCodeViewerOpen(true)}
+                                onClick={() => {
+                                    React.startTransition(() => {
+                                        useStore.getState().setCodeViewerOpen(true)
+                                    })
+                                }}
                                 style={{
                                     background: '#3b82f6',
                                     color: 'white',
