@@ -11,21 +11,59 @@ import useStore from '../../../store/useStore'
 export default React.memo(function HolographicCityName() {
     const cityData = useStore(s => s.cityData)
 
-    const { cityRadius, maxBuildingTop } = useMemo(() => {
-        if (!cityData?.buildings?.length) return { cityRadius: 200, maxBuildingTop: 80 }
+    const { cityRadius, maxBuildingTop, hallTop } = useMemo(() => {
+        if (!cityData?.buildings?.length) return { cityRadius: 200, maxBuildingTop: 80, hallTop: 74 }
         let maxR = 0
         let maxH = 0
+        const heights = []
         for (const b of cityData.buildings) {
             const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
             if (r > maxR) maxR = r
             const h = (b.dimensions?.height || 8) * 3.0
             if (h > maxH) maxH = h
+            heights.push(h)
         }
+        heights.sort((a, b) => a - b)
+        const p90 = heights[Math.floor(heights.length * 0.9)] || 50
+        const spireHeight = Math.max(60, p90 * 1.4)
         return {
             cityRadius: Math.max(200, maxR * 0.8),
             maxBuildingTop: maxH,
+            hallTop: 8 + spireHeight + 6,
         }
     }, [cityData])
+
+    const titleAnchor = useMemo(() => {
+        const buildings = cityData?.buildings || []
+        if (!buildings.length) return { x: 140, z: -90 }
+
+        // Find a spot on the outskirts to place the name so it doesn't overlap Mothership/Center
+        const ringRadius = Math.max(cityRadius * 0.85, 140)
+        let best = { x: ringRadius, z: 0, score: -Infinity }
+        const candidates = 16
+
+        for (let i = 0; i < candidates; i++) {
+            const angle = (Math.PI * 2 * i) / candidates + Math.PI * 0.125
+            const x = Math.cos(angle) * ringRadius
+            const z = Math.sin(angle) * ringRadius
+
+            let minDistSq = Infinity
+            let crowdedCount = 0
+            for (const b of buildings) {
+                const dx = (b.position?.x || 0) - x
+                const dz = (b.position?.z || 0) - z
+                const distSq = dx * dx + dz * dz
+                if (distSq < minDistSq) minDistSq = distSq
+                if (distSq < 95 * 95) crowdedCount++
+            }
+
+            const radialBonus = Math.abs(x) * 0.08 + Math.abs(z) * 0.06
+            const score = Math.sqrt(minDistSq) - crowdedCount * 12 + radialBonus
+            if (score > best.score) best = { x, z, score }
+        }
+
+        return { x: best.x, z: best.z }
+    }, [cityData, cityRadius])
 
     const repoName = cityData?.name || ''
 
@@ -86,12 +124,12 @@ export default React.memo(function HolographicCityName() {
     if (!texture || !repoName) return null
 
     const scale = Math.max(60, cityRadius * 0.4)
-    // Position: always 40 units above tallest building, minimum at cityRadius*0.5
-    const titleY = Math.max(cityRadius * 0.5, maxBuildingTop + 40)
+    // Keep the title above buildings and clearly above the central Town Hall spire.
+    const titleY = Math.max(cityRadius * 0.52, maxBuildingTop + 55, hallTop + 36)
 
     return (
         <sprite
-            position={[0, titleY, 0]}
+            position={[titleAnchor.x, titleY, titleAnchor.z]}
             scale={[scale, scale * 0.25, 1]}
         >
             <spriteMaterial
@@ -99,7 +137,7 @@ export default React.memo(function HolographicCityName() {
                 transparent
                 opacity={0.8}
                 depthWrite={false}
-                depthTest={true}
+                depthTest={false}
                 sizeAttenuation
             />
         </sprite>

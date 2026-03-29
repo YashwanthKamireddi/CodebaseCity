@@ -315,13 +315,43 @@ export default React.memo(function CodeViewer({ building, onClose }) {
 
     const { lines, truncated, lineCount } = useMemo(() => {
         const content = fileContent?.content || ''
-        const allLines = content.split('\n')
-        const total = allLines.length
-        if (total > MAX_DISPLAY_LINES) {
-            return { lines: allLines.slice(0, MAX_DISPLAY_LINES), truncated: true, lineCount: total }
+        
+        const MAX_DISPLAY_LINES = 10000
+        const outLines = []
+        let lastIdx = 0
+        let count = 0
+        
+        // Fast extraction: only extract up to MAX_DISPLAY_LINES to avoid out-of-memory
+        // crashes when splitting massive files (e.g. 500,000+ line bundle.js)
+        // Additionally, crop any single line > 1500 chars to prevent React freeze on minified lines
+        while (count < MAX_DISPLAY_LINES && lastIdx < content.length) {
+            let nextIdx = content.indexOf('\n', lastIdx)
+            if (nextIdx === -1) {
+                const chunk = content.slice(lastIdx, lastIdx + 1500)
+                outLines.push(chunk + (lastIdx + 1500 < content.length ? '... [Line Truncated]' : ''))
+                break
+            }
+            
+            const lineLen = nextIdx - lastIdx
+            if (lineLen > 1500) {
+                outLines.push(content.slice(lastIdx, lastIdx + 1500) + '... [Line Truncated]')
+            } else {
+                outLines.push(content.slice(lastIdx, nextIdx))
+            }
+            
+            lastIdx = nextIdx + 1
+            count++
         }
-        return { lines: allLines, truncated: false, lineCount: total }
-    }, [fileContent?.content])
+        
+        if (lastIdx < content.length) {
+            // Document is truncated. Use pre-computed LOC from metrics if available,
+            // otherwise just append a '+' to indicate more lines.
+            const estimatedTotal = building?.metrics?.loc || count
+            return { lines: outLines, truncated: true, lineCount: estimatedTotal > count ? estimatedTotal : `${count}+` }
+        }
+
+        return { lines: outLines, truncated: false, lineCount: count }
+    }, [fileContent?.content, building?.metrics?.loc])
     const gutterWidth = Math.max(3, String(lineCount).length)
 
     if (!building) return null
