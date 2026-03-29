@@ -33,38 +33,6 @@ export default React.memo(function HolographicCityName() {
         }
     }, [cityData])
 
-    const titleAnchor = useMemo(() => {
-        const buildings = cityData?.buildings || []
-        if (!buildings.length) return { x: 140, z: -90 }
-
-        // Find a spot on the outskirts to place the name so it doesn't overlap Mothership/Center
-        const ringRadius = Math.max(cityRadius * 0.85, 140)
-        let best = { x: ringRadius, z: 0, score: -Infinity }
-        const candidates = 16
-
-        for (let i = 0; i < candidates; i++) {
-            const angle = (Math.PI * 2 * i) / candidates + Math.PI * 0.125
-            const x = Math.cos(angle) * ringRadius
-            const z = Math.sin(angle) * ringRadius
-
-            let minDistSq = Infinity
-            let crowdedCount = 0
-            for (const b of buildings) {
-                const dx = (b.position?.x || 0) - x
-                const dz = (b.position?.z || 0) - z
-                const distSq = dx * dx + dz * dz
-                if (distSq < minDistSq) minDistSq = distSq
-                if (distSq < 95 * 95) crowdedCount++
-            }
-
-            const radialBonus = Math.abs(x) * 0.08 + Math.abs(z) * 0.06
-            const score = Math.sqrt(minDistSq) - crowdedCount * 12 + radialBonus
-            if (score > best.score) best = { x, z, score }
-        }
-
-        return { x: best.x, z: best.z }
-    }, [cityData, cityRadius])
-
     const repoName = cityData?.name || ''
 
     const texture = useMemo(() => {
@@ -124,20 +92,22 @@ export default React.memo(function HolographicCityName() {
     if (!texture || !repoName) return null
 
     const scale = Math.max(60, cityRadius * 0.4)
-    // Keep the title above buildings and clearly above the central Town Hall spire.
-    const titleY = Math.max(cityRadius * 0.52, maxBuildingTop + 55, hallTop + 36)
+    const textHeight = scale * 0.25
+
+    // Position text squarely above the central Town Hall, guaranteeing daylight space.
+    const titleY = Math.max(cityRadius * 0.52, maxBuildingTop + 55, hallTop + textHeight / 2 + 40)
 
     return (
         <sprite
-            position={[titleAnchor.x, titleY, titleAnchor.z]}
-            scale={[scale, scale * 0.25, 1]}
+            position={[0, titleY, 0]}
+            scale={[scale, textHeight, 1]}
         >
             <spriteMaterial
                 map={texture}
                 transparent
                 opacity={0.8}
                 depthWrite={false}
-                depthTest={false}
+                depthTest={true}
                 sizeAttenuation
             />
         </sprite>

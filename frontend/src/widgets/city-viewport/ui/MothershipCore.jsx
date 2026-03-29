@@ -248,16 +248,26 @@ const MothershipCore = React.memo(function MothershipCore() {
         return 8 + spireHeight + 6 // baseTop(8) + tower + crown(6)
     }, [cityData])
 
-    // Compute altitude — well above tallest building
+    // Compute altitude — well above tallest building, the town hall, and the holographic name
     const altitude = useMemo(() => {
         if (!cityData?.buildings?.length) return 300
         let maxH = 0
+        let maxR = 0
         for (const b of cityData.buildings) {
             const h = (b.dimensions?.height || 8) * 3.0
             if (h > maxH) maxH = h
+            const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
+            if (r > maxR) maxR = r
         }
-        return Math.max(260, maxH + 200)
-    }, [cityData])
+        
+        // Match the scale calculation from HolographicCityName to clearance
+        const cityRadius = Math.max(200, maxR * 0.8)
+        const scaleForName = Math.max(60, cityRadius * 0.4)
+        const textHeight = scaleForName * 0.25
+        const nameTop = hallTop + 40 + textHeight
+
+        return Math.max(260, maxH + 200, nameTop + 60)
+    }, [cityData, hallTop])
 
     const hullMat = useMemo(() => new THREE.ShaderMaterial({
         uniforms: { uTime: { value: 0 } },

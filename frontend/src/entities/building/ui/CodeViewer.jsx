@@ -254,6 +254,7 @@ function VirtualizedCode({ lines, gutterWidth }) {
             <div style={{ height: totalHeight, position: 'relative' }}>
                 <table style={{
                     borderCollapse: 'collapse', width: '100%',
+                    tableLayout: 'fixed', // Prevent reflows on long lines
                     fontFamily: 'inherit', fontSize: 'inherit', lineHeight: 'inherit',
                     position: 'absolute',
                     top: startIdx * LINE_HEIGHT,
@@ -275,7 +276,7 @@ function VirtualizedCode({ lines, gutterWidth }) {
                                     <td style={{
                                         paddingLeft: '16px', paddingRight: '24px',
                                         whiteSpace: 'pre', color: '#abb2bf',
-                                        height: LINE_HEIGHT,
+                                        height: LINE_HEIGHT, overflow: 'hidden', textOverflow: 'ellipsis'
                                     }}>
                                         <HighlightedLine text={line} />
                                     </td>
