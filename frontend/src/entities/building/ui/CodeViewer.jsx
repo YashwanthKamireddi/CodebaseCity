@@ -113,7 +113,7 @@ function tokenizeLine(line) {
         // Identifiers / keywords
         if (/[a-zA-Z_$@]/.test(line[i])) {
             let j = i
-            while (j < len && /[a-zA-Z0-9_$]/.test(line[j])) j++
+            while (j < len && /[a-zA-Z0-9_$@]/.test(line[j])) j++
             const word = line.slice(i, j)
 
             // Check if it's a function call (word followed by `(`)
@@ -316,12 +316,12 @@ export default React.memo(function CodeViewer({ building, onClose }) {
 
     const { lines, truncated, lineCount } = useMemo(() => {
         const content = fileContent?.content || ''
-        
+
         const MAX_DISPLAY_LINES = 10000
         const outLines = []
         let lastIdx = 0
         let count = 0
-        
+
         // Fast extraction: only extract up to MAX_DISPLAY_LINES to avoid out-of-memory
         // crashes when splitting massive files (e.g. 500,000+ line bundle.js)
         // Additionally, crop any single line > 1500 chars to prevent React freeze on minified lines
@@ -332,18 +332,18 @@ export default React.memo(function CodeViewer({ building, onClose }) {
                 outLines.push(chunk + (lastIdx + 1500 < content.length ? '... [Line Truncated]' : ''))
                 break
             }
-            
+
             const lineLen = nextIdx - lastIdx
             if (lineLen > 1500) {
                 outLines.push(content.slice(lastIdx, lastIdx + 1500) + '... [Line Truncated]')
             } else {
                 outLines.push(content.slice(lastIdx, nextIdx))
             }
-            
+
             lastIdx = nextIdx + 1
             count++
         }
-        
+
         if (lastIdx < content.length) {
             // Document is truncated. Use pre-computed LOC from metrics if available,
             // otherwise just append a '+' to indicate more lines.
