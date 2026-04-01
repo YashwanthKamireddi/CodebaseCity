@@ -29,6 +29,7 @@
         "react-dom": "^18.3.1",
         "react-markdown": "^9.1.0",
         "three": "^0.160.0",
+        "wasm-core": "file:src/engine/wasm-core/pkg",
         "zustand": "^4.4.7"
     },
     "devDependencies": {

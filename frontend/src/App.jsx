@@ -118,6 +118,7 @@ function App() {
     const setCodeViewerOpen = useStore(s => s.setCodeViewerOpen)
     const exportReportOpen = useStore(s => s.exportReportOpen)
     const setExportReportOpen = useStore(s => s.setExportReportOpen)
+    const isGenesisPlaying = useStore(s => s.isGenesisPlaying)
     const isLandingOverlayActive = useStore(s => s.isLandingOverlayActive)
 
     const [view, setView] = useState('3d') // '3d' or 'table'
@@ -214,25 +215,25 @@ function App() {
                                         position={[250, 150, 250]}
                                         fov={45}
                                         near={1}
-                                        far={20000}
+                                        far={500000}
                                     />
 
                                     {/* Camera Controls - World-class trackpad/touch/mouse */}
                                     <OrbitControls
                                         makeDefault
+                                        enabled={!isGenesisPlaying}
                                         enablePan={true}
                                         enableZoom={true}
                                         zoomSpeed={3.0}
                                         enableRotate={true}
                                         screenSpacePanning={true}
                                         minDistance={1}
-                                        maxDistance={15000}
+                                        maxDistance={500000}
                                         maxPolarAngle={Math.PI / 2 - 0.05}
                                         minPolarAngle={0.05}
                                         enableDamping={true}
                                         dampingFactor={isMobile ? 0.12 : 0.18}
                                         rotateSpeed={isMobile ? 0.7 : 1.0}
-                                        zoomSpeed={isMobile ? 0.3 : 0.8}
                                         panSpeed={isMobile ? 0.8 : 1.2}
                                         zoomToCursor={true}
                                         enableKeys={true}

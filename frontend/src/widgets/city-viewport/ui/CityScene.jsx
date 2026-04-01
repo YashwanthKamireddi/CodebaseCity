@@ -114,7 +114,7 @@ const CityScene = React.memo(function CityScene() {
                 <EnergyShieldDome />
             </group>
 
-            <fog attach="fog" args={['#0a0e1a', cityRadius * 2, cityRadius * 8]} />
+            <fog attach="fog" args={['#0a0e1a', Math.max(cityRadius * 2, 2000), Math.max(cityRadius * 8, 40000)]} />
             <color attach="background" args={['#070b14']} />
             <CameraController />
         </group>

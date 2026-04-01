@@ -136,9 +136,10 @@ export default function FloatingDock({ view, onViewChange, onShowExport }) {
 
                 <DeckItem
                     onClick={() => window.open('https://github.com/YashwanthKamireddi/CodebaseCity', '_blank')}
-                    icon={<Github size={18} />}
-                    label="GitHub"
-                    description="Star us on GitHub!"
+                    icon={<Github size={18} className="gh-icon-pulse" />}
+                    label="Star us on GitHub! ⭐"
+                    description="Support open source!"
+                    className="gh-glow-btn"
                 />
             </nav>
 
@@ -189,7 +190,7 @@ export default function FloatingDock({ view, onViewChange, onShowExport }) {
     )
 }
 
-function DeckItem({ icon, label, description, onClick, active, loading: isLoading, accent, shortcut, disabled }) {
+function DeckItem({ icon, label, description, onClick, active, loading: isLoading, accent, shortcut, disabled, className }) {
     const [hovered, setHovered] = useState(false)
 
     const handleKeyDown = (e) => {
@@ -201,6 +202,7 @@ function DeckItem({ icon, label, description, onClick, active, loading: isLoadin
 
     const btnClass = [
         'deck-btn',
+        className,
         active && 'active',
         accent && active && 'accent',
         disabled && 'disabled'

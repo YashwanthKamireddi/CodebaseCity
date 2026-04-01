@@ -1,7 +1,8 @@
-import React, { useRef, useLayoutEffect, useMemo, useState, useCallback } from 'react'
+import React, { useRef, useLayoutEffect, useEffect, useMemo, useState, useCallback } from 'react'
 import * as THREE from 'three'
 import { useFrame, extend, useThree } from '@react-three/fiber'
 import { useDrag } from '@use-gesture/react'
+import init, { PhysicsEngine } from 'wasm-core'
 import useStore from '../../../store/useStore'
 import { PulseMaterial } from '../shaders/PulseMaterial'
 import { getBuildingColor } from '../../../utils/colorUtils'
@@ -26,6 +27,20 @@ let cachedColorArray = null
  * - Interactive hover/selection states
  */
 const InstancedCity = React.memo(function InstancedCity() {
+    const [wasmEngine, setWasmEngine] = useState(null)
+    const wasmMemoryRef = useRef(null)
+    const engineRef = useRef(null)
+
+    useEffect(() => {
+        let active = true
+        init().then(wasm => {
+            if (!active) return
+            wasmMemoryRef.current = wasm.memory
+            setWasmEngine(true)
+        }).catch(console.error)
+        return () => { active = false }
+    }, [])
+
     // Granular selectors — only re-render when specific state changes
     const cityData = useStore(s => s.cityData)
     const selectedBuilding = useStore(s => s.selectedBuilding)
@@ -180,15 +195,27 @@ const InstancedCity = React.memo(function InstancedCity() {
             // World class cinematic camera sweep
             if (state.camera && state.controls) {
                 const target = state.controls.target;
-                const radius = Math.max(state.camera.position.distanceTo(target), 200);
+                
+                // Dynamically frame the entire city roughly based on simulation scale
+                let cityRadius = 250;
+                if (meshRef.current && meshRef.current.geometry.boundingSphere) {
+                    cityRadius = meshRef.current.geometry.boundingSphere.radius;
+                }
+                const cappedRadius = Math.min(cityRadius, 15000); // Prevent black screens on huge cities
+                const idealRadius = Math.max(cappedRadius * 1.6, 250);
+                
+                const currentRadius = state.camera.position.distanceTo(target);
+                // Ultra-smooth easing towards the perfect framing distance
+                const radius = THREE.MathUtils.lerp(currentRadius, idealRadius, delta * 1.5);
                 
                 // Slowly pan around the city based on simulation time
                 const angle = Math.atan2(state.camera.position.z - target.z, state.camera.position.x - target.x);
                 const newAngle = angle + (delta * 0.1); // Slow majestic rotation
                 
-                // Move orbit gently
+                // Move orbit gently and slightly elevate
                 state.camera.position.x = target.x + Math.cos(newAngle) * radius;
                 state.camera.position.z = target.z + Math.sin(newAngle) * radius;
+                state.camera.position.y = target.y + radius * 0.5; // Elevate correctly for wide shots
                 
                 // Soft sweeping camera height based on the city's scale
                 const targetY = radius * 0.35 + Math.sin(simTime * Math.PI) * (radius * 0.15);
@@ -204,9 +231,23 @@ const InstancedCity = React.memo(function InstancedCity() {
 
         // 2. Churn flame flickering (30fps throttled)
         const t = state.clock.elapsedTime
-        if (t - lastTimeUpdate.current < 0.033) return
-        lastTimeUpdate.current = t
-        materialRef.current.uniforms.uTime.value = t
+        if (t - lastTimeUpdate.current > 0.033) {
+            lastTimeUpdate.current = t
+            materialRef.current.uniforms.uTime.value = t
+        }
+
+        // 3. ZERO-COPY RUST PHYSICS TICK (120FPS MAX)
+        if (engineRef.current && wasmMemoryRef.current && meshRef.current && wasmEngine) {
+            engineRef.current.tick(delta, t)
+
+            // Direct Array Buffer Override directly mapping to the GPU
+            const ptr = engineRef.current.get_matrices_ptr()
+            const floatArray = new Float32Array(wasmMemoryRef.current.buffer, ptr, count * 16)
+            
+            meshRef.current.instanceMatrix.array.set(floatArray)
+            meshRef.current.instanceMatrix.needsUpdate = true
+            invalidate()
+        }
     })
 
     const [hoveredInstanceId, setHoveredInstanceId] = useState(null)
@@ -216,86 +257,49 @@ const InstancedCity = React.memo(function InstancedCity() {
 
 
     // ═══════════════════════════════════════════════════════════════
-    // BUILDING ANIMATION - Smooth "Digital Rise" effect
+    // WASM HIGH-PERFORMANCE LAYOUT PIPELINE
     // ═══════════════════════════════════════════════════════════════
     useLayoutEffect(() => {
-        if (!meshRef.current || count === 0) return
+        if (!wasmEngine || !meshRef.current || count === 0) return
 
-        // Initialize bounding sphere for raycasting
+        if (engineRef.current) {
+            engineRef.current.free()
+        }
+
+        const engine = new PhysicsEngine(count)
+        engineRef.current = engine
+
+        let maxRadiusSq = 0
+
+        // 1. Send all numeric blueprint dimensions over to Rust
+        for (let i = 0; i < count; i++) {
+            const b = buildings[i]
+            const { x, z } = b.position
+            const width = b.dimensions?.width || 8
+            const depth = b.dimensions?.depth || 8
+            const targetHeight = (b.dimensions?.height || 8) * 3.0
+            const y = targetHeight / 2
+
+            // Store pure target positions into WASM so it scales up natively
+            engine.set_building(i, x, y, z, width, targetHeight, depth)
+
+            const distSq = x * x + z * z
+            if (distSq > maxRadiusSq) maxRadiusSq = distSq
+        }
+
+        // 2. Setup Three.js bounding sphere manually
         if (meshRef.current.geometry) {
-            if (!meshRef.current.geometry.boundingSphere) {
-                meshRef.current.geometry.boundingSphere = new THREE.Sphere()
-            }
-            meshRef.current.geometry.boundingSphere.radius = 5000
-            meshRef.current.geometry.boundingSphere.center.set(0, 0, 0)
+            meshRef.current.geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), Math.sqrt(maxRadiusSq) + 100)
         }
 
-        const startTime = performance.now()
-        const duration = 600 // Fast 0.6s rise - no glitchy feeling
-        let animationFrameId;
-
-        const animateGrowth = (now) => {
-            if (!meshRef.current) return; // Safety check if unmounted during animation
-
-            const elapsed = now - startTime
-            // Skip animation entirely for large datasets or when time traveling
-            const isQuick = isAnimating || currentCommitIndex !== -1 || count > 200
-            const progress = isQuick ? 1 : Math.min(elapsed / duration, 1)
-
-            // Track max radius for bounding sphere
-            let maxRadiusSq = 0
-
-            // Batch process buildings using pre-computed stagger data
-            for (let i = 0; i < count; i++) {
-                const b = buildings[i]
-                let { x, z } = b.position
-
-                // Clearance is now handled natively during the spiral layout algorithm
-                // so we no longer artificially push instances around the origin here.
-
-                const width = b.dimensions?.width || 8
-                const depth = b.dimensions?.depth || 8
-                const targetHeight = (b.dimensions?.height || 8) * 3.0
-
-                // Minimal stagger - buildings rise together smoothly
-                const staggerDelay = isQuick ? 0 : Math.min((staggerData?.delays[i] ?? 0) * 0.3, 0.1)
-                const staggeredProgress = Math.max(0, (progress - staggerDelay) / (1 - staggerDelay))
-                // Smooth ease-out for professional feel
-                const staggeredEase = isQuick ? 1 : 1 - Math.pow(1 - Math.min(staggeredProgress, 1), 2.5)
-
-                const currentHeight = Math.max(0.5, targetHeight * staggeredEase)
-                const y = currentHeight / 2
-
-                tempObject.position.set(x, y, z)
-                tempObject.scale.set(width, currentHeight, depth)
-                tempObject.updateMatrix()
-                meshRef.current.setMatrixAt(i, tempObject.matrix)
-
-                const distSq = x * x + z * z
-                if (distSq > maxRadiusSq) maxRadiusSq = distSq
-            }
-
-            meshRef.current.instanceMatrix.needsUpdate = true
-            invalidate()
-
-            // Update bounding sphere
-            if (meshRef.current.geometry) {
-                meshRef.current.geometry.boundingSphere.radius = Math.sqrt(maxRadiusSq) + 100
-                meshRef.current.geometry.boundingSphere.center.set(0, 0, 0)
-            }
-
-            if (progress < 1 && !isQuick) {
-                animationFrameId = requestAnimationFrame(animateGrowth)
-            }
-        }
-        animationFrameId = requestAnimationFrame(animateGrowth)
-
+        // Cleanup memory pointer mapping on unmount
         return () => {
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId)
+            if (engineRef.current) {
+                engineRef.current.free()
+                engineRef.current = null
             }
         }
-    }, [buildings, count, isAnimating, currentCommitIndex])
+    }, [buildings, count, wasmEngine])
 
     // Pre-compute issue sets once for O(1) lookup instead of O(n)
     const issueIndex = useMemo(() => {
@@ -461,21 +465,43 @@ const InstancedCity = React.memo(function InstancedCity() {
         if (e.buttons > 0 || dragActive) return
 
         e.stopPropagation()
+        
+        // Instant cursor state feedback (smoother feel)
+        if (document.body.style.cursor !== 'pointer') {
+            document.body.style.cursor = 'pointer'
+        }
+
         const now = performance.now()
         if (now - lastPointerTime.current < 32) return // ~30fps throttle for smooth response
         lastPointerTime.current = now
-        if (e.instanceId !== undefined) {
-            setHoveredInstanceId(e.instanceId)
-            const b = useStore.getState().cityData?.buildings?.[e.instanceId]
-            if (b) setHoveredBuilding(b)
-            document.body.style.cursor = 'pointer'
-        }
-    }, [setHoveredBuilding])
 
-    const handlePointerOut = useCallback(() => {
-        setHoveredInstanceId(null)
-        setHoveredBuilding(null)
-        document.body.style.cursor = 'auto'
+        if (e.instanceId !== undefined) {
+            // ONLY dispatch full React/Zustand state updates if the specific building ID ACTUALLY changed
+            setHoveredInstanceId((prev) => {
+                if (prev === e.instanceId) return prev; 
+                
+                // Changed! Dispatch heavy view updates
+                const b = useStore.getState().cityData?.buildings?.[e.instanceId];
+                if (b) setHoveredBuilding(b);
+                
+                return e.instanceId;
+            });
+        }
+    }, [dragActive, setHoveredBuilding])
+
+    const handlePointerOut = useCallback((e) => {
+        if (e && e.buttons > 0) return;
+        
+        document.body.style.cursor = 'auto';
+
+        // Clear hover states if we aren't currently hovering over anything
+        setHoveredInstanceId((prev) => {
+            if (prev !== null) {
+                setHoveredBuilding(null);
+                return null;
+            }
+            return prev;
+        });
     }, [setHoveredBuilding])
 
     const handleClick = useCallback((e) => {

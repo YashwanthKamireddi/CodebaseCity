@@ -27,8 +27,8 @@ export default function UfoOverlay() {
         <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
             pointerEvents: 'none', zIndex: 50, display: 'flex',
-            flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end',
-            paddingBottom: '120px'
+            flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start',
+            paddingTop: '80px', paddingBottom: 0
         }}>
 
             {ufoIntroOpen && (
@@ -78,7 +78,7 @@ export default function UfoOverlay() {
 
                         <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)' }} />
 
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', justifyContent: 'flex-end' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', justifyContent: 'flex-start' }}>
                             <div style={{ display: 'flex', gap: '4px' }}>
                                 <Kbd style={{ width: '60px' }}>SPACE</Kbd>
                             </div>

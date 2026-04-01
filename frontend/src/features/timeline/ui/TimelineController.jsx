@@ -34,7 +34,7 @@ export default function TimelineController() {
 
     return (
         <div style={{
-            position: 'absolute', bottom: '96px', left: '50%', transform: 'translateX(-50%)',
+            position: 'absolute', bottom: '96px', left: '50%',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             opacity: isVisible ? (isGenesisPlaying ? 0.3 : 1.0) : 0, 
             transform: `translate(-50%, ${isVisible ? '0' : '30px'})`,
