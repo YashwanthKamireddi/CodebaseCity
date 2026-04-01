@@ -186,6 +186,7 @@ export const createCitySlice = (set, get) => ({
                 setProgress(100)
                 setCityData(cachedData)
                 set({ currentRepoPath: `${owner}/${repo}`, commits: [], currentCommitIndex: -1 })
+                get().fetchHistory(`${owner}/${repo}`)
                 return
             }
 
@@ -644,6 +645,7 @@ export const createCitySlice = (set, get) => ({
             cacheCity(cacheKey, cityData).catch(() => {}) // Persist for next visit (24h TTL)
             setCityData(cityData)
             set({ currentRepoPath: `${owner}/${repo}`, commits: [], currentCommitIndex: -1 })
+            get().fetchHistory(`${owner}/${repo}`)
 
         } catch (error) {
             logger.error("GitHub Analysis Error:", error)
@@ -686,6 +688,7 @@ export const createCitySlice = (set, get) => ({
 
             setCityData(cityData)
             set({ currentRepoPath: cityData.name, commits: [], currentCommitIndex: -1 })
+            get().fetchHistory(cityData.name)
 
         } catch (error) {
             logger.error("Client Analysis Error:", error)

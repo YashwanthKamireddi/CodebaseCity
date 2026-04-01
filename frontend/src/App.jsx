@@ -232,7 +232,7 @@ function App() {
                                         enableDamping={true}
                                         dampingFactor={isMobile ? 0.12 : 0.18}
                                         rotateSpeed={isMobile ? 0.7 : 1.0}
-                                        zoomSpeed={isMobile ? 1.0 : 1.5}
+                                        zoomSpeed={isMobile ? 0.3 : 0.8}
                                         panSpeed={isMobile ? 0.8 : 1.2}
                                         zoomToCursor={true}
                                         enableKeys={true}
@@ -245,8 +245,6 @@ function App() {
                                             ONE: THREE.TOUCH.ROTATE,
                                             TWO: THREE.TOUCH.DOLLY_PAN,
                                         }}
-                                        autoRotate={isLandingOverlayActive}
-                                        autoRotateSpeed={0.4}
                                         target={[0, 0, 0]}
                                     />
 

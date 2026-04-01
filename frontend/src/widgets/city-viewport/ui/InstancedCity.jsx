@@ -176,6 +176,26 @@ const InstancedCity = React.memo(function InstancedCity() {
                store.setGenesisPlay(false);
             }
             store.setGenesisTime(simTime);
+
+            // World class cinematic camera sweep
+            if (state.camera && state.controls) {
+                const target = state.controls.target;
+                const radius = Math.max(state.camera.position.distanceTo(target), 200);
+                
+                // Slowly pan around the city based on simulation time
+                const angle = Math.atan2(state.camera.position.z - target.z, state.camera.position.x - target.x);
+                const newAngle = angle + (delta * 0.1); // Slow majestic rotation
+                
+                // Move orbit gently
+                state.camera.position.x = target.x + Math.cos(newAngle) * radius;
+                state.camera.position.z = target.z + Math.sin(newAngle) * radius;
+                
+                // Soft sweeping camera height based on the city's scale
+                const targetY = radius * 0.35 + Math.sin(simTime * Math.PI) * (radius * 0.15);
+                state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, Math.max(targetY, 50), delta * 0.5);
+
+                state.controls.update();
+            }
         }
         
         const currentSimTime = store.genesisTime !== undefined ? store.genesisTime : 1.0;
@@ -542,9 +562,10 @@ const InstancedCity = React.memo(function InstancedCity() {
         // Spawn organically from center outwards + slight randomness
         buildings.forEach((b, i) => {
             const dist = Math.sqrt(b.position.x * b.position.x + (b.position.z||0) * (b.position.z||0));
-            let age = dist / maxDist;
-            age += (Math.random() - 0.5) * 0.1;
-            array[i] = Math.max(0.0, Math.min(1.0, age));
+            // Compress age to 0 - 0.85 so that the maximum uGenesisTime=1.0 has time to finish animation
+            let age = (dist / maxDist) * 0.85;
+            age += (Math.random() - 0.5) * 0.05;
+            array[i] = Math.max(0.0, Math.min(0.9, age));
         })
         return new THREE.InstancedBufferAttribute(array, 1)
     }, [buildings, count])
