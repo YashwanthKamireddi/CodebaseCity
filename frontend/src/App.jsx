@@ -222,6 +222,7 @@ function App() {
                                         makeDefault
                                         enablePan={true}
                                         enableZoom={true}
+                                        zoomSpeed={3.0}
                                         enableRotate={true}
                                         screenSpacePanning={true}
                                         minDistance={1}
