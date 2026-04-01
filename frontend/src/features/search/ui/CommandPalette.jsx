@@ -37,6 +37,7 @@ export default function CommandPalette() {
     const commandPaletteOpen = useStore(s => s.commandPaletteOpen)
     const setCommandPaletteOpen = useStore(s => s.setCommandPaletteOpen)
     const searchCode = useStore(s => s.searchCode)
+    const setCodeViewerOpen = useStore(s => s.setCodeViewerOpen)
 
     // Search State
     const [searchResults, setSearchResults] = useState([])
@@ -99,8 +100,12 @@ export default function CommandPalette() {
         // Map backend paths to buildings
         const semanticMatches = searchResults
             .map(res => {
-                // Find building by path suffix match (robustness)
-                return cityData.buildings.find(b => b.path.endsWith(res.path) || b.path.includes(res.path))
+                // Find building exactly by internal ID assigned by state (O(1) safety)
+                const b = cityData.buildings.find(b => b.id === res.id)
+                if (b) {
+                    return { ...b, snippet: res.snippet, line: res.line }
+                }
+                return null
             })
             .filter(Boolean)
             .filter(b => !exactMatches.find(ex => ex.id === b.id)) // Dedupe
@@ -110,9 +115,14 @@ export default function CommandPalette() {
 
     // Handle file selection
     const handleSelectFile = useCallback((building) => {
-        selectBuilding(building)
+        selectBuilding(building, null, building.line || null)
+        if (building.snippet || building.line) {
+            // Open immediately if they specifically searched for a sym/snippet
+            // We use setTimeout to ensure interaction slice's set(codeViewerOpen: false) doesn't race condition
+            setTimeout(() => setCodeViewerOpen(true), 50)
+        }
         setCommandPaletteOpen(false)
-    }, [selectBuilding, setCommandPaletteOpen])
+    }, [selectBuilding, setCommandPaletteOpen, setCodeViewerOpen])
 
     const actions = useMemo(() => [
         {
@@ -134,9 +144,9 @@ export default function CommandPalette() {
             label: 'Open AI Architect',
             icon: Terminal,
             shortcut: 'A',
-            action: () => { 
+            action: () => {
                 useStore.setState({ chatOpen: true })
-                setCommandPaletteOpen(false) 
+                setCommandPaletteOpen(false)
             }
         },
         {
@@ -144,9 +154,9 @@ export default function CommandPalette() {
             label: 'Time Travel (Commit History)',
             icon: History,
             shortcut: 'H',
-            action: () => { 
+            action: () => {
                 useStore.setState({ showTimeline: true })
-                setCommandPaletteOpen(false) 
+                setCommandPaletteOpen(false)
             }
         },
         {
@@ -154,9 +164,9 @@ export default function CommandPalette() {
             label: 'Export Analysis Report',
             icon: Download,
             shortcut: 'E',
-            action: () => { 
+            action: () => {
                 useStore.setState({ exportReportOpen: true })
-                setCommandPaletteOpen(false) 
+                setCommandPaletteOpen(false)
             }
         },
         {
@@ -164,7 +174,7 @@ export default function CommandPalette() {
             label: 'Take City Screenshot',
             icon: Camera,
             shortcut: 'P',
-            action: () => { 
+            action: () => {
                 const canvas = document.querySelector('canvas')
                 if (canvas) {
                     const link = document.createElement('a')
@@ -172,7 +182,7 @@ export default function CommandPalette() {
                     link.href = canvas.toDataURL('image/png')
                     link.click()
                 }
-                setCommandPaletteOpen(false) 
+                setCommandPaletteOpen(false)
             }
         },
         {
@@ -191,7 +201,12 @@ export default function CommandPalette() {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
                 return
             }
-            
+
+            // Disable all single-key shortcuts while exploring so WASD works for flying
+            if (useStore.getState().ufoMode && /^[a-zA-Z0-9]$/.test(e.key)) {
+                return
+            }
+
             // Prevent shortcuts from triggering when the command palette is actively open
             if (!e.key || commandPaletteOpen) return
 
@@ -298,6 +313,11 @@ export default function CommandPalette() {
                                                 <div className="command-item-content">
                                                     <span className="command-item-title">{building.name}</span>
                                                     <span className="command-item-subtitle">{building.path}</span>
+                                                    {building.snippet && (
+                                                        <span className="command-item-snippet" style={{ fontSize: '11px', opacity: 0.7, fontFamily: 'monospace', marginTop: '2px', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                            {building.snippet}
+                                                        </span>
+                                                    )}
                                                 </div>
                                                 <div className={`command-item-badge ${building.health >= 70 ? 'success' :
                                                     building.health >= 40 ? 'warning' : 'danger'

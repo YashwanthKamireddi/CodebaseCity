@@ -29,6 +29,7 @@ const FACTS = [
 
 export default function CityBuilderLoader() {
     const analysisProgress = useStore(s => s.analysisProgress)
+    const vfsStatus = useStore(s => s.vfsStatus)
     const [simulatedProgress, setSimulatedProgress] = useState(0)
     const [elapsedSec, setElapsedSec] = useState(0)
     const [factIndex, setFactIndex] = useState(0)
@@ -167,7 +168,7 @@ export default function CityBuilderLoader() {
                                 </div>
                             </div>
                             <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.4)', lineHeight: 1.4, fontWeight: 300, paddingLeft: '46px' }}>
-                                {stage.detail}
+                                {vfsStatus?.message || stage.detail}
                             </span>
                         </div>
                 </div>
@@ -175,8 +176,18 @@ export default function CityBuilderLoader() {
                 {/* Progress bar */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'rgba(255,255,255,0.35)', fontFamily: 'var(--font-mono)' }}>
-                        <span>{fileCount > 0 ? `${fileCount} files processed` : 'BUILDING'}</span>
-                        <span style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>{effectiveProgress.toFixed(0)}%</span>
+                        <span>
+                            {vfsStatus?.current && vfsStatus?.total
+                                ? (vfsStatus.total > 100000
+                                    ? `${(vfsStatus.current / 1024 / 1024).toFixed(1)} / ${(vfsStatus.total / 1024 / 1024).toFixed(1)} MB OPFS Cache`
+                                    : `${vfsStatus.current} / ${vfsStatus.total} OPFS Files`)
+                                : (fileCount > 0 ? `${fileCount} AST nodes analyzed` : 'BUILDING')}
+                        </span>
+                        <span style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 500 }}>
+                            {vfsStatus?.current && vfsStatus?.total
+                                ? Math.floor((vfsStatus.current / vfsStatus.total) * 100) + '%'
+                                : `${effectiveProgress.toFixed(0)}%`}
+                        </span>
                     </div>
 
                     <div style={{
@@ -189,7 +200,7 @@ export default function CityBuilderLoader() {
                             background: 'linear-gradient(90deg, rgba(255,255,255,0.4), #ffffff)',
                             borderRadius: '4px',
                             boxShadow: '0 0 12px rgba(255,255,255,0.15)',
-                            width: `${effectiveProgress}%`,
+                            width: `${vfsStatus?.current && vfsStatus?.total ? Math.floor((vfsStatus.current / vfsStatus.total) * 100) : effectiveProgress}%`,
                             transition: 'width 0.4s ease-out',
                         }}
                         />

@@ -12,13 +12,13 @@ import useStore from '../../../store/useStore'
 
 const ROAD_Y = 0.02
 const ROAD_WIDTH = 14
-const MAX_ROAD_SEGMENTS = 24000
+const MAX_ROAD_SEGMENTS = 100000
 const ROUNDABOUT_RADIUS = 9
-const MAX_ROUNDABOUTS = 300
+const MAX_ROUNDABOUTS = 1000
 const MIN_RENDERABLE_SEGMENT = 12
 const ROAD_CLEARANCE = ROAD_WIDTH * 0.45 + 2
-const MAX_LOCAL_LANES_PER_AXIS = 4
-const MAX_DISTRICT_CONNECTORS = 160
+const MAX_LOCAL_LANES_PER_AXIS = 16
+const MAX_DISTRICT_CONNECTORS = 600
 
 /* ═══════════════════════════════════════════════════════════════
    GLSL — Road Vertex

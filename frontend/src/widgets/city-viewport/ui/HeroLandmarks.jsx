@@ -15,11 +15,11 @@ import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js
 const CITY_HEIGHT_SCALE = 3.0
 
 const HERO_PALETTE = [
-    { body: '#0a0e14', accent: '#ffcc00', crystal: '#ffe066' },
-    { body: '#0a0e14', accent: '#00ccff', crystal: '#80eeff' },
-    { body: '#0a0e14', accent: '#ff3388', crystal: '#ff77aa' },
-    { body: '#0a0e14', accent: '#8844ff', crystal: '#aa77ff' },
-    { body: '#0a0e14', accent: '#00ff88', crystal: '#66ffaa' },
+    { body: '#ffd700', accent: '#ffffff', crystal: '#ffaa00' }, // Gold/Sun
+    { body: '#00e5ff', accent: '#ffffff', crystal: '#00aaff' }, // Cyan/Electric
+    { body: '#ff2a6d', accent: '#ffffff', crystal: '#ff0055' }, // Neon Pink
+    { body: '#b55bff', accent: '#ffffff', crystal: '#8800ff' }, // Deep Purple
+    { body: '#00ff88', accent: '#ffffff', crystal: '#00cc66' }, // Matrix Green
 ]
 
 const _color = new THREE.Color()

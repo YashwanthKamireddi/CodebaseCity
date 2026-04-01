@@ -12,13 +12,15 @@ export const createUISlice = (set, get) => ({
     viewMode: 'orbit', // orbit | street | overview
     colorMode: 'default', // default | layer | churn | language | author
     renderMode: 'lod2', // 'instanced' (fast) | 'lod2' (realistic CityGML)
-    showRoads: true,
+    showRoads: false,
     theme: getInitialTheme(),
+    ufoMode: false,
 
     // Modals & Panels
     commandPaletteOpen: false,
     codeViewerOpen: false,
     exportReportOpen: false,
+    ufoIntroOpen: false,
 
     // Highlights
     highlightedCategory: null, // { type: 'language' | 'health' | 'district', value: string }
@@ -56,6 +58,10 @@ export const createUISlice = (set, get) => ({
     // Camera
     setCameraAction: (type) => set({ cameraAction: { type, timestamp: Date.now() } }),
     setScreenshotRequest: (timestamp) => set({ screenshotRequest: timestamp }),
+
+    // UFO Mode
+    setUfoMode: (enabled) => set({ ufoMode: enabled, ufoIntroOpen: enabled }),
+    closeUfoIntro: () => set({ ufoIntroOpen: false }),
 
     // Theme Logic
     toggleTheme: () => set((state) => {

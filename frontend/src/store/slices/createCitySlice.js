@@ -1,6 +1,7 @@
 import logger from '../../utils/logger'
-import { ghFetch, ghFetchBatch, ghFetchRaw } from '../../engine/api/githubApi'
+import { ghFetch, ghFetchBatch, ghFetchRaw, fetchGitHubZipball } from '../../engine/api/githubApi'
 import { getCachedCity, cacheCity } from '../../utils/cityCache'
+import { searchVfsEngine, ingestZipballToVfs, setVfsProgressCallback } from '../../engine/fs/vfs.js'
 
 /**
  * City Slice
@@ -205,13 +206,13 @@ export const createCitySlice = (set, get) => ({
 
             setProgress(25)
 
-            // Fetch full file tree
-            const treeResult = await ghFetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/git/trees/${encodeURIComponent(branch)}?recursive=1`)
-            const treeData = treeResult.data
-
-            if (treeData.truncated) {
-                logger.warn('Repository tree was truncated (very large repo)')
-            }
+            // Fetch full file tree & Ingest to OPFS VFS
+            setVfsProgressCallback((status) => {
+                set({ vfsStatus: status })
+            })
+            const zipBuffer = await fetchGitHubZipball(owner, repo, branch)
+            const { tree } = await ingestZipballToVfs(zipBuffer, repo)
+            const treeData = { tree }
 
             if (!treeData.tree || !Array.isArray(treeData.tree)) {
                 throw new Error('Invalid repository tree response from GitHub API.')
@@ -370,11 +371,11 @@ export const createCitySlice = (set, get) => ({
 
             const sourceFiles = treeData.tree.filter(item => {
                 if (item.type !== 'blob') return false
-                
+
                 // Fast directory exclusion
                 const parts = item.path.split('/')
                 if (parts.some(p => IGNORE_DIRS.has(p))) return false
-                
+
                 // Custom pattern exclusion from user settings
                 if (excludePatterns && excludePatterns.length > 0) {
                     if (excludePatterns.some(pattern => matchPattern(item.path, pattern))) {
@@ -439,14 +440,14 @@ export const createCitySlice = (set, get) => ({
             const districtCellSizes = finalDirNames.map(dir => {
                 const files = mergedGroups[dir]
                 const gridSide = Math.ceil(Math.sqrt(files.length))
-                const contentBased = gridSide * 25 + 20
-                const overlapSafe = gridSide * 24 + 10 // 24 min spacing + 10 margin
-                return Math.max(60, contentBased, overlapSafe)
+                const contentBased = gridSide * 35 + 20
+                const overlapSafe = gridSide * 32 + 20
+                return Math.max(80, contentBased, overlapSafe)
             })
 
             // Grid layout with per-district sizes: use cumulative offsets
             // Build rows of districts with adaptive widths
-            const districtGap = 40
+            const districtGap = 140
             const rowHeights = []
             const colWidths = []
 
@@ -533,10 +534,10 @@ export const createCitySlice = (set, get) => ({
                 const brows = Math.ceil(files.length / bcols)
 
                 // Spacing adapts to THIS district's size with overlap guard
-                const usableSize = thisCellSize - 10
+                const usableSize = thisCellSize - 20
                 const rawSpacing = usableSize / Math.max(bcols, brows)
-                // Prevent overlap: minimum gap = max possible building width (20) + 4
-                const spacing = Math.max(24, rawSpacing)
+                // Prevent overlap
+                const spacing = Math.max(30, rawSpacing)
 
                 files.forEach((file, fileIdx) => {
                     const ext = file.path.substring(file.path.lastIndexOf('.')).toLowerCase()
@@ -544,13 +545,13 @@ export const createCitySlice = (set, get) => ({
                     languageCounts[lang] = (languageCounts[lang] || 0) + 1
 
                     const size = file.size || 100
-                    // Log-scale sizing prevents one huge file from crushing everything else
                     const logSize = Math.log2(size + 1)
                     const logMax = Math.log2(maxSize + 1)
                     const sizeNorm = logSize / Math.max(logMax, 1)
 
-                    const width = Math.max(8, 8 + 12 * sizeNorm)
-                    const height = Math.max(8, 8 + 72 * sizeNorm)
+                    // Cinematic Building dimensions: Tall and sleek
+                    const width = Math.max(4, 6 + 12 * sizeNorm)
+                    const height = Math.max(10, 15 + Math.pow(sizeNorm, 2.5) * 350)
                     const depth = width
 
                     const fcol = fileIdx % bcols
@@ -799,10 +800,10 @@ export const createCitySlice = (set, get) => ({
                     const success = results.find(r => r.status === 'fulfilled' && r.value.ok)
                     if (success) {
                         const content = await success.value.text()
-                        
+
                         // Prevent race conditions: Check if user already clicked another file
                         if (get().fileContent?.path !== path) return
-                        
+
                         set({ fileContent: { path, content, loading: false } })
                         return
                     }
@@ -822,12 +823,14 @@ export const createCitySlice = (set, get) => ({
         }
     },
 
-    searchCode: (query) => {
-        const { cityData } = get()
+    searchCode: async (query) => {
+        const { cityData, currentRepoPath } = get()
         if (!query || !cityData?.buildings) return []
 
         const q = query.toLowerCase()
-        return cityData.buildings
+
+        // 1. Initial metadata search (fast)
+        const localResults = cityData.buildings
             .filter(b => {
                 const name = (b.name || '').toLowerCase()
                 const path = (b.file_path || b.path || '').toLowerCase()
@@ -838,12 +841,45 @@ export const createCitySlice = (set, get) => ({
                     funcs.some(f => f.includes(q)) ||
                     classes.some(c => c.includes(q))
             })
-            .slice(0, 20)
+            .slice(0, 10)
             .map(b => ({
                 id: b.id,
                 name: b.name,
                 path: b.file_path || b.path,
-                type: 'file'
+                type: 'file',
+                matches: []
             }))
+
+        // 2. Advanced OPFS RipGrep Search (Web Worker)
+        try {
+            if (currentRepoPath && currentRepoPath !== 'demo') {
+                const repoName = currentRepoPath.split('/').pop()
+                const vfsResponse = await searchVfsEngine(repoName, query, false)
+
+                if (vfsResponse && vfsResponse.results && vfsResponse.results.length > 0) {
+                    // Map VFS results back to building IDs for the Command Palette UI
+                    for (const vfsRes of vfsResponse.results) {
+                        const building = cityData.buildings.find(b =>
+                            (b.file_path || b.path || '') === vfsRes.path
+                        )
+                        if (building && !localResults.some(r => r.id === building.id)) {
+                            localResults.push({
+                                id: building.id,
+                                name: building.name,
+                                path: building.file_path || building.path,
+                                type: 'file',
+                                snippet: vfsRes.snippet,
+                                line: vfsRes.line,
+                                matches: vfsRes.matches || []
+                            })
+                        }
+                    }
+                }
+            }
+        } catch (err) {
+            logger.error("VFS Search failed:", err)
+        }
+
+        return localResults.slice(0, 20)
     }
 })

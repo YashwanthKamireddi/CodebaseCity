@@ -33,6 +33,7 @@ import CityBuilderLoader from './features/onboarding/ui/CityBuilderLoader'
 import EmptyCityHero from './features/onboarding/ui/EmptyCityHero'
 import ViewControl from './widgets/layout/ui/ViewControl'
 import CanvasUI from './widgets/layout/ui/CanvasUI'
+import UfoOverlay from './widgets/layout/ui/UfoOverlay'
 import useStore from './store/useStore'
 
 // Design tokens
@@ -68,6 +69,9 @@ function useKeyboardShortcuts(setView) {
 
             // Other shortcuts blocked on landing
             if (state.isLandingOverlayActive) return
+
+            // Do not override keys when exploring (flying the game mode ufo)
+            if (state.ufoMode && /^[a-zA-Z0-9]$/.test(e.key)) return
 
             if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
                 e.preventDefault()
@@ -128,6 +132,20 @@ function App() {
         }
     }, [])
     const dprRange = isLowEnd ? [0.75, 1] : [1, 1.25]
+
+    // Handle Shareable URLs (?repo=owner/repo)
+    useEffect(() => {
+        if (isCodePage) return
+        const urlParams = new URLSearchParams(window.location.search)
+        const repo = urlParams.get('repo')
+        if (repo) {
+            // Slight delay to ensure Zustand store map is initialized
+            // and Demo background doesn't overwrite our loading state.
+            setTimeout(() => {
+                useStore.getState().analyzeRepo(repo)
+            }, 100)
+        }
+    }, [isCodePage])
 
     // Close sidebar by default on mobile
     useEffect(() => {
@@ -206,7 +224,7 @@ function App() {
                                         enableZoom={true}
                                         enableRotate={true}
                                         screenSpacePanning={true}
-                                        minDistance={10}
+                                        minDistance={1}
                                         maxDistance={15000}
                                         maxPolarAngle={Math.PI / 2 - 0.05}
                                         minPolarAngle={0.05}
@@ -305,6 +323,7 @@ function App() {
                                     />
                                 </Suspense>
                             )}
+                            <UfoOverlay />
                         </>
                     )}
                 </div>

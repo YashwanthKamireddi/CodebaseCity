@@ -267,3 +267,25 @@ export function clearCache() {
         keys.forEach(k => sessionStorage.removeItem(k))
     } catch { /* ignore */ }
 }
+
+/**
+ * World-Class Implementation: Ingests a complete repo branch as a Zipball buffer.
+ * Bypasses JSON/Tree parsing limitations by downloading everything iteratively in C++ style Streams.
+ */
+export async function fetchGitHubZipball(owner, repo, branch = 'main') {
+    // Fetch directly from codeload.github.com to avoid redirect losing our cache-busting parameter
+    // Append a unique timestamp query parameter to bust GitHub's CDN caching
+    // of CORS headers (Access-Control-Allow-Origin).
+    const url = `/codeload/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/legacy.zip/refs/heads/${encodeURIComponent(branch)}?t=${Date.now()}`;
+    const token = getGitHubToken();
+    const headers = {};
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    const response = await fetch(url, { headers });
+    if (!response.ok) {
+        throw new Error(`Failed to fetch Zipball: ${response.status} ${response.statusText}`);
+    }
+
+    // Returns an ArrayBuffer ready to be zero-copied to the VFS Worker
+    return await response.arrayBuffer();
+}

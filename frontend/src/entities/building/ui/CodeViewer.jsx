@@ -215,10 +215,24 @@ function LoadingSkeleton() {
 const LINE_HEIGHT = 20  // px per line — must match lineHeight in code body
 const OVERSCAN = 20     // extra lines rendered above/below viewport
 
-function VirtualizedCode({ lines, gutterWidth }) {
+function VirtualizedCode({ lines, gutterWidth, targetLine }) {
     const containerRef = useRef(null)
     const [scrollTop, setScrollTop] = useState(0)
     const [containerHeight, setContainerHeight] = useState(0)
+
+    // Center on target line when provided map or content lines resize
+    React.useEffect(() => {
+        if (targetLine && targetLine > 0 && containerRef.current && lines.length > 0) {
+            // Wait brief moment for layout/paint
+            setTimeout(() => {
+                if (containerRef.current) {
+                    const pixelsToTop = Math.max(0, (targetLine - 10) * LINE_HEIGHT)
+                    containerRef.current.scrollTop = pixelsToTop
+                    setScrollTop(pixelsToTop)
+                }
+            }, 50)
+        }
+    }, [targetLine, lines.length])
 
     const handleScroll = useCallback((e) => {
         setScrollTop(e.currentTarget.scrollTop)
@@ -263,19 +277,24 @@ function VirtualizedCode({ lines, gutterWidth }) {
                     <tbody>
                         {lines.slice(startIdx, endIdx).map((line, offset) => {
                             const i = startIdx + offset
+                            const isTargetLine = targetLine && targetLine === (i + 1)
                             return (
-                                <tr key={i}>
+                                <tr key={i} style={{
+                                    background: isTargetLine ? 'rgba(99, 102, 241, 0.2)' : 'transparent',
+                                    transition: 'background 0.5s',
+                                    outline: isTargetLine ? '1px solid rgba(99, 102, 241, 0.4)' : 'none'
+                                }}>
                                     <td style={{
                                         width: `${gutterWidth + 1}em`, minWidth: `${gutterWidth + 1}em`,
                                         textAlign: 'right', paddingRight: '16px', paddingLeft: '16px',
-                                        color: 'rgba(255,255,255,0.15)', userSelect: 'none',
+                                        color: isTargetLine ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255,255,255,0.15)', userSelect: 'none',
                                         verticalAlign: 'top', whiteSpace: 'nowrap',
                                         borderRight: '1px solid rgba(255,255,255,0.04)',
                                         height: LINE_HEIGHT,
                                     }}>{i + 1}</td>
                                     <td style={{
                                         paddingLeft: '16px', paddingRight: '24px',
-                                        whiteSpace: 'pre', color: '#abb2bf',
+                                        whiteSpace: 'pre', color: isTargetLine ? '#fff' : '#abb2bf',
                                         height: LINE_HEIGHT, overflow: 'hidden', textOverflow: 'ellipsis'
                                     }}>
                                         <HighlightedLine text={line} />
@@ -295,6 +314,7 @@ function VirtualizedCode({ lines, gutterWidth }) {
 export default React.memo(function CodeViewer({ building, onClose }) {
     const fileContent = useStore(s => s.fileContent)
     const fetchFileContent = useStore(s => s.fetchFileContent)
+    const searchLineTarget = useStore(s => s.searchLineTarget)
     const [copied, setCopied] = React.useState(false)
 
     // Self-fetch: ensure content is loaded for this building
@@ -513,7 +533,7 @@ export default React.memo(function CodeViewer({ building, onClose }) {
                         </div>
                     ) : (
                         <>
-                            <VirtualizedCode lines={lines} gutterWidth={gutterWidth} />
+                            <VirtualizedCode lines={lines} gutterWidth={gutterWidth} targetLine={searchLineTarget} />
                             {truncated && (
                                 <div style={{
                                     padding: '8px 16px', textAlign: 'center',

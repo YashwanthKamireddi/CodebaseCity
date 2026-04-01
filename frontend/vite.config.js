@@ -5,6 +5,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
+    proxy: {
+      '/codeload': {
+        target: 'https://codeload.github.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/codeload/, '')
+      }
+    }
   },
   build: {
     sourcemap: 'hidden',

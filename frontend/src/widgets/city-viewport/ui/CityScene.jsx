@@ -17,6 +17,7 @@ import DataStreams from './DataStreams'
 import AtmosphericParticles from './AtmosphericParticles'
 
 import EnergyShieldDome from './EnergyShieldDome'
+import UfoAvatar from './UfoAvatar'
 
 /**
  * AnimationPump — In frameloop="demand" mode, periodically invalidates
@@ -48,17 +49,17 @@ function ScreenshotHandler() {
 
     useEffect(() => {
         if (!screenshotRequest) return
-        
+
         // Force synchronous render to ensure buffer is full even with preserveDrawingBuffer=false
         gl.render(scene, camera)
-        
+
         const dataUrl = gl.domElement.toDataURL('image/png')
         const link = document.createElement('a')
         link.download = `codebase-city-snapshot-${Date.now()}.png`
         link.href = dataUrl
         link.click()
     }, [screenshotRequest, gl, scene, camera])
-    
+
     return null
 }
 
@@ -105,6 +106,9 @@ const CityScene = React.memo(function CityScene() {
                 <MothershipCore />
                 <HolographicCityName />
                 <HeroLandmarks buildings={cityData?.buildings} />
+
+                {/* ── Gamified Interactive Avatar ── */}
+                <UfoAvatar />
 
                 {/* ── EnergyShieldDome ── */}
                 <EnergyShieldDome />

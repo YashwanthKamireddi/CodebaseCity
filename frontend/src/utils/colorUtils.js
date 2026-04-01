@@ -66,6 +66,12 @@ export function getBuildingColor(data, mode, context = {}) {
     // COLOR MODES
     // ═══════════════════════════════════════════════════════════════
 
+    // Quick Cache for Base Colors to avoid string operations and regex loops
+    if (!data._colorCache) data._colorCache = {}
+    if (data._colorCache[mode]) return data._colorCache[mode]
+
+    let resultColor = '#64748b' // default fallback
+
     // LAYER MODE — Vivid architectural layers
     if (mode === 'layer') {
         const p = data.path.toLowerCase()
@@ -85,31 +91,33 @@ export function getBuildingColor(data, mode, context = {}) {
             db: '#ffc400',       // Vivid gold — Database
             other: '#78909c'     // Blue gray — Unknown
         }
-        return layerColors[layer] || layerColors.other
+        resultColor = layerColors[layer] || layerColors.other
     }
 
     // CHURN MODE — Heat map (blue → red)
-    if (mode === 'churn') {
-        if (data.is_hotspot) return '#ef4444' // Red for hotspots
-        const churn = data.metrics?.churn || 0
-        if (churn > 8) return '#f97316'   // Orange (very hot)
-        if (churn > 5) return '#eab308'   // Yellow (hot)
-        if (churn > 2) return '#84cc16'   // Lime (warm)
-        return '#38bdf8'                  // Sky blue (stable)
+    else if (mode === 'churn') {
+        if (data.is_hotspot) resultColor = '#ef4444' // Red for hotspots
+        else {
+            const churn = data.metrics?.churn || 0
+            if (churn > 8) resultColor = '#f97316'   // Orange (very hot)
+            else if (churn > 5) resultColor = '#eab308'   // Yellow (hot)
+            else if (churn > 2) resultColor = '#84cc16'   // Lime (warm)
+            else resultColor = '#38bdf8'                  // Sky blue (stable)
+        }
     }
 
     // COMPLEXITY MODE — Gradient
-    if (mode === 'complexity') {
+    else if (mode === 'complexity') {
         const c = data.metrics?.complexity || 0
-        if (c > 30) return '#e11d48'  // Deep rose (extreme)
-        if (c > 20) return '#f97316'  // Hot orange (high)
-        if (c > 10) return '#f59e0b'  // Amber (medium)
-        if (c > 5) return '#84cc16'   // Lime (low)
-        return '#22c55e'              // Green (simple)
+        if (c > 30) resultColor = '#e11d48'  // Deep rose (extreme)
+        else if (c > 20) resultColor = '#f97316'  // Hot orange (high)
+        else if (c > 10) resultColor = '#f59e0b'  // Amber (medium)
+        else if (c > 5) resultColor = '#84cc16'   // Lime (low)
+        else resultColor = '#22c55e'              // Green (simple)
     }
 
     // LANGUAGE MODE — GitHub-inspired vibrant colors
-    if (mode === 'language') {
+    else if (mode === 'language') {
         const ext = data.path.split('.').pop().toLowerCase()
 
         const languageColors = {
@@ -139,16 +147,15 @@ export function getBuildingColor(data, mode, context = {}) {
             cs: '#178600'
         }
 
-        return languageColors[ext] || '#64748b'
+        resultColor = languageColors[ext] || '#64748b'
     }
 
     // AUTHOR MODE — Contributor visualization
-    if (mode === 'author') {
+    else if (mode === 'author') {
         if (data.author) {
             const name = typeof data.author === 'object' ? data.author.author : data.author
-            return stringToColor(name || 'Unknown')
+            resultColor = stringToColor(name || 'Unknown')
         }
-        return '#64748b'
     }
 
     // ═══════════════════════════════════════════════════════════════
@@ -156,13 +163,19 @@ export function getBuildingColor(data, mode, context = {}) {
     // Blue (small) → Green → Gold → Red (huge)
     // Uses color_metric (rank-normalized 0-1) for even distribution.
     // ═══════════════════════════════════════════════════════════════
+    else {
+        // color_metric is rank-normalized (0-1) computed at city load time.
+        // Smallest file = 0 (blue), largest file = 1 (red), evenly distributed.
+        // Fallback: simple height-based ratio for edge cases.
+        if (data.color_metric != null) resultColor = metricToHex(data.color_metric)
+        else {
+            const h = data.dimensions?.height || 8
+            resultColor = metricToHex(Math.min(1, Math.max(0, h / 80)))
+        }
+    }
 
-    // color_metric is rank-normalized (0-1) computed at city load time.
-    // Smallest file = 0 (blue), largest file = 1 (red), evenly distributed.
-    // Fallback: simple height-based ratio for edge cases.
-    if (data.color_metric != null) return metricToHex(data.color_metric)
-    const h = data.dimensions?.height || 8
-    return metricToHex(Math.min(1, Math.max(0, h / 80)))
+    data._colorCache[mode] = resultColor
+    return resultColor
 }
 
 /**

@@ -11,12 +11,16 @@ export const createInteractionSlice = (set) => ({
     selectedLandmark: null, // 'reactor' | 'mothership' | null
 
     // Actions
-    selectBuilding: (building, screenY = null) => {
+    searchLineTarget: null,
+
+    selectBuilding: (building, screenY = null, lineTarget = null) => {
         set({
             selectedBuilding: building,
             selectedBuildingScreenY: screenY,
             selectedLandmark: null,
-            codeViewerOpen: false
+            codeViewerOpen: false,
+            searchLineTarget: lineTarget,
+            ufoMode: false // Turn off Drone when building is selected
         })
     },
 

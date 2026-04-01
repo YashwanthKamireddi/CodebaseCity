@@ -183,8 +183,6 @@ export default function BuildingPanel({ building }) {
                 {/* SCROLL CONTENT */}
                 <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
 
-
-
                     {/* ANALYTICAL HUD */}
                     <div style={{
                         display: 'grid',

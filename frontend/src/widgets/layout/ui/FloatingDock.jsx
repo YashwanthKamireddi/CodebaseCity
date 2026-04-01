@@ -14,9 +14,12 @@ import {
     History,
     Github,
     Download,
-    KeyRound
+    KeyRound,
+    Share2,
+    Gamepad2
 } from 'lucide-react'
 import useStore from '../../../store/useStore'
+import { toast } from '../../../shared/ui/Toast'
 
 export default function FloatingDock({ view, onViewChange, onShowExport }) {
     const setCommandPaletteOpen = useStore(s => s.setCommandPaletteOpen)
@@ -59,6 +62,14 @@ export default function FloatingDock({ view, onViewChange, onShowExport }) {
 
                 {/* Actions */}
                 <DeckItem
+                    onClick={() => useStore.getState().setUfoMode(!useStore.getState().ufoMode)}
+                    active={useStore(state => state.ufoMode)}
+                    icon={<Gamepad2 size={18} />}
+                    label="Explore Mode"
+                    description="Fly the UFO with WASD"
+                />
+
+                <DeckItem
                     onClick={() => setCommandPaletteOpen(true)}
                     icon={<Search size={18} />}
                     label="Search"
@@ -76,6 +87,24 @@ export default function FloatingDock({ view, onViewChange, onShowExport }) {
                 <div className="dock-divider" />
 
                 {/* Toggles */}
+                <DeckItem
+                    onClick={() => {
+                        const state = useStore.getState();
+                        const isGithub = state.cityData?.source === 'github';
+                        const repo = state.cityData?.name || '';
+                        if (isGithub && repo) {
+                            const url = `${window.location.origin}/?repo=${repo}`
+                            navigator.clipboard.writeText(url)
+                            toast.success('Shareable URL copied to clipboard!', `${repo}`)
+                        } else {
+                            toast.error('Cannot share local repository cities.', 'Share Failed')
+                        }
+                    }}
+                    icon={<Share2 size={18} />}
+                    label="Share URL"
+                    description="Copy link to this specific codebase city instantly"
+                />
+
                 <DeckItem
                     onClick={() => useStore.setState(state => ({ showTimeline: !state.showTimeline }))}
                     active={useStore(state => state.showTimeline)}
