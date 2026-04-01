@@ -163,8 +163,26 @@ const InstancedCity = React.memo(function InstancedCity() {
 
     // Smooth time-based animation — drives shader pulse (throttled 30fps)
     const lastTimeUpdate = useRef(0)
-    useFrame((state) => {
+    useFrame((state, delta) => {
         if (!materialRef.current) return
+        
+        // 1. Genesis Time Animation (60fps flawless directly from store to shader)
+        const store = useStore.getState();
+        if (store.isGenesisPlaying) {
+            let simTime = store.genesisTime || 0;
+            simTime += delta / 12.0; // 12 second cinematic construction
+            if (simTime >= 1.0) {
+               simTime = 1.0;
+               store.setGenesisPlay(false);
+            }
+            store.setGenesisTime(simTime);
+        }
+        
+        const currentSimTime = store.genesisTime !== undefined ? store.genesisTime : 1.0;
+        if (!materialRef.current.uniforms.uGenesisTime) materialRef.current.uniforms.uGenesisTime = { value: 1.0 };
+        materialRef.current.uniforms.uGenesisTime.value = currentSimTime;
+
+        // 2. Churn flame flickering (30fps throttled)
         const t = state.clock.elapsedTime
         if (t - lastTimeUpdate.current < 0.033) return
         lastTimeUpdate.current = t
@@ -509,6 +527,28 @@ const InstancedCity = React.memo(function InstancedCity() {
         }
     }, { filterTaps: true })
 
+    // Cinematic Genesis Spawning Data
+    const genesisAttribute = useMemo(() => {
+        if (count === 0) return null
+        const array = new Float32Array(count)
+
+        // Calculate max distance for shockwave normalization
+        let maxDist = 1;
+        buildings.forEach(b => {
+             const dist = Math.sqrt(b.position.x * b.position.x + (b.position.z||0) * (b.position.z||0));
+             maxDist = Math.max(maxDist, dist);
+        });
+
+        // Spawn organically from center outwards + slight randomness
+        buildings.forEach((b, i) => {
+            const dist = Math.sqrt(b.position.x * b.position.x + (b.position.z||0) * (b.position.z||0));
+            let age = dist / maxDist;
+            age += (Math.random() - 0.5) * 0.1;
+            array[i] = Math.max(0.0, Math.min(1.0, age));
+        })
+        return new THREE.InstancedBufferAttribute(array, 1)
+    }, [buildings, count])
+
     // Telemetry Heat data for shader (Normalized Churn/Commits)
     const churnAttribute = useMemo(() => {
         if (count === 0) return null
@@ -547,6 +587,12 @@ const InstancedCity = React.memo(function InstancedCity() {
                     <instancedBufferAttribute
                         attach="attributes-aChurn"
                         args={[churnAttribute.array, 1]}
+                    />
+                )}
+                {genesisAttribute && (
+                    <instancedBufferAttribute
+                        attach="attributes-aGenesisStart"
+                        args={[genesisAttribute.array, 1]}
                     />
                 )}
             </boxGeometry>

@@ -108,7 +108,7 @@ export default React.memo(function DistrictFloors() {
     if (!mergedFloor) return null
 
     return (
-        <group>
+        <group ref={groupRef}>
             <mesh
                 ref={floorRef}
                 geometry={mergedFloor}

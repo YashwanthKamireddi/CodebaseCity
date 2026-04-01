@@ -1,4 +1,6 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect, useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
+import useStore from '../../../store/useStore'
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 
@@ -107,10 +109,18 @@ const HeroLandmarks = React.memo(function HeroLandmarks({ buildings }) {
         }
     }, [bodyGeo, accentGeo, crystalGeo])
 
-    if (!bodyGeo) return null
+    const groupRef = useRef();
+useFrame((state, delta) => {
+  if (!groupRef.current) return;
+  const t = useStore.getState().genesisTime !== undefined ? useStore.getState().genesisTime : 1.0;
+  const s = Math.max(0.001, t > 0.8 ? (t - 0.8) * 5.0 : 0.0); // pops in only at the very end
+  groupRef.current.scale.set(s, s, s);
+});
+if (!bodyGeo) return null;
+
 
     return (
-        <group>
+        <group ref={groupRef}>
             <mesh geometry={bodyGeo} raycast={() => null}>
                 <meshBasicMaterial vertexColors />
             </mesh>

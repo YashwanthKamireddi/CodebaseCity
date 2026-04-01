@@ -106,7 +106,10 @@ export default function FloatingDock({ view, onViewChange, onShowExport }) {
                 />
 
                 <DeckItem
-                    onClick={() => useStore.setState(state => ({ showTimeline: !state.showTimeline }))}
+                    onClick={() => useStore.setState(state => {
+                        const next = !state.showTimeline;
+                        return { showTimeline: next, isGenesisPlaying: next, genesisTime: next ? 0.0 : 1.0, selectedBuilding: null };
+                    })}
                     active={useStore(state => state.showTimeline)}
                     icon={<History size={18} />}
                     label="Time Travel"

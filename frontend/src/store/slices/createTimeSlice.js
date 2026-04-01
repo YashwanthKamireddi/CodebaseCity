@@ -26,6 +26,13 @@ export const createTimeSlice = (set, get) => ({
     currentCommitIndex: -1,
     historyLoading: false,
     showTimeline: false,
+    
+    // Genesis Protocol (Cinematic Mode)
+    isGenesisPlaying: false,
+    genesisTime: 1.0,
+    setGenesisPlay: (playing) => set({ isGenesisPlaying: playing }),
+    setGenesisTime: (time) => set({ genesisTime: time }),
+
     _treeCache: {}, // sha → { path → size } — caches fetched trees
     _treeCacheOrder: [], // LRU order for cache eviction
     _maxCacheSize: 50, // Maximum number of cached trees
@@ -35,7 +42,7 @@ export const createTimeSlice = (set, get) => ({
     animationSpeed: 1000,
 
     // Actions
-    setShowTimeline: (show) => set({ showTimeline: show }),
+    setShowTimeline: (show) => set({ showTimeline: show, isGenesisPlaying: show, genesisTime: show ? 0.0 : 1.0 }),
     setCommitIndex: (index) => set({ currentCommitIndex: index }),
     setAnimating: (isAnimating) => set({ isAnimating }),
     setAnimationSpeed: (speed) => set({ animationSpeed: speed }),

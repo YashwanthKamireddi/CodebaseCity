@@ -52,7 +52,7 @@ export default function UfoAvatar() {
 
     // Physics & Movement State
     const velocity = useRef(new THREE.Vector3())
-    
+
     // 100 buildings = 1x speed, 2000 buildings = 4x speed
     const speedMult = Math.max(1.0, Math.min(4.0, (cityData?.buildings?.length || 100) / 500))
     const acceleration = 180.0 * Math.pow(speedMult, 1.2)
@@ -169,7 +169,7 @@ export default function UfoAvatar() {
                 if (nextPos.y < h + 10 && isInsideXNext && isInsideZCurr) collisionX = true
                 // Horizontal collision Z
                 if (nextPos.y < h + 10 && isInsideZNext && isInsideXCurr) collisionZ = true
-                
+
                 // Vertical collision (top-down)
                 if (nextPos.y < h + 10 && isInsideXNext && isInsideZNext) {
                     if (groupRef.current.position.y >= h + 10) {
@@ -193,7 +193,7 @@ export default function UfoAvatar() {
             nextPos.y = roofHeight
             velocity.current.y *= -0.2 // slight bounce
             if (velocity.current.y < 0) velocity.current.y = 0
-            if (KEYS.shift) velocity.current.y = 0 
+            if (KEYS.shift) velocity.current.y = 0
         }
 
         groupRef.current.position.copy(nextPos)

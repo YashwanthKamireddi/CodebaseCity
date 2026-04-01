@@ -12,7 +12,7 @@ import * as THREE from 'three'
 
 const PulseMaterial = shaderMaterial(
   {
-    uTime: 0,
+    uTime: 0, uGenesisTime: 1.0,
     uBaseColor: new THREE.Color('#1a1a2e'),
   },
   // ═══════════════════════ VERTEX SHADER ═══════════════════════
@@ -20,7 +20,7 @@ const PulseMaterial = shaderMaterial(
     #include <common>
     #include <logdepthbuf_pars_vertex>
 
-    attribute float aChurn;
+    attribute float aChurn; attribute float aGenesisStart;
     // (aOpacityOverride removed — unused in fragment shader)
 
     varying vec3 vWorldPosition;
@@ -31,13 +31,13 @@ const PulseMaterial = shaderMaterial(
     varying vec3 vColor;
     varying float vChurn;
     varying vec3 vScale;
-    varying float vFresnel;
+    varying float vFresnel; varying float vGenesisProgress;
 
     void main() {
       vLocalPosition = position;
       vLocalNormal = normal;
       vNormal = normalize(normalMatrix * normal);
-      vColor = instanceColor;
+      vColor = instanceColor; float progress = clamp((uGenesisTime - aGenesisStart) * 10.0, 0.0, 1.0); vec3 animatedPosition = position; animatedPosition.y = (position.y + 0.5) * progress - 0.5; vGenesisProgress = progress;
       vChurn = aChurn;
 
       vScale = vec3(
@@ -46,7 +46,7 @@ const PulseMaterial = shaderMaterial(
         length(instanceMatrix[2].xyz)
       );
 
-      vec4 worldPos = modelMatrix * instanceMatrix * vec4(position, 1.0);
+      vec4 worldPos = modelMatrix * instanceMatrix * vec4(animatedPosition, 1.0);
       vWorldPosition = worldPos.xyz;
       vViewDir = normalize(cameraPosition - worldPos.xyz);
 
@@ -64,6 +64,7 @@ const PulseMaterial = shaderMaterial(
     #include <logdepthbuf_pars_fragment>
 
     uniform float uTime;
+    uniform float uGenesisTime;
 
     varying vec3 vWorldPosition;
     varying vec3 vLocalPosition;
@@ -73,7 +74,7 @@ const PulseMaterial = shaderMaterial(
     varying vec3 vColor;
     varying float vChurn;
     varying vec3 vScale;
-    varying float vFresnel;
+    varying float vFresnel; varying float vGenesisProgress;
 
     void main() {
       #include <logdepthbuf_fragment>
@@ -195,7 +196,7 @@ const PulseMaterial = shaderMaterial(
           }
       }
 
-      gl_FragColor = vec4(finalColor, 1.0);
+      float flash = smoothstep(1.0, 0.9, vGenesisProgress) * smoothstep(0.0, 0.2, vGenesisProgress); finalColor += vec3(0.0, 1.0, 0.8) * flash * 2.0; if (vGenesisProgress < 0.01 && uGenesisTime < 0.99) discard; gl_FragColor = vec4(finalColor, 1.0);
     }
   `
 )
