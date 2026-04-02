@@ -202,8 +202,8 @@ const InstancedCity = React.memo(function InstancedCity() {
                 if (meshRef.current && meshRef.current.geometry.boundingSphere) {
                     cityRadius = meshRef.current.geometry.boundingSphere.radius;
                 }
-                const cappedRadius = Math.min(cityRadius, 2500); // Prevent black screens/specks on huge cities
-                const idealRadius = Math.max(cappedRadius * 1.5, 300);
+                const cappedRadius = Math.min(cityRadius, 1500); // Tighter cap to prevent black screens
+                const idealRadius = Math.max(cappedRadius * 1.8, 300);
 
                 const currentRadius = state.camera.position.distanceTo(target);
                 // Ultra-smooth easing towards the perfect framing distance
@@ -222,6 +222,7 @@ const InstancedCity = React.memo(function InstancedCity() {
                 const targetY = radius * 0.35 + Math.sin(simTime * Math.PI) * (radius * 0.15);
                 state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, Math.max(targetY, 50), delta * 0.5);
 
+                state.camera.lookAt(target);
                 state.controls.update();
             }
         }
