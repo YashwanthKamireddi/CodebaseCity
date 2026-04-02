@@ -193,38 +193,7 @@ const InstancedCity = React.memo(function InstancedCity() {
             }
             store.setGenesisTime(simTime);
 
-            // World class cinematic camera sweep
-            if (state.camera && state.controls) {
-                const target = state.controls.target;
-
-                // Dynamically frame the entire city roughly based on simulation scale
-                let cityRadius = 250;
-                if (meshRef.current && meshRef.current.geometry.boundingSphere) {
-                    cityRadius = meshRef.current.geometry.boundingSphere.radius;
-                }
-                const cappedRadius = Math.min(cityRadius, 1500); // Tighter cap to prevent black screens
-                const idealRadius = Math.max(cappedRadius * 1.8, 300);
-
-                const currentRadius = state.camera.position.distanceTo(target);
-                // Ultra-smooth easing towards the perfect framing distance
-                const radius = THREE.MathUtils.lerp(currentRadius, idealRadius, delta * 1.5);
-
-                // Slowly pan around the city based on simulation time
-                const angle = Math.atan2(state.camera.position.z - target.z, state.camera.position.x - target.x);
-                const newAngle = angle + (delta * 0.1); // Slow majestic rotation
-
-                // Move orbit gently and slightly elevate
-                state.camera.position.x = target.x + Math.cos(newAngle) * radius;
-                state.camera.position.z = target.z + Math.sin(newAngle) * radius;
-                state.camera.position.y = target.y + radius * 0.5; // Elevate correctly for wide shots
-
-                // Soft sweeping camera height based on the city's scale
-                const targetY = radius * 0.35 + Math.sin(simTime * Math.PI) * (radius * 0.15);
-                state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, Math.max(targetY, 50), delta * 0.5);
-
-                state.camera.lookAt(target);
-                state.controls.update();
-            }
+            // Removed cinematic camera sweep to prevent black screen issue per user request.
         }
 
         const currentSimTime = store.genesisTime !== undefined ? store.genesisTime : 1.0;
