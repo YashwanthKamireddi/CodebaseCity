@@ -197,6 +197,7 @@ function App() {
                                 <Canvas
                                     style={isLandingOverlayActive ? { pointerEvents: 'none' } : undefined}
                                     shadows={false}
+                                    camera={{ fov: 50, near: 1, far: 80000 }} // Support massive repos perfectly
                                     frameloop={isLandingOverlayActive ? "always" : "demand"}
                                     dpr={dprRange}
                                     gl={{

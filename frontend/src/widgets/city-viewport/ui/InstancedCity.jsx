@@ -193,7 +193,45 @@ const InstancedCity = React.memo(function InstancedCity() {
             }
             store.setGenesisTime(simTime);
 
-            // Removed cinematic camera sweep to prevent black screen issue per user request.
+            // World Class Video Game Cinematic Sweep
+            if (state.camera && state.controls) {
+                const target = state.controls.target;
+
+                // Perfectly frame the true world boundaries dynamically
+                let cityRadius = 250;
+                if (meshRef.current && meshRef.current.geometry.boundingSphere) {
+                    cityRadius = meshRef.current.geometry.boundingSphere.radius;
+                }
+                
+                // Allow the camera to easily zoom out for massive repos (Canvas far clipping is now fixed)
+                const idealRadius = Math.max(cityRadius * 1.6, 250);
+
+                // Calculate current coordinates relative to the target
+                const cx = state.camera.position.x - target.x;
+                const cz = state.camera.position.z - target.z;
+                const currentRadius = Math.sqrt(cx * cx + cz * cz);
+                
+                // Buttery smooth damped lerp zooming
+                const r = THREE.MathUtils.damp(currentRadius, idealRadius, 2.5, delta);
+
+                // Smooth cinematic orbit panning (zero lag)
+                const angle = Math.atan2(cz, cx);
+                const newAngle = angle + (delta * 0.08); // Slow and steady orbit
+                
+                // Apply planar coordinates
+                state.camera.position.x = target.x + Math.cos(newAngle) * r;
+                state.camera.position.z = target.z + Math.sin(newAngle) * r;
+
+                // Cinematic boom sweep: Height sweeps fluidly relative to the world's scale
+                const sweepPhase = Math.sin(simTime * Math.PI); // Creates a beautiful 0->1->0 curve
+                const targetY = r * 0.2 + sweepPhase * (r * 0.35);
+                
+                state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, Math.max(targetY, 40), 2.5, delta);
+
+                // Always smoothly focus on the city core during motion
+                state.camera.lookAt(target);
+                state.controls.update();
+            }
         }
 
         const currentSimTime = store.genesisTime !== undefined ? store.genesisTime : 1.0;
