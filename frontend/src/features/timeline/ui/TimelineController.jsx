@@ -10,7 +10,7 @@ export default function TimelineController() {
     const commits = useStore(s => s.commits)
     const isComplete = useStore(s => s.genesisTime >= 0.999)
     const [isVisible, setIsVisible] = useState(false)
-    
+
     useEffect(() => {
         if (showTimeline) {
             setTimeout(() => setIsVisible(true), 600)
@@ -23,8 +23,8 @@ export default function TimelineController() {
 
     const handleAction = () => {
         if (isComplete) {
-            setGenesisTime(0.0) 
-            setTimeout(() => setGenesisPlay(true), 150) 
+            setGenesisTime(0.0)
+            setTimeout(() => setGenesisPlay(true), 150)
         } else {
             setGenesisPlay(!isGenesisPlaying)
         }
@@ -36,7 +36,7 @@ export default function TimelineController() {
         <div style={{
             position: 'absolute', bottom: '96px', left: '50%',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            opacity: isVisible ? (isGenesisPlaying ? 0.3 : 1.0) : 0, 
+            opacity: isVisible ? (isGenesisPlaying ? 0.3 : 1.0) : 0,
             transform: `translate(-50%, ${isVisible ? '0' : '30px'})`,
             transition: 'opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
             zIndex: 1000, pointerEvents: 'auto'
@@ -47,7 +47,7 @@ export default function TimelineController() {
         onMouseLeave={(e) => {
              e.currentTarget.style.opacity = isGenesisPlaying ? '0.3' : '1.0'
         }}>
-            
+
             <button
                 onClick={handleAction}
                 style={{
@@ -80,16 +80,16 @@ export default function TimelineController() {
                         <Play size={20} fill="currentColor" strokeWidth={0} style={{ marginLeft: '4px' }} />
                     )}
                 </div>
-                
+
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', paddingRight: '8px' }}>
-                    <span style={{ 
-                        fontSize: '11px', color: 'rgba(255,255,255,0.5)', 
+                    <span style={{
+                        fontSize: '11px', color: 'rgba(255,255,255,0.5)',
                         fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase',
                         transition: 'color 0.3s'
                     }}>
                         {isComplete ? 'Analysis Finished' : (isGenesisPlaying ? 'Simulation in Progress' : 'Git Evolution')}
                     </span>
-                    <span style={{ 
+                    <span style={{
                         fontSize: '14px', color: 'rgba(255,255,255,0.9)', fontWeight: 500,
                         opacity: isGenesisPlaying ? 0.7 : 1
                     }}>

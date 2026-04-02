@@ -48,6 +48,7 @@ const InstancedCity = React.memo(function InstancedCity() {
     const setHoveredBuilding = useStore(s => s.setHoveredBuilding)
     const colorMode = useStore(s => s.colorMode)
     const highlightedIssue = useStore(s => s.highlightedIssue)
+    const isGenesisPlaying = useStore(s => s.isGenesisPlaying)
     const cityMeshRef = useStore(s => s.cityMeshRef)
     const isAnimating = useStore(s => s.isAnimating)
     const currentCommitIndex = useStore(s => s.currentCommitIndex)
@@ -180,7 +181,7 @@ const InstancedCity = React.memo(function InstancedCity() {
     const lastTimeUpdate = useRef(0)
     useFrame((state, delta) => {
         if (!materialRef.current) return
-        
+
         // 1. Genesis Time Animation (60fps flawless directly from store to shader)
         const store = useStore.getState();
         if (store.isGenesisPlaying) {
@@ -195,28 +196,28 @@ const InstancedCity = React.memo(function InstancedCity() {
             // World class cinematic camera sweep
             if (state.camera && state.controls) {
                 const target = state.controls.target;
-                
+
                 // Dynamically frame the entire city roughly based on simulation scale
                 let cityRadius = 250;
                 if (meshRef.current && meshRef.current.geometry.boundingSphere) {
                     cityRadius = meshRef.current.geometry.boundingSphere.radius;
                 }
-                const cappedRadius = Math.min(cityRadius, 15000); // Prevent black screens on huge cities
-                const idealRadius = Math.max(cappedRadius * 1.6, 250);
-                
+                const cappedRadius = Math.min(cityRadius, 2500); // Prevent black screens/specks on huge cities
+                const idealRadius = Math.max(cappedRadius * 1.5, 300);
+
                 const currentRadius = state.camera.position.distanceTo(target);
                 // Ultra-smooth easing towards the perfect framing distance
                 const radius = THREE.MathUtils.lerp(currentRadius, idealRadius, delta * 1.5);
-                
+
                 // Slowly pan around the city based on simulation time
                 const angle = Math.atan2(state.camera.position.z - target.z, state.camera.position.x - target.x);
                 const newAngle = angle + (delta * 0.1); // Slow majestic rotation
-                
+
                 // Move orbit gently and slightly elevate
                 state.camera.position.x = target.x + Math.cos(newAngle) * radius;
                 state.camera.position.z = target.z + Math.sin(newAngle) * radius;
                 state.camera.position.y = target.y + radius * 0.5; // Elevate correctly for wide shots
-                
+
                 // Soft sweeping camera height based on the city's scale
                 const targetY = radius * 0.35 + Math.sin(simTime * Math.PI) * (radius * 0.15);
                 state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, Math.max(targetY, 50), delta * 0.5);
@@ -224,7 +225,7 @@ const InstancedCity = React.memo(function InstancedCity() {
                 state.controls.update();
             }
         }
-        
+
         const currentSimTime = store.genesisTime !== undefined ? store.genesisTime : 1.0;
         if (!materialRef.current.uniforms.uGenesisTime) materialRef.current.uniforms.uGenesisTime = { value: 1.0 };
         materialRef.current.uniforms.uGenesisTime.value = currentSimTime;
@@ -243,7 +244,7 @@ const InstancedCity = React.memo(function InstancedCity() {
             // Direct Array Buffer Override directly mapping to the GPU
             const ptr = engineRef.current.get_matrices_ptr()
             const floatArray = new Float32Array(wasmMemoryRef.current.buffer, ptr, count * 16)
-            
+
             meshRef.current.instanceMatrix.array.set(floatArray)
             meshRef.current.instanceMatrix.needsUpdate = true
             invalidate()
@@ -465,7 +466,7 @@ const InstancedCity = React.memo(function InstancedCity() {
         if (e.buttons > 0 || dragActive) return
 
         e.stopPropagation()
-        
+
         // Instant cursor state feedback (smoother feel)
         if (document.body.style.cursor !== 'pointer') {
             document.body.style.cursor = 'pointer'
@@ -478,12 +479,12 @@ const InstancedCity = React.memo(function InstancedCity() {
         if (e.instanceId !== undefined) {
             // ONLY dispatch full React/Zustand state updates if the specific building ID ACTUALLY changed
             setHoveredInstanceId((prev) => {
-                if (prev === e.instanceId) return prev; 
-                
+                if (prev === e.instanceId) return prev;
+
                 // Changed! Dispatch heavy view updates
                 const b = useStore.getState().cityData?.buildings?.[e.instanceId];
                 if (b) setHoveredBuilding(b);
-                
+
                 return e.instanceId;
             });
         }
@@ -491,7 +492,7 @@ const InstancedCity = React.memo(function InstancedCity() {
 
     const handlePointerOut = useCallback((e) => {
         if (e && e.buttons > 0) return;
-        
+
         document.body.style.cursor = 'auto';
 
         // Clear hover states if we aren't currently hovering over anything
@@ -624,9 +625,9 @@ const InstancedCity = React.memo(function InstancedCity() {
             ref={meshRef}
             args={[null, null, count]}
             frustumCulled={false}
-            onPointerMove={handlePointerMove}
-            onPointerOut={handlePointerOut}
-            onClick={handleClick}
+            onPointerMove={isGenesisPlaying ? undefined : handlePointerMove}
+            onPointerOut={isGenesisPlaying ? undefined : handlePointerOut}
+            onClick={isGenesisPlaying ? undefined : handleClick}
             {...(refactoringModeActive ? bindDrag() : {})}
         >
             <boxGeometry args={[1, 1, 1]}>
