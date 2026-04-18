@@ -107,270 +107,105 @@ extend({ EngineThrustMaterial })
 /**
  * FuturisticSpeeder - Sleek cyberpunk exploration vehicle
  * Replaces the ball with a proper futuristic speeder bike/hover vehicle
+/**
+ * Minimalist Future Drone
+ * Ultra-clean, sleek metallic toroid floating around a pure glass/energy orb.
+ * Fits the AAA 2026 CodebaseCity minimalistic aesthetic perfectly.
  */
-function FuturisticSpeeder({ velocity, time }) {
-    const mainBodyRef = useRef()
-    const engineLeftRef = useRef()
-    const engineRightRef = useRef()
-    const shieldRef = useRef()
-    const thrustLeftRef = useRef()
-    const thrustRightRef = useRef()
-    const thrustCenterRef = useRef()
+function MinimalistDrone({ velocity, time }) {
+    const mainRef = useRef()
+    const coreRef = useRef()
     
     const speed = velocity ? velocity.length() : 0
-    const thrustIntensity = Math.min(1.0, speed / 200) * 0.8 + 0.2
-    
+
     useFrame((state) => {
         const t = state.clock.elapsedTime
-        
-        // Animate shield
-        if (shieldRef.current) {
-            shieldRef.current.uniforms.uTime.value = t
+        if (mainRef.current) {
+            // Spin the drone itself slowly based on time and speed
+            mainRef.current.rotation.y = t * 2.0 // Fast spin for stability
+            
+            // Subtle hover dynamics
+            mainRef.current.position.y = Math.sin(t * 3.0) * 0.2
+            
+            // Bank into turns based on velocity
+            const bankAngleX = velocity.z * 0.015
+            const bankAngleZ = -velocity.x * 0.015
+            mainRef.current.rotation.x = THREE.MathUtils.lerp(mainRef.current.rotation.x, bankAngleX, 0.1)
+            mainRef.current.rotation.z = THREE.MathUtils.lerp(mainRef.current.rotation.z, bankAngleZ, 0.1)
         }
         
-        // Animate engine thrusters based on speed
-        if (thrustLeftRef.current) {
-            thrustLeftRef.current.uniforms.uTime.value = t
-            thrustLeftRef.current.uniforms.uIntensity.value = thrustIntensity
-        }
-        if (thrustRightRef.current) {
-            thrustRightRef.current.uniforms.uTime.value = t
-            thrustRightRef.current.uniforms.uIntensity.value = thrustIntensity
-        }
-        if (thrustCenterRef.current) {
-            thrustCenterRef.current.uniforms.uTime.value = t
-            thrustCenterRef.current.uniforms.uIntensity.value = thrustIntensity * 1.2
-        }
-        
-        // Subtle hover bob
-        if (mainBodyRef.current) {
-            mainBodyRef.current.position.y = Math.sin(t * 2.5) * 0.3
+        if (coreRef.current) {
+            // Unlink core spin from hull for complex mechanical feel
+            coreRef.current.rotation.x = t * 1.5
+            coreRef.current.rotation.z = t * 2.1
+            coreRef.current.rotation.y = t * -1.0
         }
     })
-    
+
     return (
-        <group ref={mainBodyRef}>
-            {/* === MAIN HULL === */}
-            {/* Central cockpit - sleek elongated shape */}
-            <mesh position={[0, 0, 0]} rotation={[0, 0, 0]}>
-                <capsuleGeometry args={[1.8, 6, 8, 16]} />
-                <meshPhysicalMaterial
-                    color="#1a1a3e"
-                    emissive="#0a0a1e"
-                    emissiveIntensity={0.3}
-                    metalness={0.95}
-                    roughness={0.1}
-                    clearcoat={1.0}
-                    clearcoatRoughness={0.1}
-                />
-            </mesh>
-            
-            {/* Cockpit canopy - glass dome */}
-            <mesh position={[0, 0.8, 1.5]}>
-                <sphereGeometry args={[1.4, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.5]} />
-                <meshPhysicalMaterial
-                    color="#001122"
-                    metalness={0.2}
-                    roughness={0.0}
+        <group ref={mainRef}>
+            {/* The Core Orb (Pure glass/energy fusion) */}
+            <mesh ref={coreRef} position={[0, 0, 0]}>
+                <sphereGeometry args={[0.7, 32, 32]} />
+                <meshPhysicalMaterial 
+                    color="#ffffff"
+                    emissive="#00ccff"
+                    emissiveIntensity={0.6}
                     transmission={0.9}
-                    thickness={0.5}
-                    ior={1.5}
                     clearcoat={1.0}
+                    roughness={0}
+                    metalness={0.1}
+                    ior={1.6}
                 />
-            </mesh>
-            
-            {/* Cockpit frame - neon accent */}
-            <mesh position={[0, 0.6, 1.5]}>
-                <torusGeometry args={[1.45, 0.08, 8, 32, Math.PI]} />
-                <meshBasicMaterial color="#00ffff" />
-            </mesh>
-            
-            {/* === WINGS / NACELLES === */}
-            {/* Left wing */}
-            <group position={[-2.5, -0.3, 0]}>
-                <mesh rotation={[0, 0, -0.15]}>
-                    <boxGeometry args={[3.5, 0.4, 4]} />
-                    <meshPhysicalMaterial
-                        color="#1a1a3e"
-                        emissive="#0a0a1e"
-                        emissiveIntensity={0.2}
-                        metalness={0.9}
-                        roughness={0.15}
-                    />
-                </mesh>
-                {/* Wing accent stripe */}
-                <mesh position={[0, 0.21, 0]}>
-                    <boxGeometry args={[3.3, 0.02, 0.15]} />
-                    <meshBasicMaterial color="#ff00ff" />
-                </mesh>
-                {/* Wing tip light */}
-                <mesh position={[-1.7, 0, 0]}>
-                    <sphereGeometry args={[0.15, 8, 8]} />
-                    <meshBasicMaterial color="#ff0088" />
-                </mesh>
-                <pointLight position={[-1.7, 0, 0]} color="#ff0088" intensity={4} distance={15} />
-            </group>
-            
-            {/* Right wing */}
-            <group position={[2.5, -0.3, 0]}>
-                <mesh rotation={[0, 0, 0.15]}>
-                    <boxGeometry args={[3.5, 0.4, 4]} />
-                    <meshPhysicalMaterial
-                        color="#1a1a3e"
-                        emissive="#0a0a1e"
-                        emissiveIntensity={0.2}
-                        metalness={0.9}
-                        roughness={0.15}
-                    />
-                </mesh>
-                {/* Wing accent stripe */}
-                <mesh position={[0, 0.21, 0]}>
-                    <boxGeometry args={[3.3, 0.02, 0.15]} />
-                    <meshBasicMaterial color="#ff00ff" />
-                </mesh>
-                {/* Wing tip light */}
-                <mesh position={[1.7, 0, 0]}>
-                    <sphereGeometry args={[0.15, 8, 8]} />
-                    <meshBasicMaterial color="#00ff88" />
-                </mesh>
-                <pointLight position={[1.7, 0, 0]} color="#00ff88" intensity={4} distance={15} />
-            </group>
-            
-            {/* === ENGINES === */}
-            {/* Left engine pod */}
-            <group ref={engineLeftRef} position={[-3.2, -0.3, -1.5]}>
+                
+                {/* Inner plasma core */}
                 <mesh>
-                    <cylinderGeometry args={[0.6, 0.8, 2.5, 12]} />
-                    <meshPhysicalMaterial
-                        color="#1a1a3e"
-                        emissive="#0a0a1e"
-                        emissiveIntensity={0.2}
-                        metalness={0.95}
-                        roughness={0.1}
-                    />
+                    <sphereGeometry args={[0.3, 16, 16]} />
+                    <meshBasicMaterial color="#ffffff" />
                 </mesh>
-                {/* Engine intake ring */}
-                <mesh position={[0, 0.5, 0]}>
-                    <torusGeometry args={[0.65, 0.08, 8, 24]} />
-                    <meshBasicMaterial color="#00ffff" />
-                </mesh>
-                {/* Engine exhaust glow */}
-                <mesh position={[0, -1.4, 0]} rotation={[Math.PI / 2, 0, 0]}>
-                    <circleGeometry args={[0.7, 16]} />
-                    <engineThrustMaterial ref={thrustLeftRef} transparent depthWrite={false} />
-                </mesh>
-                <pointLight position={[0, -1.5, 0]} color="#00ffff" intensity={4} distance={25} />
-            </group>
-            
-            {/* Right engine pod */}
-            <group ref={engineRightRef} position={[3.2, -0.3, -1.5]}>
-                <mesh>
-                    <cylinderGeometry args={[0.6, 0.8, 2.5, 12]} />
-                    <meshPhysicalMaterial
-                        color="#1a1a3e"
-                        emissive="#0a0a1e"
-                        emissiveIntensity={0.2}
-                        metalness={0.95}
-                        roughness={0.1}
-                    />
-                </mesh>
-                {/* Engine intake ring */}
-                <mesh position={[0, 0.5, 0]}>
-                    <torusGeometry args={[0.65, 0.08, 8, 24]} />
-                    <meshBasicMaterial color="#00ffff" />
-                </mesh>
-                {/* Engine exhaust glow */}
-                <mesh position={[0, -1.4, 0]} rotation={[Math.PI / 2, 0, 0]}>
-                    <circleGeometry args={[0.7, 16]} />
-                    <engineThrustMaterial ref={thrustRightRef} transparent depthWrite={false} />
-                </mesh>
-                <pointLight position={[0, -1.5, 0]} color="#00ffff" intensity={4} distance={25} />
-            </group>
-            
-            {/* Center main thruster */}
-            <group position={[0, -0.6, -3.5]}>
-                <mesh rotation={[Math.PI / 2, 0, 0]}>
-                    <coneGeometry args={[1.2, 2, 12]} />
-                    <meshPhysicalMaterial
-                        color="#1a1a3e"
-                        emissive="#0a0a1e"
-                        emissiveIntensity={0.2}
-                        metalness={0.95}
-                        roughness={0.1}
-                    />
-                </mesh>
-                {/* Thruster exhaust */}
-                <mesh position={[0, 0, -1.2]} rotation={[Math.PI / 2, 0, 0]}>
-                    <circleGeometry args={[1.0, 16]} />
-                    <engineThrustMaterial ref={thrustCenterRef} transparent depthWrite={false} />
-                </mesh>
-                <pointLight position={[0, 0, -1.5]} color="#aa00ff" intensity={4} distance={30} />
-            </group>
-            
-            {/* === DETAILS === */}
-            {/* Front nose cone */}
-            <mesh position={[0, 0, 4]} rotation={[Math.PI / 2, 0, 0]}>
-                <coneGeometry args={[1.0, 3, 12]} />
-                <meshPhysicalMaterial
-                    color="#1a1a3e"
-                    emissive="#0a0a1e"
-                    emissiveIntensity={0.3}
-                    metalness={0.95}
-                    roughness={0.1}
+            </mesh>
+            <pointLight distance={40} intensity={4} color="#00ccff" />
+
+            {/* The sleek minimalistic metallic Toroid Hull */}
+            <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+                <torusGeometry args={[1.4, 0.12, 32, 128]} />
+                <meshPhysicalMaterial 
+                    color="#020203"
+                    metalness={1.0}
+                    roughness={0.05}
+                    clearcoat={1.0}
+                    envMapIntensity={2.0}
                 />
             </mesh>
             
-            {/* Nose light */}
-            <mesh position={[0, 0, 5.3]}>
-                <sphereGeometry args={[0.2, 8, 8]} />
-                <meshBasicMaterial color="#ffffff" />
-            </mesh>
-            <spotLight 
-                position={[0, 0, 5.5]} 
-                target-position={[0, -5, 15]}
-                color="#ffffff" 
-                intensity={8} 
-                distance={100}
-                angle={0.4}
-                penumbra={0.5}
-            />
-            
-            {/* Undercarriage details */}
-            <mesh position={[0, -1.0, 0]}>
-                <boxGeometry args={[1.5, 0.3, 5]} />
-                <meshPhysicalMaterial
-                    color="#1a1a3e"
-                    emissive="#0a0a1e"
-                    emissiveIntensity={0.2}
-                    metalness={0.9}
-                    roughness={0.2}
-                />
+            {/* Inner glowing magnetic accelerator ring */}
+            <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+                <torusGeometry args={[1.25, 0.02, 16, 128]} />
+                <meshBasicMaterial color="#00ffcc" />
             </mesh>
             
-            {/* Cyan underglow */}
-            <pointLight position={[0, -2, 0]} color="#00ffff" intensity={3} distance={40} />
-            
-            {/* Hover pads (4 corners) */}
-            {[[-1.8, -1.2, 1.5], [1.8, -1.2, 1.5], [-1.8, -1.2, -1.5], [1.8, -1.2, -1.5]].map((pos, i) => (
-                <group key={i} position={pos}>
-                    <mesh>
-                        <cylinderGeometry args={[0.4, 0.5, 0.2, 12]} />
-                        <meshBasicMaterial color="#00aaff" transparent opacity={0.8} />
-                    </mesh>
-                    <pointLight color="#00aaff" intensity={1.5} distance={10} />
-                </group>
-            ))}
-            
-            {/* Energy shield (subtle) */}
-            <mesh position={[0, 0, 0]} scale={[2.8, 1.5, 3.5]}>
-                <sphereGeometry args={[2, 24, 16]} />
-                <holoShieldMaterial 
-                    ref={shieldRef} 
-                    transparent 
-                    depthWrite={false}
-                    side={THREE.DoubleSide}
-                />
+            {/* Outer edge neon slit light */}
+            <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+                <torusGeometry args={[1.52, 0.01, 16, 128]} />
+                <meshBasicMaterial color="#ff00cc" />
             </mesh>
+            
+            {/* 3 ultra-clean sleek stabilization fins/prongs pointing inwards */}
+            {[0, 1, 2].map(i => {
+                const angle = (i * Math.PI * 2) / 3
+                return (
+                    <group key={i} rotation={[0, angle, 0]}>
+                        <mesh position={[1.0, 0, 0]}>
+                            <boxGeometry args={[0.6, 0.04, 0.08]} />
+                            <meshPhysicalMaterial color="#050505" metalness={1.0} roughness={0.0} />
+                        </mesh>
+                        <mesh position={[0.7, 0, 0]}>
+                            <sphereGeometry args={[0.06, 16, 16]} />
+                            <meshBasicMaterial color="#ff00ff" />
+                        </mesh>
+                    </group>
+                )
+            })}
         </group>
     )
 }
@@ -666,7 +501,7 @@ export default function UfoAvatar() {
             />
             
             <group ref={vehicleGroupRef} scale={[1.5, 1.5, 1.5]}>
-                <FuturisticSpeeder velocity={velocity.current} />
+                <MinimalistDrone velocity={velocity.current} />
             </group>
         </group>
     )

@@ -21,6 +21,17 @@ export default function UfoOverlay() {
         return () => window.removeEventListener('keydown', onFirstKey)
     }, [ufoIntroOpen, closeUfoIntro])
 
+    // Global exit via Escape key
+    useEffect(() => {
+        const onEsc = (e) => {
+            if (e.key === 'Escape') {
+                setUfoMode(false)
+            }
+        }
+        window.addEventListener('keydown', onEsc)
+        return () => window.removeEventListener('keydown', onEsc)
+    }, [setUfoMode])
+
     if (!ufoMode) return null
 
     return (
@@ -112,12 +123,23 @@ export default function UfoOverlay() {
                     <button
                         onClick={() => setUfoMode(false)}
                         style={{
-                            background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.7)',
-                            fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px',
-                            padding: 0
+                            background: 'rgba(255, 50, 100, 0.15)', 
+                            border: '1px solid rgba(255, 50, 100, 0.4)', 
+                            color: '#ffaaaa',
+                            fontSize: '12px', 
+                            cursor: 'pointer', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            gap: '6px',
+                            padding: '4px 12px',
+                            borderRadius: '12px',
+                            fontWeight: 600,
+                            letterSpacing: '0.5px'
                         }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255, 50, 100, 0.3)' }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255, 50, 100, 0.15)' }}
                     >
-                        <X size={14} /> Exit
+                        <X size={14} /> EXIT <span style={{ opacity: 0.5, marginLeft: '4px', fontSize: '10px' }}>(ESC)</span>
                     </button>
                 </div>
             )}
