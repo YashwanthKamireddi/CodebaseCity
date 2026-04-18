@@ -4,7 +4,6 @@ import { useFrame, extend, useThree } from '@react-three/fiber'
 import { useDrag } from '@use-gesture/react'
 import init, { PhysicsEngine } from 'wasm-core'
 import useStore from '../../../store/useStore'
-import { PulseMaterial } from '../shaders/PulseMaterial'
 import { getBuildingColor, getBuildingType } from '../../../utils/colorUtils'
 
 // Reusable temp objects - avoid allocations in hot paths
@@ -56,8 +55,9 @@ const InstancedCity = React.memo(function InstancedCity() {
     const applyRefactoringDrift = useStore(s => s.applyRefactoringDrift)
     const refactoringDrifts = useStore(s => s.refactoringDrifts)
     const selectedLandmark = useStore(s => s.selectedLandmark)
-    const meshRef = useRef()
-    const materialRef = useRef()
+    const backendRef = useRef()
+    const frontendRef = useRef()
+    const configRef = useRef()
     const { camera, raycaster, pointer, invalidate } = useThree()
 
     // Drag State
@@ -67,7 +67,7 @@ const InstancedCity = React.memo(function InstancedCity() {
 
     // Expose Ref
     useLayoutEffect(() => {
-        if (meshRef.current) cityMeshRef.current = meshRef.current
+        if (frontendRef.current) cityMeshRef.current = frontendRef.current
     })
 
     // Derived Data
@@ -131,57 +131,60 @@ const InstancedCity = React.memo(function InstancedCity() {
     // Inject high-performance customized raycaster for Three.js
     // Defaults evaluate 80,000 O(N) matrices per mouse move. This chunked version is near O(1).
     useLayoutEffect(() => {
-        if (!meshRef.current || count === 0 || chunkData.length === 0) return
+        if (!backendRef.current || count === 0 || chunkData.length === 0) return
 
-        // Cache instances OUTSIDE the raycast function to avoid severe GC stutter on mousemove
-        const _mesh = new THREE.Mesh(meshRef.current.geometry, meshRef.current.material)
-        const _instanceLocalMatrix = new THREE.Matrix4()
-        const _instanceWorldMatrix = new THREE.Matrix4()
-        const _instanceIntersects = []
-        const _sphere = new THREE.Sphere()
+        // Helper to update custom raycaster across multiple meshes
+        const attachCustomRaycaster = (mRef) => {
+            const _mesh = new THREE.Mesh(mRef.current.geometry, mRef.current.material)
+            const _instanceLocalMatrix = new THREE.Matrix4()
+            const _instanceWorldMatrix = new THREE.Matrix4()
+            const _instanceIntersects = []
+            const _sphere = new THREE.Sphere()
 
-        meshRef.current.raycast = function (raycaster, intersects) {
-            const matrixWorld = this.matrixWorld
+            mRef.current.raycast = function (raycaster, intersects) {
+                const matrixWorld = this.matrixWorld
+                _mesh.geometry = this.geometry
+                _mesh.material = this.material
 
-            // Re-sync material/geometry just in case it mutated
-            _mesh.geometry = this.geometry
-            _mesh.material = this.material
+                if (this.boundingSphere === null) this.computeBoundingSphere()
 
-            if (this.boundingSphere === null) this.computeBoundingSphere()
+                for (let c = 0; c < chunkData.length; c++) {
+                    const chunk = chunkData[c]
+                    _sphere.copy(chunk.sphere).applyMatrix4(matrixWorld)
 
+                    if (raycaster.ray.intersectsSphere(_sphere) === false) continue
 
-            // 2. Loop Chunks (1000 buildings each)
-            for (let c = 0; c < chunkData.length; c++) {
-                const chunk = chunkData[c]
-                _sphere.copy(chunk.sphere).applyMatrix4(matrixWorld)
+                    for (let instanceId = chunk.start; instanceId < chunk.end; instanceId++) {
+                        this.getMatrixAt(instanceId, _instanceLocalMatrix)
 
-                // Fast prune: skip 1000 buildings if chunk sphere missed! 🔥
-                if (raycaster.ray.intersectsSphere(_sphere) === false) continue
+                        // 🔴 AAA Scale-Zero Optimization Pruning! 🔴
+                        if (_instanceLocalMatrix.elements[0] == 0.0) continue;
 
-                // 3. Fallback to Three.js exact raycasting for only the visible chunk bounds
-                for (let instanceId = chunk.start; instanceId < chunk.end; instanceId++) {
-                    this.getMatrixAt(instanceId, _instanceLocalMatrix)
-                    _instanceWorldMatrix.multiplyMatrices(matrixWorld, _instanceLocalMatrix)
-                    _mesh.matrixWorld = _instanceWorldMatrix
-                    _mesh.raycast(raycaster, _instanceIntersects)
+                        _instanceWorldMatrix.multiplyMatrices(matrixWorld, _instanceLocalMatrix)
+                        _mesh.matrixWorld = _instanceWorldMatrix
+                        _mesh.raycast(raycaster, _instanceIntersects)
 
-                    for (let i = 0, l = _instanceIntersects.length; i < l; i++) {
-                        const intersect = _instanceIntersects[i]
-                        intersect.instanceId = instanceId
-                        intersect.object = this
-                        intersects.push(intersect)
+                        for (let i = 0, l = _instanceIntersects.length; i < l; i++) {
+                            const intersect = _instanceIntersects[i]
+                            intersect.instanceId = instanceId
+                            intersect.object = this
+                            intersects.push(intersect)
+                        }
+                        _instanceIntersects.length = 0
                     }
-                    _instanceIntersects.length = 0
                 }
             }
         }
+        
+        attachCustomRaycaster(backendRef)
+        attachCustomRaycaster(frontendRef)
+        attachCustomRaycaster(configRef)
+
     }, [chunkData, count])
 
     // Smooth time-based animation — drives shader pulse (throttled 30fps)
     const lastTimeUpdate = useRef(0)
     useFrame((state, delta) => {
-        if (!materialRef.current) return
-
         // 1. Genesis Time Animation (60fps flawless directly from store to shader)
         const store = useStore.getState();
         if (store.isGenesisPlaying) {
@@ -199,8 +202,8 @@ const InstancedCity = React.memo(function InstancedCity() {
 
                 // Perfectly frame the true world boundaries dynamically
                 let cityRadius = 250;
-                if (meshRef.current && meshRef.current.geometry.boundingSphere) {
-                    cityRadius = meshRef.current.geometry.boundingSphere.radius;
+                if (backendRef.current && backendRef.current.geometry.boundingSphere) {
+                    cityRadius = backendRef.current.geometry.boundingSphere.radius;
                 }
                 
                 // Allow the camera to easily zoom out for massive repos (Canvas far clipping is now fixed)
@@ -234,29 +237,8 @@ const InstancedCity = React.memo(function InstancedCity() {
             }
         }
 
-        const currentSimTime = store.genesisTime !== undefined ? store.genesisTime : 1.0;
-        if (!materialRef.current.uniforms.uGenesisTime) materialRef.current.uniforms.uGenesisTime = { value: 1.0 };
-        materialRef.current.uniforms.uGenesisTime.value = currentSimTime;
-
-        // 2. Churn flame flickering (30fps throttled)
-        const t = state.clock.elapsedTime
-        if (t - lastTimeUpdate.current > 0.033) {
-            lastTimeUpdate.current = t
-            materialRef.current.uniforms.uTime.value = t
-        }
-
-        // 3. ZERO-COPY RUST PHYSICS TICK (120FPS MAX)
-        if (engineRef.current && wasmMemoryRef.current && meshRef.current && wasmEngine) {
-            engineRef.current.tick(delta, t)
-
-            // Direct Array Buffer Override directly mapping to the GPU
-            const ptr = engineRef.current.get_matrices_ptr()
-            const floatArray = new Float32Array(wasmMemoryRef.current.buffer, ptr, count * 16)
-
-            meshRef.current.instanceMatrix.array.set(floatArray)
-            meshRef.current.instanceMatrix.needsUpdate = true
-            invalidate()
-        }
+        // 3. WASM Physics engine removed to avoid slow random drop-in animations.
+        // Matrices are now generated instantly exactly 1 time on layout effect.
     })
 
     const [hoveredInstanceId, setHoveredInstanceId] = useState(null)
@@ -266,49 +248,66 @@ const InstancedCity = React.memo(function InstancedCity() {
 
 
     // ═══════════════════════════════════════════════════════════════
-    // WASM HIGH-PERFORMANCE LAYOUT PIPELINE
+    // MULTI-GEOMETRY INSTANT JS LAYOUT PIPELINE
     // ═══════════════════════════════════════════════════════════════
     useLayoutEffect(() => {
-        if (!wasmEngine || !meshRef.current || count === 0) return
-
-        if (engineRef.current) {
-            engineRef.current.free()
-        }
-
-        const engine = new PhysicsEngine(count)
-        engineRef.current = engine
+        if (!backendRef.current || count === 0) return
 
         let maxRadiusSq = 0
+        const matrix = new THREE.Matrix4()
+        const position = new THREE.Vector3()
+        const scale = new THREE.Vector3()
+        const rotation = new THREE.Euler()
+        const quaternion = new THREE.Quaternion()
 
-        // 1. Send all numeric blueprint dimensions over to Rust
+        // 1. Calculate static positions precisely and filter to the 3 Architecture Types
         for (let i = 0; i < count; i++) {
             const b = buildings[i]
             const { x, z } = b.position
-            const width = b.dimensions?.width || 8
-            const depth = b.dimensions?.depth || 8
+            const width = (b.dimensions?.width || 8) * 1.5
+            const depth = (b.dimensions?.depth || 8) * 1.5
             const targetHeight = (b.dimensions?.height || 8) * 3.0
             const y = targetHeight / 2
 
-            // Store pure target positions into WASM so it scales up natively
-            engine.set_building(i, x, y, z, width, targetHeight, depth)
+            position.set(x, y, z)
+            scale.set(width, targetHeight, depth)
+            quaternion.setFromEuler(rotation) // 0 rotation
+
+            matrix.compose(position, quaternion, scale)
+            
+            // To maintain indices for accurate raycasting without breaking Hover/Click:
+            // All 3 instancedMeshes get the full array, but only the corresponding language gets scale > 0.
+            const lang = b.language || 'unknown'
+            const isBackend = ['go', 'rust', 'java', 'python', 'c', 'cpp', 'php', 'ruby', 'sql'].includes(lang)
+            const isFrontend = ['javascript', 'typescript', 'vue', 'svelte', 'html', 'css', 'scss', 'less'].includes(lang)
+            
+            if (isBackend) {
+                backendRef.current.setMatrixAt(i, matrix)
+                matrix.makeScale(0, 0, 0); frontendRef.current.setMatrixAt(i, matrix); configRef.current.setMatrixAt(i, matrix);
+            } else if (isFrontend) {
+                frontendRef.current.setMatrixAt(i, matrix)
+                matrix.makeScale(0, 0, 0); backendRef.current.setMatrixAt(i, matrix); configRef.current.setMatrixAt(i, matrix);
+            } else {
+                configRef.current.setMatrixAt(i, matrix)
+                matrix.makeScale(0, 0, 0); backendRef.current.setMatrixAt(i, matrix); frontendRef.current.setMatrixAt(i, matrix);
+            }
 
             const distSq = x * x + z * z
             if (distSq > maxRadiusSq) maxRadiusSq = distSq
         }
 
-        // 2. Setup Three.js bounding sphere manually
-        if (meshRef.current.geometry) {
-            meshRef.current.geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), Math.sqrt(maxRadiusSq) + 100)
-        }
+        const notifyUpdate = (ref) => { ref.current.instanceMatrix.needsUpdate = true; }
+        notifyUpdate(backendRef); notifyUpdate(frontendRef); notifyUpdate(configRef);
 
-        // Cleanup memory pointer mapping on unmount
-        return () => {
-            if (engineRef.current) {
-                engineRef.current.free()
-                engineRef.current = null
-            }
-        }
-    }, [buildings, count, wasmEngine])
+        // 2. Setup Three.js bounding sphere manually
+        const rad = Math.sqrt(maxRadiusSq) + 100
+        const sphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), rad)
+        backendRef.current.geometry.boundingSphere = sphere
+        frontendRef.current.geometry.boundingSphere = sphere
+        configRef.current.geometry.boundingSphere = sphere
+
+        invalidate()
+    }, [buildings, count, invalidate])
 
     // Pre-compute issue sets once for O(1) lookup instead of O(n)
     const issueIndex = useMemo(() => {
@@ -354,38 +353,24 @@ const InstancedCity = React.memo(function InstancedCity() {
     }, [buildings, colorMode, highlightedIssue, highlightedPathsSet, issueIndex, selectedLandmark])
 
     // Full color rebuild when base visual state changes
-    // Single-pass with color cache: ~30 unique hex values per mode are parsed once,
-    // then written directly to the Float32Array — one GPU upload instead of 9 chunked ones.
     const colorRGBCache = useRef(new Map())
     useLayoutEffect(() => {
-        if (!meshRef.current || count === 0) return
-        const mesh = meshRef.current
-
-        // Ensure instanceColor buffer exists (Three.js lazy-creates it on first setColorAt)
-        if (!mesh.instanceColor) {
-            mesh.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(count * 3), 3)
-        }
-
-        const colorArray = mesh.instanceColor.array
-        const rgbCache = colorRGBCache.current
-        rgbCache.clear()
-
+        if (!backendRef.current || count === 0) return
+        
         for (let i = 0; i < count; i++) {
             const hex = computeColor(i, hoveredInstanceId, selectedBuildingId)
             if (!hex) continue
-            let rgb = rgbCache.get(hex)
-            if (!rgb) {
-                tempColor.set(hex)
-                rgb = [tempColor.r, tempColor.g, tempColor.b]
-                rgbCache.set(hex, rgb)
-            }
-            const idx = i * 3
-            colorArray[idx] = rgb[0]
-            colorArray[idx + 1] = rgb[1]
-            colorArray[idx + 2] = rgb[2]
+            tempColor.set(hex)
+            
+            // Native highly-optimized Three.js property injection
+            backendRef.current.setColorAt(i, tempColor)
+            frontendRef.current.setColorAt(i, tempColor)
+            configRef.current.setColorAt(i, tempColor)
         }
 
-        mesh.instanceColor.needsUpdate = true
+        backendRef.current.instanceColor.needsUpdate = true
+        frontendRef.current.instanceColor.needsUpdate = true
+        configRef.current.instanceColor.needsUpdate = true
         invalidate()
 
         prevHoveredRef.current = hoveredInstanceId
@@ -397,41 +382,31 @@ const InstancedCity = React.memo(function InstancedCity() {
     // recolor because the "isUnrelated" dimming flag applies to every building.
     // Single-pass with cache for toggle case — one GPU upload, no stutter.
     useLayoutEffect(() => {
-        if (!meshRef.current || count === 0) return
+        if (!backendRef.current || count === 0) return
         const oldHover = prevHoveredRef.current
         const oldSelect = prevSelectedRef.current
         if (oldHover === hoveredInstanceId && oldSelect === selectedBuildingId) return
 
-        // Detect selection toggle (null → selected OR selected → null)
         const selectionToggled = !oldSelect !== !selectedBuildingId
 
         if (selectionToggled) {
-            // All buildings need recolor (isUnrelated flag flips for every building)
-            // Use cached RGB parse — same as full rebuild path
-            if (!meshRef.current.instanceColor) return
-            const colorArray = meshRef.current.instanceColor.array
-            const rgbCache = colorRGBCache.current
-            rgbCache.clear()
+            if (!backendRef.current.instanceColor) return
 
             for (let i = 0; i < count; i++) {
                 const hex = computeColor(i, hoveredInstanceId, selectedBuildingId)
                 if (!hex) continue
-                let rgb = rgbCache.get(hex)
-                if (!rgb) {
-                    tempColor.set(hex)
-                    rgb = [tempColor.r, tempColor.g, tempColor.b]
-                    rgbCache.set(hex, rgb)
-                }
-                const idx = i * 3
-                colorArray[idx] = rgb[0]
-                colorArray[idx + 1] = rgb[1]
-                colorArray[idx + 2] = rgb[2]
+                tempColor.set(hex)
+
+                backendRef.current.setColorAt(i, tempColor)
+                frontendRef.current.setColorAt(i, tempColor)
+                configRef.current.setColorAt(i, tempColor)
             }
 
-            meshRef.current.instanceColor.needsUpdate = true
+            backendRef.current.instanceColor.needsUpdate = true
+            frontendRef.current.instanceColor.needsUpdate = true
+            configRef.current.instanceColor.needsUpdate = true
             invalidate()
         } else {
-            // Non-toggle: only 1-4 dirty instances (hover change or select swap)
             const dirty = new Set()
             if (oldHover !== null && oldHover !== undefined) dirty.add(oldHover)
             if (hoveredInstanceId !== null && hoveredInstanceId !== undefined) dirty.add(hoveredInstanceId)
@@ -448,13 +423,17 @@ const InstancedCity = React.memo(function InstancedCity() {
                     const hex = computeColor(i, hoveredInstanceId, selectedBuildingId)
                     if (hex) {
                         tempColor.set(hex)
-                        meshRef.current.setColorAt(i, tempColor)
+                        backendRef.current.setColorAt(i, tempColor)
+                        frontendRef.current.setColorAt(i, tempColor)
+                        configRef.current.setColorAt(i, tempColor)
                     }
                 }
             }
 
-            if (dirty.size > 0 && meshRef.current.instanceColor) {
-                meshRef.current.instanceColor.needsUpdate = true
+            if (dirty.size > 0 && backendRef.current.instanceColor) {
+                backendRef.current.instanceColor.needsUpdate = true
+                frontendRef.current.instanceColor.needsUpdate = true
+                configRef.current.instanceColor.needsUpdate = true
                 invalidate()
             }
         }
@@ -555,11 +534,18 @@ const InstancedCity = React.memo(function InstancedCity() {
                 const depth = b.dimensions?.depth || 8
                 const height = (b.dimensions?.height || 8) * 3.0
 
+                const targetMesh = (() => {
+                    const lang = b.language || 'unknown'
+                    if (['go', 'rust', 'java', 'python', 'c', 'cpp', 'php', 'ruby', 'sql'].includes(lang)) return backendRef.current
+                    if (['javascript', 'typescript', 'vue', 'svelte', 'html', 'css', 'scss', 'less'].includes(lang)) return frontendRef.current
+                    return configRef.current
+                })()
+
                 tempObject.position.copy(intersectPoint)
                 tempObject.scale.set(width, height, depth)
                 tempObject.updateMatrix()
-                meshRef.current.setMatrixAt(draggedInstanceId, tempObject.matrix)
-                meshRef.current.instanceMatrix.needsUpdate = true
+                targetMesh.setMatrixAt(draggedInstanceId, tempObject.matrix)
+                targetMesh.instanceMatrix.needsUpdate = true
             }
         }
 
@@ -578,7 +564,14 @@ const InstancedCity = React.memo(function InstancedCity() {
             setDraggedInstanceId(null)
 
             // Trigger reactivity to snap back
-            meshRef.current.instanceMatrix.needsUpdate = true
+            const b = buildings[draggedInstanceId]
+            const targetMesh = (() => {
+                const lang = b.language || 'unknown'
+                if (['go', 'rust', 'java', 'python', 'c', 'cpp', 'php', 'ruby', 'sql'].includes(lang)) return backendRef.current
+                if (['javascript', 'typescript', 'vue', 'svelte', 'html', 'css', 'scss', 'less'].includes(lang)) return frontendRef.current
+                return configRef.current
+            })()
+            targetMesh.instanceMatrix.needsUpdate = true
         }
     }, { filterTaps: true })
 
@@ -652,61 +645,133 @@ const InstancedCity = React.memo(function InstancedCity() {
     }, [selectedBuilding, buildings])
 
     // Update uniforms each frame for GPU selection dimming
-    useFrame(() => {
-        if (materialRef.current) {
-            materialRef.current.uSelectedId = selectedInstanceIdx
-            materialRef.current.uHoveredId = hoveredInstanceId ?? -1
-        }
-    })
+    useFrame(() => {})
 
-    if (count === 0) return null
+    // AAA 'Living Windows' Shader injected into physical materials
+    const sharedMaterial = (
+        <meshPhysicalMaterial
+            color="#ffffff" // Clean canvas for instance colors
+            metalness={0.3} // Lower metalness so ambient/directional lights illuminate it, preventing black mirror effect
+            roughness={0.3}
+            clearcoat={1.0}
+            onBeforeCompile={(shader) => {
+                shader.vertexShader = shader.vertexShader.replace(
+                    '#include <common>',
+                    `#include <common>
+                    varying vec3 vInstPosition;
+                    varying vec3 vInstScale;
+                    varying vec3 vObjNormal;
+                    varying vec3 vBuildingIdSeed;`
+                );
+                shader.vertexShader = shader.vertexShader.replace(
+                    '#include <begin_vertex>',
+                    `#include <begin_vertex>
+                    vInstPosition = position;
+                    vObjNormal = normal; // Local geometry normal prevents camera rotation bugs
+                    vBuildingIdSeed = instanceMatrix[3].xyz; // Unique per building location
+                    vInstScale = vec3(
+                        length(instanceMatrix[0].xyz),
+                        length(instanceMatrix[1].xyz),
+                        length(instanceMatrix[2].xyz)
+                    );` 
+                );
+                shader.fragmentShader = shader.fragmentShader.replace(
+                    '#include <common>',
+                    `#include <common>
+                    varying vec3 vInstPosition;
+                    varying vec3 vInstScale;
+                    varying vec3 vObjNormal;
+                    varying vec3 vBuildingIdSeed;`
+                );
+                shader.fragmentShader = shader.fragmentShader.replace(
+                    '#include <emissivemap_fragment>',
+                    `#include <emissivemap_fragment>
+                    // Procedural Living Windows Engine
+                    bool isSide = abs(vObjNormal.y) < 0.5;
+                    if (isSide) {
+                         vec3 scaledPos = vInstPosition * vInstScale;
+                         float winSizeF = 6.0; 
+                         float gridX = fract(scaledPos.x / winSizeF);
+                         float gridY = fract(scaledPos.y / winSizeF);
+                         float gridZ = fract(scaledPos.z / winSizeF);
+                         
+                         float winEdge = 0.65;
+                         bool hasWinX = gridX < winEdge;
+                         bool hasWinY = gridY < winEdge;
+                         bool hasWinZ = gridZ < winEdge;
+                         
+                         if ((hasWinX || hasWinZ) && hasWinY) {
+                            float rnd = fract(sin(dot(floor(scaledPos / winSizeF) + vBuildingIdSeed, vec3(12.9898, 78.233, 37.719))) * 43758.5453);
+                            if (rnd > 0.7) {
+                                 totalEmissiveRadiance += diffuseColor.rgb * 4.5; 
+                            } else if (rnd > 0.4) {
+                                 totalEmissiveRadiance += diffuseColor.rgb * 0.8;
+                            } else {
+                                 diffuseColor.rgb *= 0.1;
+                            }
+                         } else {
+                             // Preserve the base architectural color from the instance
+                             diffuseColor.rgb *= 0.7; 
+                             roughnessFactor = 0.8;
+                             totalEmissiveRadiance += diffuseColor.rgb * 0.2; // Soft baseline side glow
+                        }
+                    } else {
+                        vec2 centerDist = abs(vInstPosition.xz) * 2.0; 
+                        if (max(centerDist.x, centerDist.y) > 0.85) {
+                            totalEmissiveRadiance += diffuseColor.rgb * 1.8; 
+                        }
+                        totalEmissiveRadiance += diffuseColor.rgb * 0.15; // Soft baseline roof glow
+                    }
+                    `
+                );
+            }}
+        />
+    )
 
     return (
-        <instancedMesh
-            key={count}
-            ref={meshRef}
-            args={[null, null, count]}
-            frustumCulled={false}
-            onPointerMove={isGenesisPlaying ? undefined : handlePointerMove}
-            onPointerOut={isGenesisPlaying ? undefined : handlePointerOut}
-            onClick={isGenesisPlaying ? undefined : handleClick}
-            {...(refactoringModeActive ? bindDrag() : {})}
-        >
-            <boxGeometry args={[1, 1, 1]}>
-                {churnAttribute && (
-                    <instancedBufferAttribute
-                        attach="attributes-aChurn"
-                        args={[churnAttribute.array, 1]}
-                    />
-                )}
-                {genesisAttribute && (
-                    <instancedBufferAttribute
-                        attach="attributes-aGenesisStart"
-                        args={[genesisAttribute.array, 1]}
-                    />
-                )}
-                {instanceIdAttribute && (
-                    <instancedBufferAttribute
-                        attach="attributes-aInstanceId"
-                        args={[instanceIdAttribute.array, 1]}
-                    />
-                )}
-                {buildingTypeAttribute && (
-                    <instancedBufferAttribute
-                        attach="attributes-aBuildingType"
-                        args={[buildingTypeAttribute.array, 1]}
-                    />
-                )}
-            </boxGeometry>
+        <group>
+            {/* 1. BACKEND MEGA-COLUMNS (Hexagons) */}
+            <instancedMesh
+                ref={backendRef}
+                args={[null, null, count]}
+                frustumCulled={false}
+                onPointerMove={isGenesisPlaying ? undefined : handlePointerMove}
+                onPointerOut={isGenesisPlaying ? undefined : handlePointerOut}
+                onClick={isGenesisPlaying ? undefined : handleClick}
+            >
+                {/* 6-sided brutalist cylinders */}
+                <cylinderGeometry args={[0.5, 0.5, 1, 6]} />
+                {sharedMaterial}
+            </instancedMesh>
 
-            {/* The Living Material */}
-            <pulseMaterial
-                ref={materialRef}
-                transparent={false}
-                depthWrite={true}
-                vertexColors={true}
-            />
-        </instancedMesh>
+            {/* 2. FRONTEND SPIRES (Sleek aerodynamic architecture) */}
+            <instancedMesh
+                ref={frontendRef}
+                args={[null, null, count]}
+                frustumCulled={false}
+                onPointerMove={isGenesisPlaying ? undefined : handlePointerMove}
+                onPointerOut={isGenesisPlaying ? undefined : handlePointerOut}
+                onClick={isGenesisPlaying ? undefined : handleClick}
+            >
+                {/* 4-sided beveled pyramids */}
+                <boxGeometry args={[1, 1, 1]} />
+                {sharedMaterial}
+            </instancedMesh>
+
+            {/* 3. CONFIG OBELISKS (Dense logic) */}
+            <instancedMesh
+                ref={configRef}
+                args={[null, null, count]}
+                frustumCulled={false}
+                onPointerMove={isGenesisPlaying ? undefined : handlePointerMove}
+                onPointerOut={isGenesisPlaying ? undefined : handlePointerOut}
+                onClick={isGenesisPlaying ? undefined : handleClick}
+            >
+                {/* Slender diamond or short boxes */}
+                <cylinderGeometry args={[0.5, 0.7, 1, 4]} />
+                {sharedMaterial}
+            </instancedMesh>
+        </group>
     )
 })
 

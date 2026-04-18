@@ -16,11 +16,14 @@ import StreetLamps from './StreetLamps'
 import DataStreams from './DataStreams'
 import AtmosphericParticles from './AtmosphericParticles'
 import CitySpawnBurst from './CitySpawnBurst'
+import { Stars } from '@react-three/drei'
 
-import EnergyShieldDome from './EnergyShieldDome'
 import UfoAvatar from './UfoAvatar'
 import BuildingCrowns from './BuildingCrowns'
 import BuildingShadows from './BuildingShadows'
+import { extend } from '@react-three/fiber'
+import { Sparkles, Sky } from '@react-three/drei'
+
 
 /**
  * AnimationPump — In frameloop="demand" mode, periodically invalidates
@@ -92,8 +95,10 @@ const CityScene = React.memo(function CityScene() {
             <AnimationPump />
             <ScreenshotHandler />
 
-            {/* All materials are MeshBasicMaterial or custom ShaderMaterial — no lit materials exist.
-                Lights removed: they had zero visual effect but cost renderer overhead. */}
+            {/* Cinematic Sunset Lighting for AAA Obsidian Glass reflections */}
+            <ambientLight intensity={0.8} color="#663377" />
+            <directionalLight position={[0, 40, -100]} intensity={3.5} color="#ff9955" castShadow />
+            <directionalLight position={[100, -20, 100]} intensity={1.5} color="#ff11bb" />
 
             <group onPointerMissed={clearSelection}>
                 <InstancedCity />
@@ -116,12 +121,22 @@ const CityScene = React.memo(function CityScene() {
                 {/* ── Gamified Interactive Avatar ── */}
                 <UfoAvatar />
 
-                {/* ── EnergyShieldDome ── */}
-                <EnergyShieldDome />
+                {/* ── World-Class Sunset Skyline ── */}
+                <Sky 
+                    distance={400000} 
+                    sunPosition={[0, -0.01, -1]} // A massive sun sinking just below the horizon
+                    mieCoefficient={0.025} // Large, soft glowing atmospheric halo
+                    mieDirectionalG={0.9} // Blindingly bright near the horizon center
+                    rayleigh={6} // High scattering for deep, rich orange/magenta hues
+                    turbidity={15} // Thick, hazy cyberpunk smog for smooth gradient
+                />
+                
+                {/* Subtle early evening stars peaking through the upper sky */}
+                <Stars radius={400} depth={150} count={3000} factor={4} saturation={1} fade speed={1} />
             </group>
 
-            <fog attach="fog" args={['#0a0e1a', Math.max(cityRadius * 2, 2000), Math.max(cityRadius * 8, 40000)]} />
-            <color attach="background" args={['#070b14']} />
+            {/* A warm, rich sunset violet/magenta volumetric fog to blend the buildings into the deep sky horizon */}
+            <fog attach="fog" args={['#2f0a2a', Math.max(cityRadius * 2, 2000), Math.max(cityRadius * 8, 40000)]} />
             <CameraController />
         </group>
     )

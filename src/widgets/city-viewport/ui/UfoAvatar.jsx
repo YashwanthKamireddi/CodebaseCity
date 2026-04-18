@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useMemo } from "react"
 import { useFrame, useThree, extend } from "@react-three/fiber"
 import * as THREE from "three"
-import { Trail, Sparkles } from "@react-three/drei"
+import { Sparkles } from "@react-three/drei"
 import { shaderMaterial } from "@react-three/drei"
 import useStore from "../../../store/useStore"
 
@@ -93,8 +93,8 @@ const EngineThrustMaterial = shaderMaterial(
             float flicker = sin(uTime * 30.0 + vPosition.x * 10.0) * 0.15 + 0.85;
             float pulse = sin(uTime * 5.0) * 0.1 + 0.9;
             vec3 innerColor = vec3(1.0, 1.0, 1.0);
-            vec3 midColor = vec3(0.0, 1.0, 1.0);
-            vec3 outerColor = vec3(0.8, 0.0, 1.0);
+            vec3 midColor = vec3(1.0, 0.0, 1.0); // Magenta
+            vec3 outerColor = vec3(1.0, 0.1, 0.5); // Neon Pink
             vec3 color = mix(outerColor, midColor, smoothstep(0.5, 0.2, dist));
             color = mix(color, innerColor, smoothstep(0.2, 0.0, dist));
             float alpha = core * flicker * pulse * uIntensity;
@@ -376,12 +376,11 @@ function FuturisticSpeeder({ velocity, time }) {
 }
 
 /**
- * Classic Flying Saucer - vibrant, clear, and perfectly cyberpunk
+ * Classic Cyberpunk UFO - Gorgeous glass dome, metal saucer, and neon thrusters.
  */
-function FlyingSaucer({ velocity, time }) {
+function ClassicUfo({ velocity, time }) {
     const mainRef = useRef()
     const engineRef = useRef()
-    const rimRef = useRef()
 
     const speed = velocity ? velocity.length() : 0
     const thrustIntensity = Math.min(1.0, speed / 200) * 0.8 + 0.2
@@ -389,94 +388,86 @@ function FlyingSaucer({ velocity, time }) {
     useFrame((state) => {
         const t = state.clock.elapsedTime
         
-        // Spin the outer ring
-        if (rimRef.current) {
-            rimRef.current.rotation.y = t * 3.0
-        }
-
-        // Pulse the main engine
         if (engineRef.current) {
             engineRef.current.uniforms.uTime.value = t
             engineRef.current.uniforms.uIntensity.value = thrustIntensity
         }
 
-        // Gentle hover
         if (mainRef.current) {
-            mainRef.current.position.y = Math.sin(t * 3.0) * 0.3
+            mainRef.current.position.y = Math.sin(t * 2.0) * 0.5
+            mainRef.current.rotation.y = t * 0.5 // Slow majestic spin
         }
     })
 
     return (
         <group ref={mainRef}>
-            {/* The Main Metallic Disc Area */}
-            <mesh position={[0, -0.2, 0]}>
-                <cylinderGeometry args={[2.5, 3.5, 0.4, 32]} />
-                <meshPhysicalMaterial
-                    color="#202230"
-                    metalness={0.9}
-                    roughness={0.1}
-                    clearcoat={1.0}
-                />
-            </mesh>
-            <mesh position={[0, -0.4, 0]}>
-                <cylinderGeometry args={[3.5, 2.0, 0.4, 32]} />
-                <meshPhysicalMaterial
-                    color="#141620"
-                    metalness={0.9}
-                    roughness={0.2}
-                />
-            </mesh>
-
-            {/* Glowing Glass Cockpit Dome */}
+            {/* The Glass Dome */}
             <mesh position={[0, 0.5, 0]}>
-                <sphereGeometry args={[1.5, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
-                <meshPhysicalMaterial
-                    color="#00ffff"
-                    emissive="#0088aa"
-                    emissiveIntensity={0.2}
-                    metalness={0.1}
-                    roughness={0.0}
-                    transmission={0.9}
-                    thickness={0.5}
+                <sphereGeometry args={[1.2, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />
+                <meshPhysicalMaterial 
+                    color="#00ffff" 
+                    transmission={0.9} 
+                    roughness={0} 
+                    metalness={0.1} 
+                    clearcoat={1.0} 
+                    thickness={1.0} 
                     ior={1.5}
                 />
             </mesh>
 
-            {/* Inner Sci-Fi Cockpit Core */}
+            {/* Inner Holographic Dashboard / Engine Core inside the glass */}
+            <mesh position={[0, 0.2, 0]}>
+                <cylinderGeometry args={[0.4, 0.8, 0.5, 16]} />
+                <meshBasicMaterial color="#ff00ff" wireframe />
+            </mesh>
+            <pointLight position={[0, 0.5, 0]} color="#00ffff" intensity={2} distance={10} />
+
+            {/* Main Saucer Hull */}
+            <mesh position={[0, 0, 0]} scale={[1, 0.22, 1]}>
+                <sphereGeometry args={[3, 32, 16]} />
+                <meshPhysicalMaterial 
+                    color="#1a1a2e" 
+                    emissive="#0a0a15"
+                    metalness={0.95} 
+                    roughness={0.2} 
+                    clearcoat={1.0} 
+                />
+            </mesh>
+
+            {/* Neon Rim Light Ring */}
             <mesh position={[0, 0, 0]}>
-                <cylinderGeometry args={[0.8, 1.0, 0.5, 16]} />
-                <meshPhysicalMaterial color="#ff00a0" emissive="#aa00ff" emissiveIntensity={2.0} />
+                <torusGeometry args={[3.04, 0.04, 16, 64]} />
+                <meshBasicMaterial color="#00ffcc" />
             </mesh>
-            <pointLight position={[0, 0.5, 0]} color="#aa00ff" intensity={5} distance={10} />
-
-            {/* Rotating Cyberpunk Neon Rim Lights */}
-            <group ref={rimRef} position={[0, -0.2, 0]}>
-                {Array.from({ length: 8 }).map((_, i) => {
-                    const angle = (i / 8) * Math.PI * 2
-                    return (
-                        <group key={i} position={[Math.cos(angle) * 3.55, 0, Math.sin(angle) * 3.55]}>
-                            <mesh>
-                                <sphereGeometry args={[0.15, 8, 8]} />
-                                <meshBasicMaterial color={i % 2 === 0 ? "#00ffff" : "#ff00ff"} />
-                            </mesh>
-                            <pointLight color={i % 2 === 0 ? "#00ffff" : "#ff00ff"} intensity={2} distance={8} />
-                        </group>
-                    )
-                })}
-            </group>
-
-            {/* Main Central Tractor Beam/Thruster Engine */}
-            <mesh position={[0, -0.8, 0]} rotation={[Math.PI / 2, 0, 0]}>
-                <circleGeometry args={[1.5, 32]} />
-                <engineThrustMaterial ref={engineRef} transparent depthWrite={false} side={THREE.DoubleSide} />
+            
+            {/* Bottom Thruster Housing */}
+            <mesh position={[0, -0.5, 0]}>
+                <cylinderGeometry args={[1.5, 1.0, 0.8, 32]} />
+                <meshPhysicalMaterial color="#050510" metalness={0.9} roughness={0.4} />
             </mesh>
-            <pointLight position={[0, -2, 0]} color="#00ffff" intensity={6} distance={40} />
-
-            {/* Tractor Beam Glow Column */}
-            <mesh position={[0, -3.5, 0]}>
-                <cylinderGeometry args={[1.5, 0.5, 5.0, 16]} />
-                <meshBasicMaterial color="#00ffff" transparent opacity={0.15} blending={THREE.AdditiveBlending} depthWrite={false} side={THREE.DoubleSide} />
+            
+            {/* Core Energy Down-Beam */}
+            <mesh position={[0, -0.95, 0]} rotation={[Math.PI / 2, 0, 0]}>
+                <circleGeometry args={[1.2, 32]} />
+                <engineThrustMaterial ref={engineRef} transparent side={THREE.DoubleSide} depthWrite={false} />
             </mesh>
+            <pointLight position={[0, -2, 0]} color="#00ffcc" intensity={5} distance={40} />
+            
+            {/* Nav Lights orbiting the rim */}
+            {Array.from({length: 8}).map((_, i) => {
+                const angle = (i / 8) * Math.PI * 2
+                const x = Math.cos(angle) * 2.8
+                const z = Math.sin(angle) * 2.8
+                return (
+                    <group key={i} position={[x, -0.15, z]}>
+                        <mesh>
+                            <sphereGeometry args={[0.08, 8, 8]} />
+                            <meshBasicMaterial color={i % 2 === 0 ? "#ff00ff" : "#00ffff"} />
+                        </mesh>
+                        <pointLight color={i % 2 === 0 ? "#ff00ff" : "#00ffff"} intensity={1.5} distance={5} />
+                    </group>
+                )
+            })}
         </group>
     )
 }
@@ -632,10 +623,33 @@ export default function UfoAvatar() {
         }
     })
 
-    if (!ufoMode) return null
+    const maxCityHeight = useMemo(() => {
+        if (!cityData?.buildings?.length) return 80
+        let maxH = 0
+        for (const b of cityData.buildings) {
+            const h = (b.dimensions?.height || 8) * 3.0
+            if (h > maxH) maxH = h
+        }
+        return maxH
+    }, [cityData])
+
+    const defaultSafeY = maxCityHeight + 40
+
+    if (!ufoMode) return (
+        <group ref={groupRef} position={[0, defaultSafeY, 0]}>
+            {/* Ambient vehicle lighting for static display mode */}
+            <pointLight distance={200} intensity={4.0} color="#00ffcc" position={[0, -3, 0]} />
+            <pointLight distance={100} intensity={2.0} color="#ff00cc" position={[0, 3, 0]} />
+            
+            <Sparkles count={60} scale={[15, 8, 25]} position={[0, 0, -8]} size={4} speed={2} opacity={0.7} color="#00ffcc" />
+            <group ref={vehicleGroupRef} scale={[1.5, 1.5, 1.5]}>
+                <ClassicUfo velocity={velocity.current} />
+            </group>
+        </group>
+    )
 
     return (
-        <group ref={groupRef} position={[0, 40, 0]}>
+        <group ref={groupRef} position={[0, defaultSafeY, 0]}>
             {/* Ambient vehicle lighting */}
             <pointLight distance={200} intensity={4.0} color="#00ffcc" position={[0, -3, 0]} />
             <pointLight distance={100} intensity={2.0} color="#ff00cc" position={[0, 3, 0]} />
@@ -652,22 +666,7 @@ export default function UfoAvatar() {
             />
             
             <group ref={vehicleGroupRef} scale={[1.5, 1.5, 1.5]}>
-                <Trail 
-                    width={3} 
-                    color="#ff00ff" 
-                    length={25} 
-                    decay={2} 
-                    local={false}
-                    attenuation={(w) => w * w}
-                >
-                    <group position={[0, 0, 0]}>
-                        <mesh visible={false}>
-                            <sphereGeometry args={[0.1]} />
-                        </mesh>
-                    </group>
-                </Trail>
-                
-                <FlyingSaucer velocity={velocity.current} />
+                <FuturisticSpeeder velocity={velocity.current} />
             </group>
         </group>
     )

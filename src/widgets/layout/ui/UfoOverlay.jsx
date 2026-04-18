@@ -27,8 +27,8 @@ export default function UfoOverlay() {
         <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
             pointerEvents: 'none', zIndex: 50, display: 'flex',
-            flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start',
-            paddingTop: '80px', paddingBottom: 0
+            flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            paddingTop: 0, paddingBottom: 0
         }}>
 
             {ufoIntroOpen && (
@@ -95,7 +95,7 @@ export default function UfoOverlay() {
             {!ufoIntroOpen && (
                 <div style={{
                     position: 'absolute',
-                    bottom: '100px', // Places it cleanly above the floating dock
+                    top: '24px', // Places it cleanly out of the way at the top
                     background: 'rgba(5, 8, 16, 0.4)',
                     backdropFilter: 'blur(8px)',
                     border: '1px solid rgba(0, 255, 204, 0.1)',
