@@ -1,0 +1,229 @@
+/* LoginGate.css — Full-screen login page */
+
+.login-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0a0a1a 0%, #1a1a3a 50%, #0f0f2a 100%);
+    overflow: hidden;
+}
+
+/* Animated grid background */
+.login-gate-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.login-gate-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(100, 200, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100, 200, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: grid-move 20s linear infinite;
+}
+
+@keyframes grid-move {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+.login-gate-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 179, 237, 0.15) 0%, transparent 70%);
+    animation: glow-pulse 4s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* Content */
+.login-gate-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 48px;
+    max-width: 480px;
+    text-align: center;
+}
+
+/* Header */
+.login-gate-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.login-gate-logo {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(99, 179, 237, 0.2), rgba(167, 139, 250, 0.2));
+    border-radius: 24px;
+    border: 1px solid rgba(99, 179, 237, 0.3);
+    color: #63b3ed;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.login-gate-title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    background: linear-gradient(135deg, #63b3ed, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.login-gate-subtitle {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    max-width: 320px;
+    line-height: 1.5;
+}
+
+/* Features */
+.login-gate-features {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.login-gate-feature {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    text-align: left;
+    transition: all 0.2s ease;
+}
+
+.login-gate-feature:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(99, 179, 237, 0.3);
+    transform: translateX(4px);
+}
+
+.login-gate-feature svg {
+    color: #63b3ed;
+    flex-shrink: 0;
+}
+
+.login-gate-feature h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.login-gate-feature p {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Login Button */
+.login-gate-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 16px 32px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(135deg, #2d3748, #1a202c);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-gate-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #63b3ed, #a78bfa);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.login-gate-button:hover::before {
+    opacity: 1;
+}
+
+.login-gate-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(99, 179, 237, 0.3);
+}
+
+.login-gate-button:active {
+    transform: translateY(0);
+}
+
+.login-gate-button svg,
+.login-gate-button span {
+    position: relative;
+    z-index: 1;
+}
+
+.login-gate-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Note */
+.login-gate-note {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .login-gate-content {
+        padding: 24px;
+    }
+    
+    .login-gate-title {
+        font-size: 32px;
+    }
+    
+    .login-gate-logo {
+        width: 80px;
+        height: 80px;
+    }
+}

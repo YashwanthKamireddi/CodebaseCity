@@ -1,0 +1,285 @@
+/**
+ * AchievementToast.css - Achievement unlock notification styles
+ * Uses design tokens from design-tokens.css
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOAST CONTAINER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.achievement-toast-container {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  z-index: var(--z-toast);
+  pointer-events: none;
+  
+  /* Entry animation */
+  opacity: 0;
+  transform: translateX(100%) translateY(20px);
+  transition: 
+    opacity var(--duration-slow) var(--ease-out-expo),
+    transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.achievement-toast-container.visible {
+  opacity: 1;
+  transform: translateX(0) translateY(0);
+  pointer-events: auto;
+}
+
+.achievement-toast-container.exiting {
+  opacity: 0;
+  transform: translateX(100%) translateY(0);
+  transition-duration: var(--duration-normal);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONFETTI PARTICLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.achievement-confetti {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.achievement-confetti-particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  left: var(--x);
+  top: 50%;
+  opacity: 0;
+  transform: scale(0);
+  animation: confetti-burst var(--duration) var(--ease-out-expo) var(--delay) forwards;
+}
+
+@keyframes confetti-burst {
+  0% {
+    opacity: 1;
+    transform: scale(var(--scale)) rotate(0deg) translateY(0) translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: 
+      scale(var(--scale)) 
+      rotate(var(--rotation)) 
+      translateY(-100px) 
+      translateX(calc((var(--x) - 50%) * 2px));
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOAST CARD
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.achievement-toast {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  min-width: 320px;
+  max-width: 420px;
+  
+  /* Glass morphism */
+  background: var(--glass-bg-elevated);
+  backdrop-filter: blur(var(--glass-blur-strong));
+  -webkit-backdrop-filter: blur(var(--glass-blur-strong));
+  border: 1px solid var(--glass-border-strong);
+  border-radius: var(--radius-xl);
+  
+  /* Shadow & glow */
+  box-shadow: 
+    var(--shadow-xl),
+    0 0 60px rgba(255, 215, 0, 0.15);
+  
+  overflow: hidden;
+}
+
+/* Animated glow effect */
+.achievement-toast-glow {
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(255, 215, 0, 0.1),
+    transparent,
+    rgba(255, 215, 0, 0.1),
+    transparent
+  );
+  animation: glow-spin 4s linear infinite;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes glow-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ICON
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.achievement-toast-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+}
+
+.achievement-toast-emoji {
+  font-size: var(--text-3xl);
+  line-height: 1;
+  animation: icon-bounce 0.6s var(--ease-spring) 0.2s;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes icon-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.achievement-toast-icon-ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  border-radius: var(--radius-full);
+  animation: ring-pulse 1.5s var(--ease-out) infinite;
+}
+
+@keyframes ring-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTENT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.achievement-toast-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.achievement-toast-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-0-5) var(--space-2);
+  margin-bottom: var(--space-1);
+  
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+  
+  color: #ffd700;
+  background: rgba(255, 215, 0, 0.15);
+  border-radius: var(--radius-full);
+}
+
+.achievement-toast-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-text-primary);
+  line-height: var(--leading-tight);
+}
+
+.achievement-toast-description {
+  margin: var(--space-1) 0 0 0;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-snug);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CLOSE BUTTON
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.achievement-toast-close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  
+  transition: 
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.achievement-toast-close:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.achievement-toast-close:active {
+  background: var(--color-bg-active);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PROGRESS BAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.achievement-toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ffd700, #ff8c00);
+  transform-origin: left center;
+  animation: progress-shrink var(--duration) linear forwards;
+}
+
+@keyframes progress-shrink {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 480px) {
+  .achievement-toast-container {
+    bottom: var(--space-4);
+    right: var(--space-4);
+    left: var(--space-4);
+  }
+  
+  .achievement-toast {
+    min-width: unset;
+    max-width: unset;
+    width: 100%;
+  }
+}

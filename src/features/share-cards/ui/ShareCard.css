@@ -1,0 +1,347 @@
+/**
+ * ShareCard.css - Stunning Visual Card Styles
+ * 
+ * Glassmorphism + Cyberpunk aesthetics for shareable city cards
+ */
+
+/* Overlay */
+.share-card-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Modal */
+.share-card-modal {
+    background: linear-gradient(135deg, rgba(15, 20, 35, 0.95), rgba(10, 15, 25, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 24px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 
+        0 25px 80px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Header */
+.share-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.share-card-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.share-card-close {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.share-card-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Card Preview Container */
+.share-card-preview {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* The Actual Card */
+.share-card {
+    position: relative;
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f1628 50%, #0a1020 100%);
+    border-radius: 16px;
+    padding: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 255, 200, 0.2);
+    box-shadow: 
+        0 0 40px rgba(0, 255, 200, 0.1),
+        0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* Background gradient effect */
+.share-card-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(ellipse at 20% 20%, rgba(0, 255, 200, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(128, 0, 255, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* City Preview (stylized buildings) */
+.share-card-city-preview {
+    position: relative;
+    height: 120px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(0, 20, 40, 0.5) 0%, rgba(0, 10, 20, 0.8) 100%);
+}
+
+.share-card-city-buildings {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    height: 80px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4px;
+    padding: 0 20px;
+}
+
+.share-card-building {
+    width: 12px;
+    height: var(--height, 40%);
+    background: linear-gradient(180deg, 
+        hsl(var(--hue, 180), 80%, 60%) 0%, 
+        hsl(var(--hue, 180), 60%, 30%) 100%);
+    border-radius: 2px 2px 0 0;
+    box-shadow: 
+        0 0 8px hsl(var(--hue, 180), 80%, 50%),
+        inset 0 0 4px rgba(255, 255, 255, 0.3);
+    animation: buildingGrow 0.5s ease forwards;
+    animation-delay: var(--delay, 0s);
+    transform-origin: bottom;
+    transform: scaleY(0);
+}
+
+@keyframes buildingGrow {
+    to { transform: scaleY(1); }
+}
+
+/* Small window dots on buildings */
+.share-card-building::before {
+    content: '';
+    position: absolute;
+    inset: 4px 2px;
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            transparent 0px,
+            transparent 4px,
+            rgba(255, 255, 255, 0.3) 4px,
+            rgba(255, 255, 255, 0.3) 6px
+        );
+}
+
+.share-card-ground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(90deg, 
+        rgba(0, 255, 200, 0.1) 0%, 
+        rgba(0, 200, 255, 0.15) 50%, 
+        rgba(0, 255, 200, 0.1) 100%);
+    border-top: 1px solid rgba(0, 255, 200, 0.3);
+}
+
+/* Title */
+.share-card-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(0, 255, 200, 0.3);
+}
+
+.share-card-title svg {
+    color: #00ffc8;
+}
+
+/* Stats Grid */
+.share-card-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.share-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.share-stat svg {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.share-stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.share-stat-label {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Achievements */
+.share-card-achievements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.share-achievement {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 20px;
+    font-size: 12px;
+    color: #ffd700;
+}
+
+.share-achievement-icon {
+    font-size: 14px;
+}
+
+.share-achievement-name {
+    font-weight: 500;
+}
+
+/* Footer */
+.share-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.share-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.share-card-branding {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #00ffc8;
+}
+
+.share-card-branding svg {
+    color: #00ffc8;
+}
+
+/* Action Buttons */
+.share-card-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.share-action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.share-action-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.share-action-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.share-action-primary {
+    background: linear-gradient(135deg, #00ffc8, #00a080);
+    border: none;
+    color: #000;
+}
+
+.share-action-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 255, 200, 0.3);
+}
+
+.share-action-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .share-card-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .share-card-meta {
+        flex-wrap: wrap;
+    }
+}

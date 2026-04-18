@@ -10,6 +10,10 @@ node_modules/
 dist/
 build/
 
+# WASM build artifacts
+src/engine/wasm-core/target/
+src/engine/wasm/target/
+
 # IDE
 .vscode/
 .idea/
@@ -28,3 +32,4 @@ npm-debug.log*
 tmp/
 temp/
 *.tmp
+tmp_*
