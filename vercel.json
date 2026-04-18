@@ -3,6 +3,7 @@
   "outputDirectory": "dist",
   "framework": null,
   "rewrites": [
+    { "source": "/codeload/:match*", "destination": "https://codeload.github.com/:match*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
