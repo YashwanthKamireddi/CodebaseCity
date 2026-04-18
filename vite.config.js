@@ -9,6 +9,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      'wasm-core': path.resolve(__dirname, './src/engine/wasm-core/pkg'),
       '@': path.resolve(__dirname, './src'),
       '@engine': path.resolve(__dirname, './src/engine'),
       '@features': path.resolve(__dirname, './src/features'),
