@@ -3,6 +3,7 @@ import { Html } from '@react-three/drei'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 import { X, Activity, Layers, Shield, Flame, Globe, GitBranch, FileCode2, Map } from 'lucide-react'
+import { townHallTopY, mothershipAltitude } from './landmarkPositions'
 
 const LANG_COLORS = {
     javascript: '#f7df1e', typescript: '#3178c6', python: '#3572A5', java: '#b07219',
@@ -42,7 +43,7 @@ const formatNum = n => n >= 1000 ? (n / 1000).toFixed(1) + 'k' : String(n)
 /* ── Reactor Panel (Town Hall Health) ── */
 function ReactorCard({ health, onClose }) {
     return (
-        <div onClick={e => e.stopPropagation()} style={cardStyle}>
+        <div onClick={e => e.stopPropagation()} style={cardStyle} className="anim-scale-in">
             <div style={{ height: '2px', background: `linear-gradient(90deg, transparent 5%, ${health.color}88, transparent 95%)` }} />
 
             {/* Header */}
@@ -107,7 +108,7 @@ function MothershipCard({ cityData, onClose }) {
     const maxLang = sortedLangs[0]?.[1] || 1
 
     return (
-        <div onClick={e => e.stopPropagation()} style={cardStyle}>
+        <div onClick={e => e.stopPropagation()} style={cardStyle} className="anim-scale-in">
             <div style={{ height: '2px', background: 'linear-gradient(90deg, transparent 5%, #60a5fa88, transparent 95%)' }} />
 
             {/* Header */}
@@ -181,17 +182,14 @@ const LandmarkPanel = React.memo(function LandmarkPanel() {
         [cityData]
     )
 
-    // Compute positions
+    // Position math sourced from landmarkPositions.js — guaranteed to match
+    // the actual geometry rendered by EnergyCoreReactor and MothershipCore.
     const layout = useMemo(() => {
         if (!selectedLandmark || !cityData) return null
 
         if (selectedLandmark === 'reactor') {
-            // Town Hall height — match EnergyCoreReactor (base 4 + hallHeight + orb 5)
-            const heights = (cityData.buildings || []).map(b => (b.dimensions?.height || 8) * 3.0).sort((a, b) => a - b)
-            const p90 = heights[Math.floor(heights.length * 0.9)] || 50
-            const spireHeight = Math.max(60, p90 * 1.4) // must match EnergyCoreReactor
-            const topY = 8 + spireHeight + 6 + 8 // baseTop + tower + crown + cage radius
-            const panelY = topY + 25
+            const topY = townHallTopY(cityData.buildings)
+            const panelY = topY + 28
             const beamGeo = new THREE.BufferGeometry()
             beamGeo.setAttribute('position', new THREE.BufferAttribute(
                 new Float32Array([0, topY, 0, 0, panelY - 2, 0]), 3
@@ -200,18 +198,14 @@ const LandmarkPanel = React.memo(function LandmarkPanel() {
         }
 
         if (selectedLandmark === 'mothership') {
-            let maxH = 0
-            for (const b of (cityData.buildings || [])) {
-                const h = (b.dimensions?.height || 8) * 3.0
-                if (h > maxH) maxH = h
-            }
-            const altitude = Math.max(260, maxH + 200)
+            const altitude = mothershipAltitude(cityData.buildings)
             const panelY = altitude + 50
+            const anchorY = altitude + 16
             const beamGeo = new THREE.BufferGeometry()
             beamGeo.setAttribute('position', new THREE.BufferAttribute(
-                new Float32Array([0, altitude + 12, 0, 0, panelY - 2, 0]), 3
+                new Float32Array([0, anchorY, 0, 0, panelY - 2, 0]), 3
             ))
-            return { panelPos: [0, panelY, 0], anchorPos: [0, altitude + 12, 0], beamGeo }
+            return { panelPos: [0, panelY, 0], anchorPos: [0, anchorY, 0], beamGeo }
         }
 
         return null

@@ -3,6 +3,7 @@ import { useThree, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 import logger from '../../../utils/logger'
+import { townHallTopY, mothershipAltitude } from './landmarkPositions'
 
 // Module-level animation state — mutated by effects, consumed by useFrame.
 // One reusable vec per role means zero allocations during camera flights.
@@ -193,13 +194,7 @@ export default React.memo(function CameraController() {
         let targetPos, lookAtPos
 
         if (selectedLandmark === 'reactor') {
-            let crownY = 74
-            if (cityData?.buildings?.length) {
-                const heights = cityData.buildings.map(b => (b.dimensions?.height || 8) * 3.0).sort((a, b) => a - b)
-                const p90 = heights[Math.floor(heights.length * 0.9)] || 50
-                const spireHeight = Math.max(60, p90 * 1.4)
-                crownY = 8 + spireHeight + 6
-            }
+            const crownY = townHallTopY(cityData?.buildings)
             const roofY = crownY
             const panelTopY = roofY + 30
             const frameCenterY = roofY * 0.6 + panelTopY * 0.4
@@ -213,15 +208,7 @@ export default React.memo(function CameraController() {
                 Math.sin(angle) * zoomDist
             )
         } else if (selectedLandmark === 'mothership') {
-            let alt = 300
-            if (cityData?.buildings?.length) {
-                let maxH = 0
-                for (const b of cityData.buildings) {
-                    const h = (b.dimensions?.height || 8) * 3.0
-                    if (h > maxH) maxH = h
-                }
-                alt = Math.max(260, maxH + 200)
-            }
+            const alt = mothershipAltitude(cityData?.buildings)
             const dist = 200
             const angle = Math.PI / 4
             const viewCenterY = alt + 20

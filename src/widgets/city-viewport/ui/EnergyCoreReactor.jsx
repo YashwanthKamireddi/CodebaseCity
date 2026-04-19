@@ -3,6 +3,10 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import useStore from '../../../store/useStore'
+import {
+    TIER_HEIGHTS, TOWNHALL_BASE_TOP, TOWNHALL_CROWN_OFFSET,
+    TOWNHALL_CROWN_RADIUS, computeSpireHeight,
+} from './landmarkPositions'
 
 /**
  * EnergyCoreReactor — "The Nexus Spire" — Grand Civic Monument
@@ -179,13 +183,8 @@ const EnergyCoreReactor = React.memo(function EnergyCoreReactor() {
 
     const health = useMemo(() => computeHealth(cityData?.buildings), [cityData])
 
-    // Spire height — taller than 90th percentile
-    const spireHeight = useMemo(() => {
-        if (!cityData?.buildings?.length) return 60
-        const heights = cityData.buildings.map(b => (b.dimensions?.height || 8) * 3.0).sort((a, b) => a - b)
-        const p90 = heights[Math.floor(heights.length * 0.9)] || 50
-        return Math.max(60, p90 * 1.4)
-    }, [cityData])
+    // Spire height — sourced from shared module so panels stay aligned
+    const spireHeight = useMemo(() => computeSpireHeight(cityData?.buildings), [cityData])
 
     const healthColor = useMemo(() => new THREE.Vector3(...health.color), [health.color])
     const threeColor = useMemo(() => new THREE.Color(...health.color), [health.color])
@@ -237,34 +236,34 @@ const EnergyCoreReactor = React.memo(function EnergyCoreReactor() {
     }), [threeColor])
 
     // Merged base — wider fortress stance with 4 corner buttress pillars.
-    // Feels like a town hall centerpiece with stepped architecture.
+    // Tier heights come from the shared module so other components stay in sync.
     const mergedBaseGeo = useMemo(() => {
-        const tier1H = 5, tier2H = 4, tier3H = 3
+        const { tier1: tier1H, tier2: tier2H, tier3: tier3H } = TIER_HEIGHTS
         const parts = []
 
-        // 3 stepped tiers (hexagonal → octagonal → octagonal)
-        const g1 = new THREE.CylinderGeometry(32, 36, tier1H, 8)
+        // 3 stepped tiers (octagonal stack — bigger, more imposing)
+        const g1 = new THREE.CylinderGeometry(40, 46, tier1H, 8)
         g1.translate(0, tier1H / 2, 0)
         parts.push(g1)
 
-        const g2 = new THREE.CylinderGeometry(24, 30, tier2H, 8)
+        const g2 = new THREE.CylinderGeometry(32, 38, tier2H, 8)
         g2.translate(0, tier1H + tier2H / 2, 0)
         parts.push(g2)
 
-        const g3 = new THREE.CylinderGeometry(18, 24, tier3H, 8)
+        const g3 = new THREE.CylinderGeometry(24, 30, tier3H, 8)
         g3.translate(0, tier1H + tier2H + tier3H / 2, 0)
         parts.push(g3)
 
-        // 4 corner buttress pillars with conical apex caps
-        for (let i = 0; i < 4; i++) {
-            const ang = (i / 4) * Math.PI * 2 + Math.PI / 4
-            const r = 34
+        // 8 corner buttress pillars with conical apex caps (octagonal symmetry)
+        for (let i = 0; i < 8; i++) {
+            const ang = (i / 8) * Math.PI * 2 + Math.PI / 8
+            const r = 43
             const pillarH = tier1H + tier2H
-            const p = new THREE.CylinderGeometry(2, 3, pillarH, 6)
+            const p = new THREE.CylinderGeometry(2.4, 3.2, pillarH, 6)
             p.translate(Math.cos(ang) * r, pillarH / 2, Math.sin(ang) * r)
             parts.push(p)
-            const apex = new THREE.ConeGeometry(2.8, 4, 6)
-            apex.translate(Math.cos(ang) * r, pillarH + 2, Math.sin(ang) * r)
+            const apex = new THREE.ConeGeometry(3.2, 5, 6)
+            apex.translate(Math.cos(ang) * r, pillarH + 2.5, Math.sin(ang) * r)
             parts.push(apex)
         }
 
@@ -275,33 +274,33 @@ const EnergyCoreReactor = React.memo(function EnergyCoreReactor() {
 
     // Merged accent rings — tier edges + spire highlights (1 draw call)
     const mergedAccentGeo = useMemo(() => {
-        const tier1H = 5, tier2H = 4, tier3H = 3
-        const baseTop = tier1H + tier2H + tier3H
+        const { tier1: tier1H, tier2: tier2H } = TIER_HEIGHTS
+        const baseTop = TOWNHALL_BASE_TOP
         const tH = spireHeight
 
         const parts = []
         const addRing = (r, w, y) => {
-            const t = new THREE.TorusGeometry(r, w, 4, 24)
+            const t = new THREE.TorusGeometry(r, w, 4, 32)
             t.rotateX(Math.PI / 2); t.translate(0, y, 0)
             parts.push(t)
         }
-        addRing(33, 0.5, tier1H)
-        addRing(27, 0.4, tier1H + tier2H)
-        addRing(21, 0.3, baseTop)
-        addRing(10, 0.55, baseTop + tH * 0.33)
-        addRing(6, 0.45, baseTop + tH * 0.66)
+        addRing(42, 0.6, tier1H)
+        addRing(34, 0.5, tier1H + tier2H)
+        addRing(27, 0.4, baseTop)
+        addRing(12, 0.65, baseTop + tH * 0.33)
+        addRing(7, 0.5, baseTop + tH * 0.66)
         const merged = mergeGeometries(parts)
         parts.forEach(p => p.dispose())
         return merged
     }, [spireHeight])
 
-    // Merged tower — shorter, more volume (1 draw call)
+    // Merged tower — taller, more presence (1 draw call)
     const mergedTowerGeo = useMemo(() => {
-        const baseTop = 12 // new base top with taller tiers
+        const baseTop = TOWNHALL_BASE_TOP
         const tH = spireHeight
-        const g1 = new THREE.CylinderGeometry(9, 14, tH * 0.55, 8, 1)
+        const g1 = new THREE.CylinderGeometry(11, 17, tH * 0.55, 8, 1)
         g1.translate(0, baseTop + tH * 0.275, 0)
-        const g2 = new THREE.CylinderGeometry(4, 9, tH * 0.45, 8, 1)
+        const g2 = new THREE.CylinderGeometry(5, 11, tH * 0.45, 8, 1)
         g2.translate(0, baseTop + tH * 0.775, 0)
         const merged = mergeGeometries([g1, g2])
         g1.dispose(); g2.dispose()
@@ -343,11 +342,10 @@ const EnergyCoreReactor = React.memo(function EnergyCoreReactor() {
         selectLandmark(isSelected ? null : 'reactor')
     }
 
-    const tier1H = 5, tier2H = 4, tier3H = 3
-    const baseTop = tier1H + tier2H + tier3H
+    const baseTop = TOWNHALL_BASE_TOP
     const towerH = spireHeight
     const towerTop = baseTop + towerH
-    const crownY = towerTop + 6
+    const crownY = towerTop + TOWNHALL_CROWN_OFFSET
 
     return (
         <group>
@@ -374,37 +372,37 @@ const EnergyCoreReactor = React.memo(function EnergyCoreReactor() {
 
                 {/* ═══ SCANNER RINGS: Orbital data scanners (animated, need individual refs) ═══ */}
                 <mesh ref={scanRing1} position={[0, baseTop + towerH * 0.25, 0]}>
-                    <torusGeometry args={[16, 0.5, 4, 24]} />
+                    <torusGeometry args={[19, 0.6, 4, 28]} />
                     <primitive object={ringMat} attach="material" />
                 </mesh>
                 <mesh ref={scanRing2} position={[0, baseTop + towerH * 0.55, 0]} rotation={[0.2, 0, 0.15]}>
-                    <torusGeometry args={[12, 0.4, 4, 20]} />
+                    <torusGeometry args={[14, 0.5, 4, 24]} />
                     <primitive object={ringMat} attach="material" />
                 </mesh>
                 <mesh ref={scanRing3} position={[0, baseTop + towerH * 0.85, 0]} rotation={[Math.PI / 2.5, 0, 0]}>
-                    <torusGeometry args={[8, 0.35, 4, 16]} />
+                    <torusGeometry args={[10, 0.4, 4, 20]} />
                     <primitive object={ringMat} attach="material" />
                 </mesh>
 
                 {/* ═══ CROWN: Pulsing energy sphere ═══ */}
                 <mesh position={[0, crownY, 0]}>
-                    <sphereGeometry args={[5, 16, 12]} />
+                    <sphereGeometry args={[TOWNHALL_CROWN_RADIUS, 18, 14]} />
                     <primitive object={coreMat} attach="material" />
                 </mesh>
 
                 {/* Containment cage around crown */}
                 <mesh ref={cageRef} position={[0, crownY, 0]}>
-                    <icosahedronGeometry args={[7.5, 1]} />
+                    <icosahedronGeometry args={[TOWNHALL_CROWN_RADIUS + 2.5, 1]} />
                     <primitive object={cageMat} attach="material" />
                 </mesh>
 
                 {/* ═══ GROUND EFFECTS ═══ */}
                 <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.1, 0]}>
-                    <ringGeometry args={[30, 40, 8]} />
+                    <ringGeometry args={[40, 52, 8]} />
                     <meshBasicMaterial color={threeColor} transparent opacity={isSelected ? 0.25 : 0.08} depthWrite={false} />
                 </mesh>
                 <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
-                    <ringGeometry args={[40, 46, 40]} />
+                    <ringGeometry args={[52, 58, 48]} />
                     <meshBasicMaterial color={threeColor} transparent opacity={0.05} depthWrite={false} />
                 </mesh>
 
@@ -412,11 +410,11 @@ const EnergyCoreReactor = React.memo(function EnergyCoreReactor() {
                 {isSelected && (
                     <>
                         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.3, 0]}>
-                            <ringGeometry args={[38, 44, 48]} />
+                            <ringGeometry args={[48, 54, 56]} />
                             <meshBasicMaterial color={threeColor} transparent opacity={0.7} depthWrite={false} />
                         </mesh>
                         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.4, 0]}>
-                            <ringGeometry args={[32, 36, 48]} />
+                            <ringGeometry args={[42, 46, 56]} />
                             <meshBasicMaterial color="#ffffff" transparent opacity={0.3} depthWrite={false} />
                         </mesh>
                     </>

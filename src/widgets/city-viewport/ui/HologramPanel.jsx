@@ -123,6 +123,8 @@ const HologramPanel = React.memo(function HologramPanel() {
                 >
                     <div
                         onClick={e => e.stopPropagation()}
+                        className="anim-scale-in"
+                        key={selectedBuilding.id || selectedBuilding.path}
                         style={{
                             width: '340px',
                             background: 'linear-gradient(165deg, rgba(12, 14, 22, 0.98), rgba(6, 8, 16, 0.99))',

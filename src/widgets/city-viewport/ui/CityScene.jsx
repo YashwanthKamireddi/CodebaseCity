@@ -33,17 +33,19 @@ function NebulaSky() {
         if (meshRef.current) meshRef.current.position.copy(camera.position)
     })
 
-    // Clean deep-space gradient — no magenta, no per-fragment noise.
-    // Just a smooth zenith-to-horizon falloff; the drei <Stars> field handles
-    // visual interest layered above this.
+    // Clean 3-stop dark sky — deep navy at zenith, cool indigo midband,
+    // muted blue near horizon. No magenta, no noise, no per-fragment math
+    // beyond two smoothsteps. Reads as "deep space" with gentle atmospheric
+    // depth instead of pure black.
     const material = useMemo(() => new THREE.ShaderMaterial({
         side: THREE.BackSide,
         depthWrite: false,
         depthTest: false,
         fog: false,
         uniforms: {
-            uZenith:  { value: new THREE.Color('#02030a') },
-            uHorizon: { value: new THREE.Color('#070b18') },
+            uZenith:  { value: new THREE.Color('#04081a') },
+            uMid:     { value: new THREE.Color('#0a1230') },
+            uHorizon: { value: new THREE.Color('#162648') },
         },
         vertexShader: `
             varying vec3 vPos;
@@ -54,12 +56,18 @@ function NebulaSky() {
         `,
         fragmentShader: `
             uniform vec3 uZenith;
+            uniform vec3 uMid;
             uniform vec3 uHorizon;
             varying vec3 vPos;
             void main() {
-                float h = vPos.y;
-                float t = smoothstep(-0.2, 0.6, h);
-                gl_FragColor = vec4(mix(uHorizon, uZenith, t), 1.0);
+                float h = vPos.y; // -1 below, 0 horizon, 1 zenith
+                vec3 color;
+                if (h > 0.2) {
+                    color = mix(uMid, uZenith, smoothstep(0.2, 1.0, h));
+                } else {
+                    color = mix(uHorizon, uMid, smoothstep(-0.1, 0.2, h));
+                }
+                gl_FragColor = vec4(color, 1.0);
             }
         `,
     }), [])
@@ -191,7 +199,7 @@ const CityScene = React.memo(function CityScene() {
                 speed={0.2}
             />
 
-            <fog attach="fog" args={['#040810', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
+            <fog attach="fog" args={['#0a1228', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
             <CameraController />
         </group>
     )

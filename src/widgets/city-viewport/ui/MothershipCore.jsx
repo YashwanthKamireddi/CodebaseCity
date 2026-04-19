@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import useStore from '../../../store/useStore'
+import { townHallTopY, mothershipAltitude } from './landmarkPositions'
 
 /**
  * MothershipCore — "Atlas" Orbital Command Hub
@@ -239,35 +240,9 @@ const MothershipCore = React.memo(function MothershipCore() {
     const ringMid = useRef()
     const lastT = useRef(0)
 
-    // Nexus Spire crown Y = baseTop(12) + spireHeight + 6 (must match EnergyCoreReactor)
-    const hallTop = useMemo(() => {
-        if (!cityData?.buildings?.length) return 78
-        const heights = cityData.buildings.map(b => (b.dimensions?.height || 8) * 3.0).sort((a, b) => a - b)
-        const p90 = heights[Math.floor(heights.length * 0.9)] || 50
-        const spireHeight = Math.max(60, p90 * 1.4)
-        return 12 + spireHeight + 6 // baseTop(12) + tower + crown(6)
-    }, [cityData])
-
-    // Compute altitude — well above tallest building, the town hall, and the holographic name
-    const altitude = useMemo(() => {
-        if (!cityData?.buildings?.length) return 300
-        let maxH = 0
-        let maxR = 0
-        for (const b of cityData.buildings) {
-            const h = (b.dimensions?.height || 8) * 3.0
-            if (h > maxH) maxH = h
-            const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
-            if (r > maxR) maxR = r
-        }
-        
-        // Match the scale calculation from HolographicCityName to clearance
-        const cityRadius = Math.max(200, maxR * 0.8)
-        const scaleForName = Math.max(60, cityRadius * 0.4)
-        const textHeight = scaleForName * 0.25
-        const nameTop = hallTop + 40 + textHeight
-
-        return Math.max(260, maxH + 200, nameTop + 60)
-    }, [cityData, hallTop])
+    // All position math now lives in landmarkPositions.js so panels stay aligned.
+    const hallTop = useMemo(() => townHallTopY(cityData?.buildings), [cityData])
+    const altitude = useMemo(() => mothershipAltitude(cityData?.buildings), [cityData])
 
     const hullMat = useMemo(() => new THREE.ShaderMaterial({
         uniforms: { uTime: { value: 0 } },
