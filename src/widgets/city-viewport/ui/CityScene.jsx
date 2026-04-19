@@ -33,19 +33,27 @@ function NebulaSky() {
         if (meshRef.current) meshRef.current.position.copy(camera.position)
     })
 
-    // Clean 3-stop dark sky — deep navy at zenith, cool indigo midband,
-    // muted blue near horizon. No magenta, no noise, no per-fragment math
-    // beyond two smoothsteps. Reads as "deep space" with gentle atmospheric
-    // depth instead of pure black.
+    // World-class deep-space sky — cool 4-stop gradient with a soft
+    // starlit horizon glow. No magenta, no noise, no banding — just a
+    // rich, readable backdrop that makes the city pop.
+    //
+    //   zenith (#04071a)   — near-black indigo at the top of the dome
+    //   upper  (#0a1440)   — saturated navy for the upper atmosphere
+    //   mid    (#152d6e)   — vivid cobalt at roughly eye level
+    //   horizon(#3a5fb5)   — cool blue glow where the ground meets sky
+    //   below  (#020409)   — deep void under the horizon so the ground
+    //                        silhouette is never washed out
     const material = useMemo(() => new THREE.ShaderMaterial({
         side: THREE.BackSide,
         depthWrite: false,
         depthTest: false,
         fog: false,
         uniforms: {
-            uZenith:  { value: new THREE.Color('#04081a') },
-            uMid:     { value: new THREE.Color('#0a1230') },
-            uHorizon: { value: new THREE.Color('#162648') },
+            uZenith:  { value: new THREE.Color('#04071a') },
+            uUpper:   { value: new THREE.Color('#0a1440') },
+            uMid:     { value: new THREE.Color('#152d6e') },
+            uHorizon: { value: new THREE.Color('#3a5fb5') },
+            uBelow:   { value: new THREE.Color('#020409') },
         },
         vertexShader: `
             varying vec3 vPos;
@@ -56,17 +64,27 @@ function NebulaSky() {
         `,
         fragmentShader: `
             uniform vec3 uZenith;
+            uniform vec3 uUpper;
             uniform vec3 uMid;
             uniform vec3 uHorizon;
+            uniform vec3 uBelow;
             varying vec3 vPos;
             void main() {
                 float h = vPos.y; // -1 below, 0 horizon, 1 zenith
                 vec3 color;
-                if (h > 0.2) {
-                    color = mix(uMid, uZenith, smoothstep(0.2, 1.0, h));
+                if (h > 0.45) {
+                    color = mix(uUpper, uZenith, smoothstep(0.45, 1.0, h));
+                } else if (h > 0.12) {
+                    color = mix(uMid, uUpper, smoothstep(0.12, 0.45, h));
+                } else if (h > -0.02) {
+                    color = mix(uHorizon, uMid, smoothstep(-0.02, 0.12, h));
                 } else {
-                    color = mix(uHorizon, uMid, smoothstep(-0.1, 0.2, h));
+                    color = mix(uBelow, uHorizon, smoothstep(-0.4, -0.02, h));
                 }
+                // Faint horizon bloom band (cool blue) — gives the sky depth
+                // without the buggy magenta we had before.
+                float bloom = smoothstep(-0.05, 0.02, h) * smoothstep(0.14, 0.06, h);
+                color += vec3(0.08, 0.18, 0.35) * bloom;
                 gl_FragColor = vec4(color, 1.0);
             }
         `,
@@ -192,14 +210,14 @@ const CityScene = React.memo(function CityScene() {
             <Stars
                 radius={Math.max(cityRadius * 10, 4000)}
                 depth={Math.max(cityRadius * 5, 2000)}
-                count={2000}
-                factor={5}
-                saturation={0.5}
+                count={3500}
+                factor={6}
+                saturation={0.7}
                 fade
-                speed={0.2}
+                speed={0.25}
             />
 
-            <fog attach="fog" args={['#0a1228', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
+            <fog attach="fog" args={['#0f2040', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
             <CameraController />
         </group>
     )

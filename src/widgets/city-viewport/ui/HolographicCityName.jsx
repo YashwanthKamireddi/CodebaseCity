@@ -91,7 +91,7 @@ export default React.memo(function HolographicCityName() {
 
     if (!texture || !repoName) return null
 
-    const scale = Math.max(60, cityRadius * 0.4)
+    const scale = Math.max(110, cityRadius * 0.55)
     const textHeight = scale * 0.25
 
     // Position text squarely above the central Town Hall, guaranteeing daylight space.

@@ -6,13 +6,14 @@
  */
 
 // Layout constants matching backend's city_builder.py
-// Widened for readability — prevents overlapping/cramped buildings on dense repos.
-export const BUILDING_SPACING = 10
-export const DISTRICT_PADDING = 24
-const MIN_BUILDING_WIDTH = 5
-const MAX_BUILDING_WIDTH = 20
-const MIN_BUILDING_HEIGHT = 4
-const MAX_BUILDING_HEIGHT = 80
+// Scaled up for a chunkier, more readable city skyline. Wider footprints +
+// generous spacing = clearer silhouettes at every zoom level.
+export const BUILDING_SPACING = 14
+export const DISTRICT_PADDING = 32
+const MIN_BUILDING_WIDTH = 8
+const MAX_BUILDING_WIDTH = 30
+const MIN_BUILDING_HEIGHT = 6
+const MAX_BUILDING_HEIGHT = 110
 
 /**
  * Calculate per-file and aggregate metrics.
@@ -243,7 +244,7 @@ function spiralPlace(footprints) {
   const baseStep = Math.max(10, avgFootprint * 0.3)
   const totalArea = footprints.reduce((s, f) => s + f.footprintW * f.footprintD, 0)
   const maxRadius = Math.max(800, Math.sqrt(totalArea) * 3)
-  const GAP = DISTRICT_PADDING + 16
+  const GAP = DISTRICT_PADDING + 24
 
   function overlapsAny(cx, cz, w, d) {
     for (const p of placed) {

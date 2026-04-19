@@ -34,7 +34,7 @@ export function townHallTopY(buildings) {
 
 /** Y where the mothership saucer center sits. */
 export function mothershipAltitude(buildings) {
-    if (!buildings?.length) return 320
+    if (!buildings?.length) return 360
     let maxH = 0
     let maxR = 0
     for (const b of buildings) {
@@ -43,10 +43,10 @@ export function mothershipAltitude(buildings) {
         const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
         if (r > maxR) maxR = r
     }
-    // Match HolographicCityName scaling — leave room for the floating name above town hall.
+    // Must stay in sync with HolographicCityName's scale formula.
     const cityRadius = Math.max(200, maxR * 0.8)
-    const scaleForName = Math.max(60, cityRadius * 0.4)
+    const scaleForName = Math.max(110, cityRadius * 0.55)
     const textHeight = scaleForName * 0.25
     const nameTop = townHallTopY(buildings) + 40 + textHeight
-    return Math.max(280, maxH + 220, nameTop + 80)
+    return Math.max(320, maxH + 260, nameTop + 100)
 }

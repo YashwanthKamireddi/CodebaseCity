@@ -91,8 +91,6 @@ export default function EmptyCityHero() {
 
             {/* Center content */}
             <div className="lp-center">
-                <p className="lp-kicker anim-slide-up">3D Codebase Visualization</p>
-
                 <h1 className="lp-heading anim-slide-up">
                     See your codebase<br />as a living city
                 </h1>
