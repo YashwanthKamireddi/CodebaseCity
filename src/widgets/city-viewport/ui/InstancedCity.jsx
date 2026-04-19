@@ -235,6 +235,9 @@ const InstancedCity = React.memo(function InstancedCity() {
                 state.camera.lookAt(target);
                 state.controls.update();
             }
+
+            // Canvas is frameloop="demand" — keep ticking until genesis finishes.
+            invalidate();
         }
 
         // 3. WASM Physics engine removed to avoid slow random drop-in animations.
@@ -644,16 +647,13 @@ const InstancedCity = React.memo(function InstancedCity() {
         return buildings.findIndex(b => b.id === selectedBuilding.id || b.name === selectedBuilding.name)
     }, [selectedBuilding, buildings])
 
-    // Update uniforms each frame for GPU selection dimming
-    useFrame(() => {})
-
-    // AAA 'Living Windows' Shader injected into physical materials
+    // AAA 'Living Windows' Shader injected into standard materials
+    // (dropped MeshPhysicalMaterial + clearcoat — ~3x cheaper per fragment)
     const sharedMaterial = (
-        <meshPhysicalMaterial
+        <meshStandardMaterial
             color="#ffffff" // Clean canvas for instance colors
             metalness={0.3} // Lower metalness so ambient/directional lights illuminate it, preventing black mirror effect
-            roughness={0.3}
-            clearcoat={1.0}
+            roughness={0.35}
             onBeforeCompile={(shader) => {
                 shader.vertexShader = shader.vertexShader.replace(
                     '#include <common>',
@@ -734,7 +734,6 @@ const InstancedCity = React.memo(function InstancedCity() {
             <instancedMesh
                 ref={backendRef}
                 args={[null, null, count]}
-                frustumCulled={false}
                 onPointerMove={isGenesisPlaying ? undefined : handlePointerMove}
                 onPointerOut={isGenesisPlaying ? undefined : handlePointerOut}
                 onClick={isGenesisPlaying ? undefined : handleClick}
@@ -748,7 +747,6 @@ const InstancedCity = React.memo(function InstancedCity() {
             <instancedMesh
                 ref={frontendRef}
                 args={[null, null, count]}
-                frustumCulled={false}
                 onPointerMove={isGenesisPlaying ? undefined : handlePointerMove}
                 onPointerOut={isGenesisPlaying ? undefined : handlePointerOut}
                 onClick={isGenesisPlaying ? undefined : handleClick}
@@ -762,7 +760,6 @@ const InstancedCity = React.memo(function InstancedCity() {
             <instancedMesh
                 ref={configRef}
                 args={[null, null, count]}
-                frustumCulled={false}
                 onPointerMove={isGenesisPlaying ? undefined : handlePointerMove}
                 onPointerOut={isGenesisPlaying ? undefined : handlePointerOut}
                 onClick={isGenesisPlaying ? undefined : handleClick}

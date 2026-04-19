@@ -22,7 +22,7 @@ export default function EmptyCityHero() {
     const setLandingOverlayActive = useStore(s => s.setLandingOverlayActive)
     const githubToken = useStore(s => s.githubToken)
     const setGithubToken = useStore(s => s.setGithubToken)
-    const { user, isAuthenticated, login, logout, loading: authLoading } = useAuth()
+    const { user, isAuthenticated, login, logout, loading: authLoading, error: authError, clearError } = useAuth()
     const [repoUrl, setRepoUrl] = useState('')
     const [showGithubInput, setShowGithubInput] = useState(false)
     const [showUniverseInput, setShowUniverseInput] = useState(false)
@@ -64,7 +64,6 @@ export default function EmptyCityHero() {
             >
                 <div className="lp-topbar-left">
                     <span className="lp-wordmark">Codebase City</span>
-                    <span className="lp-ver">v2.0</span>
                 </div>
                 <div className="lp-topbar-right">
                     {isAuthenticated ? (
@@ -112,23 +111,29 @@ export default function EmptyCityHero() {
                 <div
                     className="lp-cta anim-slide-up"
                 >
-                    <button onClick={analyzeLocal} className="lp-btn lp-btn--solid">
-                        <FolderOpen size={14} />
-                        Open Folder
-                        <ArrowRight size={12} className="lp-arrow" />
+                    <button onClick={analyzeLocal} className="lp-btn lp-btn--primary">
+                        <FolderOpen size={15} />
+                        <span>Open Folder</span>
                     </button>
-                    <button onClick={() => { setShowGithubInput(v => !v); setShowUniverseInput(false) }} className="lp-btn lp-btn--outline">
-                        <Github size={14} />
-                        GitHub Repo
+                    <button
+                        onClick={() => { setShowGithubInput(v => !v); setShowUniverseInput(false) }}
+                        className={`lp-btn lp-btn--primary${showGithubInput ? ' is-active' : ''}`}
+                    >
+                        <Github size={15} />
+                        <span>GitHub Repo</span>
                     </button>
-                    <button onClick={() => { setShowUniverseInput(v => !v); setShowGithubInput(false) }} className="lp-btn lp-btn--outline lp-btn--universe">
-                        <Globe size={14} />
-                        User Universe
-                    </button>
-                    <button onClick={handleExploreDemoCity} className="lp-btn lp-btn--text">
-                        Explore Demo
+                    <button
+                        onClick={() => { setShowUniverseInput(v => !v); setShowGithubInput(false) }}
+                        className={`lp-btn lp-btn--primary${showUniverseInput ? ' is-active' : ''}`}
+                    >
+                        <Globe size={15} />
+                        <span>User Universe</span>
                     </button>
                 </div>
+                <button onClick={handleExploreDemoCity} className="lp-demo-link">
+                    Explore demo city
+                    <ArrowRight size={12} />
+                </button>
 
                 {showGithubInput && (
                         <div
@@ -234,6 +239,13 @@ export default function EmptyCityHero() {
 
                 {error && (
                         <p className="lp-err anim-fade-in">{error}</p>
+                    )}
+
+                {authError && (
+                        <div className="lp-err anim-fade-in" role="alert">
+                            <span>{authError}</span>
+                            <button onClick={clearError} className="lp-err-close" aria-label="Dismiss">✕</button>
+                        </div>
                     )}
             </div>
 
@@ -384,89 +396,56 @@ export default function EmptyCityHero() {
                     max-width: 480px;
                 }
 
-                /* ── CTAs - MNC Grade Premium Buttons ─── */
+                /* ── Unified CTA buttons — identical style for all 3 primary actions ─── */
                 .lp-cta {
-                    display: flex; gap: 12px; flex-wrap: wrap;
+                    display: flex; gap: 10px; flex-wrap: wrap;
                     justify-content: center;
                 }
                 .lp-btn {
-                    display: inline-flex; align-items: center; gap: 8px;
-                    padding: 12px 24px; border-radius: 8px;
-                    font-size: 0.875rem; font-weight: 500;
+                    display: inline-flex; align-items: center; gap: 9px;
+                    padding: 12px 22px;
+                    min-height: 44px;
+                    border-radius: 10px;
+                    font-size: 0.88rem; font-weight: 500;
                     font-family: var(--font-body);
                     cursor: pointer; white-space: nowrap;
-                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-                    border: none;
+                    transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
                     text-decoration: none;
+                    line-height: 1;
                 }
-                .lp-btn--solid {
-                    background: #ffffff;
-                    color: #0a0a0a;
-                    font-weight: 600;
-                    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-                }
-                .lp-btn--solid:hover {
-                    background: #f4f4f5;
-                    transform: translateY(-2px);
-                    box-shadow:
-                        0 4px 12px rgba(0,0,0,0.15),
-                        0 8px 24px rgba(0,0,0,0.1);
-                }
-                .lp-btn--solid:active {
-                    transform: translateY(0);
-                }
-                .lp-arrow {
-                    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-                    opacity: 0.6;
-                }
-                .lp-btn--solid:hover .lp-arrow {
-                    transform: translateX(4px);
-                    opacity: 1;
-                }
-
-                .lp-btn--outline {
+                .lp-btn--primary {
                     background: rgba(255,255,255,0.08);
-                    border: 1px solid rgba(255,255,255,0.15);
-                    color: rgba(255,255,255,0.9);
-                    backdrop-filter: blur(8px);
-                    -webkit-backdrop-filter: blur(8px);
-                }
-                .lp-btn--outline:hover {
-                    background: rgba(255,255,255,0.12);
-                    border-color: rgba(255,255,255,0.25);
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-                }
-                .lp-btn--outline:active {
-                    transform: translateY(0);
-                }
-
-                .lp-btn--text {
-                    background: rgba(255,255,255,0.05);
-                    border: 1px solid rgba(255,255,255,0.08);
-                    color: rgba(255,255,255,0.7);
-                    backdrop-filter: blur(8px);
-                    -webkit-backdrop-filter: blur(8px);
-                }
-                .lp-btn--text:hover {
+                    border: 1px solid rgba(255,255,255,0.18);
                     color: rgba(255,255,255,0.95);
-                    background: rgba(255,255,255,0.1);
-                    border-color: rgba(255,255,255,0.15);
-                    transform: translateY(-2px);
+                    backdrop-filter: blur(10px);
+                    -webkit-backdrop-filter: blur(10px);
                 }
-                .lp-btn--text:active {
-                    transform: translateY(0);
+                .lp-btn--primary:hover {
+                    background: rgba(255,255,255,0.14);
+                    border-color: rgba(255,255,255,0.32);
+                    transform: translateY(-1px);
+                    box-shadow: 0 6px 20px rgba(0,0,0,0.28);
+                }
+                .lp-btn--primary:active { transform: translateY(0); }
+                .lp-btn--primary.is-active {
+                    background: rgba(255,255,255,0.18);
+                    border-color: rgba(255,255,255,0.4);
                 }
 
-                .lp-btn--universe {
-                    background: linear-gradient(135deg, rgba(99, 179, 237, 0.15), rgba(79, 209, 197, 0.15));
-                    border: 1px solid rgba(99, 179, 237, 0.3);
-                    color: #63b3ed;
+                .lp-demo-link {
+                    display: inline-flex; align-items: center; gap: 6px;
+                    margin-top: 18px;
+                    padding: 6px 4px;
+                    background: none; border: none;
+                    color: rgba(255,255,255,0.6);
+                    font-family: var(--font-body);
+                    font-size: 0.8rem; font-weight: 400;
+                    cursor: pointer;
+                    transition: color 0.18s ease, gap 0.18s ease;
                 }
-                .lp-btn--universe:hover {
-                    background: linear-gradient(135deg, rgba(99, 179, 237, 0.25), rgba(79, 209, 197, 0.25));
-                    border-color: rgba(99, 179, 237, 0.5);
-                    box-shadow: 0 4px 20px rgba(99, 179, 237, 0.2);
+                .lp-demo-link:hover {
+                    color: rgba(255,255,255,0.95);
+                    gap: 10px;
                 }
 
                 /* ── GitHub input ─── */
@@ -535,19 +514,26 @@ export default function EmptyCityHero() {
 
                 /* ── Error Message - Premium Styling ─── */
                 .lp-err {
+                    display: flex; align-items: center; justify-content: center; gap: 10px;
                     margin-top: 16px;
-                    padding: 12px 20px;
+                    padding: 12px 16px;
                     font-size: 0.8rem;
                     color: #fca5a5;
                     font-family: var(--font-mono);
                     background: rgba(239, 68, 68, 0.1);
-                    border: 1px solid rgba(239, 68, 68, 0.2);
+                    border: 1px solid rgba(239, 68, 68, 0.25);
                     border-radius: 8px;
                     backdrop-filter: blur(8px);
                     -webkit-backdrop-filter: blur(8px);
-                    max-width: 400px;
+                    max-width: 440px;
                     text-align: center;
                 }
+                .lp-err-close {
+                    background: none; border: none; color: inherit;
+                    cursor: pointer; padding: 0; font-size: 0.9rem; line-height: 1;
+                    opacity: 0.7; transition: opacity 0.15s ease;
+                }
+                .lp-err-close:hover { opacity: 1; }
 
                 /* ── Footer ─── */
                 .lp-footer {
