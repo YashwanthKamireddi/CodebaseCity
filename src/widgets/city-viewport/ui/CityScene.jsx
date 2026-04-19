@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useRef } from 'react'
-import { useThree } from '@react-three/fiber'
+import { useThree, useFrame } from '@react-three/fiber'
 import { Stars } from '@react-three/drei'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
@@ -21,13 +21,23 @@ import AtmosphericParticles from './AtmosphericParticles'
 import UfoAvatar from './UfoAvatar'
 
 /**
- * NebulaSky — massive inverted sphere with a gradient shader + slow nebula swirl.
- * Zero lights needed, one draw call, no texture sampling. Replaces flat background.
+ * NebulaSky — camera-locked inverted sphere painted with a gradient + nebula
+ * shader. Depth test disabled so it always paints before everything else,
+ * regardless of logarithmicDepthBuffer or far-plane scaling.
  */
-function NebulaSky({ radius = 20000 }) {
+function NebulaSky() {
+    const meshRef = useRef()
+
+    // Lock to camera so we never fall outside the sky sphere.
+    useFrame(({ camera }) => {
+        if (meshRef.current) meshRef.current.position.copy(camera.position)
+    })
+
     const material = useMemo(() => new THREE.ShaderMaterial({
         side: THREE.BackSide,
         depthWrite: false,
+        depthTest: false,
+        fog: false,
         uniforms: {
             uTop: { value: new THREE.Color('#05030f') },
             uMid: { value: new THREE.Color('#1a0838') },
@@ -48,11 +58,10 @@ function NebulaSky({ radius = 20000 }) {
             uniform vec3 uGlow;
             varying vec3 vPos;
 
-            // Cheap 3D noise for nebula bands
             float hash(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453); }
 
             void main() {
-                float h = vPos.y; // -1 bottom, +1 top
+                float h = vPos.y;
                 vec3 color;
                 if (h > 0.15) {
                     color = mix(uMid, uTop, smoothstep(0.15, 1.0, h));
@@ -62,12 +71,10 @@ function NebulaSky({ radius = 20000 }) {
                     color = mix(uTop, uHorizon, smoothstep(-1.0, -0.05, h));
                 }
 
-                // Nebula glow band near horizon, with low-freq noise variation
                 float horizonBand = smoothstep(0.05, -0.15, h) * smoothstep(-0.4, -0.15, h);
                 float noise = hash(floor(vPos * 30.0)) * 0.5 + hash(floor(vPos * 12.0)) * 0.5;
                 color += uGlow * horizonBand * (0.25 + noise * 0.35);
 
-                // Sparse star-dust sprinkle in the upper hemisphere
                 float star = step(0.995, hash(floor(vPos * 500.0))) * step(0.0, h);
                 color += vec3(star);
 
@@ -77,8 +84,8 @@ function NebulaSky({ radius = 20000 }) {
     }), [])
 
     return (
-        <mesh frustumCulled={false} renderOrder={-1}>
-            <sphereGeometry args={[radius, 32, 16]} />
+        <mesh ref={meshRef} frustumCulled={false} renderOrder={-1000}>
+            <sphereGeometry args={[500, 32, 16]} />
             <primitive object={material} attach="material" />
         </mesh>
     )
@@ -177,7 +184,7 @@ const CityScene = React.memo(function CityScene() {
             </group>
 
             {/* Stunning gradient nebula backdrop + dense starfield */}
-            <NebulaSky radius={Math.max(cityRadius * 30, 20000)} />
+            <NebulaSky />
             <Stars
                 radius={Math.max(cityRadius * 10, 4000)}
                 depth={Math.max(cityRadius * 5, 2000)}
