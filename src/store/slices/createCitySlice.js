@@ -344,36 +344,70 @@ export const createCitySlice = (set, get) => ({
 
             setProgress(50)
 
-            // Filter to source code files only
+            // Filter to source code files only. Broad coverage so we don't reject
+            // infra-only / data-only / docs-only repos.
             const EXT_TO_LANG = {
+                // Web / JS ecosystem
                 '.js': 'javascript', '.jsx': 'javascript', '.mjs': 'javascript', '.cjs': 'javascript',
                 '.ts': 'typescript', '.tsx': 'typescript',
-                '.py': 'python', '.pyw': 'python',
+                '.vue': 'vue', '.svelte': 'svelte',
+                '.html': 'html', '.htm': 'html',
+                '.css': 'css', '.scss': 'scss', '.less': 'less', '.sass': 'scss', '.styl': 'css',
+                // Systems / backend
+                '.py': 'python', '.pyw': 'python', '.pyx': 'python',
                 '.java': 'java',
+                '.kt': 'kotlin', '.kts': 'kotlin',
+                '.scala': 'scala', '.sc': 'scala',
                 '.go': 'go',
                 '.rs': 'rust',
-                '.rb': 'ruby',
-                '.php': 'php',
+                '.rb': 'ruby', '.rake': 'ruby',
+                '.php': 'php', '.phtml': 'php',
                 '.c': 'c', '.h': 'c',
-                '.cpp': 'cpp', '.hpp': 'cpp', '.cc': 'cpp', '.cxx': 'cpp',
+                '.cpp': 'cpp', '.hpp': 'cpp', '.cc': 'cpp', '.cxx': 'cpp', '.hh': 'cpp', '.hxx': 'cpp',
                 '.cs': 'csharp',
                 '.swift': 'swift',
-                '.kt': 'kotlin', '.kts': 'kotlin',
-                '.scala': 'scala',
-                '.vue': 'vue',
-                '.svelte': 'svelte',
+                '.m': 'objc', '.mm': 'objc',
                 '.dart': 'dart',
                 '.lua': 'lua',
                 '.r': 'r', '.R': 'r',
+                '.zig': 'zig',
+                '.nim': 'nim',
+                '.cr': 'crystal',
+                '.v': 'v',
+                // Functional
+                '.hs': 'haskell', '.lhs': 'haskell',
+                '.ml': 'ocaml', '.mli': 'ocaml',
+                '.fs': 'fsharp', '.fsx': 'fsharp', '.fsi': 'fsharp',
+                '.clj': 'clojure', '.cljs': 'clojure', '.cljc': 'clojure', '.edn': 'clojure',
+                '.ex': 'elixir', '.exs': 'elixir',
+                '.erl': 'erlang', '.hrl': 'erlang',
+                // Shell / scripts
+                '.sh': 'shell', '.bash': 'shell', '.zsh': 'shell', '.fish': 'shell',
+                '.ps1': 'powershell', '.psm1': 'powershell',
+                '.bat': 'batch', '.cmd': 'batch',
+                // Data / config / infra
                 '.sql': 'sql',
-                '.sh': 'shell', '.bash': 'shell', '.zsh': 'shell',
-                '.css': 'css', '.scss': 'scss', '.less': 'less',
-                '.html': 'html', '.htm': 'html',
+                '.yml': 'yaml', '.yaml': 'yaml',
+                '.toml': 'toml',
+                '.json': 'json', '.jsonc': 'json', '.json5': 'json',
+                '.xml': 'xml',
+                '.proto': 'protobuf',
+                '.graphql': 'graphql', '.gql': 'graphql',
+                '.tf': 'terraform', '.tfvars': 'terraform',
+                '.hcl': 'hcl',
+                '.dockerfile': 'docker',
+                // Docs / markup
+                '.md': 'markdown', '.mdx': 'markdown', '.markdown': 'markdown',
+                '.rst': 'rst',
+                '.tex': 'tex',
+                // Notebooks
+                '.ipynb': 'jupyter',
             }
 
             const IGNORE_DIRS = new Set([
-                'node_modules', '.git', 'dist', 'build', 'vendor', '__pycache__',
+                'node_modules', '.git', 'dist', 'build', 'out', 'vendor', '__pycache__',
                 '.next', '.nuxt', 'coverage', '.cache', 'target', '.venv', 'venv',
+                '.idea', '.vscode', '.gradle', '.parcel-cache', '.turbo', '.svelte-kit',
             ])
 
             // Helper to match simple glob patterns (e.g. *.test.js)
@@ -404,7 +438,17 @@ export const createCitySlice = (set, get) => ({
             })
 
             if (sourceFiles.length === 0) {
-                throw new Error('No source code files found in this repository.')
+                const totalBlobs = treeData.tree.filter(i => i.type === 'blob').length
+                if (totalBlobs === 0) {
+                    throw new Error('This repository is empty — nothing to visualize yet.')
+                }
+                const excluded = excludePatterns && excludePatterns.length > 0
+                    ? ' Your exclude patterns may be too aggressive — check Settings.'
+                    : ''
+                throw new Error(
+                    `No recognized source files found (${totalBlobs} files scanned).${excluded} ` +
+                    `Common causes: repo is binary-only, uses unsupported languages, or all paths match an ignored directory.`
+                )
             }
 
             setProgress(65)

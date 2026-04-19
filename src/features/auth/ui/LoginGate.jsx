@@ -1,5 +1,4 @@
-import React from 'react'
-import { Github, Building2, Sparkles, Globe, Zap } from 'lucide-react'
+import { Github, Building2, Sparkles, Globe, Zap, AlertCircle } from 'lucide-react'
 import { useAuth } from '../AuthProvider'
 import './LoginGate.css'
 
@@ -8,7 +7,7 @@ import './LoginGate.css'
  * Beautiful, welcoming, showcases what Codebase City offers.
  */
 export default function LoginGate() {
-    const { login, loading } = useAuth()
+    const { login, loading, error, clearError } = useAuth()
 
     return (
         <div className="login-gate">
@@ -56,14 +55,22 @@ export default function LoginGate() {
                 </div>
 
                 {/* Login Button */}
-                <button 
-                    onClick={login} 
+                <button
+                    onClick={login}
                     className="login-gate-button"
                     disabled={loading}
                 >
                     <Github size={22} />
                     <span>{loading ? 'Signing in...' : 'Sign in with GitHub'}</span>
                 </button>
+
+                {error && (
+                    <div className="login-gate-error" role="alert">
+                        <AlertCircle size={16} />
+                        <span>{error}</span>
+                        <button onClick={clearError} className="login-gate-error-close" aria-label="Dismiss">✕</button>
+                    </div>
+                )}
 
                 <p className="login-gate-note">
                     We only request read access to your public profile.
