@@ -57,89 +57,117 @@ function buildSpatialGrid(buildings) {
 }
 
 /**
- * CodeProbe — bright holographic explorer drone.
+ * CodeProbe — classic game flying saucer.
  *
- * Themed to the project: a floating data probe that looks like it's reading
- * the city. No trails, no heavy translucent shaders.
- *   - Bright white core (basic material, toneMapped=false → glows against bloom)
- *   - Angular metallic shell (octahedron, low-poly on purpose)
- *   - Twin counter-rotating rings
- *   - Down-beam thruster cone (additive blend)
- *   - Two high-intensity point lights
+ * Readable silhouette from any distance:
+ *   - Wide flat saucer hull (disc) — metallic dark with emissive panel lines
+ *   - Transparent glass cockpit dome with bright white core inside
+ *   - 8 classic "running lights" around the equator, alternating cyan/white
+ *   - Under-disc tractor beam (additive cone)
+ *   - Thin glowing rim torus — cyan edge highlight
+ *   - 2 point lights (one below, one above) for illumination + self-glow
+ *
+ * Everything uses cheap materials. Rings counter-rotate for motion cue.
  */
-function CodeProbe({ velocity, thrustMag }) {
+function CodeProbe({ thrustMag }) {
     const shellRef = useRef()
     const coreRef = useRef()
-    const ringARef = useRef()
-    const ringBRef = useRef()
     const beamRef = useRef()
+    const lightsRef = useRef()
 
     useFrame((state) => {
         const t = state.clock.elapsedTime
         if (shellRef.current) {
-            shellRef.current.position.y = Math.sin(t * 2.2) * 0.35
-            shellRef.current.rotation.y = t * 0.45
+            shellRef.current.position.y = Math.sin(t * 2.0) * 0.3
+            shellRef.current.rotation.y = t * 0.35
         }
         if (coreRef.current) {
-            const pulse = 1 + Math.sin(t * 5) * 0.08
+            const pulse = 1 + Math.sin(t * 5.5) * 0.1
             coreRef.current.scale.setScalar(pulse)
         }
-        if (ringARef.current) ringARef.current.rotation.z = t * 1.8
-        if (ringBRef.current) ringBRef.current.rotation.x = -t * 1.4
         if (beamRef.current) {
             const boost = Math.min(1, thrustMag?.current || 0)
-            beamRef.current.material.opacity = 0.35 + boost * 0.35 + Math.sin(t * 9) * 0.08
-            beamRef.current.scale.y = 1 + boost * 0.9
+            beamRef.current.material.opacity = 0.4 + boost * 0.3 + Math.sin(t * 8) * 0.08
+            beamRef.current.scale.y = 1 + boost * 0.8
+        }
+        // Running lights blink pattern
+        if (lightsRef.current) {
+            lightsRef.current.rotation.y = t * 0.6
         }
     })
 
     return (
         <group ref={shellRef}>
-            {/* Shell — angular low-poly metallic hull */}
-            <mesh>
-                <octahedronGeometry args={[2.4, 0]} />
+            {/* ── Main saucer hull — wide flat disc ── */}
+            <mesh scale={[1, 0.24, 1]}>
+                <sphereGeometry args={[3.2, 28, 14]} />
                 <meshStandardMaterial
-                    color="#e8f6ff"
-                    metalness={0.85}
-                    roughness={0.2}
-                    emissive="#3ab7ff"
-                    emissiveIntensity={0.5}
+                    color="#1a2238"
+                    metalness={0.9}
+                    roughness={0.28}
+                    emissive="#1e4a7a"
+                    emissiveIntensity={0.45}
                 />
             </mesh>
 
-            {/* Brighter equator band for silhouette */}
+            {/* ── Sharp rim torus — bright cyan edge ── */}
             <mesh rotation={[Math.PI / 2, 0, 0]}>
-                <torusGeometry args={[2.6, 0.1, 8, 48]} />
+                <torusGeometry args={[3.2, 0.09, 8, 56]} />
                 <meshBasicMaterial color="#00ffcc" toneMapped={false} />
             </mesh>
 
-            {/* White core — always reads as the brightest point on screen */}
-            <mesh ref={coreRef}>
-                <sphereGeometry args={[1.1, 20, 16]} />
+            {/* ── Cockpit dome — translucent glass ── */}
+            <mesh position={[0, 0.55, 0]}>
+                <sphereGeometry args={[1.35, 24, 14, 0, Math.PI * 2, 0, Math.PI / 2]} />
+                <meshStandardMaterial
+                    color="#6bd4ff"
+                    emissive="#2aa6ff"
+                    emissiveIntensity={0.8}
+                    metalness={0.4}
+                    roughness={0.05}
+                    transparent
+                    opacity={0.5}
+                />
+            </mesh>
+
+            {/* ── Bright white core inside dome — reads as the UFO's light source ── */}
+            <mesh ref={coreRef} position={[0, 0.45, 0]}>
+                <sphereGeometry args={[0.55, 16, 12]} />
                 <meshBasicMaterial color="#ffffff" toneMapped={false} />
             </mesh>
 
-            {/* Rotating accent rings (counter-rotating) */}
-            <mesh ref={ringARef} rotation={[Math.PI / 3, 0, 0]}>
-                <torusGeometry args={[3.2, 0.04, 8, 64]} />
-                <meshBasicMaterial color="#66e6ff" toneMapped={false} transparent opacity={0.9} />
-            </mesh>
-            <mesh ref={ringBRef} rotation={[0, Math.PI / 3, 0]}>
-                <torusGeometry args={[3.5, 0.03, 8, 64]} />
-                <meshBasicMaterial color="#ff5ad8" toneMapped={false} transparent opacity={0.85} />
+            {/* ── 8 classic running lights around the equator (alternating cyan/white) ── */}
+            <group ref={lightsRef}>
+                {Array.from({ length: 8 }).map((_, i) => {
+                    const a = (i / 8) * Math.PI * 2
+                    const x = Math.cos(a) * 2.9
+                    const z = Math.sin(a) * 2.9
+                    const color = i % 2 === 0 ? '#ffffff' : '#00ffcc'
+                    return (
+                        <mesh key={i} position={[x, -0.1, z]}>
+                            <sphereGeometry args={[0.14, 10, 8]} />
+                            <meshBasicMaterial color={color} toneMapped={false} />
+                        </mesh>
+                    )
+                })}
+            </group>
+
+            {/* ── Thin bottom disc for underside definition ── */}
+            <mesh position={[0, -0.38, 0]} rotation={[Math.PI / 2, 0, 0]}>
+                <ringGeometry args={[1.1, 2.4, 32]} />
+                <meshBasicMaterial
+                    color="#00aaff"
+                    transparent
+                    opacity={0.35}
+                    side={THREE.DoubleSide}
+                    depthWrite={false}
+                    toneMapped={false}
+                />
             </mesh>
 
-            {/* Four diagonal stabilizer spikes — subtle detail */}
-            {[[1, 1], [-1, 1], [1, -1], [-1, -1]].map(([sx, sz], i) => (
-                <mesh key={i} position={[sx * 1.7, 0, sz * 1.7]} rotation={[0, Math.atan2(sz, sx), 0]}>
-                    <coneGeometry args={[0.12, 0.8, 6]} />
-                    <meshBasicMaterial color="#00ffcc" toneMapped={false} />
-                </mesh>
-            ))}
-
-            {/* Down-beam thruster */}
-            <mesh ref={beamRef} position={[0, -1.8, 0]} rotation={[Math.PI, 0, 0]}>
-                <coneGeometry args={[1.1, 2.4, 20, 1, true]} />
+            {/* ── Tractor beam (below) — expands with thrust ── */}
+            <mesh ref={beamRef} position={[0, -1.9, 0]} rotation={[Math.PI, 0, 0]}>
+                <coneGeometry args={[1.5, 2.6, 24, 1, true]} />
                 <meshBasicMaterial
                     color="#00ffcc"
                     transparent
@@ -151,11 +179,9 @@ function CodeProbe({ velocity, thrustMag }) {
                 />
             </mesh>
 
-            {/* Two high-intensity point lights — one below (illuminates the city
-                as you fly over), one on the hull (keeps the probe visible against
-                the dark sky). */}
-            <pointLight position={[0, -2, 0]} color="#00ffcc" intensity={6} distance={120} />
-            <pointLight position={[0, 1.5, 0]} color="#ffffff" intensity={1.8} distance={30} />
+            {/* ── Lights ── */}
+            <pointLight position={[0, -2, 0]} color="#00ffcc" intensity={6} distance={140} />
+            <pointLight position={[0, 1, 0]} color="#ffffff" intensity={2.2} distance={30} />
         </group>
     )
 }
@@ -320,8 +346,8 @@ export default function UfoAvatar() {
     return (
         <group ref={groupRef} position={[0, 40, 0]}>
             <Sparkles count={30} scale={[18, 8, 24]} position={[0, 0, -8]} size={5} speed={2} opacity={0.55} color="#00ffcc" />
-            <group ref={vehicleRef} scale={[3.0, 3.0, 3.0]}>
-                <CodeProbe velocity={velocity.current} thrustMag={thrustMag} />
+            <group ref={vehicleRef} scale={[3.2, 3.2, 3.2]}>
+                <CodeProbe thrustMag={thrustMag} />
             </group>
         </group>
     )

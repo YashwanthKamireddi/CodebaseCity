@@ -236,49 +236,73 @@ const EnergyCoreReactor = React.memo(function EnergyCoreReactor() {
         opacity: 0.3,
     }), [threeColor])
 
-    // Merged base tiers geometry (3 cylinders → 1 draw call)
+    // Merged base — wider fortress stance with 4 corner buttress pillars.
+    // Feels like a town hall centerpiece with stepped architecture.
     const mergedBaseGeo = useMemo(() => {
-        const tier1H = 3, tier2H = 3, tier3H = 2
-        const g1 = new THREE.CylinderGeometry(22, 25, tier1H, 6)
+        const tier1H = 5, tier2H = 4, tier3H = 3
+        const parts = []
+
+        // 3 stepped tiers (hexagonal → octagonal → octagonal)
+        const g1 = new THREE.CylinderGeometry(32, 36, tier1H, 8)
         g1.translate(0, tier1H / 2, 0)
-        const g2 = new THREE.CylinderGeometry(17, 22, tier2H, 6)
+        parts.push(g1)
+
+        const g2 = new THREE.CylinderGeometry(24, 30, tier2H, 8)
         g2.translate(0, tier1H + tier2H / 2, 0)
-        const g3 = new THREE.CylinderGeometry(13, 17, tier3H, 6)
+        parts.push(g2)
+
+        const g3 = new THREE.CylinderGeometry(18, 24, tier3H, 8)
         g3.translate(0, tier1H + tier2H + tier3H / 2, 0)
-        const merged = mergeGeometries([g1, g2, g3])
-        g1.dispose(); g2.dispose(); g3.dispose()
+        parts.push(g3)
+
+        // 4 corner buttress pillars with conical apex caps
+        for (let i = 0; i < 4; i++) {
+            const ang = (i / 4) * Math.PI * 2 + Math.PI / 4
+            const r = 34
+            const pillarH = tier1H + tier2H
+            const p = new THREE.CylinderGeometry(2, 3, pillarH, 6)
+            p.translate(Math.cos(ang) * r, pillarH / 2, Math.sin(ang) * r)
+            parts.push(p)
+            const apex = new THREE.ConeGeometry(2.8, 4, 6)
+            apex.translate(Math.cos(ang) * r, pillarH + 2, Math.sin(ang) * r)
+            parts.push(apex)
+        }
+
+        const merged = mergeGeometries(parts)
+        parts.forEach(p => p.dispose())
         return merged
     }, [])
 
-    // Merged accent tori geometry (5 tori → 1 draw call)
+    // Merged accent rings — tier edges + spire highlights (1 draw call)
     const mergedAccentGeo = useMemo(() => {
-        const tier1H = 3, tier2H = 3, tier3H = 2
+        const tier1H = 5, tier2H = 4, tier3H = 3
         const baseTop = tier1H + tier2H + tier3H
         const tH = spireHeight
 
-        const t1 = new THREE.TorusGeometry(23, 0.4, 4, 6)
-        t1.rotateX(Math.PI / 2); t1.translate(0, tier1H, 0)
-        const t2 = new THREE.TorusGeometry(18, 0.3, 4, 6)
-        t2.rotateX(Math.PI / 2); t2.translate(0, tier1H + tier2H, 0)
-        const t3 = new THREE.TorusGeometry(14, 0.25, 4, 6)
-        t3.rotateX(Math.PI / 2); t3.translate(0, baseTop, 0)
-        const t4 = new THREE.TorusGeometry(10, 0.5, 4, 6)
-        t4.rotateX(Math.PI / 2); t4.translate(0, baseTop + tH * 0.33, 0)
-        const t5 = new THREE.TorusGeometry(6, 0.4, 4, 6)
-        t5.rotateX(Math.PI / 2); t5.translate(0, baseTop + tH * 0.66, 0)
-        const merged = mergeGeometries([t1, t2, t3, t4, t5])
-        t1.dispose(); t2.dispose(); t3.dispose(); t4.dispose(); t5.dispose()
+        const parts = []
+        const addRing = (r, w, y) => {
+            const t = new THREE.TorusGeometry(r, w, 4, 24)
+            t.rotateX(Math.PI / 2); t.translate(0, y, 0)
+            parts.push(t)
+        }
+        addRing(33, 0.5, tier1H)
+        addRing(27, 0.4, tier1H + tier2H)
+        addRing(21, 0.3, baseTop)
+        addRing(10, 0.55, baseTop + tH * 0.33)
+        addRing(6, 0.45, baseTop + tH * 0.66)
+        const merged = mergeGeometries(parts)
+        parts.forEach(p => p.dispose())
         return merged
     }, [spireHeight])
 
-    // Merged tower geometry (2 cylinders → 1 draw call)
+    // Merged tower — shorter, more volume (1 draw call)
     const mergedTowerGeo = useMemo(() => {
-        const baseTop = 8
+        const baseTop = 12 // new base top with taller tiers
         const tH = spireHeight
-        const g1 = new THREE.CylinderGeometry(7, 12, tH * 0.6, 6, 1)
-        g1.translate(0, baseTop + tH * 0.3, 0)
-        const g2 = new THREE.CylinderGeometry(3.5, 7, tH * 0.5, 6, 1)
-        g2.translate(0, baseTop + tH * 0.75, 0)
+        const g1 = new THREE.CylinderGeometry(9, 14, tH * 0.55, 8, 1)
+        g1.translate(0, baseTop + tH * 0.275, 0)
+        const g2 = new THREE.CylinderGeometry(4, 9, tH * 0.45, 8, 1)
+        g2.translate(0, baseTop + tH * 0.775, 0)
         const merged = mergeGeometries([g1, g2])
         g1.dispose(); g2.dispose()
         return merged
@@ -319,7 +343,7 @@ const EnergyCoreReactor = React.memo(function EnergyCoreReactor() {
         selectLandmark(isSelected ? null : 'reactor')
     }
 
-    const tier1H = 3, tier2H = 3, tier3H = 2
+    const tier1H = 5, tier2H = 4, tier3H = 3
     const baseTop = tier1H + tier2H + tier3H
     const towerH = spireHeight
     const towerTop = baseTop + towerH
@@ -376,23 +400,23 @@ const EnergyCoreReactor = React.memo(function EnergyCoreReactor() {
 
                 {/* ═══ GROUND EFFECTS ═══ */}
                 <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.1, 0]}>
-                    <ringGeometry args={[20, 28, 6]} />
+                    <ringGeometry args={[30, 40, 8]} />
                     <meshBasicMaterial color={threeColor} transparent opacity={isSelected ? 0.25 : 0.08} depthWrite={false} />
                 </mesh>
                 <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
-                    <ringGeometry args={[28, 32, 36]} />
-                    <meshBasicMaterial color={threeColor} transparent opacity={0.04} depthWrite={false} />
+                    <ringGeometry args={[40, 46, 40]} />
+                    <meshBasicMaterial color={threeColor} transparent opacity={0.05} depthWrite={false} />
                 </mesh>
 
                 {/* ═══ SELECTION HIGHLIGHT ═══ */}
                 {isSelected && (
                     <>
                         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.3, 0]}>
-                            <ringGeometry args={[26, 32, 48]} />
+                            <ringGeometry args={[38, 44, 48]} />
                             <meshBasicMaterial color={threeColor} transparent opacity={0.7} depthWrite={false} />
                         </mesh>
                         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.4, 0]}>
-                            <ringGeometry args={[22, 25, 48]} />
+                            <ringGeometry args={[32, 36, 48]} />
                             <meshBasicMaterial color="#ffffff" transparent opacity={0.3} depthWrite={false} />
                         </mesh>
                     </>
