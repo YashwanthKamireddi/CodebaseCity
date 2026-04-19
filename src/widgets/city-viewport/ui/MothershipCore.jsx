@@ -282,7 +282,7 @@ const MothershipCore = React.memo(function MothershipCore() {
     // Beam connects ship belly to nexus spire crown — wider at ship, narrow at reactor
     const beamHeight = altitude - hallTop
     const beamGeo = useMemo(() => {
-        return new THREE.CylinderGeometry(14, 3, beamHeight, 16, 6, true)
+        return new THREE.CylinderGeometry(21, 4.5, beamHeight, 16, 6, true)
     }, [beamHeight])
 
     // Dispose GPU resources on unmount or deps change
@@ -324,49 +324,49 @@ const MothershipCore = React.memo(function MothershipCore() {
                 onPointerEnter={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer' }}
                 onPointerLeave={() => { document.body.style.cursor = 'auto' }}
             >
-                {/* Main disc hull — thicker, grander saucer */}
+                {/* Main disc hull — thicker, grander saucer (+50%) */}
                 <mesh scale={[1, 0.22, 1]}>
-                    <sphereGeometry args={[72, 20, 12]} />
+                    <sphereGeometry args={[108, 24, 14]} />
                     <primitive object={hullMat} attach="material" />
                 </mesh>
 
                 {/* Bridge + ventral domes — merged (2 → 1 draw call) */}
-                <mesh geometry={mergedBridgeGeo} scale={[1.35, 1.35, 1.35]}>
+                <mesh geometry={mergedBridgeGeo} scale={[2.0, 2.0, 2.0]}>
                     <primitive object={bridgeMat} attach="material" />
                 </mesh>
 
                 {/* Communications antenna on top of bridge */}
-                <mesh position={[0, 24, 0]}>
-                    <cylinderGeometry args={[0.5, 0.9, 10, 8]} />
+                <mesh position={[0, 36, 0]}>
+                    <cylinderGeometry args={[0.75, 1.4, 15, 8]} />
                     <primitive object={accentMat} attach="material" />
                 </mesh>
-                <mesh position={[0, 29, 0]}>
-                    <sphereGeometry args={[1.2, 10, 8]} />
+                <mesh position={[0, 44, 0]}>
+                    <sphereGeometry args={[1.8, 10, 8]} />
                     <meshBasicMaterial color="#00ffff" toneMapped={false} />
                 </mesh>
 
                 {/* Outer ring */}
                 <mesh ref={ringOuter}>
-                    <torusGeometry args={[82, 3, 6, 32]} />
+                    <torusGeometry args={[122, 4.5, 6, 36]} />
                     <primitive object={accentMat} attach="material" />
                 </mesh>
 
                 {/* Mid ring */}
                 <mesh ref={ringMid} rotation={[0.15, 0, 0]}>
-                    <torusGeometry args={[68, 1.8, 4, 24]} />
+                    <torusGeometry args={[102, 2.7, 4, 28]} />
                     <primitive object={accentMat} attach="material" />
                 </mesh>
 
                 {/* Inner ring */}
                 <mesh ref={ringInner} rotation={[Math.PI / 2, 0, 0]}>
-                    <torusGeometry args={[46, 1.4, 4, 20]} />
+                    <torusGeometry args={[69, 2.1, 4, 24]} />
                     <primitive object={accentMat} attach="material" />
                 </mesh>
 
                 {/* Selection highlight ring */}
                 {isSelected && (
-                    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -14, 0]}>
-                        <ringGeometry args={[74, 80, 48]} />
+                    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -21, 0]}>
+                        <ringGeometry args={[110, 120, 56]} />
                         <meshBasicMaterial color="#00bbee" transparent opacity={0.5} depthWrite={false} />
                     </mesh>
                 )}
@@ -378,13 +378,13 @@ const MothershipCore = React.memo(function MothershipCore() {
             </mesh>
 
             {/* ── Ship underside glow — wide halo beneath hull ── */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, altitude - 14, 0]}>
-                <ringGeometry args={[6, 58, 40]} />
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, altitude - 21, 0]}>
+                <ringGeometry args={[9, 87, 48]} />
                 <meshBasicMaterial color="#004488" transparent opacity={0.16} depthWrite={false} />
             </mesh>
             {/* Beam emission glow — bright ring directly under ventral dome */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, altitude - 16, 0]}>
-                <ringGeometry args={[2, 20, 32]} />
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, altitude - 24, 0]}>
+                <ringGeometry args={[3, 30, 36]} />
                 <meshBasicMaterial color="#00aaff" transparent opacity={0.28} depthWrite={false} />
             </mesh>
         </group>

@@ -126,7 +126,7 @@ function AnimationPump() {
  * CameraFloorGuard — keeps the camera + orbit target above the ground plane.
  * Runs in useFrame so it catches pan, dolly, and rotate transitions equally.
  */
-function CameraFloorGuard({ floorY = 2, targetFloorY = 4 }) {
+function CameraFloorGuard({ floorY = 3, targetFloorY = 6 }) {
     useFrame(({ camera, controls }) => {
         if (camera.position.y < floorY) camera.position.y = floorY
         if (controls?.target && controls.target.y < targetFloorY) {

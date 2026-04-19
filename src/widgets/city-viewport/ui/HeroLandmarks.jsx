@@ -65,8 +65,8 @@ const HeroLandmarks = React.memo(function HeroLandmarks({ buildings }) {
             const palette = HERO_PALETTE[i % HERO_PALETTE.length]
 
             const buildingH = hero.rawH * CITY_HEIGHT_SCALE
-            const spireH = Math.max(12, buildingH * 0.35)
-            const spireW = Math.min(hero.rawW * 0.15, 2.5)
+            const spireH = Math.max(18, buildingH * 0.35)
+            const spireW = Math.min(hero.rawW * 0.15, 5)
             const ringR = spireW * 2.2
             const baseY = buildingH + 1
             const centerY = baseY + spireH / 2

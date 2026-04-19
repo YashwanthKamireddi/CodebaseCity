@@ -11,20 +11,20 @@
  */
 
 // Town hall (EnergyCoreReactor) tier thicknesses — must match the geometry
-// constructed in EnergyCoreReactor.jsx.
-export const TIER_HEIGHTS = { tier1: 6, tier2: 5, tier3: 4 }
+// constructed in EnergyCoreReactor.jsx. Scaled ~50% with the rest of the city.
+export const TIER_HEIGHTS = { tier1: 9, tier2: 7, tier3: 6 }
 export const TOWNHALL_BASE_TOP = TIER_HEIGHTS.tier1 + TIER_HEIGHTS.tier2 + TIER_HEIGHTS.tier3
-export const TOWNHALL_CROWN_OFFSET = 8 // crown sphere center above tower top
-export const TOWNHALL_CROWN_RADIUS = 6
+export const TOWNHALL_CROWN_OFFSET = 12 // crown sphere center above tower top
+export const TOWNHALL_CROWN_RADIUS = 9
 
 /** Tower (spire) height — taller than 90th-percentile building. */
 export function computeSpireHeight(buildings) {
-    if (!buildings?.length) return 70
+    if (!buildings?.length) return 105
     const heights = buildings
         .map(b => (b.dimensions?.height || 8) * 3.0)
         .sort((a, b) => a - b)
     const p90 = heights[Math.floor(heights.length * 0.9)] || 50
-    return Math.max(70, p90 * 1.5)
+    return Math.max(105, p90 * 1.5)
 }
 
 /** Y of the very top of the town hall (above crown sphere). */
@@ -44,9 +44,9 @@ export function mothershipAltitude(buildings) {
         if (r > maxR) maxR = r
     }
     // Must stay in sync with HolographicCityName's scale formula.
-    const cityRadius = Math.max(200, maxR * 0.8)
-    const scaleForName = Math.max(110, cityRadius * 0.55)
+    const cityRadius = Math.max(300, maxR * 0.8)
+    const scaleForName = Math.max(165, cityRadius * 0.55)
     const textHeight = scaleForName * 0.25
-    const nameTop = townHallTopY(buildings) + 40 + textHeight
-    return Math.max(320, maxH + 260, nameTop + 100)
+    const nameTop = townHallTopY(buildings) + 50 + textHeight
+    return Math.max(460, maxH + 340, nameTop + 140)
 }
