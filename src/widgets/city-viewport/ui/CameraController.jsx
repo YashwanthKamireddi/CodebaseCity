@@ -149,8 +149,14 @@ export default React.memo(function CameraController() {
 
     // Auto-fit camera when city data changes (new analysis or demo load).
     // Uses FOV-aware framing so cities always fill the viewport correctly.
+    //
+    // Delay scales with building count so the camera flight doesn't start
+    // while InstancedCity is still streaming matrices (those ships compete
+    // for main-thread frames and cause the flight to stutter).
     useEffect(() => {
         if (!cityData?.buildings?.length || !controls) return
+        const count = cityData.buildings.length
+        const delay = Math.min(800, 220 + Math.floor(count / 40))
 
         const timer = setTimeout(() => {
             // FOV-aware framing: the distance at which a sphere of radius R
@@ -181,7 +187,7 @@ export default React.memo(function CameraController() {
             if (controls.maxDistance < neededFar * 0.5) {
                 controls.maxDistance = neededFar * 0.5
             }
-        }, 200)
+        }, delay)
 
         return () => clearTimeout(timer)
     }, [cityData, cityRadius, cx, cz, maxHeight, camera, controls, animateTo])

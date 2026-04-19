@@ -139,16 +139,29 @@ function App() {
         reloadAchievementsForUser()
     }, [isAuthenticated, user?.id, reloadAchievementsForUser])
 
-    // Performance tier detection — computed once, not on every render
+    // Performance tier detection — computed once, not on every render.
+    // Desktop gets full device DPR (up to 2) so the scene isn't blurry on
+    // retina/hi-DPI. Only phones AND ≤2-core machines get downgraded.
     const { isMobile, isLowEnd } = useMemo(() => {
         const isMobileDevice = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0
         const isNarrowScreen = typeof window !== 'undefined' && window.innerWidth <= 768
+        const cores = (typeof navigator !== 'undefined' && navigator.hardwareConcurrency) || 8
         return {
             isMobile: isMobileDevice && isNarrowScreen,
-            isLowEnd: isMobileDevice || (typeof navigator !== 'undefined' && navigator.hardwareConcurrency <= 4),
+            // Truly low-end: only phones with ≤2 cores, or a narrow screen (= mobile).
+            // Desktop with 4 cores is NOT low-end; modern laptops are 4-8 cores.
+            isLowEnd: (isMobileDevice && cores <= 2) || (isNarrowScreen && cores <= 4),
         }
     }, [])
-    const dprRange = isLowEnd ? [0.75, 1] : [1, 1.25]
+    // DPR strategy:
+    //   low-end   → [0.75, 1]   (phones, keep battery + thermal in check)
+    //   mobile    → [1, 1.5]    (retina phones, keep quality readable)
+    //   desktop   → [1, 2]      (match device, kill the blur)
+    const dprRange = isLowEnd
+        ? [0.75, 1]
+        : isMobile
+            ? [1, 1.5]
+            : [1, 2]
 
     // Handle Shareable URLs (?repo=owner/repo)
     useEffect(() => {
