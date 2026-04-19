@@ -18,7 +18,7 @@ import LoadingScreen from './shared/ui/LoadingScreen'
 import { ErrorBoundary } from './shared/ui/ErrorBoundary'
 import { ToastContainer } from './shared/ui/Toast'
 import { AchievementToast } from './features/achievements'
-import { useAuth, LoginGate } from './features/auth'
+import { useAuth, LoginGate, GitHubTokenButton } from './features/auth'
 
 
 // Lazy-loaded heavy panels (only loaded when needed)
@@ -379,6 +379,9 @@ function App() {
             {cityData && !isLandingOverlayActive && view === '3d' && <Sidebar />}
 
             {/* Building detail panel — now rendered as 3D hologram inside CityScene */}
+
+            {/* GitHub PAT chip (top-right) — visible everywhere for rate-limit relief */}
+            <GitHubTokenButton />
 
             {/* Command Palette - ⌘K */}
             {cityData && (

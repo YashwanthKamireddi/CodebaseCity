@@ -1,11 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import * as Sentry from '@sentry/react'
+import * as THREE from 'three'
+import { acceleratedRaycast, computeBoundsTree, disposeBoundsTree } from 'three-mesh-bvh'
 import App from './App'
 import './index.css'
 import './shared/animations/animations.css'
 import { ErrorBoundary } from './shared/ui/ErrorBoundary'
 import { AuthProvider } from './features/auth'
+
+// Global BVH-accelerated raycasting for every THREE.Mesh in the scene.
+// One-time setup; every mesh we raycast against gets O(log n) intersection
+// instead of O(n). Does not affect InstancedCity (which has its own chunked
+// raycaster), but Mothership, EnergyCoreReactor, HeroLandmarks, etc. all benefit.
+THREE.BufferGeometry.prototype.computeBoundsTree = computeBoundsTree
+THREE.BufferGeometry.prototype.disposeBoundsTree = disposeBoundsTree
+THREE.Mesh.prototype.raycast = acceleratedRaycast
 
 function initAnalytics() {
     const analyticsDomain = import.meta.env.VITE_ANALYTICS_DOMAIN
