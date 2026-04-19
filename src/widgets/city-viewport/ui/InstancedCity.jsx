@@ -245,18 +245,8 @@ const InstancedCity = React.memo(function InstancedCity() {
             materialRef.current.uniforms.uTime.value = t
         }
 
-        // 3. ZERO-COPY RUST PHYSICS TICK (120FPS MAX)
-        if (engineRef.current && wasmMemoryRef.current && meshRef.current && wasmEngine) {
-            engineRef.current.tick(delta, t)
-
-            // Direct Array Buffer Override directly mapping to the GPU
-            const ptr = engineRef.current.get_matrices_ptr()
-            const floatArray = new Float32Array(wasmMemoryRef.current.buffer, ptr, count * 16)
-
-            meshRef.current.instanceMatrix.array.set(floatArray)
-            meshRef.current.instanceMatrix.needsUpdate = true
-            invalidate()
-        }
+        // Physics drop-in tick disabled: buildings now placed deterministically
+        // in the layout effect below. City appears in place instantly, no jitter.
     })
 
     const [hoveredInstanceId, setHoveredInstanceId] = useState(null)
@@ -266,21 +256,13 @@ const InstancedCity = React.memo(function InstancedCity() {
 
 
     // ═══════════════════════════════════════════════════════════════
-    // WASM HIGH-PERFORMANCE LAYOUT PIPELINE
+    // DETERMINISTIC LAYOUT — buildings placed in one pass, no animation.
+    // Replaces the WASM physics drop-in that made buildings jitter on load.
     // ═══════════════════════════════════════════════════════════════
     useLayoutEffect(() => {
-        if (!wasmEngine || !meshRef.current || count === 0) return
-
-        if (engineRef.current) {
-            engineRef.current.free()
-        }
-
-        const engine = new PhysicsEngine(count)
-        engineRef.current = engine
+        if (!meshRef.current || count === 0) return
 
         let maxRadiusSq = 0
-
-        // 1. Send all numeric blueprint dimensions over to Rust
         for (let i = 0; i < count; i++) {
             const b = buildings[i]
             const { x, z } = b.position
@@ -289,26 +271,25 @@ const InstancedCity = React.memo(function InstancedCity() {
             const targetHeight = (b.dimensions?.height || 8) * 3.0
             const y = targetHeight / 2
 
-            // Store pure target positions into WASM so it scales up natively
-            engine.set_building(i, x, y, z, width, targetHeight, depth)
+            tempObject.position.set(x, y, z)
+            tempObject.scale.set(width, targetHeight, depth)
+            tempObject.rotation.set(0, 0, 0)
+            tempObject.updateMatrix()
+            meshRef.current.setMatrixAt(i, tempObject.matrix)
 
             const distSq = x * x + z * z
             if (distSq > maxRadiusSq) maxRadiusSq = distSq
         }
 
-        // 2. Setup Three.js bounding sphere manually
+        meshRef.current.instanceMatrix.needsUpdate = true
         if (meshRef.current.geometry) {
-            meshRef.current.geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), Math.sqrt(maxRadiusSq) + 100)
+            meshRef.current.geometry.boundingSphere = new THREE.Sphere(
+                new THREE.Vector3(0, 0, 0),
+                Math.sqrt(maxRadiusSq) + 100
+            )
         }
-
-        // Cleanup memory pointer mapping on unmount
-        return () => {
-            if (engineRef.current) {
-                engineRef.current.free()
-                engineRef.current = null
-            }
-        }
-    }, [buildings, count, wasmEngine])
+        invalidate()
+    }, [buildings, count, invalidate])
 
     // Pre-compute issue sets once for O(1) lookup instead of O(n)
     const issueIndex = useMemo(() => {

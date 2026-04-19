@@ -1,5 +1,7 @@
 import React, { useMemo, useEffect, useRef } from 'react'
 import { useThree } from '@react-three/fiber'
+import { Stars } from '@react-three/drei'
+import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 import Roads from './Roads'
 import InstancedCity from './InstancedCity'
@@ -16,8 +18,71 @@ import StreetLamps from './StreetLamps'
 import DataStreams from './DataStreams'
 import AtmosphericParticles from './AtmosphericParticles'
 
-import EnergyShieldDome from './EnergyShieldDome'
 import UfoAvatar from './UfoAvatar'
+
+/**
+ * NebulaSky — massive inverted sphere with a gradient shader + slow nebula swirl.
+ * Zero lights needed, one draw call, no texture sampling. Replaces flat background.
+ */
+function NebulaSky({ radius = 20000 }) {
+    const material = useMemo(() => new THREE.ShaderMaterial({
+        side: THREE.BackSide,
+        depthWrite: false,
+        uniforms: {
+            uTop: { value: new THREE.Color('#05030f') },
+            uMid: { value: new THREE.Color('#1a0838') },
+            uHorizon: { value: new THREE.Color('#3a0a4a') },
+            uGlow: { value: new THREE.Color('#ff3a8c') },
+        },
+        vertexShader: `
+            varying vec3 vPos;
+            void main() {
+                vPos = normalize(position);
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `,
+        fragmentShader: `
+            uniform vec3 uTop;
+            uniform vec3 uMid;
+            uniform vec3 uHorizon;
+            uniform vec3 uGlow;
+            varying vec3 vPos;
+
+            // Cheap 3D noise for nebula bands
+            float hash(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453); }
+
+            void main() {
+                float h = vPos.y; // -1 bottom, +1 top
+                vec3 color;
+                if (h > 0.15) {
+                    color = mix(uMid, uTop, smoothstep(0.15, 1.0, h));
+                } else if (h > -0.05) {
+                    color = mix(uHorizon, uMid, smoothstep(-0.05, 0.15, h));
+                } else {
+                    color = mix(uTop, uHorizon, smoothstep(-1.0, -0.05, h));
+                }
+
+                // Nebula glow band near horizon, with low-freq noise variation
+                float horizonBand = smoothstep(0.05, -0.15, h) * smoothstep(-0.4, -0.15, h);
+                float noise = hash(floor(vPos * 30.0)) * 0.5 + hash(floor(vPos * 12.0)) * 0.5;
+                color += uGlow * horizonBand * (0.25 + noise * 0.35);
+
+                // Sparse star-dust sprinkle in the upper hemisphere
+                float star = step(0.995, hash(floor(vPos * 500.0))) * step(0.0, h);
+                color += vec3(star);
+
+                gl_FragColor = vec4(color, 1.0);
+            }
+        `,
+    }), [])
+
+    return (
+        <mesh frustumCulled={false} renderOrder={-1}>
+            <sphereGeometry args={[radius, 32, 16]} />
+            <primitive object={material} attach="material" />
+        </mesh>
+    )
+}
 
 /**
  * AnimationPump — In frameloop="demand" mode, periodically invalidates
@@ -109,13 +174,21 @@ const CityScene = React.memo(function CityScene() {
 
                 {/* ── Gamified Interactive Avatar ── */}
                 <UfoAvatar />
-
-                {/* ── EnergyShieldDome ── */}
-                <EnergyShieldDome />
             </group>
 
-            <fog attach="fog" args={['#0a0e1a', Math.max(cityRadius * 2, 2000), Math.max(cityRadius * 8, 40000)]} />
-            <color attach="background" args={['#070b14']} />
+            {/* Stunning gradient nebula backdrop + dense starfield */}
+            <NebulaSky radius={Math.max(cityRadius * 30, 20000)} />
+            <Stars
+                radius={Math.max(cityRadius * 10, 4000)}
+                depth={Math.max(cityRadius * 5, 2000)}
+                count={6000}
+                factor={6}
+                saturation={0.6}
+                fade
+                speed={0.3}
+            />
+
+            <fog attach="fog" args={['#0c0720', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
             <CameraController />
         </group>
     )
