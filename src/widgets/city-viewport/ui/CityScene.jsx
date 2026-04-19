@@ -115,6 +115,20 @@ function AnimationPump() {
     return null
 }
 
+/**
+ * CameraFloorGuard — keeps the camera + orbit target above the ground plane.
+ * Runs in useFrame so it catches pan, dolly, and rotate transitions equally.
+ */
+function CameraFloorGuard({ floorY = 2, targetFloorY = 4 }) {
+    useFrame(({ camera, controls }) => {
+        if (camera.position.y < floorY) camera.position.y = floorY
+        if (controls?.target && controls.target.y < targetFloorY) {
+            controls.target.y = targetFloorY
+        }
+    })
+    return null
+}
+
 function ScreenshotHandler() {
     const { gl, scene, camera } = useThree()
     const screenshotRequest = useStore(s => s.screenshotRequest)
@@ -160,6 +174,7 @@ const CityScene = React.memo(function CityScene() {
         <group>
             <AnimationPump />
             <ScreenshotHandler />
+            <CameraFloorGuard />
 
             {/* All materials are MeshBasicMaterial or custom ShaderMaterial — no lit materials exist.
                 Lights removed: they had zero visual effect but cost renderer overhead. */}

@@ -3,7 +3,15 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 const AuthContext = createContext(null)
 
 const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID
+// Must match the Authorization callback URL registered on the GitHub OAuth App
+// (https://github.com/settings/applications). Falls back to current origin.
+const REDIRECT_URI_OVERRIDE = import.meta.env.VITE_GITHUB_REDIRECT_URI
 const STORAGE_KEY = 'codebase_city_user'
+
+function resolveRedirectUri() {
+  if (REDIRECT_URI_OVERRIDE) return REDIRECT_URI_OVERRIDE
+  return `${window.location.origin}/`
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
@@ -27,14 +35,27 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const code = params.get('code')
+    const returnedState = params.get('state')
     const oauthErr = params.get('error')
     if (oauthErr) {
       const desc = params.get('error_description') || oauthErr
-      setError(decodeURIComponent(desc.replace(/\+/g, ' ')))
+      let msg = decodeURIComponent(desc.replace(/\+/g, ' '))
+      if (oauthErr === 'redirect_uri_mismatch') {
+        msg = `GitHub rejected the redirect URL. Add "${resolveRedirectUri()}" to your OAuth App's "Authorization callback URL" on github.com/settings/developers.`
+      }
+      setError(msg)
+      sessionStorage.removeItem('oauth_state')
       window.history.replaceState({}, '', window.location.pathname)
       return
     }
     if (code) {
+      const expected = sessionStorage.getItem('oauth_state')
+      sessionStorage.removeItem('oauth_state')
+      if (expected && returnedState && expected !== returnedState) {
+        setError('Sign-in aborted: state mismatch. Please try again.')
+        window.history.replaceState({}, '', window.location.pathname)
+        return
+      }
       exchangeCodeForToken(code)
       window.history.replaceState({}, '', window.location.pathname)
     }
@@ -81,9 +102,17 @@ export function AuthProvider({ children }) {
       return
     }
     setError(null)
-    const redirectUri = `${window.location.origin}/`
+    const redirectUri = resolveRedirectUri()
     const scope = 'read:user'
-    window.location.href = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}`
+    const state = Math.random().toString(36).slice(2) + Date.now().toString(36)
+    sessionStorage.setItem('oauth_state', state)
+    const authUrl =
+      `https://github.com/login/oauth/authorize` +
+      `?client_id=${encodeURIComponent(GITHUB_CLIENT_ID)}` +
+      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+      `&scope=${encodeURIComponent(scope)}` +
+      `&state=${encodeURIComponent(state)}`
+    window.location.href = authUrl
   }, [])
 
   const logout = useCallback(() => {

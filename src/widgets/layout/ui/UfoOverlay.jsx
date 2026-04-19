@@ -27,8 +27,8 @@ export default function UfoOverlay() {
         <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
             pointerEvents: 'none', zIndex: 50, display: 'flex',
-            flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start',
-            paddingTop: '80px', paddingBottom: 0
+            flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end',
+            paddingTop: 0, paddingBottom: '120px'
         }}>
 
             {ufoIntroOpen && (
@@ -38,10 +38,11 @@ export default function UfoOverlay() {
                     border: '1px solid rgba(0, 255, 204, 0.4)',
                     boxShadow: '0 8px 32px rgba(0,255,204,0.1)',
                     borderRadius: '16px',
-                    padding: '32px 48px',
+                    padding: '28px 44px',
                     textAlign: 'center',
                     pointerEvents: 'auto',
-                    position: 'relative'
+                    position: 'relative',
+                    marginBottom: '20px'
                 }}>
                     <button
                         onClick={() => closeUfoIntro()}
@@ -91,29 +92,38 @@ export default function UfoOverlay() {
                 </div>
             )}
 
-            {/* Very minimal HUD when flying */}
+            {/* Minimal bottom HUD when flying — out of the way of the top toolbar */}
             {!ufoIntroOpen && (
                 <div style={{
-                    background: 'rgba(5, 8, 16, 0.4)',
-                    backdropFilter: 'blur(8px)',
-                    border: '1px solid rgba(0, 255, 204, 0.1)',
+                    background: 'rgba(5, 8, 16, 0.55)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(0, 255, 204, 0.18)',
                     borderRadius: '24px',
-                    padding: '8px 16px',
-                    display: 'flex', gap: '16px', alignItems: 'center',
-                    pointerEvents: 'auto'
+                    padding: '8px 8px 8px 18px',
+                    display: 'flex', gap: '14px', alignItems: 'center',
+                    pointerEvents: 'auto',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.4)'
                 }}>
-                    <span style={{ color: '#00ffcc', fontSize: '13px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <div style={{ width: '8px', height: '8px', background: '#00ffcc', borderRadius: '50%', boxShadow: '0 0 8px #00ffcc' }} />
+                    <span style={{ color: '#00ffcc', fontSize: '12.5px', fontWeight: 600, letterSpacing: '0.08em', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '8px', height: '8px', background: '#00ffcc', borderRadius: '50%', boxShadow: '0 0 10px #00ffcc' }} />
                         DRONE ONLINE
                     </span>
-                    <div style={{ width: '1px', height: '16px', background: 'rgba(255,255,255,0.2)' }} />
+                    <span style={{ color: 'rgba(255,255,255,0.42)', fontSize: '11.5px', fontFamily: 'var(--font-mono)' }}>
+                        WASD · SPACE / SHIFT · Click a building to exit
+                    </span>
                     <button
                         onClick={() => setUfoMode(false)}
                         style={{
-                            background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.7)',
-                            fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px',
-                            padding: 0
+                            background: 'rgba(255,255,255,0.06)',
+                            border: '1px solid rgba(255,255,255,0.12)',
+                            color: 'rgba(255,255,255,0.9)',
+                            fontSize: '12.5px', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', gap: '6px',
+                            padding: '6px 12px', borderRadius: '16px',
+                            transition: 'background 0.15s ease'
                         }}
+                        onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)' }}
+                        onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)' }}
                     >
                         <X size={14} /> Exit
                     </button>

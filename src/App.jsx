@@ -276,7 +276,7 @@ function App() {
                                         screenSpacePanning={true}
                                         minDistance={1}
                                         maxDistance={500000}
-                                        maxPolarAngle={Math.PI / 2 - 0.05}
+                                        maxPolarAngle={Math.PI / 2 - 0.14}
                                         minPolarAngle={0.05}
                                         enableDamping={true}
                                         dampingFactor={isMobile ? 0.12 : 0.18}

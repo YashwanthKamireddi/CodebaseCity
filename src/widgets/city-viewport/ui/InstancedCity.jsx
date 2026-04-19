@@ -500,6 +500,10 @@ const InstancedCity = React.memo(function InstancedCity() {
         if (e.instanceId !== undefined) {
             const b = useStore.getState().cityData?.buildings?.[e.instanceId]
             if (b) {
+                // Exit explore/UFO mode so the selected building takes focus
+                if (useStore.getState().ufoMode) {
+                    useStore.getState().setUfoMode(false)
+                }
                 const screenY = e.nativeEvent?.clientY ?? null
                 selectBuilding(b, screenY)
             }
