@@ -21,25 +21,14 @@ export default function UfoOverlay() {
         return () => window.removeEventListener('keydown', onFirstKey)
     }, [ufoIntroOpen, closeUfoIntro])
 
-    // Global exit via Escape key
-    useEffect(() => {
-        const onEsc = (e) => {
-            if (e.key === 'Escape') {
-                setUfoMode(false)
-            }
-        }
-        window.addEventListener('keydown', onEsc)
-        return () => window.removeEventListener('keydown', onEsc)
-    }, [setUfoMode])
-
     if (!ufoMode) return null
 
     return (
         <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
             pointerEvents: 'none', zIndex: 50, display: 'flex',
-            flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-            paddingTop: 0, paddingBottom: 0
+            flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start',
+            paddingTop: '80px', paddingBottom: 0
         }}>
 
             {ufoIntroOpen && (
@@ -105,8 +94,6 @@ export default function UfoOverlay() {
             {/* Very minimal HUD when flying */}
             {!ufoIntroOpen && (
                 <div style={{
-                    position: 'absolute',
-                    top: '24px', // Places it cleanly out of the way at the top
                     background: 'rgba(5, 8, 16, 0.4)',
                     backdropFilter: 'blur(8px)',
                     border: '1px solid rgba(0, 255, 204, 0.1)',
@@ -123,23 +110,12 @@ export default function UfoOverlay() {
                     <button
                         onClick={() => setUfoMode(false)}
                         style={{
-                            background: 'rgba(255, 50, 100, 0.15)', 
-                            border: '1px solid rgba(255, 50, 100, 0.4)', 
-                            color: '#ffaaaa',
-                            fontSize: '12px', 
-                            cursor: 'pointer', 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            gap: '6px',
-                            padding: '4px 12px',
-                            borderRadius: '12px',
-                            fontWeight: 600,
-                            letterSpacing: '0.5px'
+                            background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.7)',
+                            fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px',
+                            padding: 0
                         }}
-                        onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255, 50, 100, 0.3)' }}
-                        onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255, 50, 100, 0.15)' }}
                     >
-                        <X size={14} /> EXIT <span style={{ opacity: 0.5, marginLeft: '4px', fontSize: '10px' }}>(ESC)</span>
+                        <X size={14} /> Exit
                     </button>
                 </div>
             )}

@@ -3,115 +3,140 @@ import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 
 /**
- * Ground — Cyberpunk Motherboard Platform (optimized)
+ * Ground — Cyberpunk city floor with glowing structural grid.
  *
- * Single cached texture shared across instances (bounds only control UV repeat).
- * 1024² resolution (was 2048²) with simplified node rendering.
+ * Design: Deep void base with bright cyan grid lines, intersection nodes
+ * with radial glow, and crosshair markers. Inspired by Tron/Cyberpunk 2077.
+ * 1 draw call, 1 mesh, 1024×1024 canvas texture with mipmaps + anisotropy.
  */
-
-// Module-level cache — the texture is independent of bounds and shared forever.
-let cachedTexture = null
-function getGridTexture() {
-    if (cachedTexture) return cachedTexture
-
-    const res = 1024
-    const canvas = document.createElement('canvas')
-    canvas.width = res
-    canvas.height = res
-    const ctx = canvas.getContext('2d')
-
-    const bg = ctx.createLinearGradient(0, 0, res, res)
-    bg.addColorStop(0, '#050a11')
-    bg.addColorStop(0.5, '#020408')
-    bg.addColorStop(1, '#050a11')
-    ctx.fillStyle = bg
-    ctx.fillRect(0, 0, res, res)
-
-    const blockSize = 128
-    const subDiv = 32
-
-    // Sub-grid — faint neon etching
-    ctx.strokeStyle = 'rgba(0, 255, 255, 0.05)'
-    ctx.lineWidth = 1.0
-    for (let i = 0; i <= res; i += subDiv) {
-        ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, res); ctx.stroke()
-        ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(res, i); ctx.stroke()
-    }
-
-    // Major motherboard pathways
-    ctx.strokeStyle = 'rgba(0, 255, 255, 0.28)'
-    ctx.lineWidth = 2.5
-    for (let i = 0; i <= res; i += blockSize) {
-        ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, res); ctx.stroke()
-        ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(res, i); ctx.stroke()
-    }
-
-    // Intersection nodes — single radial gradient per node (was 2 + 4 bracket strokes)
-    for (let x = 0; x <= res; x += blockSize) {
-        for (let y = 0; y <= res; y += blockSize) {
-            const grad = ctx.createRadialGradient(x, y, 0, x, y, 20)
-            grad.addColorStop(0, 'rgba(255, 255, 255, 1.0)')
-            grad.addColorStop(0.3, 'rgba(0, 255, 255, 0.4)')
-            grad.addColorStop(1, 'rgba(0, 160, 255, 0)')
-            ctx.fillStyle = grad
-            ctx.beginPath(); ctx.arc(x, y, 20, 0, Math.PI * 2); ctx.fill()
-        }
-    }
-
-    const texture = new THREE.CanvasTexture(canvas)
-    texture.wrapS = THREE.RepeatWrapping
-    texture.wrapT = THREE.RepeatWrapping
-    texture.anisotropy = 8
-    texture.minFilter = THREE.LinearMipmapLinearFilter
-    texture.magFilter = THREE.LinearFilter
-    cachedTexture = texture
-    return texture
-}
-
 function Ground() {
     const cityData = useStore(s => s.cityData)
 
-    const bounds = useMemo(() => {
-        if (!cityData?.buildings?.length) return { width: 3000, depth: 3000, cx: 0, cz: 0 }
-        let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity
+    const size = useMemo(() => {
+        if (!cityData?.buildings?.length) return 3000
+        let maxR = 0
         for (const b of cityData.buildings) {
-            if (b.position.x < minX) minX = b.position.x
-            if (b.position.x > maxX) maxX = b.position.x
-            if (b.position.z < minZ) minZ = b.position.z
-            if (b.position.z > maxZ) maxZ = b.position.z
+            const r = Math.max(Math.abs(b.position.x), Math.abs(b.position.z || 0))
+            if (r > maxR) maxR = r
         }
-        return {
-            width: maxX - minX + 800,
-            depth: maxZ - minZ + 800,
-            cx: (minX + maxX) / 2,
-            cz: (minZ + maxZ) / 2
-        }
+        return Math.max(600, (maxR + 80) * 2)
     }, [cityData])
 
-    // Clone the shared texture so per-instance UV repeat can differ.
     const gridTexture = useMemo(() => {
-        const base = getGridTexture()
-        const tex = base.clone()
-        tex.needsUpdate = true
-        tex.repeat.set(bounds.width / 400, bounds.depth / 400)
-        return tex
-    }, [bounds.width, bounds.depth])
+        const res = 1024
+        const canvas = document.createElement('canvas')
+        canvas.width = res
+        canvas.height = res
+        const ctx = canvas.getContext('2d')
+
+        // Deep void base with subtle gradient
+        const bg = ctx.createRadialGradient(res / 2, res / 2, 0, res / 2, res / 2, res * 0.7)
+        bg.addColorStop(0, '#020408')
+        bg.addColorStop(1, '#010204')
+        ctx.fillStyle = bg
+        ctx.fillRect(0, 0, res, res)
+
+        const blockSize = 128 // 8×8 major grid cells
+        const subDiv = 32    // 32×32 minor grid cells
+
+        // Sub-grid — very faint minor lines for depth
+        ctx.strokeStyle = 'rgba(0, 200, 255, 0.04)'
+        ctx.lineWidth = 0.5
+        for (let i = 0; i <= res; i += subDiv) {
+            ctx.beginPath()
+            ctx.moveTo(i, 0)
+            ctx.lineTo(i, res)
+            ctx.stroke()
+            ctx.beginPath()
+            ctx.moveTo(0, i)
+            ctx.lineTo(res, i)
+            ctx.stroke()
+        }
+
+        // Major grid — subtle cyan lines
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.18)'
+        ctx.lineWidth = 1.5
+        for (let i = 0; i <= res; i += blockSize) {
+            ctx.beginPath()
+            ctx.moveTo(i, 0)
+            ctx.lineTo(i, res)
+            ctx.stroke()
+            ctx.beginPath()
+            ctx.moveTo(0, i)
+            ctx.lineTo(res, i)
+            ctx.stroke()
+        }
+
+        // Intersection nodes — glowing crosshairs with outer halo
+        for (let x = 0; x <= res; x += blockSize) {
+            for (let y = 0; y <= res; y += blockSize) {
+                // Outer halo
+                const halo = ctx.createRadialGradient(x, y, 0, x, y, 22)
+                halo.addColorStop(0, 'rgba(0, 200, 255, 0.25)')
+                halo.addColorStop(0.4, 'rgba(0, 180, 255, 0.08)')
+                halo.addColorStop(1, 'rgba(0, 160, 255, 0)')
+                ctx.fillStyle = halo
+                ctx.beginPath()
+                ctx.arc(x, y, 22, 0, Math.PI * 2)
+                ctx.fill()
+
+                // Inner bright dot
+                const dot = ctx.createRadialGradient(x, y, 0, x, y, 4)
+                dot.addColorStop(0, 'rgba(0, 255, 255, 0.9)')
+                dot.addColorStop(1, 'rgba(0, 255, 255, 0)')
+                ctx.fillStyle = dot
+                ctx.beginPath()
+                ctx.arc(x, y, 4, 0, Math.PI * 2)
+                ctx.fill()
+
+                // Crosshair arms
+                ctx.strokeStyle = 'rgba(0, 255, 255, 0.6)'
+                ctx.lineWidth = 1.5
+                const cs = 6
+                ctx.beginPath()
+                ctx.moveTo(x - cs, y); ctx.lineTo(x + cs, y)
+                ctx.stroke()
+                ctx.beginPath()
+                ctx.moveTo(x, y - cs); ctx.lineTo(x, y + cs)
+                ctx.stroke()
+            }
+        }
+
+        // Sub-grid intersection dots — tiny dim dots at minor grid crossings
+        ctx.fillStyle = 'rgba(0, 200, 255, 0.12)'
+        for (let x = subDiv; x < res; x += subDiv) {
+            for (let y = subDiv; y < res; y += subDiv) {
+                if (x % blockSize === 0 && y % blockSize === 0) continue
+                ctx.beginPath()
+                ctx.arc(x, y, 1.2, 0, Math.PI * 2)
+                ctx.fill()
+            }
+        }
+
+        const texture = new THREE.CanvasTexture(canvas)
+        texture.wrapS = THREE.RepeatWrapping
+        texture.wrapT = THREE.RepeatWrapping
+        texture.repeat.set(size / 300, size / 300)
+        texture.anisotropy = 16
+        texture.minFilter = THREE.LinearMipmapLinearFilter
+        texture.magFilter = THREE.LinearFilter
+
+        return texture
+    }, [size])
+
+    // Dispose texture on change/unmount
+    React.useEffect(() => {
+        return () => gridTexture.dispose()
+    }, [gridTexture])
 
     return (
         <mesh
-            position={[bounds.cx, -0.15, bounds.cz]}
             rotation={[-Math.PI / 2, 0, 0]}
+            position={[0, -0.15, 0]}
         >
-            {/* 48-segment circle — visually identical to 96 at this camera distance, half the verts */}
-            <circleGeometry args={[Math.max(bounds.width, bounds.depth) / 2 * 1.5, 48]} />
-            <meshStandardMaterial
+            <circleGeometry args={[size / 2, 64]} />
+            <meshBasicMaterial
                 map={gridTexture}
-                emissive="#ffffff"
-                emissiveMap={gridTexture}
-                emissiveIntensity={1.4}
-                color="#555555"
-                metalness={0.6}
-                roughness={0.4}
                 polygonOffset
                 polygonOffsetFactor={1}
                 polygonOffsetUnits={1}

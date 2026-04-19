@@ -94,9 +94,8 @@ export default React.memo(function HolographicCityName() {
     const scale = Math.max(60, cityRadius * 0.4)
     const textHeight = scale * 0.25
 
-    // Position text perfectly above the UFO Orbit height, ensuring it is always the highest element!
-    // The UFO sits at (maxBuildingTop + 40). We place the label at (maxBuildingTop + 65).
-    const titleY = maxBuildingTop + 65
+    // Position text squarely above the central Town Hall, guaranteeing daylight space.
+    const titleY = Math.max(cityRadius * 0.52, maxBuildingTop + 55, hallTop + textHeight / 2 + 40)
 
     return (
         <sprite
