@@ -265,14 +265,18 @@ function App() {
                                         far={500000}
                                     />
 
-                                    {/* Camera Controls - World-class trackpad/touch/mouse */}
+                                    {/* Camera Controls - World-class trackpad/touch/mouse.
+                                        Auto-rotates slowly during landing so the demo city
+                                        keeps drifting behind the hero — the "alive" feel. */}
                                     <OrbitControls
                                         makeDefault
                                         enabled={!isGenesisPlaying}
-                                        enablePan={true}
-                                        enableZoom={true}
+                                        enablePan={!isLandingOverlayActive}
+                                        enableZoom={!isLandingOverlayActive}
                                         zoomSpeed={isMobile ? 1.8 : 2.2}
                                         enableRotate={true}
+                                        autoRotate={isLandingOverlayActive}
+                                        autoRotateSpeed={0.5}
                                         screenSpacePanning={true}
                                         minDistance={1}
                                         maxDistance={500000}

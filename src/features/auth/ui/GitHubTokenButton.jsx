@@ -13,9 +13,15 @@ import './GitHubTokenButton.css'
 
 const PAT_DOCS_URL = 'https://github.com/settings/tokens/new?description=Codebase%20City&scopes=public_repo'
 
-export default function GitHubTokenButton() {
+export default function GitHubTokenButton({ floating = true }) {
     const githubToken = useStore(s => s.githubToken)
     const setGithubToken = useStore(s => s.setGithubToken)
+    const isLandingOverlayActive = useStore(s => s.isLandingOverlayActive)
+
+    // When the landing overlay is up, it provides its own inline trigger (next to the
+    // sign-in button) so the floating chip would just collide with sign-in. Hide
+    // ourselves unless explicitly told to render inline.
+    const shouldRender = floating ? !isLandingOverlayActive : true
 
     const [open, setOpen] = useState(false)
     const [draft, setDraft] = useState(githubToken || '')
@@ -105,16 +111,18 @@ export default function GitHubTokenButton() {
 
     return (
         <>
-            {/* Floating chip in top-right corner */}
-            <button
-                className={`gh-tok-chip${isAuthed ? ' is-active' : ''}${lowOnQuota ? ' is-low' : ''}`}
-                onClick={() => setOpen(true)}
-                title={isAuthed ? 'GitHub token active — click to manage' : 'Add a GitHub token to unlock 5,000 req/hr'}
-            >
-                {isAuthed ? <KeyRound size={13} /> : <Github size={13} />}
-                <span className="gh-tok-chip-label">{limitClass}</span>
-                {isAuthed && <Check size={11} className="gh-tok-chip-check" />}
-            </button>
+            {/* Chip — floating by default, inline when rendered from landing topbar */}
+            {shouldRender && (
+                <button
+                    className={`gh-tok-chip${floating ? ' is-floating' : ' is-inline'}${isAuthed ? ' is-active' : ''}${lowOnQuota ? ' is-low' : ''}`}
+                    onClick={() => setOpen(true)}
+                    title={isAuthed ? 'GitHub token active — click to manage' : 'Add a GitHub token to unlock 5,000 req/hr'}
+                >
+                    {isAuthed ? <KeyRound size={13} /> : <Github size={13} />}
+                    <span className="gh-tok-chip-label">{limitClass}</span>
+                    {isAuthed && <Check size={11} className="gh-tok-chip-check" />}
+                </button>
+            )}
 
             {/* Modal */}
             {open && (

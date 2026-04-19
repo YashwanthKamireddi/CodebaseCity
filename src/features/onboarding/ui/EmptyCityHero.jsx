@@ -10,6 +10,7 @@ import { FolderOpen, ArrowRight, Github, KeyRound, Globe, LogIn, LogOut, User } 
 import useStore from '../../../store/useStore'
 import logger from '../../../utils/logger'
 import { useAuth } from '../../auth'
+import GitHubTokenButton from '../../auth/ui/GitHubTokenButton'
 
 export default function EmptyCityHero() {
     const analyzeLocal = useStore(s => s.analyzeLocal)
@@ -66,6 +67,7 @@ export default function EmptyCityHero() {
                     <span className="lp-wordmark">Codebase City</span>
                 </div>
                 <div className="lp-topbar-right">
+                    <GitHubTokenButton floating={false} />
                     {isAuthenticated ? (
                         <div className="lp-user-badge">
                             {user?.avatar_url ? (
@@ -151,10 +153,10 @@ export default function EmptyCityHero() {
                             <p className="lp-gh-hint">Any public repository</p>
                             <button
                                 onClick={() => setShowTokenInput(v => !v)}
-                                className="lp-token-toggle"
+                                className={`lp-token-toggle${githubToken ? ' is-set' : ''}`}
                             >
-                                <KeyRound size={11} />
-                                {githubToken ? 'Token set — 5 000 req/hr' : 'Add token for 5 000 req/hr'}
+                                <KeyRound size={12} />
+                                {githubToken ? 'Token active — 5,000 req/hr' : 'Add token for 5,000 req/hr'}
                             </button>
                             {showTokenInput && (
                                     <div
@@ -488,16 +490,64 @@ export default function EmptyCityHero() {
                     font-family: var(--font-mono);
                     line-height: 1.5;
                 }
+                /* GitHub-style token CTA — polished pill with state */
                 .lp-token-toggle {
-                    display: flex; align-items: center; gap: 6px;
-                    justify-content: center;
-                    margin: 6px auto 0; padding: 4px 10px;
-                    background: none; border: none;
-                    font-size: 0.65rem; font-family: var(--font-mono);
-                    color: rgba(255,255,255,0.7); cursor: pointer;
-                    transition: color 0.2s;
+                    display: inline-flex; align-items: center; gap: 8px;
+                    margin: 12px auto 0;
+                    padding: 8px 14px;
+                    background: linear-gradient(180deg,
+                        rgba(20, 26, 40, 0.85),
+                        rgba(12, 16, 26, 0.9)
+                    );
+                    border: 1px solid rgba(0, 220, 255, 0.22);
+                    border-radius: 22px;
+                    font-size: 0.72rem;
+                    font-weight: 600;
+                    font-family: var(--font-body);
+                    letter-spacing: 0.02em;
+                    color: rgba(255,255,255,0.85);
+                    cursor: pointer;
+                    backdrop-filter: blur(8px);
+                    -webkit-backdrop-filter: blur(8px);
+                    box-shadow:
+                        inset 0 1px 0 rgba(255,255,255,0.05),
+                        0 2px 10px rgba(0, 0, 0, 0.35);
+                    transition:
+                        background-color 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+                        border-color 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+                        transform 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
+                        box-shadow 180ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
                 }
-                .lp-token-toggle:hover { color: rgba(255,255,255,0.92); }
+                .lp-token-toggle svg {
+                    color: #00ffcc;
+                    flex-shrink: 0;
+                }
+                .lp-token-toggle:hover {
+                    background: linear-gradient(180deg,
+                        rgba(28, 38, 56, 0.92),
+                        rgba(18, 24, 36, 0.96)
+                    );
+                    border-color: rgba(0, 255, 204, 0.5);
+                    color: #ffffff;
+                    transform: translateY(-1px);
+                    box-shadow:
+                        inset 0 1px 0 rgba(255,255,255,0.08),
+                        0 6px 18px rgba(0, 255, 204, 0.18),
+                        0 2px 10px rgba(0, 0, 0, 0.4);
+                }
+                .lp-token-toggle:active { transform: translateY(0); }
+                .lp-token-toggle.is-set {
+                    background: linear-gradient(180deg,
+                        rgba(0, 255, 204, 0.14),
+                        rgba(0, 180, 160, 0.08)
+                    );
+                    border-color: rgba(0, 255, 204, 0.55);
+                    color: #66ffdd;
+                    box-shadow:
+                        inset 0 1px 0 rgba(255,255,255,0.06),
+                        0 0 18px rgba(0, 255, 204, 0.2);
+                }
+                .lp-token-toggle.is-set svg { color: #00ffcc; }
                 .lp-token-wrap { overflow: hidden; margin-top: 8px; }
                 .lp-link {
                     color: rgba(255,255,255,0.9);

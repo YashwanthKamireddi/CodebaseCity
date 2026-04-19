@@ -256,39 +256,94 @@ const InstancedCity = React.memo(function InstancedCity() {
 
 
     // ═══════════════════════════════════════════════════════════════
-    // DETERMINISTIC LAYOUT — buildings placed in one pass, no animation.
-    // Replaces the WASM physics drop-in that made buildings jitter on load.
+    // STREAMED LAYOUT — for huge repos we can't write 100k matrices in
+    // one tick without freezing the main thread. Strategy:
+    //   · Small repos (≤ 4k buildings) write synchronously — no visible lag.
+    //   · Large repos split the work into chunks of BATCH_SIZE and write
+    //     a chunk per animation frame. Page stays responsive, buildings
+    //     pop in waves over ~300ms on a 50k repo.
+    //   · Cancellable: if `buildings` changes mid-stream, the old loop
+    //     aborts before stomping the new matrices.
     // ═══════════════════════════════════════════════════════════════
+    const streamingRef = useRef({ cancelled: false, handle: 0 })
     useLayoutEffect(() => {
-        if (!meshRef.current || count === 0) return
+        const mesh = meshRef.current
+        if (!mesh || count === 0) return
 
-        let maxRadiusSq = 0
-        for (let i = 0; i < count; i++) {
-            const b = buildings[i]
-            const { x, z } = b.position
-            const width = b.dimensions?.width || 8
-            const depth = b.dimensions?.depth || 8
-            const targetHeight = (b.dimensions?.height || 8) * 3.0
-            const y = targetHeight / 2
-
-            tempObject.position.set(x, y, z)
-            tempObject.scale.set(width, targetHeight, depth)
-            tempObject.rotation.set(0, 0, 0)
-            tempObject.updateMatrix()
-            meshRef.current.setMatrixAt(i, tempObject.matrix)
-
-            const distSq = x * x + z * z
-            if (distSq > maxRadiusSq) maxRadiusSq = distSq
+        // Cancel any in-flight stream from a previous cityData
+        streamingRef.current.cancelled = true
+        if (streamingRef.current.handle) {
+            cancelAnimationFrame(streamingRef.current.handle)
+            streamingRef.current.handle = 0
         }
 
-        meshRef.current.instanceMatrix.needsUpdate = true
-        if (meshRef.current.geometry) {
-            meshRef.current.geometry.boundingSphere = new THREE.Sphere(
+        const session = { cancelled: false, handle: 0 }
+        streamingRef.current = session
+
+        const BATCH_SIZE = 4000           // under ~6ms of work per batch on mid-range hw
+        const SYNC_THRESHOLD = 4000       // small scenes write synchronously
+        let maxRadiusSq = 0
+
+        const writeRange = (from, to) => {
+            for (let i = from; i < to; i++) {
+                const b = buildings[i]
+                if (!b) continue
+                const { x, z } = b.position
+                const width = b.dimensions?.width || 8
+                const depth = b.dimensions?.depth || 8
+                const targetHeight = (b.dimensions?.height || 8) * 3.0
+                const y = targetHeight / 2
+
+                tempObject.position.set(x, y, z)
+                tempObject.scale.set(width, targetHeight, depth)
+                tempObject.rotation.set(0, 0, 0)
+                tempObject.updateMatrix()
+                mesh.setMatrixAt(i, tempObject.matrix)
+
+                const distSq = x * x + z * z
+                if (distSq > maxRadiusSq) maxRadiusSq = distSq
+            }
+        }
+
+        const finalize = () => {
+            if (!mesh.geometry) return
+            mesh.geometry.boundingSphere = new THREE.Sphere(
                 new THREE.Vector3(0, 0, 0),
                 Math.sqrt(maxRadiusSq) + 100
             )
+            mesh.instanceMatrix.needsUpdate = true
+            invalidate()
         }
-        invalidate()
+
+        // Fast path — the whole scene is small, one tick is fine.
+        if (count <= SYNC_THRESHOLD) {
+            writeRange(0, count)
+            finalize()
+            return () => { session.cancelled = true }
+        }
+
+        // Slow path — stream in batches. Push a partial upload after
+        // every batch so the user sees progress instead of a hang.
+        let cursor = 0
+        const step = () => {
+            if (session.cancelled) return
+            const end = Math.min(cursor + BATCH_SIZE, count)
+            writeRange(cursor, end)
+            mesh.instanceMatrix.needsUpdate = true
+            invalidate()
+            cursor = end
+            if (cursor < count) {
+                session.handle = requestAnimationFrame(step)
+            } else {
+                finalize()
+            }
+        }
+        session.handle = requestAnimationFrame(step)
+
+        return () => {
+            session.cancelled = true
+            if (session.handle) cancelAnimationFrame(session.handle)
+        }
     }, [buildings, count, invalidate])
 
     // Pre-compute issue sets once for O(1) lookup instead of O(n)

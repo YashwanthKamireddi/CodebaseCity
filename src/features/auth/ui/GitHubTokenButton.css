@@ -3,10 +3,6 @@
  * ──────────────────────────────────────────────────────────────────── */
 
 .gh-tok-chip {
-    position: fixed;
-    top: 14px;
-    right: 14px;
-    z-index: 9000;
     display: inline-flex; align-items: center; gap: 7px;
     padding: 6px 12px 6px 10px;
     background: rgba(10, 14, 24, 0.78);
@@ -24,6 +20,17 @@
                 border-color 160ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
                 transform 160ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)),
                 box-shadow 160ms var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+}
+/* Floating variant — used in city/universe views where no topbar exists */
+.gh-tok-chip.is-floating {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 9000;
+}
+/* Inline variant — used inside the landing topbar next to sign-in */
+.gh-tok-chip.is-inline {
+    position: relative;
 }
 .gh-tok-chip:hover {
     background: rgba(20, 28, 44, 0.85);
