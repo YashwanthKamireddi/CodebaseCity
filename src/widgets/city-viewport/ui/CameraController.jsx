@@ -63,7 +63,8 @@ export default React.memo(function CameraController() {
 
     const { cx, cz, radius: cityRadius, maxHeight } = cityBounds
 
-    /** Start a smooth camera animation — cancels any in-flight animation */
+    /** Start a smooth camera animation — cancels any in-flight animation.
+     *  Invalidates once so the render loop wakes up in demand frameloop. */
     const animateTo = useCallback((targetPos, lookAtPos, duration, easeType = 'inOutCubic') => {
         _anim.startPos.copy(camera.position)
         _anim.endPos.copy(targetPos)
@@ -73,7 +74,8 @@ export default React.memo(function CameraController() {
         _anim.startTime = clock.elapsedTime
         _anim.easeType = easeType in EASE ? easeType : 'inOutCubic'
         _anim.active = true
-    }, [camera, controls, clock])
+        invalidate()
+    }, [camera, controls, clock, invalidate])
 
 
     // useFrame drives all camera animations — easing is selectable per flight type
@@ -105,16 +107,24 @@ export default React.memo(function CameraController() {
             const bWidth = building.dimensions?.width || 8
             const bDepth = building.dimensions?.depth || 8
 
+            // Frame the TOP of the building + panel, not the whole silhouette.
+            // Gets the camera close enough to actually read the detail panel
+            // without requiring the user to manually zoom in.
             const roofY = buildingHeight
             const panelTopY = roofY + 30
-            const frameCenterY = roofY * 0.6 + panelTopY * 0.4
+            const frameCenterY = roofY * 0.85 + panelTopY * 0.15
 
-            const totalVerticalExtent = panelTopY
             const footprintSize = Math.max(bWidth, bDepth)
-            const zoomDist = Math.max(45, totalVerticalExtent * 0.6, footprintSize * 1.5)
+            // Distance scales with footprint (wide buildings need more distance),
+            // NOT with total height (tall towers used to push camera absurdly far).
+            // Hard cap prevents outliers from blowing the framing.
+            const zoomDist = Math.min(
+                Math.max(65, footprintSize * 3.2),
+                220
+            )
 
             const camAngle = Math.PI / 4
-            const elevationFactor = 0.55
+            const elevationFactor = 0.35
 
             const targetPos = new THREE.Vector3(
                 x + Math.cos(camAngle) * zoomDist,

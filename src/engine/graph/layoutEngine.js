@@ -6,13 +6,11 @@
  */
 
 // Layout constants matching backend's city_builder.py
-// Scaled up ~50% from the previous round so the entire city reads as a
-// proper metropolis — not a scale-model of one. Every distance, footprint,
-// and height goes up together so the proportions stay right.
-export const BUILDING_SPACING = 21
-export const DISTRICT_PADDING = 48
-const MIN_BUILDING_WIDTH = 12
-const MAX_BUILDING_WIDTH = 45
+// Chunky metropolitan scale — buildings feel like blocks, not poles.
+export const BUILDING_SPACING = 22
+export const DISTRICT_PADDING = 52
+const MIN_BUILDING_WIDTH = 18
+const MAX_BUILDING_WIDTH = 65
 const MIN_BUILDING_HEIGHT = 9
 const MAX_BUILDING_HEIGHT = 165
 
@@ -66,17 +64,19 @@ export function generateBuildings(parsedFiles, communities, metrics) {
       let width = MIN_BUILDING_WIDTH + (MAX_BUILDING_WIDTH - MIN_BUILDING_WIDTH) * linesNorm
       const height = MIN_BUILDING_HEIGHT + (MAX_BUILDING_HEIGHT - MIN_BUILDING_HEIGHT) * complexityNorm
 
-      // Enforce minimum aspect ratio to prevent pole-like buildings
-      const minWidth = Math.max(MIN_BUILDING_WIDTH, height / 4)
+      // Enforce minimum aspect ratio to prevent pole-like buildings.
+      // Tightened from height/4 → height/2.8 so towers feel like chunky blocks.
+      const minWidth = Math.max(MIN_BUILDING_WIDTH, height / 2.8)
       width = Math.max(width, minWidth)
 
-      // Wider bases for very tall buildings
+      // Wider bases for very tall buildings (height > 40 maps to 3D height > 120).
       if (height > 40) {
-        width = Math.max(width, height / 3)
+        width = Math.max(width, height / 2.4)
       }
 
-      // Add slight variation (±10%) for visual variety
-      width *= 0.9 + Math.random() * 0.2
+      // Add slight variation (±8%) for visual variety — less jitter so
+      // buildings in the same size bucket still read as a coherent district.
+      width *= 0.92 + Math.random() * 0.16
 
       fileDims.set(file.file_path, { width, height, depth: width })
     }

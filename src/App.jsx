@@ -283,9 +283,9 @@ function App() {
                                         maxPolarAngle={Math.PI / 2 - 0.14}
                                         minPolarAngle={0.05}
                                         enableDamping={true}
-                                        dampingFactor={isMobile ? 0.09 : 0.07}
-                                        rotateSpeed={isMobile ? 0.6 : 0.85}
-                                        panSpeed={isMobile ? 0.75 : 1.05}
+                                        dampingFactor={isMobile ? 0.14 : 0.16}
+                                        rotateSpeed={isMobile ? 0.65 : 0.9}
+                                        panSpeed={isMobile ? 0.85 : 1.1}
                                         zoomToCursor={true}
                                         enableKeys={true}
                                         mouseButtons={{

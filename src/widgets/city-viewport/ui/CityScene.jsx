@@ -207,14 +207,25 @@ const CityScene = React.memo(function CityScene() {
 
             {/* Stunning gradient nebula backdrop + dense starfield */}
             <NebulaSky />
+            {/* Dual-layer starfield — far faint background + near bright highlights.
+                Two <Stars> primitives cost ~1 draw call each and give real depth. */}
             <Stars
-                radius={Math.max(cityRadius * 10, 4000)}
-                depth={Math.max(cityRadius * 5, 2000)}
-                count={3500}
-                factor={6}
-                saturation={0.7}
+                radius={Math.max(cityRadius * 14, 6000)}
+                depth={Math.max(cityRadius * 8, 3000)}
+                count={5500}
+                factor={7}
+                saturation={0.35}
                 fade
-                speed={0.25}
+                speed={0.15}
+            />
+            <Stars
+                radius={Math.max(cityRadius * 6, 2500)}
+                depth={Math.max(cityRadius * 3, 1200)}
+                count={900}
+                factor={4}
+                saturation={0.9}
+                fade
+                speed={0.45}
             />
 
             <fog attach="fog" args={['#0f2040', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
