@@ -33,16 +33,17 @@ function NebulaSky() {
         if (meshRef.current) meshRef.current.position.copy(camera.position)
     })
 
+    // Clean deep-space gradient — no magenta, no per-fragment noise.
+    // Just a smooth zenith-to-horizon falloff; the drei <Stars> field handles
+    // visual interest layered above this.
     const material = useMemo(() => new THREE.ShaderMaterial({
         side: THREE.BackSide,
         depthWrite: false,
         depthTest: false,
         fog: false,
         uniforms: {
-            uTop: { value: new THREE.Color('#05030f') },
-            uMid: { value: new THREE.Color('#1a0838') },
-            uHorizon: { value: new THREE.Color('#3a0a4a') },
-            uGlow: { value: new THREE.Color('#ff3a8c') },
+            uZenith:  { value: new THREE.Color('#02030a') },
+            uHorizon: { value: new THREE.Color('#070b18') },
         },
         vertexShader: `
             varying vec3 vPos;
@@ -52,28 +53,13 @@ function NebulaSky() {
             }
         `,
         fragmentShader: `
-            uniform vec3 uTop;
-            uniform vec3 uMid;
+            uniform vec3 uZenith;
             uniform vec3 uHorizon;
-            uniform vec3 uGlow;
             varying vec3 vPos;
-
             void main() {
                 float h = vPos.y;
-                vec3 color;
-                if (h > 0.15) {
-                    color = mix(uMid, uTop, smoothstep(0.15, 1.0, h));
-                } else if (h > -0.05) {
-                    color = mix(uHorizon, uMid, smoothstep(-0.05, 0.15, h));
-                } else {
-                    color = mix(uTop, uHorizon, smoothstep(-1.0, -0.05, h));
-                }
-
-                // Soft horizon glow band (no per-fragment noise — cheaper)
-                float horizonBand = smoothstep(0.05, -0.15, h) * smoothstep(-0.4, -0.15, h);
-                color += uGlow * horizonBand * 0.35;
-
-                gl_FragColor = vec4(color, 1.0);
+                float t = smoothstep(-0.2, 0.6, h);
+                gl_FragColor = vec4(mix(uHorizon, uZenith, t), 1.0);
             }
         `,
     }), [])
@@ -205,7 +191,7 @@ const CityScene = React.memo(function CityScene() {
                 speed={0.2}
             />
 
-            <fog attach="fog" args={['#0c0720', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
+            <fog attach="fog" args={['#040810', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
             <CameraController />
         </group>
     )

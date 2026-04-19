@@ -1,57 +1,81 @@
-/* ── Shared CSS animations (replaces framer-motion) ── */
+/* ============================================================================
+ * Shared CSS animations — unified system.
+ *
+ * Easing standards (use ONE of these, never default `ease`):
+ *   --ease-out      : crisp arrival, default for entering elements
+ *   --ease-in-out   : balanced, for state transitions
+ *   --ease-spring   : gentle overshoot for celebratory moments only
+ *
+ * Duration scale (multiples of 80ms):
+ *   --d-quick   : 160ms  (hover, micro)
+ *   --d-base    : 240ms  (standard entry)
+ *   --d-medium  : 320ms  (panel transitions)
+ *   --d-long    : 480ms  (hero reveals)
+ * ============================================================================ */
 
-/* Keyframes */
+:root {
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --d-quick: 160ms;
+  --d-base: 240ms;
+  --d-medium: 320ms;
+  --d-long: 480ms;
+}
+
+/* Keyframes — only translate + opacity (GPU-friendly). No filter/blur in entries. */
 @keyframes anim-fade-in   { from { opacity: 0 } to { opacity: 1 } }
 @keyframes anim-fade-out  { from { opacity: 1 } to { opacity: 0 } }
 
 @keyframes anim-slide-up {
-  from { opacity: 0; transform: translateY(16px) }
-  to   { opacity: 1; transform: translateY(0) }
+  from { opacity: 0; transform: translate3d(0, 12px, 0) }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) }
 }
 @keyframes anim-slide-up-exit {
-  from { opacity: 1; transform: translateY(0) }
-  to   { opacity: 0; transform: translateY(16px) }
+  from { opacity: 1; transform: translate3d(0, 0, 0) }
+  to   { opacity: 0; transform: translate3d(0, 12px, 0) }
 }
 
 @keyframes anim-slide-down {
-  from { opacity: 0; transform: translateY(-16px) }
-  to   { opacity: 1; transform: translateY(0) }
+  from { opacity: 0; transform: translate3d(0, -12px, 0) }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) }
 }
 
 @keyframes anim-slide-right-enter {
-  from { opacity: 0.8; transform: translateX(100%) }
-  to   { opacity: 1;   transform: translateX(0) }
+  from { opacity: 0; transform: translate3d(100%, 0, 0) }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) }
 }
 @keyframes anim-slide-right-exit {
-  from { opacity: 1;   transform: translateX(0) }
-  to   { opacity: 0.8; transform: translateX(100%) }
+  from { opacity: 1; transform: translate3d(0, 0, 0) }
+  to   { opacity: 0; transform: translate3d(100%, 0, 0) }
 }
 
 @keyframes anim-scale-in {
-  from { opacity: 0; transform: scale(0.95) translateY(10px) }
-  to   { opacity: 1; transform: scale(1) translateY(0) }
+  from { opacity: 0; transform: scale3d(0.96, 0.96, 1) translate3d(0, 6px, 0) }
+  to   { opacity: 1; transform: scale3d(1, 1, 1) translate3d(0, 0, 0) }
 }
 @keyframes anim-scale-in-exit {
-  from { opacity: 1; transform: scale(1) translateY(0) }
-  to   { opacity: 0; transform: scale(0.95) translateY(10px) }
+  from { opacity: 1; transform: scale3d(1, 1, 1) translate3d(0, 0, 0) }
+  to   { opacity: 0; transform: scale3d(0.96, 0.96, 1) translate3d(0, 6px, 0) }
 }
 
 @keyframes anim-slide-from-bottom {
-  from { opacity: 0; transform: translateY(80px) }
-  to   { opacity: 1; transform: translateY(0) }
+  from { opacity: 0; transform: translate3d(0, 64px, 0) }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) }
 }
 @keyframes anim-slide-to-bottom {
-  from { opacity: 1; transform: translateY(0) }
-  to   { opacity: 0; transform: translateY(80px) }
+  from { opacity: 1; transform: translate3d(0, 0, 0) }
+  to   { opacity: 0; transform: translate3d(0, 64px, 0) }
 }
 
 @keyframes anim-toast-enter {
-  from { opacity: 0; transform: translateX(100px) scale(0.9) }
-  to   { opacity: 1; transform: translateX(0) scale(1) }
+  from { opacity: 0; transform: translate3d(80px, 0, 0) scale3d(0.95, 0.95, 1) }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale3d(1, 1, 1) }
 }
 @keyframes anim-toast-exit {
-  from { opacity: 1; transform: translateX(0) scale(1) }
-  to   { opacity: 0; transform: translateX(100px) scale(0.9) }
+  from { opacity: 1; transform: translate3d(0, 0, 0) scale3d(1, 1, 1) }
+  to   { opacity: 0; transform: translate3d(80px, 0, 0) scale3d(0.95, 0.95, 1) }
 }
 
 @keyframes anim-shimmer {
@@ -129,56 +153,60 @@
   100% { opacity: 0; transform: scale(1.5) }
 }
 
-/* Utility classes */
-.anim-fade-in    { animation: anim-fade-in 0.25s cubic-bezier(0.32, 0.72, 0, 1) both }
-.anim-fade-out   { animation: anim-fade-out 0.25s cubic-bezier(0.32, 0.72, 0, 1) both }
-.anim-slide-up   { animation: anim-slide-up 0.3s cubic-bezier(0.32, 0.72, 0, 1) both }
-.anim-scale-in   { animation: anim-scale-in 0.2s cubic-bezier(0.32, 0.72, 0, 1) both }
-.anim-bounce-in  { animation: anim-bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) both }
-.anim-float      { animation: anim-float 3s ease-in-out infinite }
-.anim-glow       { animation: anim-glow-pulse 2s ease-in-out infinite }
+/* Utility classes — single easing curve, multiples of base duration */
+.anim-fade-in    { animation: anim-fade-in   var(--d-base) var(--ease-out) both; will-change: opacity }
+.anim-fade-out   { animation: anim-fade-out  var(--d-base) var(--ease-out) both; will-change: opacity }
+.anim-slide-up   { animation: anim-slide-up  var(--d-medium) var(--ease-out) both; will-change: transform, opacity }
+.anim-slide-down { animation: anim-slide-down var(--d-medium) var(--ease-out) both; will-change: transform, opacity }
+.anim-scale-in   { animation: anim-scale-in var(--d-base) var(--ease-out) both; will-change: transform, opacity }
+.anim-bounce-in  { animation: anim-bounce-in var(--d-long) var(--ease-spring) both }
+.anim-float      { animation: anim-float 3s var(--ease-in-out) infinite }
+.anim-glow       { animation: anim-glow-pulse 2s var(--ease-in-out) infinite }
 .anim-shake      { animation: anim-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both }
 
-/* Interactive button enhancements */
+/* Interactive button enhancements — smooth, no overshoot */
 .btn-interactive {
   position: relative;
   overflow: hidden;
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), 
-              box-shadow 0.2s ease;
+  transition:
+    transform var(--d-quick) var(--ease-out),
+    background-color var(--d-quick) var(--ease-out),
+    box-shadow var(--d-quick) var(--ease-out);
 }
 
 .btn-interactive:hover {
-  transform: translateY(-2px);
+  transform: translate3d(0, -2px, 0);
 }
 
 .btn-interactive:active {
-  transform: translateY(0) scale(0.98);
+  transform: translate3d(0, 0, 0) scale3d(0.98, 0.98, 1);
 }
 
 .btn-interactive::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%);
   opacity: 0;
-  transform: scale(0);
-  transition: opacity 0.3s, transform 0.3s;
+  transform: scale3d(0, 0, 1);
+  transition: opacity var(--d-base) var(--ease-out),
+              transform var(--d-base) var(--ease-out);
+  pointer-events: none;
 }
 
 .btn-interactive:hover::after {
   opacity: 1;
-  transform: scale(2);
+  transform: scale3d(2, 2, 1);
 }
 
-/* Reduced motion */
+/* Reduced motion: collapse all entry animations to a fast fade */
 @media (prefers-reduced-motion: reduce) {
-  .anim-fade-in, .anim-fade-out,
-  .anim-slide-up, .anim-scale-in,
-  .anim-bounce-in, .anim-float,
-  .anim-glow, .anim-shake {
-    animation-duration: 0.01s !important;
-  }
-  .btn-interactive {
-    transition: none !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
