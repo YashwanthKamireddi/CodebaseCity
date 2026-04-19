@@ -271,7 +271,7 @@ function App() {
                                         enabled={!isGenesisPlaying}
                                         enablePan={true}
                                         enableZoom={true}
-                                        zoomSpeed={3.0}
+                                        zoomSpeed={isMobile ? 1.8 : 2.2}
                                         enableRotate={true}
                                         screenSpacePanning={true}
                                         minDistance={1}
@@ -279,9 +279,9 @@ function App() {
                                         maxPolarAngle={Math.PI / 2 - 0.14}
                                         minPolarAngle={0.05}
                                         enableDamping={true}
-                                        dampingFactor={isMobile ? 0.12 : 0.18}
-                                        rotateSpeed={isMobile ? 0.7 : 1.0}
-                                        panSpeed={isMobile ? 0.8 : 1.2}
+                                        dampingFactor={isMobile ? 0.09 : 0.07}
+                                        rotateSpeed={isMobile ? 0.6 : 0.85}
+                                        panSpeed={isMobile ? 0.75 : 1.05}
                                         zoomToCursor={true}
                                         enableKeys={true}
                                         mouseButtons={{

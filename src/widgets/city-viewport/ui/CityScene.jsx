@@ -58,8 +58,6 @@ function NebulaSky() {
             uniform vec3 uGlow;
             varying vec3 vPos;
 
-            float hash(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453); }
-
             void main() {
                 float h = vPos.y;
                 vec3 color;
@@ -71,12 +69,9 @@ function NebulaSky() {
                     color = mix(uTop, uHorizon, smoothstep(-1.0, -0.05, h));
                 }
 
+                // Soft horizon glow band (no per-fragment noise — cheaper)
                 float horizonBand = smoothstep(0.05, -0.15, h) * smoothstep(-0.4, -0.15, h);
-                float noise = hash(floor(vPos * 30.0)) * 0.5 + hash(floor(vPos * 12.0)) * 0.5;
-                color += uGlow * horizonBand * (0.25 + noise * 0.35);
-
-                float star = step(0.995, hash(floor(vPos * 500.0))) * step(0.0, h);
-                color += vec3(star);
+                color += uGlow * horizonBand * 0.35;
 
                 gl_FragColor = vec4(color, 1.0);
             }
@@ -203,11 +198,11 @@ const CityScene = React.memo(function CityScene() {
             <Stars
                 radius={Math.max(cityRadius * 10, 4000)}
                 depth={Math.max(cityRadius * 5, 2000)}
-                count={6000}
-                factor={6}
-                saturation={0.6}
+                count={2000}
+                factor={5}
+                saturation={0.5}
                 fade
-                speed={0.3}
+                speed={0.2}
             />
 
             <fog attach="fog" args={['#0c0720', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />

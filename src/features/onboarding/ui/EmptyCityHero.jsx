@@ -87,30 +87,31 @@ export default function EmptyCityHero() {
                 </div>
             </header>
 
+            {/* Cinematic corner brackets — AAA HUD frame */}
+            <div className="lp-bracket lp-bracket--tl" />
+            <div className="lp-bracket lp-bracket--tr" />
+            <div className="lp-bracket lp-bracket--bl" />
+            <div className="lp-bracket lp-bracket--br" />
+
             {/* Center content */}
             <div className="lp-center">
-                <p
-                    className="lp-kicker anim-slide-up"
-                >
-                    3D Codebase Visualization
-                </p>
+                <div className="lp-kicker-wrap anim-slide-up">
+                    <span className="lp-kicker-dot" />
+                    <p className="lp-kicker">System online · 3D Codebase Visualization</p>
+                </div>
 
-                <h1
-                    className="lp-heading anim-slide-up"
-                >
-                    See your codebase<br />as a living city
+                <h1 className="lp-heading anim-slide-up">
+                    <span className="lp-heading-line">See your codebase</span>
+                    <span className="lp-heading-line lp-heading-grad">as a living city</span>
                 </h1>
 
-                <p
-                    className="lp-desc anim-slide-up"
-                >
-                    Architecture maps, complexity heat, git history —<br />
+                <p className="lp-desc anim-slide-up">
+                    Architecture maps, complexity heat, git history —
+                    <br />
                     everything in one interactive 3D view.
                 </p>
 
-                <div
-                    className="lp-cta anim-slide-up"
-                >
+                <div className="lp-cta anim-slide-up">
                     <button onClick={analyzeLocal} className="lp-btn lp-btn--primary">
                         <FolderOpen size={15} />
                         <span>Open Folder</span>
@@ -262,12 +263,42 @@ export default function EmptyCityHero() {
                 .lp-vignette {
                     position: absolute; inset: 0; pointer-events: none;
                     background:
-                        radial-gradient(ellipse 80% 60% at 50% 50%,
-                            rgba(3,5,10,0.56) 0%,
-                            rgba(4,6,12,0.78) 45%,
-                            rgba(0,0,0,0.93) 100%
+                        radial-gradient(ellipse 70% 55% at 50% 50%,
+                            rgba(3,5,10,0.35) 0%,
+                            rgba(4,6,12,0.72) 50%,
+                            rgba(0,0,0,0.95) 100%
                         );
                 }
+                .lp-vignette::after {
+                    content: '';
+                    position: absolute; inset: 0;
+                    background:
+                        repeating-linear-gradient(
+                            0deg,
+                            transparent 0,
+                            transparent 2px,
+                            rgba(255,255,255,0.012) 2px,
+                            rgba(255,255,255,0.012) 3px
+                        );
+                    mix-blend-mode: overlay;
+                    pointer-events: none;
+                }
+
+                /* AAA HUD corner brackets */
+                .lp-bracket {
+                    position: absolute;
+                    width: 44px; height: 44px;
+                    pointer-events: none;
+                    opacity: 0.45;
+                    border-color: rgba(0, 255, 204, 0.7);
+                    border-style: solid;
+                    border-width: 0;
+                    transition: opacity 0.5s ease;
+                }
+                .lp-bracket--tl { top: 24px; left: 24px; border-top-width: 2px; border-left-width: 2px; }
+                .lp-bracket--tr { top: 24px; right: 24px; border-top-width: 2px; border-right-width: 2px; }
+                .lp-bracket--bl { bottom: 24px; left: 24px; border-bottom-width: 2px; border-left-width: 2px; }
+                .lp-bracket--br { bottom: 24px; right: 24px; border-bottom-width: 2px; border-right-width: 2px; }
 
                 /* ── Topbar ─── */
                 .lp-topbar {
@@ -360,92 +391,172 @@ export default function EmptyCityHero() {
                     pointer-events: auto;
                     display: flex; flex-direction: column;
                     align-items: center; text-align: center;
-                    max-width: 680px; padding: 40px 32px;
+                    max-width: 820px; padding: 40px 32px;
                 }
 
+                .lp-kicker-wrap {
+                    display: inline-flex; align-items: center; gap: 10px;
+                    margin: 0 0 28px;
+                    padding: 6px 16px 6px 12px;
+                    background: rgba(0, 255, 204, 0.06);
+                    border: 1px solid rgba(0, 255, 204, 0.22);
+                    border-radius: 40px;
+                    backdrop-filter: blur(10px);
+                    -webkit-backdrop-filter: blur(10px);
+                    box-shadow: 0 0 24px rgba(0, 255, 204, 0.08);
+                }
+                .lp-kicker-dot {
+                    width: 7px; height: 7px;
+                    background: #00ffcc;
+                    border-radius: 50%;
+                    box-shadow: 0 0 8px #00ffcc, 0 0 16px rgba(0, 255, 204, 0.6);
+                    animation: lp-pulse 2s ease-in-out infinite;
+                }
+                @keyframes lp-pulse {
+                    0%, 100% { opacity: 1; transform: scale(1); }
+                    50% { opacity: 0.45; transform: scale(0.85); }
+                }
                 .lp-kicker {
-                    margin: 0 0 20px;
+                    margin: 0;
                     font-size: 0.7rem; font-family: var(--font-mono);
                     text-transform: uppercase; letter-spacing: 0.2em;
-                    color: rgba(255,255,255,0.76); font-weight: 600;
-                    padding: 6px 14px;
-                    background: rgba(255,255,255,0.1);
-                    border: 1px solid rgba(255,255,255,0.14);
-                    border-radius: 20px;
+                    color: rgba(255,255,255,0.88); font-weight: 600;
                 }
 
                 .lp-heading {
-                    margin: 0 0 24px;
+                    margin: 0 0 26px;
                     font-family: var(--font-display);
-                    font-size: clamp(2.6rem, 6vw, 4.5rem);
-                    font-weight: 700;
-                    line-height: 1.08;
-                    letter-spacing: -0.03em;
+                    font-size: clamp(3.0rem, 7.5vw, 6rem);
+                    font-weight: 800;
+                    line-height: 1.02;
+                    letter-spacing: -0.045em;
                     color: #ffffff;
+                }
+                .lp-heading-line {
+                    display: block;
                     text-shadow:
-                        0 2px 20px rgba(0,0,0,0.8),
-                        0 4px 40px rgba(0,0,0,0.6);
+                        0 2px 20px rgba(0,0,0,0.85),
+                        0 4px 60px rgba(0,0,0,0.7);
+                }
+                .lp-heading-grad {
+                    background: linear-gradient(
+                        135deg,
+                        #ffffff 0%,
+                        #7fffe6 35%,
+                        #00ffcc 65%,
+                        #5ab4ff 100%
+                    );
+                    -webkit-background-clip: text;
+                    background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    color: transparent;
+                    filter: drop-shadow(0 0 40px rgba(0, 255, 204, 0.25));
                 }
 
                 .lp-desc {
-                    margin: 0 0 36px;
-                    font-size: 1rem; line-height: 1.7;
+                    margin: 0 0 38px;
+                    font-size: 1.05rem; line-height: 1.7;
                     color: rgba(255,255,255,0.82);
                     font-weight: 400;
-                    text-shadow: 0 2px 14px rgba(0,0,0,0.55);
-                    max-width: 480px;
+                    text-shadow: 0 2px 14px rgba(0,0,0,0.65);
+                    max-width: 520px;
                 }
 
-                /* ── Unified CTA buttons — identical style for all 3 primary actions ─── */
+                /* ── Cinematic CTA buttons — glass + subtle inner glow ── */
                 .lp-cta {
-                    display: flex; gap: 10px; flex-wrap: wrap;
+                    display: flex; gap: 12px; flex-wrap: wrap;
                     justify-content: center;
                 }
                 .lp-btn {
-                    display: inline-flex; align-items: center; gap: 9px;
-                    padding: 12px 22px;
-                    min-height: 44px;
-                    border-radius: 10px;
-                    font-size: 0.88rem; font-weight: 500;
+                    position: relative;
+                    display: inline-flex; align-items: center; gap: 10px;
+                    padding: 14px 26px;
+                    min-height: 48px;
+                    border-radius: 12px;
+                    font-size: 0.92rem; font-weight: 600;
                     font-family: var(--font-body);
+                    letter-spacing: 0.01em;
                     cursor: pointer; white-space: nowrap;
-                    transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+                    transition:
+                        background-color 0.22s ease,
+                        border-color 0.22s ease,
+                        transform 0.2s ease,
+                        box-shadow 0.25s ease;
                     text-decoration: none;
                     line-height: 1;
+                    overflow: hidden;
                 }
                 .lp-btn--primary {
-                    background: rgba(255,255,255,0.08);
-                    border: 1px solid rgba(255,255,255,0.18);
-                    color: rgba(255,255,255,0.95);
-                    backdrop-filter: blur(10px);
-                    -webkit-backdrop-filter: blur(10px);
+                    background: linear-gradient(
+                        180deg,
+                        rgba(255,255,255,0.1),
+                        rgba(255,255,255,0.04)
+                    );
+                    border: 1px solid rgba(255,255,255,0.22);
+                    color: rgba(255,255,255,0.97);
+                    backdrop-filter: blur(14px);
+                    -webkit-backdrop-filter: blur(14px);
+                    box-shadow:
+                        inset 0 1px 0 rgba(255,255,255,0.08),
+                        0 2px 12px rgba(0,0,0,0.35);
+                }
+                .lp-btn--primary::after {
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    border-radius: 12px;
+                    background: linear-gradient(135deg, rgba(0,255,204,0.25), transparent 55%);
+                    opacity: 0;
+                    transition: opacity 0.22s ease;
+                    pointer-events: none;
                 }
                 .lp-btn--primary:hover {
-                    background: rgba(255,255,255,0.14);
-                    border-color: rgba(255,255,255,0.32);
-                    transform: translateY(-1px);
-                    box-shadow: 0 6px 20px rgba(0,0,0,0.28);
+                    background: linear-gradient(
+                        180deg,
+                        rgba(255,255,255,0.16),
+                        rgba(255,255,255,0.08)
+                    );
+                    border-color: rgba(0, 255, 204, 0.45);
+                    transform: translateY(-2px);
+                    box-shadow:
+                        inset 0 1px 0 rgba(255,255,255,0.15),
+                        0 10px 32px rgba(0, 255, 204, 0.15),
+                        0 2px 12px rgba(0,0,0,0.4);
+                }
+                .lp-btn--primary:hover::after {
+                    opacity: 1;
                 }
                 .lp-btn--primary:active { transform: translateY(0); }
                 .lp-btn--primary.is-active {
-                    background: rgba(255,255,255,0.18);
-                    border-color: rgba(255,255,255,0.4);
+                    background: linear-gradient(
+                        180deg,
+                        rgba(0, 255, 204, 0.18),
+                        rgba(0, 255, 204, 0.06)
+                    );
+                    border-color: rgba(0, 255, 204, 0.55);
+                    box-shadow:
+                        inset 0 1px 0 rgba(255,255,255,0.12),
+                        0 0 24px rgba(0, 255, 204, 0.2);
                 }
 
                 .lp-demo-link {
-                    display: inline-flex; align-items: center; gap: 6px;
-                    margin-top: 18px;
-                    padding: 6px 4px;
-                    background: none; border: none;
-                    color: rgba(255,255,255,0.6);
-                    font-family: var(--font-body);
-                    font-size: 0.8rem; font-weight: 400;
+                    display: inline-flex; align-items: center; gap: 8px;
+                    margin-top: 22px;
+                    padding: 8px 14px;
+                    background: none; border: 1px solid transparent;
+                    border-radius: 20px;
+                    color: rgba(255,255,255,0.58);
+                    font-family: var(--font-mono);
+                    font-size: 0.78rem; font-weight: 500;
+                    letter-spacing: 0.05em;
+                    text-transform: uppercase;
                     cursor: pointer;
-                    transition: color 0.18s ease, gap 0.18s ease;
+                    transition: color 0.2s ease, gap 0.22s ease, border-color 0.2s ease;
                 }
                 .lp-demo-link:hover {
-                    color: rgba(255,255,255,0.95);
-                    gap: 10px;
+                    color: #00ffcc;
+                    gap: 14px;
+                    border-color: rgba(0, 255, 204, 0.28);
                 }
 
                 /* ── GitHub input ─── */

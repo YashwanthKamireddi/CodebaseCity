@@ -236,11 +236,11 @@ export default function UfoAvatar() {
 
         _nextPos.copy(groupRef.current.position).addScaledVector(velocity.current, dt * 8)
 
-        // Spatial-grid AABB collision
+        // Spatial-grid AABB collision (UFO is 3x bigger visually — match with bigger collision radius)
         let collisionX = false, collisionZ = false, collisionY = false, roofHeight = 0
         if (spatialGrid) {
-            const radius = 60 * speedMult
-            const vr = 10
+            const radius = 80 * speedMult
+            const vr = 18
             const minCx = Math.floor((_nextPos.x - radius) / CELL_SIZE)
             const maxCx = Math.floor((_nextPos.x + radius) / CELL_SIZE)
             const minCz = Math.floor((_nextPos.z - radius) / CELL_SIZE)
@@ -288,12 +288,12 @@ export default function UfoAvatar() {
         if (groupRef.current.position.y < 4) groupRef.current.position.y = 4
         if (groupRef.current.position.y > 1500) groupRef.current.position.y = 1500
 
-        // Chase camera
+        // Chase camera (pulled back to frame the bigger probe)
         if (controls && (velocity.current.lengthSq() > 5 || !collisionX || !collisionZ)) {
             controls.target.lerp(groupRef.current.position, dt * 8)
             const motionZoom = velocity.current.lengthSq() * 0.0003
-            const camDist = 120 + (speedMult - 1) * 35 + motionZoom
-            const camHeight = 60 + (speedMult - 1) * 20 + Math.abs(velocity.current.y * 0.1)
+            const camDist = 170 + (speedMult - 1) * 40 + motionZoom
+            const camHeight = 80 + (speedMult - 1) * 22 + Math.abs(velocity.current.y * 0.1)
             _desiredCam.set(
                 groupRef.current.position.x - _forward.x * camDist,
                 groupRef.current.position.y + camHeight,
@@ -319,8 +319,8 @@ export default function UfoAvatar() {
 
     return (
         <group ref={groupRef} position={[0, 40, 0]}>
-            <Sparkles count={40} scale={[12, 6, 18]} position={[0, 0, -6]} size={3.5} speed={2} opacity={0.6} color="#00ffcc" />
-            <group ref={vehicleRef} scale={[1.3, 1.3, 1.3]}>
+            <Sparkles count={30} scale={[18, 8, 24]} position={[0, 0, -8]} size={5} speed={2} opacity={0.55} color="#00ffcc" />
+            <group ref={vehicleRef} scale={[3.0, 3.0, 3.0]}>
                 <CodeProbe velocity={velocity.current} thrustMag={thrustMag} />
             </group>
         </group>

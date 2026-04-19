@@ -4,7 +4,8 @@ import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 import logger from '../../../utils/logger'
 
-// Module-level animation state — mutated by effects, consumed by useFrame
+// Module-level animation state — mutated by effects, consumed by useFrame.
+// One reusable vec per role means zero allocations during camera flights.
 const _anim = {
     active: false,
     startPos: new THREE.Vector3(),
@@ -13,11 +14,19 @@ const _anim = {
     endTarget: new THREE.Vector3(),
     duration: 1.0,
     startTime: 0,
+    easeType: 'inOutCubic',
 }
 
-/** power3.inOut easing equivalent */
-function easeInOutCubic(t) {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+// Cinematic easings — used based on flight type for a more expressive feel.
+const EASE = {
+    // Slight settle at end — good for selections
+    outExpo: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+    // Balanced in/out — good for long traversals
+    inOutCubic: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
+    // Sharper in/out — good for short hops
+    inOutQuart: (t) => (t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2),
+    // Accelerating only — good for zoom-out / reveal
+    outQuart: (t) => 1 - Math.pow(1 - t, 4),
 }
 
 export default React.memo(function CameraController() {
@@ -54,24 +63,25 @@ export default React.memo(function CameraController() {
     const { cx, cz, radius: cityRadius, maxHeight } = cityBounds
 
     /** Start a smooth camera animation — cancels any in-flight animation */
-    const animateTo = useCallback((targetPos, lookAtPos, duration) => {
+    const animateTo = useCallback((targetPos, lookAtPos, duration, easeType = 'inOutCubic') => {
         _anim.startPos.copy(camera.position)
         _anim.endPos.copy(targetPos)
         _anim.startTarget.copy(controls?.target || new THREE.Vector3())
         _anim.endTarget.copy(lookAtPos)
-        _anim.duration = duration
+        _anim.duration = Math.max(0.18, duration)
         _anim.startTime = clock.elapsedTime
+        _anim.easeType = easeType in EASE ? easeType : 'inOutCubic'
         _anim.active = true
     }, [camera, controls, clock])
 
 
-    // useFrame drives all camera animations — replaces GSAP
+    // useFrame drives all camera animations — easing is selectable per flight type
     useFrame(() => {
         if (!_anim.active || !controls) return
 
         const elapsed = clock.elapsedTime - _anim.startTime
         const raw = Math.min(1, elapsed / _anim.duration)
-        const t = easeInOutCubic(raw)
+        const t = EASE[_anim.easeType](raw)
 
         camera.position.lerpVectors(_anim.startPos, _anim.endPos, t)
         controls.target.lerpVectors(_anim.startTarget, _anim.endTarget, t)
@@ -112,36 +122,45 @@ export default React.memo(function CameraController() {
             )
             const lookAtPos = new THREE.Vector3(x, frameCenterY, z)
 
+            // Duration weighted by BOTH distance and angle change — cinematic pacing
             const travelDist = camera.position.distanceTo(targetPos)
-            const flyDuration = Math.min(2.0, Math.max(0.8, travelDist / 400))
+            const curTarget = controls?.target || new THREE.Vector3()
+            const angleDist = curTarget.distanceTo(lookAtPos)
+            const tripMag = travelDist + angleDist * 0.5
+            const flyDuration = Math.min(1.8, Math.max(0.65, tripMag / 420))
 
-            animateTo(targetPos, lookAtPos, flyDuration)
+            animateTo(targetPos, lookAtPos, flyDuration, 'outExpo')
         }
 
         window.addEventListener('flyToBuilding', handleFlyTo)
         return () => window.removeEventListener('flyToBuilding', handleFlyTo)
     }, [camera, controls, animateTo])
 
-    // Auto-fit camera when city data changes (new analysis or demo load)
+    // Auto-fit camera when city data changes (new analysis or demo load).
+    // Uses FOV-aware framing so cities always fill the viewport correctly.
     useEffect(() => {
         if (!cityData?.buildings?.length || !controls) return
 
         const timer = setTimeout(() => {
-            // For large repos, cap the viewing distance so buildings remain clearly visible
-            // Instead of showing the entire city from orbit, start near the buildings
-            const isLargeCity = cityRadius > 300
-            const fitDist = isLargeCity
-                ? Math.min(cityRadius * 1.5, 1200)   // Back way out
-                : Math.max(cityRadius * 1.2, 200)      // Small/medium: view whole city clearly
+            // FOV-aware framing: the distance at which a sphere of radius R
+            // just fits the viewport with some padding.
+            const fovRad = (camera.fov * Math.PI) / 180
+            const halfFov = fovRad / 2
+            const frameRadius = cityRadius * 1.15 // 15% padding
+            const fovDist = frameRadius / Math.sin(halfFov)
 
-            const camY = isLargeCity
-                ? Math.min(maxHeight * 1.8 + cityRadius * 0.6, 900)      // Push height up significantly
-                : Math.max(cityRadius * 1.0, maxHeight * 1.2, 160) // Higher baseline
+            // Clamp so huge repos don't end up on a different planet
+            const fitDist = Math.min(fovDist, Math.max(cityRadius * 1.8, 2200))
+            const camY = Math.min(
+                Math.max(maxHeight * 1.4, cityRadius * 0.55, 140),
+                fitDist * 0.6
+            )
 
             animateTo(
-                new THREE.Vector3(cx + fitDist, camY, cz + fitDist),
+                new THREE.Vector3(cx + fitDist * 0.707, camY, cz + fitDist * 0.707),
                 new THREE.Vector3(cx, 0, cz),
-                1.8
+                1.6,
+                'inOutCubic'
             )
 
             // Dynamically scale far plane and maxDistance
@@ -216,8 +235,8 @@ export default React.memo(function CameraController() {
 
         if (targetPos && lookAtPos) {
             const travelDist = camera.position.distanceTo(targetPos)
-            const flyDuration = Math.min(2.2, Math.max(1.0, travelDist / 300))
-            animateTo(targetPos, lookAtPos, flyDuration)
+            const flyDuration = Math.min(1.9, Math.max(0.9, travelDist / 340))
+            animateTo(targetPos, lookAtPos, flyDuration, 'outExpo')
         }
     }, [selectedLandmark, camera, controls, animateTo, cityData])
 
@@ -234,21 +253,24 @@ export default React.memo(function CameraController() {
         const distance = currentPos.distanceTo(currentTarget)
 
         if (type === 'ZOOM_IN') {
-            const newPos = currentPos.clone().add(direction.clone().multiplyScalar(distance * 0.3))
-            animateTo(newPos, currentTarget.clone(), 0.45)
+            // Exponential zoom: each tap closes ~35% of remaining distance — fluid feel
+            const newPos = currentPos.clone().add(direction.clone().multiplyScalar(distance * 0.35))
+            animateTo(newPos, currentTarget.clone(), 0.38, 'outQuart')
         } else if (type === 'ZOOM_OUT') {
-            const newPos = currentPos.clone().sub(direction.clone().multiplyScalar(distance * 0.3))
-            animateTo(newPos, currentTarget.clone(), 0.45)
+            const newPos = currentPos.clone().sub(direction.clone().multiplyScalar(distance * 0.45))
+            animateTo(newPos, currentTarget.clone(), 0.45, 'outQuart')
         } else if (type === 'FIT' || type === 'RESET') {
-            const fitDist = cityRadius * 0.55
-            const camY = Math.max(cityRadius * 0.30, maxHeight * 0.9)
+            const fovRad = (camera.fov * Math.PI) / 180
+            const fitDist = Math.min((cityRadius * 1.15) / Math.sin(fovRad / 2), cityRadius * 1.8)
+            const camY = Math.max(cityRadius * 0.5, maxHeight * 1.2, 140)
             animateTo(
-                new THREE.Vector3(cx + fitDist, camY, cz + fitDist),
+                new THREE.Vector3(cx + fitDist * 0.707, camY, cz + fitDist * 0.707),
                 new THREE.Vector3(cx, 0, cz),
-                1.2
+                1.1,
+                'inOutCubic'
             )
         } else if (type === 'CENTER') {
-            animateTo(currentPos.clone(), new THREE.Vector3(cx, 0, cz), 0.8)
+            animateTo(currentPos.clone(), new THREE.Vector3(cx, 0, cz), 0.7, 'outExpo')
         }
 
     }, [cameraAction, camera, controls, animateTo, cx, cz, cityRadius, maxHeight])
