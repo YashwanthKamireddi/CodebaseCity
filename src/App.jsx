@@ -8,6 +8,7 @@
 import React, { useState, useEffect, useMemo, Suspense, useCallback, lazy, startTransition } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, Preload } from '@react-three/drei'
+import AdaptiveDPR from './widgets/city-viewport/ui/AdaptiveDPR'
 import * as THREE from 'three'
 
 import CityScene from './widgets/city-viewport/ui/CityScene'
@@ -153,15 +154,18 @@ function App() {
             isLowEnd: (isMobileDevice && cores <= 2) || (isNarrowScreen && cores <= 4),
         }
     }, [])
-    // DPR strategy:
-    //   low-end   → [0.75, 1]   (phones, keep battery + thermal in check)
-    //   mobile    → [1, 1.5]    (retina phones, keep quality readable)
-    //   desktop   → [1, 2]      (match device, kill the blur)
+    // DPR strategy: a single upper bound — PerformanceMonitor (mounted inside
+    // the Canvas) dynamically drops pixel density when FPS falls and raises
+    // it when FPS is healthy. So the "max" here is a ceiling, not a target.
+    //
+    //   low-end → 1.0   (phones / ≤2 cores — don't burn battery)
+    //   mobile  → 1.35  (retina phones can handle a bit of sharpness)
+    //   desktop → 1.6   (retina/4K readable without quadruple fragment cost)
     const dprRange = isLowEnd
-        ? [0.75, 1]
+        ? [0.75, 1.0]
         : isMobile
-            ? [1, 1.5]
-            : [1, 2]
+            ? [0.9, 1.35]
+            : [1.0, 1.6]
 
     // Handle Shareable URLs (?repo=owner/repo)
     useEffect(() => {
@@ -312,6 +316,11 @@ function App() {
                                         }}
                                         target={[0, 0, 0]}
                                     />
+
+                                    {/* Adaptive quality: drop DPR automatically when FPS dips,
+                                        raise when headroom is available. Keeps the experience
+                                        smooth on integrated GPUs without hurting sharp displays. */}
+                                    <AdaptiveDPR min={dprRange[0]} max={dprRange[1]} />
 
                                     <Suspense fallback={null}>
                                         <CityScene data={cityData} />
