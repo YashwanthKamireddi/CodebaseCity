@@ -5,8 +5,7 @@ import useStore from '../../../store/useStore'
 import logger from '../../../utils/logger'
 import { townHallTopY, mothershipAltitude } from './landmarkPositions'
 
-// Module-level animation state — mutated by effects, consumed by useFrame.
-// One reusable vec per role means zero allocations during camera flights.
+// Module-level animation state — mutated by effects, consumed by useFrame
 const _anim = {
     active: false,
     startPos: new THREE.Vector3(),
@@ -15,19 +14,11 @@ const _anim = {
     endTarget: new THREE.Vector3(),
     duration: 1.0,
     startTime: 0,
-    easeType: 'inOutCubic',
 }
 
-// Cinematic easings — used based on flight type for a more expressive feel.
-const EASE = {
-    // Slight settle at end — good for selections
-    outExpo: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
-    // Balanced in/out — good for long traversals
-    inOutCubic: (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2),
-    // Sharper in/out — good for short hops
-    inOutQuart: (t) => (t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2),
-    // Accelerating only — good for zoom-out / reveal
-    outQuart: (t) => 1 - Math.pow(1 - t, 4),
+/** power3.inOut easing equivalent */
+function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
 }
 
 export default React.memo(function CameraController() {
@@ -63,28 +54,25 @@ export default React.memo(function CameraController() {
 
     const { cx, cz, radius: cityRadius, maxHeight } = cityBounds
 
-    /** Start a smooth camera animation — cancels any in-flight animation.
-     *  Invalidates once so the render loop wakes up in demand frameloop. */
-    const animateTo = useCallback((targetPos, lookAtPos, duration, easeType = 'inOutCubic') => {
+    /** Start a smooth camera animation — cancels any in-flight animation */
+    const animateTo = useCallback((targetPos, lookAtPos, duration) => {
         _anim.startPos.copy(camera.position)
         _anim.endPos.copy(targetPos)
         _anim.startTarget.copy(controls?.target || new THREE.Vector3())
         _anim.endTarget.copy(lookAtPos)
-        _anim.duration = Math.max(0.18, duration)
+        _anim.duration = duration
         _anim.startTime = clock.elapsedTime
-        _anim.easeType = easeType in EASE ? easeType : 'inOutCubic'
         _anim.active = true
-        invalidate()
-    }, [camera, controls, clock, invalidate])
+    }, [camera, controls, clock])
 
 
-    // useFrame drives all camera animations — easing is selectable per flight type
+    // useFrame drives all camera animations — replaces GSAP
     useFrame(() => {
         if (!_anim.active || !controls) return
 
         const elapsed = clock.elapsedTime - _anim.startTime
         const raw = Math.min(1, elapsed / _anim.duration)
-        const t = EASE[_anim.easeType](raw)
+        const t = easeInOutCubic(raw)
 
         camera.position.lerpVectors(_anim.startPos, _anim.endPos, t)
         controls.target.lerpVectors(_anim.startTarget, _anim.endTarget, t)
@@ -107,24 +95,16 @@ export default React.memo(function CameraController() {
             const bWidth = building.dimensions?.width || 8
             const bDepth = building.dimensions?.depth || 8
 
-            // Frame the TOP of the building + panel, not the whole silhouette.
-            // Gets the camera close enough to actually read the detail panel
-            // without requiring the user to manually zoom in.
             const roofY = buildingHeight
             const panelTopY = roofY + 30
-            const frameCenterY = roofY * 0.85 + panelTopY * 0.15
+            const frameCenterY = roofY * 0.6 + panelTopY * 0.4
 
+            const totalVerticalExtent = panelTopY
             const footprintSize = Math.max(bWidth, bDepth)
-            // Distance scales with footprint (wide buildings need more distance),
-            // NOT with total height (tall towers used to push camera absurdly far).
-            // Hard cap prevents outliers from blowing the framing.
-            const zoomDist = Math.min(
-                Math.max(65, footprintSize * 3.2),
-                220
-            )
+            const zoomDist = Math.max(45, totalVerticalExtent * 0.6, footprintSize * 1.5)
 
             const camAngle = Math.PI / 4
-            const elevationFactor = 0.35
+            const elevationFactor = 0.55
 
             const targetPos = new THREE.Vector3(
                 x + Math.cos(camAngle) * zoomDist,
@@ -133,51 +113,36 @@ export default React.memo(function CameraController() {
             )
             const lookAtPos = new THREE.Vector3(x, frameCenterY, z)
 
-            // Duration weighted by BOTH distance and angle change — cinematic pacing
             const travelDist = camera.position.distanceTo(targetPos)
-            const curTarget = controls?.target || new THREE.Vector3()
-            const angleDist = curTarget.distanceTo(lookAtPos)
-            const tripMag = travelDist + angleDist * 0.5
-            const flyDuration = Math.min(1.8, Math.max(0.65, tripMag / 420))
+            const flyDuration = Math.min(2.0, Math.max(0.8, travelDist / 400))
 
-            animateTo(targetPos, lookAtPos, flyDuration, 'outExpo')
+            animateTo(targetPos, lookAtPos, flyDuration)
         }
 
         window.addEventListener('flyToBuilding', handleFlyTo)
         return () => window.removeEventListener('flyToBuilding', handleFlyTo)
     }, [camera, controls, animateTo])
 
-    // Auto-fit camera when city data changes (new analysis or demo load).
-    // Uses FOV-aware framing so cities always fill the viewport correctly.
-    //
-    // Delay scales with building count so the camera flight doesn't start
-    // while InstancedCity is still streaming matrices (those ships compete
-    // for main-thread frames and cause the flight to stutter).
+    // Auto-fit camera when city data changes (new analysis or demo load)
     useEffect(() => {
         if (!cityData?.buildings?.length || !controls) return
-        const count = cityData.buildings.length
-        const delay = Math.min(800, 220 + Math.floor(count / 40))
 
         const timer = setTimeout(() => {
-            // FOV-aware framing: the distance at which a sphere of radius R
-            // just fits the viewport with some padding.
-            const fovRad = (camera.fov * Math.PI) / 180
-            const halfFov = fovRad / 2
-            const frameRadius = cityRadius * 1.15 // 15% padding
-            const fovDist = frameRadius / Math.sin(halfFov)
+            // For large repos, cap the viewing distance so buildings remain clearly visible
+            // Instead of showing the entire city from orbit, start near the buildings
+            const isLargeCity = cityRadius > 300
+            const fitDist = isLargeCity
+                ? Math.min(cityRadius * 1.5, 1200)   // Back way out
+                : Math.max(cityRadius * 1.2, 200)      // Small/medium: view whole city clearly
 
-            // Clamp so huge repos don't end up on a different planet
-            const fitDist = Math.min(fovDist, Math.max(cityRadius * 1.8, 2200))
-            const camY = Math.min(
-                Math.max(maxHeight * 1.4, cityRadius * 0.55, 140),
-                fitDist * 0.6
-            )
+            const camY = isLargeCity
+                ? Math.min(maxHeight * 1.8 + cityRadius * 0.6, 900)      // Push height up significantly
+                : Math.max(cityRadius * 1.0, maxHeight * 1.2, 160) // Higher baseline
 
             animateTo(
-                new THREE.Vector3(cx + fitDist * 0.707, camY, cz + fitDist * 0.707),
+                new THREE.Vector3(cx + fitDist, camY, cz + fitDist),
                 new THREE.Vector3(cx, 0, cz),
-                1.6,
-                'inOutCubic'
+                1.8
             )
 
             // Dynamically scale far plane and maxDistance
@@ -187,7 +152,7 @@ export default React.memo(function CameraController() {
             if (controls.maxDistance < neededFar * 0.5) {
                 controls.maxDistance = neededFar * 0.5
             }
-        }, delay)
+        }, 200)
 
         return () => clearTimeout(timer)
     }, [cityData, cityRadius, cx, cz, maxHeight, camera, controls, animateTo])
@@ -210,6 +175,8 @@ export default React.memo(function CameraController() {
         let targetPos, lookAtPos
 
         if (selectedLandmark === 'reactor') {
+            // Source of truth lives in landmarkPositions.js so panels/mothership/camera
+            // all agree on where the town hall crown actually is.
             const crownY = townHallTopY(cityData?.buildings)
             const roofY = crownY
             const panelTopY = roofY + 30
@@ -225,7 +192,7 @@ export default React.memo(function CameraController() {
             )
         } else if (selectedLandmark === 'mothership') {
             const alt = mothershipAltitude(cityData?.buildings)
-            const dist = 200
+            const dist = 280
             const angle = Math.PI / 4
             const viewCenterY = alt + 20
             lookAtPos = new THREE.Vector3(0, viewCenterY, 0)
@@ -238,8 +205,8 @@ export default React.memo(function CameraController() {
 
         if (targetPos && lookAtPos) {
             const travelDist = camera.position.distanceTo(targetPos)
-            const flyDuration = Math.min(1.9, Math.max(0.9, travelDist / 340))
-            animateTo(targetPos, lookAtPos, flyDuration, 'outExpo')
+            const flyDuration = Math.min(2.2, Math.max(1.0, travelDist / 300))
+            animateTo(targetPos, lookAtPos, flyDuration)
         }
     }, [selectedLandmark, camera, controls, animateTo, cityData])
 
@@ -256,24 +223,21 @@ export default React.memo(function CameraController() {
         const distance = currentPos.distanceTo(currentTarget)
 
         if (type === 'ZOOM_IN') {
-            // Exponential zoom: each tap closes ~35% of remaining distance — fluid feel
-            const newPos = currentPos.clone().add(direction.clone().multiplyScalar(distance * 0.35))
-            animateTo(newPos, currentTarget.clone(), 0.38, 'outQuart')
+            const newPos = currentPos.clone().add(direction.clone().multiplyScalar(distance * 0.3))
+            animateTo(newPos, currentTarget.clone(), 0.45)
         } else if (type === 'ZOOM_OUT') {
-            const newPos = currentPos.clone().sub(direction.clone().multiplyScalar(distance * 0.45))
-            animateTo(newPos, currentTarget.clone(), 0.45, 'outQuart')
+            const newPos = currentPos.clone().sub(direction.clone().multiplyScalar(distance * 0.3))
+            animateTo(newPos, currentTarget.clone(), 0.45)
         } else if (type === 'FIT' || type === 'RESET') {
-            const fovRad = (camera.fov * Math.PI) / 180
-            const fitDist = Math.min((cityRadius * 1.15) / Math.sin(fovRad / 2), cityRadius * 1.8)
-            const camY = Math.max(cityRadius * 0.5, maxHeight * 1.2, 140)
+            const fitDist = cityRadius * 0.55
+            const camY = Math.max(cityRadius * 0.30, maxHeight * 0.9)
             animateTo(
-                new THREE.Vector3(cx + fitDist * 0.707, camY, cz + fitDist * 0.707),
+                new THREE.Vector3(cx + fitDist, camY, cz + fitDist),
                 new THREE.Vector3(cx, 0, cz),
-                1.1,
-                'inOutCubic'
+                1.2
             )
         } else if (type === 'CENTER') {
-            animateTo(currentPos.clone(), new THREE.Vector3(cx, 0, cz), 0.7, 'outExpo')
+            animateTo(currentPos.clone(), new THREE.Vector3(cx, 0, cz), 0.8)
         }
 
     }, [cameraAction, camera, controls, animateTo, cx, cz, cityRadius, maxHeight])

@@ -33,27 +33,28 @@ function NebulaSky() {
         if (meshRef.current) meshRef.current.position.copy(camera.position)
     })
 
-    // World-class deep-space sky — cool 4-stop gradient with a soft
-    // starlit horizon glow. No magenta, no noise, no banding — just a
-    // rich, readable backdrop that makes the city pop.
+    // Beautiful deep-space sky — 5-stop gradient + subtle violet nebula
+    // wash in the upper hemisphere + cool blue horizon glow. Still pure
+    // math (no textures, no noise), 2 multiplies & 3 smoothsteps per pixel.
     //
-    //   zenith (#04071a)   — near-black indigo at the top of the dome
-    //   upper  (#0a1440)   — saturated navy for the upper atmosphere
-    //   mid    (#152d6e)   — vivid cobalt at roughly eye level
-    //   horizon(#3a5fb5)   — cool blue glow where the ground meets sky
-    //   below  (#020409)   — deep void under the horizon so the ground
-    //                        silhouette is never washed out
+    //   zenith (#040518)   — deep indigo at the top of the dome
+    //   upper  (#0a1340)   — saturated navy for the upper atmosphere
+    //   mid    (#18316e)   — vivid cobalt at eye level
+    //   horizon(#3a6bc5)   — cool blue glow where the ground meets sky
+    //   below  (#020409)   — void under horizon so the ground reads sharp
+    //   nebula (#5a32a8)   — soft violet wash painted into the upper dome
     const material = useMemo(() => new THREE.ShaderMaterial({
         side: THREE.BackSide,
         depthWrite: false,
         depthTest: false,
         fog: false,
         uniforms: {
-            uZenith:  { value: new THREE.Color('#04071a') },
-            uUpper:   { value: new THREE.Color('#0a1440') },
-            uMid:     { value: new THREE.Color('#152d6e') },
-            uHorizon: { value: new THREE.Color('#3a5fb5') },
+            uZenith:  { value: new THREE.Color('#040518') },
+            uUpper:   { value: new THREE.Color('#0a1340') },
+            uMid:     { value: new THREE.Color('#18316e') },
+            uHorizon: { value: new THREE.Color('#3a6bc5') },
             uBelow:   { value: new THREE.Color('#020409') },
+            uNebula:  { value: new THREE.Color('#5a32a8') },
         },
         vertexShader: `
             varying vec3 vPos;
@@ -68,6 +69,7 @@ function NebulaSky() {
             uniform vec3 uMid;
             uniform vec3 uHorizon;
             uniform vec3 uBelow;
+            uniform vec3 uNebula;
             varying vec3 vPos;
             void main() {
                 float h = vPos.y; // -1 below, 0 horizon, 1 zenith
@@ -81,10 +83,18 @@ function NebulaSky() {
                 } else {
                     color = mix(uBelow, uHorizon, smoothstep(-0.4, -0.02, h));
                 }
-                // Faint horizon bloom band (cool blue) — gives the sky depth
-                // without the buggy magenta we had before.
+
+                // Soft nebula wash — painted into the upper 2/3 of the dome,
+                // biased to one side for asymmetric beauty (like a real night sky).
+                float nebula = smoothstep(0.15, 0.7, h) *
+                               smoothstep(0.95, 0.55, h) *
+                               (0.5 + 0.5 * vPos.x);
+                color += uNebula * nebula * 0.22;
+
+                // Cool-blue horizon bloom band
                 float bloom = smoothstep(-0.05, 0.02, h) * smoothstep(0.14, 0.06, h);
-                color += vec3(0.08, 0.18, 0.35) * bloom;
+                color += vec3(0.1, 0.22, 0.42) * bloom;
+
                 gl_FragColor = vec4(color, 1.0);
             }
         `,
@@ -207,25 +217,35 @@ const CityScene = React.memo(function CityScene() {
 
             {/* Stunning gradient nebula backdrop + dense starfield */}
             <NebulaSky />
-            {/* Dual-layer starfield — far faint background + near bright highlights.
-                Two <Stars> primitives cost ~1 draw call each and give real depth. */}
+            {/* Tri-layer starfield — dense cosmic dust + mid-field + close
+                bright stars. Three <Stars> still cost ~3 draw calls total and
+                give a real sense of cosmic depth when the camera moves. */}
             <Stars
-                radius={Math.max(cityRadius * 14, 6000)}
-                depth={Math.max(cityRadius * 8, 3000)}
-                count={5500}
-                factor={7}
-                saturation={0.35}
+                radius={Math.max(cityRadius * 18, 8000)}
+                depth={Math.max(cityRadius * 10, 4000)}
+                count={7500}
+                factor={8}
+                saturation={0.2}
                 fade
-                speed={0.15}
+                speed={0.1}
             />
             <Stars
-                radius={Math.max(cityRadius * 6, 2500)}
-                depth={Math.max(cityRadius * 3, 1200)}
-                count={900}
-                factor={4}
-                saturation={0.9}
+                radius={Math.max(cityRadius * 10, 4500)}
+                depth={Math.max(cityRadius * 5, 2200)}
+                count={2500}
+                factor={5}
+                saturation={0.55}
                 fade
-                speed={0.45}
+                speed={0.25}
+            />
+            <Stars
+                radius={Math.max(cityRadius * 5, 2200)}
+                depth={Math.max(cityRadius * 2.5, 1100)}
+                count={600}
+                factor={3.5}
+                saturation={0.95}
+                fade
+                speed={0.55}
             />
 
             <fog attach="fog" args={['#0f2040', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />

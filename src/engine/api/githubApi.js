@@ -120,6 +120,21 @@ let _inflight = 0
 const MAX_CONCURRENT = 6
 const _queue = []
 
+// Combine multiple AbortSignals into one — aborted if any source aborts.
+// Polyfill for AbortSignal.any() which isn't supported in all browsers.
+function anySignal(signals) {
+    if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.any === 'function') {
+        return AbortSignal.any(signals)
+    }
+    const ctrl = new AbortController()
+    const onAbort = () => ctrl.abort()
+    for (const s of signals) {
+        if (s.aborted) { ctrl.abort(); break }
+        s.addEventListener('abort', onAbort, { once: true })
+    }
+    return ctrl.signal
+}
+
 function enqueue() {
     return new Promise(resolve => {
         if (_inflight < MAX_CONCURRENT) {
@@ -207,11 +222,24 @@ export async function ghFetch(url, opts = {}) {
             headers['If-None-Match'] = cachedEntry.etag
         }
 
-        // 5. Fetch with retry
+        // 5. Fetch with retry — fail-fast on prod so the loading screen never
+        //    hangs for minutes on rate-limit. Max wait ≈ 4s, 2 attempts total.
         let lastError = null
-        for (let attempt = 0; attempt < 3; attempt++) {
+        for (let attempt = 0; attempt < 2; attempt++) {
             try {
-                const res = await fetch(url, { headers, signal })
+                // Hard 30s timeout per attempt so the network layer never hangs.
+                const timeoutCtrl = new AbortController()
+                const timeoutId = setTimeout(() => timeoutCtrl.abort(), 30_000)
+                const mergedSignal = signal
+                    ? anySignal([signal, timeoutCtrl.signal])
+                    : timeoutCtrl.signal
+
+                let res
+                try {
+                    res = await fetch(url, { headers, signal: mergedSignal })
+                } finally {
+                    clearTimeout(timeoutId)
+                }
 
                 // Update rate-limit tracking
                 const remaining = res.headers.get('x-ratelimit-remaining')
@@ -225,22 +253,21 @@ export async function ghFetch(url, opts = {}) {
                     return { data: cachedEntry.data, status: 304, fromCache: true }
                 }
 
-                // Rate limited — retry with backoff
+                // Rate limited — short retry, then fail fast with clear msg.
                 if (res.status === 403 || res.status === 429) {
                     const retryAfter = res.headers.get('retry-after')
-                    const waitSec = retryAfter ? parseInt(retryAfter, 10) : (2 ** attempt) * 2
-                    if (attempt < 2 && waitSec < 120) {
-                        logger.warn(`GitHub ${res.status} — retrying in ${waitSec}s (attempt ${attempt + 1}/3)`)
+                    const waitSec = Math.min(4, retryAfter ? parseInt(retryAfter, 10) : 2)
+                    if (attempt === 0 && _rateLimitRemaining > 0) {
+                        logger.warn(`GitHub ${res.status} — retrying once in ${waitSec}s`)
                         await new Promise(r => setTimeout(r, waitSec * 1000))
                         continue
                     }
-                    // Final attempt — throw with helpful message
                     const isAuthd = !!token
                     throw new Error(
                         `GitHub API rate limit exceeded (${_rateLimitRemaining} remaining). ` +
                         (isAuthd
                             ? 'Limit resets at ' + new Date(_rateLimitReset * 1000).toLocaleTimeString() + '.'
-                            : 'Add a GitHub token in settings for 5,000 requests/hour instead of 60.')
+                            : 'Add a GitHub token (key icon, top-right) for 5,000 requests/hour instead of 60.')
                     )
                 }
 
