@@ -352,6 +352,85 @@ const InstancedCity = React.memo(function InstancedCity() {
         }
     }, [buildings, count, invalidate])
 
+    // ═══════════════════════════════════════════════════════════════
+    // PHASE 4 — PER-CHUNK FRUSTUM CULLING
+    //
+    // The city is partitioned into ~N spatial chunks (see chunkData).
+    // Each frame we test each chunk's bounding sphere against the camera
+    // frustum. Chunks that leave the frustum have their instances collapsed
+    // to scale 0 (off-screen = zero pixels drawn). Instances that re-enter
+    // restore their matrices from `buildings[i]`.
+    //
+    // We only write to the GPU buffer when a chunk's visibility FLIPS —
+    // so a static camera costs zero per frame, and panning only uploads
+    // the handful of chunks crossing the edge. This is what makes
+    // 100k-building repos smooth during navigation.
+    //
+    // Skipped when refactoring mode or genesis playback is active
+    // (those rewrite matrices on their own and would collide with us).
+    // ═══════════════════════════════════════════════════════════════
+    const chunkVisibilityRef = useRef(null)
+    const frustumRef = useRef(new THREE.Frustum())
+    const projScreenRef = useRef(new THREE.Matrix4())
+    const cullSphereRef = useRef(new THREE.Sphere())
+
+    useEffect(() => {
+        // Reset state when chunks change
+        chunkVisibilityRef.current = chunkData.map(() => true)
+    }, [chunkData])
+
+    useFrame(() => {
+        const mesh = meshRef.current
+        if (!mesh || count === 0 || chunkData.length === 0) return
+        if (refactoringModeActive) return
+        if (useStore.getState().isGenesisPlaying) return
+        if (!chunkVisibilityRef.current) return
+
+        // Build current camera frustum
+        projScreenRef.current.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse)
+        frustumRef.current.setFromProjectionMatrix(projScreenRef.current)
+
+        const states = chunkVisibilityRef.current
+        const matrixWorld = mesh.matrixWorld
+        let anyChange = false
+
+        for (let c = 0; c < chunkData.length; c++) {
+            const chunk = chunkData[c]
+            cullSphereRef.current.copy(chunk.sphere).applyMatrix4(matrixWorld)
+            const visible = frustumRef.current.intersectsSphere(cullSphereRef.current)
+            if (visible === states[c]) continue
+
+            // Visibility flipped — write new matrices for this range
+            states[c] = visible
+            anyChange = true
+            for (let i = chunk.start; i < chunk.end; i++) {
+                const b = buildings[i]
+                if (!b) continue
+                if (visible) {
+                    // Restore from source of truth
+                    const width = b.dimensions?.width || 8
+                    const depth = b.dimensions?.depth || 8
+                    const targetHeight = (b.dimensions?.height || 8) * 3.0
+                    tempObject.position.set(b.position.x, targetHeight / 2, b.position.z)
+                    tempObject.scale.set(width, targetHeight, depth)
+                    tempObject.rotation.set(0, 0, 0)
+                } else {
+                    // Collapse to a point — zero pixels, still a valid matrix
+                    tempObject.position.set(b.position.x, 0, b.position.z)
+                    tempObject.scale.set(0, 0, 0)
+                    tempObject.rotation.set(0, 0, 0)
+                }
+                tempObject.updateMatrix()
+                mesh.setMatrixAt(i, tempObject.matrix)
+            }
+        }
+
+        if (anyChange) {
+            mesh.instanceMatrix.needsUpdate = true
+            invalidate()
+        }
+    })
+
     // Pre-compute issue sets once for O(1) lookup instead of O(n)
     const issueIndex = useMemo(() => {
         const issues = cityData?.metadata?.issues || {}
