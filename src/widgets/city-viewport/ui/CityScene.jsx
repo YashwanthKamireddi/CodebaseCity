@@ -3,6 +3,7 @@ import { useThree, useFrame } from '@react-three/fiber'
 import { Stars } from '@react-three/drei'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
+import { detectDeviceTier } from '../../../shared/perf/deviceTier'
 import Roads from './Roads'
 import InstancedCity from './InstancedCity'
 import CameraController from './CameraController'
@@ -182,11 +183,19 @@ function ScreenshotHandler() {
 
 /**
  * CityScene - Premium Cinematic City Environment
+ *
+ * Tier-aware: on low-tier devices (≤2 GB RAM, ≤2 cores, or weak GPU) we
+ * drop the decoration layer entirely, pick a 1-layer starfield, and skip
+ * the shader-warmup pass. On mid-tier, decorations are trimmed. On high
+ * tier, full fidelity.
  */
 const CityScene = React.memo(function CityScene() {
     const cityData = useStore(s => s.cityData)
     const clearSelection = useStore(s => s.clearSelection)
     const showRoads = useStore(s => s.showRoads)
+    const tier = useMemo(() => detectDeviceTier(), [])
+    const low = tier.tier === 'low'
+    const high = tier.tier === 'high'
 
     const buildingCount = cityData?.buildings?.length || 0
 
@@ -204,11 +213,11 @@ const CityScene = React.memo(function CityScene() {
         <group>
             <AnimationPump />
             <ScreenshotHandler />
-            <ShaderWarmup />
+            {/* Shader warmup is expensive on low-tier GPUs (forces compile of
+                EVERY material at once); skip it and let shaders compile on
+                first use instead. */}
+            {!low && <ShaderWarmup />}
             <CameraFloorGuard />
-
-            {/* All materials are MeshBasicMaterial or custom ShaderMaterial — no lit materials exist.
-                Lights removed: they had zero visual effect but cost renderer overhead. */}
 
             <group onPointerMissed={clearSelection}>
                 <InstancedCity />
@@ -216,54 +225,72 @@ const CityScene = React.memo(function CityScene() {
                 <Ground />
                 <HologramPanel />
                 <LandmarkPanel />
-                <DistrictLabels />
-                <StreetLamps />
-                <DataStreams />
-                <AtmosphericParticles
-                    count={Math.min(180, Math.max(40, Math.floor(Math.sqrt(buildingCount || 1) * 4)))}
-                    spread={cityRadius * 1.5}
-                />
+                {/* Always-kept core — affordable everywhere */}
                 <EnergyCoreReactor />
                 <MothershipCore />
                 <HolographicCityName />
-                <HeroLandmarks buildings={cityData?.buildings} />
-
-                {/* ── Gamified Interactive Avatar ── */}
                 <UfoAvatar />
+
+                {/* Mid/high-tier decorations */}
+                {!low && <DistrictLabels />}
+                {!low && <StreetLamps />}
+                {!low && <HeroLandmarks buildings={cityData?.buildings} />}
+
+                {/* High-tier-only decorations */}
+                {high && <DataStreams />}
+                {high && (
+                    <AtmosphericParticles
+                        count={Math.min(180, Math.max(40, Math.floor(Math.sqrt(buildingCount || 1) * 4)))}
+                        spread={cityRadius * 1.5}
+                    />
+                )}
             </group>
 
-            {/* Stunning gradient nebula backdrop + dense starfield */}
             <NebulaSky />
-            {/* Tri-layer starfield — dense cosmic dust + mid-field + close
-                bright stars. Three <Stars> still cost ~3 draw calls total and
-                give a real sense of cosmic depth when the camera moves. */}
-            <Stars
-                radius={Math.max(cityRadius * 18, 8000)}
-                depth={Math.max(cityRadius * 10, 4000)}
-                count={7500}
-                factor={8}
-                saturation={0.2}
-                fade
-                speed={0.1}
-            />
-            <Stars
-                radius={Math.max(cityRadius * 10, 4500)}
-                depth={Math.max(cityRadius * 5, 2200)}
-                count={2500}
-                factor={5}
-                saturation={0.55}
-                fade
-                speed={0.25}
-            />
-            <Stars
-                radius={Math.max(cityRadius * 5, 2200)}
-                depth={Math.max(cityRadius * 2.5, 1100)}
-                count={600}
-                factor={3.5}
-                saturation={0.95}
-                fade
-                speed={0.55}
-            />
+            {/* Starfield: 1 layer low, 2 layers mid, 3 layers high */}
+            {low ? (
+                <Stars
+                    radius={Math.max(cityRadius * 8, 3500)}
+                    depth={Math.max(cityRadius * 4, 1800)}
+                    count={800}
+                    factor={5}
+                    saturation={0.5}
+                    fade
+                    speed={0.2}
+                />
+            ) : (
+                <>
+                    <Stars
+                        radius={Math.max(cityRadius * 18, 8000)}
+                        depth={Math.max(cityRadius * 10, 4000)}
+                        count={high ? 7500 : 3500}
+                        factor={8}
+                        saturation={0.2}
+                        fade
+                        speed={0.1}
+                    />
+                    <Stars
+                        radius={Math.max(cityRadius * 10, 4500)}
+                        depth={Math.max(cityRadius * 5, 2200)}
+                        count={high ? 2500 : 1200}
+                        factor={5}
+                        saturation={0.55}
+                        fade
+                        speed={0.25}
+                    />
+                    {high && (
+                        <Stars
+                            radius={Math.max(cityRadius * 5, 2200)}
+                            depth={Math.max(cityRadius * 2.5, 1100)}
+                            count={600}
+                            factor={3.5}
+                            saturation={0.95}
+                            fade
+                            speed={0.55}
+                        />
+                    )}
+                </>
+            )}
 
             <fog attach="fog" args={['#060918', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
             <CameraController />
