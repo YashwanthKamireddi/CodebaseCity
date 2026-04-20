@@ -14,7 +14,7 @@ function ApiKeyBanner({ onOpenSettings }) {
                 Add your Gemini API key to chat with the AI architect. Your key is stored locally and never sent to any server.
             </p>
             <div className="ci-key-banner-actions">
-                <button onClick={onOpenSettings} className="ci-key-add-btn">Add Key</button>
+                <button onClick={onOpenSettings} className="p-btn p-btn-secondary">Add Key</button>
                 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="ci-key-get-link">
                     Get Key <ExternalLink size={10} />
                 </a>
@@ -35,22 +35,22 @@ function ApiKeySettings({ onClose }) {
         <div className="ci-settings">
             <div className="ci-settings-head">
                 <span>API Key Settings</span>
-                <button onClick={onClose} className="ci-icon-btn"><X size={14} /></button>
+                <button onClick={onClose} className="p-icon-btn"><X size={14} /></button>
             </div>
             <div className="ci-settings-input-row">
                 <input
                     type="password" value={keyInput}
                     onChange={e => setKeyInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && handleSave()}
-                    placeholder="AIza..." autoFocus className="ci-settings-input"
+                    placeholder="AIza..." autoFocus className="p-input"
                 />
                 {geminiApiKey && (
-                    <button onClick={handleRemove} title="Remove key" className="ci-key-remove-btn">
-                        <Trash2 size={12} />
+                    <button onClick={handleRemove} title="Remove key" className="p-icon-btn" style={{ color: 'var(--color-error)' }}>
+                        <Trash2 size={16} />
                     </button>
                 )}
                 <button onClick={handleSave} disabled={!keyInput.trim()}
-                    className={`ci-key-save-btn ${keyInput.trim() ? 'ci-key-save-btn--active' : ''}`}>
+                    className="p-btn p-btn-primary">
                     Save
                 </button>
             </div>
@@ -90,7 +90,7 @@ export default function ChatInterface() {
     const hasKey = !!geminiApiKey
 
     return (
-        <div className="ci-root anim-slide-up">
+        <div className="ci-root anim-slide-up p-panel-floating">
                 {/* Top accent line */}
                 <div className="ci-accent-line" />
 
@@ -109,10 +109,10 @@ export default function ChatInterface() {
                     </div>
                     <div className="ci-header-actions">
                         <button onClick={() => setShowSettings(s => !s)} title="API Key Settings"
-                            className={`ci-icon-btn ${showSettings ? 'ci-icon-btn--active' : ''} ${hasKey ? 'ci-icon-btn--green' : ''}`}>
-                            <KeyRound size={14} />
+                            className={`p-icon-btn ${showSettings ? 'ci-icon-btn--active' : ''} ${hasKey ? 'ci-icon-btn--green' : ''}`}>
+                            <KeyRound size={16} />
                         </button>
-                        <button onClick={() => useStore.setState({ chatOpen: false })} className="ci-icon-btn">
+                        <button onClick={() => useStore.setState({ chatOpen: false })} className="p-icon-btn">
                             <X size={16} />
                         </button>
                     </div>
@@ -179,17 +179,19 @@ export default function ChatInterface() {
                     <div ref={messagesEndRef} />
                 </div>
 
-                {/* Input */}
-                <div className="ci-input-area">
-                    <div className="ci-input-row">
+                <div className="ci-input-area" style={{ padding: 'var(--space-3)' }}>
+                    <div className="p-input-group" style={{ padding: 0, borderTop: 'none', background: 'transparent' }}>
                         <input type="text" value={input}
                             onChange={e => setInput(e.target.value)}
                             onKeyDown={e => e.key === 'Enter' && handleSend()}
                             placeholder={hasKey ? 'Ask Architect...' : 'Add API key to start...'}
-                            className="ci-input"
+                            className="p-input"
+                            style={{ borderRadius: 'var(--radius-full)', paddingLeft: '1rem' }}
                         />
                         <button onClick={handleSend} disabled={!input.trim() || chatLoading}
-                            className={`ci-send-btn ${input.trim() ? 'ci-send-btn--active' : ''}`}>
+                            className="p-btn p-btn-primary"
+                            style={{ borderRadius: 'var(--radius-full)', width: '38px', padding: 0 }}
+                        >
                             <ArrowUp size={16} strokeWidth={2.5} />
                         </button>
                     </div>

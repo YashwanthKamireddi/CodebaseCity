@@ -88,7 +88,7 @@ export default function ExportReport({ isOpen, onClose }) {
                 onClick={onClose}
             >
                 <div
-                    className="export-modal anim-scale-in"
+                    className="export-modal anim-scale-in p-panel-floating"
                     onClick={(e) => e.stopPropagation()}
                 >
                     {/* Header */}
@@ -97,7 +97,7 @@ export default function ExportReport({ isOpen, onClose }) {
                             <Download size={20} />
                             <h2>Export Report</h2>
                         </div>
-                        <button className="export-close" onClick={onClose}>
+                        <button className="p-icon-btn" onClick={onClose}>
                             <X size={18} />
                         </button>
                     </div>
@@ -169,11 +169,11 @@ export default function ExportReport({ isOpen, onClose }) {
 
                     {/* Footer */}
                     <div className="export-footer">
-                        <button className="export-cancel" onClick={onClose}>
+                        <button className="p-btn p-btn-secondary" onClick={onClose}>
                             Cancel
                         </button>
                         <button
-                            className="export-submit"
+                            className="p-btn p-btn-primary"
                             onClick={handleClientExport}
                             disabled={exporting || !cityData}
                         >

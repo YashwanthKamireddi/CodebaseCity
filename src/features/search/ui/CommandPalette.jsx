@@ -251,7 +251,7 @@ export default function CommandPalette() {
 
                     {/* Command dialog */}
                     <div
-                        className="command-dialog anim-scale-in"
+                        className="command-dialog anim-scale-in p-panel-floating"
                     >
                         <Command
                             className="command-root"

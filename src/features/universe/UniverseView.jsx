@@ -142,7 +142,7 @@ export default function UniverseView() {
 
             {/* ── Top bar ─────────────────────────────────────────────────── */}
             <header className="uv-topbar">
-                <button className="uv-back" onClick={() => exitUniverse()}>
+                <button className="p-btn p-btn-secondary uv-back" onClick={() => exitUniverse()}>
                     <ArrowLeft size={16} />
                     <span>Exit Atlas</span>
                 </button>
@@ -239,6 +239,7 @@ export default function UniverseView() {
                                 placeholder="Search worlds…"
                                 value={universeFilter}
                                 onChange={e => setUniverseFilter(e.target.value)}
+                                className="p-input"
                             />
                         </div>
 
@@ -309,7 +310,7 @@ export default function UniverseView() {
                             <div className="uv-empty">
                                 <Sparkles size={48} />
                                 <p>No worlds match this filter</p>
-                                <button className="uv-empty-reset" onClick={() => { setTier('all'); setUniverseFilter(''); setUniverseLanguageFilter(null) }}>
+                                <button className="p-btn p-btn-primary uv-empty-reset" onClick={() => { setTier('all'); setUniverseFilter(''); setUniverseLanguageFilter(null) }}>
                                     Reset filters
                                 </button>
                             </div>
@@ -419,9 +420,8 @@ function WorldCard({ repo, index, isSelected, onSelect, onEnter }) {
                 </div>
             </div>
 
-            {/* Land button */}
             <button
-                className="uv-world-land"
+                className="p-btn p-btn-primary uv-world-land"
                 onClick={(e) => { e.stopPropagation(); onEnter() }}
             >
                 <span>Land</span>

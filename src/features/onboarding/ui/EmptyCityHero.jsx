@@ -101,20 +101,20 @@ export default function EmptyCityHero() {
                 </p>
 
                 <div className="lp-cta anim-slide-up">
-                    <button onClick={analyzeLocal} className="lp-btn lp-btn--primary">
+                    <button onClick={analyzeLocal} className="p-btn p-btn-primary lp-btn">
                         <FolderOpen size={15} />
                         <span>Open Folder</span>
                     </button>
                     <button
                         onClick={() => { setShowGithubInput(v => !v); setShowUniverseInput(false) }}
-                        className={`lp-btn lp-btn--primary${showGithubInput ? ' is-active' : ''}`}
+                        className={`p-btn p-btn-primary lp-btn${showGithubInput ? ' is-active' : ''}`}
                     >
                         <Github size={15} />
                         <span>GitHub Repo</span>
                     </button>
                     <button
                         onClick={() => { setShowUniverseInput(v => !v); setShowGithubInput(false) }}
-                        className={`lp-btn lp-btn--primary${showUniverseInput ? ' is-active' : ''}`}
+                        className={`p-btn p-btn-primary lp-btn${showUniverseInput ? ' is-active' : ''}`}
                     >
                         <Globe size={15} />
                         <span>User Universe</span>
@@ -137,7 +137,7 @@ export default function EmptyCityHero() {
                                     onChange={e => setRepoUrl(e.target.value)}
                                     onKeyDown={handleKeyDown}
                                     placeholder="owner/repo or full URL"
-                                    className="lp-gh-input"
+                                    className="p-input lp-gh-input"
                                     autoFocus
                                 />
                                 <button
@@ -173,7 +173,7 @@ export default function EmptyCityHero() {
                                                     }
                                                 }}
                                                 placeholder="ghp_... (personal access token)"
-                                                className="lp-gh-input"
+                                                className="p-input lp-gh-input"
                                             />
                                             <button
                                                 onClick={() => {
@@ -209,7 +209,7 @@ export default function EmptyCityHero() {
                                     onChange={e => setUniverseUsername(e.target.value)}
                                     onKeyDown={handleUniverseKeyDown}
                                     placeholder="GitHub username"
-                                    className="lp-gh-input"
+                                    className="p-input lp-gh-input"
                                     autoFocus
                                 />
                                 <button

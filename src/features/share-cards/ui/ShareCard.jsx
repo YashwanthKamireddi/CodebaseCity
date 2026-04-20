@@ -204,14 +204,14 @@ Generated with Code City`
     
     return createPortal(
         <div className="share-card-overlay" onClick={onClose}>
-            <div className="share-card-modal" onClick={e => e.stopPropagation()}>
+            <div className="share-card-modal p-panel-floating" onClick={e => e.stopPropagation()}>
                 {/* Header */}
                 <div className="share-card-header">
                     <h2>
                         <Share2 size={20} />
                         Share Your City
                     </h2>
-                    <button className="share-card-close" onClick={onClose}>
+                    <button className="p-icon-btn" onClick={onClose}>
                         <X size={20} />
                     </button>
                 </div>
@@ -303,14 +303,14 @@ Generated with Code City`
                 {/* Actions */}
                 <div className="share-card-actions">
                     <button 
-                        className="share-action-btn share-action-secondary"
+                        className="p-btn p-btn-secondary share-action-btn"
                         onClick={handleCopy}
                     >
                         {copied ? <Check size={18} /> : <Copy size={18} />}
                         {copied ? 'Copied!' : 'Copy Stats'}
                     </button>
                     <button 
-                        className="share-action-btn share-action-primary"
+                        className="p-btn p-btn-primary share-action-btn"
                         onClick={handleExport}
                         disabled={exporting}
                     >
