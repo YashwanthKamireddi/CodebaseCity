@@ -205,7 +205,10 @@ const CityScene = React.memo(function CityScene() {
                 <DistrictLabels />
                 <StreetLamps />
                 <DataStreams />
-                <AtmosphericParticles count={100} spread={cityRadius * 1.5} />
+                <AtmosphericParticles
+                    count={Math.min(180, Math.max(40, Math.floor(Math.sqrt(buildingCount || 1) * 4)))}
+                    spread={cityRadius * 1.5}
+                />
                 <EnergyCoreReactor />
                 <MothershipCore />
                 <HolographicCityName />
