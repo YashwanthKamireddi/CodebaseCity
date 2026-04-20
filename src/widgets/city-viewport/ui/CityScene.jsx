@@ -146,6 +146,30 @@ function CameraFloorGuard({ floorY = 3, targetFloorY = 6 }) {
     return null
 }
 
+/**
+ * ShaderWarmup — forces every material in the scene to compile its GPU program
+ * on the very first render, so the user never sees the one-frame hitch when a
+ * new shader first rolls into view. Runs once per cityData change, cheap (<16ms
+ * on mid-range hardware) because Three.js just does a gl.compile pass.
+ */
+function ShaderWarmup() {
+    const { gl, scene, camera } = useThree()
+    const cityData = useStore(s => s.cityData)
+    useEffect(() => {
+        if (!cityData?.buildings?.length) return
+        // Defer one tick so the new meshes are actually in the scene graph.
+        const raf = requestAnimationFrame(() => {
+            try {
+                gl.compile(scene, camera)
+            } catch {
+                // gl.compile is best-effort; never fatal
+            }
+        })
+        return () => cancelAnimationFrame(raf)
+    }, [cityData, gl, scene, camera])
+    return null
+}
+
 function ScreenshotHandler() {
     const { gl, scene, camera } = useThree()
     const screenshotRequest = useStore(s => s.screenshotRequest)
@@ -191,6 +215,7 @@ const CityScene = React.memo(function CityScene() {
         <group>
             <AnimationPump />
             <ScreenshotHandler />
+            <ShaderWarmup />
             <CameraFloorGuard />
 
             {/* All materials are MeshBasicMaterial or custom ShaderMaterial — no lit materials exist.

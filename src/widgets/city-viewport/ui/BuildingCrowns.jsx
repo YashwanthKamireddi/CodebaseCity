@@ -48,13 +48,18 @@ function HotFileRings({ buildings }) {
   const hots = useMemo(() => 
     buildings.filter(b => getCrownType(b) === 'hot'), [buildings])
   
+  // Throttle to ~20fps — the pulse reads identically at half rate
+  // and saves per-frame work on scenes with many hot buildings.
+  const lastT = useRef(0)
   useFrame((state) => {
-    if (ringRef.current) {
-      const scale = 1 + Math.sin(state.clock.elapsedTime * 4) * 0.2
-      ringRef.current.children.forEach(child => {
-        child.scale.setScalar(scale)
-      })
-    }
+    if (!ringRef.current) return
+    const t = state.clock.elapsedTime
+    if (t - lastT.current < 0.05) return
+    lastT.current = t
+    const scale = 1 + Math.sin(t * 4) * 0.2
+    ringRef.current.children.forEach(child => {
+      child.scale.setScalar(scale)
+    })
   })
   
   if (hots.length === 0) return null

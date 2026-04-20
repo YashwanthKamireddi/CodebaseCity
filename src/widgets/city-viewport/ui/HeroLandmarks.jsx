@@ -110,13 +110,16 @@ const HeroLandmarks = React.memo(function HeroLandmarks({ buildings }) {
     }, [bodyGeo, accentGeo, crystalGeo])
 
     const groupRef = useRef();
-useFrame((state, delta) => {
-  if (!groupRef.current) return;
-  const t = useStore.getState().genesisTime !== undefined ? useStore.getState().genesisTime : 1.0;
-  const s = Math.max(0.001, t > 0.8 ? (t - 0.8) * 5.0 : 0.0); // pops in only at the very end
-  groupRef.current.scale.set(s, s, s);
-});
-if (!bodyGeo) return null;
+    const settledRef = useRef(false);
+    useFrame(() => {
+      if (!groupRef.current || settledRef.current) return;
+      const t = useStore.getState().genesisTime !== undefined ? useStore.getState().genesisTime : 1.0;
+      const s = Math.max(0.001, t > 0.8 ? (t - 0.8) * 5.0 : 0.0);
+      groupRef.current.scale.set(s, s, s);
+      // Stop touching scale once the pop-in is done — no reason to run every frame forever.
+      if (t >= 1.0) settledRef.current = true;
+    });
+    if (!bodyGeo) return null;
 
 
     return (
