@@ -392,7 +392,8 @@ const InstancedCity = React.memo(function InstancedCity() {
 
         const states = chunkVisibilityRef.current
         const matrixWorld = mesh.matrixWorld
-        let anyChange = false
+        let minFlipped = Infinity
+        let maxFlipped = -1
 
         for (let c = 0; c < chunkData.length; c++) {
             const chunk = chunkData[c]
@@ -402,7 +403,9 @@ const InstancedCity = React.memo(function InstancedCity() {
 
             // Visibility flipped — write new matrices for this range
             states[c] = visible
-            anyChange = true
+            if (chunk.start < minFlipped) minFlipped = chunk.start
+            if (chunk.end > maxFlipped) maxFlipped = chunk.end
+
             for (let i = chunk.start; i < chunk.end; i++) {
                 const b = buildings[i]
                 if (!b) continue
@@ -425,7 +428,20 @@ const InstancedCity = React.memo(function InstancedCity() {
             }
         }
 
-        if (anyChange) {
+        if (maxFlipped >= 0) {
+            // Partial buffer upload — only push the byte range that actually
+            // changed. Each instance matrix is 16 floats; addUpdateRange is
+            // an order of magnitude cheaper than re-uploading the whole buffer.
+            const offset = minFlipped * 16
+            const rangeCount = (maxFlipped - minFlipped) * 16
+            if (typeof mesh.instanceMatrix.addUpdateRange === 'function') {
+                mesh.instanceMatrix.clearUpdateRanges()
+                mesh.instanceMatrix.addUpdateRange(offset, rangeCount)
+            } else if (mesh.instanceMatrix.updateRange) {
+                // Older three.js compatibility
+                mesh.instanceMatrix.updateRange.offset = offset
+                mesh.instanceMatrix.updateRange.count = rangeCount
+            }
             mesh.instanceMatrix.needsUpdate = true
             invalidate()
         }
