@@ -314,7 +314,7 @@ export default function CommandPalette() {
                                                     <span className="command-item-title">{building.name}</span>
                                                     <span className="command-item-subtitle">{building.path}</span>
                                                     {building.snippet && (
-                                                        <span className="command-item-snippet" style={{ fontSize: '11px', opacity: 0.7, fontFamily: 'monospace', marginTop: '2px', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                        <span className="command-item-snippet" style={{ fontSize: '11px', opacity: 0.7, fontFamily: 'var(--font-mono)', marginTop: '2px', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                             {building.snippet}
                                                         </span>
                                                     )}

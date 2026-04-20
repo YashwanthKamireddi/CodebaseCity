@@ -136,7 +136,7 @@ const HologramPanel = React.memo(function HologramPanel() {
                                 0 0 60px rgba(0, 120, 200, 0.06)
                             `,
                             color: '#e4e4e7',
-                            fontFamily: "'Inter', system-ui, sans-serif",
+                            fontFamily: 'var(--font-sans)',
                             overflow: 'hidden',
                         }}
                     >
@@ -176,7 +176,7 @@ const HologramPanel = React.memo(function HologramPanel() {
                                 <div style={{
                                     fontSize: '10px',
                                     color: '#52525b',
-                                    fontFamily: "'JetBrains Mono', monospace",
+                                    fontFamily: 'var(--font-mono)',
                                     marginTop: '3px',
                                     wordBreak: 'break-all',
                                     lineHeight: 1.3,
@@ -343,7 +343,7 @@ function MetricCell({ label, value, warn, icon }) {
             <div style={{
                 fontSize: '15px',
                 fontWeight: 500,
-                fontFamily: "'Outfit', 'Inter', sans-serif",
+                fontFamily: 'var(--font-sans)',
                 color: warn ? '#ef4444' : '#e4e4e7',
                 letterSpacing: '-0.01em',
             }}>

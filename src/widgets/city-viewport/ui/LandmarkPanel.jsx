@@ -267,7 +267,7 @@ const cardStyle = {
     borderRadius: '14px',
     boxShadow: '0 0 0 1px rgba(0, 180, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 60px rgba(0, 120, 200, 0.06)',
     color: '#e4e4e7',
-    fontFamily: "'Inter', system-ui, sans-serif",
+    fontFamily: 'var(--font-sans)',
     overflow: 'hidden',
 }
 
@@ -295,7 +295,7 @@ const titleStyle = {
 const subtitleStyle = {
     fontSize: '10px',
     color: '#52525b',
-    fontFamily: "'JetBrains Mono', monospace",
+    fontFamily: 'var(--font-mono)',
     marginTop: '3px',
     lineHeight: 1.3,
 }
@@ -342,7 +342,7 @@ function MetricCell({ label, value, icon, warn }) {
             <div style={{
                 fontSize: '15px',
                 fontWeight: 500,
-                fontFamily: "'Outfit', 'Inter', sans-serif",
+                fontFamily: 'var(--font-sans)',
                 color: warn ? '#ef4444' : '#e4e4e7',
                 letterSpacing: '-0.01em',
             }}>

@@ -2,6 +2,7 @@ import React, { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+import { Cpu } from 'lucide-react'
 import useStore from '../../../store/useStore'
 import { townHallTopY, mothershipAltitude } from './landmarkPositions'
 
@@ -149,8 +150,8 @@ const overviewStyle = {
     borderRadius: '14px',
     padding: '16px 20px',
     width: '250px',
-    fontFamily: "'Inter', -apple-system, sans-serif",
-    color: '#e4e4e7',
+    fontFamily: 'var(--font-sans)',
+    color: 'var(--text-primary)',
     boxShadow: '0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.06)',
     pointerEvents: 'none',
     userSelect: 'none',
@@ -182,7 +183,7 @@ function OverviewPanel({ cityData }) {
         <div style={overviewStyle}>
             {/* Header */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <Cpu size={14} color="rgba(255,255,255,0.4)" strokeWidth={2} />
                 <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)' }}>Atlas Command</span>
             </div>
 
@@ -198,7 +199,7 @@ function OverviewPanel({ cityData }) {
                     ['Roads', connections],
                 ].map(([label, val]) => (
                     <div key={label} style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '16px', fontWeight: 700, fontFamily: "'JetBrains Mono', monospace", color: '#a5b4fc' }}>{val}</div>
+                        <div style={{ fontSize: '16px', fontWeight: 700, fontFamily: 'var(--font-mono)', color: '#a5b4fc' }}>{val}</div>
                         <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.3)', letterSpacing: '0.04em', marginTop: '2px' }}>{label}</div>
                     </div>
                 ))}

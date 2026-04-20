@@ -92,7 +92,7 @@ export default function BuildingPanel({ building }) {
                         <h2 style={{
                             margin: 0,
                             fontSize: '1.4rem',
-                            fontFamily: 'var(--font-display)',
+                            fontFamily: 'var(--font-sans)',
                             fontWeight: 600,
                             lineHeight: 1.2,
                             overflowWrap: 'break-word', // Wrap long names
@@ -335,7 +335,7 @@ const SwissMetric = ({ label, value, highlight }) => (
         <div style={{
             fontSize: '1.8rem',
             fontWeight: 300,
-            fontFamily: 'var(--font-display)',
+            fontFamily: 'var(--font-sans)',
             color: highlight ? 'var(--signal-danger)' : 'var(--text-primary)'
         }}>
             {value}
