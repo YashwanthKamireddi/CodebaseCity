@@ -33,28 +33,22 @@ function NebulaSky() {
         if (meshRef.current) meshRef.current.position.copy(camera.position)
     })
 
-    // Beautiful deep-space sky — 5-stop gradient + subtle violet nebula
-    // wash in the upper hemisphere + cool blue horizon glow. Still pure
-    // math (no textures, no noise), 2 multiplies & 3 smoothsteps per pixel.
-    //
-    //   zenith (#040518)   — deep indigo at the top of the dome
-    //   upper  (#0a1340)   — saturated navy for the upper atmosphere
-    //   mid    (#18316e)   — vivid cobalt at eye level
-    //   horizon(#3a6bc5)   — cool blue glow where the ground meets sky
-    //   below  (#020409)   — void under horizon so the ground reads sharp
-    //   nebula (#5a32a8)   — soft violet wash painted into the upper dome
+    // Deep-space sky — single smooth gradient with a faint violet wash.
+    // Previous version had a bright saturated "horizon band" (#3a6bc5)
+    // that dominated the whole view when the camera was level; that's
+    // what read as "just blue" and stripey. One continuous smoothstep
+    // fixes both the banding and the hot-blue band.
     const material = useMemo(() => new THREE.ShaderMaterial({
         side: THREE.BackSide,
         depthWrite: false,
         depthTest: false,
         fog: false,
         uniforms: {
-            uZenith:  { value: new THREE.Color('#040518') },
-            uUpper:   { value: new THREE.Color('#0a1340') },
-            uMid:     { value: new THREE.Color('#18316e') },
-            uHorizon: { value: new THREE.Color('#3a6bc5') },
-            uBelow:   { value: new THREE.Color('#020409') },
-            uNebula:  { value: new THREE.Color('#5a32a8') },
+            uZenith:  { value: new THREE.Color('#02030c') },  // deep void
+            uMid:     { value: new THREE.Color('#070a1e') },  // midnight navy
+            uHorizon: { value: new THREE.Color('#0d1530') },  // muted sea-of-blue
+            uBelow:   { value: new THREE.Color('#010207') },
+            uNebula:  { value: new THREE.Color('#4a2a85') },
         },
         vertexShader: `
             varying vec3 vPos;
@@ -65,7 +59,6 @@ function NebulaSky() {
         `,
         fragmentShader: `
             uniform vec3 uZenith;
-            uniform vec3 uUpper;
             uniform vec3 uMid;
             uniform vec3 uHorizon;
             uniform vec3 uBelow;
@@ -74,26 +67,22 @@ function NebulaSky() {
             void main() {
                 float h = vPos.y; // -1 below, 0 horizon, 1 zenith
                 vec3 color;
-                if (h > 0.45) {
-                    color = mix(uUpper, uZenith, smoothstep(0.45, 1.0, h));
-                } else if (h > 0.12) {
-                    color = mix(uMid, uUpper, smoothstep(0.12, 0.45, h));
-                } else if (h > -0.02) {
-                    color = mix(uHorizon, uMid, smoothstep(-0.02, 0.12, h));
+                // Single wide smoothstep from horizon through mid to zenith
+                // means no visible banding between colors.
+                if (h >= 0.0) {
+                    float tMid = smoothstep(0.0, 0.35, h);
+                    float tZen = smoothstep(0.35, 1.0, h);
+                    color = mix(mix(uHorizon, uMid, tMid), uZenith, tZen);
                 } else {
-                    color = mix(uBelow, uHorizon, smoothstep(-0.4, -0.02, h));
+                    color = mix(uHorizon, uBelow, smoothstep(0.0, -0.35, h));
                 }
 
-                // Soft nebula wash — painted into the upper 2/3 of the dome,
-                // biased to one side for asymmetric beauty (like a real night sky).
-                float nebula = smoothstep(0.15, 0.7, h) *
-                               smoothstep(0.95, 0.55, h) *
-                               (0.5 + 0.5 * vPos.x);
-                color += uNebula * nebula * 0.22;
-
-                // Cool-blue horizon bloom band
-                float bloom = smoothstep(-0.05, 0.02, h) * smoothstep(0.14, 0.06, h);
-                color += vec3(0.1, 0.22, 0.42) * bloom;
+                // Very soft violet nebula wash — painted into the upper dome,
+                // slight horizontal asymmetry for a real-sky feel.
+                float nebula = smoothstep(0.2, 0.7, h) *
+                               smoothstep(1.0, 0.55, h) *
+                               (0.45 + 0.55 * vPos.x);
+                color += uNebula * nebula * 0.12;
 
                 gl_FragColor = vec4(color, 1.0);
             }
@@ -276,7 +265,7 @@ const CityScene = React.memo(function CityScene() {
                 speed={0.55}
             />
 
-            <fog attach="fog" args={['#0f2040', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
+            <fog attach="fog" args={['#060918', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
             <CameraController />
         </group>
     )
