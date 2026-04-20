@@ -278,7 +278,7 @@
 
 .p-btn-primary {
   background: var(--color-accent);
-  color: white;
+  color: var(--color-text-inverse);
 }
 
 .p-btn-primary:hover {
