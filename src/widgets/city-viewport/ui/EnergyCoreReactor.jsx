@@ -393,14 +393,17 @@ const EnergyCoreReactor = React.memo(function EnergyCoreReactor() {
                     <primitive object={cageMat} attach="material" />
                 </mesh>
 
-                {/* ═══ GROUND EFFECTS ═══ */}
+                {/* ═══ GROUND EFFECTS ═══
+                    Segments bumped 8 → 64 (the old ring was a visible
+                    octagon). Opacity dialed down so the reactor no longer
+                    blasts cyan spokes across the whole ground plane. */}
                 <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.1, 0]}>
-                    <ringGeometry args={[60, 78, 8]} />
-                    <meshBasicMaterial color={threeColor} transparent opacity={isSelected ? 0.25 : 0.08} depthWrite={false} />
+                    <ringGeometry args={[60, 78, 64]} />
+                    <meshBasicMaterial color={threeColor} transparent opacity={isSelected ? 0.18 : 0.05} depthWrite={false} />
                 </mesh>
                 <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.05, 0]}>
-                    <ringGeometry args={[78, 87, 56]} />
-                    <meshBasicMaterial color={threeColor} transparent opacity={0.05} depthWrite={false} />
+                    <ringGeometry args={[78, 87, 64]} />
+                    <meshBasicMaterial color={threeColor} transparent opacity={0.03} depthWrite={false} />
                 </mesh>
 
                 {/* ═══ SELECTION HIGHLIGHT ═══ */}

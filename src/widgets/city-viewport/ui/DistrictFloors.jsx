@@ -1,13 +1,14 @@
 /**
- * DistrictFloors — subtle floor plate under each district.
+ * DistrictFloors — tinted neighborhood plates.
  *
- * Each district gets a shallow box on the ground plane with a glowing top
- * rim in its own color. Makes the city read as real neighborhoods, not a
- * flat field of buildings.
+ * Flat plane per district sitting just above the main ground, tinted with
+ * the district's accent color at very low opacity. Reads as a subtle
+ * neighborhood footprint — like a real city block — instead of a stack
+ * of floating rectangles.
  *
  * Performance:
- *   · One InstancedMesh for the dark floor tiles (one box geometry).
- *   · One merged lineSegments for the rim glow, all districts in one draw.
+ *   · One InstancedMesh of plane geometries (one draw call for all plates).
+ *   · Per-instance color via instanceColor attribute — no shader rewrite.
  *   · 0 useFrame — fully static.
  *   · Gated off on low-tier in CityScene.
  */
@@ -21,9 +22,8 @@ const FALLBACK_PALETTE = [
     '#ff5ae0', '#70ff5a', '#5affaa', '#ff9a5a', '#5accff',
 ]
 
-const PADDING = 8       // how much larger than building footprint
-const HEIGHT = 0.5      // floor-plate thickness
-const Y_OFFSET = -0.09  // sits just above the main ground
+const PADDING = 6       // footprint padding (smaller — tighter around buildings)
+const Y_OFFSET = -0.06  // just above main ground to avoid z-fight
 
 function hexToRgb(hex) {
     if (!hex || typeof hex !== 'string') return null
@@ -36,10 +36,9 @@ function hexToRgb(hex) {
 const DistrictFloors = React.memo(function DistrictFloors() {
     const cityData = useStore(s => s.cityData)
 
-    const { floors, rimLines } = useMemo(() => {
-        if (!cityData?.buildings?.length) return { floors: null, rimLines: null }
+    const data = useMemo(() => {
+        if (!cityData?.buildings?.length) return null
 
-        // Group buildings by district_id / directory
         const byDistrict = new Map()
         for (const b of cityData.buildings) {
             const id = b.district_id || b.directory || 'root'
@@ -47,7 +46,6 @@ const DistrictFloors = React.memo(function DistrictFloors() {
             byDistrict.get(id).push(b)
         }
 
-        // Axis-aligned bounding rectangle per district
         const districts = []
         let i = 0
         for (const [id, blds] of byDistrict) {
@@ -71,105 +69,69 @@ const DistrictFloors = React.memo(function DistrictFloors() {
                 d.id === id.replace('district_', '')
             )
             const hex = districtData?.color || FALLBACK_PALETTE[i % FALLBACK_PALETTE.length]
-            districts.push({ id, minX, maxX, minZ, maxZ, hex })
+            districts.push({ minX, maxX, minZ, maxZ, hex })
             i++
         }
 
-        if (districts.length === 0) return { floors: null, rimLines: null }
+        if (districts.length === 0) return null
 
-        // ── Floor-plate instance matrices ──
         const tempObj = new THREE.Object3D()
         const matrices = new Float32Array(districts.length * 16)
+        const colors = new Float32Array(districts.length * 3)
+
         for (let k = 0; k < districts.length; k++) {
             const d = districts[k]
+            const w = d.maxX - d.minX
+            const dp = d.maxZ - d.minZ
             tempObj.position.set((d.minX + d.maxX) / 2, Y_OFFSET, (d.minZ + d.maxZ) / 2)
-            tempObj.scale.set(d.maxX - d.minX, HEIGHT, d.maxZ - d.minZ)
-            tempObj.rotation.set(0, 0, 0)
+            // PlaneGeometry is in the XY plane — rotate to lie flat, then scale
+            tempObj.rotation.set(-Math.PI / 2, 0, 0)
+            tempObj.scale.set(w, dp, 1)
             tempObj.updateMatrix()
             tempObj.matrix.toArray(matrices, k * 16)
+
+            const rgb = hexToRgb(d.hex) || [0.35, 0.66, 1]
+            // Dim the color heavily so plates are subtle hints, not lights
+            colors[k * 3 + 0] = rgb[0] * 0.35
+            colors[k * 3 + 1] = rgb[1] * 0.35
+            colors[k * 3 + 2] = rgb[2] * 0.35
         }
 
-        // ── Rim lines (top edges of each plate, colored, merged) ──
-        const linePoints = []
-        const lineColors = []
-        for (const d of districts) {
-            const rgb = hexToRgb(d.hex) || [0.4, 0.8, 1]
-            const y = Y_OFFSET + HEIGHT + 0.02
-            const corners = [
-                [d.minX, y, d.minZ],
-                [d.maxX, y, d.minZ],
-                [d.maxX, y, d.maxZ],
-                [d.minX, y, d.maxZ],
-            ]
-            for (let s = 0; s < 4; s++) {
-                const a = corners[s]
-                const b = corners[(s + 1) % 4]
-                linePoints.push(a[0], a[1], a[2], b[0], b[1], b[2])
-                lineColors.push(rgb[0], rgb[1], rgb[2], rgb[0], rgb[1], rgb[2])
-            }
-        }
-
-        return {
-            floors: { count: districts.length, matrices },
-            rimLines: {
-                positions: new Float32Array(linePoints),
-                colors: new Float32Array(lineColors),
-            },
-        }
+        return { count: districts.length, matrices, colors }
     }, [cityData])
 
-    const instancedMeshRef = useRef()
+    const meshRef = useRef()
 
     useLayoutEffect(() => {
-        if (!floors || !instancedMeshRef.current) return
-        const mesh = instancedMeshRef.current
-        mesh.instanceMatrix.array.set(floors.matrices)
+        if (!data || !meshRef.current) return
+        const mesh = meshRef.current
+        mesh.instanceMatrix.array.set(data.matrices)
         mesh.instanceMatrix.needsUpdate = true
+        if (!mesh.instanceColor) {
+            mesh.instanceColor = new THREE.InstancedBufferAttribute(
+                new Float32Array(data.count * 3), 3
+            )
+        }
+        mesh.instanceColor.array.set(data.colors)
+        mesh.instanceColor.needsUpdate = true
         mesh.geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 1e6)
-    }, [floors])
+    }, [data])
 
-    if (!floors || !rimLines) return null
+    if (!data) return null
 
     return (
-        <group>
-            {/* Dark floor tiles — one instanced draw */}
-            <instancedMesh ref={instancedMeshRef} args={[null, null, floors.count]}>
-                <boxGeometry args={[1, 1, 1]} />
-                <meshBasicMaterial
-                    color="#0a1226"
-                    transparent
-                    opacity={0.78}
-                    polygonOffset
-                    polygonOffsetFactor={1}
-                    polygonOffsetUnits={1}
-                />
-            </instancedMesh>
-
-            {/* Glowing rims — merged line segments, one draw */}
-            <lineSegments>
-                <bufferGeometry>
-                    <bufferAttribute
-                        attach="attributes-position"
-                        count={rimLines.positions.length / 3}
-                        array={rimLines.positions}
-                        itemSize={3}
-                    />
-                    <bufferAttribute
-                        attach="attributes-color"
-                        count={rimLines.colors.length / 3}
-                        array={rimLines.colors}
-                        itemSize={3}
-                    />
-                </bufferGeometry>
-                <lineBasicMaterial
-                    vertexColors
-                    transparent
-                    opacity={0.9}
-                    depthWrite={false}
-                    toneMapped={false}
-                />
-            </lineSegments>
-        </group>
+        <instancedMesh ref={meshRef} args={[null, null, data.count]} frustumCulled={false}>
+            <planeGeometry args={[1, 1]} />
+            <meshBasicMaterial
+                transparent
+                opacity={0.22}
+                depthWrite={false}
+                blending={THREE.NormalBlending}
+                polygonOffset
+                polygonOffsetFactor={1}
+                polygonOffsetUnits={1}
+            />
+        </instancedMesh>
     )
 })
 

@@ -275,7 +275,8 @@ input[type='text'].uv-search input,
 .lp-gh-input:focus,
 .gh-tok-input:focus {
   border-color: var(--u-accent-border) !important;
-  box-shadow: 0 0 0 3px var(--u-accent-soft) !important;
+  /* Inner glow only — can't escape the parent even when row has overflow:visible. */
+  box-shadow: inset 0 0 0 1px var(--u-accent-border) !important;
 }
 .uv-search {
   height: var(--u-h-input) !important;
@@ -286,7 +287,19 @@ input[type='text'].uv-search input,
 }
 .uv-search:focus-within {
   border-color: var(--u-accent-border) !important;
+  box-shadow: inset 0 0 0 1px var(--u-accent-border) !important;
+}
+/* Landing GitHub-input row: accent border when input inside is focused.
+   Uses :focus-within on the parent so the ring applies to the ROW, not
+   the bare input (which was overflowing in a bug report). */
+.lp-gh-row:focus-within {
+  border-color: var(--u-accent-border) !important;
   box-shadow: 0 0 0 3px var(--u-accent-soft) !important;
+}
+/* Remove the raw input's own focus ring — parent handles it now. */
+.lp-gh-row .lp-gh-input:focus {
+  box-shadow: none !important;
+  border-color: transparent !important;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
