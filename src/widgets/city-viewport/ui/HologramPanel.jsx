@@ -34,23 +34,10 @@ const HologramPanel = React.memo(function HologramPanel() {
         const bx = position.x
         const bz = position.z
         const buildingTop = height
-        let panelY = buildingTop + 30
-
-        const cityData = useStore.getState().cityData
-        if (cityData?.buildings) {
-            const sorted = [...cityData.buildings].map(b => {
-                const w = b.dimensions?.width || 8
-                const h = b.dimensions?.height || 8
-                return { path: b.path, v: w * w * h, rawW: w, rawH: h }
-            }).sort((a,b) => b.v - a.v).slice(0, 5)
-
-            const hero = sorted.find(s => s.path === (selectedBuilding.path || selectedBuilding.id))
-            if (hero) {
-                const spireH = Math.max(12, hero.rawH * 3.0 * 0.35)
-                const spireW = Math.min(hero.rawW * 0.15, 2.5)
-                panelY = buildingTop + 1 + spireH + spireW * 0.2 + 30
-            }
-        }
+        // Card always sits directly above the building roof — never floats
+        // up the hero spire (that's what made it look like it was attached
+        // to an antenna instead of the building).
+        const panelY = buildingTop + 28
 
         // Dispose previous geometry to prevent memory leak
         if (prevBeamGeoRef.current) {

@@ -67,22 +67,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 24px;
+    /* Allow scroll when viewport is small (mobile / zoomed) */
+    overflow-y: auto;
 }
 
 /* Modal */
 .gh-tok-modal {
     width: 100%;
-    max-width: 480px;
+    max-width: 440px;
+    max-height: calc(100vh - 48px);  /* never overflow viewport */
+    overflow-y: auto;
     background: linear-gradient(165deg, rgba(15, 20, 32, 0.98), rgba(10, 14, 22, 0.99));
-    border: 1px solid rgba(0, 220, 255, 0.18);
-    border-radius: 16px;
-    box-shadow:
-        0 0 0 1px rgba(0, 220, 255, 0.06),
-        0 24px 80px rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.7);
     color: #e6eef7;
-    font-family: 'Inter', system-ui, sans-serif;
-    overflow: hidden;
+    font-family: var(--u-font, -apple-system, 'Inter', system-ui, sans-serif);
+    /* Subtle inner scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+.gh-tok-modal::-webkit-scrollbar { width: 6px; }
+.gh-tok-modal::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
 }
 
 /* Header */

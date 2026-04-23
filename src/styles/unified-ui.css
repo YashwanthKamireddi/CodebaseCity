@@ -101,10 +101,9 @@ button.canvas-ui-btn {
 }
 button:active { transform: scale(0.98); }
 
-/* PRIMARY button — canonical shape, used for CTAs */
+/* PRIMARY button — ghost glass, used for most CTAs */
 .lp-btn--primary,
 .uv-world-land,
-.gh-tok-save,
 .repo-enter-btn {
   height: var(--u-h-btn) !important;
   padding: 0 18px !important;
@@ -125,7 +124,6 @@ button:active { transform: scale(0.98); }
 }
 .lp-btn--primary:hover,
 .uv-world-land:hover,
-.gh-tok-save:hover,
 .repo-enter-btn:hover {
   background: var(--u-glass-3) !important;
   border-color: var(--u-glass-border-strong) !important;
@@ -135,6 +133,39 @@ button:active { transform: scale(0.98); }
 .lp-btn--primary.is-active {
   background: var(--u-accent-soft) !important;
   border-color: var(--u-accent-border) !important;
+}
+
+/* ACCENT button — filled, confident action. Save, confirm, "do it". */
+.gh-tok-save,
+.lp-gh-go {
+  height: var(--u-h-btn) !important;
+  padding: 0 20px !important;
+  border-radius: var(--u-radius-btn) !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: linear-gradient(180deg, #6fb4ff, #4a93eb) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+  cursor: pointer;
+  box-shadow:
+    0 4px 14px rgba(74, 147, 235, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.gh-tok-save:hover:not(:disabled),
+.lp-gh-go:hover:not(:disabled) {
+  background: linear-gradient(180deg, #85c1ff, #5a9eed) !important;
+  box-shadow:
+    0 6px 20px rgba(74, 147, 235, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.gh-tok-save:disabled,
+.lp-gh-go:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 /* GHOST / SECONDARY button */

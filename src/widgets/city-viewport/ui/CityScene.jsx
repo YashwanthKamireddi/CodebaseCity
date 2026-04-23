@@ -18,6 +18,7 @@ import DistrictLabels from './DistrictLabels'
 import StreetLamps from './StreetLamps'
 import DataStreams from './DataStreams'
 import AtmosphericParticles from './AtmosphericParticles'
+import DistrictFloors from './DistrictFloors'
 
 import UfoAvatar from './UfoAvatar'
 
@@ -228,6 +229,7 @@ const CityScene = React.memo(function CityScene() {
                 <InstancedCity />
                 {showRoads && <Roads />}
                 <Ground />
+                {!low && <DistrictFloors />}
                 <HologramPanel />
                 <LandmarkPanel />
                 {/* Always-kept core — affordable everywhere */}

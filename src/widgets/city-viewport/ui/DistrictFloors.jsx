@@ -1,179 +1,176 @@
-import React, { useMemo, useEffect, useRef } from 'react'
+/**
+ * DistrictFloors — subtle floor plate under each district.
+ *
+ * Each district gets a shallow box on the ground plane with a glowing top
+ * rim in its own color. Makes the city read as real neighborhoods, not a
+ * flat field of buildings.
+ *
+ * Performance:
+ *   · One InstancedMesh for the dark floor tiles (one box geometry).
+ *   · One merged lineSegments for the rim glow, all districts in one draw.
+ *   · 0 useFrame — fully static.
+ *   · Gated off on low-tier in CityScene.
+ */
+import React, { useMemo, useRef, useLayoutEffect } from 'react'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 
-const _color = new THREE.Color()
+const FALLBACK_PALETTE = [
+    '#5aa8ff', '#ff8b5a', '#5affb4', '#ffd85a', '#b35aff',
+    '#ff5aa0', '#5affff', '#ff5a5a', '#a0ff5a', '#5a8aff',
+    '#ff5ae0', '#70ff5a', '#5affaa', '#ff9a5a', '#5accff',
+]
 
-/**
- * DistrictFloors — Renders translucent colored ground planes for each district.
- * All districts are merged into ONE floor mesh + ONE border lineSegments = 2 draw calls total.
- */
-export default React.memo(function DistrictFloors() {
+const PADDING = 8       // how much larger than building footprint
+const HEIGHT = 0.5      // floor-plate thickness
+const Y_OFFSET = -0.09  // sits just above the main ground
+
+function hexToRgb(hex) {
+    if (!hex || typeof hex !== 'string') return null
+    const m = hex.match(/^#?([0-9A-Fa-f]{6})$/)
+    if (!m) return null
+    const n = parseInt(m[1], 16)
+    return [(n >> 16 & 0xff) / 255, (n >> 8 & 0xff) / 255, (n & 0xff) / 255]
+}
+
+const DistrictFloors = React.memo(function DistrictFloors() {
     const cityData = useStore(s => s.cityData)
-    const floorRef = useRef()
-    const borderRef = useRef()
 
-    const districts = useMemo(() => {
-        if (!cityData?.districts?.length) return []
-        return cityData.districts.filter(d => d.boundary?.length >= 3)
+    const { floors, rimLines } = useMemo(() => {
+        if (!cityData?.buildings?.length) return { floors: null, rimLines: null }
+
+        // Group buildings by district_id / directory
+        const byDistrict = new Map()
+        for (const b of cityData.buildings) {
+            const id = b.district_id || b.directory || 'root'
+            if (!byDistrict.has(id)) byDistrict.set(id, [])
+            byDistrict.get(id).push(b)
+        }
+
+        // Axis-aligned bounding rectangle per district
+        const districts = []
+        let i = 0
+        for (const [id, blds] of byDistrict) {
+            let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity
+            for (const b of blds) {
+                const halfW = (b.dimensions?.width || 8) / 2
+                const halfD = (b.dimensions?.depth || 8) / 2
+                const x = b.position.x
+                const z = b.position.z || 0
+                if (x - halfW < minX) minX = x - halfW
+                if (x + halfW > maxX) maxX = x + halfW
+                if (z - halfD < minZ) minZ = z - halfD
+                if (z + halfD > maxZ) maxZ = z + halfD
+            }
+            minX -= PADDING; maxX += PADDING
+            minZ -= PADDING; maxZ += PADDING
+
+            const districtData = cityData.districts?.find(d =>
+                d.id === id ||
+                `district_${d.id}` === id ||
+                d.id === id.replace('district_', '')
+            )
+            const hex = districtData?.color || FALLBACK_PALETTE[i % FALLBACK_PALETTE.length]
+            districts.push({ id, minX, maxX, minZ, maxZ, hex })
+            i++
+        }
+
+        if (districts.length === 0) return { floors: null, rimLines: null }
+
+        // ── Floor-plate instance matrices ──
+        const tempObj = new THREE.Object3D()
+        const matrices = new Float32Array(districts.length * 16)
+        for (let k = 0; k < districts.length; k++) {
+            const d = districts[k]
+            tempObj.position.set((d.minX + d.maxX) / 2, Y_OFFSET, (d.minZ + d.maxZ) / 2)
+            tempObj.scale.set(d.maxX - d.minX, HEIGHT, d.maxZ - d.minZ)
+            tempObj.rotation.set(0, 0, 0)
+            tempObj.updateMatrix()
+            tempObj.matrix.toArray(matrices, k * 16)
+        }
+
+        // ── Rim lines (top edges of each plate, colored, merged) ──
+        const linePoints = []
+        const lineColors = []
+        for (const d of districts) {
+            const rgb = hexToRgb(d.hex) || [0.4, 0.8, 1]
+            const y = Y_OFFSET + HEIGHT + 0.02
+            const corners = [
+                [d.minX, y, d.minZ],
+                [d.maxX, y, d.minZ],
+                [d.maxX, y, d.maxZ],
+                [d.minX, y, d.maxZ],
+            ]
+            for (let s = 0; s < 4; s++) {
+                const a = corners[s]
+                const b = corners[(s + 1) % 4]
+                linePoints.push(a[0], a[1], a[2], b[0], b[1], b[2])
+                lineColors.push(rgb[0], rgb[1], rgb[2], rgb[0], rgb[1], rgb[2])
+            }
+        }
+
+        return {
+            floors: { count: districts.length, matrices },
+            rimLines: {
+                positions: new Float32Array(linePoints),
+                colors: new Float32Array(lineColors),
+            },
+        }
     }, [cityData])
 
-    // Merge all floor shapes into a single BufferGeometry with per-vertex color
-    const mergedFloor = useMemo(() => {
-        if (!districts.length) return null
+    const instancedMeshRef = useRef()
 
-        const geometries = []
-        for (const d of districts) {
-            const { boundary, color } = d
-            if (!boundary || boundary.length < 3) continue
+    useLayoutEffect(() => {
+        if (!floors || !instancedMeshRef.current) return
+        const mesh = instancedMeshRef.current
+        mesh.instanceMatrix.array.set(floors.matrices)
+        mesh.instanceMatrix.needsUpdate = true
+        mesh.geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 1e6)
+    }, [floors])
 
-            const cx = boundary.reduce((s, p) => s + p.x, 0) / boundary.length
-            const cy = boundary.reduce((s, p) => s + p.y, 0) / boundary.length
-
-            const shape = new THREE.Shape()
-            const expanded = boundary.map(p => {
-                const dx = p.x - cx
-                const dy = p.y - cy
-                const len = Math.sqrt(dx * dx + dy * dy) || 1
-                return { x: p.x + (dx / len) * 4, y: p.y + (dy / len) * 4 }
-            })
-            shape.moveTo(expanded[0].x, expanded[0].y)
-            for (let i = 1; i < expanded.length; i++) shape.lineTo(expanded[i].x, expanded[i].y)
-            shape.closePath()
-
-            const geo = new THREE.ShapeGeometry(shape)
-            // Stamp per-vertex color
-            _color.set(color || '#4488ff')
-            const colors = new Float32Array(geo.attributes.position.count * 3)
-            for (let i = 0; i < geo.attributes.position.count; i++) {
-                colors[i * 3] = _color.r
-                colors[i * 3 + 1] = _color.g
-                colors[i * 3 + 2] = _color.b
-            }
-            geo.setAttribute('color', new THREE.BufferAttribute(colors, 3))
-            geometries.push(geo)
-        }
-
-        if (!geometries.length) return null
-        const merged = mergeBufferGeometries(geometries)
-        geometries.forEach(g => g.dispose())
-        return merged
-    }, [districts])
-
-    // Merge all border line segments into a single BufferGeometry with per-vertex color
-    const mergedBorder = useMemo(() => {
-        if (!districts.length) return null
-
-        const positions = []
-        const colors = []
-        for (const d of districts) {
-            const { boundary, color } = d
-            if (!boundary || boundary.length < 3) continue
-
-            const cx = boundary.reduce((s, p) => s + p.x, 0) / boundary.length
-            const cy = boundary.reduce((s, p) => s + p.y, 0) / boundary.length
-            _color.set(color || '#4488ff')
-
-            const expanded = boundary.map(p => {
-                const dx = p.x - cx
-                const dy = p.y - cy
-                const len = Math.sqrt(dx * dx + dy * dy) || 1
-                return { x: p.x + (dx / len) * 4, y: p.y + (dy / len) * 4 }
-            })
-
-            for (let i = 0; i < expanded.length; i++) {
-                const a = expanded[i]
-                const b = expanded[(i + 1) % expanded.length]
-                // lineSegments: each pair of vertices = one segment
-                positions.push(a.x, a.y, 0, b.x, b.y, 0)
-                colors.push(_color.r, _color.g, _color.b, _color.r, _color.g, _color.b)
-            }
-        }
-
-        if (!positions.length) return null
-        const geo = new THREE.BufferGeometry()
-        geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
-        geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
-        return geo
-    }, [districts])
-
-    // Dispose on unmount / data change
-    useEffect(() => {
-        return () => {
-            mergedFloor?.dispose()
-            mergedBorder?.dispose()
-        }
-    }, [mergedFloor, mergedBorder])
-
-    if (!mergedFloor) return null
+    if (!floors || !rimLines) return null
 
     return (
         <group>
-            <mesh
-                ref={floorRef}
-                geometry={mergedFloor}
-                rotation={[-Math.PI / 2, 0, 0]}
-                position={[0, 0.05, 0]}
-            >
+            {/* Dark floor tiles — one instanced draw */}
+            <instancedMesh ref={instancedMeshRef} args={[null, null, floors.count]}>
+                <boxGeometry args={[1, 1, 1]} />
                 <meshBasicMaterial
+                    color="#0a1226"
+                    transparent
+                    opacity={0.78}
+                    polygonOffset
+                    polygonOffsetFactor={1}
+                    polygonOffsetUnits={1}
+                />
+            </instancedMesh>
+
+            {/* Glowing rims — merged line segments, one draw */}
+            <lineSegments>
+                <bufferGeometry>
+                    <bufferAttribute
+                        attach="attributes-position"
+                        count={rimLines.positions.length / 3}
+                        array={rimLines.positions}
+                        itemSize={3}
+                    />
+                    <bufferAttribute
+                        attach="attributes-color"
+                        count={rimLines.colors.length / 3}
+                        array={rimLines.colors}
+                        itemSize={3}
+                    />
+                </bufferGeometry>
+                <lineBasicMaterial
                     vertexColors
                     transparent
-                    opacity={0.10}
+                    opacity={0.9}
                     depthWrite={false}
-                    side={THREE.DoubleSide}
-                    blending={THREE.AdditiveBlending}
+                    toneMapped={false}
                 />
-            </mesh>
-
-            {mergedBorder && (
-                <lineSegments
-                    ref={borderRef}
-                    geometry={mergedBorder}
-                    rotation={[-Math.PI / 2, 0, 0]}
-                    position={[0, 0.08, 0]}
-                >
-                    <lineBasicMaterial
-                        vertexColors
-                        transparent
-                        opacity={0.50}
-                        linewidth={1}
-                        blending={THREE.AdditiveBlending}
-                    />
-                </lineSegments>
-            )}
+            </lineSegments>
         </group>
     )
 })
 
-/**
- * Fallback merge for environments without BufferGeometryUtils on THREE namespace.
- */
-function mergeBufferGeometries(geometries) {
-    let totalVerts = 0, totalIndices = 0
-    for (const g of geometries) {
-        totalVerts += g.attributes.position.count
-        totalIndices += g.index ? g.index.count : g.attributes.position.count
-    }
-    const pos = new Float32Array(totalVerts * 3)
-    const col = new Float32Array(totalVerts * 3)
-    const idx = new Uint32Array(totalIndices)
-    let vOff = 0, iOff = 0, vertBase = 0
-    for (const g of geometries) {
-        const p = g.attributes.position.array
-        const c = g.attributes.color.array
-        pos.set(p, vOff * 3)
-        col.set(c, vOff * 3)
-        if (g.index) {
-            for (let i = 0; i < g.index.count; i++) idx[iOff++] = g.index.array[i] + vertBase
-        } else {
-            for (let i = 0; i < g.attributes.position.count; i++) idx[iOff++] = vertBase + i
-        }
-        vertBase += g.attributes.position.count
-        vOff += g.attributes.position.count
-    }
-    const merged = new THREE.BufferGeometry()
-    merged.setAttribute('position', new THREE.BufferAttribute(pos, 3))
-    merged.setAttribute('color', new THREE.BufferAttribute(col, 3))
-    merged.setIndex(new THREE.BufferAttribute(idx, 1))
-    return merged
-}
+export default DistrictFloors
