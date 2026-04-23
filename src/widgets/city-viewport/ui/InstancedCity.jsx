@@ -280,14 +280,11 @@ const InstancedCity = React.memo(function InstancedCity() {
         const session = { cancelled: false, handle: 0 }
         streamingRef.current = session
 
-        // Tight budgets so any repo size (100 files or 100,000) loads smooth.
-        //   SYNC_THRESHOLD: up to this many instances we write synchronously.
-        //     Below 2k, one tick stays under 5ms → user can't perceive it.
-        //   BATCH_SIZE: above threshold we stream. Batches of 1500 keep each
-        //     frame under ~4ms on mid-range hardware — smooth at 60fps even
-        //     on laptops with integrated GPUs.
-        const BATCH_SIZE = 1500
-        const SYNC_THRESHOLD = 2000
+        // Small/medium repos write synchronously — one frame is fine up to
+        // 8k buildings (~20ms of setMatrixAt on mid hardware, user can't
+        // perceive the hitch at load time). Only truly huge repos stream.
+        const BATCH_SIZE = 2500
+        const SYNC_THRESHOLD = 8000
         let maxRadiusSq = 0
 
         const writeRange = (from, to) => {

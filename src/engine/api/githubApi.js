@@ -200,13 +200,17 @@ export async function ghFetch(url, opts = {}) {
     await enqueue()
 
     try {
-        // 3. Pre-flight rate limit check — if we know we're exhausted, wait
+        // 3. Pre-flight rate limit check — if we know we're exhausted, fail
+        // fast with a helpful message. Waiting up to 2 minutes silently is
+        // awful UX; the user needs to see the error and add a PAT.
         if (_rateLimitRemaining <= 1 && _rateLimitReset > Date.now() / 1000) {
-            const waitMs = (_rateLimitReset - Date.now() / 1000 + 2) * 1000
-            if (waitMs > 0 && waitMs < 120_000) {
-                logger.warn(`GitHub rate limit near zero — waiting ${Math.ceil(waitMs / 1000)}s`)
-                await new Promise(r => setTimeout(r, waitMs))
-            }
+            const isAuthd = !!getGitHubToken()
+            throw new Error(
+                `GitHub API rate limit exhausted. ` +
+                (isAuthd
+                    ? `Resets at ${new Date(_rateLimitReset * 1000).toLocaleTimeString()}.`
+                    : `Add a GitHub token (key icon, top-right) for 5,000 requests/hour instead of 60.`)
+            )
         }
 
         // 4. Build headers
