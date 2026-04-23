@@ -44,6 +44,8 @@ import './styles/design-tokens.css'
 import './styles/ProfessionalUI.css'
 import './App.css'
 import './styles/mobile.css'
+// Phase 8 — unified design language; MUST be last so specificity wins.
+import './styles/unified-ui.css'
 
 /**
  * useKeyboardShortcuts — Extracted hook for keyboard event handling.

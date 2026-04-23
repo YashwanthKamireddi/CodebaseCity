@@ -1,0 +1,369 @@
+/*
+ * ═══════════════════════════════════════════════════════════════════════════
+ * UNIFIED UI — Phase 8 design-language consolidation
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Apple-grade consistency across every surface in the app. Loaded AFTER
+ * all other stylesheets so specificity wins. Rather than refactor 60+
+ * components, we define the canonical component shapes here and project
+ * them onto existing class names via attribute + class selectors.
+ *
+ * The goal: every button feels the same, every panel has the same radius,
+ * every chip has the same padding, every input has the same focus ring.
+ * One look, one feel.
+ */
+
+:root {
+  /* ─── Canonical radius scale (tighter set) ─── */
+  --u-radius-pill: 9999px;
+  --u-radius-chip: 10px;
+  --u-radius-btn:  10px;
+  --u-radius-card: 14px;
+  --u-radius-input: 10px;
+
+  /* ─── Canonical heights ─── */
+  --u-h-chip:  28px;
+  --u-h-input: 36px;
+  --u-h-btn:   38px;
+  --u-h-btn-lg: 44px;
+  --u-h-icon:  32px;
+
+  /* ─── Canonical shadow scale ─── */
+  --u-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --u-shadow-2: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --u-shadow-3: 0 10px 32px rgba(0, 0, 0, 0.45);
+  --u-shadow-glow: 0 0 24px rgba(0, 210, 255, 0.18);
+
+  /* ─── Canonical surface backgrounds (glass on dark) ─── */
+  --u-glass-1: rgba(255, 255, 255, 0.04);
+  --u-glass-2: rgba(255, 255, 255, 0.08);
+  --u-glass-3: rgba(255, 255, 255, 0.14);
+  --u-glass-border: rgba(255, 255, 255, 0.12);
+  --u-glass-border-strong: rgba(255, 255, 255, 0.22);
+
+  /* ─── Accent (single system-wide accent) ─── */
+  --u-accent: #5aa8ff;
+  --u-accent-soft: rgba(90, 168, 255, 0.14);
+  --u-accent-border: rgba(90, 168, 255, 0.35);
+
+  /* ─── Typography ─── */
+  --u-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Segoe UI', sans-serif;
+  --u-font-mono: 'SF Mono', 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   GLOBAL: one typeface, one smoothing
+   ═══════════════════════════════════════════════════════════════════════════ */
+body,
+input,
+button,
+textarea,
+select,
+.lp-root,
+.uv-root,
+.universe-view {
+  font-family: var(--u-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.005em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BUTTONS — every class name that historically existed now looks unified
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Base normalization for every button-like thing */
+button.lp-btn,
+button.lp-signin-btn,
+button.lp-demo-link,
+button.lp-token-toggle,
+button.lp-gh-go,
+button.gh-tok-test-btn,
+button.gh-tok-save,
+button.gh-tok-cancel,
+button.gh-tok-clear,
+button.uv-back,
+button.login-gate-button,
+button.repo-enter-btn,
+button.uv-world-land,
+button.uv-faction,
+button.uv-tier,
+button.p-btn,
+button.canvas-ui-btn {
+  font-family: var(--u-font);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  transition:
+    background-color 160ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 160ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 160ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+button:active { transform: scale(0.98); }
+
+/* PRIMARY button — canonical shape, used for CTAs */
+.lp-btn--primary,
+.uv-world-land,
+.gh-tok-save,
+.repo-enter-btn {
+  height: var(--u-h-btn) !important;
+  padding: 0 18px !important;
+  border-radius: var(--u-radius-btn) !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: var(--u-glass-2) !important;
+  border: 1px solid var(--u-glass-border) !important;
+  color: #ffffff !important;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--u-shadow-1), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+.lp-btn--primary:hover,
+.uv-world-land:hover,
+.gh-tok-save:hover,
+.repo-enter-btn:hover {
+  background: var(--u-glass-3) !important;
+  border-color: var(--u-glass-border-strong) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--u-shadow-2), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.lp-btn--primary.is-active {
+  background: var(--u-accent-soft) !important;
+  border-color: var(--u-accent-border) !important;
+}
+
+/* GHOST / SECONDARY button */
+.lp-signin-btn,
+.lp-demo-link,
+.uv-back,
+.uv-faction,
+.uv-tier,
+.gh-tok-cancel {
+  height: var(--u-h-btn) !important;
+  padding: 0 14px !important;
+  border-radius: var(--u-radius-btn) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  background: var(--u-glass-1) !important;
+  border: 1px solid var(--u-glass-border) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  cursor: pointer;
+  text-decoration: none !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.lp-signin-btn:hover,
+.lp-demo-link:hover,
+.uv-back:hover,
+.uv-faction:hover,
+.uv-tier:hover:not(:disabled),
+.gh-tok-cancel:hover {
+  background: var(--u-glass-2) !important;
+  color: #ffffff !important;
+  border-color: var(--u-glass-border-strong) !important;
+}
+
+/* DESTRUCTIVE button */
+.gh-tok-clear,
+.login-button-error-close {
+  border-color: rgba(255, 90, 90, 0.3) !important;
+  color: #ff9090 !important;
+}
+.gh-tok-clear:hover {
+  background: rgba(255, 90, 90, 0.08) !important;
+  border-color: rgba(255, 90, 90, 0.5) !important;
+}
+
+/* Tier active / faction active — use consistent accent */
+.uv-tier.is-active,
+.uv-faction.is-active {
+  background: var(--u-accent-soft) !important;
+  border-color: var(--u-accent-border) !important;
+  color: #ffffff !important;
+  box-shadow: var(--u-shadow-glow);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CHIPS — status indicators, tags, small pills
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.gh-tok-chip,
+.lp-kicker,
+.uv-status-pill,
+.lp-ver {
+  height: var(--u-h-chip) !important;
+  padding: 0 12px !important;
+  border-radius: var(--u-radius-pill) !important;
+  background: var(--u-glass-1) !important;
+  border: 1px solid var(--u-glass-border) !important;
+  font-family: var(--u-font-mono) !important;
+  font-size: 10.5px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.gh-tok-chip.is-active {
+  background: rgba(0, 220, 180, 0.1) !important;
+  border-color: rgba(0, 220, 180, 0.4) !important;
+  color: #6fffdd !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   INPUTS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.lp-gh-input,
+.gh-tok-input,
+input[type='text'].uv-search input,
+.p-input {
+  height: var(--u-h-input) !important;
+  padding: 0 14px !important;
+  border-radius: var(--u-radius-input) !important;
+  background: rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid var(--u-glass-border) !important;
+  color: #ffffff !important;
+  font-size: 13.5px !important;
+  font-family: var(--u-font) !important;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+.lp-gh-input:focus,
+.gh-tok-input:focus {
+  border-color: var(--u-accent-border) !important;
+  box-shadow: 0 0 0 3px var(--u-accent-soft) !important;
+}
+.uv-search {
+  height: var(--u-h-input) !important;
+  padding: 0 12px !important;
+  border-radius: var(--u-radius-input) !important;
+  background: rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid var(--u-glass-border) !important;
+}
+.uv-search:focus-within {
+  border-color: var(--u-accent-border) !important;
+  box-shadow: 0 0 0 3px var(--u-accent-soft) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PANELS / CARDS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.lp-gh-wrap > .lp-gh-row,
+.gh-tok-modal,
+.uv-commander,
+.uv-world {
+  border-radius: var(--u-radius-card) !important;
+  background: linear-gradient(
+      180deg,
+      rgba(16, 20, 36, 0.92),
+      rgba(10, 13, 24, 0.94)
+  ) !important;
+  border: 1px solid var(--u-glass-border) !important;
+  box-shadow: var(--u-shadow-3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ICON BUTTONS (close, dismiss, etc.)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.gh-tok-close,
+.lp-logout-btn,
+.lp-err-close,
+.uv-empty-reset {
+  width: var(--u-h-icon) !important;
+  height: var(--u-h-icon) !important;
+  padding: 0 !important;
+  border-radius: 10px !important;
+  background: var(--u-glass-1) !important;
+  border: 1px solid var(--u-glass-border) !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  transition: all 140ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.gh-tok-close:hover,
+.lp-logout-btn:hover {
+  background: var(--u-glass-2) !important;
+  color: #ffffff !important;
+  border-color: var(--u-glass-border-strong) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TYPOGRAPHY — headings, text sizing
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.lp-heading,
+.uv-commander-name {
+  font-family: var(--u-font) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.025em !important;
+}
+
+.lp-desc,
+.uv-commander-bio,
+.uv-world-desc {
+  font-family: var(--u-font) !important;
+  font-weight: 400 !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Numeric stats — mono, tabular */
+.uv-stat-value,
+.gh-tok-chip,
+.cbl-meta {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOOLBAR GROUPS (sort, view toggle)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.uv-sort,
+.uv-view-toggle {
+  border-radius: var(--u-radius-btn) !important;
+  background: var(--u-glass-1) !important;
+  border: 1px solid var(--u-glass-border) !important;
+  padding: 3px !important;
+}
+.uv-sort button,
+.uv-view-toggle button {
+  height: 30px !important;
+  border-radius: 7px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+.uv-sort button.is-active,
+.uv-view-toggle button.is-active {
+  background: var(--u-accent-soft) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 0 0 1px var(--u-accent-border) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ACCESSIBILITY — keyboard focus rings
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--u-accent) !important;
+  outline-offset: 2px;
+}

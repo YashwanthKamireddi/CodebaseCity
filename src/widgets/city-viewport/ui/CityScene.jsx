@@ -45,11 +45,12 @@ function NebulaSky() {
         depthTest: false,
         fog: false,
         uniforms: {
-            uZenith:  { value: new THREE.Color('#02030c') },  // deep void
-            uMid:     { value: new THREE.Color('#070a1e') },  // midnight navy
-            uHorizon: { value: new THREE.Color('#0d1530') },  // muted sea-of-blue
-            uBelow:   { value: new THREE.Color('#010207') },
-            uNebula:  { value: new THREE.Color('#4a2a85') },
+            // Deep space with enough tone to read as a real sky, not pure black.
+            uZenith:  { value: new THREE.Color('#0a0d28') },  // zenith indigo
+            uMid:     { value: new THREE.Color('#162248') },  // midnight navy
+            uHorizon: { value: new THREE.Color('#2a3870') },  // cool horizon blue
+            uBelow:   { value: new THREE.Color('#04060f') },  // void under horizon
+            uNebula:  { value: new THREE.Color('#6b3fbe') },  // soft violet wash
         },
         vertexShader: `
             varying vec3 vPos;
@@ -78,12 +79,16 @@ function NebulaSky() {
                     color = mix(uHorizon, uBelow, smoothstep(0.0, -0.35, h));
                 }
 
-                // Very soft violet nebula wash — painted into the upper dome,
-                // slight horizontal asymmetry for a real-sky feel.
-                float nebula = smoothstep(0.2, 0.7, h) *
+                // Soft violet nebula wash — painted into the upper dome with
+                // horizontal asymmetry for real-sky feel.
+                float nebula = smoothstep(0.15, 0.7, h) *
                                smoothstep(1.0, 0.55, h) *
-                               (0.45 + 0.55 * vPos.x);
-                color += uNebula * nebula * 0.12;
+                               (0.5 + 0.5 * vPos.x);
+                color += uNebula * nebula * 0.22;
+
+                // Subtle cool-blue horizon bloom — reads as atmospheric glow.
+                float bloom = smoothstep(-0.05, 0.04, h) * smoothstep(0.22, 0.06, h);
+                color += vec3(0.14, 0.22, 0.45) * bloom * 0.5;
 
                 gl_FragColor = vec4(color, 1.0);
             }
@@ -292,7 +297,7 @@ const CityScene = React.memo(function CityScene() {
                 </>
             )}
 
-            <fog attach="fog" args={['#060918', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
+            <fog attach="fog" args={['#0f1a38', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
             <CameraController />
         </group>
     )
