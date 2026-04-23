@@ -94,17 +94,27 @@ export default React.memo(function CameraController() {
             const buildingHeight = rawHeight * 3.0
             const bWidth = building.dimensions?.width || 8
             const bDepth = building.dimensions?.depth || 8
-
-            const roofY = buildingHeight
-            const panelTopY = roofY + 30
-            const frameCenterY = roofY * 0.6 + panelTopY * 0.4
-
-            const totalVerticalExtent = panelTopY
             const footprintSize = Math.max(bWidth, bDepth)
-            const zoomDist = Math.max(45, totalVerticalExtent * 0.6, footprintSize * 1.5)
+
+            // Unified framing: regardless of building height, land the
+            // camera so the ROOF + HOVER CARD fill roughly the same share
+            // of the screen. We look at the panel (just above the roof),
+            // not at the building centerline, so the card is always the
+            // visual anchor.
+            const roofY = buildingHeight
+            const panelY = roofY + 28           // must match HologramPanel
+            const frameCenterY = roofY * 0.3 + panelY * 0.7   // card-biased
+
+            // Distance is driven by footprint size (so small files get
+            // close, big files get farther) with a hard ceiling so we
+            // never fly absurdly far on a hero-sized tower.
+            const zoomDist = Math.min(
+                Math.max(75, footprintSize * 2.8),
+                260
+            )
 
             const camAngle = Math.PI / 4
-            const elevationFactor = 0.55
+            const elevationFactor = 0.42   // slightly lower angle → card visible, roof still readable
 
             const targetPos = new THREE.Vector3(
                 x + Math.cos(camAngle) * zoomDist,
@@ -114,7 +124,7 @@ export default React.memo(function CameraController() {
             const lookAtPos = new THREE.Vector3(x, frameCenterY, z)
 
             const travelDist = camera.position.distanceTo(targetPos)
-            const flyDuration = Math.min(2.0, Math.max(0.8, travelDist / 400))
+            const flyDuration = Math.min(1.6, Math.max(0.7, travelDist / 420))
 
             animateTo(targetPos, lookAtPos, flyDuration)
         }

@@ -389,6 +389,61 @@ input[type='text'].uv-search input,
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   EXPLORE MODE MODAL (UfoOverlay) — match the canonical card language
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Container background: same glass as other cards, same radius */
+.ufo-intro-card,
+[data-ufo-intro] {
+    border-radius: var(--u-radius-card) !important;
+    background: linear-gradient(
+        180deg,
+        rgba(16, 20, 36, 0.92),
+        rgba(10, 13, 24, 0.94)
+    ) !important;
+    border: 1px solid var(--u-glass-border) !important;
+    box-shadow: var(--u-shadow-3) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    font-family: var(--u-font) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BUILDING HOVER CARD (HologramPanel) — strict shape + readable text
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.hologram-card,
+[data-hologram-card] {
+    border-radius: var(--u-radius-card) !important;
+    background: linear-gradient(
+        180deg,
+        rgba(16, 20, 36, 0.95),
+        rgba(10, 13, 24, 0.97)
+    ) !important;
+    border: 1px solid var(--u-glass-border) !important;
+    box-shadow: var(--u-shadow-3) !important;
+    backdrop-filter: blur(22px) !important;
+    -webkit-backdrop-filter: blur(22px) !important;
+    font-family: var(--u-font) !important;
+    color: #ffffff !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TIMELINE CONTROLLER (bottom-center play strip)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.timeline-controller-root,
+[data-timeline-controller] {
+    border-radius: var(--u-radius-pill) !important;
+    background: linear-gradient(180deg, rgba(16, 20, 36, 0.92), rgba(10, 13, 24, 0.94)) !important;
+    border: 1px solid var(--u-glass-border) !important;
+    box-shadow: var(--u-shadow-3) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    font-family: var(--u-font) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    ACCESSIBILITY — keyboard focus rings
    ═══════════════════════════════════════════════════════════════════════════ */
 
