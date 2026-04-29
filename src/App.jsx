@@ -408,8 +408,9 @@ function App() {
 
             {/* Building detail panel — now rendered as 3D hologram inside CityScene */}
 
-            {/* GitHub PAT chip (top-right) — visible everywhere for rate-limit relief */}
-            <GitHubTokenButton />
+            {/* GitHub PAT chip — only when user has dismissed the landing overlay
+                so it never collides with landing-page UI. */}
+            {!isLandingOverlayActive && <GitHubTokenButton />}
 
             {/* Command Palette - ⌘K */}
             {cityData && (

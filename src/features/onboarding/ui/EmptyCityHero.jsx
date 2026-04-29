@@ -10,7 +10,6 @@ import { FolderOpen, ArrowRight, Github, KeyRound, Globe, LogIn, LogOut, User } 
 import useStore from '../../../store/useStore'
 import logger from '../../../utils/logger'
 import { useAuth } from '../../auth'
-import GitHubTokenButton from '../../auth/ui/GitHubTokenButton'
 
 export default function EmptyCityHero() {
     const analyzeLocal = useStore(s => s.analyzeLocal)
@@ -67,7 +66,6 @@ export default function EmptyCityHero() {
                     <span className="lp-wordmark">Codebase City</span>
                 </div>
                 <div className="lp-topbar-right">
-                    <GitHubTokenButton floating={false} />
                     {isAuthenticated ? (
                         <div className="lp-user-badge">
                             {user?.avatar_url ? (

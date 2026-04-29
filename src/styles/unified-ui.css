@@ -164,8 +164,15 @@ button:active { transform: scale(0.98); }
 }
 .gh-tok-save:disabled,
 .lp-gh-go:disabled {
-  opacity: 0.45;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.55) !important;
   cursor: not-allowed;
+  box-shadow: none !important;
+}
+.gh-tok-save:disabled svg,
+.lp-gh-go:disabled svg {
+  opacity: 0.7;
 }
 
 /* GHOST / SECONDARY button */
