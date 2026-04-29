@@ -221,125 +221,20 @@ export const createCitySlice = (set, get) => ({
 
             setProgress(45)
 
-            // Fetch recent commits and their per-file change lists for accurate author attribution
-            let commitAuthors = {} // path → author name
-            let authorEmails = {} // authorName → email (for Gravatar)
-            let fileCommitCounts = {} // path → { author → count }
-            try {
-                const commitsResult = await ghFetch(`https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/commits?per_page=100`)
-                if (commitsResult.data) {
-                    const commitsData = commitsResult.data
-
-                    // Build global author frequency from ALL 100 commits
-                    const globalAuthorFreq = {} // author → commit count
-                    for (const c of commitsData) {
-                        const name = c.commit?.author?.name
-                        const email = c.commit?.author?.email
-                        if (name) {
-                            globalAuthorFreq[name] = (globalAuthorFreq[name] || 0) + 1
-                            if (email) authorEmails[name] = email
-                        }
-                    }
-
-                    // Fetch file lists from 10 most recent commits (reduced from 30 to conserve rate limit)
-                    const commitUrls = commitsData.slice(0, 10).map(c =>
-                        `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/commits/${c.sha}`
-                    )
-                    const details = await ghFetchBatch(commitUrls)
-
-                    // Build path → author mapping from real commit file lists
-                    for (const detail of details) {
-                        if (!detail?.files) continue
-                        const author = detail.commit?.author?.name || 'Unknown'
-                        for (const file of detail.files) {
-                            if (!commitAuthors[file.filename]) {
-                                commitAuthors[file.filename] = author
-                            }
-                            if (!fileCommitCounts[file.filename]) fileCommitCounts[file.filename] = {}
-                            fileCommitCounts[file.filename][author] = (fileCommitCounts[file.filename][author] || 0) + 1
-                        }
-                    }
-
-                    // Build directory → author distribution from detailed commits
-                    // Walk all ancestor directories for each file, not just immediate parent
-                    const dirAuthorCounts = {}
-                    for (const [path, authors] of Object.entries(fileCommitCounts)) {
-                        const parts = path.split('/')
-                        // Attribute to every ancestor directory level
-                        for (let depth = 1; depth < parts.length; depth++) {
-                            const dir = parts.slice(0, depth).join('/')
-                            if (!dirAuthorCounts[dir]) dirAuthorCounts[dir] = {}
-                            for (const [author, count] of Object.entries(authors)) {
-                                dirAuthorCounts[dir][author] = (dirAuthorCounts[dir][author] || 0) + count
-                            }
-                        }
-                        // Also attribute to (root) for root-level files
-                        if (parts.length === 1) {
-                            if (!dirAuthorCounts['(root)']) dirAuthorCounts['(root)'] = {}
-                            for (const [author, count] of Object.entries(authors)) {
-                                dirAuthorCounts['(root)'][author] = (dirAuthorCounts['(root)'][author] || 0) + count
-                            }
-                        }
-                    }
-
-                    // Pre-sort author distributions ONCE (O(m log m) total, not per file)
-                    const sortedDirAuthors = new Map()
-                    for (const [dir, counts] of Object.entries(dirAuthorCounts)) {
-                        const entries = Object.entries(counts).sort((a, b) => b[1] - a[1])
-                        const total = entries.reduce((s, e) => s + e[1], 0)
-                        sortedDirAuthors.set(dir, { entries, total })
-                    }
-
-                    // Pre-sort global author frequency
-                    const sortedGlobalAuthors = Object.entries(globalAuthorFreq).sort((a, b) => b[1] - a[1])
-                    const globalTotal = sortedGlobalAuthors.reduce((s, e) => s + e[1], 0)
-
-                    // Helper: O(1) pick from pre-sorted entries using deterministic seed
-                    const pickWeightedAuthor = (sortedData, seed) => {
-                        const { entries, total } = sortedData
-                        // Deterministic pseudo-random from seed (simple hash mod)
-                        let hash = 0
-                        for (let i = 0; i < seed.length; i++) {
-                            hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0
-                        }
-                        const pick = ((hash >>> 0) % total)
-                        let cumulative = 0
-                        for (const [author, count] of entries) {
-                            cumulative += count
-                            if (pick < cumulative) return author
-                        }
-                        return entries[0][0]
-                    }
-
-                    // Assign remaining files using pre-sorted directory attribution
-                    for (const item of treeData.tree) {
-                        if (item.type !== 'blob' || commitAuthors[item.path]) continue
-
-                        // Walk up directory tree to find the closest directory with author data
-                        const parts = item.path.split('/')
-                        let assigned = false
-                        for (let depth = parts.length - 1; depth >= 1; depth--) {
-                            const dir = parts.slice(0, depth).join('/')
-                            const sortedData = sortedDirAuthors.get(dir)
-                            if (sortedData) {
-                                commitAuthors[item.path] = pickWeightedAuthor(sortedData, item.path)
-                                assigned = true
-                                break
-                            }
-                        }
-                        // Check (root) level
-                        if (!assigned && sortedDirAuthors.has('(root)')) {
-                            commitAuthors[item.path] = pickWeightedAuthor(sortedDirAuthors.get('(root)'), item.path)
-                            assigned = true
-                        }
-                        // Ultimate fallback: distribute across ALL authors by global commit frequency
-                        if (!assigned && sortedGlobalAuthors.length > 0) {
-                            commitAuthors[item.path] = pickWeightedAuthor({ entries: sortedGlobalAuthors, total: globalTotal }, item.path)
-                        }
-                    }
-                }
-            } catch {
-                // Non-critical — author data is optional
+            // Author attribution is now BACKGROUND-ONLY. The previous code
+            // blocked the loading screen for 10 sequential commit-detail
+            // GitHub API calls (~5–60 s on slow / rate-limited connections).
+            // Users were sitting on "Loading…" for over a minute on small
+            // repos. Now we ship the city immediately and let authors
+            // populate after the user can already see + interact with it.
+            const commitAuthors = {} // path → author name (filled async)
+            const authorEmails = {}  // authorName → email
+            // Schedule the enrichment for after setCityData runs (see end
+            // of analyzeRepo). Stored on the analyzer scope so the enrich
+            // call below can reach it.
+            const enrichmentTask = {
+                owner, repo,
+                run: null, // assigned below; runs after setCityData
             }
 
             setProgress(50)
@@ -710,6 +605,93 @@ export const createCitySlice = (set, get) => ({
             setCityData(cityData)
             set({ currentRepoPath: `${owner}/${repo}`, commits: [], currentCommitIndex: -1 })
             get().fetchHistory(`${owner}/${repo}`)
+
+            // ── Background author enrichment ──
+            // Fires AFTER the city is on-screen. Even if it takes 30 s,
+            // the user is already exploring; when it finishes we patch
+            // the buildings array in place (no full re-render — Zustand
+            // selectors only fire if author actually changed).
+            ;(async () => {
+                try {
+                    const commitsResult = await ghFetch(
+                        `https://api.github.com/repos/${encodeURIComponent(enrichmentTask.owner)}/${encodeURIComponent(enrichmentTask.repo)}/commits?per_page=100`
+                    )
+                    if (!commitsResult?.data?.length) return
+                    const commitsData = commitsResult.data
+
+                    // Pull global author frequency from the lightweight commits list.
+                    const globalAuthorFreq = {}
+                    for (const c of commitsData) {
+                        const name = c.commit?.author?.name
+                        const email = c.commit?.author?.email
+                        if (name) {
+                            globalAuthorFreq[name] = (globalAuthorFreq[name] || 0) + 1
+                            if (email) authorEmails[name] = email
+                        }
+                    }
+
+                    // Fetch only THREE commit details (was 10) — we just want a
+                    // sample for per-file attribution; more = more API spend.
+                    const commitUrls = commitsData.slice(0, 3).map(c =>
+                        `https://api.github.com/repos/${encodeURIComponent(enrichmentTask.owner)}/${encodeURIComponent(enrichmentTask.repo)}/commits/${c.sha}`
+                    )
+                    const details = await ghFetchBatch(commitUrls)
+                    const fileCommitCounts = {}
+                    for (const detail of details) {
+                        if (!detail?.files) continue
+                        const author = detail.commit?.author?.name || 'Unknown'
+                        for (const file of detail.files) {
+                            if (!commitAuthors[file.filename]) commitAuthors[file.filename] = author
+                            if (!fileCommitCounts[file.filename]) fileCommitCounts[file.filename] = {}
+                            fileCommitCounts[file.filename][author] = (fileCommitCounts[file.filename][author] || 0) + 1
+                        }
+                    }
+
+                    // Spread author info to remaining files via global frequency
+                    // (deterministic per-path hash, so refresh shows same colors).
+                    const sortedGlobal = Object.entries(globalAuthorFreq).sort((a, b) => b[1] - a[1])
+                    const globalTotal = sortedGlobal.reduce((s, e) => s + e[1], 0)
+                    if (globalTotal > 0) {
+                        for (const b of cityData.buildings) {
+                            if (commitAuthors[b.path]) continue
+                            let hash = 0
+                            for (let i = 0; i < b.path.length; i++) {
+                                hash = ((hash << 5) - hash + b.path.charCodeAt(i)) | 0
+                            }
+                            const pick = (hash >>> 0) % globalTotal
+                            let cumulative = 0
+                            for (const [author, count] of sortedGlobal) {
+                                cumulative += count
+                                if (pick < cumulative) {
+                                    commitAuthors[b.path] = author
+                                    break
+                                }
+                            }
+                        }
+                    }
+
+                    // Patch buildings in-place with author info.
+                    let touched = 0
+                    for (const b of cityData.buildings) {
+                        const a = commitAuthors[b.path]
+                        if (a && b.author !== a) {
+                            b.author = a
+                            b.email = authorEmails[a] || null
+                            touched++
+                        }
+                    }
+                    if (touched > 0) {
+                        // Trigger a shallow re-render so views observing buildings refresh.
+                        // Keep the same array reference; Zustand selectors using
+                        // `cityData.buildings.length` won't fire, but components reading
+                        // the building objects directly (like the Authors view mode)
+                        // will see fresh data on next interaction.
+                        set({ cityData: { ...cityData, buildings: cityData.buildings } })
+                    }
+                } catch {
+                    // Non-fatal — authors are an enhancement.
+                }
+            })()
 
         } catch (error) {
             logger.error("GitHub Analysis Error:", error)
