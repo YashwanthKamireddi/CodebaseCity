@@ -135,9 +135,8 @@ button:active { transform: scale(0.98); }
   border-color: var(--u-accent-border) !important;
 }
 
-/* ACCENT button — filled, confident action. Save, confirm, "do it". */
-.gh-tok-save,
-.lp-gh-go {
+/* ACCENT button — filled, confident action. Used for "Save" pill. */
+.gh-tok-save {
   height: var(--u-h-btn) !important;
   padding: 0 20px !important;
   border-radius: var(--u-radius-btn) !important;
@@ -155,26 +154,61 @@ button:active { transform: scale(0.98); }
     0 4px 14px rgba(74, 147, 235, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
-.gh-tok-save:hover:not(:disabled),
-.lp-gh-go:hover:not(:disabled) {
+.gh-tok-save:hover:not(:disabled) {
   background: linear-gradient(180deg, #85c1ff, #5a9eed) !important;
   box-shadow:
     0 6px 20px rgba(74, 147, 235, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
-.gh-tok-save:disabled,
-.lp-gh-go:disabled {
+.gh-tok-save:disabled {
   background: rgba(255, 255, 255, 0.18) !important;
   border-color: rgba(255, 255, 255, 0.22) !important;
   color: rgba(255, 255, 255, 0.95) !important;
   cursor: not-allowed;
   box-shadow: none !important;
 }
-.gh-tok-save:disabled svg,
-.lp-gh-go:disabled svg {
-  opacity: 1;
+.gh-tok-save:disabled svg { opacity: 1; }
+
+/* SQUARE ICON BUTTON — used for the inline GitHub URL submit arrow.
+   Small, square, prominent icon. Was getting destroyed by the wider
+   accent treatment above; pinned back to its native 38×38 shape. */
+.lp-gh-go {
+  width: 38px !important;
+  height: 38px !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(180deg, #6fb4ff, #4a93eb) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow:
+    0 2px 10px rgba(74, 147, 235, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.lp-gh-go:hover:not(:disabled) {
+  background: linear-gradient(180deg, #85c1ff, #5a9eed) !important;
+  transform: scale(1.04);
+  box-shadow:
+    0 4px 14px rgba(74, 147, 235, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.lp-gh-go:disabled {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
+.lp-gh-go svg {
+  width: 16px !important;
+  height: 16px !important;
   color: #ffffff !important;
   stroke: #ffffff !important;
+  stroke-width: 2.5 !important;
+  opacity: 1 !important;
 }
 
 /* GHOST / SECONDARY button */
