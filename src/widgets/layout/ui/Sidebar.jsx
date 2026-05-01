@@ -57,7 +57,7 @@ export default function Sidebar() {
         >
             {/* Header */}
             <div className="sidebar-header">
-                <h2 className="sidebar-title">{displayTitle}</h2>
+                <h2 className="sidebar-title" title={displayTitle}>{displayTitle}</h2>
                 <button onClick={onClose} className="sidebar-close-btn" aria-label="Close sidebar">
                     ×
                 </button>

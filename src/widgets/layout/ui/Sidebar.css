@@ -35,25 +35,35 @@
 
 /* ── Header ──────────────────────────────────────────────────── */
 .sidebar-header {
-    padding: 24px 24px;
+    padding: 20px 16px 20px 20px;
     border-bottom: 1px solid var(--border-default);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
     background: transparent;
 }
 
 .sidebar-title {
-    font-size: 1.1rem;
+    flex: 1;
+    min-width: 0;                /* allow flex child to shrink below content size */
+    font-size: 1rem;
     margin: 0;
     font-weight: 700;
     letter-spacing: 0.05em;
     color: var(--color-text-primary);
     font-family: var(--font-display);
     text-transform: uppercase;
+    /* Long repo names ("vikaskushwaha5424/echospace") were running under
+       the close button. Truncate with ellipsis and show the full name on
+       hover via the title attribute (set in Sidebar.jsx). */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .sidebar-close-btn {
+    flex-shrink: 0;
     background: transparent;
     border: none;
     color: var(--color-text-secondary);
