@@ -207,27 +207,39 @@ export const createCitySlice = (set, get) => ({
 
             setProgress(25)
 
-            // Fetch full file tree & Ingest to OPFS VFS
-            setVfsProgressCallback((status) => {
-                set({ vfsStatus: status })
-            })
-            // Stream-download the zipball with live progress updates so the
-            // user sees movement during the long network step instead of a
-            // frozen "25%" for 30 seconds.
-            const zipBuffer = await fetchGitHubZipball(owner, repo, branch, {
-                onProgress: ({ received, total }) => {
-                    // Map download bytes into the 25–43 progress band.
-                    const frac = total > 0 ? received / total : Math.min(1, received / (8 * 1024 * 1024))
-                    const pct = 25 + Math.floor(frac * 18)
-                    setProgress(pct)
-                },
-            })
-            setProgress(43)
-            const { tree } = await ingestZipballToVfs(zipBuffer, repo)
-            const treeData = { tree }
+            // ────────────────────────────────────────────────────────────
+            // ARCHITECTURAL CHANGE (Phase 9):
+            // We no longer download the entire repo as a zipball just to
+            // get its file list. Old flow took 30s+ for a tiny repo because
+            // it had to: download tens of MB of source code → write it to
+            // OPFS via a worker → scan the tree → discard 99% of it.
+            //
+            // New flow: ONE GitHub Tree API call gives us paths + sizes for
+            // every file in the repo. ~500 ms total for any repo size, and
+            // the response is capped at 7 MB / 100k entries by GitHub
+            // (which is plenty for visualization).
+            //
+            // File content is fetched on-demand from raw.githubusercontent
+            // .com when the user clicks a building (already wired in
+            // fetchFileContent below) — so the 3D city renders in the time
+            // it used to take just to start the zip extraction.
+            // ────────────────────────────────────────────────────────────
+            setProgress(30)
+            const treeUrl =
+                `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}` +
+                `/git/trees/${encodeURIComponent(branch)}?recursive=1`
+            const treeResult = await ghFetch(treeUrl)
+            const treeData = treeResult?.data
+            setProgress(42)
 
-            if (!treeData.tree || !Array.isArray(treeData.tree)) {
-                throw new Error('Invalid repository tree response from GitHub API.')
+            if (!treeData?.tree || !Array.isArray(treeData.tree)) {
+                throw new Error('Invalid tree response from GitHub.')
+            }
+            if (treeData.truncated) {
+                logger.warn(
+                    `Tree was truncated by GitHub — repo has more files than ` +
+                    `the API returns in one call. City will show the first ~100k entries.`
+                )
             }
 
             setProgress(45)
