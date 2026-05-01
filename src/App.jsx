@@ -326,7 +326,11 @@ function App() {
 
                                     <Suspense fallback={null}>
                                         <CityScene data={cityData} />
-                                        <Preload all />
+                                        {/* `<Preload all />` was here. Removed — ShaderWarmup
+                                            inside CityScene already does a one-shot gl.compile
+                                            after cityData lands; Preload all on every mount
+                                            walked the entire scene graph compiling shaders we
+                                            may never use, adding multi-second startup cost. */}
                                     </Suspense>
 
 

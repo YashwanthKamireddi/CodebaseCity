@@ -2,7 +2,6 @@ import React, { useRef, useLayoutEffect, useEffect, useMemo, useState, useCallba
 import * as THREE from 'three'
 import { useFrame, extend, useThree } from '@react-three/fiber'
 import { useDrag } from '@use-gesture/react'
-import init, { PhysicsEngine } from 'wasm-core'
 import useStore from '../../../store/useStore'
 import { PulseMaterial } from '../shaders/PulseMaterial'
 import { getBuildingColor } from '../../../utils/colorUtils'
@@ -27,19 +26,11 @@ let cachedColorArray = null
  * - Interactive hover/selection states
  */
 const InstancedCity = React.memo(function InstancedCity() {
-    const [wasmEngine, setWasmEngine] = useState(null)
-    const wasmMemoryRef = useRef(null)
-    const engineRef = useRef(null)
-
-    useEffect(() => {
-        let active = true
-        init().then(wasm => {
-            if (!active) return
-            wasmMemoryRef.current = wasm.memory
-            setWasmEngine(true)
-        }).catch(console.error)
-        return () => { active = false }
-    }, [])
+    // Note: previously kicked off `init()` from wasm-core here for the
+    // PhysicsEngine. We removed the physics drop-in months ago but the
+    // import was still loading the WASM module on every mount — a 1–3 s
+    // hit on cold cache and a SILENT HANG on production if MIME/CSP
+    // didn't cooperate. Killed the dependency entirely.
 
     // Granular selectors — only re-render when specific state changes
     const cityData = useStore(s => s.cityData)
@@ -382,6 +373,10 @@ const InstancedCity = React.memo(function InstancedCity() {
         if (refactoringModeActive) return
         if (useStore.getState().isGenesisPlaying) return
         if (!chunkVisibilityRef.current) return
+        // Skip culling overhead entirely on small/medium scenes — Three.js's
+        // built-in frustum cull on the whole InstancedMesh is enough below
+        // ~3k buildings, and the per-chunk pass was burning frames for nothing.
+        if (count < 3000) return
 
         // Build current camera frustum
         projScreenRef.current.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse)
