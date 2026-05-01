@@ -345,22 +345,71 @@ export function clearCache() {
  * World-Class Implementation: Ingests a complete repo branch as a Zipball buffer.
  * Bypasses JSON/Tree parsing limitations by downloading everything iteratively in C++ style Streams.
  */
-export async function fetchGitHubZipball(owner, repo, branch = 'main') {
-    // Fetch directly from codeload.github.com to avoid redirect losing our cache-busting parameter
-    // Append a unique timestamp query parameter to bust GitHub's CDN caching
-    // of CORS headers (Access-Control-Allow-Origin).
+export async function fetchGitHubZipball(owner, repo, branch = 'main', opts = {}) {
+    // Fetch directly via Vercel proxy to keep CORS clean. Cache-bust the
+    // CDN per request so we never serve a stale ACAO header.
     const url = `/codeload/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/legacy.zip/refs/heads/${encodeURIComponent(branch)}?t=${Date.now()}`;
     const token = getGitHubToken();
     const headers = {};
     if (token) headers.Authorization = `Bearer ${token}`;
 
-    const response = await fetch(url, { headers });
-    if (!response.ok) {
-        throw new Error(`Failed to fetch Zipball: ${response.status} ${response.statusText}`);
+    // Hard 55s timeout — Vercel proxy itself will kill at 60s, so we abort
+    // sooner and surface a clean error before that hits.
+    const ctrl = new AbortController();
+    const timeoutId = setTimeout(() => ctrl.abort(), 55_000);
+
+    let response;
+    try {
+        response = await fetch(url, { headers, signal: ctrl.signal });
+    } catch (err) {
+        clearTimeout(timeoutId);
+        if (err?.name === 'AbortError') {
+            throw new Error(
+                'Repository download timed out (>55s). The repo may be very large or GitHub is throttling. ' +
+                'Try again, or add a GitHub token (key icon, top-right) for higher priority.'
+            );
+        }
+        throw err;
     }
 
-    // Returns an ArrayBuffer ready to be zero-copied to the VFS Worker
-    return await response.arrayBuffer();
+    if (!response.ok) {
+        clearTimeout(timeoutId);
+        throw new Error(`Failed to fetch repository (HTTP ${response.status}). It may be very large or GitHub is throttling.`);
+    }
+
+    // Stream the download so we can report progress instead of sitting
+    // silent until the whole zip lands. Reports byte count via opts.onProgress.
+    const total = parseInt(response.headers.get('content-length') || '0', 10) || 0;
+    const reader = response.body?.getReader?.();
+    if (!reader) {
+        // Fallback when streaming isn't available (very old browsers / extensions)
+        clearTimeout(timeoutId);
+        return await response.arrayBuffer();
+    }
+
+    const chunks = [];
+    let received = 0;
+    try {
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            chunks.push(value);
+            received += value.byteLength;
+            if (opts.onProgress) opts.onProgress({ received, total });
+        }
+    } finally {
+        clearTimeout(timeoutId);
+    }
+
+    // Concatenate chunks into a single ArrayBuffer for zero-copy transfer
+    // into the VFS worker.
+    const buf = new Uint8Array(received);
+    let pos = 0;
+    for (const c of chunks) {
+        buf.set(c, pos);
+        pos += c.byteLength;
+    }
+    return buf.buffer;
 }
 
 // ── Universe Mode: Multi-repo fetching ──────────────────────────────

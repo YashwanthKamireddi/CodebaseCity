@@ -211,7 +211,18 @@ export const createCitySlice = (set, get) => ({
             setVfsProgressCallback((status) => {
                 set({ vfsStatus: status })
             })
-            const zipBuffer = await fetchGitHubZipball(owner, repo, branch)
+            // Stream-download the zipball with live progress updates so the
+            // user sees movement during the long network step instead of a
+            // frozen "25%" for 30 seconds.
+            const zipBuffer = await fetchGitHubZipball(owner, repo, branch, {
+                onProgress: ({ received, total }) => {
+                    // Map download bytes into the 25–43 progress band.
+                    const frac = total > 0 ? received / total : Math.min(1, received / (8 * 1024 * 1024))
+                    const pct = 25 + Math.floor(frac * 18)
+                    setProgress(pct)
+                },
+            })
+            setProgress(43)
             const { tree } = await ingestZipballToVfs(zipBuffer, repo)
             const treeData = { tree }
 
