@@ -101,33 +101,26 @@ export default React.memo(function CameraController() {
             const bDepth = building.dimensions?.depth || 8
             const footprintSize = Math.max(bWidth, bDepth)
 
-            // Cinematic framing: pull back enough to keep the building IN
-            // CONTEXT — surrounding city visible, not just one tower
-            // filling the screen. Distance scales with both footprint
-            // (wide buildings need more) and height (tall ones too).
+            // Cinematic framing: closer than before — user reported the
+            // selection zoom was pulling back so far the chosen building
+            // was lost in the surrounding city. Tightened to 90–280
+            // (was 140–520). Camera looks at upper-third of the building
+            // + info-card composition.
             const roofY = buildingHeight
             const panelY = roofY + 28
-            // Look at the upper third of the building+card composition.
             const frameCenterY = roofY * 0.55 + panelY * 0.45
 
-            // Distance scales with the LARGER of two needs:
-            //   - footprint:  width × 4   (give 2× building widths of margin)
-            //   - height:     height × 1.1 (so tall towers don't fill screen)
-            // Floored at 140 (never absurdly close) and capped at 520 (never
-            // so far the panel becomes unreadable).
             const zoomDist = Math.min(
-                520,
+                280,
                 Math.max(
-                    140,
-                    footprintSize * 4,
-                    buildingHeight * 1.1
+                    90,
+                    footprintSize * 3.2,   // ~1.6 building-widths of margin
+                    buildingHeight * 0.85,
                 )
             )
 
             const camAngle = Math.PI / 4
-            // Higher angle = more aerial = more city context visible behind
-            // the selected building. 0.42 → 0.55.
-            const elevationFactor = 0.55
+            const elevationFactor = 0.65   // higher angle = more skyline context
 
             const targetPos = new THREE.Vector3(
                 x + Math.cos(camAngle) * zoomDist,
@@ -136,11 +129,11 @@ export default React.memo(function CameraController() {
             )
             const lookAtPos = new THREE.Vector3(x, frameCenterY, z)
 
-            // Snappier flights — 0.7–1.6 s → 0.55–1.2 s. Combined with the
-            // outQuart easing, this gives a confident, decisive pull instead
-            // of a sluggish lerp.
+            // Switching between buildings should feel cinematic — not a
+            // snap. Floor bumped 0.55 → 0.85 and the long-flight ceiling
+            // raised 1.2 → 1.6 so even short moves feel deliberate.
             const travelDist = camera.position.distanceTo(targetPos)
-            const flyDuration = Math.min(1.2, Math.max(0.55, travelDist / 600))
+            const flyDuration = Math.min(1.6, Math.max(0.85, travelDist / 480))
 
             animateTo(targetPos, lookAtPos, flyDuration)
         }
@@ -149,30 +142,44 @@ export default React.memo(function CameraController() {
         return () => window.removeEventListener('flyToBuilding', handleFlyTo)
     }, [camera, controls, animateTo])
 
-    // Auto-fit camera when city data changes (new analysis or demo load)
+    // Auto-fit camera when city data changes (new analysis or demo load).
+    // The user wants the *whole city + the city-name hologram floating
+    // above* visible in the establishing shot — like a movie's opening.
     useEffect(() => {
         if (!cityData?.buildings?.length || !controls) return
 
         const timer = setTimeout(() => {
-            // For large repos, cap the viewing distance so buildings remain clearly visible
-            // Instead of showing the entire city from orbit, start near the buildings
-            const isLargeCity = cityRadius > 300
-            const fitDist = isLargeCity
-                ? Math.min(cityRadius * 1.5, 1200)   // Back way out
-                : Math.max(cityRadius * 1.2, 200)      // Small/medium: view whole city clearly
+            // Compute the full vertical span we need to fit:
+            //   ground (y=0) → mothership altitude → hologram label above.
+            // mothershipAltitude is roughly maxHeight + 340; the city-name
+            // hologram sits ~80 above that. We approximate without
+            // importing landmarkPositions to avoid circular concerns.
+            const verticalSpan = Math.max(maxHeight * 1.4 + 460, 600)
+            const lookCenterY = verticalSpan * 0.42  // look slightly below middle
 
-            const camY = isLargeCity
-                ? Math.min(maxHeight * 1.8 + cityRadius * 0.6, 900)      // Push height up significantly
-                : Math.max(cityRadius * 1.0, maxHeight * 1.2, 160) // Higher baseline
+            // Distance such that the vertical span fits inside ~70% of
+            // the camera FOV (leaves 30% margin top + bottom). For the
+            // default 50° FOV, half-vertical-tan = 0.466.
+            const fovHalfTan = Math.tan((camera.fov * Math.PI / 180) / 2)
+            const distForVertical = (verticalSpan * 0.5) / (fovHalfTan * 0.7)
+
+            // Distance such that the city's horizontal extent (2 *
+            // cityRadius) fits in ~80% of the visible width. Aspect
+            // ratio approximated at 1.78 for typical wide screens.
+            const aspect = camera.aspect || 1.78
+            const distForHorizontal = cityRadius / (fovHalfTan * aspect * 0.8)
+
+            const fitDist = Math.max(distForVertical, distForHorizontal)
+            const camY = lookCenterY + fitDist * 0.55   // 55% elevation = cinematic
 
             animateTo(
-                new THREE.Vector3(cx + fitDist, camY, cz + fitDist),
-                new THREE.Vector3(cx, 0, cz),
-                1.8
+                new THREE.Vector3(cx + fitDist * 0.71, camY, cz + fitDist * 0.71),
+                new THREE.Vector3(cx, lookCenterY, cz),
+                2.4   // longer = more cinematic
             )
 
             // Dynamically scale far plane and maxDistance
-            const neededFar = Math.max(5000, cityRadius * 6)
+            const neededFar = Math.max(8000, fitDist * 6)
             camera.far = neededFar
             camera.updateProjectionMatrix()
             if (controls.maxDistance < neededFar * 0.5) {

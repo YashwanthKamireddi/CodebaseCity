@@ -139,9 +139,14 @@ function makeRoadMaterial(highTier) {
                 vec4 wp = modelMatrix * instanceMatrix * vec4(position, 1.0);
                 vWorldPos = wp.xyz;
                 vLocalPos = position;
-                vec3 sx = vec3(instanceMatrix[0].xyz);
-                vec3 sz = vec3(instanceMatrix[2].xyz);
-                vScale = vec2(length(sx), length(sz));
+                // Plane is built in XY then rotated -π/2 around X so it
+                // lies on world XZ. Column 0 carries world-X scale; column
+                // 1 carries world-Z scale (was original Y → world Z after
+                // rotate). Column 2 is always 1 (the unit Z) — DON'T read
+                // it. This was the "vertical roads silently shaded as
+                // horizontal" bug.
+                vScale = vec2(length(instanceMatrix[0].xyz),
+                              length(instanceMatrix[1].xyz));
                 vAxis = vScale.x > vScale.y ? 0.0 : 1.0;
                 gl_Position = projectionMatrix * viewMatrix * wp;
             }
