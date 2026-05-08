@@ -78,12 +78,15 @@ const DistrictFloors = React.memo(function DistrictFloors() {
         const tempObj = new THREE.Object3D()
         const matrices = new Float32Array(districts.length * 16)
         const colors = new Float32Array(districts.length * 3)
+        const meta = []  // per-instance click metadata
 
         for (let k = 0; k < districts.length; k++) {
             const d = districts[k]
             const w = d.maxX - d.minX
             const dp = d.maxZ - d.minZ
-            tempObj.position.set((d.minX + d.maxX) / 2, Y_OFFSET, (d.minZ + d.maxZ) / 2)
+            const cx = (d.minX + d.maxX) / 2
+            const cz = (d.minZ + d.maxZ) / 2
+            tempObj.position.set(cx, Y_OFFSET, cz)
             // PlaneGeometry is in the XY plane — rotate to lie flat, then scale
             tempObj.rotation.set(-Math.PI / 2, 0, 0)
             tempObj.scale.set(w, dp, 1)
@@ -91,15 +94,16 @@ const DistrictFloors = React.memo(function DistrictFloors() {
             tempObj.matrix.toArray(matrices, k * 16)
 
             const rgb = hexToRgb(d.hex) || [0.35, 0.66, 1]
-            // Dim less than before — plates need to be visible against
-            // the dark plate. 0.55 gives presence without competing
-            // with building colours.
             colors[k * 3 + 0] = rgb[0] * 0.55
             colors[k * 3 + 1] = rgb[1] * 0.55
             colors[k * 3 + 2] = rgb[2] * 0.55
+
+            // Per-instance click metadata — radius is half-diagonal so
+            // the camera can fit the whole plate.
+            meta.push({ cx, cz, radius: Math.sqrt(w * w + dp * dp) / 2 })
         }
 
-        return { count: districts.length, matrices, colors }
+        return { count: districts.length, matrices, colors, meta }
     }, [cityData])
 
     const meshRef = useRef()
@@ -121,8 +125,23 @@ const DistrictFloors = React.memo(function DistrictFloors() {
 
     if (!data) return null
 
+    const handleClick = (e) => {
+        if (e.instanceId == null) return
+        const m = data.meta[e.instanceId]
+        if (!m) return
+        e.stopPropagation()
+        // Fire a custom event so CameraController can fly to the district.
+        // Same pattern as flyToBuilding.
+        window.dispatchEvent(new CustomEvent('flyToDistrict', { detail: m }))
+    }
+
     return (
-        <instancedMesh ref={meshRef} args={[null, null, data.count]} frustumCulled={false}>
+        <instancedMesh
+            ref={meshRef}
+            args={[null, null, data.count]}
+            frustumCulled={false}
+            onClick={handleClick}
+        >
             <planeGeometry args={[1, 1]} />
             <meshBasicMaterial
                 transparent

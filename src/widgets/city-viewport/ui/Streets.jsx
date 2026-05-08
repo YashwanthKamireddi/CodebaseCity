@@ -28,10 +28,10 @@ import { detectDeviceTier } from '../../../shared/perf/deviceTier'
  * Tier-gated: low tier renders the asphalt only (no centre line).
  */
 
-const ROAD_WIDTH = 16          // world units
+const ROAD_WIDTH = 18          // world units — wider so roads read clearly
 const PERIMETER_INSET = 80     // distance from city edge to ring road
-const ROAD_Y = -0.07           // sits just above DistrictFloors (-0.06)
-const JUNCTION_Y = -0.06       // junctions on top to mask the lane lines
+const ROAD_Y = -0.05           // ABOVE DistrictFloors (-0.06) so roads are visible
+const JUNCTION_Y = -0.045      // junctions slightly higher to mask lane lines
 
 function clusterAxis(values, eps = 30) {
     if (values.length === 0) return []
@@ -158,34 +158,36 @@ function makeRoadMaterial(highTier) {
             varying vec2 vScale;
             varying float vAxis;
             void main() {
-                // Asphalt base — nearly black, very faint cool tint
-                vec3 asphalt = vec3(0.07, 0.075, 0.085);
+                // Asphalt — visibly distinct from the dark plate ground
+                // (#0c1018) so the road grid actually reads. Was #131420
+                // which got lost on a near-black floor.
+                vec3 asphalt = vec3(0.18, 0.19, 0.22);
 
-                // Edge stripes — solid thin bright lines along the road's
-                // outer edges so the road's silhouette is crisp from far.
+                // Edge stripes — solid bright white lines along the
+                // road's outer edges. Crisp silhouette from any altitude.
                 float edgeFromCenter;
+                float halfW;
                 if (vAxis < 0.5) {
-                    // Horizontal road — outer edge is along z (local y)
+                    // Horizontal road — width direction is local Y
                     edgeFromCenter = abs(vLocalPos.y) * vScale.y;
-                    float halfW = vScale.y * 0.5;
-                    float edge = smoothstep(halfW - 0.6, halfW - 0.1, edgeFromCenter);
-                    asphalt = mix(asphalt, vec3(0.85, 0.85, 0.88), edge * 0.85);
+                    halfW = vScale.y * 0.5;
                 } else {
+                    // Vertical road — width direction is local X
                     edgeFromCenter = abs(vLocalPos.x) * vScale.x;
-                    float halfW = vScale.x * 0.5;
-                    float edge = smoothstep(halfW - 0.6, halfW - 0.1, edgeFromCenter);
-                    asphalt = mix(asphalt, vec3(0.85, 0.85, 0.88), edge * 0.85);
+                    halfW = vScale.x * 0.5;
                 }
+                float edge = smoothstep(halfW - 0.8, halfW - 0.1, edgeFromCenter);
+                asphalt = mix(asphalt, vec3(0.92, 0.92, 0.95), edge);
 
-                // Centre line — dashed yellow, only on high tier
+                // Centre line — dashed yellow, only on mid+
                 if (uHigh > 0.5) {
                     float centre = vAxis < 0.5
                         ? abs(vLocalPos.y) * vScale.y
                         : abs(vLocalPos.x) * vScale.x;
                     float along = vAxis < 0.5 ? vWorldPos.x : vWorldPos.z;
-                    float dashOn = step(0.5, fract(along / 6.0));
-                    float lineMask = smoothstep(0.6, 0.0, centre);
-                    asphalt = mix(asphalt, vec3(0.95, 0.78, 0.30), lineMask * dashOn * 0.85);
+                    float dashOn = step(0.5, fract(along / 8.0));
+                    float lineMask = smoothstep(0.7, 0.0, centre);
+                    asphalt = mix(asphalt, vec3(0.95, 0.78, 0.30), lineMask * dashOn);
                 }
 
                 gl_FragColor = vec4(asphalt, 1.0);

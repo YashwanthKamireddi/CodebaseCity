@@ -142,6 +142,35 @@ export default React.memo(function CameraController() {
         return () => window.removeEventListener('flyToBuilding', handleFlyTo)
     }, [camera, controls, animateTo])
 
+    // Fly to a district when its plate is clicked. Frames the entire
+    // district (radius + small margin) at a 45° aerial angle.
+    useEffect(() => {
+        const handleFlyToDistrict = (event) => {
+            const { cx: dcx, cz: dcz, radius: dr } = event.detail || {}
+            if (dcx == null || dcz == null) return
+
+            const fovHalfTan = Math.tan((camera.fov * Math.PI / 180) / 2)
+            const aspect = camera.aspect || 1.78
+            // Distance such that the district radius fits inside ~70% of
+            // the visible width — leaves margin for surrounding context.
+            const fitDist = Math.max(120, dr / (fovHalfTan * aspect * 0.7))
+            const camY = fitDist * 0.55
+
+            const ang = Math.PI / 4
+            animateTo(
+                new THREE.Vector3(
+                    dcx + Math.cos(ang) * fitDist,
+                    camY,
+                    dcz + Math.sin(ang) * fitDist,
+                ),
+                new THREE.Vector3(dcx, 0, dcz),
+                1.2,
+            )
+        }
+        window.addEventListener('flyToDistrict', handleFlyToDistrict)
+        return () => window.removeEventListener('flyToDistrict', handleFlyToDistrict)
+    }, [camera, animateTo])
+
     // Auto-fit camera when city data changes (new analysis or demo load).
     // The user wants the *whole city + the city-name hologram floating
     // above* visible in the establishing shot — like a movie's opening.

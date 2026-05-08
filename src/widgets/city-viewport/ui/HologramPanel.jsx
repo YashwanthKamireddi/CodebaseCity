@@ -80,27 +80,9 @@ const HologramPanel = React.memo(function HologramPanel() {
 
     return (
         <group>
-            {/* Beam line from building top to panel */}
-            <lineSegments geometry={layoutData.beamGeo} renderOrder={998}>
-                <lineBasicMaterial
-                    color="#00d9ff"
-                    transparent
-                    opacity={0.55}
-                    depthTest={false}
-                    depthWrite={false}
-                />
-            </lineSegments>
-
-            {/* Anchor dot at building roof */}
-            <mesh position={layoutData.dotPos} renderOrder={999}>
-                <sphereGeometry args={[0.8, 10, 10]} />
-                <meshBasicMaterial
-                    color="#00d9ff"
-                    depthTest={false}
-                    depthWrite={false}
-                />
-            </mesh>
-
+            {/* Beam line + anchor dot REMOVED per user feedback —
+                "the poles of the buildings are still in the sky, remove them".
+                The Html panel anchors itself via 3D position; no pole needed. */}
             <group position={layoutData.panelPos}>
                 <Html
                     center
