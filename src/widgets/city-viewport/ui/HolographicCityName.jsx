@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect } from 'react'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
+import { HEIGHT_SCALE } from './cityScale'
 
 /**
  * HolographicCityName — Floating repo name above the city.
@@ -19,7 +20,7 @@ export default React.memo(function HolographicCityName() {
         for (const b of cityData.buildings) {
             const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
             if (r > maxR) maxR = r
-            const h = (b.dimensions?.height || 8) * 3.0
+            const h = (b.dimensions?.height || 8) * HEIGHT_SCALE
             if (h > maxH) maxH = h
             heights.push(h)
         }

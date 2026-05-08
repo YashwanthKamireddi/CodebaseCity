@@ -3,6 +3,7 @@ import { useFrame, useThree } from "@react-three/fiber"
 import * as THREE from "three"
 import { Sparkles } from "@react-three/drei"
 import useStore from "../../../store/useStore"
+import { HEIGHT_SCALE } from "./cityScale"
 
 const KEYS = { w: false, a: false, s: false, d: false, space: false, shift: false }
 
@@ -281,7 +282,7 @@ export default function UfoAvatar() {
                         const b = cell[k]
                         const w = (b.dimensions?.width || 8) / 2
                         const d = (b.dimensions?.depth || 8) / 2
-                        const h = (b.dimensions?.height || 8) * 3.0
+                        const h = (b.dimensions?.height || 8) * HEIGHT_SCALE
                         const bx = b.position.x
                         const bz = b.position.z || 0
                         const nx = Math.abs(bx - _nextPos.x), nz = Math.abs(bz - _nextPos.z)

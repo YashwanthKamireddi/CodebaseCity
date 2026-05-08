@@ -2,6 +2,7 @@ import logger from '../../utils/logger'
 import { ghFetch, ghFetchBatch, ghFetchRaw, fetchGitHubZipball, fetchUserRepos } from '../../engine/api/githubApi'
 import { getCachedCity, cacheCity } from '../../utils/cityCache'
 import { searchVfsEngine, ingestZipballToVfs, setVfsProgressCallback } from '../../engine/fs/vfs.js'
+import { classify, dimsFor, typeNameToId } from '../../widgets/city-viewport/ui/buildingTypes'
 
 /**
  * City Slice
@@ -410,14 +411,16 @@ export const createCitySlice = (set, get) => ({
             const cols = Math.ceil(Math.sqrt(finalDirNames.length))
             const rows = Math.ceil(finalDirNames.length / cols)
 
-            // Compute per-district cell sizes — each district sized to its own content
-            // Ensure cells are large enough so buildings never overlap (min 24-unit spacing)
+            // Compute per-district cell sizes. Per-cell budget bumped to
+            // 60 units to accommodate the new building widths (towers up
+            // to 30, malls up to 44) without collisions, plus generous
+            // gap between buildings.
             const districtCellSizes = finalDirNames.map(dir => {
                 const files = mergedGroups[dir]
                 const gridSide = Math.ceil(Math.sqrt(files.length))
-                const contentBased = gridSide * 35 + 20
-                const overlapSafe = gridSide * 32 + 20
-                return Math.max(80, contentBased, overlapSafe)
+                const contentBased = gridSide * 60 + 30
+                const overlapSafe = gridSide * 56 + 30
+                return Math.max(140, contentBased, overlapSafe)
             })
 
             // Grid layout with per-district sizes: use cumulative offsets
@@ -516,11 +519,13 @@ export const createCitySlice = (set, get) => ({
                 const bcols = Math.ceil(Math.sqrt(files.length))
                 const brows = Math.ceil(files.length / bcols)
 
-                // Spacing adapts to THIS district's size with overlap guard
-                const usableSize = thisCellSize - 20
+                // Spacing adapts to THIS district's size with overlap guard.
+                // Min spacing bumped to 55 to handle the widest building
+                // type (mall, 44 wide) plus an 11-unit gap between
+                // neighbours. Below this, buildings would clip each other.
+                const usableSize = thisCellSize - 30
                 const rawSpacing = usableSize / Math.max(bcols, brows)
-                // Prevent overlap
-                const spacing = Math.max(30, rawSpacing)
+                const spacing = Math.max(55, rawSpacing)
 
                 files.forEach((file, fileIdx) => {
                     const ext = file.path.substring(file.path.lastIndexOf('.')).toLowerCase()
@@ -532,10 +537,14 @@ export const createCitySlice = (set, get) => ({
                     const logMax = Math.log2(maxSize + 1)
                     const sizeNorm = logSize / Math.max(logMax, 1)
 
-                    // Cinematic Building dimensions: Tall and sleek
-                    const width = Math.max(4, 6 + 12 * sizeNorm)
-                    const height = Math.max(10, 15 + Math.pow(sizeNorm, 2.5) * 350)
-                    const depth = width
+                    // Building taxonomy — file character drives type, type
+                    // drives dimensions. Per-type height bands enforce
+                    // zoning: a townhouse can't grow into a tower just
+                    // because the file got bigger; classify decides which
+                    // category it belongs to first.
+                    const buildingType = classify(file, sizeNorm)
+                    const { width, height, depth } = dimsFor(buildingType, sizeNorm)
+                    const buildingTypeId = typeNameToId(buildingType)
 
                     const fcol = fileIdx % bcols
                     const frow = Math.floor(fileIdx / bcols)
@@ -559,6 +568,8 @@ export const createCitySlice = (set, get) => ({
                         directory: file.path.includes('/') ? file.path.substring(0, file.path.lastIndexOf('/')) : '(root)',
                         position: { x: offsetX, y: 0, z: offsetZ },
                         dimensions: { width, height, depth },
+                        building_type: buildingType,
+                        building_type_id: buildingTypeId,
                         color_metric: sizeNorm,
                         coupling_score: 0,
                         lines_of_code: Math.ceil(size / 40),

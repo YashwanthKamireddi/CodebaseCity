@@ -4,8 +4,9 @@ import { Stars } from '@react-three/drei'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 import { detectDeviceTier } from '../../../shared/perf/deviceTier'
-import Roads from './Roads'
+import Streets from './Streets'
 import InstancedCity from './InstancedCity'
+import BuildingAccents from './BuildingAccents'
 import CameraController from './CameraController'
 import Ground from './Ground'
 import HologramPanel from './HologramPanel'
@@ -19,6 +20,7 @@ import StreetLamps from './StreetLamps'
 import DataStreams from './DataStreams'
 import AtmosphericParticles from './AtmosphericParticles'
 import DistrictFloors from './DistrictFloors'
+import Post from '../post/Post'
 
 import UfoAvatar from './UfoAvatar'
 
@@ -208,7 +210,6 @@ function ScreenshotHandler() {
 const CityScene = React.memo(function CityScene() {
     const cityData = useStore(s => s.cityData)
     const clearSelection = useStore(s => s.clearSelection)
-    const showRoads = useStore(s => s.showRoads)
     const tier = useMemo(() => detectDeviceTier(), [])
     const low = tier.tier === 'low'
     const high = tier.tier === 'high'
@@ -235,11 +236,29 @@ const CityScene = React.memo(function CityScene() {
             {!low && <ShaderWarmup />}
             <CameraFloorGuard />
 
+            {/* Global lighting — key + sky-bounce + ambient floor.
+                Most building surfaces use the custom PulseMaterial shader
+                which reads `uLightDir` directly; these three drive
+                landmarks, ground, and the per-type accent meshes
+                (BuildingAccents). Sun direction normalize(300, 600, 200)
+                ≈ (0.41, 0.82, 0.27) — PulseMaterial uLightDir default
+                matches. */}
+            <directionalLight
+                intensity={1.6}
+                position={[300, 600, 200]}
+                color="#fff5e6"
+            />
+            <hemisphereLight args={['#7fa8ff', '#1a1a2a', 0.45]} />
+            <ambientLight intensity={0.18} />
+
             <group onPointerMissed={clearSelection}>
                 <InstancedCity />
-                {showRoads && <Roads />}
+                <BuildingAccents />
                 <Ground />
                 {!low && <DistrictFloors />}
+                {/* Streets — always on. Connect every district to its
+                    neighbours via a proper road grid. */}
+                <Streets />
                 <HologramPanel />
                 <LandmarkPanel />
                 {/* Always-kept core — affordable everywhere */}
@@ -311,6 +330,7 @@ const CityScene = React.memo(function CityScene() {
 
             <fog attach="fog" args={['#1a2658', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
             <CameraController />
+            <Post tier={tier.tier} />
         </group>
     )
 })

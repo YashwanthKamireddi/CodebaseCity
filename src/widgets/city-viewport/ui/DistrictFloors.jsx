@@ -22,7 +22,7 @@ const FALLBACK_PALETTE = [
     '#ff5ae0', '#70ff5a', '#5affaa', '#ff9a5a', '#5accff',
 ]
 
-const PADDING = 6       // footprint padding (smaller — tighter around buildings)
+const PADDING = 14      // wider — districts read as bounded neighbourhoods
 const Y_OFFSET = -0.06  // just above main ground to avoid z-fight
 
 function hexToRgb(hex) {
@@ -91,10 +91,12 @@ const DistrictFloors = React.memo(function DistrictFloors() {
             tempObj.matrix.toArray(matrices, k * 16)
 
             const rgb = hexToRgb(d.hex) || [0.35, 0.66, 1]
-            // Dim the color heavily so plates are subtle hints, not lights
-            colors[k * 3 + 0] = rgb[0] * 0.35
-            colors[k * 3 + 1] = rgb[1] * 0.35
-            colors[k * 3 + 2] = rgb[2] * 0.35
+            // Dim less than before — plates need to be visible against
+            // the dark plate. 0.55 gives presence without competing
+            // with building colours.
+            colors[k * 3 + 0] = rgb[0] * 0.55
+            colors[k * 3 + 1] = rgb[1] * 0.55
+            colors[k * 3 + 2] = rgb[2] * 0.55
         }
 
         return { count: districts.length, matrices, colors }
@@ -124,7 +126,7 @@ const DistrictFloors = React.memo(function DistrictFloors() {
             <planeGeometry args={[1, 1]} />
             <meshBasicMaterial
                 transparent
-                opacity={0.22}
+                opacity={0.42}
                 depthWrite={false}
                 blending={THREE.NormalBlending}
                 polygonOffset

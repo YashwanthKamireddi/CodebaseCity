@@ -1,13 +1,13 @@
 import React, { useMemo, useEffect } from 'react'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
+import { HEIGHT_SCALE } from './cityScale'
 
 /**
  * DistrictLabels — Floating holographic district name tags.
  * Each label gets its own CanvasTexture with dynamic width based on text length.
  * Enhanced for Universe mode — shows repo info (stars, language).
  */
-const CITY_HEIGHT_SCALE = 3.0
 
 function createLabelTexture(text, color, subtitle = null) {
     // Create temporary canvas to measure text
@@ -110,7 +110,7 @@ const DistrictLabels = React.memo(function DistrictLabels() {
         if (cityData.buildings) {
             for (const b of cityData.buildings) {
                 const did = b.district_id
-                const h = (b.dimensions?.height || 8) * CITY_HEIGHT_SCALE
+                const h = (b.dimensions?.height || 8) * HEIGHT_SCALE
                 if (!districtMaxH[did] || h > districtMaxH[did]) {
                     districtMaxH[did] = h
                 }

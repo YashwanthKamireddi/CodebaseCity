@@ -10,6 +10,8 @@
  * propagates to every consumer automatically.
  */
 
+import { buildingHeight } from './cityScale'
+
 // Town hall (EnergyCoreReactor) tier thicknesses — must match the geometry
 // constructed in EnergyCoreReactor.jsx. Scaled ~50% with the rest of the city.
 export const TIER_HEIGHTS = { tier1: 9, tier2: 7, tier3: 6 }
@@ -21,7 +23,7 @@ export const TOWNHALL_CROWN_RADIUS = 9
 export function computeSpireHeight(buildings) {
     if (!buildings?.length) return 105
     const heights = buildings
-        .map(b => (b.dimensions?.height || 8) * 3.0)
+        .map(buildingHeight)
         .sort((a, b) => a - b)
     const p90 = heights[Math.floor(heights.length * 0.9)] || 50
     return Math.max(105, p90 * 1.5)
@@ -38,7 +40,7 @@ export function mothershipAltitude(buildings) {
     let maxH = 0
     let maxR = 0
     for (const b of buildings) {
-        const h = (b.dimensions?.height || 8) * 3.0
+        const h = buildingHeight(b)
         if (h > maxH) maxH = h
         const r = Math.sqrt(b.position.x ** 2 + (b.position.z || 0) ** 2)
         if (r > maxR) maxR = r

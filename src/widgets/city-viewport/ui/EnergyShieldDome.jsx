@@ -2,6 +2,7 @@ import React, { useRef, useMemo, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
+import { HEIGHT_SCALE } from './cityScale'
 
 /**
  * EnergyShieldDome — Translucent hexagonal force field surrounding the city.
@@ -22,7 +23,7 @@ export default React.memo(function EnergyShieldDome() {
             const z = b.position.z || 0
             const halfW = (b.dimensions?.width || 8) / 2
             const halfD = (b.dimensions?.depth || 8) / 2
-            const h = (b.dimensions?.height || 8) * 3.0
+            const h = (b.dimensions?.height || 8) * HEIGHT_SCALE
             // Account for building footprint edges, not just center
             const cornerR = Math.sqrt((Math.abs(x) + halfW) ** 2 + (Math.abs(z) + halfD) ** 2)
             if (cornerR > maxR) maxR = cornerR

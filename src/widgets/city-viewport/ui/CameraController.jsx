@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 import logger from '../../../utils/logger'
 import { townHallTopY, mothershipAltitude } from './landmarkPositions'
+import { HEIGHT_SCALE } from './cityScale'
 
 // Module-level animation state — mutated by effects, consumed by useFrame
 const _anim = {
@@ -41,7 +42,7 @@ export default React.memo(function CameraController() {
             const z = b.position.z || 0
             const w = (b.dimensions?.width || 8) / 2
             const d = (b.dimensions?.depth || 8) / 2
-            const h = (b.dimensions?.height || 8) * 3.0
+            const h = (b.dimensions?.height || 8) * HEIGHT_SCALE
             if (x - w < minX) minX = x - w
             if (x + w > maxX) maxX = x + w
             if (z - d < minZ) minZ = z - d
@@ -95,7 +96,7 @@ export default React.memo(function CameraController() {
             const x = building.position.x
             const z = building.position.z
             const rawHeight = building.dimensions?.height || 8
-            const buildingHeight = rawHeight * 3.0
+            const buildingHeight = rawHeight * HEIGHT_SCALE
             const bWidth = building.dimensions?.width || 8
             const bDepth = building.dimensions?.depth || 8
             const footprintSize = Math.max(bWidth, bDepth)

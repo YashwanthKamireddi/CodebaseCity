@@ -5,6 +5,7 @@ import { useDrag } from '@use-gesture/react'
 import useStore from '../../../store/useStore'
 import { PulseMaterial } from '../shaders/PulseMaterial'
 import { getBuildingColor } from '../../../utils/colorUtils'
+import { HEIGHT_SCALE } from './cityScale'
 
 // Reusable temp objects - avoid allocations in hot paths
 const tempObject = new THREE.Object3D()
@@ -285,7 +286,7 @@ const InstancedCity = React.memo(function InstancedCity() {
                 const { x, z } = b.position
                 const width = b.dimensions?.width || 8
                 const depth = b.dimensions?.depth || 8
-                const targetHeight = (b.dimensions?.height || 8) * 3.0
+                const targetHeight = (b.dimensions?.height || 8) * HEIGHT_SCALE
                 const y = targetHeight / 2
 
                 tempObject.position.set(x, y, z)
@@ -405,7 +406,7 @@ const InstancedCity = React.memo(function InstancedCity() {
                     // Restore from source of truth
                     const width = b.dimensions?.width || 8
                     const depth = b.dimensions?.depth || 8
-                    const targetHeight = (b.dimensions?.height || 8) * 3.0
+                    const targetHeight = (b.dimensions?.height || 8) * HEIGHT_SCALE
                     tempObject.position.set(b.position.x, targetHeight / 2, b.position.z)
                     tempObject.scale.set(width, targetHeight, depth)
                     tempObject.rotation.set(0, 0, 0)
@@ -672,7 +673,7 @@ const InstancedCity = React.memo(function InstancedCity() {
 
             // Set the invisible drag plane to the height of the clicked building
             const b = buildings[event.instanceId]
-            const height = (b.dimensions?.height || 8) * 3.0
+            const height = (b.dimensions?.height || 8) * HEIGHT_SCALE
             dragPlane.current.constant = -(height / 2) // Three.js uses -d for plane equation
         }
 
@@ -686,7 +687,7 @@ const InstancedCity = React.memo(function InstancedCity() {
                 const b = buildings[draggedInstanceId]
                 const width = b.dimensions?.width || 8
                 const depth = b.dimensions?.depth || 8
-                const height = (b.dimensions?.height || 8) * 3.0
+                const height = (b.dimensions?.height || 8) * HEIGHT_SCALE
 
                 tempObject.position.copy(intersectPoint)
                 tempObject.scale.set(width, height, depth)
@@ -758,6 +759,19 @@ const InstancedCity = React.memo(function InstancedCity() {
         return new THREE.InstancedBufferAttribute(array, 1)
     }, [buildings, count])
 
+    // Building-type per instance — drives the shader's window density,
+    // edge thickness, and roof treatment branches. Without this set the
+    // attribute defaults to 0 and every building renders as the densest
+    // pattern (the original "buildings look like striped LED tubes" bug).
+    const buildingTypeAttribute = useMemo(() => {
+        if (count === 0) return null
+        const array = new Float32Array(count)
+        for (let i = 0; i < count; i++) {
+            array[i] = buildings[i]?.building_type_id ?? 1   // default office
+        }
+        return new THREE.InstancedBufferAttribute(array, 1)
+    }, [buildings, count])
+
     if (count === 0) return null
 
     return (
@@ -782,6 +796,12 @@ const InstancedCity = React.memo(function InstancedCity() {
                     <instancedBufferAttribute
                         attach="attributes-aGenesisStart"
                         args={[genesisAttribute.array, 1]}
+                    />
+                )}
+                {buildingTypeAttribute && (
+                    <instancedBufferAttribute
+                        attach="attributes-aBuildingType"
+                        args={[buildingTypeAttribute.array, 1]}
                     />
                 )}
             </boxGeometry>

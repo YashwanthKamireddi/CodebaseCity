@@ -3,6 +3,7 @@ import { Html } from '@react-three/drei'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 import { FileCode2, Code, Layers, Activity, User, Eye, Copy, ExternalLink, X } from 'lucide-react'
+import { HEIGHT_SCALE } from './cityScale'
 
 function formatFileSize(bytes) {
     if (!bytes || bytes === 0) return '0 B'
@@ -30,7 +31,7 @@ const HologramPanel = React.memo(function HologramPanel() {
     const layoutData = useMemo(() => {
         if (!selectedBuilding) return null
         const { position, dimensions } = selectedBuilding
-        const height = (dimensions?.height || 8) * 3.0
+        const height = (dimensions?.height || 8) * HEIGHT_SCALE
         const bx = position.x
         const bz = position.z
         const buildingTop = height
