@@ -16,9 +16,13 @@ const _anim = {
     startTime: 0,
 }
 
-/** power3.inOut easing equivalent */
-function easeInOutCubic(t) {
-    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+/**
+ * Cinematic ease — accelerates fast, decelerates slowly. Used for all
+ * camera flights so they feel like a confident pull instead of a sluggish
+ * lerp. Equivalent to Apple's "easeOutQuart".
+ */
+function easeOutQuart(t) {
+    return 1 - Math.pow(1 - t, 4)
 }
 
 export default React.memo(function CameraController() {
@@ -72,7 +76,7 @@ export default React.memo(function CameraController() {
 
         const elapsed = clock.elapsedTime - _anim.startTime
         const raw = Math.min(1, elapsed / _anim.duration)
-        const t = easeInOutCubic(raw)
+        const t = easeOutQuart(raw)
 
         camera.position.lerpVectors(_anim.startPos, _anim.endPos, t)
         controls.target.lerpVectors(_anim.startTarget, _anim.endTarget, t)
@@ -96,25 +100,33 @@ export default React.memo(function CameraController() {
             const bDepth = building.dimensions?.depth || 8
             const footprintSize = Math.max(bWidth, bDepth)
 
-            // Unified framing: regardless of building height, land the
-            // camera so the ROOF + HOVER CARD fill roughly the same share
-            // of the screen. We look at the panel (just above the roof),
-            // not at the building centerline, so the card is always the
-            // visual anchor.
+            // Cinematic framing: pull back enough to keep the building IN
+            // CONTEXT — surrounding city visible, not just one tower
+            // filling the screen. Distance scales with both footprint
+            // (wide buildings need more) and height (tall ones too).
             const roofY = buildingHeight
-            const panelY = roofY + 28           // must match HologramPanel
-            const frameCenterY = roofY * 0.3 + panelY * 0.7   // card-biased
+            const panelY = roofY + 28
+            // Look at the upper third of the building+card composition.
+            const frameCenterY = roofY * 0.55 + panelY * 0.45
 
-            // Distance is driven by footprint size (so small files get
-            // close, big files get farther) with a hard ceiling so we
-            // never fly absurdly far on a hero-sized tower.
+            // Distance scales with the LARGER of two needs:
+            //   - footprint:  width × 4   (give 2× building widths of margin)
+            //   - height:     height × 1.1 (so tall towers don't fill screen)
+            // Floored at 140 (never absurdly close) and capped at 520 (never
+            // so far the panel becomes unreadable).
             const zoomDist = Math.min(
-                Math.max(75, footprintSize * 2.8),
-                260
+                520,
+                Math.max(
+                    140,
+                    footprintSize * 4,
+                    buildingHeight * 1.1
+                )
             )
 
             const camAngle = Math.PI / 4
-            const elevationFactor = 0.42   // slightly lower angle → card visible, roof still readable
+            // Higher angle = more aerial = more city context visible behind
+            // the selected building. 0.42 → 0.55.
+            const elevationFactor = 0.55
 
             const targetPos = new THREE.Vector3(
                 x + Math.cos(camAngle) * zoomDist,
@@ -123,8 +135,11 @@ export default React.memo(function CameraController() {
             )
             const lookAtPos = new THREE.Vector3(x, frameCenterY, z)
 
+            // Snappier flights — 0.7–1.6 s → 0.55–1.2 s. Combined with the
+            // outQuart easing, this gives a confident, decisive pull instead
+            // of a sluggish lerp.
             const travelDist = camera.position.distanceTo(targetPos)
-            const flyDuration = Math.min(1.6, Math.max(0.7, travelDist / 420))
+            const flyDuration = Math.min(1.2, Math.max(0.55, travelDist / 600))
 
             animateTo(targetPos, lookAtPos, flyDuration)
         }
@@ -185,15 +200,14 @@ export default React.memo(function CameraController() {
         let targetPos, lookAtPos
 
         if (selectedLandmark === 'reactor') {
-            // Source of truth lives in landmarkPositions.js so panels/mothership/camera
-            // all agree on where the town hall crown actually is.
+            // Town-hall flight: frame the crown sphere with city in view.
+            // Pulled tighter than before — was zooming so far back that the
+            // town hall looked tiny and the camera "felt stuck".
             const crownY = townHallTopY(cityData?.buildings)
-            const roofY = crownY
-            const panelTopY = roofY + 30
-            const frameCenterY = roofY * 0.6 + panelTopY * 0.4
-            const zoomDist = Math.max(65, panelTopY * 0.85)
+            const frameCenterY = crownY * 0.85           // look slightly below the crown
+            const zoomDist = Math.max(180, crownY * 1.6)  // closer than before
             const angle = Math.PI / 4
-            const elevationFactor = 0.55
+            const elevationFactor = 0.45
             lookAtPos = new THREE.Vector3(0, frameCenterY, 0)
             targetPos = new THREE.Vector3(
                 Math.cos(angle) * zoomDist,
@@ -201,21 +215,25 @@ export default React.memo(function CameraController() {
                 Math.sin(angle) * zoomDist
             )
         } else if (selectedLandmark === 'mothership') {
+            // Mothership flight: orbit the saucer, look up at it. Was
+            // landing camera ABOVE the ship looking down at the city,
+            // which felt detached. Now camera sits below and to the side
+            // looking up at the mothership belly + city horizon.
             const alt = mothershipAltitude(cityData?.buildings)
-            const dist = 280
+            const dist = 320
             const angle = Math.PI / 4
-            const viewCenterY = alt + 20
+            const viewCenterY = alt - 10                  // look at the underside
             lookAtPos = new THREE.Vector3(0, viewCenterY, 0)
             targetPos = new THREE.Vector3(
                 Math.cos(angle) * dist,
-                alt - 15,
+                alt - 80,                                  // 80 below the ship
                 Math.sin(angle) * dist
             )
         }
 
         if (targetPos && lookAtPos) {
             const travelDist = camera.position.distanceTo(targetPos)
-            const flyDuration = Math.min(2.2, Math.max(1.0, travelDist / 300))
+            const flyDuration = Math.min(1.4, Math.max(0.7, travelDist / 500))
             animateTo(targetPos, lookAtPos, flyDuration)
         }
     }, [selectedLandmark, camera, controls, animateTo, cityData])
