@@ -270,7 +270,10 @@ const CityScene = React.memo(function CityScene() {
                 {/* Mid/high-tier decorations */}
                 {!low && <DistrictLabels />}
                 {!low && <StreetLamps />}
-                {!low && <HeroLandmarks buildings={cityData?.buildings} />}
+                {/* HeroLandmarks removed per user feedback — the tall
+                    pink/green/yellow spires reading as "poles in the sky".
+                    Building-type accents (BuildingAccents) carry the
+                    silhouette variety now. */}
 
                 {/* High-tier-only decorations */}
                 {high && <DataStreams />}

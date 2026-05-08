@@ -1,7 +1,9 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 import { detectDeviceTier } from '../../../shared/perf/deviceTier'
+import { BLOOM_LAYER } from '../post/Post'
 
 /**
  * Streets — proper road grid connecting every district.
@@ -28,10 +30,11 @@ import { detectDeviceTier } from '../../../shared/perf/deviceTier'
  * Tier-gated: low tier renders the asphalt only (no centre line).
  */
 
-const ROAD_WIDTH = 18          // world units — wider so roads read clearly
-const PERIMETER_INSET = 80     // distance from city edge to ring road
-const ROAD_Y = -0.05           // ABOVE DistrictFloors (-0.06) so roads are visible
-const JUNCTION_Y = -0.045      // junctions slightly higher to mask lane lines
+const ROAD_WIDTH = 22          // wider so roads read from any altitude
+const PERIMETER_INSET = 80
+const ROAD_Y = 0.04            // ABOVE the dark plate (-0.12) and DistrictFloors (-0.06)
+const JUNCTION_Y = 0.06
+const TRAFFIC_Y = 0.12         // headlights ride above the road surface
 
 function clusterAxis(values, eps = 30) {
     if (values.length === 0) return []
@@ -158,35 +161,32 @@ function makeRoadMaterial(highTier) {
             varying vec2 vScale;
             varying float vAxis;
             void main() {
-                // Asphalt — visibly distinct from the dark plate ground
-                // (#0c1018) so the road grid actually reads. Was #131420
-                // which got lost on a near-black floor.
-                vec3 asphalt = vec3(0.18, 0.19, 0.22);
+                // Asphalt — significantly brighter than before so it
+                // actually reads against the dark ground. Slight cool
+                // tint avoids it looking like grey paint.
+                vec3 asphalt = vec3(0.32, 0.33, 0.38);
 
-                // Edge stripes — solid bright white lines along the
-                // road's outer edges. Crisp silhouette from any altitude.
+                // Edge stripes — bold white lines along the outer edges
                 float edgeFromCenter;
                 float halfW;
                 if (vAxis < 0.5) {
-                    // Horizontal road — width direction is local Y
                     edgeFromCenter = abs(vLocalPos.y) * vScale.y;
                     halfW = vScale.y * 0.5;
                 } else {
-                    // Vertical road — width direction is local X
                     edgeFromCenter = abs(vLocalPos.x) * vScale.x;
                     halfW = vScale.x * 0.5;
                 }
-                float edge = smoothstep(halfW - 0.8, halfW - 0.1, edgeFromCenter);
-                asphalt = mix(asphalt, vec3(0.92, 0.92, 0.95), edge);
+                float edge = smoothstep(halfW - 1.0, halfW - 0.1, edgeFromCenter);
+                asphalt = mix(asphalt, vec3(0.96, 0.96, 0.98), edge);
 
-                // Centre line — dashed yellow, only on mid+
+                // Centre line — dashed yellow, mid+
                 if (uHigh > 0.5) {
                     float centre = vAxis < 0.5
                         ? abs(vLocalPos.y) * vScale.y
                         : abs(vLocalPos.x) * vScale.x;
                     float along = vAxis < 0.5 ? vWorldPos.x : vWorldPos.z;
                     float dashOn = step(0.5, fract(along / 8.0));
-                    float lineMask = smoothstep(0.7, 0.0, centre);
+                    float lineMask = smoothstep(0.9, 0.0, centre);
                     asphalt = mix(asphalt, vec3(0.95, 0.78, 0.30), lineMask * dashOn);
                 }
 
@@ -284,8 +284,82 @@ const Streets = React.memo(function Streets() {
                 <planeGeometry args={[1, 1]} />
                 <primitive object={junctionMat} attach="material" />
             </instancedMesh>
+            {tier.tier !== 'low' && <Traffic segments={data.segments} />}
         </group>
     )
 })
+
+/**
+ * Traffic — animated bright dots travelling along each road segment.
+ * Catches SelectiveBloom so the city looks alive from any altitude.
+ *
+ * Three dots per segment, evenly phased, random forward/back direction.
+ * Speed scales inversely with segment length so visual pace stays
+ * consistent — short streets and long avenues both feel "the same
+ * traffic flow", not "long avenue stuff slow".
+ */
+function Traffic({ segments }) {
+    const meshRef = useRef()
+    const trafficData = useMemo(() => {
+        const dots = []
+        const PER_SEG = 3
+        for (const seg of segments) {
+            const isHorizontal = seg.sx > seg.sz
+            const length = isHorizontal ? seg.sx : seg.sz
+            for (let i = 0; i < PER_SEG; i++) {
+                dots.push({
+                    cx: seg.cx,
+                    cz: seg.cz,
+                    isHorizontal,
+                    length,
+                    phase: i / PER_SEG + Math.random() * 0.05,
+                    direction: Math.random() < 0.5 ? 1 : -1,
+                    speed: 22 / length,   // ~22 world-units/sec, normalized
+                })
+            }
+        }
+        return dots
+    }, [segments])
+
+    React.useEffect(() => {
+        if (meshRef.current) meshRef.current.layers.enable(BLOOM_LAYER)
+    }, [trafficData.length])
+
+    useFrame((state, delta) => {
+        const mesh = meshRef.current
+        if (!mesh) return
+        const d = Math.min(0.05, delta)  // clamp delta on slow frames
+        for (let i = 0; i < trafficData.length; i++) {
+            const td = trafficData[i]
+            td.phase = (td.phase + d * td.speed * td.direction + 1) % 1
+            const offset = (td.phase - 0.5) * td.length
+            const x = td.isHorizontal ? td.cx + offset : td.cx
+            const z = td.isHorizontal ? td.cz : td.cz + offset
+            _o.position.set(x, TRAFFIC_Y, z)
+            _o.rotation.set(0, 0, 0)
+            _o.scale.set(2.4, 2.4, 2.4)
+            _o.updateMatrix()
+            mesh.setMatrixAt(i, _o.matrix)
+        }
+        mesh.instanceMatrix.needsUpdate = true
+        // Demand-rendering: keep traffic ticking even when nothing else
+        // requests a frame. Single invalidate per frame is cheap.
+        state.invalidate()
+    })
+
+    if (trafficData.length === 0) return null
+
+    return (
+        <instancedMesh
+            key={`traffic-${trafficData.length}`}
+            ref={meshRef}
+            args={[null, null, trafficData.length]}
+            frustumCulled={false}
+        >
+            <sphereGeometry args={[1, 8, 6]} />
+            <meshBasicMaterial color="#ffe8a8" toneMapped={false} />
+        </instancedMesh>
+    )
+}
 
 export default Streets
