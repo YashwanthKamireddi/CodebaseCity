@@ -96,25 +96,29 @@ const HologramPanel = React.memo(function HologramPanel() {
                         className="anim-scale-in"
                         key={selectedBuilding.id || selectedBuilding.path}
                         style={{
-                            width: '440px',
-                            background: 'linear-gradient(168deg, rgba(14, 17, 26, 0.985), rgba(7, 9, 17, 0.995))',
-                            border: '1px solid rgba(255,255,255,0.08)',
-                            borderRadius: '18px',
+                            width: '460px',
+                            // Solid near-opaque background — was too dim
+                            // and the underlying scene was bleeding through
+                            background: 'linear-gradient(165deg, #0f1320 0%, #070a13 100%)',
+                            // Bolder border + double outer ring with the
+                            // language colour for prominent visibility
+                            border: `1px solid ${langColor}55`,
+                            borderRadius: '20px',
                             boxShadow: `
-                                0 0 0 1px rgba(0, 180, 255, 0.06),
-                                0 14px 48px rgba(0, 0, 0, 0.75),
-                                0 0 72px rgba(0, 120, 200, 0.08)
+                                0 0 0 1px ${langColor}22,
+                                0 20px 60px rgba(0, 0, 0, 0.85),
+                                0 0 90px ${langColor}1a
                             `,
-                            color: '#e4e4e7',
+                            color: '#fafafa',
                             fontFamily: 'var(--font-sans)',
                             overflow: 'hidden',
-                            backdropFilter: 'blur(8px)',
+                            backdropFilter: 'blur(12px) saturate(140%)',
                         }}
                     >
-                        {/* Top accent gradient line */}
+                        {/* Top accent gradient line — now solid colour */}
                         <div style={{
-                            height: '3px',
-                            background: `linear-gradient(90deg, transparent 4%, ${langColor}, transparent 96%)`,
+                            height: '4px',
+                            background: `linear-gradient(90deg, ${langColor}, ${langColor}aa, ${langColor})`,
                         }} />
 
                         {/* Header */}

@@ -253,15 +253,16 @@ export default LandmarkPanel
 /* ── Shared styling ── */
 
 const cardStyle = {
-    width: '440px',
-    background: 'linear-gradient(168deg, rgba(14, 17, 26, 0.985), rgba(7, 9, 17, 0.995))',
-    border: '1px solid rgba(255,255,255,0.08)',
-    borderRadius: '18px',
-    boxShadow: '0 0 0 1px rgba(0, 180, 255, 0.06), 0 14px 48px rgba(0, 0, 0, 0.75), 0 0 72px rgba(0, 120, 200, 0.08)',
-    color: '#e4e4e7',
+    width: '460px',
+    // Solid near-opaque card — was bleeding the scene through
+    background: 'linear-gradient(165deg, #0f1320 0%, #070a13 100%)',
+    border: '1px solid rgba(120, 200, 255, 0.32)',
+    borderRadius: '20px',
+    boxShadow: '0 0 0 1px rgba(80, 170, 255, 0.10), 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 90px rgba(60, 140, 220, 0.12)',
+    color: '#fafafa',
     fontFamily: 'var(--font-sans)',
     overflow: 'hidden',
-    backdropFilter: 'blur(8px)',
+    backdropFilter: 'blur(12px) saturate(140%)',
 }
 
 const headerStyle = {
