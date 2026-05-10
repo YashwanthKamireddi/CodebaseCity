@@ -1,20 +1,28 @@
 /**
- * DistrictFloors — tinted neighborhood plates.
+ * DistrictFloors — AAA cyberpunk neighbourhood plates.
  *
- * Flat plane per district sitting just above the main ground, tinted with
- * the district's accent color at very low opacity. Reads as a subtle
- * neighborhood footprint — like a real city block — instead of a stack
- * of floating rectangles.
+ * Each district gets a flat plate tinted with its accent colour, but
+ * the visible character comes from a custom shader that adds:
+ *
+ *   1. A subtle world-space dot grid (every 8 wu), so the plate reads
+ *      as a "data-floor" surface with depth, not flat colour.
+ *   2. A bright neon rim band at the plate's outer perimeter — last
+ *      ~3 world-units glow at 2.5× the base colour. The rim catches
+ *      SelectiveBloom from the post pipeline so neighbourhoods have
+ *      visible boundaries from any altitude.
+ *   3. Soft falloff toward the centre so the dark ground shows through
+ *      slightly, keeping the plates from feeling like opaque slabs.
  *
  * Performance:
- *   · One InstancedMesh of plane geometries (one draw call for all plates).
- *   · Per-instance color via instanceColor attribute — no shader rewrite.
+ *   · Single InstancedMesh, one draw call.
+ *   · Per-instance colour via instanceColor.
  *   · 0 useFrame — fully static.
- *   · Gated off on low-tier in CityScene.
+ *   · Tier-gated off on low.
  */
-import React, { useMemo, useRef, useLayoutEffect } from 'react'
+import React, { useMemo, useRef, useLayoutEffect, useEffect } from 'react'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
+import { BLOOM_LAYER } from '../post/Post'
 
 const FALLBACK_PALETTE = [
     '#5aa8ff', '#ff8b5a', '#5affb4', '#ffd85a', '#b35aff',
@@ -123,6 +131,11 @@ const DistrictFloors = React.memo(function DistrictFloors() {
         mesh.geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 1e6)
     }, [data])
 
+    // Plates opt onto bloom layer so SelectiveBloom catches the rim
+    useEffect(() => {
+        if (meshRef.current) meshRef.current.layers.enable(BLOOM_LAYER)
+    }, [data])
+
     if (!data) return null
 
     const handleClick = (e) => {
@@ -143,17 +156,71 @@ const DistrictFloors = React.memo(function DistrictFloors() {
             onClick={handleClick}
         >
             <planeGeometry args={[1, 1]} />
-            <meshBasicMaterial
-                transparent
-                opacity={0.42}
-                depthWrite={false}
-                blending={THREE.NormalBlending}
-                polygonOffset
-                polygonOffsetFactor={1}
-                polygonOffsetUnits={1}
-            />
+            <primitive object={districtMaterial} attach="material" />
         </instancedMesh>
     )
+})
+
+const districtMaterial = new THREE.ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: 1,
+    polygonOffsetUnits: 1,
+    vertexShader: `
+        varying vec3 vColor;
+        varying vec3 vWorldPos;
+        varying vec2 vLocalPos;
+        varying vec2 vPlateScale;
+        void main() {
+            vColor = instanceColor;
+            vLocalPos = position.xy;
+            // Plane is rotated -π/2 around X so local Y maps to world Z.
+            // Column 0 = world-X scale; Column 1 = world-Z scale.
+            vPlateScale = vec2(
+                length(instanceMatrix[0].xyz),
+                length(instanceMatrix[1].xyz)
+            );
+            vec4 wp = modelMatrix * instanceMatrix * vec4(position, 1.0);
+            vWorldPos = wp.xyz;
+            gl_Position = projectionMatrix * viewMatrix * wp;
+        }
+    `,
+    fragmentShader: `
+        varying vec3 vColor;
+        varying vec3 vWorldPos;
+        varying vec2 vLocalPos;
+        varying vec2 vPlateScale;
+        void main() {
+            vec3 col = vColor;
+
+            // World-space distance from the plate's outer edge
+            float edgeX = (0.5 - abs(vLocalPos.x)) * vPlateScale.x;
+            float edgeZ = (0.5 - abs(vLocalPos.y)) * vPlateScale.y;
+            float edgeDist = min(edgeX, edgeZ);
+
+            // Bright rim — last ~3 wu glow at 2.5×, catches bloom
+            float rim = smoothstep(3.0, 0.0, edgeDist);
+            col = mix(col, vColor * 2.5 + vec3(0.04), rim * 0.85);
+
+            // Subtle dot grid — every 8 wu
+            vec2 dotUv = vWorldPos.xz / 8.0;
+            vec2 dotMod = abs(fract(dotUv) - 0.5);
+            float dot = smoothstep(0.42, 0.40, length(dotMod));
+            col = mix(col, col * 1.6, dot * 0.32);
+
+            // Centre falloff — plates thinner in the middle so ground
+            // shows through slightly
+            float centerFalloff = smoothstep(0.0, 12.0, edgeDist);
+            float alpha = mix(0.30, 0.55, centerFalloff);
+
+            // Rim brightens toward the edge so neighbourhood boundary
+            // stays readable
+            alpha = max(alpha, rim * 0.90);
+
+            gl_FragColor = vec4(col, alpha);
+        }
+    `,
 })
 
 export default DistrictFloors
