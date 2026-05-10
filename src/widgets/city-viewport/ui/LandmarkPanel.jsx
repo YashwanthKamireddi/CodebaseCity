@@ -235,10 +235,11 @@ const LandmarkPanel = React.memo(function LandmarkPanel() {
                 rule as HologramPanel. The card anchors via its 3D
                 position; no leader line needed. */}
             <group position={layout.panelPos}>
-                {/* distanceFactor dropped — was scaling DOM with camera
-                    distance, blurring text. Card now renders at native
-                    CSS size for crisp readability at any zoom. */}
-                <Html center style={{ pointerEvents: 'auto', userSelect: 'none' }} zIndexRange={[50, 0]} occlude={false}>
+                {/* distanceFactor=140 for landmarks (mothership is high
+                    altitude, town hall has a tall spire — camera sits
+                    further than typical building selection). Keeps card
+                    anchored to the landmark without blurry CSS upscaling. */}
+                <Html center distanceFactor={140} style={{ pointerEvents: 'auto', userSelect: 'none' }} zIndexRange={[50, 0]} occlude={false}>
                     {selectedLandmark === 'reactor' && (
                         <ReactorCard health={health} onClose={clearSelection} />
                     )}

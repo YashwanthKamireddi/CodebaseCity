@@ -86,10 +86,14 @@ const HologramPanel = React.memo(function HologramPanel() {
             <group position={layoutData.panelPos}>
                 <Html
                     center
-                    /* distanceFactor removed — was scaling the DOM with
-                       camera distance which produced blurry/grainy text
-                       when zoomed close. Without it, the card renders
-                       at its native CSS size always — crisp at any zoom. */
+                    /* distanceFactor=100: card stays anchored to the
+                       building (scales with camera distance) but never
+                       gets blurry — at typical selection camera distances
+                       (90–180 units) the scale is 0.55–1.1, so DOM
+                       upscaling stays modest. Was 60 (5–10× scale at
+                       close zoom = severe blur) before. Was missing
+                       (card felt detached from building) just before. */
+                    distanceFactor={100}
                     style={{ pointerEvents: 'auto', userSelect: 'none' }}
                     zIndexRange={[50, 0]}
                     occlude={false}
