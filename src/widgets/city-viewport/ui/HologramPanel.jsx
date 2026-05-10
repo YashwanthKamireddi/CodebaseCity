@@ -86,7 +86,10 @@ const HologramPanel = React.memo(function HologramPanel() {
             <group position={layoutData.panelPos}>
                 <Html
                     center
-                    distanceFactor={60}
+                    /* distanceFactor removed — was scaling the DOM with
+                       camera distance which produced blurry/grainy text
+                       when zoomed close. Without it, the card renders
+                       at its native CSS size always — crisp at any zoom. */
                     style={{ pointerEvents: 'auto', userSelect: 'none' }}
                     zIndexRange={[50, 0]}
                     occlude={false}
