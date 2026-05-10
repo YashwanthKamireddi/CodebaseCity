@@ -30,10 +30,8 @@ export default function CommandPalette() {
 
     const cityData = useStore(s => s.cityData)
     const selectBuilding = useStore(s => s.selectBuilding)
-    const toggleRoads = useStore(s => s.toggleRoads)
     const toggleTheme = useStore(s => s.toggleTheme)
     const theme = useStore(s => s.theme)
-    const showRoads = useStore(s => s.showRoads)
     const commandPaletteOpen = useStore(s => s.commandPaletteOpen)
     const setCommandPaletteOpen = useStore(s => s.setCommandPaletteOpen)
     const searchCode = useStore(s => s.searchCode)
@@ -186,7 +184,7 @@ export default function CommandPalette() {
             shortcut: 'R',
             action: () => { window.location.reload() }
         }
-    ], [showRoads, theme, toggleRoads, toggleTheme, setCommandPaletteOpen])
+    ], [theme, toggleTheme, setCommandPaletteOpen])
 
     // Global Keybindings Listener
     useEffect(() => {

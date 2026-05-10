@@ -89,9 +89,7 @@ function useKeyboardShortcuts(setView) {
                     e.preventDefault()
                     document.querySelector('input[placeholder*="Search"]')?.focus()
                     break
-                case 'd':
-                    state.toggleRoads()
-                    break
+                // 'd' key toggle-roads removed — roads are gone
                 case 'v':
                     startTransition(() => {
                         setView(v => v === '3d' ? 'table' : '3d')

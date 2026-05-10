@@ -21,7 +21,6 @@ export { default as NeonDistrictBorders } from './ui/NeonDistrictBorders'
 
 // Environment
 export { default as Ground } from './ui/Ground'
-export { default as Roads } from './ui/Roads'
 export { default as StreetLamps } from './ui/StreetLamps'
 export { default as AtmosphericParticles } from './ui/AtmosphericParticles'
 

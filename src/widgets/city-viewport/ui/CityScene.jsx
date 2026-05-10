@@ -4,7 +4,6 @@ import { Stars } from '@react-three/drei'
 import * as THREE from 'three'
 import useStore from '../../../store/useStore'
 import { detectDeviceTier } from '../../../shared/perf/deviceTier'
-import Streets from './Streets'
 import InstancedCity from './InstancedCity'
 import BuildingAccents from './BuildingAccents'
 import CameraController from './CameraController'
@@ -260,9 +259,6 @@ const CityScene = React.memo(function CityScene() {
                 <BuildingAccents />
                 <Ground />
                 {!low && <DistrictFloors />}
-                {/* Streets — always on. Connect every district to its
-                    neighbours via a proper road grid. */}
-                <Streets />
                 <HologramPanel />
                 <LandmarkPanel />
                 {/* Town-hall reactor + UFO avatar removed per user feedback.
