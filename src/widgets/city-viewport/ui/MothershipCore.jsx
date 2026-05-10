@@ -4,7 +4,7 @@ import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 import { Cpu } from 'lucide-react'
 import useStore from '../../../store/useStore'
-import { townHallTopY, mothershipAltitude } from './landmarkPositions'
+import { mothershipAltitude } from './landmarkPositions'
 
 /**
  * MothershipCore — "Atlas" Orbital Command Hub
@@ -71,76 +71,6 @@ void main() {
 }
 `
 
-const BEAM_VERT = /* glsl */ `
-#include <common>
-#include <logdepthbuf_pars_vertex>
-varying vec2 vUv;
-varying float vHeight;
-void main() {
-    vUv = uv;
-    vHeight = position.y;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    #include <logdepthbuf_vertex>
-}
-`
-
-const BEAM_FRAG = /* glsl */ `
-#include <common>
-#include <logdepthbuf_pars_fragment>
-uniform float uTime;
-varying vec2 vUv;
-varying float vHeight;
-void main() {
-    #include <logdepthbuf_fragment>
-
-    // Radial fade — bright core, soft edges
-    float dist = abs(vUv.x - 0.5) * 2.0;
-    float innerCore = 1.0 - smoothstep(0.0, 0.12, dist);
-    float outerGlow = 1.0 - smoothstep(0.0, 1.0, dist);
-    outerGlow = pow(outerGlow, 1.5);
-
-    // Vertical fade — bright at ship, gradual falloff toward ground
-    float topBright = smoothstep(1.0, 0.85, vUv.y) * 0.3;
-    float botBright = smoothstep(0.0, 0.08, vUv.y) * 0.15;
-    float midFade = 0.7 + topBright + botBright;
-
-    // Multiple scrolling energy layers (downward toward reactor)
-    float s1 = fract(vUv.y * 20.0 - uTime * 1.5);
-    float line1 = smoothstep(0.42, 0.5, s1) * smoothstep(0.58, 0.5, s1);
-
-    float s2 = fract(vUv.y * 12.0 - uTime * 0.8 + 0.5);
-    float line2 = smoothstep(0.4, 0.5, s2) * smoothstep(0.6, 0.5, s2);
-
-    float s3 = fract(vUv.y * 30.0 - uTime * 2.5 + 0.2);
-    float line3 = smoothstep(0.44, 0.5, s3) * smoothstep(0.56, 0.5, s3);
-
-    float energy = line1 * 0.45 + line2 * 0.35 + line3 * 0.25;
-
-    // Swirling double-helix effect
-    float angle = vUv.y * 6.2832 * 4.0 + uTime * 0.8;
-    float spiral1 = sin(angle + dist * 5.0) * 0.5 + 0.5;
-    float spiral2 = sin(angle * 0.7 - dist * 3.0 + 3.14) * 0.5 + 0.5;
-    energy += (spiral1 + spiral2) * innerCore * 0.12;
-
-    // Combine
-    float coreAlpha = innerCore * 0.35 * midFade;
-    float glowAlpha = outerGlow * 0.12 * midFade;
-    float energyAlpha = energy * outerGlow * 0.25;
-
-    float alpha = coreAlpha + glowAlpha + energyAlpha;
-
-    // Color: white-cyan center, blue edges
-    vec3 coreColor = vec3(0.7, 0.95, 1.0);
-    vec3 edgeColor = vec3(0.0, 0.35, 0.8);
-    vec3 col = mix(edgeColor, coreColor, innerCore * 0.7 + energy * 0.3);
-
-    // Pulse
-    float pulse = 0.88 + 0.12 * sin(uTime * 3.5);
-    alpha *= pulse;
-
-    gl_FragColor = vec4(col, alpha);
-}
-`
 
 /* ── Overview panel ─────────────────────────────────────────────────── */
 
@@ -241,23 +171,12 @@ const MothershipCore = React.memo(function MothershipCore() {
     const ringMid = useRef()
     const lastT = useRef(0)
 
-    // All position math now lives in landmarkPositions.js so panels stay aligned.
-    const hallTop = useMemo(() => townHallTopY(cityData?.buildings), [cityData])
     const altitude = useMemo(() => mothershipAltitude(cityData?.buildings), [cityData])
 
     const hullMat = useMemo(() => new THREE.ShaderMaterial({
         uniforms: { uTime: { value: 0 } },
         vertexShader: HULL_VERT,
         fragmentShader: HULL_FRAG,
-    }), [])
-
-    const beamMat = useMemo(() => new THREE.ShaderMaterial({
-        uniforms: { uTime: { value: 0 } },
-        vertexShader: BEAM_VERT,
-        fragmentShader: BEAM_FRAG,
-        transparent: true,
-        depthWrite: false,
-        side: THREE.FrontSide,
     }), [])
 
     const accentMat = useMemo(() => new THREE.MeshBasicMaterial({
@@ -280,23 +199,15 @@ const MothershipCore = React.memo(function MothershipCore() {
         return merged
     }, [])
 
-    // Beam connects ship belly to nexus spire crown — wider at ship, narrow at reactor
-    const beamHeight = altitude - hallTop
-    const beamGeo = useMemo(() => {
-        return new THREE.CylinderGeometry(21, 4.5, beamHeight, 16, 6, true)
-    }, [beamHeight])
-
     // Dispose GPU resources on unmount or deps change
     React.useEffect(() => {
         return () => {
             hullMat.dispose()
-            beamMat.dispose()
             accentMat.dispose()
             bridgeMat.dispose()
-            beamGeo.dispose()
             mergedBridgeGeo.dispose()
         }
-    }, [hullMat, beamMat, accentMat, bridgeMat, beamGeo, mergedBridgeGeo])
+    }, [hullMat, accentMat, bridgeMat, mergedBridgeGeo])
 
     const isSelected = selectedLandmark === 'mothership'
 
@@ -305,7 +216,6 @@ const MothershipCore = React.memo(function MothershipCore() {
         if (t - lastT.current < 0.05) return
         lastT.current = t
         hullMat.uniforms.uTime.value = t
-        beamMat.uniforms.uTime.value = t
         if (ringOuter.current) ringOuter.current.rotation.y = t * 0.05
         if (ringMid.current) ringMid.current.rotation.y = t * -0.08
         if (ringInner.current) ringInner.current.rotation.y = t * 0.12
@@ -371,23 +281,23 @@ const MothershipCore = React.memo(function MothershipCore() {
                         <meshBasicMaterial color="#00bbee" transparent opacity={0.5} depthWrite={false} />
                     </mesh>
                 )}
+
+                {/* ── Underside glow — wider halo so the ship has weight
+                       even from below, now that the tractor beam is gone */}
+                <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -22, 0]}>
+                    <ringGeometry args={[9, 96, 48]} />
+                    <meshBasicMaterial color="#004488" transparent opacity={0.22} depthWrite={false} />
+                </mesh>
+                {/* Bright cyan engine ring directly under ventral dome */}
+                <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -25, 0]}>
+                    <ringGeometry args={[6, 36, 36]} />
+                    <meshBasicMaterial color="#00d8ff" transparent opacity={0.42} depthWrite={false} toneMapped={false} />
+                </mesh>
             </group>
 
-            {/* ── Tractor beam — ship to town hall orb ── */}
-            <mesh position={[0, hallTop + beamHeight / 2, 0]} geometry={beamGeo}>
-                <primitive object={beamMat} attach="material" />
-            </mesh>
-
-            {/* ── Ship underside glow — wide halo beneath hull ── */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, altitude - 21, 0]}>
-                <ringGeometry args={[9, 87, 48]} />
-                <meshBasicMaterial color="#004488" transparent opacity={0.16} depthWrite={false} />
-            </mesh>
-            {/* Beam emission glow — bright ring directly under ventral dome */}
-            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, altitude - 24, 0]}>
-                <ringGeometry args={[3, 30, 36]} />
-                <meshBasicMaterial color="#00aaff" transparent opacity={0.28} depthWrite={false} />
-            </mesh>
+            {/* Tractor beam removed — was connecting the ship to the
+                town hall orb, but the reactor was deleted in a recent
+                pass. No anchor, no beam. */}
         </group>
     )
 })
