@@ -29,41 +29,36 @@ import UfoAvatar from './UfoAvatar'
  * regardless of logarithmicDepthBuffer or far-plane scaling.
  */
 function NebulaSky() {
-    const meshRef = useRef()
+    // Sky is GPU-locked to the camera via the vertex shader. The previous
+    // useFrame approach (which copied camera.position to mesh.position
+    // every frame) had a one-frame lag whenever OrbitControls or any
+    // other system updated the camera position AFTER React's frame loop
+    // had already committed — visible as the "sky glitches/flickers
+    // when moving" the user repeatedly reported. Adding cameraPosition
+    // to the vertex position in the shader eliminates that race
+    // entirely: the GPU has the live camera matrix, no lag possible.
 
-    // Lock to camera so we never fall outside the sky sphere. Priority 1
-    // makes this run AFTER the default useFrame chain (and therefore
-    // after OrbitControls' damped-camera update) — without this the sky
-    // can lag the camera by one frame on fast pans, producing the
-    // "sky shifts/glitches" the user reported.
-    useFrame(({ camera }) => {
-        if (meshRef.current) meshRef.current.position.copy(camera.position)
-    }, 1)
-
-    // Deep-space sky — single smooth gradient with a faint violet wash.
-    // Previous version had a bright saturated "horizon band" (#3a6bc5)
-    // that dominated the whole view when the camera was level; that's
-    // what read as "just blue" and stripey. One continuous smoothstep
-    // fixes both the banding and the hot-blue band.
     const material = useMemo(() => new THREE.ShaderMaterial({
         side: THREE.BackSide,
         depthWrite: false,
         depthTest: false,
         fog: false,
         uniforms: {
-            // Magical twilight sky — never reads as pure black. Every stop
-            // has real hue so the sphere feels alive even at the zenith.
-            uZenith:  { value: new THREE.Color('#1a2150') },  // deep twilight indigo
-            uMid:     { value: new THREE.Color('#253373') },  // rich royal navy
-            uHorizon: { value: new THREE.Color('#456abe') },  // soft hero blue
-            uBelow:   { value: new THREE.Color('#0d1230') },  // barely-navy void
-            uNebula:  { value: new THREE.Color('#9055e8') },  // luminous violet wash
+            uZenith:  { value: new THREE.Color('#1a2150') },
+            uMid:     { value: new THREE.Color('#253373') },
+            uHorizon: { value: new THREE.Color('#456abe') },
+            uBelow:   { value: new THREE.Color('#0d1230') },
+            uNebula:  { value: new THREE.Color('#9055e8') },
         },
         vertexShader: `
             varying vec3 vPos;
             void main() {
                 vPos = normalize(position);
-                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                // cameraPosition is a built-in three.js uniform.
+                // Adding it to position pins the sphere to the camera
+                // every frame — no JS-side useFrame needed.
+                gl_Position = projectionMatrix * viewMatrix
+                    * vec4(position + cameraPosition, 1.0);
             }
         `,
         fragmentShader: `
@@ -112,7 +107,7 @@ function NebulaSky() {
     }), [])
 
     return (
-        <mesh ref={meshRef} frustumCulled={false} renderOrder={-1000}>
+        <mesh frustumCulled={false} renderOrder={-1000}>
             <sphereGeometry args={[2000, 48, 24]} />
             <primitive object={material} attach="material" />
         </mesh>
