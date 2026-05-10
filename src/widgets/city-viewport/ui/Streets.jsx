@@ -161,12 +161,12 @@ function makeRoadMaterial(highTier) {
             varying vec2 vScale;
             varying float vAxis;
             void main() {
-                // Asphalt — significantly brighter than before so it
-                // actually reads against the dark ground. Slight cool
-                // tint avoids it looking like grey paint.
-                vec3 asphalt = vec3(0.32, 0.33, 0.38);
+                // Cyber-city road surface — dark teal-navy base. Distinct
+                // from the dark ground (#0c1018) so the grid reads, but
+                // still reads as "road" not "deck plate".
+                vec3 base = vec3(0.04, 0.08, 0.13);
 
-                // Edge stripes — bold white lines along the outer edges
+                // Distance from outer edge in world units
                 float edgeFromCenter;
                 float halfW;
                 if (vAxis < 0.5) {
@@ -176,21 +176,30 @@ function makeRoadMaterial(highTier) {
                     edgeFromCenter = abs(vLocalPos.x) * vScale.x;
                     halfW = vScale.x * 0.5;
                 }
-                float edge = smoothstep(halfW - 1.0, halfW - 0.1, edgeFromCenter);
-                asphalt = mix(asphalt, vec3(0.96, 0.96, 0.98), edge);
 
-                // Centre line — dashed yellow, mid+
+                // Outer NEON edge band — bright cyan, ~1.5 units thick.
+                // Catches bloom for the Tron-grid look.
+                float edge = smoothstep(halfW - 1.6, halfW - 0.2, edgeFromCenter);
+                vec3 neon = vec3(0.20, 1.00, 0.92);
+                base = mix(base, neon, edge);
+
+                // Subtle inner glow falloff — cyan tint near the edges
+                // bleeding inward. Sells "energized road surface".
+                float innerGlow = smoothstep(halfW, halfW - 4.0, edgeFromCenter);
+                base = mix(base, neon * 0.55, innerGlow * 0.18);
+
+                // Centre line — dashed cyan, mid+
                 if (uHigh > 0.5) {
                     float centre = vAxis < 0.5
                         ? abs(vLocalPos.y) * vScale.y
                         : abs(vLocalPos.x) * vScale.x;
                     float along = vAxis < 0.5 ? vWorldPos.x : vWorldPos.z;
-                    float dashOn = step(0.5, fract(along / 8.0));
+                    float dashOn = step(0.5, fract(along / 7.0));
                     float lineMask = smoothstep(0.9, 0.0, centre);
-                    asphalt = mix(asphalt, vec3(0.95, 0.78, 0.30), lineMask * dashOn);
+                    base = mix(base, vec3(0.55, 1.00, 0.95), lineMask * dashOn * 0.85);
                 }
 
-                gl_FragColor = vec4(asphalt, 1.0);
+                gl_FragColor = vec4(base, 1.0);
             }
         `,
     })
@@ -227,6 +236,13 @@ const Streets = React.memo(function Streets() {
             junctionMat.dispose()
         }
     }, [roadMat, junctionMat])
+
+    // Roads opt onto bloom layer so SelectiveBloom catches the cyan neon
+    // edges. Junctions stay off the bloom layer (they're meant to mask
+    // edge stripes at intersections — bloom would defeat that).
+    React.useEffect(() => {
+        if (segMeshRef.current) segMeshRef.current.layers.enable(BLOOM_LAYER)
+    }, [data])
 
     React.useLayoutEffect(() => {
         if (!data) return

@@ -48,43 +48,44 @@ function ReactorCard({ health, onClose }) {
 
             {/* Header */}
             <div style={headerStyle}>
-                <div style={{ ...iconBoxStyle, background: `${health.color}18`, border: `1px solid ${health.color}30` }}>
-                    <Shield size={15} color={health.color} />
+                <div style={{ ...iconBoxStyle, background: `${health.color}1c`, border: `1px solid ${health.color}3a` }}>
+                    <Shield size={20} color={health.color} />
                 </div>
                 <div style={{ flex: 1 }}>
                     <div style={titleStyle}>Town Hall</div>
                     <div style={subtitleStyle}>Codebase Health Monitor</div>
                 </div>
-                <button onClick={onClose} style={closeBtnStyle}><X size={12} /></button>
+                <button onClick={onClose} style={closeBtnStyle}><X size={14} /></button>
             </div>
 
             {/* Score */}
-            <div style={{ padding: '0 16px 12px', display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <span style={{ fontSize: '32px', fontWeight: 800, color: health.color, lineHeight: 1 }}>{health.score}</span>
-                <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.35)' }}>/100</span>
-                <span style={{ fontSize: '11px', fontWeight: 600, color: health.color, marginLeft: '4px' }}>{health.grade}</span>
+            <div style={{ padding: '14px 22px 16px', display: 'flex', alignItems: 'baseline', gap: '10px' }}>
+                <span style={{ fontSize: '44px', fontWeight: 800, color: health.color, lineHeight: 1, letterSpacing: '-0.03em' }}>{health.score}</span>
+                <span style={{ fontSize: '14px', color: 'rgba(255,255,255,0.35)' }}>/100</span>
+                <span style={{ fontSize: '13px', fontWeight: 700, color: health.color, marginLeft: '6px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{health.grade}</span>
             </div>
 
             {/* Metrics grid */}
-            <div style={{ padding: '0 16px 12px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                <MetricCell label="Files" value={formatNum(health.totalFiles)} icon={<FileCode2 size={10} />} />
-                <MetricCell label="Lines" value={formatNum(health.totalLoc)} icon={<Layers size={10} />} />
-                <MetricCell label="Avg Complexity" value={health.avgComplexity} icon={<Activity size={10} />} warn={health.avgComplexity > 10} />
-                <MetricCell label="Hotspots" value={health.hotspots} icon={<Flame size={10} />} warn={health.hotspots > 5} />
+            <div style={{ padding: '0 22px 14px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                <MetricCell label="Files" value={formatNum(health.totalFiles)} icon={<FileCode2 size={11} />} />
+                <MetricCell label="Lines" value={formatNum(health.totalLoc)} icon={<Layers size={11} />} />
+                <MetricCell label="Avg Complexity" value={health.avgComplexity} icon={<Activity size={11} />} warn={health.avgComplexity > 10} />
+                <MetricCell label="Hotspots" value={health.hotspots} icon={<Flame size={11} />} warn={health.hotspots > 5} />
             </div>
 
             {/* Languages */}
             {Object.keys(health.languages).length > 0 && (
-                <div style={{ padding: '0 16px 14px' }}>
+                <div style={{ padding: '4px 22px 20px' }}>
                     <div style={sectionLabelStyle}>Top Languages</div>
-                    {Object.entries(health.languages).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([lang, count]) => {
+                    {Object.entries(health.languages).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([lang, count]) => {
                         const pct = Math.round((count / health.totalFiles) * 100)
                         return (
-                            <div key={lang} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                                <div style={{ flex: 1, height: '4px', background: 'rgba(255,255,255,0.06)', borderRadius: '2px', overflow: 'hidden' }}>
-                                    <div style={{ width: `${pct}%`, height: '100%', background: health.color, opacity: 0.65, borderRadius: '2px' }} />
+                            <div key={lang} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '7px' }}>
+                                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.85)', minWidth: '90px', textTransform: 'capitalize' }}>{lang}</span>
+                                <div style={{ flex: 1, height: '6px', background: 'rgba(255,255,255,0.06)', borderRadius: '3px', overflow: 'hidden' }}>
+                                    <div style={{ width: `${pct}%`, height: '100%', background: health.color, opacity: 0.75, borderRadius: '3px' }} />
                                 </div>
-                                <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.5)', minWidth: '60px', textAlign: 'right' }}>{lang} {pct}%</span>
+                                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.55)', minWidth: '36px', textAlign: 'right', fontFamily: 'var(--font-mono)' }}>{pct}%</span>
                             </div>
                         )
                     })}
@@ -230,18 +231,9 @@ const LandmarkPanel = React.memo(function LandmarkPanel() {
 
     return (
         <group>
-            {/* Beam line from landmark to panel */}
-            <lineSegments geometry={layout.beamGeo} renderOrder={998}>
-                <lineBasicMaterial color="#00d9ff" transparent opacity={0.35} depthTest={false} depthWrite={false} />
-            </lineSegments>
-
-            {/* Anchor dot */}
-            <mesh position={layout.anchorPos} renderOrder={999}>
-                <sphereGeometry args={[0.8, 10, 10]} />
-                <meshBasicMaterial color="#00d9ff" depthTest={false} depthWrite={false} />
-            </mesh>
-
-            {/* Card */}
+            {/* Beam + anchor dot removed — same "no poles in the sky"
+                rule as HologramPanel. The card anchors via its 3D
+                position; no leader line needed. */}
             <group position={layout.panelPos}>
                 <Html center distanceFactor={selectedLandmark === 'mothership' ? 120 : 60} style={{ pointerEvents: 'auto', userSelect: 'none' }} zIndexRange={[50, 0]} occlude={false}>
                     {selectedLandmark === 'reactor' && (
@@ -261,90 +253,98 @@ export default LandmarkPanel
 /* ── Shared styling ── */
 
 const cardStyle = {
-    width: '340px',
-    background: 'linear-gradient(165deg, rgba(12, 14, 22, 0.98), rgba(6, 8, 16, 0.99))',
-    border: '1px solid rgba(0, 180, 255, 0.15)',
-    borderRadius: '14px',
-    boxShadow: '0 0 0 1px rgba(0, 180, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.7), 0 0 60px rgba(0, 120, 200, 0.06)',
+    width: '440px',
+    background: 'linear-gradient(168deg, rgba(14, 17, 26, 0.985), rgba(7, 9, 17, 0.995))',
+    border: '1px solid rgba(255,255,255,0.08)',
+    borderRadius: '18px',
+    boxShadow: '0 0 0 1px rgba(0, 180, 255, 0.06), 0 14px 48px rgba(0, 0, 0, 0.75), 0 0 72px rgba(0, 120, 200, 0.08)',
     color: '#e4e4e7',
     fontFamily: 'var(--font-sans)',
     overflow: 'hidden',
+    backdropFilter: 'blur(8px)',
 }
 
 const headerStyle = {
-    padding: '14px 16px 10px',
+    padding: '20px 22px 14px',
     borderBottom: '1px solid rgba(255,255,255,0.05)',
     display: 'flex',
     alignItems: 'flex-start',
-    gap: '10px',
+    gap: '14px',
 }
 
 const iconBoxStyle = {
-    width: 32, height: 32, borderRadius: '8px',
+    width: 44, height: 44, borderRadius: '10px',
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     flexShrink: 0,
 }
 
 const titleStyle = {
-    fontSize: '14px',
-    fontWeight: 600,
-    lineHeight: 1.2,
+    fontSize: '17px',
+    fontWeight: 700,
+    lineHeight: 1.25,
     color: '#fafafa',
+    letterSpacing: '-0.01em',
 }
 
 const subtitleStyle = {
-    fontSize: '10px',
-    color: '#52525b',
+    fontSize: '11px',
+    color: '#71717a',
     fontFamily: 'var(--font-mono)',
-    marginTop: '3px',
-    lineHeight: 1.3,
+    marginTop: '5px',
+    lineHeight: 1.4,
+    opacity: 0.85,
 }
 
 const closeBtnStyle = {
     background: 'rgba(255,255,255,0.06)',
-    border: '1px solid rgba(255,255,255,0.08)',
-    color: '#71717a',
+    border: '1px solid rgba(255,255,255,0.10)',
+    color: '#a1a1aa',
     cursor: 'pointer',
-    padding: '4px',
-    borderRadius: '6px',
+    width: '30px',
+    height: '30px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '8px',
     flexShrink: 0,
-    lineHeight: 0,
 }
 
 const sectionLabelStyle = {
-    fontSize: '10px',
-    color: 'rgba(255,255,255,0.3)',
-    marginBottom: '6px',
-    letterSpacing: '0.04em',
+    fontSize: '11px',
+    color: 'rgba(255,255,255,0.4)',
+    marginBottom: '8px',
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+    fontWeight: 600,
 }
 
 function MetricCell({ label, value, icon, warn }) {
     return (
         <div style={{
-            padding: '6px 8px',
-            background: 'rgba(255,255,255,0.025)',
-            borderRadius: '8px',
-            border: '1px solid rgba(255,255,255,0.04)',
+            padding: '10px 12px',
+            background: 'rgba(255,255,255,0.035)',
+            borderRadius: '10px',
+            border: '1px solid rgba(255,255,255,0.06)',
         }}>
             <div style={{
-                fontSize: '9px',
-                color: '#52525b',
+                fontSize: '10px',
+                color: '#71717a',
                 textTransform: 'uppercase',
                 letterSpacing: '0.08em',
-                marginBottom: '3px',
+                marginBottom: '5px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '3px',
+                gap: '4px',
             }}>
                 {icon}
                 {label}
             </div>
             <div style={{
-                fontSize: '15px',
-                fontWeight: 500,
+                fontSize: '18px',
+                fontWeight: 600,
                 fontFamily: 'var(--font-sans)',
-                color: warn ? '#ef4444' : '#e4e4e7',
-                letterSpacing: '-0.01em',
+                color: warn ? '#ef4444' : '#fafafa',
+                letterSpacing: '-0.015em',
             }}>
                 {value}
             </div>

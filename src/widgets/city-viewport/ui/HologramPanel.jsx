@@ -96,60 +96,63 @@ const HologramPanel = React.memo(function HologramPanel() {
                         className="anim-scale-in"
                         key={selectedBuilding.id || selectedBuilding.path}
                         style={{
-                            width: '340px',
-                            background: 'linear-gradient(165deg, rgba(12, 14, 22, 0.98), rgba(6, 8, 16, 0.99))',
-                            border: '1px solid rgba(0, 180, 255, 0.15)',
-                            borderRadius: '14px',
+                            width: '440px',
+                            background: 'linear-gradient(168deg, rgba(14, 17, 26, 0.985), rgba(7, 9, 17, 0.995))',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                            borderRadius: '18px',
                             boxShadow: `
-                                0 0 0 1px rgba(0, 180, 255, 0.05),
-                                0 8px 32px rgba(0, 0, 0, 0.7),
-                                0 0 60px rgba(0, 120, 200, 0.06)
+                                0 0 0 1px rgba(0, 180, 255, 0.06),
+                                0 14px 48px rgba(0, 0, 0, 0.75),
+                                0 0 72px rgba(0, 120, 200, 0.08)
                             `,
                             color: '#e4e4e7',
                             fontFamily: 'var(--font-sans)',
                             overflow: 'hidden',
+                            backdropFilter: 'blur(8px)',
                         }}
                     >
                         {/* Top accent gradient line */}
                         <div style={{
-                            height: '2px',
-                            background: `linear-gradient(90deg, transparent 5%, ${langColor}88, transparent 95%)`,
+                            height: '3px',
+                            background: `linear-gradient(90deg, transparent 4%, ${langColor}, transparent 96%)`,
                         }} />
 
                         {/* Header */}
                         <div style={{
-                            padding: '14px 16px 10px',
+                            padding: '20px 22px 14px',
                             borderBottom: '1px solid rgba(255,255,255,0.05)',
                             display: 'flex',
                             alignItems: 'flex-start',
-                            gap: '10px',
+                            gap: '14px',
                         }}>
                             <div style={{
-                                width: 32, height: 32, borderRadius: '8px',
-                                background: `${langColor}18`,
-                                border: `1px solid ${langColor}30`,
+                                width: 44, height: 44, borderRadius: '10px',
+                                background: `${langColor}1c`,
+                                border: `1px solid ${langColor}3a`,
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 flexShrink: 0,
                             }}>
-                                <FileCode2 size={15} color={langColor} />
+                                <FileCode2 size={20} color={langColor} />
                             </div>
                             <div style={{ flex: 1, minWidth: 0 }}>
                                 <div style={{
-                                    fontSize: '14px',
-                                    fontWeight: 600,
-                                    lineHeight: 1.2,
+                                    fontSize: '17px',
+                                    fontWeight: 700,
+                                    lineHeight: 1.25,
                                     color: '#fafafa',
                                     wordBreak: 'break-word',
+                                    letterSpacing: '-0.01em',
                                 }}>
                                     {name}
                                 </div>
                                 <div style={{
-                                    fontSize: '10px',
-                                    color: '#52525b',
+                                    fontSize: '11px',
+                                    color: '#71717a',
                                     fontFamily: 'var(--font-mono)',
-                                    marginTop: '3px',
+                                    marginTop: '5px',
                                     wordBreak: 'break-all',
-                                    lineHeight: 1.3,
+                                    lineHeight: 1.4,
+                                    opacity: 0.85,
                                 }}>
                                     {path}
                                 </div>
@@ -158,43 +161,46 @@ const HologramPanel = React.memo(function HologramPanel() {
                                 onClick={clearSelection}
                                 style={{
                                     background: 'rgba(255,255,255,0.06)',
-                                    border: '1px solid rgba(255,255,255,0.08)',
-                                    color: '#71717a',
+                                    border: '1px solid rgba(255,255,255,0.10)',
+                                    color: '#a1a1aa',
                                     cursor: 'pointer',
-                                    padding: '4px',
-                                    borderRadius: '6px',
+                                    width: '30px',
+                                    height: '30px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    borderRadius: '8px',
                                     flexShrink: 0,
-                                    lineHeight: 0,
                                     transition: 'all 0.15s ease',
                                 }}
                             >
-                                <X size={12} />
+                                <X size={14} />
                             </button>
                         </div>
 
                         {/* Tags row: Language + Author + Hotspot */}
                         <div style={{
-                            padding: '8px 16px',
+                            padding: '12px 22px',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '8px',
+                            gap: '10px',
                             flexWrap: 'wrap',
                             borderBottom: '1px solid rgba(255,255,255,0.04)',
                         }}>
                             <span style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '4px',
-                                fontSize: '10px',
+                                gap: '5px',
+                                fontSize: '11px',
                                 fontWeight: 600,
                                 color: langColor,
-                                padding: '2px 8px',
-                                background: `${langColor}12`,
-                                border: `1px solid ${langColor}20`,
-                                borderRadius: '20px',
+                                padding: '4px 10px',
+                                background: `${langColor}14`,
+                                border: `1px solid ${langColor}28`,
+                                borderRadius: '999px',
                                 textTransform: 'capitalize',
                             }}>
-                                <Code size={9} />
+                                <Code size={11} />
                                 {language || 'unknown'}
                             </span>
 
@@ -202,24 +208,24 @@ const HologramPanel = React.memo(function HologramPanel() {
                                 <span style={{
                                     display: 'inline-flex',
                                     alignItems: 'center',
-                                    gap: '4px',
-                                    fontSize: '10px',
+                                    gap: '5px',
+                                    fontSize: '11px',
                                     color: '#a1a1aa',
                                 }}>
-                                    <User size={9} />
+                                    <User size={11} />
                                     {author}
                                 </span>
                             )}
 
                             {is_hotspot && (
                                 <span style={{
-                                    fontSize: '9px',
+                                    fontSize: '10px',
                                     fontWeight: 700,
                                     color: '#ef4444',
-                                    padding: '2px 7px',
-                                    background: 'rgba(239,68,68,0.10)',
-                                    border: '1px solid rgba(239,68,68,0.18)',
-                                    borderRadius: '20px',
+                                    padding: '3px 9px',
+                                    background: 'rgba(239,68,68,0.12)',
+                                    border: '1px solid rgba(239,68,68,0.22)',
+                                    borderRadius: '999px',
                                     textTransform: 'uppercase',
                                     letterSpacing: '0.06em',
                                     marginLeft: 'auto',
@@ -231,10 +237,10 @@ const HologramPanel = React.memo(function HologramPanel() {
 
                         {/* Metrics grid — 2×3 */}
                         <div style={{
-                            padding: '12px 16px',
+                            padding: '16px 22px',
                             display: 'grid',
                             gridTemplateColumns: '1fr 1fr 1fr',
-                            gap: '8px',
+                            gap: '10px',
                         }}>
                             <MetricCell label="Lines" value={loc} icon={<Layers size={10} />} />
                             <MetricCell
@@ -292,30 +298,30 @@ export default HologramPanel
 function MetricCell({ label, value, warn, icon }) {
     return (
         <div style={{
-            padding: '6px 8px',
-            background: 'rgba(255,255,255,0.025)',
-            borderRadius: '8px',
-            border: '1px solid rgba(255,255,255,0.04)',
+            padding: '10px 12px',
+            background: 'rgba(255,255,255,0.035)',
+            borderRadius: '10px',
+            border: '1px solid rgba(255,255,255,0.06)',
         }}>
             <div style={{
-                fontSize: '9px',
-                color: '#52525b',
+                fontSize: '10px',
+                color: '#71717a',
                 textTransform: 'uppercase',
                 letterSpacing: '0.08em',
-                marginBottom: '3px',
+                marginBottom: '5px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '3px',
+                gap: '4px',
             }}>
                 {icon}
                 {label}
             </div>
             <div style={{
-                fontSize: '15px',
-                fontWeight: 500,
+                fontSize: '18px',
+                fontWeight: 600,
                 fontFamily: 'var(--font-sans)',
-                color: warn ? '#ef4444' : '#e4e4e7',
-                letterSpacing: '-0.01em',
+                color: warn ? '#ef4444' : '#fafafa',
+                letterSpacing: '-0.015em',
             }}>
                 {value}
             </div>

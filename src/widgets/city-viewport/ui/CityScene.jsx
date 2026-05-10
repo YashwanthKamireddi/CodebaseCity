@@ -32,10 +32,14 @@ import UfoAvatar from './UfoAvatar'
 function NebulaSky() {
     const meshRef = useRef()
 
-    // Lock to camera so we never fall outside the sky sphere.
+    // Lock to camera so we never fall outside the sky sphere. Priority 1
+    // makes this run AFTER the default useFrame chain (and therefore
+    // after OrbitControls' damped-camera update) — without this the sky
+    // can lag the camera by one frame on fast pans, producing the
+    // "sky shifts/glitches" the user reported.
     useFrame(({ camera }) => {
         if (meshRef.current) meshRef.current.position.copy(camera.position)
-    })
+    }, 1)
 
     // Deep-space sky — single smooth gradient with a faint violet wash.
     // Previous version had a bright saturated "horizon band" (#3a6bc5)
@@ -110,7 +114,7 @@ function NebulaSky() {
 
     return (
         <mesh ref={meshRef} frustumCulled={false} renderOrder={-1000}>
-            <sphereGeometry args={[500, 32, 16]} />
+            <sphereGeometry args={[2000, 48, 24]} />
             <primitive object={material} attach="material" />
         </mesh>
     )
@@ -331,7 +335,17 @@ const CityScene = React.memo(function CityScene() {
                 </>
             )}
 
-            <fog attach="fog" args={['#1a2658', Math.max(cityRadius * 2.5, 2500), Math.max(cityRadius * 10, 50000)]} />
+            {/* Exponential fog — smoother falloff than linear, no
+                near/far popping when buildings cross the threshold
+                during fast camera moves. Density tuned per cityRadius:
+                tighter for small repos, looser for huge ones. */}
+            <fogExp2
+                attach="fog"
+                args={[
+                    '#1a2658',
+                    Math.min(0.00055, Math.max(0.00018, 250 / Math.max(cityRadius, 100))),
+                ]}
+            />
             <CameraController />
             <Post tier={tier.tier} />
         </group>
