@@ -125,13 +125,7 @@ export default function CommandPalette() {
     }, [selectBuilding, setCommandPaletteOpen, setCodeViewerOpen])
 
     const actions = useMemo(() => [
-        {
-            id: 'toggle-roads',
-            label: showRoads ? 'Hide Roads & Traffic' : 'Show Roads & Traffic',
-            icon: Map,
-            shortcut: 'D',
-            action: () => { toggleRoads(); setCommandPaletteOpen(false) }
-        },
+        // toggle-roads removed — roads are now always-on (Streets.jsx).
         {
             id: 'toggle-theme',
             label: theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode',

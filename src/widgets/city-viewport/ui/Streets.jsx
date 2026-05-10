@@ -30,11 +30,11 @@ import { BLOOM_LAYER } from '../post/Post'
  * Tier-gated: low tier renders the asphalt only (no centre line).
  */
 
-const ROAD_WIDTH = 22          // wider so roads read from any altitude
+const ROAD_WIDTH = 26          // bumped wider — was getting lost at city-overview scale
 const PERIMETER_INSET = 80
-const ROAD_Y = 0.04            // ABOVE the dark plate (-0.12) and DistrictFloors (-0.06)
-const JUNCTION_Y = 0.06
-const TRAFFIC_Y = 0.12         // headlights ride above the road surface
+const ROAD_Y = 0.5             // well above DistrictFloors (-0.06) and ground (-0.12)
+const JUNCTION_Y = 0.6
+const TRAFFIC_Y = 1.0          // traffic dots ride visibly above the road
 
 function clusterAxis(values, eps = 30) {
     if (values.length === 0) return []
@@ -124,95 +124,23 @@ function computeStreetGeometry(districts) {
 }
 
 function makeRoadMaterial(highTier) {
-    return new THREE.ShaderMaterial({
-        transparent: true,
-        depthWrite: false,
-        polygonOffset: true,
-        polygonOffsetFactor: -1,
-        polygonOffsetUnits: -1,
-        uniforms: {
-            uHigh: { value: highTier ? 1.0 : 0.0 },
-        },
-        vertexShader: `
-            varying vec3 vWorldPos;
-            varying vec3 vLocalPos;
-            varying vec2 vScale;
-            varying float vAxis; // 0 = horizontal (long X), 1 = vertical (long Z)
-            void main() {
-                vec4 wp = modelMatrix * instanceMatrix * vec4(position, 1.0);
-                vWorldPos = wp.xyz;
-                vLocalPos = position;
-                // Plane is built in XY then rotated -π/2 around X so it
-                // lies on world XZ. Column 0 carries world-X scale; column
-                // 1 carries world-Z scale (was original Y → world Z after
-                // rotate). Column 2 is always 1 (the unit Z) — DON'T read
-                // it. This was the "vertical roads silently shaded as
-                // horizontal" bug.
-                vScale = vec2(length(instanceMatrix[0].xyz),
-                              length(instanceMatrix[1].xyz));
-                vAxis = vScale.x > vScale.y ? 0.0 : 1.0;
-                gl_Position = projectionMatrix * viewMatrix * wp;
-            }
-        `,
-        fragmentShader: `
-            uniform float uHigh;
-            varying vec3 vWorldPos;
-            varying vec3 vLocalPos;
-            varying vec2 vScale;
-            varying float vAxis;
-            void main() {
-                // Cyber-city road surface — dark teal-navy base. Distinct
-                // from the dark ground (#0c1018) so the grid reads, but
-                // still reads as "road" not "deck plate".
-                vec3 base = vec3(0.04, 0.08, 0.13);
-
-                // Distance from outer edge in world units
-                float edgeFromCenter;
-                float halfW;
-                if (vAxis < 0.5) {
-                    edgeFromCenter = abs(vLocalPos.y) * vScale.y;
-                    halfW = vScale.y * 0.5;
-                } else {
-                    edgeFromCenter = abs(vLocalPos.x) * vScale.x;
-                    halfW = vScale.x * 0.5;
-                }
-
-                // Outer NEON edge band — bright cyan, ~1.5 units thick.
-                // Catches bloom for the Tron-grid look.
-                float edge = smoothstep(halfW - 1.6, halfW - 0.2, edgeFromCenter);
-                vec3 neon = vec3(0.20, 1.00, 0.92);
-                base = mix(base, neon, edge);
-
-                // Subtle inner glow falloff — cyan tint near the edges
-                // bleeding inward. Sells "energized road surface".
-                float innerGlow = smoothstep(halfW, halfW - 4.0, edgeFromCenter);
-                base = mix(base, neon * 0.55, innerGlow * 0.18);
-
-                // Centre line — dashed cyan, mid+
-                if (uHigh > 0.5) {
-                    float centre = vAxis < 0.5
-                        ? abs(vLocalPos.y) * vScale.y
-                        : abs(vLocalPos.x) * vScale.x;
-                    float along = vAxis < 0.5 ? vWorldPos.x : vWorldPos.z;
-                    float dashOn = step(0.5, fract(along / 7.0));
-                    float lineMask = smoothstep(0.9, 0.0, centre);
-                    base = mix(base, vec3(0.55, 1.00, 0.95), lineMask * dashOn * 0.85);
-                }
-
-                gl_FragColor = vec4(base, 1.0);
-            }
-        `,
+    // Plain bright cyber-cyan asphalt. The previous custom shader was
+    // mathematically correct but the dark base + thin edge band produced
+    // sub-pixel results from city overview, so the user reported the
+    // roads as "completely black". MeshBasicMaterial with a saturated
+    // bright color renders at every distance and toneMapped:false keeps
+    // it crisp through the post pipeline.
+    return new THREE.MeshBasicMaterial({
+        color: '#1ec5b6',
+        toneMapped: false,
     })
 }
 
 function makeJunctionMaterial() {
+    // Brighter than the road so junctions read as "where roads meet"
     return new THREE.MeshBasicMaterial({
-        color: '#0a0c12',
-        transparent: true,
-        depthWrite: false,
-        polygonOffset: true,
-        polygonOffsetFactor: -2,
-        polygonOffsetUnits: -2,
+        color: '#3ae0d2',
+        toneMapped: false,
     })
 }
 
