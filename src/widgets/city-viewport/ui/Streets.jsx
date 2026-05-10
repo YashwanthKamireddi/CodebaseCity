@@ -30,11 +30,11 @@ import { BLOOM_LAYER } from '../post/Post'
  * Tier-gated: low tier renders the asphalt only (no centre line).
  */
 
-const ROAD_WIDTH = 26          // bumped wider — was getting lost at city-overview scale
+const ROAD_WIDTH = 38          // way wider — visible from any altitude on any repo
 const PERIMETER_INSET = 80
-const ROAD_Y = 0.5             // well above DistrictFloors (-0.06) and ground (-0.12)
+const ROAD_Y = 0.5
 const JUNCTION_Y = 0.6
-const TRAFFIC_Y = 1.0          // traffic dots ride visibly above the road
+const TRAFFIC_Y = 1.0
 
 function clusterAxis(values, eps = 30) {
     if (values.length === 0) return []

@@ -47,12 +47,15 @@ export function getDistrictType(path) {
  *   Small → Mid → Large → Huge
  *   Blue  → Green → Gold → Red
  * color_metric is rank-normalised 0→1 so distribution is always even.
+ *
+ * Bumped saturation (was reading as pinkish-pastel through bloom + AO).
+ * These values are pure cyber-vivid so they survive the post pipeline.
  */
 const PALETTE = [
-    [59,  158, 255],  // #3b9eff — Small  (blue)
-    [0,   230, 118],  // #00e676 — Mid    (green)
-    [255, 196,   0],  // #ffc400 — Large  (gold)
-    [255,  23,  68],  // #ff1744 — Huge   (red)
+    [60,  180, 255],  // #3cb4ff — Small  (electric blue)
+    [40,  255, 140],  // #28ff8c — Mid    (vivid emerald)
+    [255, 200,  20],  // #ffc814 — Large  (saturated gold)
+    [255,  40,  90],  // #ff285a — Huge   (hot red)
 ]
 
 export function metricToHex(t) {
