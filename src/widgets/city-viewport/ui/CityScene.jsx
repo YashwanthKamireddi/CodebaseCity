@@ -20,7 +20,6 @@ import StreetLamps from './StreetLamps'
 import DataStreams from './DataStreams'
 import AtmosphericParticles from './AtmosphericParticles'
 import DistrictFloors from './DistrictFloors'
-import EnergyShieldDome from './EnergyShieldDome'
 import Post from '../post/Post'
 
 import UfoAvatar from './UfoAvatar'
@@ -264,10 +263,6 @@ const CityScene = React.memo(function CityScene() {
                 {/* Streets — always on. Connect every district to its
                     neighbours via a proper road grid. */}
                 <Streets />
-                {/* Hex-grid energy shield dome — cyberpunk surround.
-                    Mid+ tier only (high triangle count for the icosahedron
-                    + per-pixel hex shader). */}
-                {!low && <EnergyShieldDome />}
                 <HologramPanel />
                 <LandmarkPanel />
                 {/* Always-kept core — affordable everywhere */}

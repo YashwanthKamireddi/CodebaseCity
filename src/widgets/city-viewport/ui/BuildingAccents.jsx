@@ -142,8 +142,11 @@ export default function BuildingAccents() {
     const groups = useMemo(() => {
         if (!buildings?.length) return null
         return {
-            tower:     buildAccentLayer(buildings, TYPE_TOWER,     'spire'),
-            civic:     buildAccentLayer(buildings, TYPE_CIVIC,     'dome'),
+            // Tower spires removed per user feedback — those white
+            // antennae read as "poles in the sky" on every screenshot.
+            // Civic domes also removed to keep the silhouette clean.
+            // tower:     buildAccentLayer(buildings, TYPE_TOWER,     'spire'),
+            // civic:     buildAccentLayer(buildings, TYPE_CIVIC,     'dome'),
             workshop:  buildAccentLayer(buildings, TYPE_WORKSHOP,  'chimney'),
             mall:      buildAccentLayer(buildings, TYPE_MALL,      'awning'),
             townhouse: buildAccentLayer(buildings, TYPE_TOWNHOUSE, 'gabled'),
@@ -155,7 +158,7 @@ export default function BuildingAccents() {
 
     return (
         <>
-            {groups.tower && (
+            {false && groups.tower && (
                 <AccentLayer
                     items={groups.tower.items}
                     kind="spire"
