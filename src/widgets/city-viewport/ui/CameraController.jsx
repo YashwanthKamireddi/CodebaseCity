@@ -101,26 +101,27 @@ export default React.memo(function CameraController() {
             const bDepth = building.dimensions?.depth || 8
             const footprintSize = Math.max(bWidth, bDepth)
 
-            // Cinematic framing: closer than before — user reported the
-            // selection zoom was pulling back so far the chosen building
-            // was lost in the surrounding city. Tightened to 90–280
-            // (was 140–520). Camera looks at upper-third of the building
-            // + info-card composition.
+            // Tight cinematic framing — user reports prior pass was
+            // still too zoomed out. Pulled in further: 60–210 (was
+            // 90–280). Camera looks at upper-third of the building +
+            // info-card composition. Works for any building size:
+            // small repo's tiny townhouses don't get a giant 90-unit
+            // pullback; mega-towers don't get clipped by the cap.
             const roofY = buildingHeight
             const panelY = roofY + 28
             const frameCenterY = roofY * 0.55 + panelY * 0.45
 
             const zoomDist = Math.min(
-                280,
+                210,
                 Math.max(
-                    90,
-                    footprintSize * 3.2,   // ~1.6 building-widths of margin
-                    buildingHeight * 0.85,
+                    60,
+                    footprintSize * 2.6,   // ~1.3 building-widths of margin
+                    buildingHeight * 0.72,
                 )
             )
 
             const camAngle = Math.PI / 4
-            const elevationFactor = 0.65   // higher angle = more skyline context
+            const elevationFactor = 0.55
 
             const targetPos = new THREE.Vector3(
                 x + Math.cos(camAngle) * zoomDist,
@@ -129,11 +130,14 @@ export default React.memo(function CameraController() {
             )
             const lookAtPos = new THREE.Vector3(x, frameCenterY, z)
 
-            // Switching between buildings should feel cinematic — not a
-            // snap. Floor bumped 0.55 → 0.85 and the long-flight ceiling
-            // raised 1.2 → 1.6 so even short moves feel deliberate.
+            // Smooth transitions from any starting angle / distance:
+            //   short hops (200u): ~0.85 s
+            //   medium (1000u):    ~1.7 s
+            //   cross-city (2500u+): ~2.6 s ceiling
+            // Both ends of the range feel cinematic instead of either
+            // snapping (too short) or dragging (too long).
             const travelDist = camera.position.distanceTo(targetPos)
-            const flyDuration = Math.min(1.6, Math.max(0.85, travelDist / 480))
+            const flyDuration = Math.min(2.6, Math.max(0.85, 0.6 + travelDist / 950))
 
             animateTo(targetPos, lookAtPos, flyDuration)
         }
@@ -237,14 +241,15 @@ export default React.memo(function CameraController() {
         let targetPos, lookAtPos
 
         if (selectedLandmark === 'reactor') {
-            // Town-hall flight: frame the crown sphere with city in view.
-            // Pulled tighter than before — was zooming so far back that the
-            // town hall looked tiny and the camera "felt stuck".
+            // Town-hall flight: hero shot of the crown sphere. Pulled
+            // tighter still — was 1.6× crown height, now 1.15× so the
+            // town hall fills more of the frame. Look at the crown
+            // directly so the user reads "this is the centerpiece".
             const crownY = townHallTopY(cityData?.buildings)
-            const frameCenterY = crownY * 0.85           // look slightly below the crown
-            const zoomDist = Math.max(180, crownY * 1.6)  // closer than before
+            const frameCenterY = crownY * 0.92
+            const zoomDist = Math.max(140, crownY * 1.15)
             const angle = Math.PI / 4
-            const elevationFactor = 0.45
+            const elevationFactor = 0.40
             lookAtPos = new THREE.Vector3(0, frameCenterY, 0)
             targetPos = new THREE.Vector3(
                 Math.cos(angle) * zoomDist,
@@ -252,25 +257,24 @@ export default React.memo(function CameraController() {
                 Math.sin(angle) * zoomDist
             )
         } else if (selectedLandmark === 'mothership') {
-            // Mothership flight: orbit the saucer, look up at it. Was
-            // landing camera ABOVE the ship looking down at the city,
-            // which felt detached. Now camera sits below and to the side
-            // looking up at the mothership belly + city horizon.
+            // Mothership: closer too — was 320 units, now scales with
+            // altitude so big repos with a higher mothership still get
+            // a recognizable framing.
             const alt = mothershipAltitude(cityData?.buildings)
-            const dist = 320
+            const dist = Math.max(220, alt * 0.55)
             const angle = Math.PI / 4
-            const viewCenterY = alt - 10                  // look at the underside
+            const viewCenterY = alt - 10
             lookAtPos = new THREE.Vector3(0, viewCenterY, 0)
             targetPos = new THREE.Vector3(
                 Math.cos(angle) * dist,
-                alt - 80,                                  // 80 below the ship
+                alt - 60,
                 Math.sin(angle) * dist
             )
         }
 
         if (targetPos && lookAtPos) {
             const travelDist = camera.position.distanceTo(targetPos)
-            const flyDuration = Math.min(1.4, Math.max(0.7, travelDist / 500))
+            const flyDuration = Math.min(2.4, Math.max(0.85, 0.7 + travelDist / 850))
             animateTo(targetPos, lookAtPos, flyDuration)
         }
     }, [selectedLandmark, camera, controls, animateTo, cityData])
@@ -288,18 +292,31 @@ export default React.memo(function CameraController() {
         const distance = currentPos.distanceTo(currentTarget)
 
         if (type === 'ZOOM_IN') {
-            const newPos = currentPos.clone().add(direction.clone().multiplyScalar(distance * 0.3))
+            // Larger step (0.4 instead of 0.3) so a single click moves
+            // meaningfully on huge cities. Distance-clamped so we don't
+            // shove the camera through the ground on tiny ones.
+            const step = Math.max(40, distance * 0.4)
+            const newPos = currentPos.clone().add(direction.clone().multiplyScalar(step))
             animateTo(newPos, currentTarget.clone(), 0.45)
         } else if (type === 'ZOOM_OUT') {
-            const newPos = currentPos.clone().sub(direction.clone().multiplyScalar(distance * 0.3))
+            const step = Math.max(40, distance * 0.4)
+            const newPos = currentPos.clone().sub(direction.clone().multiplyScalar(step))
             animateTo(newPos, currentTarget.clone(), 0.45)
         } else if (type === 'FIT' || type === 'RESET') {
-            const fitDist = cityRadius * 0.55
-            const camY = Math.max(cityRadius * 0.30, maxHeight * 0.9)
+            // Use the same FOV-based fit as the initial auto-fit so
+            // RESET works correctly for any repo size.
+            const fovHalfTan = Math.tan((camera.fov * Math.PI / 180) / 2)
+            const aspect = camera.aspect || 1.78
+            const verticalSpan = Math.max(maxHeight * 1.4 + 460, 600)
+            const lookCenterY = verticalSpan * 0.42
+            const distForVertical = (verticalSpan * 0.5) / (fovHalfTan * 0.7)
+            const distForHorizontal = cityRadius / (fovHalfTan * aspect * 0.8)
+            const fitDist = Math.max(distForVertical, distForHorizontal)
+            const camY = lookCenterY + fitDist * 0.55
             animateTo(
-                new THREE.Vector3(cx + fitDist, camY, cz + fitDist),
-                new THREE.Vector3(cx, 0, cz),
-                1.2
+                new THREE.Vector3(cx + fitDist * 0.71, camY, cz + fitDist * 0.71),
+                new THREE.Vector3(cx, lookCenterY, cz),
+                1.6
             )
         } else if (type === 'CENTER') {
             animateTo(currentPos.clone(), new THREE.Vector3(cx, 0, cz), 0.8)
