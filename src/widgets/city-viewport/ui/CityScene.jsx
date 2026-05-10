@@ -265,11 +265,10 @@ const CityScene = React.memo(function CityScene() {
                 <Streets />
                 <HologramPanel />
                 <LandmarkPanel />
-                {/* Always-kept core — affordable everywhere */}
-                <EnergyCoreReactor />
+                {/* Town-hall reactor + UFO avatar removed per user feedback.
+                    Mothership stays — it's the only landmark left. */}
                 <MothershipCore />
                 <HolographicCityName />
-                <UfoAvatar />
 
                 {/* Mid/high-tier decorations */}
                 {!low && <DistrictLabels />}

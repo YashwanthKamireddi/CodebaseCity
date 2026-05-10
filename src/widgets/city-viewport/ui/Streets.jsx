@@ -123,23 +123,113 @@ function computeStreetGeometry(districts) {
     return { segments, junctions, cityCx, cityCz, cityW, cityD }
 }
 
-function makeRoadMaterial(/* highTier */) {
-    // Final answer: plain bright cyan, no shader. Every shader-based
-    // version I've tried has resulted in user reports that roads are
-    // invisible — the math is right but the visual reads as black at
-    // city-overview distance. Pure flat #00e8c8 with toneMapped:false
-    // is uncompromisingly visible from any camera position.
-    return new THREE.MeshBasicMaterial({
-        color: '#00e8c8',
-        toneMapped: false,
+function makeRoadMaterial(highTier) {
+    // Cyber road, AAA detail layered on the now-confirmed-visible
+    // bright cyan base. Solid bright base ensures roads are never
+    // black; subtle inner darker channel + white edge stripes +
+    // dashed centre line add the futuristic-grid character.
+    return new THREE.ShaderMaterial({
+        uniforms: { uHigh: { value: highTier ? 1.0 : 0.0 } },
+        vertexShader: `
+            varying vec3 vWorldPos;
+            varying vec3 vLocalPos;
+            varying vec2 vScale;
+            varying float vAxis;
+            void main() {
+                vec4 wp = modelMatrix * instanceMatrix * vec4(position, 1.0);
+                vWorldPos = wp.xyz;
+                vLocalPos = position;
+                vScale = vec2(length(instanceMatrix[0].xyz),
+                              length(instanceMatrix[1].xyz));
+                vAxis = vScale.x > vScale.y ? 0.0 : 1.0;
+                gl_Position = projectionMatrix * viewMatrix * wp;
+            }
+        `,
+        fragmentShader: `
+            uniform float uHigh;
+            varying vec3 vWorldPos;
+            varying vec3 vLocalPos;
+            varying vec2 vScale;
+            varying float vAxis;
+            void main() {
+                // Confirmed-visible bright cyan base (was the working flat colour)
+                vec3 col = vec3(0.0, 0.91, 0.78);
+
+                // Distance from outer edge in world units
+                float edgeFromCenter, halfW;
+                if (vAxis < 0.5) {
+                    edgeFromCenter = abs(vLocalPos.y) * vScale.y;
+                    halfW = vScale.y * 0.5;
+                } else {
+                    edgeFromCenter = abs(vLocalPos.x) * vScale.x;
+                    halfW = vScale.x * 0.5;
+                }
+
+                // Asphalt channel — slightly DARKER cyan in the centre
+                // 60% of the road, so the edges read as raised stripes.
+                float channel = smoothstep(halfW * 0.65, halfW * 0.55, edgeFromCenter);
+                col = mix(col * 0.55, col, channel);
+
+                // Bright white outer edge stripes
+                float edge = smoothstep(halfW - 1.5, halfW - 0.2, edgeFromCenter);
+                col = mix(col, vec3(0.98, 1.0, 1.0), edge);
+
+                // Centre lane markers — dashed white (mid+ tier)
+                if (uHigh > 0.5) {
+                    float centre = vAxis < 0.5
+                        ? abs(vLocalPos.y) * vScale.y
+                        : abs(vLocalPos.x) * vScale.x;
+                    float along = vAxis < 0.5 ? vWorldPos.x : vWorldPos.z;
+                    float dashOn = step(0.55, fract(along / 8.0));
+                    float lineMask = smoothstep(0.9, 0.0, centre);
+                    col = mix(col, vec3(1.0), lineMask * dashOn);
+                }
+
+                gl_FragColor = vec4(col, 1.0);
+            }
+        `,
     })
 }
 
 function makeJunctionMaterial() {
-    // Brighter than the road itself so junctions read as connection points
-    return new THREE.MeshBasicMaterial({
-        color: '#3affe0',
-        toneMapped: false,
+    // AAA junction — bright cyan square with a soft white "data hub"
+    // dot in the centre and crosshair-style axes through the middle.
+    // Reads as a control intersection, not a flat colour patch.
+    return new THREE.ShaderMaterial({
+        vertexShader: `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position, 1.0);
+            }
+        `,
+        fragmentShader: `
+            varying vec2 vUv;
+            void main() {
+                vec2 p = vUv - 0.5;
+                float r = length(p);
+
+                // Same bright-cyan base as roads
+                vec3 col = vec3(0.0, 0.91, 0.78);
+
+                // Soft white centre cap — "data hub"
+                float center = smoothstep(0.18, 0.04, r);
+                col = mix(col, vec3(1.0), center * 0.85);
+
+                // Crosshair axes through the junction centre
+                float axis = max(
+                    smoothstep(0.04, 0.015, abs(p.x)) * step(abs(p.y), 0.46),
+                    smoothstep(0.04, 0.015, abs(p.y)) * step(abs(p.x), 0.46)
+                );
+                col = mix(col, vec3(1.0), axis * 0.65);
+
+                // White outer ring frame
+                float ring = smoothstep(0.475, 0.49, max(abs(p.x), abs(p.y)));
+                col = mix(col, vec3(1.0), ring);
+
+                gl_FragColor = vec4(col, 1.0);
+            }
+        `,
     })
 }
 
