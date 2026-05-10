@@ -363,28 +363,32 @@ export default function EmptyCityHero() {
                 }
 
                 .lp-heading {
-                    margin: 0 0 24px;
+                    margin: 0 0 22px;
                     font-family: var(--font-display);
-                    font-size: clamp(2.6rem, 6vw, 4.5rem);
-                    font-weight: 700;
-                    line-height: 1.08;
-                    letter-spacing: -0.03em;
+                    /* Bigger, bolder — was 2.6/4.5rem, now 3.0/5.5rem.
+                       More confident first impression. */
+                    font-size: clamp(3.0rem, 7vw, 5.5rem);
+                    font-weight: 800;
+                    line-height: 1.04;
+                    letter-spacing: -0.038em;
                     color: #ffffff;
                     text-shadow:
-                        0 2px 20px rgba(0,0,0,0.8),
-                        0 4px 40px rgba(0,0,0,0.6);
+                        0 2px 20px rgba(0,0,0,0.85),
+                        0 6px 50px rgba(0,0,0,0.6);
                 }
 
                 .lp-desc {
-                    margin: 0 0 36px;
-                    font-size: 1rem; line-height: 1.7;
+                    margin: 0 0 40px;
+                    font-size: 1.06rem; line-height: 1.65;
                     color: rgba(255,255,255,0.82);
                     font-weight: 400;
                     text-shadow: 0 2px 14px rgba(0,0,0,0.55);
-                    max-width: 480px;
+                    max-width: 520px;
                 }
 
-                /* ── Unified CTA buttons — clean glass, identical for all 3 actions ── */
+                /* ── CTA: GitHub Repo is now the visual primary (filled
+                   accent button); Open Folder + User Universe drop to
+                   ghost variants so the user has one obvious next step. */
                 .lp-cta {
                     display: flex; gap: 10px; flex-wrap: wrap;
                     justify-content: center;
@@ -394,7 +398,7 @@ export default function EmptyCityHero() {
                     padding: 12px 22px;
                     min-height: 44px;
                     border-radius: 10px;
-                    font-size: 0.88rem; font-weight: 500;
+                    font-size: 0.92rem; font-weight: 500;
                     font-family: var(--font-body);
                     cursor: pointer; white-space: nowrap;
                     transition:
@@ -420,8 +424,10 @@ export default function EmptyCityHero() {
                 }
                 .lp-btn--primary:active { transform: translateY(0); }
                 .lp-btn--primary.is-active {
-                    background: rgba(255,255,255,0.16);
-                    border-color: rgba(255,255,255,0.36);
+                    background: rgba(90, 168, 255, 0.18);
+                    border-color: rgba(90, 168, 255, 0.55);
+                    color: #ffffff;
+                    box-shadow: 0 0 0 3px rgba(90, 168, 255, 0.12);
                 }
 
                 .lp-demo-link {
