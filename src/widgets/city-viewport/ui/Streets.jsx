@@ -30,11 +30,11 @@ import { BLOOM_LAYER } from '../post/Post'
  * Tier-gated: low tier renders the asphalt only (no centre line).
  */
 
-const ROAD_WIDTH = 38          // way wider — visible from any altitude on any repo
+const ROAD_WIDTH = 60          // huge — unmistakable from any altitude
 const PERIMETER_INSET = 80
 const ROAD_Y = 0.5
 const JUNCTION_Y = 0.6
-const TRAFFIC_Y = 1.0
+const TRAFFIC_Y = 1.4
 
 function clusterAxis(values, eps = 30) {
     if (values.length === 0) return []
@@ -123,117 +123,23 @@ function computeStreetGeometry(districts) {
     return { segments, junctions, cityCx, cityCz, cityW, cityD }
 }
 
-function makeRoadMaterial(highTier) {
-    // Cyber-cyan road with proper futuristic detail: solid base color
-    // (bright enough to read at city overview), white outer-edge
-    // markings (crisp silhouette), dashed bright-white center stripe
-    // (lane divider). The previous shader had this logic but its dark
-    // base made it dissolve into the ground; this version is the same
-    // ideas on top of the bright-cyan base color.
-    return new THREE.ShaderMaterial({
+function makeRoadMaterial(/* highTier */) {
+    // Final answer: plain bright cyan, no shader. Every shader-based
+    // version I've tried has resulted in user reports that roads are
+    // invisible — the math is right but the visual reads as black at
+    // city-overview distance. Pure flat #00e8c8 with toneMapped:false
+    // is uncompromisingly visible from any camera position.
+    return new THREE.MeshBasicMaterial({
+        color: '#00e8c8',
         toneMapped: false,
-        uniforms: {
-            uHigh: { value: highTier ? 1.0 : 0.0 },
-        },
-        vertexShader: `
-            varying vec3 vWorldPos;
-            varying vec3 vLocalPos;
-            varying vec2 vScale;
-            varying float vAxis;  // 0 horizontal, 1 vertical
-            void main() {
-                vec4 wp = modelMatrix * instanceMatrix * vec4(position, 1.0);
-                vWorldPos = wp.xyz;
-                vLocalPos = position;
-                vScale = vec2(length(instanceMatrix[0].xyz),
-                              length(instanceMatrix[1].xyz));
-                vAxis = vScale.x > vScale.y ? 0.0 : 1.0;
-                gl_Position = projectionMatrix * viewMatrix * wp;
-            }
-        `,
-        fragmentShader: `
-            uniform float uHigh;
-            varying vec3 vWorldPos;
-            varying vec3 vLocalPos;
-            varying vec2 vScale;
-            varying float vAxis;
-            void main() {
-                // Base — bright cyber-teal so the road is unmistakable.
-                vec3 col = vec3(0.12, 0.78, 0.72);
-
-                // Distance from the road's outer edge (in world units).
-                float edgeFromCenter, halfW;
-                if (vAxis < 0.5) {
-                    edgeFromCenter = abs(vLocalPos.y) * vScale.y;
-                    halfW = vScale.y * 0.5;
-                } else {
-                    edgeFromCenter = abs(vLocalPos.x) * vScale.x;
-                    halfW = vScale.x * 0.5;
-                }
-
-                // Outer EDGE STRIPES — bright crisp white lines, ~1.6 wu thick.
-                float edge = smoothstep(halfW - 1.6, halfW - 0.3, edgeFromCenter);
-                col = mix(col, vec3(0.97, 0.99, 1.0), edge);
-
-                // Inner shoulder — slightly darker band just inside the
-                // edge stripes. Reads as a marked shoulder.
-                float shoulder = smoothstep(halfW - 3.0, halfW - 2.0, edgeFromCenter)
-                               * (1.0 - edge);
-                col = mix(col, col * 0.78, shoulder * 0.6);
-
-                // Centre LANE MARKERS — dashed white. Mid+ tier only
-                // (low tier gets just edge stripes).
-                if (uHigh > 0.5) {
-                    float centre = vAxis < 0.5
-                        ? abs(vLocalPos.y) * vScale.y
-                        : abs(vLocalPos.x) * vScale.x;
-                    float along = vAxis < 0.5 ? vWorldPos.x : vWorldPos.z;
-                    float dashOn = step(0.55, fract(along / 7.0));
-                    float lineMask = smoothstep(0.85, 0.0, centre);
-                    col = mix(col, vec3(1.0, 1.0, 1.0), lineMask * dashOn * 0.92);
-                }
-
-                gl_FragColor = vec4(col, 1.0);
-            }
-        `,
     })
 }
 
 function makeJunctionMaterial() {
-    // Junction patch — a brighter centre with subtle crosshair
-    // markings. Reads as "intersection / control point" rather than
-    // a flat colour blob.
-    return new THREE.ShaderMaterial({
+    // Brighter than the road itself so junctions read as connection points
+    return new THREE.MeshBasicMaterial({
+        color: '#3affe0',
         toneMapped: false,
-        vertexShader: `
-            varying vec2 vUv;
-            void main() {
-                vUv = uv;
-                gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position, 1.0);
-            }
-        `,
-        fragmentShader: `
-            varying vec2 vUv;
-            void main() {
-                vec2 p = vUv - 0.5;       // -0.5..0.5
-                float r = length(p);
-
-                // Bright base
-                vec3 col = vec3(0.18, 0.88, 0.80);
-
-                // Soft white center cap — like a "data hub" marker
-                float center = smoothstep(0.20, 0.05, r);
-                col = mix(col, vec3(0.96, 1.0, 0.99), center * 0.85);
-
-                // Cross-arm markings — pixel-thin white axes
-                float axis = step(0.96, max(
-                    smoothstep(0.04, 0.02, abs(p.x)),
-                    smoothstep(0.04, 0.02, abs(p.y))
-                ));
-                col = mix(col, vec3(1.0), axis * 0.75);
-
-                gl_FragColor = vec4(col, 1.0);
-            }
-        `,
     })
 }
 

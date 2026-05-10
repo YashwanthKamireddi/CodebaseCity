@@ -222,13 +222,12 @@ const PulseMaterial = shaderMaterial(
       
       buildingColor *= typeAccent;
       
-      // Building facade — was 0.10 (90% dark) which read as faded
-      // pinkish-pastel through bloom + AO. 0.32 gives the buildings
-      // genuine colour identity instead of dim shapes with bright
-      // window pinpricks. Combined with the existing edge + window +
-      // fresnel layers, walls now actually look like the building's
-      // colour, not "hint of colour over dark grey".
-      vec3 darkFace = buildingColor * 0.32;
+      // Original 0.10 — restored from git. The vivid look of the city
+      // came from the WINDOW + EDGE accents popping bright against this
+      // dark facade base. Bumping the base higher makes buildings look
+      // washed out (the colour averages out instead of contrasting
+      // against the bright windows).
+      vec3 darkFace = buildingColor * 0.10;
       
       // Edge colors with type-based intensity
       float edgeIntensity = mix(1.8, 1.2, buildingType / 5.0);
