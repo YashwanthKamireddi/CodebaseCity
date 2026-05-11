@@ -7,7 +7,11 @@ import { HEIGHT_SCALE } from "./cityScale"
 
 const KEYS = { w: false, a: false, s: false, d: false, space: false, shift: false }
 
-window.addEventListener("keydown", (e) => {
+// Listeners moved INSIDE the component (was module-level → fired on
+// import, never cleaned up = persistent leak across hot-reloads and
+// across mount/unmount cycles). Now scoped to the UfoAvatar component
+// lifetime via the useEffect inside the component below.
+function _onKeyDown(e) {
     if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return
     const isUfo = useStore.getState().ufoMode
     if (!isUfo) return
@@ -18,9 +22,9 @@ window.addEventListener("keydown", (e) => {
     if (k === "d" || k === "arrowright")  { KEYS.d = true; e.preventDefault() }
     if (k === " ")                        { KEYS.space = true; e.preventDefault() }
     if (k === "shift")                    { KEYS.shift = true; e.preventDefault() }
-})
+}
 
-window.addEventListener("keyup", (e) => {
+function _onKeyUp(e) {
     if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return
     const k = e.key.toLowerCase()
     if (k === "w" || k === "arrowup")     KEYS.w = false
@@ -29,7 +33,7 @@ window.addEventListener("keyup", (e) => {
     if (k === "d" || k === "arrowright")  KEYS.d = false
     if (k === " ")                        KEYS.space = false
     if (k === "shift")                    KEYS.shift = false
-})
+}
 
 // Module-level reusable vectors — zero per-frame allocations
 const _forward = new THREE.Vector3()
@@ -197,6 +201,18 @@ export default function UfoAvatar() {
     const { camera, controls, invalidate } = useThree()
     const velocity = useRef(new THREE.Vector3())
     const initialized = useRef(false)
+
+    // Scoped key listeners — added on mount, removed on unmount.
+    // Replaces the previous module-level listeners which leaked
+    // across the entire page lifetime.
+    useEffect(() => {
+        window.addEventListener("keydown", _onKeyDown)
+        window.addEventListener("keyup", _onKeyUp)
+        return () => {
+            window.removeEventListener("keydown", _onKeyDown)
+            window.removeEventListener("keyup", _onKeyUp)
+        }
+    }, [])
 
     // Speed scales with city size
     const speedMult = Math.max(1.0, Math.min(4.0, (cityData?.buildings?.length || 100) / 500))

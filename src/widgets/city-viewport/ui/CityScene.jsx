@@ -126,14 +126,31 @@ function AnimationPump() {
     useEffect(() => {
         let raf
         const tick = (t) => {
-            if (t - lastRef.current >= 200) {
+            // Skip when tab is hidden — saves CPU and battery; the
+            // browser already throttles RAF in hidden tabs but we get
+            // an explicit pause for the periodic invalidate cadence.
+            if (!document.hidden && t - lastRef.current >= 200) {
                 lastRef.current = t
                 invalidate()
             }
             raf = requestAnimationFrame(tick)
         }
         raf = requestAnimationFrame(tick)
-        return () => cancelAnimationFrame(raf)
+
+        // Resume immediately when the tab becomes visible again — without
+        // this, the next invalidate could be up to 200ms away.
+        const onVis = () => {
+            if (!document.hidden) {
+                lastRef.current = 0   // force immediate tick
+                invalidate()
+            }
+        }
+        document.addEventListener('visibilitychange', onVis)
+
+        return () => {
+            cancelAnimationFrame(raf)
+            document.removeEventListener('visibilitychange', onVis)
+        }
     }, [invalidate])
     return null
 }
