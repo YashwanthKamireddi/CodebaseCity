@@ -50,6 +50,7 @@ function NebulaSky() {
             uBelow:   { value: new THREE.Color('#0d1230') },
             uNebula:  { value: new THREE.Color('#9055e8') },
         },
+        // NB: vertexShader / fragmentShader below; dispose on unmount.
         vertexShader: `
             varying vec3 vPos;
             void main() {
@@ -105,6 +106,10 @@ function NebulaSky() {
             }
         `,
     }), [])
+
+    // Dispose the shader material on unmount so we don't leak GPU
+    // resources if the Canvas remounts.
+    useEffect(() => () => material.dispose(), [material])
 
     return (
         <mesh frustumCulled={false} renderOrder={-1000}>
