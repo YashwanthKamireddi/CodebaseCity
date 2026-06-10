@@ -153,9 +153,9 @@ for (let di = 0; di < dirNames.length; di++) {
     const cellSize = districtCellSizes[di]
     const bcols = Math.ceil(Math.sqrt(files.length))
     const brows = Math.ceil(files.length / bcols)
-    const usableSize = cellSize - 36
+    const usableSize = cellSize - 30
     const rawSpacing = usableSize / Math.max(bcols, brows)
-    const spacing = Math.max(64, rawSpacing)
+    const spacing = Math.max(55, rawSpacing)
 
     files.forEach((file, i) => {
         const ext = file.path.includes('.') ? file.path.slice(file.path.lastIndexOf('.')) : ''

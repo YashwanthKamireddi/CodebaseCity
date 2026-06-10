@@ -5,7 +5,7 @@ import { detectDeviceTier } from '../../../shared/perf/deviceTier'
 import { getBuildingColor } from '../../../utils/colorUtils'
 import { HEIGHT_SCALE } from './cityScale'
 import {
-    TYPE_TOWER, TYPE_OFFICE, TYPE_MALL, TYPE_WORKSHOP, TYPE_TOWNHOUSE,
+    TYPE_TOWER, TYPE_CIVIC, TYPE_MALL, TYPE_WORKSHOP, TYPE_TOWNHOUSE,
 } from './buildingTypes'
 import { BLOOM_LAYER } from '../post/Post'
 
@@ -80,22 +80,6 @@ function accentTransform(kind, b) {
             sz = d * 1.08
             cy = h * 0.22 // low band, not roof
             break
-        case 'podium':
-            // Wider base block — the classic skyscraper setback. This
-            // single shape is what makes a box read as "tower with a
-            // street-level podium" instead of a stick.
-            sy = Math.max(8, h * 0.14)
-            sx = w * 1.38
-            sz = d * 1.38
-            cy = sy / 2          // sits on the ground at the base
-            break
-        case 'crown':
-            // Narrower top step — completes the tiered silhouette.
-            sy = Math.max(5, h * 0.07)
-            sx = w * 0.64
-            sz = d * 0.64
-            cy = h + sy / 2
-            break
         case 'gabled':
         default:
             sy = Math.max(2, Math.min(w, d) * 0.5)
@@ -158,13 +142,11 @@ export default function BuildingAccents() {
     const groups = useMemo(() => {
         if (!buildings?.length) return null
         return {
-            // Tower spires + civic domes stay removed (user: "poles").
-            // Podium + crown are the new core of the silhouette: a
-            // wider base block and a narrower top step turn every
-            // tower/office box into a tiered skyscraper.
-            towerPodium:  buildAccentLayer(buildings, TYPE_TOWER,  'podium'),
-            towerCrown:   buildAccentLayer(buildings, TYPE_TOWER,  'crown'),
-            officePodium: buildAccentLayer(buildings, TYPE_OFFICE, 'podium'),
+            // Tower spires removed per user feedback — those white
+            // antennae read as "poles in the sky" on every screenshot.
+            // Civic domes also removed to keep the silhouette clean.
+            // tower:     buildAccentLayer(buildings, TYPE_TOWER,     'spire'),
+            // civic:     buildAccentLayer(buildings, TYPE_CIVIC,     'dome'),
             workshop:  buildAccentLayer(buildings, TYPE_WORKSHOP,  'chimney'),
             mall:      buildAccentLayer(buildings, TYPE_MALL,      'awning'),
             townhouse: buildAccentLayer(buildings, TYPE_TOWNHOUSE, 'gabled'),
@@ -176,39 +158,42 @@ export default function BuildingAccents() {
 
     return (
         <>
-            {/* Tiered-skyscraper silhouette — podiums + crowns render on
-                every tier above low; they ARE the building design now. */}
-            {groups.towerPodium && (
+            {false && groups.tower && (
                 <AccentLayer
-                    items={groups.towerPodium.items}
-                    kind="podium"
-                    geomNode={<boxGeometry args={[1, 1, 1]} />}
+                    items={groups.tower.items}
+                    kind="spire"
+                    geomNode={<cylinderGeometry args={[0.18, 0.5, 1, 8]} />}
                     materialNode={
-                        <meshStandardMaterial metalness={0.2} roughness={0.7} vertexColors />
+                        <meshStandardMaterial
+                            metalness={0.7}
+                            roughness={0.28}
+                            vertexColors
+                            emissive="#ffffff"
+                            emissiveIntensity={1.4}
+                            toneMapped={false}
+                        />
                     }
                     colorMode={colorMode}
+                    bloomEligible
                 />
             )}
-            {groups.towerCrown && (
+            {groups.civic && (
                 <AccentLayer
-                    items={groups.towerCrown.items}
-                    kind="crown"
-                    geomNode={<boxGeometry args={[1, 1, 1]} />}
+                    items={groups.civic.items}
+                    kind="dome"
+                    geomNode={<sphereGeometry args={[0.5, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />}
                     materialNode={
-                        <meshStandardMaterial metalness={0.35} roughness={0.5} vertexColors />
+                        <meshStandardMaterial
+                            metalness={0.45}
+                            roughness={0.4}
+                            vertexColors
+                            emissive="#ffe6b3"
+                            emissiveIntensity={0.6}
+                            toneMapped={false}
+                        />
                     }
                     colorMode={colorMode}
-                />
-            )}
-            {groups.officePodium && (
-                <AccentLayer
-                    items={groups.officePodium.items}
-                    kind="podium"
-                    geomNode={<boxGeometry args={[1, 1, 1]} />}
-                    materialNode={
-                        <meshStandardMaterial metalness={0.2} roughness={0.7} vertexColors />
-                    }
-                    colorMode={colorMode}
+                    bloomEligible
                 />
             )}
             {!midOnly && groups.workshop && (

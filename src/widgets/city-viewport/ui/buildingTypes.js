@@ -115,43 +115,41 @@ export function dimsFor(type, sizeNorm) {
     const t = Math.max(0, Math.min(1, sizeNorm))
     switch (type) {
         case 'tower': {
-            // Hero skyscrapers. Aspect capped near 6:1 — the previous
-            // 18-wide × 310-tall ratio (17:1) is why towers read as
-            // "sticks", not buildings. Real game towers are massive.
-            const width = 26 + 14 * t        // 26 .. 40
-            const height = 110 + 130 * t     // 110 .. 240
+            // Hero skyscrapers — visible-from-anywhere.
+            const width = 18 + 12 * t        // 18 .. 30
+            const height = 130 + 180 * t     // 130 .. 310
             return { width, height, depth: width }
         }
         case 'office': {
-            // The city's bulk — chunky mid-rises, ~3-4:1 aspect.
-            const width = 24 + 12 * t        // 24 .. 36
-            const height = 55 + 75 * t       // 55 .. 130
+            // The city's bulk — proper mid-rises with mass.
+            const width = 18 + 10 * t        // 18 .. 28
+            const height = 65 + 105 * t      // 65 .. 170
             return { width, height, depth: width }
         }
         case 'civic': {
             // Substantial civic anchors with dome cap.
-            const width = 30 + 14 * t        // 30 .. 44
-            const height = 40 + 40 * t       // 40 .. 80
+            const width = 26 + 12 * t        // 26 .. 38
+            const height = 45 + 45 * t       // 45 .. 90
             return { width, height, depth: width }
         }
         case 'mall': {
             // Big-box stores — wide footprint, moderate height.
-            const width = 34 + 16 * t        // 34 .. 50
-            const height = 24 + 24 * t       // 24 .. 48
+            const width = 30 + 14 * t        // 30 .. 44
+            const height = 28 + 27 * t       // 28 .. 55
             const depth = width * 0.85
             return { width, height, depth }
         }
         case 'workshop': {
-            // Factories / industrial — broad sheds, not poles.
-            const width = 24 + 12 * t        // 24 .. 36
-            const height = 35 + 45 * t       // 35 .. 80
+            // Factories / industrial.
+            const width = 20 + 10 * t        // 20 .. 30
+            const height = 40 + 55 * t       // 40 .. 95
             return { width, height, depth: width }
         }
         case 'townhouse':
         default: {
-            // Residential — squat row-houses, ~2:1 aspect.
-            const width = 16 + 8 * t         // 16 .. 24
-            const height = 26 + 22 * t       // 26 .. 48
+            // Residential — small but visible.
+            const width = 14 + 6 * t         // 14 .. 20
+            const height = 32 + 26 * t       // 32 .. 58
             return { width, height, depth: width }
         }
     }

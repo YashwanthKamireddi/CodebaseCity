@@ -50,11 +50,10 @@ export function layoutDistricts(mergedGroups) {
     })
     weighted.sort((a, b) => b.bytes - a.bytes)
 
-    // ── Per-district cell size. Budget of 68 wu per building column
-    //    fits the widest type (mall, 50 wu) plus a real gap. ──
+    // ── Per-district cell size (same content-driven formula as before) ──
     const cellSizeOf = (count) => {
         const gridSide = Math.ceil(Math.sqrt(count))
-        return Math.max(150, gridSide * 68 + 36)
+        return Math.max(140, gridSide * 60 + 30)
     }
 
     const n = dirNames.length
