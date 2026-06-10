@@ -460,12 +460,12 @@ export const createCitySlice = (set, get) => ({
                 const brows = Math.ceil(files.length / bcols)
 
                 // Spacing adapts to THIS district's size with overlap guard.
-                // Min spacing bumped to 55 to handle the widest building
-                // type (mall, 44 wide) plus an 11-unit gap between
-                // neighbours. Below this, buildings would clip each other.
-                const usableSize = thisCellSize - 30
+                // Min 64 handles the widest type (mall, 50 wu) plus a
+                // street-scale gap. Must stay in sync with cityLayout's
+                // cellSizeOf budget (68/column).
+                const usableSize = thisCellSize - 36
                 const rawSpacing = usableSize / Math.max(bcols, brows)
-                const spacing = Math.max(55, rawSpacing)
+                const spacing = Math.max(64, rawSpacing)
 
                 files.forEach((file, fileIdx) => {
                     const ext = file.path.substring(file.path.lastIndexOf('.')).toLowerCase()
