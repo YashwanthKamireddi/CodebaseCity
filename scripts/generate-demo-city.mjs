@@ -14,6 +14,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
 import { classify, dimsFor, typeNameToId } from '../src/widgets/city-viewport/ui/buildingTypes.js'
+import { layoutDistricts } from '../src/widgets/city-viewport/ui/cityLayout.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -106,43 +107,10 @@ for (const f of sourceFiles) {
     dirGroups[dir].push(f)
 }
 
-const dirNames = Object.keys(dirGroups).sort()
-const cols = Math.ceil(Math.sqrt(dirNames.length))
-const rows = Math.ceil(dirNames.length / cols)
-
-// Per-district cell size — must accommodate the new bigger building widths.
-const districtCellSizes = dirNames.map(dir => {
-    const files = dirGroups[dir]
-    const gridSide = Math.ceil(Math.sqrt(files.length))
-    const contentBased = gridSide * 60 + 30
-    const overlapSafe = gridSide * 56 + 30
-    return Math.max(140, contentBased, overlapSafe)
-})
-
-const districtGap = 140
-const rowHeights = []
-const colWidths = []
-for (let r = 0; r < rows; r++) {
-    let maxH = 0
-    for (let c = 0; c < cols; c++) {
-        const idx = r * cols + c
-        if (idx < dirNames.length) maxH = Math.max(maxH, districtCellSizes[idx])
-    }
-    rowHeights.push(maxH)
-}
-for (let c = 0; c < cols; c++) {
-    let maxW = 0
-    for (let r = 0; r < rows; r++) {
-        const idx = r * cols + c
-        if (idx < dirNames.length) maxW = Math.max(maxW, districtCellSizes[idx])
-    }
-    colWidths.push(maxW)
-}
-
-const totalW = colWidths.reduce((s, w) => s + w + districtGap, -districtGap)
-const totalH = rowHeights.reduce((s, h) => s + h + districtGap, -districtGap)
-const cumColW = [0]; for (let c = 0; c < cols; c++) cumColW[c + 1] = cumColW[c] + colWidths[c] + districtGap
-const cumRowH = [0]; for (let r = 0; r < rows; r++) cumRowH[r + 1] = cumRowH[r] + rowHeights[r] + districtGap
+// ── Zoned, contiguous layout — shared with the live analyzer ────────
+const placements = layoutDistricts(dirGroups)
+const dirNames = placements.map(p => p.dir)
+const districtCellSizes = placements.map(p => p.cellSize)
 
 const DISTRICT_COLORS = [
     '#5aa8ff', '#ff8b5a', '#5affb4', '#ffd85a', '#b35aff',
@@ -151,32 +119,25 @@ const DISTRICT_COLORS = [
 ]
 
 // ── Build districts ──────────────────────────────────────────────────
-const CORE_OFFSET = 180
 const districts = []
 const districtMap = {}
-dirNames.forEach((dir, idx) => {
+placements.forEach((p, idx) => {
     const districtId = `district_${idx}`
-    const col = idx % cols
-    const row = Math.floor(idx / cols)
-    let cx = -totalW / 2 + cumColW[col] + colWidths[col] / 2
-    let cy = -totalH / 2 + cumRowH[row] + rowHeights[row] / 2
-    cx = cx < 0 ? cx - CORE_OFFSET : cx + CORE_OFFSET
-    cy = cy < 0 ? cy - CORE_OFFSET : cy + CORE_OFFSET
-    const cellSize = districtCellSizes[idx]
+    const half = p.cellSize / 2
     districts.push({
         id: districtId,
-        name: dir,
+        name: p.dir,
         color: DISTRICT_COLORS[idx % DISTRICT_COLORS.length],
-        center: { x: cx, y: cy },
+        center: { x: p.cx, y: p.cz },
         boundary: [
-            { x: cx - cellSize / 2, y: cy - cellSize / 2 },
-            { x: cx + cellSize / 2, y: cy - cellSize / 2 },
-            { x: cx + cellSize / 2, y: cy + cellSize / 2 },
-            { x: cx - cellSize / 2, y: cy + cellSize / 2 },
+            { x: p.cx - half, y: p.cz - half },
+            { x: p.cx + half, y: p.cz - half },
+            { x: p.cx + half, y: p.cz + half },
+            { x: p.cx - half, y: p.cz + half },
         ],
-        building_count: dirGroups[dir].length,
+        building_count: dirGroups[p.dir].length,
     })
-    districtMap[dir] = districtId
+    districtMap[p.dir] = districtId
 })
 
 // ── Build buildings ──────────────────────────────────────────────────

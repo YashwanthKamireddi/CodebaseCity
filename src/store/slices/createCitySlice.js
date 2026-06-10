@@ -3,6 +3,7 @@ import { ghFetch, ghFetchBatch, ghFetchRaw, fetchGitHubZipball, fetchUserRepos }
 import { getCachedCity, cacheCity } from '../../utils/cityCache'
 import { searchVfsEngine, ingestZipballToVfs, setVfsProgressCallback } from '../../engine/fs/vfs.js'
 import { classify, dimsFor, typeNameToId } from '../../widgets/city-viewport/ui/buildingTypes'
+import { layoutDistricts } from '../../widgets/city-viewport/ui/cityLayout'
 
 /**
  * City Slice
@@ -407,101 +408,40 @@ export const createCitySlice = (set, get) => ({
                 }
             }
 
-            const finalDirNames = Object.keys(mergedGroups).sort()
-            const cols = Math.ceil(Math.sqrt(finalDirNames.length))
-            const rows = Math.ceil(finalDirNames.length / cols)
+            // ── Zoned, contiguous city layout ─────────────────────────
+            // layoutDistricts assigns the heaviest districts (most code
+            // mass → tallest towers) to the most central cells, so the
+            // skyline peaks downtown and falls toward the outskirts —
+            // like a real metropolis. Districts tile with a 32-unit
+            // avenue gap instead of the old 140-unit void canyons, and
+            // the old 360-unit "mothership hole" at the origin is gone.
+            const placements = layoutDistricts(mergedGroups)
+            const finalDirNames = placements.map(p => p.dir)
 
-            // Compute per-district cell sizes. Per-cell budget bumped to
-            // 60 units to accommodate the new building widths (towers up
-            // to 30, malls up to 44) without collisions, plus generous
-            // gap between buildings.
-            const districtCellSizes = finalDirNames.map(dir => {
-                const files = mergedGroups[dir]
-                const gridSide = Math.ceil(Math.sqrt(files.length))
-                const contentBased = gridSide * 60 + 30
-                const overlapSafe = gridSide * 56 + 30
-                return Math.max(140, contentBased, overlapSafe)
-            })
-
-            // Grid layout with per-district sizes: use cumulative offsets
-            // Build rows of districts with adaptive widths
-            const districtGap = 140
-            const rowHeights = []
-            const colWidths = []
-
-            // Calculate max dimensions per grid row/column
-            for (let r = 0; r < rows; r++) {
-                let maxH = 0
-                for (let c = 0; c < cols; c++) {
-                    const idx = r * cols + c
-                    if (idx < finalDirNames.length) {
-                        maxH = Math.max(maxH, districtCellSizes[idx])
-                    }
-                }
-                rowHeights.push(maxH)
-            }
-            for (let c = 0; c < cols; c++) {
-                let maxW = 0
-                for (let r = 0; r < rows; r++) {
-                    const idx = r * cols + c
-                    if (idx < finalDirNames.length) {
-                        maxW = Math.max(maxW, districtCellSizes[idx])
-                    }
-                }
-                colWidths.push(maxW)
-            }
-
-            const totalW = colWidths.reduce((s, w) => s + w + districtGap, -districtGap)
-            const totalH = rowHeights.reduce((s, h) => s + h + districtGap, -districtGap)
-
-            // Precompute cumulative offsets for O(1) position lookup
-            const cumulativeColWidths = new Float32Array(cols + 1)
-            cumulativeColWidths[0] = 0
-            for (let c = 0; c < cols; c++) {
-                cumulativeColWidths[c + 1] = cumulativeColWidths[c] + colWidths[c] + districtGap
-            }
-
-            const cumulativeRowHeights = new Float32Array(rows + 1)
-            cumulativeRowHeights[0] = 0
-            for (let r = 0; r < rows; r++) {
-                cumulativeRowHeights[r + 1] = cumulativeRowHeights[r] + rowHeights[r] + districtGap
-            }
-
-            const CORE_SAFE_RADIUS = 48
-
-            finalDirNames.forEach((dir, idx) => {
+            placements.forEach((p, idx) => {
                 const districtId = `district_${idx}`
-                const col = idx % cols
-                const row = Math.floor(idx / cols)
-                const files = mergedGroups[dir]
-                const thisCellSize = districtCellSizes[idx]
-
-                // O(1) position lookup using precomputed cumulative offsets
-                let cx = -totalW / 2 + cumulativeColWidths[col] + colWidths[col] / 2
-                let cy = -totalH / 2 + cumulativeRowHeights[row] + rowHeights[row] / 2
-
-                // Expand grid outward from the center to leave a clean, non-colliding hole
-                // for the Mothership Core without squishing districts into a circle.
-                const CORE_OFFSET = 180; // Total 360 diameter hole
-                cx = cx < 0 ? cx - CORE_OFFSET : cx + CORE_OFFSET;
-                cy = cy < 0 ? cy - CORE_OFFSET : cy + CORE_OFFSET;
+                const files = mergedGroups[p.dir]
+                const half = p.cellSize / 2
 
                 districts.push({
                     id: districtId,
-                    name: dir,
+                    name: p.dir,
                     color: DISTRICT_COLORS[idx % DISTRICT_COLORS.length],
-                    center: { x: cx, y: cy },
+                    center: { x: p.cx, y: p.cz },
                     boundary: [
-                        { x: cx - thisCellSize / 2, y: cy - thisCellSize / 2 },
-                        { x: cx + thisCellSize / 2, y: cy - thisCellSize / 2 },
-                        { x: cx + thisCellSize / 2, y: cy + thisCellSize / 2 },
-                        { x: cx - thisCellSize / 2, y: cy + thisCellSize / 2 },
+                        { x: p.cx - half, y: p.cz - half },
+                        { x: p.cx + half, y: p.cz - half },
+                        { x: p.cx + half, y: p.cz + half },
+                        { x: p.cx - half, y: p.cz + half },
                     ],
                     building_count: files.length,
                 })
 
-                districtMap[dir] = districtId
+                districtMap[p.dir] = districtId
             })
+
+            // cellSize lookup for the building-placement loop below
+            const districtCellSizes = placements.map(p => p.cellSize)
 
             setProgress(80)
 

@@ -34,8 +34,10 @@ function Ground() {
             const corner = Math.sqrt((Math.abs(x) + halfW) ** 2 + (Math.abs(z) + halfD) ** 2)
             if (corner > maxR) maxR = corner
         }
-        const padding = Math.max(140, Math.min(700, maxR * 0.25))
-        return Math.max(500, maxR + padding)
+        // Tighter padding — the plate should hug the city footprint
+        // like an island shoreline, not extend into a huge empty disc.
+        const padding = Math.max(80, Math.min(300, maxR * 0.15))
+        return Math.max(400, maxR + padding)
     }, [cityData])
 
     return (
@@ -46,11 +48,16 @@ function Ground() {
                 <meshBasicMaterial color="#02030a" fog={false} />
             </mesh>
 
-            {/* 2. Main plate — single dark muted color */}
+            {/* 2. Main plate — "paved avenue" slate. With the new
+                 contiguous layout the 32-unit gaps between district
+                 plates expose this surface, so it must read as city
+                 ground (asphalt between blocks), not as a black void.
+                 #151a26 is bright enough to separate from the backdrop
+                 while staying far below the district plates' tint. */}
             <mesh position={[0, -0.12, 0]} rotation={[-Math.PI / 2, 0, 0]}>
                 <circleGeometry args={[platformRadius, 96]} />
                 <meshStandardMaterial
-                    color="#0c1018"
+                    color="#151a26"
                     metalness={0.0}
                     roughness={0.85}
                     polygonOffset
